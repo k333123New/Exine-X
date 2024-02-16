@@ -1,0 +1,33 @@
+-------------------------------------------
+-Action Type-
+ActionIdx 0(+0~7) : pmode std(0000)
+ActionIdx 8(+0~7) : onestd
+ActionIdx 16(+0~7) : twostd
+ActionIdx 24(+0~7) : bowstd
+ActionIdx 32(+0~7) : pmoderun_left(0000)
+ActionIdx 40(+0~7) : onerun_left
+ActionIdx 48(+0~7) : tworun_left
+ActionIdx 56(+0~7) : bowrun_left
+ActionIdx 64(+0~7) : pmode_sitdown
+ActionIdx 72(+0~7) : oneStuck
+ActionIdx 80(+0~7) : twoStuck
+ActionIdx 88(+0~7) : bowStuck
+ActionIdx 96(+0~7) : die(0000)
+ActionIdx 104(+0~7) : oneak1
+ActionIdx 112(+0~7) : oneak2
+ActionIdx 120(+0~7) : oneak3
+ActionIdx 128(+0~7) : twoak1
+ActionIdx 136(+0~7) : twoak2
+ActionIdx 144(+0~7) : twoak3
+ActionIdx 152(+0~7) : bowatk1
+ActionIdx 160 : mgccast
+ActionIdx 161(+0~7) : mgcatk
+ActionIdx 169(+0~7) : pmoderun_right(0000)
+ActionIdx 177(+0~7) : onerun_right
+ActionIdx 185(+0~7) : tworun2_right
+ActionIdx 193(+0~7) : bowrun2_right
+ActionIdx 201 : ???
+ActionIdx 202(+0~7) : pmode_standup
+
+
+-------------------------------------------

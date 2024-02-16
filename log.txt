@@ -1,0 +1,1585 @@
+Shanda has anitile
+
+
+Client Project Output : Console Application
+
+--------------
+panel100 - 0   => 초상화, 링명, ???, 칭호, 캐릭명, 레벨
+panel100 - 33 => HP이미지
+panel100 - 34 => MP이미지
+--------------
+panel200 - 0 => 벨트
+panel200 - 1~4 : 평화모드 버튼 프레스 등(3번 프레스)
+panel200 - 5~8 : 전투모드 버튼 프래스 등(7번 프레스)
+panel200 - 9~12 : 벨트 중간 위 버튼(11번 프레스)
+panel200 - 13~16 : 벨트 중간 아래 버튼(15번 프레스)
+panel200 - 17~20 : 벨트 우측 버튼(?모드1, 19번 프레스)
+panel200 - 21~24 : 벨트 우측 버튼(?모드2, 23번 프레스)
+panel200 - 25~40 : 벨트 우측 버튼의 왼쪽 버튼 (??? 버튼) 의미?
+--------------
+panel201 - 0 => 대화창
+panel201 - 1 => 대화창 확장
+panel201 - 2~5 => 대화창 확장 버튼(4번 프레스)
+panel201 - 6 => 대화창 스크롤 버튼(상)
+panel201 - 7 => 대화창 스크롤 버튼(하)
+panel201 - 8 => 대화창 스크롤 포지션
+panel201 - 9 => 대화창 스크롤 버튼(상) 오버롤
+panel201 - 10 => 대화창 스크롤 버튼(상) 프레스
+panel201 - 11 => 대화창 스크롤 버튼(하) 오버롤
+panel201 - 12 => 대화창 스크롤 버튼(하) 프레스
+panel201 - 13 => 대화창 스크롤 포지션(오버롤)
+panel201 - 14 => 경험치 바
+--------------
+panel202 - 0 => 대화입력창(엔터 누를때만 나옴)
+panel202 - 1~8 =>말하기 모드(5~8 프레스)
+-> 3명까지 지정해서 말하기 가능한듯함. 
+panel202 - 41~48 =>상대방지정버튼1(45~48 프레스)
+panel202 - 49~56 =>상대방지정버튼2(53~56 프레스)
+panel202 - 57~64 =>상대방지정버튼3(61~64 프레스)
+
+panel202 - 9~16 =>외치기 모드
+panel202 - 17~24 =>파티말하기 모드
+panel202 - 25~32 =>귓속말 모드
+panel202 - 33~40 =>링 말하기 모드
+
+--------------
+panel203 - 0 => 케릭터 머리 위 대사창
+panel204 - 0 => 아이템 퀵슬롯칸?
+panel205 - 0 => 마법/스킬 퀵슬롯칸?
+--------------
+panel300 - 0 => 상대방 선택시 표시칸
+panel300 - 33~36 => 교환버튼(35 : 프레스, 36 오버롤)
+--------------
+panel301 - 0 => 미니맵 표시
+--------------
+panel400 - 0~23 : ??? 선택메뉴
+panel401 - 0~3 : NPC 선택메뉴(대화 normal, overroll, pressed, disable)
+panel401 - 4~7 : NPC 선택메뉴(거래? normal, overroll, pressed, disable)
+panel401 - 8~11 : NPC 선택메뉴(수리? normal, overroll, pressed, disable)
+panel401 - 12~15 : NPC 선택메뉴(취소 normal, overroll, pressed, disable)
+panel401 - 16~19 : NPC 선택메뉴(보기 normal, overroll, pressed, disable)
+panel401 - 20~23 : NPC 선택메뉴(달리기??? normal, overroll, pressed, disable)
+--------------
+panel500 - 0 : 정보창
+panel500 - 1~24 : 정보창 특성치 할당 버튼(힘~운)
+--------------
+panel504 - 0 : 링 창
+panel504 - 1~52 : 링 관련 버튼
+--------------
+panel505 - 0 : 가족 창
+panel505 - 1~16 : 가족 관련 버튼
+--------------
+panel506 - 0 : 칭호 창
+panel506 - 1~144 : 칭호 관련 버튼
+--------------
+panel503 - 0~7 : 정보창 - 탭버튼
+panel503 - 8~15 : 정보창 - 탭버튼
+panel503 - 16~23 : 정보창 - 탭버튼
+panel503 - 24~31: 정보창 - 탭버튼
+panel503 - 32~35 : 정보창 - 닫기 버튼
+--------------
+panel501 - 0 : 상점 거래창
+panel501 - 1~117: 상점 거래창 버튼등
+--------------
+panel502 - 0 : 창고창
+panel502 - 1~20 : 창고창 버튼등
+--------------
+panel507 - 0 : 교환창
+panel507 - 1~20 : 교환창 버튼등
+--------------
+panel509 - 0 : 퀘스트창
+panel509 - 1~44 : 퀘스트창 버튼등
+--------------
+panel510 - 0 : NPC 대화창
+panel510 - 1~12 : NPC 대화창 버튼
+--------------
+panel511 - 0 : NPC 대화창-전체보기?
+panel511 - 1~12 : NPC 대화창-전체보기?버튼
+--------------
+panel512 - 0 : 제조창
+panel512 - 1~12 : 제조창 버튼
+--------------
+panel600 - 0 : 장비창
+panel600 - 1~92 : 장비창 버튼
+--------------
+panel601 - 0 : 기술 스킬포인트 메인창
+panel601 - 1~232 : 기술 스킬포인트 메인창 버튼
+--------------
+panel602 - 0 : 마법 스킬포인트 메인창
+panel602 - 1~232 : 마법 스킬포인트 메인창 버튼
+--------------
+panel603 - 0 : 생산 스킬포인트 메인창
+panel603 - 1~236 : 생산 스킬포인트 메인창 버튼
+--------------
+panel604 - 0 : 링 전수 삭제 메인창?
+panel604 - 1~8 : 링 전수 삭제 메인창? 버튼
+--------------
+panel605 - 0 : 창조 전수 삭제 메인창?
+panel605 - 1~8 : 창조 전수 삭제 메인창? 버튼
+--------------
+panel606 - 0~7 :  마법탭(스킬포인트)
+panel606 - 8~15 :  기술탭(스킬포인트)
+panel606 - 16~23 :  생산탭(스킬포인트)
+panel606 - 24~31 :  링탭(스킬포인트)
+panel606 - 32~39 :  창조탭(스킬포인트)
+panel606 - 40~43 :  종료버튼(스킬포인트)
+--------------
+panel700~709 - 0 : 파티상태 표시창
+panel700~709 - 1 : 파티상태 (HP)
+panel700~709 - 2 : 파티상태 (MP)
+--------------
+panel710 - 0~12 : 파티장 관리 버튼
+--------------
+panel800 - 0 : 교환 수량 입력창
+panel800 - 1~8 : 교환 수량 입력창 버튼
+--------------
+panel900 - 0 :친구관리창등
+panel900 - 1~44 :친구관리창등 버튼
+--------------
+panel901 - 0 :상용구 세팅창
+--------------
+panel902 - 0 :게임 옵션 세팅창
+panel902 - 1~28 :게임 옵션 세팅창
+--------------
+panel903 - 0 :친구리스트
+--------------
+panel904 - 0 :귓말 거부 대상
+--------------
+panel905 - 0 :유저리스트 추가,갱신
+--------------
+panel1000 - 0~19 :시스템 메뉴선택 버튼(게시판, 가이드, 옵션, 끝내기, 게임으로 가기)
+--------------
+panel1100 - 0:데니 교환창
+panel1100 - 1~8:데니 교환창
+--------------
+panel1200 - 0~7 : ??상/하 화살표
+--------------
+
+--------------
+SayFrame - 0 : 케릭터 머리 위 대사창의 초상화
+SayFrame - 1 : 케릭터 머리 위 대사창의 초상화 오른쪽 아래 일부
+SayFrame - 2 : 비어있음
+--------------
+ScriptButton - 0~11 : 스크립트 버튼
+--------------
+ScriptScrollButton - 0~7 : 스크립트 스크롤 버튼
+--------------
+ScriptScrollBar - 0~7 : 스크립트 스크롤 버튼
+--------------
+Shadow - 0~7 : 그림자(5, 6, 7)
+--------------
+SubNameTitle - 0 : 케릭터 위 링 이름 앞 아이콘
+SubNameTitle - 1 : ???이름 앞 아이콘
+SubNameTitle - 2 : ??? 이름 앞 아이콘(칭호?)
+--------------
+Target - 0~5 : 선택 타겟 표시
+--------------
+UserInput : 입력버튼 ?
+--------------
+UserListSortBy : 유저리스트 소팅 버튼?
+------------------
+CorverIcon : 초상화부분, 아이콘 부분 빈칸.
+
+
+
+[sound]
+//.\sound\SoundList.lst
+//30001: 30001.wav
+//30002: 30002.wav
+
+
+SoundManager.cs
+//  public static class SoundList
+//  public static int
+            None = 0,
+            Music = 0,
+
+            ExineIntroMusic = 10000,
+            ExineSelectMusic = 10001,
+            ...
+
+
+
+
+client>MapObject.cs > DrawChat 참조로 접근//주석치면 화면상에 안뜸
+client>MapObject.cs > Chat 참조로 접근
+ExineMainScene.cs >  private void ObjectChat(S.ObjectChat p) 참고
+
+CMain is main 
+
+-config file 
+ [Graphics]
+ Resolution=1024
+
+ [Network]
+ UseConfig=True
+ IPAddress=127.0.0.1
+ Port=7000
+
+ [Launcher]
+ Enabled=False
+
+[MirControl/MirScene.cs]
+@fix
+public static MirScene ActiveScene = new LoginScene();
+=>public static MirScene ActiveScene = new OpeningScene();
+
+@fix
+protected MirScene()
+{
+ ...
+ BackColour = Color.Magenta;
+ =>BackColour = Color.Black;
+ ...
+}
+
+
+[MirControl/ExineImageControl.cs]
+@color ok (Tint Color Apply to File With Mask)
+Library.DrawTinted(Index, DisplayLocation, ForeColour, Color.FromArgb(100,Color.Red), true);//test
+
+
+TintColour = Color.FromArgb(100,Color.BlueViolet),
+
+
+[MLibrary.cs]
+public void ExineDrawTinted(int index, Point point, Color colour, Color Tint, bool offSet = false, bool isBlending=false, float rate = 1 )
+        {
+            if (!CheckImage(index))
+                return;
+
+            MImage mi = _images[index];
+
+            if (offSet) point.Offset(mi.X, mi.Y);
+
+            if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
+                return;
+
+            bool oldBlend = DXManager.Blending;
+            if(isBlending)DXManager.SetBlend(true, rate);
+            DXManager.Draw(mi.Image, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), colour);
+            if (isBlending) DXManager.SetBlend(oldBlend);
+            if (mi.HasMask)
+            {
+                DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Tint);
+            }
+
+            mi.CleanTime = CMain.Time + Settings.CleanDelay;
+        }
+
+=> Apply ExineImageControl.cs
+=> 1) Color is Gray Only(maybe)
+=> 2) Mask is must same size and position is matched!
+
+
+
+[MirGraphics/MLibrary.cs]
+@add
+public static readonly MLibrary ExineOpening = new MLibrary(Settings.DataPath + "ExineOpening");
+public static readonly MLibrary ExineLogin = new MLibrary(Settings.DataPath + "ExineLogin");
+public static readonly MLibrary ExineNewChar = new MLibrary(Settings.DataPath + "ExineNewChar");
+
+
+[MirObject/PlayerObject.cs]
+  public void DrawHead()
+        {
+            if (HairLibrary != null)
+                HairLibrary.Draw(DrawFrame + HairOffSet, DrawLocation, DrawColour, true);
+        }
+
+         public void DrawBody()
+        {
+            bool oldGrayScale = DXManager.GrayScale;
+            Color drawColour = ApplyDrawColour();                     
+
+            if (BodyLibrary != null)
+                BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
+
+            DXManager.SetGrayscale(oldGrayScale);
+
+            //BodyLibrary.DrawTinted(DrawFrame + ArmourOffSet, DrawLocation, DrawColour, Color.DarkSeaGreen);
+        }
+=> When Create Char, Send Player Color Info to Server, 
+=> When Login, Send Player Info With Color to Client.
+=> Draw Tint
+
+
+
+intro music : 10146
+
+
+private void Login(S.LoginSuccess p)
+=>Change to GameScene
+
+
+--------------------------------------------------------
+Network Original Flow
+xxxScene.cs - Network.Connect();//Try Conenct to Server
+ > CMain.cs -  Network.Process();//loop
+ > Network.cs - public static void Process() 
+    {
+        ...
+        if (!_receiveList.TryDequeue(out Packet p) || p == null) continue;
+        MirScene.ActiveScene.ProcessPacket(p);
+    }
+ > xxxScene.cs - ProcessPacket(Packet p)
+    {
+        ...
+        case (short)ServerPacketIds.Connected:
+                        Network.Connected = true;
+                        SendVersion();
+                        break;
+        ...
+    }
+ > xxxScene.cs - SendVersion()
+    {
+        ...
+        C.ClientVersion p = new C.ClientVersion();
+        ...
+        Network.Enqueue(p);
+        ...
+    }
+ > xxxScene.cs - ProcessPacket(Packet p)
+    {
+        ...
+        case (short)ServerPacketIds.ClientVersion:
+                    ClientVersion((S.ClientVersion) p);
+                    break;
+        ...
+    }
+ > xxxScene.cs - ClientVersion(S.ClientVersion p)
+    {
+        ...
+       switch (p.Result)
+       ..
+       case 1:
+        _loginDialog.Show(); 
+        break;
+        ...
+    }
+
+ //new Account
+ > xxxScene.cs - CreateAccount()
+   {
+    ...
+        Network.Enqueue(new C.NewAccount
+            {
+                    AccountID = AccountIDTextBox.Text,
+                    Password = Password1TextBox.Text,
+                    EMailAddress = EMailTextBox.Text,
+                    BirthDate = !string.IsNullOrEmpty(BirthDateTextBox.Text)
+                                        ? DateTime.Parse(BirthDateTextBox.Text)
+                                        : DateTime.MinValue,
+                    UserName = UserNameTextBox.Text,
+                    SecretQuestion = QuestionTextBox.Text,
+                    SecretAnswer = AnswerTextBox.Text,
+             }
+         );
+    }
+
+ > xxxScene.cs - ProcessPacket(Packet p)
+   {
+        ...
+        case (short)ServerPacketIds.NewAccount:
+                    NewAccount((S.NewAccount) p);
+                    break;
+        ...
+   }
+
+ > xxxScene.cs - NewAccount(S.NewAccount p)
+   {
+        ...
+        switch (p.Result)
+        {
+            ...
+            case 8: "Your account was created successfully.");  break;
+        }
+   }
+
+///login
+ > xxxScene.cs - class LoginDialog - OKButton.Click += (o, e) => 
+    {
+        Login();
+    }
+ > xxxScene.cs - Login()
+    {
+        Network.Enqueue(
+            new C.Login 
+            {
+                AccountID = AccountIDTextBox.Text, 
+                Password = PasswordTextBox.Text
+            }
+        );
+    }
+ > xxxScene.cs - ProcessPacket(Packet p)
+    {
+        ...
+        case (short)ServerPacketIds.LoginBanned:
+                    Login((S.LoginBanned) p);
+                    break;
+
+        case (short)ServerPacketIds.LoginSuccess:
+                    Login((S.LoginSuccess) p);
+                    break;
+        ...
+    }
+ > xxxScene.cs - Login(S.LoginSuccess p)
+    {
+        Dispose();
+        ActiveScene = new SelectScene(p.Characters);
+    }
+   
+ > SelectScene.cs  ////new cha
+    Network.Enqueue(
+        new C.NewCharacter
+        {
+            Name = _character.NameTextBox.Text,
+            Class = _character.Class, 
+            Gender = _character.Gender
+        }
+    );
+
+ > SelectScene.cs ////del cha
+    Network.Enqueue(
+        new C.DeleteCharacter 
+        { 
+            CharacterIndex = index 
+        }
+    );
+
+ > SelectScene.cs - StartXam()
+    {
+        if (!Libraries.Loaded)
+        {
+            ...
+            StartXam();
+        }
+
+        Network.Enqueue(
+            new C.StartXam
+            {
+                CharacterIndex = Characters[_selected].Index
+                //p.Characters[0].Index //index is all char real index
+            }
+        );
+    }
+
+> SelectScene.cs - ProcessPacket(Packet p)
+    {
+        ...
+        case (short)ServerPacketIds.StartXam:
+                    StartXam((S.StartXam)p);
+                    break;
+        ...
+    }
+
+    SelectScene.cs - StartXam(S.StartXam p)
+    {
+        ...
+        case 4:
+            Settings.Resolution = 1024;
+            CMain.SetResolution(1024, 768);
+            ActiveScene = new XamScene();
+            Dispose();
+            break;
+    }
+
+
+
+
+//main network
+     NewHeroDialog.OnCreateCharacter += (o, e) =>
+            {
+                Network.Enqueue(new C.NewHero
+                {
+                    Name = NewHeroDialog.NameTextBox.Text,
+                    Class = NewHeroDialog.Class,
+                    Gender = NewHeroDialog.Gender
+                });
+            };
+
+
+    case KeybindOptions.Pickup:
+        if (CMain.Time > PickUpTime)
+        {
+            PickUpTime = CMain.Time + 200;
+            Network.Enqueue(new C.PickUp());
+        }
+        break;
+
+        Network.Enqueue(new C.TradeRequest());
+
+        Network.Enqueue(new C.ChangePMode { Mode = PetMode.Both });
+        Network.Enqueue(new C.ChangePMode { Mode = PetMode.MoveOnly });
+        Network.Enqueue(new C.ChangePMode { Mode = PetMode.AttackOnly });
+        Network.Enqueue(new C.ChangePMode { Mode = PetMode.None });
+         Network.Enqueue(new C.ChangePMode { Mode = PetMode.FocusMasterTarget });
+         Network.Enqueue(new C.IntelligentCreaturePickup { MouseMode = false, Location = MapControl.MapLocation });
+         Network.Enqueue(new C.IntelligentCreaturePickup { MouseMode = true, Location = MapControl.MapLocation });
+
+         ChangeAttackMode();
+         Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Peace });
+         Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Group });
+         Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Guild });
+         Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.EnemyGuild });
+         Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.RedBrown });
+         Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.All });
+
+
+          public void ChangePetMode()
+        {
+            switch (PMode)
+            {
+                case PetMode.Both:
+                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.MoveOnly });
+                    return;
+                case PetMode.MoveOnly:
+                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.AttackOnly });
+                    return;
+                case PetMode.AttackOnly:
+                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.None });
+                    return;
+                case PetMode.None:
+                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.FocusMasterTarget });
+                    return;
+                case PetMode.FocusMasterTarget:
+                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.Both });
+                    return;
+            }
+        }
+        public void ChangeAttackMode()
+        {
+            switch (AMode)
+            {
+                case AttackMode.Peace:
+                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Group });
+                    return;
+                case AttackMode.Group:
+                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Guild });
+                    return;
+                case AttackMode.Guild:
+                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.EnemyGuild });
+                    return;
+                case AttackMode.EnemyGuild:
+                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.RedBrown });
+                    return;
+                case AttackMode.RedBrown:
+                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.All });
+                    return;
+                case AttackMode.All:
+                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Peace });
+                    return;
+            }
+        }
+
+        public override void ProcessPacket(Packet p)
+        {
+            switch (p.Index)
+            {
+                case (short)ServerPacketIds.KeepAlive:
+                    KeepAlive((S.KeepAlive)p);
+                    break;
+                case (short)ServerPacketIds.MapInformation: //MapInfo
+                    MapInformation((S.MapInformation)p);
+                    break;
+                case (short)ServerPacketIds.NewMapInfo:
+                    NewMapInfo((S.NewMapInfo)p);
+                    break;
+                case (short)ServerPacketIds.WorldMapSetup:
+                    WorldMapSetup((S.WorldMapSetupInfo)p);
+                    break;
+                case (short)ServerPacketIds.SearchMapResult:
+                    SearchMapResult((S.SearchMapResult)p);
+                    break;
+                case (short)ServerPacketIds.UserInformation:
+                    UserInformation((S.UserInformation)p);
+                    break;
+                case (short)ServerPacketIds.UserSlotsRefresh:
+                    UserSlotsRefresh((S.UserSlotsRefresh)p);
+                    break;
+                case (short)ServerPacketIds.UserLocation:
+                    UserLocation((S.UserLocation)p);
+                    break;
+                case (short)ServerPacketIds.ObjectPlayer:
+                    ObjectPlayer((S.ObjectPlayer)p);
+                    break;
+                case (short)ServerPacketIds.ObjectHero:
+                    ObjectHero((S.ObjectHero)p);
+                    break;
+                case (short)ServerPacketIds.ObjectRemove:
+                    ObjectRemove((S.ObjectRemove)p);
+                    break;
+                case (short)ServerPacketIds.ObjectTurn:
+                    ObjectTurn((S.ObjectTurn)p);
+                    break;
+                case (short)ServerPacketIds.ObjectWalk:
+                    ObjectWalk((S.ObjectWalk)p);
+                    break;
+                case (short)ServerPacketIds.ObjectRun:
+                    ObjectRun((S.ObjectRun)p);
+                    break;
+                case (short)ServerPacketIds.Chat:
+                    ReceiveChat((S.Chat)p);
+                    break;
+                case (short)ServerPacketIds.ObjectChat:
+                    ObjectChat((S.ObjectChat)p);
+                    break;
+                case (short)ServerPacketIds.MoveItem:
+                    MoveItem((S.MoveItem)p);
+                    break;
+                case (short)ServerPacketIds.EquipItem:
+                    EquipItem((S.EquipItem)p);
+                    break;
+                case (short)ServerPacketIds.MergeItem:
+                    MergeItem((S.MergeItem)p);
+                    break;
+                case (short)ServerPacketIds.RemoveItem:
+                    RemoveItem((S.RemoveItem)p);
+                    break;
+                case (short)ServerPacketIds.RemoveSlotItem:
+                    RemoveSlotItem((S.RemoveSlotItem)p);
+                    break;
+                case (short)ServerPacketIds.TakeBackItem:
+                    TakeBackItem((S.TakeBackItem)p);
+                    break;
+                case (short)ServerPacketIds.StoreItem:
+                    StoreItem((S.StoreItem)p);
+                    break;
+                case (short)ServerPacketIds.DepositRefineItem:
+                    DepositRefineItem((S.DepositRefineItem)p);
+                    break;
+                case (short)ServerPacketIds.RetrieveRefineItem:
+                    RetrieveRefineItem((S.RetrieveRefineItem)p);
+                    break;
+                case (short)ServerPacketIds.RefineCancel:
+                    RefineCancel((S.RefineCancel)p);
+                    break;
+                case (short)ServerPacketIds.RefineItem:
+                    RefineItem((S.RefineItem)p);
+                    break;
+                case (short)ServerPacketIds.DepositTradeItem:
+                    DepositTradeItem((S.DepositTradeItem)p);
+                    break;
+                case (short)ServerPacketIds.RetrieveTradeItem:
+                    RetrieveTradeItem((S.RetrieveTradeItem)p);
+                    break;
+                case (short)ServerPacketIds.SplitItem:
+                    SplitItem((S.SplitItem)p);
+                    break;
+                case (short)ServerPacketIds.SplitItem1:
+                    SplitItem1((S.SplitItem1)p);
+                    break;
+                case (short)ServerPacketIds.UseItem:
+                    UseItem((S.UseItem)p);
+                    break;
+                case (short)ServerPacketIds.DropItem:
+                    DropItem((S.DropItem)p);
+                    break;
+                case (short)ServerPacketIds.TakeBackHeroItem:
+                    TakeBackHeroItem((S.TakeBackHeroItem)p);
+                    break;
+                case (short)ServerPacketIds.TransferHeroItem:
+                    TransferHeroItem((S.TransferHeroItem)p);
+                    break;
+                case (short)ServerPacketIds.PlayerUpdate:
+                    PlayerUpdate((S.PlayerUpdate)p);
+                    break;
+                case (short)ServerPacketIds.PlayerInspect:
+                    PlayerInspect((S.PlayerInspect)p);
+                    break;
+                case (short)ServerPacketIds.LogOutSuccess:
+                    LogOutSuccess((S.LogOutSuccess)p);
+                    break;
+                case (short)ServerPacketIds.LogOutFailed:
+                    LogOutFailed((S.LogOutFailed)p);
+                    break;
+                case (short)ServerPacketIds.ReturnToLogin:
+                    ReturnToLogin((S.ReturnToLogin)p);
+                    break;
+                case (short)ServerPacketIds.TimeOfDay:
+                    TimeOfDay((S.TimeOfDay)p);
+                    break;
+                case (short)ServerPacketIds.ChangeAMode:
+                    ChangeAMode((S.ChangeAMode)p);
+                    break;
+                case (short)ServerPacketIds.ChangePMode:
+                    ChangePMode((S.ChangePMode)p);
+                    break;
+                case (short)ServerPacketIds.ObjectItem:
+                    ObjectItem((S.ObjectItem)p);
+                    break;
+                case (short)ServerPacketIds.ObjectGold:
+                    ObjectGold((S.ObjectGold)p);
+                    break;
+                case (short)ServerPacketIds.GainedItem:
+                    GainedItem((S.GainedItem)p);
+                    break;
+                case (short)ServerPacketIds.GainedGold:
+                    GainedGold((S.GainedGold)p);
+                    break;
+                case (short)ServerPacketIds.LoseGold:
+                    LoseGold((S.LoseGold)p);
+                    break;
+                case (short)ServerPacketIds.GainedCredit:
+                    GainedCredit((S.GainedCredit)p);
+                    break;
+                case (short)ServerPacketIds.LoseCredit:
+                    LoseCredit((S.LoseCredit)p);
+                    break;
+                case (short)ServerPacketIds.ObjectMonster:
+                    ObjectMonster((S.ObjectMonster)p);
+                    break;
+                case (short)ServerPacketIds.ObjectAttack:
+                    ObjectAttack((S.ObjectAttack)p);
+                    break;
+                case (short)ServerPacketIds.Struck:
+                    Struck((S.Struck)p);
+                    break;
+                case (short)ServerPacketIds.DamageIndicator:
+                    DamageIndicator((S.DamageIndicator)p);
+                    break;
+                case (short)ServerPacketIds.ObjectStruck:
+                    ObjectStruck((S.ObjectStruck)p);
+                    break;
+                case (short)ServerPacketIds.DuraChanged:
+                    DuraChanged((S.DuraChanged)p);
+                    break;
+                case (short)ServerPacketIds.HealthChanged:
+                    HealthChanged((S.HealthChanged)p);
+                    break;
+                case (short)ServerPacketIds.HeroHealthChanged:
+                    HeroHealthChanged((S.HeroHealthChanged)p);
+                    break;
+                case (short)ServerPacketIds.DeleteItem:
+                    DeleteItem((S.DeleteItem)p);
+                    break;
+                case (short)ServerPacketIds.Death:
+                    Death((S.Death)p);
+                    break;
+                case (short)ServerPacketIds.ObjectDied:
+                    ObjectDied((S.ObjectDied)p);
+                    break;
+                case (short)ServerPacketIds.ColourChanged:
+                    ColourChanged((S.ColourChanged)p);
+                    break;
+                case (short)ServerPacketIds.ObjectColourChanged:
+                    ObjectColourChanged((S.ObjectColourChanged)p);
+                    break;
+                case (short)ServerPacketIds.ObjectGuildNameChanged:
+                    ObjectGuildNameChanged((S.ObjectGuildNameChanged)p);
+                    break;
+                case (short)ServerPacketIds.GainExperience:
+                    GainExperience((S.GainExperience)p);
+                    break;
+                case (short)ServerPacketIds.GainHeroExperience:
+                    GainHeroExperience((S.GainHeroExperience)p);
+                    break;
+                case (short)ServerPacketIds.LevelChanged:
+                    LevelChanged((S.LevelChanged)p);
+                    break;
+                case (short)ServerPacketIds.HeroLevelChanged:
+                    HeroLevelChanged((S.HeroLevelChanged)p);
+                    break;
+                case (short)ServerPacketIds.ObjectLeveled:
+                    ObjectLeveled((S.ObjectLeveled)p);
+                    break;
+                case (short)ServerPacketIds.ObjectHarvest:
+                    ObjectHarvest((S.ObjectHarvest)p);
+                    break;
+                case (short)ServerPacketIds.ObjectHarvested:
+                    ObjectHarvested((S.ObjectHarvested)p);
+                    break;
+                case (short)ServerPacketIds.ObjectNpc:
+                    ObjectNPC((S.ObjectNPC)p);
+                    break;
+                case (short)ServerPacketIds.NPCResponse:
+                    NPCResponse((S.NPCResponse)p);
+                    break;
+                case (short)ServerPacketIds.ObjectHide:
+                    ObjectHide((S.ObjectHide)p);
+                    break;
+                case (short)ServerPacketIds.ObjectShow:
+                    ObjectShow((S.ObjectShow)p);
+                    break;
+                case (short)ServerPacketIds.Poisoned:
+                    Poisoned((S.Poisoned)p);
+                    break;
+                case (short)ServerPacketIds.ObjectPoisoned:
+                    ObjectPoisoned((S.ObjectPoisoned)p);
+                    break;
+                case (short)ServerPacketIds.MapChanged:
+                    MapChanged((S.MapChanged)p);
+                    break;
+                case (short)ServerPacketIds.ObjectTeleportOut:
+                    ObjectTeleportOut((S.ObjectTeleportOut)p);
+                    break;
+                case (short)ServerPacketIds.ObjectTeleportIn:
+                    ObjectTeleportIn((S.ObjectTeleportIn)p);
+                    break;
+                case (short)ServerPacketIds.TeleportIn:
+                    TeleportIn();
+                    break;
+                case (short)ServerPacketIds.NPCGoods:
+                    NPCGoods((S.NPCGoods)p);
+                    break;
+                case (short)ServerPacketIds.NPCSell:
+                    NPCSell();
+                    break;
+                case (short)ServerPacketIds.NPCRepair:
+                    NPCRepair((S.NPCRepair)p);
+                    break;
+                case (short)ServerPacketIds.NPCSRepair:
+                    NPCSRepair((S.NPCSRepair)p);
+                    break;
+                case (short)ServerPacketIds.NPCRefine:
+                    NPCRefine((S.NPCRefine)p);
+                    break;
+                case (short)ServerPacketIds.NPCCheckRefine:
+                    NPCCheckRefine((S.NPCCheckRefine)p);
+                    break;
+                case (short)ServerPacketIds.NPCCollectRefine:
+                    NPCCollectRefine((S.NPCCollectRefine)p);
+                    break;
+                case (short)ServerPacketIds.NPCReplaceWedRing:
+                    NPCReplaceWedRing((S.NPCReplaceWedRing)p);
+                    break;
+                case (short)ServerPacketIds.NPCStorage:
+                    NPCStorage();
+                    break;
+                case (short)ServerPacketIds.NPCRequestInput:
+                    NPCRequestInput((S.NPCRequestInput)p);
+                    break;
+                case (short)ServerPacketIds.SellItem:
+                    SellItem((S.SellItem)p);
+                    break;
+                case (short)ServerPacketIds.CraftItem:
+                    CraftItem((S.CraftItem)p);
+                    break;
+                case (short)ServerPacketIds.RepairItem:
+                    RepairItem((S.RepairItem)p);
+                    break;
+                case (short)ServerPacketIds.ItemRepaired:
+                    ItemRepaired((S.ItemRepaired)p);
+                    break;
+                case (short)ServerPacketIds.ItemSlotSizeChanged:
+                    ItemSlotSizeChanged((S.ItemSlotSizeChanged)p);
+                    break;
+                case (short)ServerPacketIds.ItemSealChanged:
+                    ItemSealChanged((S.ItemSealChanged)p);
+                    break;
+                case (short)ServerPacketIds.NewMagic:
+                    NewMagic((S.NewMagic)p);
+                    break;
+                case (short)ServerPacketIds.MagicLeveled:
+                    MagicLeveled((S.MagicLeveled)p);
+                    break;
+                case (short)ServerPacketIds.Magic:
+                    Magic((S.Magic)p);
+                    break;
+                case (short)ServerPacketIds.MagicDelay:
+                    MagicDelay((S.MagicDelay)p);
+                    break;
+                case (short)ServerPacketIds.MagicCast:
+                    MagicCast((S.MagicCast)p);
+                    break;
+                case (short)ServerPacketIds.ObjectMagic:
+                    ObjectMagic((S.ObjectMagic)p);
+                    break;
+                case (short)ServerPacketIds.ObjectProjectile:
+                    ObjectProjectile((S.ObjectProjectile)p);
+                    break;
+                case (short)ServerPacketIds.ObjectEffect:
+                    ObjectEffect((S.ObjectEffect)p);
+                    break;
+                case (short)ServerPacketIds.RangeAttack:
+                    RangeAttack((S.RangeAttack)p);
+                    break;
+                case (short)ServerPacketIds.Pushed:
+                    Pushed((S.Pushed)p);
+                    break;
+                case (short)ServerPacketIds.ObjectPushed:
+                    ObjectPushed((S.ObjectPushed)p);
+                    break;
+                case (short)ServerPacketIds.ObjectName:
+                    ObjectName((S.ObjectName)p);
+                    break;
+                case (short)ServerPacketIds.UserStorage:
+                    UserStorage((S.UserStorage)p);
+                    break;
+                case (short)ServerPacketIds.SwitchGroup:
+                    SwitchGroup((S.SwitchGroup)p);
+                    break;
+                case (short)ServerPacketIds.DeleteGroup:
+                    DeleteGroup();
+                    break;
+                case (short)ServerPacketIds.DeleteMember:
+                    DeleteMember((S.DeleteMember)p);
+                    break;
+                case (short)ServerPacketIds.GroupInvite:
+                    GroupInvite((S.GroupInvite)p);
+                    break;
+                case (short)ServerPacketIds.AddMember:
+                    AddMember((S.AddMember)p);
+                    break;
+                case (short)ServerPacketIds.GroupMembersMap:
+                    GroupMembersMap((S.GroupMembersMap)p);
+                    break;
+                case (short)ServerPacketIds.SendMemberLocation:
+                    SendMemberLocation((S.SendMemberLocation)p);
+                    break;
+                case (short)ServerPacketIds.Revived:
+                    Revived();
+                    break;
+                case (short)ServerPacketIds.ObjectRevived:
+                    ObjectRevived((S.ObjectRevived)p);
+                    break;
+                case (short)ServerPacketIds.SpellToggle:
+                    SpellToggle((S.SpellToggle)p);
+                    break;
+                case (short)ServerPacketIds.ObjectHealth:
+                    ObjectHealth((S.ObjectHealth)p);
+                    break;
+                case (short)ServerPacketIds.ObjectMana:
+                    ObjectMana((S.ObjectMana)p);
+                    break;
+                case (short)ServerPacketIds.MapEffect:
+                    MapEffect((S.MapEffect)p);
+                    break;
+                case (short)ServerPacketIds.AllowObserve:
+                    AllowObserve = ((S.AllowObserve)p).Allow;
+                    break;
+                case (short)ServerPacketIds.ObjectRangeAttack:
+                    ObjectRangeAttack((S.ObjectRangeAttack)p);
+                    break;
+                case (short)ServerPacketIds.AddBuff:
+                    AddBuff((S.AddBuff)p);
+                    break;
+                case (short)ServerPacketIds.RemoveBuff:
+                    RemoveBuff((S.RemoveBuff)p);
+                    break;
+                case (short)ServerPacketIds.PauseBuff:
+                    PauseBuff((S.PauseBuff)p);
+                    break;
+                case (short)ServerPacketIds.ObjectHidden:
+                    ObjectHidden((S.ObjectHidden)p);
+                    break;
+                case (short)ServerPacketIds.RefreshItem:
+                    RefreshItem((S.RefreshItem)p);
+                    break;
+                case (short)ServerPacketIds.ObjectSpell:
+                    ObjectSpell((S.ObjectSpell)p);
+                    break;
+                case (short)ServerPacketIds.UserDash:
+                    UserDash((S.UserDash)p);
+                    break;
+                case (short)ServerPacketIds.ObjectDash:
+                    ObjectDash((S.ObjectDash)p);
+                    break;
+                case (short)ServerPacketIds.UserDashFail:
+                    UserDashFail((S.UserDashFail)p);
+                    break;
+                case (short)ServerPacketIds.ObjectDashFail:
+                    ObjectDashFail((S.ObjectDashFail)p);
+                    break;
+                case (short)ServerPacketIds.NPCConsign:
+                    NPCConsign();
+                    break;
+                case (short)ServerPacketIds.NPCMarket:
+                    NPCMarket((S.NPCMarket)p);
+                    break;
+                case (short)ServerPacketIds.NPCMarketPage:
+                    NPCMarketPage((S.NPCMarketPage)p);
+                    break;
+                case (short)ServerPacketIds.ConsignItem:
+                    ConsignItem((S.ConsignItem)p);
+                    break;
+                case (short)ServerPacketIds.MarketFail:
+                    MarketFail((S.MarketFail)p);
+                    break;
+                case (short)ServerPacketIds.MarketSuccess:
+                    MarketSuccess((S.MarketSuccess)p);
+                    break;
+                case (short)ServerPacketIds.ObjectSitDown:
+                    ObjectSitDown((S.ObjectSitDown)p);
+                    break;
+                case (short)ServerPacketIds.InTrapRock:
+                    S.InTrapRock packetdata = (S.InTrapRock)p;
+                    User.InTrapRock = packetdata.Trapped;
+                    break;
+                case (short)ServerPacketIds.RemoveMagic:
+                    RemoveMagic((S.RemoveMagic)p);
+                    break;
+                case (short)ServerPacketIds.BaseStatsInfo:
+                    BaseStatsInfo((S.BaseStatsInfo)p);
+                    break;
+                case (short)ServerPacketIds.HeroBaseStatsInfo:
+                    HeroBaseStatsInfo((S.HeroBaseStatsInfo)p);
+                    break;
+                case (short)ServerPacketIds.UserName:
+                    UserName((S.UserName)p);
+                    break;
+                case (short)ServerPacketIds.ChatItemStats:
+                    ChatItemStats((S.ChatItemStats)p);
+                    break;
+                case (short)ServerPacketIds.GuildInvite:
+                    GuildInvite((S.GuildInvite)p);
+                    break;
+                case (short)ServerPacketIds.GuildMemberChange:
+                    GuildMemberChange((S.GuildMemberChange)p);
+                    break;
+                case (short)ServerPacketIds.GuildNoticeChange:
+                    GuildNoticeChange((S.GuildNoticeChange)p);
+                    break;
+                case (short)ServerPacketIds.GuildStatus:
+                    GuildStatus((S.GuildStatus)p);
+                    break;
+                case (short)ServerPacketIds.GuildExpGain:
+                    GuildExpGain((S.GuildExpGain)p);
+                    break;
+                case (short)ServerPacketIds.GuildNameRequest:
+                    GuildNameRequest((S.GuildNameRequest)p);
+                    break;
+                case (short)ServerPacketIds.GuildStorageGoldChange:
+                    GuildStorageGoldChange((S.GuildStorageGoldChange)p);
+                    break;
+                case (short)ServerPacketIds.GuildStorageItemChange:
+                    GuildStorageItemChange((S.GuildStorageItemChange)p);
+                    break;
+                case (short)ServerPacketIds.GuildStorageList:
+                    GuildStorageList((S.GuildStorageList)p);
+                    break;
+                case (short)ServerPacketIds.GuildRequestWar:
+                    GuildRequestWar((S.GuildRequestWar)p);
+                    break;
+                case (short)ServerPacketIds.HeroCreateRequest:
+                    HeroCreateRequest((S.HeroCreateRequest)p);
+                    break;
+                case (short)ServerPacketIds.NewHero:
+                    NewHero((S.NewHero)p);
+                    break;
+                case (short)ServerPacketIds.HeroInformation:
+                    HeroInformation((S.HeroInformation)p);
+                    break;
+                case (short)ServerPacketIds.UpdateHeroSpawnState:
+                    UpdateHeroSpawnState((S.UpdateHeroSpawnState)p);
+                    break;
+                case (short)ServerPacketIds.UnlockHeroAutoPot:
+                    UnlockHeroAutoPot(true);
+                    break;
+                case (short)ServerPacketIds.SetAutoPotValue:
+                    SetAutoPotValue((S.SetAutoPotValue)p);
+                    break;
+                case (short)ServerPacketIds.SetHeroBehaviour:
+                    SetHeroBehaviour((S.SetHeroBehaviour)p);
+                    break;
+                case (short)ServerPacketIds.SetAutoPotItem:
+                    SetAutoPotItem((S.SetAutoPotItem)p);
+                    break;
+                case (short)ServerPacketIds.ManageHeroes:
+                    ManageHeroes((S.ManageHeroes)p);
+                    break;
+                case (short)ServerPacketIds.ChangeHero:
+                    ChangeHero((S.ChangeHero)p);
+                    break;
+                case (short)ServerPacketIds.DefaultNPC:
+                    DefaultNPC((S.DefaultNPC)p);
+                    break;
+                case (short)ServerPacketIds.NPCUpdate:
+                    NPCUpdate((S.NPCUpdate)p);
+                    break;
+                case (short)ServerPacketIds.NPCImageUpdate:
+                    NPCImageUpdate((S.NPCImageUpdate)p);
+                    break;
+                case (short)ServerPacketIds.MarriageRequest:
+                    MarriageRequest((S.MarriageRequest)p);
+                    break;
+                case (short)ServerPacketIds.DivorceRequest:
+                    DivorceRequest((S.DivorceRequest)p);
+                    break;
+                case (short)ServerPacketIds.MentorRequest:
+                    MentorRequest((S.MentorRequest)p);
+                    break;
+                case (short)ServerPacketIds.TradeRequest:
+                    TradeRequest((S.TradeRequest)p);
+                    break;
+                case (short)ServerPacketIds.TradeAccept:
+                    TradeAccept((S.TradeAccept)p);
+                    break;
+                case (short)ServerPacketIds.TradeGold:
+                    TradeGold((S.TradeGold)p);
+                    break;
+                case (short)ServerPacketIds.TradeItem:
+                    TradeItem((S.TradeItem)p);
+                    break;
+                case (short)ServerPacketIds.TradeConfirm:
+                    TradeConfirm();
+                    break;
+                case (short)ServerPacketIds.TradeCancel:
+                    TradeCancel((S.TradeCancel)p);
+                    break;
+                case (short)ServerPacketIds.MountUpdate:
+                    MountUpdate((S.MountUpdate)p);
+                    break;
+                case (short)ServerPacketIds.TransformUpdate:
+                    TransformUpdate((S.TransformUpdate)p);
+                    break;
+                case (short)ServerPacketIds.EquipSlotItem:
+                    EquipSlotItem((S.EquipSlotItem)p);
+                    break;
+                case (short)ServerPacketIds.FishingUpdate:
+                    FishingUpdate((S.FishingUpdate)p);
+                    break;
+                case (short)ServerPacketIds.ChangeQuest:
+                    ChangeQuest((S.ChangeQuest)p);
+                    break;
+                case (short)ServerPacketIds.CompleteQuest:
+                    CompleteQuest((S.CompleteQuest)p);
+                    break;
+                case (short)ServerPacketIds.ShareQuest:
+                    ShareQuest((S.ShareQuest)p);
+                    break;
+                case (short)ServerPacketIds.GainedQuestItem:
+                    GainedQuestItem((S.GainedQuestItem)p);
+                    break;
+                case (short)ServerPacketIds.DeleteQuestItem:
+                    DeleteQuestItem((S.DeleteQuestItem)p);
+                    break;
+                case (short)ServerPacketIds.CancelReincarnation:
+                    User.ReincarnationStopTime = 0;
+                    break;
+                case (short)ServerPacketIds.RequestReincarnation:
+                    if (!User.Dead) return;
+                    RequestReincarnation();
+                    break;
+                case (short)ServerPacketIds.UserBackStep:
+                    UserBackStep((S.UserBackStep)p);
+                    break;
+                case (short)ServerPacketIds.ObjectBackStep:
+                    ObjectBackStep((S.ObjectBackStep)p);
+                    break;
+                case (short)ServerPacketIds.UserDashAttack:
+                    UserDashAttack((S.UserDashAttack)p);
+                    break;
+                case (short)ServerPacketIds.ObjectDashAttack:
+                    ObjectDashAttack((S.ObjectDashAttack)p);
+                    break;
+                case (short)ServerPacketIds.UserAttackMove://Warrior Skill - SlashingBurst
+                    UserAttackMove((S.UserAttackMove)p);
+                    break;
+                case (short)ServerPacketIds.CombineItem:
+                    CombineItem((S.CombineItem)p);
+                    break;
+                case (short)ServerPacketIds.ItemUpgraded:
+                    ItemUpgraded((S.ItemUpgraded)p);
+                    break;
+                case (short)ServerPacketIds.SetConcentration:
+                    SetConcentration((S.SetConcentration)p);
+                    break;
+                case (short)ServerPacketIds.SetElemental:
+                    SetElemental((S.SetElemental)p);
+                    break;
+                case (short)ServerPacketIds.RemoveDelayedExplosion:
+                    RemoveDelayedExplosion((S.RemoveDelayedExplosion)p);
+                    break;
+                case (short)ServerPacketIds.ObjectDeco:
+                    ObjectDeco((S.ObjectDeco)p);
+                    break;
+                case (short)ServerPacketIds.ObjectSneaking:
+                    ObjectSneaking((S.ObjectSneaking)p);
+                    break;
+                case (short)ServerPacketIds.ObjectLevelEffects:
+                    ObjectLevelEffects((S.ObjectLevelEffects)p);
+                    break;
+                case (short)ServerPacketIds.SetBindingShot:
+                    SetBindingShot((S.SetBindingShot)p);
+                    break;
+                case (short)ServerPacketIds.SendOutputMessage:
+                    SendOutputMessage((S.SendOutputMessage)p);
+                    break;
+                case (short)ServerPacketIds.NPCAwakening:
+                    NPCAwakening();
+                    break;
+                case (short)ServerPacketIds.NPCDisassemble:
+                    NPCDisassemble();
+                    break;
+                case (short)ServerPacketIds.NPCDowngrade:
+                    NPCDowngrade();
+                    break;
+                case (short)ServerPacketIds.NPCReset:
+                    NPCReset();
+                    break;
+                case (short)ServerPacketIds.AwakeningNeedMaterials:
+                    AwakeningNeedMaterials((S.AwakeningNeedMaterials)p);
+                    break;
+                case (short)ServerPacketIds.AwakeningLockedItem:
+                    AwakeningLockedItem((S.AwakeningLockedItem)p);
+                    break;
+                case (short)ServerPacketIds.Awakening:
+                    Awakening((S.Awakening)p);
+                    break;
+                case (short)ServerPacketIds.ReceiveMail:
+                    ReceiveMail((S.ReceiveMail)p);
+                    break;
+                case (short)ServerPacketIds.MailLockedItem:
+                    MailLockedItem((S.MailLockedItem)p);
+                    break;
+                case (short)ServerPacketIds.MailSent:
+                    MailSent((S.MailSent)p);
+                    break;
+                case (short)ServerPacketIds.MailSendRequest:
+                    MailSendRequest((S.MailSendRequest)p);
+                    break;
+                case (short)ServerPacketIds.ParcelCollected:
+                    ParcelCollected((S.ParcelCollected)p);
+                    break;
+                case (short)ServerPacketIds.MailCost:
+                    MailCost((S.MailCost)p);
+                    break;
+                case (short)ServerPacketIds.ResizeInventory:
+                    ResizeInventory((S.ResizeInventory)p);
+                    break;
+                case (short)ServerPacketIds.ResizeStorage:
+                    ResizeStorage((S.ResizeStorage)p);
+                    break;
+                case (short)ServerPacketIds.NewIntelligentCreature:
+                    NewIntelligentCreature((S.NewIntelligentCreature)p);
+                    break;
+                case (short)ServerPacketIds.UpdateIntelligentCreatureList:
+                    UpdateIntelligentCreatureList((S.UpdateIntelligentCreatureList)p);
+                    break;
+                case (short)ServerPacketIds.IntelligentCreatureEnableRename:
+                    IntelligentCreatureEnableRename((S.IntelligentCreatureEnableRename)p);
+                    break;
+                case (short)ServerPacketIds.IntelligentCreaturePickup:
+                    IntelligentCreaturePickup((S.IntelligentCreaturePickup)p);
+                    break;
+                case (short)ServerPacketIds.NPCPearlGoods:
+                    NPCPearlGoods((S.NPCPearlGoods)p);
+                    break;
+                case (short)ServerPacketIds.FriendUpdate:
+                    FriendUpdate((S.FriendUpdate)p);
+                    break;
+                case (short)ServerPacketIds.LoverUpdate:
+                    LoverUpdate((S.LoverUpdate)p);
+                    break;
+                case (short)ServerPacketIds.MentorUpdate:
+                    MentorUpdate((S.MentorUpdate)p);
+                    break;
+                case (short)ServerPacketIds.GuildBuffList:
+                    GuildBuffList((S.GuildBuffList)p);
+                    break;
+                case (short)ServerPacketIds.GameShopInfo:
+                    GameShopUpdate((S.GameShopInfo)p);
+                    break;
+                case (short)ServerPacketIds.GameShopStock:
+                    GameShopStock((S.GameShopStock)p);
+                    break;
+                case (short)ServerPacketIds.Rankings:
+                    Rankings((S.Rankings)p);
+                    break;
+                case (short)ServerPacketIds.Opendoor:
+                    Opendoor((S.Opendoor)p);
+                    break;
+                case (short)ServerPacketIds.GetRentedItems:
+                    RentedItems((S.GetRentedItems)p);
+                    break;
+                case (short)ServerPacketIds.ItemRentalRequest:
+                    ItemRentalRequest((S.ItemRentalRequest)p);
+                    break;
+                case (short)ServerPacketIds.ItemRentalFee:
+                    ItemRentalFee((S.ItemRentalFee)p);
+                    break;
+                case (short)ServerPacketIds.ItemRentalPeriod:
+                    ItemRentalPeriod((S.ItemRentalPeriod)p);
+                    break;
+                case (short)ServerPacketIds.DepositRentalItem:
+                    DepositRentalItem((S.DepositRentalItem)p);
+                    break;
+                case (short)ServerPacketIds.RetrieveRentalItem:
+                    RetrieveRentalItem((S.RetrieveRentalItem)p);
+                    break;
+                case (short)ServerPacketIds.UpdateRentalItem:
+                    UpdateRentalItem((S.UpdateRentalItem)p);
+                    break;
+                case (short)ServerPacketIds.CancelItemRental:
+                    CancelItemRental((S.CancelItemRental)p);
+                    break;
+                case (short)ServerPacketIds.ItemRentalLock:
+                    ItemRentalLock((S.ItemRentalLock)p);
+                    break;
+                case (short)ServerPacketIds.ItemRentalPartnerLock:
+                    ItemRentalPartnerLock((S.ItemRentalPartnerLock)p);
+                    break;
+                case (short)ServerPacketIds.CanConfirmItemRental:
+                    CanConfirmItemRental((S.CanConfirmItemRental)p);
+                    break;
+                case (short)ServerPacketIds.ConfirmItemRental:
+                    ConfirmItemRental((S.ConfirmItemRental)p);
+                    break;
+                case (short)ServerPacketIds.OpenBrowser:
+                    OpenBrowser((S.OpenBrowser)p);
+                    break;
+                case (short)ServerPacketIds.PlaySound:
+                    PlaySound((S.PlaySound)p);
+                    break;
+                case (short)ServerPacketIds.SetTimer:
+                    SetTimer((S.SetTimer)p);
+                    break;
+                case (short)ServerPacketIds.ExpireTimer:
+                    ExpireTimer((S.ExpireTimer)p);
+                    break;
+                case (short)ServerPacketIds.UpdateNotice:
+                    ShowNotice((S.UpdateNotice)p);
+                    break;
+                case (short)ServerPacketIds.Roll:
+                    Roll((S.Roll)p);
+                    break;
+                case (short)ServerPacketIds.SetCompass:
+                    SetCompass((S.SetCompass)p);
+                    break;
+                default:
+                    base.ProcessPacket(p);
+                    break;
+            }
+        }
+
+
+
+
+
+ 
+ public override void ProcessPacket(Packet p)
+ {
+            switch (p.Index)
+            {
+                case (short)ServerPacketIds.Connected:
+                    Network.Connected = true;
+                    SendVersion();
+                    break;
+                case (short)ServerPacketIds.ClientVersion:
+                    ClientVersion((S.ClientVersion) p);
+                    break;
+                case (short)ServerPacketIds.NewAccount:
+                    NewAccount((S.NewAccount) p);
+                    break;
+                case (short)ServerPacketIds.ChangePassword:
+                    ChangePassword((S.ChangePassword) p);
+                    break;
+                case (short)ServerPacketIds.ChangePasswordBanned:
+                    ChangePassword((S.ChangePasswordBanned) p);
+                    break;
+                case (short)ServerPacketIds.Login:
+                    Login((S.Login) p);
+                    break;
+                case (short)ServerPacketIds.LoginBanned:
+                    Login((S.LoginBanned) p);
+                    break;
+                case (short)ServerPacketIds.LoginSuccess:
+                    Login((S.LoginSuccess) p);
+                    break;
+                default:
+                    base.ProcessPacket(p);
+                    break;
+            }
+ }
+...
+                case (short)ServerPacketIds.NewCharacter:
+                    NewCharacter((S.NewCharacter)p);
+                    break;
+                case (short)ServerPacketIds.NewCharacterSuccess:
+                    NewCharacter((S.NewCharacterSuccess)p);
+                    break;
+                case (short)ServerPacketIds.DeleteCharacter:
+                    DeleteCharacter((S.DeleteCharacter)p);
+                    break;
+                case (short)ServerPacketIds.DeleteCharacterSuccess:
+                    DeleteCharacter((S.DeleteCharacterSuccess)p);
+                    break;
+                case (short)ServerPacketIds.StartGame:
+                    StartGame((S.StartGame)p);
+                    break;
+                case (short)ServerPacketIds.StartGameBanned:
+                    StartGame((S.StartGameBanned)p);
+                    break;
+                case (short)ServerPacketIds.StartGameDelay:
+                    StartGame((S.StartGameDelay)p);
+                    break;
+                default:
+                    base.ProcessPacket(p);
+                    break;
+            }
+...
+}
+
+
+Kor ID is Block this Section
+Server.Library > Envir.cs =>  static Envir()
+        {
+            AccountIDReg = new Regex(@"^[A-Za-z0-9]{" + Globals.MinAccountIDLength + "," + Globals.MaxAccountIDLength + "}$");//!!!
+            PasswordReg = new Regex(@"^[A-Za-z0-9]{" + Globals.MinPasswordLength + "," + Globals.MaxPasswordLength + "}$");
+            EMailReg = new Regex(@"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*");
+            CharacterReg = new Regex(@"^[\u4e00-\u9fa5_A-Za-z0-9]{" + Globals.MinCharacterNameLength + "," + Globals.MaxCharacterNameLength + "}$");  //!!!
+        }
+
+
+
+public void NewAccount(ClientPackets.NewAccount p, MirConnection c)
+{
+    ...
+    if (!AccountIDReg.IsMatch(p.AccountID)) => if (!string.IsNullOrWhiteSpace(p.AccountID) && p.AccountID.Length > 20)
+            {
+    ...
+}
+public int HTTPNewAccount(ClientPackets.NewAccount p, string ip)
+{
+    ...
+    if (!AccountIDReg.IsMatch(p.AccountID)) => if (!string.IsNullOrWhiteSpace(p.AccountID) && p.AccountID.Length > 20)
+    ...
+}
+public void Login(ClientPackets.Login p, MirConnection c)
+{
+    ...
+    if (!AccountIDReg.IsMatch(p.AccountID)) => if (!string.IsNullOrWhiteSpace(p.AccountID) && p.AccountID.Length > 20)
+    ...
+}
+public int HTTPLogin(string AccountID, string Password)
+{
+    ...
+    if (!AccountIDReg.IsMatch(AccountID)) => if (!string.IsNullOrWhiteSpace(AccountID) && AccountID.Length > 20)
+    ...
+}
+public void NewCharacter(ClientPackets.NewCharacter p, MirConnection c, bool IsGm)
+{
+    ...
+    if (!CharacterReg.IsMatch(p.Name)) =>if (!string.IsNullOrWhiteSpace(p.Name) && p.Name.Length > 20)//231107
+    ...
+}
+public bool CanCreateHero(ClientPackets.NewHero p, MirConnection c, bool IsGm)
+{
+    ...
+    if(!CharacterReg.IsMatch(p.Name)) => if (!string.IsNullOrWhiteSpace(p.Name) && p.Name.Length > 20)//231107 
+    ...
+}
+
+
+
+
+
+Apply Style and Color data
+Shared > ClientPackets.cs > NewCharacter 
+Server.lib > CharecterInfo.cs >  
+Server.lib >GetInfo > return ...
+
+Shared > ServerPackets.cs >UserInformation
+Shared > ServerPackets.cs >ObjectPlayer
+
+Client > PlayerObject.cs => S.ObjectPlayer info> Load
+
+
+portrate
+\Exine\RData\Profiles\charname.jpg
+72*72
+
+
+test
+:test.jpg
+
+
+//track
+Server.lib.MirConnection.cs
+  var info = new CharacterInfo(p, c) { Index = ++NextCharacterID, AccountInfo = c.Account };
+
+                c.Account.Characters.Add(info);
+                CharacterList.Add(info);
+
+                c.Enqueue(new ServerPackets.NewCharacterSuccess { CharInfo = info.ToSelectInfo() });
+
+//  MImage mImage = new MImage(image) { X = x, Y = y };
+
+
+
+----------------------------------------------
+todo rest make ref Packet.cs >  die, revive
+char flow pattern
+
+
+
+/*
+                        Name = info.Name;
+            Settings.LoadTrackedQuests(info.Name);
+            NameColour = info.NameColour;
+            GuildName = info.GuildName;
+            GuildRankName = info.GuildRank;
+            Class = info.Class;
+            Gender = info.Gender;
+            Level = info.Level;
+
+            CurrentLocation = info.Location;
+            MapLocation = info.Location;
+            ExineMainScene.Scene.MapControl.AddObject(this);
+
+            Direction = info.Direction;
+            Hair = info.Hair;
+
+            HP = info.HP;
+            MP = info.MP;
+
+            Experience = info.Experience;
+            MaxExperience = info.MaxExperience;
+
+            LevelEffects = info.LevelEffects;
+
+            Inventory = info.Inventory;
+            Equipment = info.Equipment;
+            QuestInventory = info.QuestInventory;
+
+            HasExpandedStorage = info.HasExpandedStorage;
+            ExpandedStorageExpiryTime = info.ExpandedStorageExpiryTime;
+
+            Magics = info.Magics;
+            for (int i = 0; i < Magics.Count; i++ )
+            {
+                Magics[i].CastTime += CMain.Time;
+            }
+
+            IntelligentCreatures = info.IntelligentCreatures;
+            SummonedCreatureType = info.SummonedCreatureType;
+            CreatureSummoned = info.CreatureSummoned;
+                    */
+
+
+client > Frames.cs >  #region Player
+
+shared.cs > enums.cs > 
+public enum MirDirection : byte
+{
+    Up = 0,
+    UpRight = 1,
+    Right = 2,
+    DownRight = 3,
+    Down = 4,
+    DownLeft = 5,
+    Left = 6,
+    UpLeft = 7
+}
+
+=>
+public enum ExineDirection : byte
+{
+    Up = 0,
+    Right = 1,
+    Down = 2,
+    Left = 3,
+    UpRight = 5,
+    DownRight = 6,
+    DownLeft = 7,
+    UpLeft = 8
+}
+
+
+
+////////////////
+irObjects > frames.cs > action - frame in
+
+irObjects > PlayerObject.cs > SetLibraries() > switch (CurrentAction)
+ wwwkangc
