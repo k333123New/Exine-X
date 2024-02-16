@@ -89,7 +89,7 @@
             this.btnSetLight = new System.Windows.Forms.ToolStripMenuItem();
             this.menu_DeleteSelectedCellData = new System.Windows.Forms.ToolStripMenuItem();
             this.hScrollBar = new System.Windows.Forms.HScrollBar();
-            this.tabWemadeMir2 = new System.Windows.Forms.TabPage();
+            this.tabExine = new System.Windows.Forms.TabPage();
             this.labWemadeMir2OffSetY = new System.Windows.Forms.Label();
             this.labeWemadeMir2OffSetX = new System.Windows.Forms.Label();
             this.LabWemadeMir2Height = new System.Windows.Forms.Label();
@@ -107,23 +107,7 @@
             this.ShandaExine2LibListBox = new System.Windows.Forms.ListBox();
             this.ShandaMir2LibListView = new System.Windows.Forms.ListView();
             this.ShandaExine2ImageList = new System.Windows.Forms.ImageList(this.components);
-            this.tabWemadeMir3 = new System.Windows.Forms.TabPage();
-            this.labWemadeMir3OffSetY = new System.Windows.Forms.Label();
-            this.labeWemadeMir3OffSetX = new System.Windows.Forms.Label();
-            this.LabWemadeMir3Height = new System.Windows.Forms.Label();
-            this.LabWemadeMir3Width = new System.Windows.Forms.Label();
-            this.picWemdeMir3 = new System.Windows.Forms.PictureBox();
-            this.WemadeExine3LibListBox = new System.Windows.Forms.ListBox();
-            this.WemadeMir3LibListView = new System.Windows.Forms.ListView();
             this.WemadeExine3ImageList = new System.Windows.Forms.ImageList(this.components);
-            this.tabShandaMir3 = new System.Windows.Forms.TabPage();
-            this.labshandaMir3OffSetY = new System.Windows.Forms.Label();
-            this.labShandaMir3OffSetX = new System.Windows.Forms.Label();
-            this.labShandaMir3Height = new System.Windows.Forms.Label();
-            this.labShandaMir3Width = new System.Windows.Forms.Label();
-            this.picShandaMir3 = new System.Windows.Forms.PictureBox();
-            this.ShandaExine3LibListBox = new System.Windows.Forms.ListBox();
-            this.ShandaMir3LibListView = new System.Windows.Forms.ListView();
             this.ShandaExine3ImageList = new System.Windows.Forms.ImageList(this.components);
             this.tabObjects = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -181,14 +165,10 @@
             this.tabMap.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
-            this.tabWemadeMir2.SuspendLayout();
+            this.tabExine.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picWemdeMir2)).BeginInit();
             this.tabShandaMir2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picShandaMir2)).BeginInit();
-            this.tabWemadeMir3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picWemdeMir3)).BeginInit();
-            this.tabShandaMir3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picShandaMir3)).BeginInit();
             this.tabObjects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -690,10 +670,8 @@
             // 
             this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tabControl1.Controls.Add(this.tabMap);
-            this.tabControl1.Controls.Add(this.tabWemadeMir2);
+            this.tabControl1.Controls.Add(this.tabExine);
             this.tabControl1.Controls.Add(this.tabShandaMir2);
-            this.tabControl1.Controls.Add(this.tabWemadeMir3);
-            this.tabControl1.Controls.Add(this.tabShandaMir3);
             this.tabControl1.Controls.Add(this.tabObjects);
             this.tabControl1.Controls.Add(this.tabTiles);
             this.tabControl1.Controls.Add(this.tabTileCutter);
@@ -845,23 +823,23 @@
             this.hScrollBar.TabIndex = 0;
             this.hScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScrollBar_Scroll);
             // 
-            // tabWemadeMir2
+            // tabExine
             // 
-            this.tabWemadeMir2.Controls.Add(this.labWemadeMir2OffSetY);
-            this.tabWemadeMir2.Controls.Add(this.labeWemadeMir2OffSetX);
-            this.tabWemadeMir2.Controls.Add(this.LabWemadeMir2Height);
-            this.tabWemadeMir2.Controls.Add(this.LabWemadeMir2Width);
-            this.tabWemadeMir2.Controls.Add(this.picWemdeMir2);
-            this.tabWemadeMir2.Controls.Add(this.WemadeExine2LibListBox);
-            this.tabWemadeMir2.Controls.Add(this.WemadeMir2LibListView);
-            this.tabWemadeMir2.Location = new System.Drawing.Point(4, 29);
-            this.tabWemadeMir2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabWemadeMir2.Name = "tabWemadeMir2";
-            this.tabWemadeMir2.Size = new System.Drawing.Size(1916, 938);
-            this.tabWemadeMir2.TabIndex = 5;
-            this.tabWemadeMir2.Text = "WemadeMir2";
-            this.tabWemadeMir2.ToolTipText = "(F1)";
-            this.tabWemadeMir2.UseVisualStyleBackColor = true;
+            this.tabExine.Controls.Add(this.labWemadeMir2OffSetY);
+            this.tabExine.Controls.Add(this.labeWemadeMir2OffSetX);
+            this.tabExine.Controls.Add(this.LabWemadeMir2Height);
+            this.tabExine.Controls.Add(this.LabWemadeMir2Width);
+            this.tabExine.Controls.Add(this.picWemdeMir2);
+            this.tabExine.Controls.Add(this.WemadeExine2LibListBox);
+            this.tabExine.Controls.Add(this.WemadeMir2LibListView);
+            this.tabExine.Location = new System.Drawing.Point(4, 29);
+            this.tabExine.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabExine.Name = "tabExine";
+            this.tabExine.Size = new System.Drawing.Size(1916, 938);
+            this.tabExine.TabIndex = 5;
+            this.tabExine.Text = "Exine";
+            this.tabExine.ToolTipText = "(F1)";
+            this.tabExine.UseVisualStyleBackColor = true;
             // 
             // labWemadeMir2OffSetY
             // 
@@ -923,7 +901,7 @@
             this.picWemdeMir2.TabIndex = 11;
             this.picWemdeMir2.TabStop = false;
             // 
-            // WemadeMir2LibListBox
+            // WemadeExine2LibListBox
             // 
             this.WemadeExine2LibListBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.WemadeExine2LibListBox.Font = new System.Drawing.Font("Comic Sans MS", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -931,7 +909,7 @@
             this.WemadeExine2LibListBox.ItemHeight = 19;
             this.WemadeExine2LibListBox.Location = new System.Drawing.Point(0, 0);
             this.WemadeExine2LibListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.WemadeExine2LibListBox.Name = "WemadeMir2LibListBox";
+            this.WemadeExine2LibListBox.Name = "WemadeExine2LibListBox";
             this.WemadeExine2LibListBox.Size = new System.Drawing.Size(200, 938);
             this.WemadeExine2LibListBox.TabIndex = 10;
             this.WemadeExine2LibListBox.SelectedIndexChanged += new System.EventHandler(this.WemadeMir2LibListBox_SelectedIndexChanged);
@@ -954,7 +932,7 @@
             this.WemadeMir2LibListView.SelectedIndexChanged += new System.EventHandler(this.WemadeMir2LibListView_SelectedIndexChanged);
             this.WemadeMir2LibListView.Click += new System.EventHandler(this.WemadeMir2LibListView_Click);
             // 
-            // WemadeMir2ImageList
+            // WemadeExine2ImageList
             // 
             this.WemadeExine2ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.WemadeExine2ImageList.ImageSize = new System.Drawing.Size(64, 64);
@@ -974,7 +952,7 @@
             this.tabShandaMir2.Name = "tabShandaMir2";
             this.tabShandaMir2.Size = new System.Drawing.Size(1916, 938);
             this.tabShandaMir2.TabIndex = 4;
-            this.tabShandaMir2.Text = "ShandaMir2";
+            this.tabShandaMir2.Text = "ShandaM2";
             this.tabShandaMir2.ToolTipText = "(F2)";
             this.tabShandaMir2.UseVisualStyleBackColor = true;
             // 
@@ -1038,7 +1016,7 @@
             this.picShandaMir2.TabIndex = 16;
             this.picShandaMir2.TabStop = false;
             // 
-            // ShandaMir2LibListBox
+            // ShandaExine2LibListBox
             // 
             this.ShandaExine2LibListBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.ShandaExine2LibListBox.Font = new System.Drawing.Font("Comic Sans MS", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1046,7 +1024,7 @@
             this.ShandaExine2LibListBox.ItemHeight = 19;
             this.ShandaExine2LibListBox.Location = new System.Drawing.Point(0, 0);
             this.ShandaExine2LibListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ShandaExine2LibListBox.Name = "ShandaMir2LibListBox";
+            this.ShandaExine2LibListBox.Name = "ShandaExine2LibListBox";
             this.ShandaExine2LibListBox.Size = new System.Drawing.Size(175, 938);
             this.ShandaExine2LibListBox.TabIndex = 8;
             this.ShandaExine2LibListBox.SelectedIndexChanged += new System.EventHandler(this.ShandaMir2LibListBox_SelectedIndexChanged);
@@ -1069,236 +1047,19 @@
             this.ShandaMir2LibListView.SelectedIndexChanged += new System.EventHandler(this.ShandaMir2LibListView_SelectedIndexChanged);
             this.ShandaMir2LibListView.Click += new System.EventHandler(this.ShandaMir2LibListView_Click);
             // 
-            // ShandaMir2ImageList
+            // ShandaExine2ImageList
             // 
             this.ShandaExine2ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.ShandaExine2ImageList.ImageSize = new System.Drawing.Size(64, 64);
             this.ShandaExine2ImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // tabWemadeMir3
-            // 
-            this.tabWemadeMir3.Controls.Add(this.labWemadeMir3OffSetY);
-            this.tabWemadeMir3.Controls.Add(this.labeWemadeMir3OffSetX);
-            this.tabWemadeMir3.Controls.Add(this.LabWemadeMir3Height);
-            this.tabWemadeMir3.Controls.Add(this.LabWemadeMir3Width);
-            this.tabWemadeMir3.Controls.Add(this.picWemdeMir3);
-            this.tabWemadeMir3.Controls.Add(this.WemadeExine3LibListBox);
-            this.tabWemadeMir3.Controls.Add(this.WemadeMir3LibListView);
-            this.tabWemadeMir3.Location = new System.Drawing.Point(4, 29);
-            this.tabWemadeMir3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabWemadeMir3.Name = "tabWemadeMir3";
-            this.tabWemadeMir3.Size = new System.Drawing.Size(1916, 938);
-            this.tabWemadeMir3.TabIndex = 6;
-            this.tabWemadeMir3.Text = "WemadeMir3";
-            this.tabWemadeMir3.ToolTipText = "(F3)";
-            this.tabWemadeMir3.UseVisualStyleBackColor = true;
-            // 
-            // labWemadeMir3OffSetY
-            // 
-            this.labWemadeMir3OffSetY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labWemadeMir3OffSetY.AutoSize = true;
-            this.labWemadeMir3OffSetY.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labWemadeMir3OffSetY.Location = new System.Drawing.Point(1675, 76);
-            this.labWemadeMir3OffSetY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labWemadeMir3OffSetY.Name = "labWemadeMir3OffSetY";
-            this.labWemadeMir3OffSetY.Size = new System.Drawing.Size(59, 20);
-            this.labWemadeMir3OffSetY.TabIndex = 20;
-            this.labWemadeMir3OffSetY.Text = "OffSetY";
-            // 
-            // labeWemadeMir3OffSetX
-            // 
-            this.labeWemadeMir3OffSetX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labeWemadeMir3OffSetX.AutoSize = true;
-            this.labeWemadeMir3OffSetX.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labeWemadeMir3OffSetX.Location = new System.Drawing.Point(1675, 29);
-            this.labeWemadeMir3OffSetX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labeWemadeMir3OffSetX.Name = "labeWemadeMir3OffSetX";
-            this.labeWemadeMir3OffSetX.Size = new System.Drawing.Size(60, 20);
-            this.labeWemadeMir3OffSetX.TabIndex = 19;
-            this.labeWemadeMir3OffSetX.Text = "OffSetX";
-            // 
-            // LabWemadeMir3Height
-            // 
-            this.LabWemadeMir3Height.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabWemadeMir3Height.AutoSize = true;
-            this.LabWemadeMir3Height.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.LabWemadeMir3Height.Location = new System.Drawing.Point(1560, 76);
-            this.LabWemadeMir3Height.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.LabWemadeMir3Height.Name = "LabWemadeMir3Height";
-            this.LabWemadeMir3Height.Size = new System.Drawing.Size(55, 20);
-            this.LabWemadeMir3Height.TabIndex = 18;
-            this.LabWemadeMir3Height.Text = "Height";
-            // 
-            // LabWemadeMir3Width
-            // 
-            this.LabWemadeMir3Width.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.LabWemadeMir3Width.AutoSize = true;
-            this.LabWemadeMir3Width.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.LabWemadeMir3Width.Location = new System.Drawing.Point(1560, 29);
-            this.LabWemadeMir3Width.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.LabWemadeMir3Width.Name = "LabWemadeMir3Width";
-            this.LabWemadeMir3Width.Size = new System.Drawing.Size(50, 20);
-            this.LabWemadeMir3Width.TabIndex = 17;
-            this.LabWemadeMir3Width.Text = "Width";
-            // 
-            // picWemdeMir3
-            // 
-            this.picWemdeMir3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.picWemdeMir3.BackColor = System.Drawing.Color.Black;
-            this.picWemdeMir3.Location = new System.Drawing.Point(1566, 131);
-            this.picWemdeMir3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.picWemdeMir3.Name = "picWemdeMir3";
-            this.picWemdeMir3.Size = new System.Drawing.Size(100, 50);
-            this.picWemdeMir3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picWemdeMir3.TabIndex = 16;
-            this.picWemdeMir3.TabStop = false;
-            // 
-            // WemadeMir3LibListBox
-            // 
-            this.WemadeExine3LibListBox.Dock = System.Windows.Forms.DockStyle.Left;
-            this.WemadeExine3LibListBox.Font = new System.Drawing.Font("Comic Sans MS", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.WemadeExine3LibListBox.FormattingEnabled = true;
-            this.WemadeExine3LibListBox.ItemHeight = 19;
-            this.WemadeExine3LibListBox.Location = new System.Drawing.Point(0, 0);
-            this.WemadeExine3LibListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.WemadeExine3LibListBox.Name = "WemadeMir3LibListBox";
-            this.WemadeExine3LibListBox.Size = new System.Drawing.Size(224, 938);
-            this.WemadeExine3LibListBox.TabIndex = 10;
-            this.WemadeExine3LibListBox.SelectedIndexChanged += new System.EventHandler(this.WemadeMir3LibListBox_SelectedIndexChanged);
-            // 
-            // WemadeMir3LibListView
-            // 
-            this.WemadeMir3LibListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.WemadeMir3LibListView.HideSelection = false;
-            this.WemadeMir3LibListView.LargeImageList = this.WemadeExine3ImageList;
-            this.WemadeMir3LibListView.Location = new System.Drawing.Point(224, 2);
-            this.WemadeMir3LibListView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.WemadeMir3LibListView.Name = "WemadeMir3LibListView";
-            this.WemadeMir3LibListView.Size = new System.Drawing.Size(1317, 883);
-            this.WemadeMir3LibListView.TabIndex = 9;
-            this.WemadeMir3LibListView.UseCompatibleStateImageBehavior = false;
-            this.WemadeMir3LibListView.VirtualMode = true;
-            this.WemadeMir3LibListView.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.WemadeMir3LibListView_RetrieveVirtualItem);
-            this.WemadeMir3LibListView.SelectedIndexChanged += new System.EventHandler(this.WemadeMir3LibListView_SelectedIndexChanged);
-            this.WemadeMir3LibListView.Click += new System.EventHandler(this.WemadeMir3LibListView_Click);
-            // 
-            // WemadeMir3ImageList
+            // WemadeExine3ImageList
             // 
             this.WemadeExine3ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.WemadeExine3ImageList.ImageSize = new System.Drawing.Size(64, 64);
             this.WemadeExine3ImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // tabShandaMir3
-            // 
-            this.tabShandaMir3.Controls.Add(this.labshandaMir3OffSetY);
-            this.tabShandaMir3.Controls.Add(this.labShandaMir3OffSetX);
-            this.tabShandaMir3.Controls.Add(this.labShandaMir3Height);
-            this.tabShandaMir3.Controls.Add(this.labShandaMir3Width);
-            this.tabShandaMir3.Controls.Add(this.picShandaMir3);
-            this.tabShandaMir3.Controls.Add(this.ShandaExine3LibListBox);
-            this.tabShandaMir3.Controls.Add(this.ShandaMir3LibListView);
-            this.tabShandaMir3.Location = new System.Drawing.Point(4, 29);
-            this.tabShandaMir3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabShandaMir3.Name = "tabShandaMir3";
-            this.tabShandaMir3.Size = new System.Drawing.Size(1916, 938);
-            this.tabShandaMir3.TabIndex = 7;
-            this.tabShandaMir3.Text = "ShandaMir3";
-            this.tabShandaMir3.UseVisualStyleBackColor = true;
-            // 
-            // labshandaMir3OffSetY
-            // 
-            this.labshandaMir3OffSetY.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labshandaMir3OffSetY.AutoSize = true;
-            this.labshandaMir3OffSetY.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labshandaMir3OffSetY.Location = new System.Drawing.Point(1687, 73);
-            this.labshandaMir3OffSetY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labshandaMir3OffSetY.Name = "labshandaMir3OffSetY";
-            this.labshandaMir3OffSetY.Size = new System.Drawing.Size(59, 20);
-            this.labshandaMir3OffSetY.TabIndex = 20;
-            this.labshandaMir3OffSetY.Text = "OffSetY";
-            // 
-            // labShandaMir3OffSetX
-            // 
-            this.labShandaMir3OffSetX.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labShandaMir3OffSetX.AutoSize = true;
-            this.labShandaMir3OffSetX.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labShandaMir3OffSetX.Location = new System.Drawing.Point(1687, 25);
-            this.labShandaMir3OffSetX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labShandaMir3OffSetX.Name = "labShandaMir3OffSetX";
-            this.labShandaMir3OffSetX.Size = new System.Drawing.Size(60, 20);
-            this.labShandaMir3OffSetX.TabIndex = 19;
-            this.labShandaMir3OffSetX.Text = "OffSetX";
-            // 
-            // labShandaMir3Height
-            // 
-            this.labShandaMir3Height.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labShandaMir3Height.AutoSize = true;
-            this.labShandaMir3Height.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labShandaMir3Height.Location = new System.Drawing.Point(1572, 73);
-            this.labShandaMir3Height.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labShandaMir3Height.Name = "labShandaMir3Height";
-            this.labShandaMir3Height.Size = new System.Drawing.Size(55, 20);
-            this.labShandaMir3Height.TabIndex = 18;
-            this.labShandaMir3Height.Text = "Height";
-            // 
-            // labShandaMir3Width
-            // 
-            this.labShandaMir3Width.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labShandaMir3Width.AutoSize = true;
-            this.labShandaMir3Width.Font = new System.Drawing.Font("Microsoft YaHei", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labShandaMir3Width.Location = new System.Drawing.Point(1572, 25);
-            this.labShandaMir3Width.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labShandaMir3Width.Name = "labShandaMir3Width";
-            this.labShandaMir3Width.Size = new System.Drawing.Size(50, 20);
-            this.labShandaMir3Width.TabIndex = 17;
-            this.labShandaMir3Width.Text = "Width";
-            // 
-            // picShandaMir3
-            // 
-            this.picShandaMir3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.picShandaMir3.BackColor = System.Drawing.Color.Black;
-            this.picShandaMir3.Location = new System.Drawing.Point(1578, 130);
-            this.picShandaMir3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.picShandaMir3.Name = "picShandaMir3";
-            this.picShandaMir3.Size = new System.Drawing.Size(100, 50);
-            this.picShandaMir3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picShandaMir3.TabIndex = 16;
-            this.picShandaMir3.TabStop = false;
-            // 
-            // ShandaMir3LibListBox
-            // 
-            this.ShandaExine3LibListBox.Dock = System.Windows.Forms.DockStyle.Left;
-            this.ShandaExine3LibListBox.Font = new System.Drawing.Font("Comic Sans MS", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ShandaExine3LibListBox.FormattingEnabled = true;
-            this.ShandaExine3LibListBox.ItemHeight = 19;
-            this.ShandaExine3LibListBox.Location = new System.Drawing.Point(0, 0);
-            this.ShandaExine3LibListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ShandaExine3LibListBox.Name = "ShandaMir3LibListBox";
-            this.ShandaExine3LibListBox.Size = new System.Drawing.Size(220, 938);
-            this.ShandaExine3LibListBox.TabIndex = 10;
-            this.ShandaExine3LibListBox.SelectedIndexChanged += new System.EventHandler(this.ShandaMir3LibListBox_SelectedIndexChanged);
-            // 
-            // ShandaMir3LibListView
-            // 
-            this.ShandaMir3LibListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.ShandaMir3LibListView.HideSelection = false;
-            this.ShandaMir3LibListView.LargeImageList = this.ShandaExine3ImageList;
-            this.ShandaMir3LibListView.Location = new System.Drawing.Point(219, 0);
-            this.ShandaMir3LibListView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.ShandaMir3LibListView.Name = "ShandaMir3LibListView";
-            this.ShandaMir3LibListView.Size = new System.Drawing.Size(1319, 885);
-            this.ShandaMir3LibListView.TabIndex = 9;
-            this.ShandaMir3LibListView.UseCompatibleStateImageBehavior = false;
-            this.ShandaMir3LibListView.VirtualMode = true;
-            this.ShandaMir3LibListView.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.ShandaMir3LibListView_RetrieveVirtualItem);
-            this.ShandaMir3LibListView.SelectedIndexChanged += new System.EventHandler(this.ShandaMir3LibListView_SelectedIndexChanged);
-            this.ShandaMir3LibListView.Click += new System.EventHandler(this.ShandaMir3LibListView_Click);
-            // 
-            // ShandaMir3ImageList
+            // ShandaExine3ImageList
             // 
             this.ShandaExine3ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.ShandaExine3ImageList.ImageSize = new System.Drawing.Size(64, 64);
@@ -1650,7 +1411,7 @@
             this.tabHelp.Location = new System.Drawing.Point(4, 29);
             this.tabHelp.Name = "tabHelp";
             this.tabHelp.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHelp.Size = new System.Drawing.Size(1974, 1068);
+            this.tabHelp.Size = new System.Drawing.Size(1916, 938);
             this.tabHelp.TabIndex = 11;
             this.tabHelp.Text = "Help";
             this.tabHelp.ToolTipText = "(H)";
@@ -1849,18 +1610,12 @@
             this.tabMap.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
-            this.tabWemadeMir2.ResumeLayout(false);
-            this.tabWemadeMir2.PerformLayout();
+            this.tabExine.ResumeLayout(false);
+            this.tabExine.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picWemdeMir2)).EndInit();
             this.tabShandaMir2.ResumeLayout(false);
             this.tabShandaMir2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picShandaMir2)).EndInit();
-            this.tabWemadeMir3.ResumeLayout(false);
-            this.tabWemadeMir3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picWemdeMir3)).EndInit();
-            this.tabShandaMir3.ResumeLayout(false);
-            this.tabShandaMir3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picShandaMir3)).EndInit();
             this.tabObjects.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -1912,18 +1667,12 @@
         private System.Windows.Forms.TabPage tabShandaMir2;
         private System.Windows.Forms.ListBox ShandaExine2LibListBox;
         private System.Windows.Forms.ListView ShandaMir2LibListView;
-        private System.Windows.Forms.TabPage tabWemadeMir2;
+        private System.Windows.Forms.TabPage tabExine;
         private System.Windows.Forms.ListBox WemadeExine2LibListBox;
         private System.Windows.Forms.ListView WemadeMir2LibListView;
         private System.Windows.Forms.ImageList WemadeExine2ImageList;
         private System.Windows.Forms.ImageList ShandaExine3ImageList;
         private System.Windows.Forms.ImageList WemadeExine3ImageList;
-        private System.Windows.Forms.TabPage tabWemadeMir3;
-        private System.Windows.Forms.ListBox WemadeExine3LibListBox;
-        private System.Windows.Forms.ListView WemadeMir3LibListView;
-        private System.Windows.Forms.TabPage tabShandaMir3;
-        private System.Windows.Forms.ListBox ShandaExine3LibListBox;
-        private System.Windows.Forms.ListView ShandaMir3LibListView;
         private System.Windows.Forms.ToolStripMenuItem chkMiddleAnimationTag;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripComboBox cmbEditorLayer;
@@ -1937,16 +1686,6 @@
         private System.Windows.Forms.Label labShandaMir2Height;
         private System.Windows.Forms.Label labShandaMir2Width;
         private System.Windows.Forms.PictureBox picShandaMir2;
-        private System.Windows.Forms.Label labWemadeMir3OffSetY;
-        private System.Windows.Forms.Label labeWemadeMir3OffSetX;
-        private System.Windows.Forms.Label LabWemadeMir3Height;
-        private System.Windows.Forms.Label LabWemadeMir3Width;
-        private System.Windows.Forms.PictureBox picWemdeMir3;
-        private System.Windows.Forms.Label labshandaMir3OffSetY;
-        private System.Windows.Forms.Label labShandaMir3OffSetX;
-        private System.Windows.Forms.Label labShandaMir3Height;
-        private System.Windows.Forms.Label labShandaMir3Width;
-        private System.Windows.Forms.PictureBox picShandaMir3;
         private System.Windows.Forms.ToolStripMenuItem chkDrawGrids;
         private System.Windows.Forms.TabPage tabObjects;
         private System.Windows.Forms.PictureBox picObjects;

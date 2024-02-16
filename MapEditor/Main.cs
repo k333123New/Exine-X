@@ -29,9 +29,8 @@ namespace Map_Editor
         public delegate void DelSetMapSize(int w, int h);
 
         
-
         private const int CellWidth = 48;
-        private const int CellHeight = 32;
+        private const int CellHeight = 24;
         private const int Exine2BigTileBlock = 50;
         private const int Exine3BigTileBlock = 30;
         private const int smTileBlock = 60;
@@ -106,7 +105,7 @@ namespace Map_Editor
         //TileCutter
         private bool grid = true;
         public static Point MPoint;
-        private Bitmap cellHighlight = new Bitmap(48, 32);
+        private Bitmap cellHighlight = new Bitmap(48, 24);
         public int CellSizeX;
         public int CellSizeY;
         public int[,] SelectedCells;
@@ -279,12 +278,11 @@ namespace Map_Editor
 
         private void Main_Load(object sender, EventArgs e)
         {
-            Libraries.LoadGameLibraries();
 
+            Libraries.LoadGameLibraries();
+             
             ReadShandaExine2LibToListBox();
             ReadWemadeExine2LibToListBox();
-            ReadWemadeExine3LibToListBox();
-            ReadShandaExine3LibToListBox();
 
             ReadObjectsToListBox();
 
@@ -445,9 +443,11 @@ namespace Map_Editor
             }
             else if (layer == Layer.BackImage)
             {
+                /*
                 var temp = CheckPointIsEven(new Point(cellX, cellY));
                 cellX = temp.X;
                 cellY = temp.Y;
+                */
                 var libIndex = selectListItem.Value;
                 var index = selectImageIndex;
                 var drawX = (cellX - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
@@ -569,7 +569,7 @@ namespace Map_Editor
                     index += AnimationCount%(animation + animation*animationTick)/(1 + animationTick);
                 }
 
-                //It's not a 48*32 or 96*64 floor tile, it's a big object
+                //It's not a 48*24 or 96*48 floor tile, it's a big object
                 if ((s.Width != CellWidth || s.Height != CellHeight) &&
                     (s.Width != CellWidth*2 || s.Height != CellHeight*2))
                 {
@@ -605,7 +605,7 @@ namespace Map_Editor
                         Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
                     }
                 }
-                //Is 48*32 or 96*64 floor tiles
+                //Is 48*24 or 96*48 floor tiles
                 else
                 {
                     drawY = (datas[i].Y + cellY - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
@@ -796,7 +796,7 @@ namespace Map_Editor
 
                         var doorOffset = X2CellInfo[x, y].DoorOffset;
                         var s = Libraries.MapLibs[libIndex].GetSize(index);
-                        //It's not a 48*32 or 96*64 floor tile, it's a big object
+                        //It's not a 48*24 or 96*48 floor tile, it's a big object
                         if ((s.Width != CellWidth || s.Height != CellHeight) &&
                             (s.Width != CellWidth*2 || s.Height != CellHeight*2))
                         {
@@ -832,7 +832,7 @@ namespace Map_Editor
                                 Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
                             }
                         }
-                        //Is 48*32 or 96*64 floor tiles
+                        //Is 48*24 or 96*48 floor tiles
                         else
                         {
                             drawY = (y - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
@@ -949,12 +949,14 @@ namespace Map_Editor
             {
                 for (var y = mapPoint.Y - 1; y <= mapPoint.Y + OffSetY; y++)
                 {
-                    if (y%2 != 0) continue;
+                    //if (y%2 != 0) continue;
+                    if (y < 0) continue;
                     if (y >= mapHeight) continue;
                     drawY = (y - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
                     for (var x = mapPoint.X - 1; x <= mapPoint.X + OffSetX; x++)
                     {
-                        if (x%2 != 0) continue;
+                        //if (x%2 != 0) continue;
+                        if (x < 0) continue;
                         if (x >= mapWidth) continue;
                         drawX = (x - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
                         index = (X2CellInfo[x, y].BackImage & 0x1FFFFFFF) - 1;
@@ -988,29 +990,7 @@ namespace Map_Editor
                 }
             }
         }
-
-        private void ReadWemadeExine3LibToListBox()
-        {
-            for (var i = 200; i < 300; i++)
-            {
-                if (Libraries.ListItems[i] != null)
-                {
-                    WemadeExine3LibListBox.Items.Add(Libraries.ListItems[i]);
-                }
-            }
-        }
-
-        private void ReadShandaExine3LibToListBox()
-        {
-            for (var i = 300; i < 400; i++)
-            {
-                if (Libraries.ListItems[i] != null)
-                {
-                    ShandaExine3LibListBox.Items.Add(Libraries.ListItems[i]);
-                }
-            }
-        }
-
+         
         private void Clear()
         {
             _shandaExine2IndexList.Clear();
@@ -1270,7 +1250,7 @@ namespace Map_Editor
                     {
                         Draw(1, 57, drawX, drawY);
                         szText = string.Format("L{0}", Light);
-                        dxFont.DrawText(DXManager.TextSprite, szText, drawX + 32*zoomMIN/zoomMAX, drawY, Color.AliceBlue);
+                        dxFont.DrawText(DXManager.TextSprite, szText, drawX + 24 * zoomMIN / zoomMAX, drawY, Color.AliceBlue);
                     }
                 }
             }
@@ -1498,77 +1478,7 @@ namespace Map_Editor
             Libraries.MapLibs[wemadeExine3ListItem.Value].Images[e.ItemIndex] = null;
         }
 
-        private void WemadeMir3LibListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Clear();
-            wemadeExine3ListItem = (ListItem) WemadeExine3LibListBox.SelectedItem;
-            selectListItem = wemadeExine3ListItem;
-            selectListItem.Version = (byte) MirVerSion.WemadeMir3;
-            WemadeMir3LibListView.VirtualListSize = Libraries.MapLibs[wemadeExine3ListItem.Value].Images.Count;
-            if (selectListItem.Text.IndexOf("Tiles30", StringComparison.Ordinal) > -1)
-            {
-                if (Libraries.MapLibs[selectListItem.Value].Images.Count%10 != 0)
-                {
-                    TileslistView.VirtualListSize = (Libraries.MapLibs[wemadeExine3ListItem.Value].Images.Count + 1)/
-                                                    Exine3BigTileBlock*2;
-                }
-                else
-                {
-                    TileslistView.VirtualListSize = Libraries.MapLibs[wemadeExine3ListItem.Value].Images.Count/
-                                                    Exine3BigTileBlock*2;
-                }
-            }
-            else if (selectListItem.Text.IndexOf("smtiles", StringComparison.Ordinal) > -1)
-            {
-                TileslistView.VirtualListSize = Libraries.MapLibs[wemadeExine3ListItem.Value].Images.Count/
-                                                Exine3BigTileBlock;
-            }
-        }
-
-        private void ShandaMir3LibListView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
-        {
-            int index;
-
-            if (_shandaExine3IndexList.TryGetValue(e.ItemIndex, out index))
-            {
-                e.Item = new ListViewItem {ImageIndex = index, Text = e.ItemIndex.ToString()};
-                return;
-            }
-
-            _shandaExine3IndexList.Add(e.ItemIndex, ShandaExine3ImageList.Images.Count);
-            Libraries.MapLibs[shangdaExine3ListItem.Value].CheckImage(e.ItemIndex);
-            ShandaExine3ImageList.Images.Add(Libraries.MapLibs[shangdaExine3ListItem.Value].GetPreview(e.ItemIndex));
-            e.Item = new ListViewItem {ImageIndex = index, Text = e.ItemIndex.ToString()};
-            Libraries.MapLibs[shangdaExine3ListItem.Value].Images[e.ItemIndex] = null;
-        }
-
-        private void ShandaMir3LibListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Clear();
-            shangdaExine3ListItem = (ListItem) ShandaExine3LibListBox.SelectedItem;
-            selectListItem = shangdaExine3ListItem;
-            selectListItem.Version = (byte) MirVerSion.ShandaMir3;
-            ShandaMir3LibListView.VirtualListSize = Libraries.MapLibs[shangdaExine3ListItem.Value].Images.Count;
-
-            if (selectListItem.Text.IndexOf("Tiles30", StringComparison.Ordinal) > -1)
-            {
-                if (Libraries.MapLibs[selectListItem.Value].Images.Count%10 != 0)
-                {
-                    TileslistView.VirtualListSize = (Libraries.MapLibs[shangdaExine3ListItem.Value].Images.Count + 1)/
-                                                    Exine3BigTileBlock*2;
-                }
-                else
-                {
-                    TileslistView.VirtualListSize = Libraries.MapLibs[shangdaExine3ListItem.Value].Images.Count/
-                                                    Exine3BigTileBlock*2;
-                }
-            }
-            else if (selectListItem.Text.IndexOf("smtiles", StringComparison.Ordinal) > -1)
-            {
-                TileslistView.VirtualListSize = Libraries.MapLibs[shangdaExine3ListItem.Value].Images.Count/
-                                                Exine3BigTileBlock;
-            }
-        }
+        
 
         private void chkMiddleAnimationTag_Click(object sender, EventArgs e)
         {
@@ -1703,6 +1613,7 @@ namespace Map_Editor
             {
                 case Layer.BackImage:
                     if (selectListItem == null) return;
+                    /*
                     if (CheckImageSizeIsBigTile(selectListItem.Value, selectImageIndex))
                     {
                         temp = CheckPointIsEven(new Point(cellX, cellY));
@@ -1712,7 +1623,11 @@ namespace Map_Editor
                         AddCellInfoPoints(points);
                         X2CellInfo[cellX, cellY].BackIndex = Convert.ToInt16(selectListItem.Value);
                         X2CellInfo[cellX, cellY].BackImage = selectImageIndex + 1;
-                    }
+                    }*/
+                    points = new[] { new Point(cellX, cellY) };
+                    AddCellInfoPoints(points);
+                    X2CellInfo[cellX, cellY].BackIndex = Convert.ToInt16(selectListItem.Value);
+                    X2CellInfo[cellX, cellY].BackImage = selectImageIndex + 1;
                     break;
                 case Layer.MiddleImage:
                     if (selectListItem == null) return;
@@ -1956,47 +1871,6 @@ namespace Map_Editor
                     labShandaMir2OffSetX.Text = "OffSetX : " + selectLibMImage.X;
                     labshandaMir2OffSetY.Text = "OffSetY : " + selectLibMImage.Y;
                     Libraries.MapLibs[shangdaExine2ListItem.Value].Images[ShandaMir2LibListView.SelectedIndices[0]] = null;
-                }
-            }
-        }
-
-        private void WemadeMir3LibListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            selectListItem = wemadeExine3ListItem;
-            if (WemadeMir3LibListView.SelectedIndices.Count > 0)
-            {
-                selectLibMImage =
-                    Libraries.MapLibs[wemadeExine3ListItem.Value].GetMImage(WemadeMir3LibListView.SelectedIndices[0]);
-                if (selectLibMImage != null)
-                {
-                    selectImageIndex = WemadeMir3LibListView.SelectedIndices[0];
-
-                    picWemdeMir3.Image = selectLibMImage.Image;
-                    LabWemadeMir3Width.Text = "Width : " + selectLibMImage.Width;
-                    LabWemadeMir3Height.Text = "Height : " + selectLibMImage.Height;
-                    labeWemadeMir3OffSetX.Text = "OffSetX : " + selectLibMImage.X;
-                    labWemadeMir3OffSetY.Text = "OffSetY : " + selectLibMImage.Y;
-                    Libraries.MapLibs[wemadeExine3ListItem.Value].Images[WemadeMir3LibListView.SelectedIndices[0]] = null;
-                }
-            }
-        }
-
-        private void ShandaMir3LibListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            selectListItem = shangdaExine3ListItem;
-            if (ShandaMir3LibListView.SelectedIndices.Count > 0)
-            {
-                selectLibMImage =
-                    Libraries.MapLibs[shangdaExine3ListItem.Value].GetMImage(ShandaMir3LibListView.SelectedIndices[0]);
-                if (selectLibMImage != null)
-                {
-                    selectImageIndex = ShandaMir3LibListView.SelectedIndices[0];
-                    picShandaMir3.Image = selectLibMImage.Image;
-                    labShandaMir3Width.Text = "Width : " + selectLibMImage.Width;
-                    labShandaMir3Height.Text = "Height : " + selectLibMImage.Height;
-                    labShandaMir3OffSetX.Text = "OffSetX : " + selectLibMImage.X;
-                    labshandaMir3OffSetY.Text = "OffSetY : " + selectLibMImage.Y;
-                    Libraries.MapLibs[shangdaExine3ListItem.Value].Images[ShandaMir3LibListView.SelectedIndices[0]] = null;
                 }
             }
         }
@@ -2784,16 +2658,13 @@ namespace Map_Editor
 
                 case Keys.F1:
                     e.SuppressKeyPress = true;
-                    tabControl1.SelectedTab = tabWemadeMir2;
+                    tabControl1.SelectedTab = tabExine;
                     break;
                 case Keys.F2:
                     e.SuppressKeyPress = true;
                     tabControl1.SelectedTab = tabShandaMir2;
                     break;
-                case Keys.F3:
-                    e.SuppressKeyPress = true;
-                    tabControl1.SelectedTab = tabWemadeMir3;
-                    break;
+               
                 case Keys.F4: //Added by M2P
                     e.SuppressKeyPress = true;
                     tabControl1.SelectedTab = tabTileCutter;
@@ -2973,47 +2844,6 @@ namespace Map_Editor
                     labShandaMir2OffSetX.Text = "OffSetX : " + selectLibMImage.X;
                     labshandaMir2OffSetY.Text = "OffSetY : " + selectLibMImage.Y;
                     Libraries.MapLibs[shangdaExine2ListItem.Value].Images[ShandaMir2LibListView.SelectedIndices[0]] = null;
-                }
-            }
-        }
-
-        private void WemadeMir3LibListView_Click(object sender, EventArgs e)
-        {
-            selectListItem = wemadeExine3ListItem;
-            if (WemadeMir3LibListView.SelectedIndices.Count > 0)
-            {
-                selectLibMImage =
-                    Libraries.MapLibs[wemadeExine3ListItem.Value].GetMImage(WemadeMir3LibListView.SelectedIndices[0]);
-                if (selectLibMImage != null)
-                {
-                    selectImageIndex = WemadeMir3LibListView.SelectedIndices[0];
-
-                    picWemdeMir3.Image = selectLibMImage.Image;
-                    LabWemadeMir3Width.Text = "Width : " + selectLibMImage.Width;
-                    LabWemadeMir3Height.Text = "Height : " + selectLibMImage.Height;
-                    labeWemadeMir3OffSetX.Text = "OffSetX : " + selectLibMImage.X;
-                    labWemadeMir3OffSetY.Text = "OffSetY : " + selectLibMImage.Y;
-                    Libraries.MapLibs[wemadeExine3ListItem.Value].Images[WemadeMir3LibListView.SelectedIndices[0]] = null;
-                }
-            }
-        }
-
-        private void ShandaMir3LibListView_Click(object sender, EventArgs e)
-        {
-            selectListItem = shangdaExine3ListItem;
-            if (ShandaMir3LibListView.SelectedIndices.Count > 0)
-            {
-                selectLibMImage =
-                    Libraries.MapLibs[shangdaExine3ListItem.Value].GetMImage(ShandaMir3LibListView.SelectedIndices[0]);
-                if (selectLibMImage != null)
-                {
-                    selectImageIndex = ShandaMir3LibListView.SelectedIndices[0];
-                    picShandaMir3.Image = selectLibMImage.Image;
-                    labShandaMir3Width.Text = "Width : " + selectLibMImage.Width;
-                    labShandaMir3Height.Text = "Height : " + selectLibMImage.Height;
-                    labShandaMir3OffSetX.Text = "OffSetX : " + selectLibMImage.X;
-                    labshandaMir3OffSetY.Text = "OffSetY : " + selectLibMImage.Y;
-                    Libraries.MapLibs[shangdaExine3ListItem.Value].Images[ShandaMir3LibListView.SelectedIndices[0]] = null;
                 }
             }
         }
@@ -4832,7 +4662,7 @@ namespace Map_Editor
 
             //loads array for storing selected cells
             CellSizeX = (comboBox_cellSize.SelectedIndex + 1) * 48;
-            CellSizeY = (comboBox_cellSize.SelectedIndex + 1) * 32;
+            CellSizeY = (comboBox_cellSize.SelectedIndex + 1) * 24;
             SelectedCells = new int[(pictureBox_Image.Image.Width / CellSizeX + 2), (pictureBox_Image.Image.Height / CellSizeY + 2)];
 
             //update grid
@@ -4854,7 +4684,7 @@ namespace Map_Editor
 
                     image = new Bitmap(pictureBox_Grid.Width, pictureBox_Grid.Height);
                     CellSizeX = (comboBox_cellSize.SelectedIndex + 1) * 48;
-                    CellSizeY = (comboBox_cellSize.SelectedIndex + 1) * 32;
+                    CellSizeY = (comboBox_cellSize.SelectedIndex + 1) * 24;
 
 
                     //vert
