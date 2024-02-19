@@ -40,16 +40,54 @@ namespace MakeMapObjectToLibForCut
 
                 //이 지도에서 필요한 Object 파일 정보를 가져와서 해당 파일만 읽어온다.
                 Console.WriteLine("Real Map Image Size:" + "("+ mapWidth + "," + mapFormat.mapHeader.Height*24 + ")");
-                byte[] outputImageData = new byte[mapWidth *2 * mapHeight * 2];//RGB565
+                byte[] outputImageData = new byte[mapWidth *4 * mapHeight * 4];//ARGB
 
                 Console.WriteLine("static object count:"+mapFormat.staticObjectInfos.Count);
                 if (mapFormat.staticObjectInfos == null) return;
 
                 Console.WriteLine("===========Static Object Info===========");
 
-                 
-                foreach (var item in mapFormat.staticObjectInfos.StaticObjects)
+
+                int prevWorld = -1;
+                int prevYpfImageSetIdx = -1;
+                byte[] prevColorDataRGBA = null;
+
+
+                //draw order sort
+                var dictionary = new Dictionary<StaticObject, int>(mapFormat.staticObjectInfos.StaticObjects.Length);
+                for (int i = 0; i < mapFormat.staticObjectInfos.StaticObjects.Length; i++)
                 {
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X);
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X*10 - mapFormat.staticObjectInfos.StaticObjects[i].Y);
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X * 2 - mapFormat.staticObjectInfos.StaticObjects[i].Y);
+                    dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X * 2 - mapFormat.staticObjectInfos.StaticObjects[i].Y*4);
+                }
+                
+                // Order by values. 
+                // ... Use LINQ to specify sorting by value. 
+                var items = from pair in dictionary 
+                            orderby pair.Value descending 
+                            select pair;
+
+                // Display results. 
+                /*
+                foreach (KeyValuePair<StaticObject, short> pair in items) 
+                { 
+                    Console.WriteLine("{0}: {1}", pair.Key, pair.Value); 
+                }
+                */
+
+
+                //foreach (var item in mapFormat.staticObjectInfos.StaticObjects)
+                foreach (KeyValuePair<StaticObject, int> pair in items)
+                {
+                    StaticObject item = pair.Key;
+
+                    if (item.IsAnim==0x01)
+                    {
+                        Console.WriteLine("IsAnimObject!");
+                      //  Console.ReadLine();
+                    }
                     Console.Write("World(TS Number):" + item.World);
                     Console.Write("\tImage_Index:" + (item.ImgIndex - item.World * 1000));
                     Console.Write("\tImage_Real_Position:" +"("+item.X+","+item.Y+")");
@@ -61,8 +99,11 @@ namespace MakeMapObjectToLibForCut
                     int ypfImageSetIdx = (item.ImgIndex - item.World * 1000);
                     //ts_object 이미지를 불러와서 비트맵 정보와 위치 정보를 기반으로 outputImageData에 데이터를 넣어준다.
                     //TS_04_Static.ypf
-                    
+
                     //한번에 정보를 다 일고 시작함!
+                    //if(item.IsAnim==0x01)YPFImageSet[] yPFImageSets =  ConvertYpfToRGBA("TS_0"+ item.World + "_AnimStatic.ypf").ypfImageSets;
+
+
                     YPFImageSet[] yPFImageSets =  ConvertYpfToRGBA("TS_0"+ item.World + "_Static.ypf").ypfImageSets;
                     Console.WriteLine("yPFImageSets.Length:"+yPFImageSets.Length );
 
@@ -71,12 +112,34 @@ namespace MakeMapObjectToLibForCut
                     int imageHeight = image.FrameHeight;
                     //image.SaveImage("0_" + ypfImageSetIdx + "saveimg.png");
 
-                    
-                    //여기서 한번 읽은 GetcolorDataRGBA가 있고 앞과 동일 하면 이 부분은 넘기게 할것
 
-                    byte[] colorDataRGBA = image.GetcolorDataRGBA();
+                    //새로운 이미지라면 해당 이미지 정보는 압축을 푼 상태로 그대로 raw파일로 저장해서 cacheFrame폴더에 만들어두기.
+                    //해당되는 프레임의 이미지가 이미 풀려져 있는 경우 해당 데이터를 바로 읽어서 사용하는 것으로 처리할것.
+                    //그릴때 순서를 정해서 그려야 할듯함.
+                    //오른쪽 위부터 대각선으로 내려가고 위쪽을 먼저 그려야함.
 
-                    
+
+                    byte[] colorDataRGBA = null;
+                    System.IO.FileInfo file = new System.IO.FileInfo(".\\CachedObject\\");
+                    file.Directory.Create();
+
+                    //if (prevWorld == item.World && prevYpfImageSetIdx == ypfImageSetIdx)
+                    if (File.Exists(".\\CachedObject\\" + item.World + "_" + ypfImageSetIdx+".raw"))
+                    {
+                        Console.WriteLine("Exist Frame Image! load frame image From Exist Data!");
+                        colorDataRGBA =  File.ReadAllBytes(".\\CachedObject\\" + item.World + "_" + ypfImageSetIdx + ".raw");
+                    }
+                    else
+                    {
+                        prevWorld = item.World;
+                        prevYpfImageSetIdx = ypfImageSetIdx;
+                        colorDataRGBA = image.GetcolorDataRGBA();
+                        File.WriteAllBytes(".\\CachedObject\\"+ item.World+"_"+ ypfImageSetIdx+".raw", colorDataRGBA);
+                        
+                        //prevColorDataRGBA = new byte[colorDataRGBA.Length];
+                        //Buffer.BlockCopy(colorDataRGBA, 0, prevColorDataRGBA, 0, colorDataRGBA.Length);
+                    }
+
                     Console.WriteLine("ypfImageSetIdx:"+ ypfImageSetIdx+" imageWidth:" + imageWidth + " imageHeight" + imageHeight);
 
                     for (int x = 0; x < imageWidth * 4; x = x + 4) //174 => 0~173*4 bytes
@@ -92,15 +155,22 @@ namespace MakeMapObjectToLibForCut
                             */
                             if (colorDataRGBA[y * (imageWidth * 4) + x + 3] != 0x00)
                             {
-                                outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left)* 4) +(x + 0) ] = colorDataRGBA[y * (imageWidth * 4) + x]; //b//0x00;//b?
-                                outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 1)] = colorDataRGBA[y * (imageWidth * 4) + x + 1];//g
-                                outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 2)] = colorDataRGBA[y * (imageWidth * 4) + x + 2];//r
-                                outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 3)] = colorDataRGBA[y * (imageWidth * 4) + x + 3];//a
+                                try
+                                {
+                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 0)] = colorDataRGBA[y * (imageWidth * 4) + x]; //b//0x00;//b?
+                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 1)] = colorDataRGBA[y * (imageWidth * 4) + x + 1];//g
+                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 2)] = colorDataRGBA[y * (imageWidth * 4) + x + 2];//r
+                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 3)] = colorDataRGBA[y * (imageWidth * 4) + x + 3];//a
+                                }
+                                catch(Exception ex)
+                                {
+                                    continue;
+                                }
                             }
 
 
                             //image.Top; //offset x ??
-                           // image.Left; //offset y ???
+                            // image.Left; //offset y ???
                             //Console.WriteLine("item.Y:" + item.Y + "item.X:" + item.X );
                             //Console.ReadLine();
                         }

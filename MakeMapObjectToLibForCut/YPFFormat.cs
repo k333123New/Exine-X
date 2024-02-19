@@ -728,7 +728,8 @@ namespace NewYPF
             int argbIdx = 0;
             for (int i = 0; i < colorData.Length; i = i + 2)
             {
-                Console.WriteLine("Get  colorData Idx : "+i+"/"+colorData.Length + "!");
+                if(i%1000==0) Console.WriteLine("Get  colorData Idx : "+i+"/"+colorData.Length + "!");
+
                 ushort data = BitConverter.ToUInt16(colorData, i);
                 byte r = (byte)(((data & 0xF800) >> 11) << 3);
                 byte g = (byte)(((data & 0x7E0) >> 5) << 2);

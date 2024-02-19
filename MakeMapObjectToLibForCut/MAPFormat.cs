@@ -106,14 +106,20 @@ namespace MapObjectToLibTilesForCut
     {
         byte isAnim;            // true : TS_ _AnimStatic[Shadows] false : TS_ _Static[Shadows]
         ushort imgIndex;       // image index
-        ushort x;
-        ushort y;
+        //ushort x;             //k333123
+        //ushort y;             //k333123
+        short x;
+        short y;
+
         int world;
 
         public byte IsAnim { get => isAnim; set => isAnim = value; }
         public ushort ImgIndex { get => imgIndex; set => imgIndex = value; }
-        public ushort X { get => x; set => x = value; }
-        public ushort Y { get => y; set => y = value; }
+        //public ushort X { get => x; set => x = value; }//k333123
+        //public ushort Y { get => y; set => y = value; }//k333123
+        public short X { get => x; set => x = value; }//k333123
+        public short Y { get => y; set => y = value; }//k333123
+
         public int World { get => world; set => world = value; }
     }
 
@@ -147,9 +153,11 @@ namespace MapObjectToLibTilesForCut
                 idx++;
                 staticObjects[i].ImgIndex = BitConverter.ToUInt16(data, idx);
                 idx = idx + 2;
-                staticObjects[i].X = BitConverter.ToUInt16(data, idx);
+                //staticObjects[i].X = BitConverter.ToUInt16(data, idx); //it maybe ToInt16
+                staticObjects[i].X = BitConverter.ToInt16(data, idx); //it maybe ToInt16 //k333123
                 idx = idx + 2;
-                staticObjects[i].Y = BitConverter.ToUInt16(data, idx);
+                //staticObjects[i].Y = BitConverter.ToUInt16(data, idx);
+                staticObjects[i].Y = BitConverter.ToInt16(data, idx); //it maybe ToInt16 //k333123
                 idx = idx + 2;
 
                 if (isElsaMap)
