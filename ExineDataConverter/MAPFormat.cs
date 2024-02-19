@@ -148,6 +148,31 @@ namespace NewYPF
                     if (mapTileInfo.LayerFlags[exineMapIdx] != 0) m2MapMgr.SetFrontLimit(j, i);
 
 
+                    //Static Object 부분 FrontLayer에 올리는거 추가 시도 
+                    foreach (var item in staticObjectInfos.StaticObjects)
+                    {
+                        int x = (int)Math.Truncate((double)item.X / 48);
+                        int y = (int)Math.Truncate((double)item.Y / 24);
+                        //if(x==j && y==i)
+
+                        if (item.X / 48 == j && item.Y / 24 == i)
+                        {
+                            Console.WriteLine("Add Static Object World val:" + item.World);//x,y가 cell 좌표가 아닌 그냥 좌표일것임.
+                            Console.WriteLine("Add Static Object ImgIndex val:" + item.ImgIndex);//x,y가 cell 좌표가 아닌 그냥 좌표일것임.
+
+                            Console.WriteLine("Add Static Object val:" + (item.ImgIndex - item.World * 1000));//x,y가 cell 좌표가 아닌 그냥 좌표일것임.
+                            m2MapMgr.SetFrontTileSetIdx((short)(item.World + 10), j, i);//object start idx:9 
+                            m2MapMgr.SetFrontImgIdx((short)((item.ImgIndex + 1) % 1000), j, i);//object를 불러와야함  //object는 index 10~19까지임.
+
+                            //m2MapMgr.SetFrontTileSetIdx((short)(item.World + 9), j, i);//object start idx:9 
+                            //m2MapMgr.SetFrontImgIdx((short)((item.ImgIndex + 1) % 1000), j, i);//object를 불러와야함  //object는 index 10~19까지임.
+                            
+                            //staticObjectInfos.StaticObjects[i].IsAnim 
+                        }
+                        //m2MapMgr.SetFrontImgIdx(staticObjectInfos[i].is)
+                    }
+
+
                     /*
                     //BackTiled is not exine use(this is for mir3 tile maybe)
                     //m2MapMgr.SetBackTileSetIdx((short)mapHeader.WorldId[0],j,i);
@@ -182,7 +207,7 @@ namespace NewYPF
 
                     //frontAnimationFrame is count?
                     //이부분은 TileCutter를 이용하여 처리할 예정임.
-                    
+
                     //test
                     //결국 방법은 하나로 만들어서 바로 올리기기
                     /*
@@ -202,7 +227,7 @@ namespace NewYPF
                         }
                         //m2MapMgr.SetFrontImgIdx(staticObjectInfos[i].is)
                     }*/
-                    
+
                 }
             }
             /*
@@ -377,12 +402,15 @@ namespace NewYPF
                 staticObjects[i].Y = BitConverter.ToUInt16(data, idx);
                 idx = idx + 2;
 
+                Console.WriteLine("worldId3:" + worldId3);
                 if (isElsaMap)
                 {
+                    Console.WriteLine("It is elsa map!");
                     staticObjects[i].World = worldId3;
                 }
                 else
                 {
+                    Console.WriteLine("It is exine map!");
                     staticObjects[i].World = staticObjects[i].ImgIndex / 1000;
                 }
             }

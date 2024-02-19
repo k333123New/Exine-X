@@ -315,6 +315,45 @@ namespace Map_Editor
             //DXManager.Sprite.Draw2D(mi.ImageTexture, new Rectangle(Point.Empty, new Size(w * zoomMIN / zoomMAX, h * zoomMIN / zoomMAX)), new Rectangle(Point.Empty, new Size(w * zoomMIN / zoomMAX, h * zoomMIN / zoomMAX)), new Point(drawX, drawY), Color.White);
         }
 
+        //여기서 잡아야함!
+        private void Draw(int libIndex, int index, int drawX, int drawY, bool offSet)
+        {
+            Libraries.MapLibs[libIndex].CheckImage(index);
+            var mi = Libraries.MapLibs[libIndex].Images[index];
+            if (mi.Image == null || mi.ImageTexture == null) return;
+            int w = mi.Width;
+            int h = mi.Height;
+
+
+            //drawX = (x - mapPoint.X) * (CellWidth * zoomMIN / zoomMAX);
+
+
+            //Point point = new Point(drawX, drawY); 
+            //if (offSet) point.Offset(mi.X/CellWidth, mi.Y/CellHeight);
+            if (index == 46) Console.WriteLine("drawX:" + drawX + " mi.X:" + mi.X+ " w:"+ w);
+
+            //drawX = drawX - (w / 2 * zoomMIN / zoomMAX) - (mi.X * zoomMIN / zoomMAX);
+            //drawY = drawY + (h / 2 * zoomMIN / zoomMAX) + (mi.X * zoomMIN / zoomMAX);
+
+            //drawX = drawX - (w / 2 * zoomMIN / zoomMAX) - (mi.X * zoomMIN / zoomMAX);
+            //drawY = drawY + (h / 2 * zoomMIN / zoomMAX) - (mi.Y * zoomMIN / zoomMAX);
+            //drawY = drawY + ((mi.X / 2) * zoomMIN / zoomMAX) + (h / 2) * zoomMIN / zoomMAX;
+
+
+            //(int)Math.Truncate
+            //drawX = drawX + (int)(mi.Y * zoomMIN / zoomMAX);
+            //drawX = drawX + (int)Math.Ceiling((double)mi.Y * zoomMIN / zoomMAX) + 300;
+            //drawY = drawY + ((mi.X / 2) * zoomMIN / zoomMAX) + (h / 2) * zoomMIN / zoomMAX;
+
+            drawX = drawX - (w / 2 + mi.X) * zoomMIN / zoomMAX - 48;
+            drawY = drawY - (h / 2 + mi.Y) * zoomMIN / zoomMAX;
+
+
+            DXManager.Sprite.Draw2D(mi.ImageTexture, Rectangle.Empty, new SizeF(w * zoomMIN / zoomMAX, h * zoomMIN / zoomMAX), new PointF(drawX , drawY ), Color.White);
+        }
+         
+
+
         public void DrawBlend(int libindex, int index, Point point, Color colour, bool offSet = false, float rate = 1f)
         {
             Libraries.MapLibs[libIndex].CheckImage(index);
@@ -400,19 +439,25 @@ namespace Map_Editor
 
         private void DrawLimit()
         {
+            //index:99
+            //56:0,57:1,58:2,59:3,116:4
             var drawX = (cellX - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
             var drawY = (cellY - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
             switch (layer)
             {
                 case Layer.BackLimit:
-                    Draw(1, 58, drawX, drawY);
+                    //Draw(1, 58, drawX, drawY);
+                    Draw(99, 2, drawX, drawY);
                     break;
                 case Layer.FrontLimit:
-                    Draw(1, 59, drawX, drawY);
+                    //Draw(1, 59, drawX, drawY);
+                    Draw(99, 3, drawX, drawY);
                     break;
                 case Layer.BackFrontLimit:
-                    Draw(1, 58, drawX, drawY);
-                    Draw(1, 59, drawX, drawY);
+                    //Draw(1, 58, drawX, drawY);
+                    //Draw(1, 59, drawX, drawY);
+                    Draw(99, 2, drawX, drawY);
+                    Draw(99, 3, drawX, drawY);
                     break;
             }
         }
@@ -434,11 +479,13 @@ namespace Map_Editor
                 {
                     drawY = (cellY - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
                     Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                    //Draw(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX,true); //k333123
                 }
                 else
                 {
                     drawY = (cellY - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
                     Draw(libIndex, index, drawX, drawY);
+                    
                 }
             }
             else if (layer == Layer.BackImage)
@@ -480,8 +527,10 @@ namespace Map_Editor
                 if (datas[i].X + cellX >= mapWidth) continue;
                 if (datas[i].Y + cellY >= mapWidth) continue;
 
+
                 drawX = (datas[i].X + cellX - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
                 drawY = (datas[i].Y + cellY - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
+
                 index = (datas[i].CellInfo.BackImage & 0x1FFFFFFF) - 1;
                 libIndex = datas[i].CellInfo.BackIndex;
                 if (libIndex < 0 || libIndex >= Libraries.MapLibs.Length) continue;
@@ -534,7 +583,8 @@ namespace Map_Editor
                 if ((datas[i].CellInfo.MiddleImage & 0x7FFF) - 1 >= 0)
                 {
                     drawY = (datas[i].Y + cellY - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
-                    Draw(1, 56, drawX, drawY);
+                    //Draw(1, 56, drawX, drawY);
+                    Draw(99, 0, drawX, drawY);
                 }
             }
 
@@ -616,7 +666,8 @@ namespace Map_Editor
                 if ((datas[i].CellInfo.FrontImage & 0x7FFF) - 1 >= 0)
                 {
                     drawY = (datas[i].Y + cellY - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
-                    Draw(1, 56, drawX, drawY);
+                    //Draw(1, 56, drawX, drawY);
+                    Draw(99, 0, drawX, drawY);
                 }
             }
         }
@@ -729,7 +780,8 @@ namespace Map_Editor
                         drawX = (x - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
                         if (Convert.ToBoolean(X2CellInfo[x, y].FrontImage & 0x8000))
                         {
-                            Draw(1, 59, drawX, drawY);
+                            //Draw(1, 59, drawX, drawY);
+                            Draw(99, 3, drawX, drawY);
                         }
                     }
                 }
@@ -750,7 +802,8 @@ namespace Map_Editor
                         drawX = (x - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
                         if (Convert.ToBoolean(X2CellInfo[x, y].BackImage & 0x20000000))
                         {
-                            Draw(1, 58, drawX, drawY);
+                            //Draw(1, 58, drawX, drawY);
+                            Draw(99, 2, drawX, drawY);
                         }
                     }
                 }
@@ -829,7 +882,11 @@ namespace Map_Editor
                             //If there is no animation
                             else
                             {
+                                //여기서 움직이지 않는 객체를 그린다.
                                 Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                                //Draw(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX,true);//k333123
+
+                                //DrawExineObject(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX);//실제 좌표를 그린다.
                             }
                         }
                         //Is 48*24 or 96*48 floor tiles
@@ -863,7 +920,8 @@ namespace Map_Editor
                         drawX = (x - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
                         if ((X2CellInfo[x, y].FrontImage & 0x7FFF) - 1 >= 0)
                         {
-                            Draw(1, 56, drawX, drawY);
+                            //Draw(1, 56, drawX, drawY);
+                            Draw(99, 0, drawX, drawY);
                         }
                     }
                 }
@@ -884,7 +942,8 @@ namespace Map_Editor
                         drawX = (x - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
                         if ((X2CellInfo[x, y].MiddleImage & 0x7FFF) - 1 >= 0)
                         {
-                            Draw(1, 56, drawX, drawY);
+                            //Draw(1, 56, drawX, drawY);
+                            Draw(99, 0, drawX, drawY);
                         }
                     }
                 }
@@ -1248,7 +1307,8 @@ namespace Map_Editor
 
                     if (Light > 0)
                     {
-                        Draw(1, 57, drawX, drawY);
+                        //Draw(1, 57, drawX, drawY);
+                        Draw(99, 1, drawX, drawY);
                         szText = string.Format("L{0}", Light);
                         dxFont.DrawText(DXManager.TextSprite, szText, drawX + 24 * zoomMIN / zoomMAX, drawY, Color.AliceBlue);
                     }
@@ -4895,7 +4955,8 @@ namespace Map_Editor
                             }
                         }
 
-                        if (!isBlank) _library.AddImage(image, 0, 0);
+                        //if (!isBlank) _library.AddImage(image, 0, 0); //k333123
+                        _library.AddImage(image, 0, 0); //k333123
                         tempY = 0;
                         continue;
                     }
@@ -4922,7 +4983,7 @@ namespace Map_Editor
                         }
                     }
 
-                    if (!isBlank)
+                    //if (!isBlank) //k333123
                     {
                         //trim image
 
@@ -4930,22 +4991,8 @@ namespace Map_Editor
                     }
                     tempY = 0; //reset when moving to next column
                 }
-
-
-
-
-
             }
-
-
-
-
-
-
             _library.Save();
-
-
-
         }
 
         private void btnRefreshList_Click(object sender, EventArgs e)

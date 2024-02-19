@@ -107,8 +107,6 @@
             this.ShandaExine2LibListBox = new System.Windows.Forms.ListBox();
             this.ShandaMir2LibListView = new System.Windows.Forms.ListView();
             this.ShandaExine2ImageList = new System.Windows.Forms.ImageList(this.components);
-            this.WemadeExine3ImageList = new System.Windows.Forms.ImageList(this.components);
-            this.ShandaExine3ImageList = new System.Windows.Forms.ImageList(this.components);
             this.tabObjects = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ObjectslistBox = new System.Windows.Forms.ListBox();
@@ -138,6 +136,8 @@
             this.pictureBox_Grid = new System.Windows.Forms.PictureBox();
             this.pictureBox_Image = new System.Windows.Forms.PictureBox();
             this.tabHelp = new System.Windows.Forms.TabPage();
+            this.WemadeExine3ImageList = new System.Windows.Forms.ImageList(this.components);
+            this.ShandaExine3ImageList = new System.Windows.Forms.ImageList(this.components);
             this.ObjectsimageList = new System.Windows.Forms.ImageList(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -246,7 +246,7 @@
             this.btnNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(36, 51);
+            this.btnNew.Size = new System.Drawing.Size(44, 51);
             this.btnNew.Text = "New";
             this.btnNew.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnNew.ToolTipText = "Create New Map (N)";
@@ -265,7 +265,7 @@
             this.btnOpen.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(40, 51);
+            this.btnOpen.Size = new System.Drawing.Size(49, 51);
             this.btnOpen.Text = "Open";
             this.btnOpen.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnOpen.ToolTipText = "Open Map (O)";
@@ -284,7 +284,7 @@
             this.btnSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(38, 51);
+            this.btnSave.Size = new System.Drawing.Size(46, 51);
             this.btnSave.Text = "Save";
             this.btnSave.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnSave.ToolTipText = "Save Map (Ctrl-S)";
@@ -303,7 +303,7 @@
             this.btnJump.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnJump.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnJump.Name = "btnJump";
-            this.btnJump.Size = new System.Drawing.Size(40, 51);
+            this.btnJump.Size = new System.Drawing.Size(50, 51);
             this.btnJump.Text = "Jump";
             this.btnJump.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnJump.ToolTipText = "Teleport to Location (J)";
@@ -321,7 +321,7 @@
             this.btnFreeMemory.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnFreeMemory.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnFreeMemory.Name = "btnFreeMemory";
-            this.btnFreeMemory.Size = new System.Drawing.Size(79, 51);
+            this.btnFreeMemory.Size = new System.Drawing.Size(100, 51);
             this.btnFreeMemory.Text = "FreeMemory";
             this.btnFreeMemory.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnFreeMemory.ToolTipText = "Free Memory";
@@ -354,7 +354,7 @@
             this.toolStripDropDownButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(47, 51);
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(56, 51);
             this.toolStripDropDownButton2.Text = "View";
             this.toolStripDropDownButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolStripDropDownButton2.Click += new System.EventHandler(this.toolStripDropDownButton2_Click);
@@ -365,7 +365,7 @@
             this.chkBack.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkBack.Name = "chkBack";
             this.chkBack.ShortcutKeys = System.Windows.Forms.Keys.F8;
-            this.chkBack.Size = new System.Drawing.Size(323, 22);
+            this.chkBack.Size = new System.Drawing.Size(390, 26);
             this.chkBack.Text = "Show/Hide Background Image";
             this.chkBack.Click += new System.EventHandler(this.chkBack_Click);
             // 
@@ -375,7 +375,7 @@
             this.chkMidd.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkMidd.Name = "chkMidd";
             this.chkMidd.ShortcutKeys = System.Windows.Forms.Keys.F7;
-            this.chkMidd.Size = new System.Drawing.Size(323, 22);
+            this.chkMidd.Size = new System.Drawing.Size(390, 26);
             this.chkMidd.Text = "Show/Hide Middle Image";
             this.chkMidd.Click += new System.EventHandler(this.chkMidd_Click);
             // 
@@ -385,7 +385,7 @@
             this.chkFront.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkFront.Name = "chkFront";
             this.chkFront.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.chkFront.Size = new System.Drawing.Size(323, 22);
+            this.chkFront.Size = new System.Drawing.Size(390, 26);
             this.chkFront.Text = "Show/Hide Front Image";
             this.chkFront.Click += new System.EventHandler(this.chkFront_Click);
             // 
@@ -393,42 +393,42 @@
             // 
             this.chkShowCellInfo.Name = "chkShowCellInfo";
             this.chkShowCellInfo.ShortcutKeys = System.Windows.Forms.Keys.F9;
-            this.chkShowCellInfo.Size = new System.Drawing.Size(323, 22);
+            this.chkShowCellInfo.Size = new System.Drawing.Size(390, 26);
             this.chkShowCellInfo.Text = "Show/Hide Cell Info";
             this.chkShowCellInfo.Click += new System.EventHandler(this.chkShowCellInfo_Click);
             // 
             // chkDoor
             // 
             this.chkDoor.Name = "chkDoor";
-            this.chkDoor.Size = new System.Drawing.Size(323, 22);
+            this.chkDoor.Size = new System.Drawing.Size(390, 26);
             this.chkDoor.Text = "Show Door Open";
             this.chkDoor.Click += new System.EventHandler(this.chkDoor_Click);
             // 
             // chkDoorSign
             // 
             this.chkDoorSign.Name = "chkDoorSign";
-            this.chkDoorSign.Size = new System.Drawing.Size(323, 22);
+            this.chkDoorSign.Size = new System.Drawing.Size(390, 26);
             this.chkDoorSign.Text = "Show Door Tag";
             this.chkDoorSign.Click += new System.EventHandler(this.chkDoorSign_Click);
             // 
             // chkFrontAnimationTag
             // 
             this.chkFrontAnimationTag.Name = "chkFrontAnimationTag";
-            this.chkFrontAnimationTag.Size = new System.Drawing.Size(323, 22);
+            this.chkFrontAnimationTag.Size = new System.Drawing.Size(390, 26);
             this.chkFrontAnimationTag.Text = "Show Front Animation  Tag";
             this.chkFrontAnimationTag.Click += new System.EventHandler(this.chkFrontAnimationTag_Click);
             // 
             // chkMiddleAnimationTag
             // 
             this.chkMiddleAnimationTag.Name = "chkMiddleAnimationTag";
-            this.chkMiddleAnimationTag.Size = new System.Drawing.Size(323, 22);
+            this.chkMiddleAnimationTag.Size = new System.Drawing.Size(390, 26);
             this.chkMiddleAnimationTag.Text = "Show Middle Animation  Tag";
             this.chkMiddleAnimationTag.Click += new System.EventHandler(this.chkMiddleAnimationTag_Click);
             // 
             // chkLightTag
             // 
             this.chkLightTag.Name = "chkLightTag";
-            this.chkLightTag.Size = new System.Drawing.Size(323, 22);
+            this.chkLightTag.Size = new System.Drawing.Size(390, 26);
             this.chkLightTag.Text = "Show Light Tag";
             this.chkLightTag.Click += new System.EventHandler(this.chkLightTag_Click);
             // 
@@ -436,7 +436,7 @@
             // 
             this.chkBackMask.Name = "chkBackMask";
             this.chkBackMask.ShortcutKeys = System.Windows.Forms.Keys.F12;
-            this.chkBackMask.Size = new System.Drawing.Size(323, 22);
+            this.chkBackMask.Size = new System.Drawing.Size(390, 26);
             this.chkBackMask.Text = "Show Back Move Limit Tag (Yellow)";
             this.chkBackMask.ToolTipText = "Low Objects\r\n(Can Shoot Over)";
             this.chkBackMask.Click += new System.EventHandler(this.chkBackMask_Click);
@@ -445,7 +445,7 @@
             // 
             this.chkFrontMask.Name = "chkFrontMask";
             this.chkFrontMask.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F12)));
-            this.chkFrontMask.Size = new System.Drawing.Size(323, 22);
+            this.chkFrontMask.Size = new System.Drawing.Size(390, 26);
             this.chkFrontMask.Text = "Show Front Move Limit Tag (Red)";
             this.chkFrontMask.ToolTipText = "High Objects \r\n(Cannot Shoot Over)";
             this.chkFrontMask.Click += new System.EventHandler(this.chkFrontMask_Click);
@@ -453,7 +453,7 @@
             // chkDrawGrids
             // 
             this.chkDrawGrids.Name = "chkDrawGrids";
-            this.chkDrawGrids.Size = new System.Drawing.Size(323, 22);
+            this.chkDrawGrids.Size = new System.Drawing.Size(390, 26);
             this.chkDrawGrids.Text = "Show/Hide Grid                                      G";
             this.chkDrawGrids.Click += new System.EventHandler(this.chkDrawGrids_Click);
             // 
@@ -461,7 +461,7 @@
             // 
             this.chkFrontTag.Name = "chkFrontTag";
             this.chkFrontTag.ShortcutKeys = System.Windows.Forms.Keys.F10;
-            this.chkFrontTag.Size = new System.Drawing.Size(323, 22);
+            this.chkFrontTag.Size = new System.Drawing.Size(390, 26);
             this.chkFrontTag.Text = "Show/Hide Front Tag";
             this.chkFrontTag.Click += new System.EventHandler(this.chkFrontTag_Click);
             // 
@@ -469,7 +469,7 @@
             // 
             this.chkMiddleTag.Name = "chkMiddleTag";
             this.chkMiddleTag.ShortcutKeys = System.Windows.Forms.Keys.F11;
-            this.chkMiddleTag.Size = new System.Drawing.Size(323, 22);
+            this.chkMiddleTag.Size = new System.Drawing.Size(390, 26);
             this.chkMiddleTag.Text = "Show/Hide Middle Tag";
             this.chkMiddleTag.Click += new System.EventHandler(this.chkMiddleTag_Click);
             // 
@@ -483,7 +483,7 @@
             // 
             this.toolStripLabel1.Font = new System.Drawing.Font("Comic Sans MS", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(79, 51);
+            this.toolStripLabel1.Size = new System.Drawing.Size(96, 51);
             this.toolStripLabel1.Text = "Editor Layer";
             this.toolStripLabel1.ToolTipText = "Layer Actions";
             this.toolStripLabel1.Click += new System.EventHandler(this.toolStripLabel1_Click);
@@ -517,7 +517,7 @@
             "Brush SmTiles--------------(-)",
             "Brush Mir3 BigTiles-------(=)"});
             this.cmbEditorLayer.Name = "cmbEditorLayer";
-            this.cmbEditorLayer.Size = new System.Drawing.Size(185, 25);
+            this.cmbEditorLayer.Size = new System.Drawing.Size(185, 28);
             this.cmbEditorLayer.SelectedIndexChanged += new System.EventHandler(this.cmbEditorLayer_SelectedIndexChanged);
             this.cmbEditorLayer.Click += new System.EventHandler(this.cmbEditorLayer_Click);
             // 
@@ -534,7 +534,7 @@
             this.BtnUnDo.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.BtnUnDo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BtnUnDo.Name = "BtnUnDo";
-            this.BtnUnDo.Size = new System.Drawing.Size(42, 51);
+            this.BtnUnDo.Size = new System.Drawing.Size(51, 51);
             this.BtnUnDo.Text = "UnDo";
             this.BtnUnDo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnUnDo.ToolTipText = "(Z)";
@@ -547,7 +547,7 @@
             this.BtnReDo.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.BtnReDo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BtnReDo.Name = "BtnReDo";
-            this.BtnReDo.Size = new System.Drawing.Size(40, 51);
+            this.BtnReDo.Size = new System.Drawing.Size(49, 51);
             this.BtnReDo.Text = "ReDo";
             this.BtnReDo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnReDo.ToolTipText = "(Ctrl-Z)";
@@ -566,7 +566,7 @@
             this.BtnZoomOut.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.BtnZoomOut.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BtnZoomOut.Name = "BtnZoomOut";
-            this.BtnZoomOut.Size = new System.Drawing.Size(67, 51);
+            this.BtnZoomOut.Size = new System.Drawing.Size(82, 51);
             this.BtnZoomOut.Text = "Zoom Out";
             this.BtnZoomOut.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnZoomOut.ToolTipText = "(Shift) (-)";
@@ -579,7 +579,7 @@
             this.BtnZoomIn.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.BtnZoomIn.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BtnZoomIn.Name = "BtnZoomIn";
-            this.BtnZoomIn.Size = new System.Drawing.Size(58, 51);
+            this.BtnZoomIn.Size = new System.Drawing.Size(71, 51);
             this.BtnZoomIn.Text = "Zoom In";
             this.BtnZoomIn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnZoomIn.ToolTipText = "(Shift) (+)";
@@ -598,7 +598,7 @@
             this.btnMiniMap.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btnMiniMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnMiniMap.Name = "btnMiniMap";
-            this.btnMiniMap.Size = new System.Drawing.Size(58, 51);
+            this.btnMiniMap.Size = new System.Drawing.Size(71, 51);
             this.btnMiniMap.Text = "MiniMap";
             this.btnMiniMap.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.btnMiniMap.ToolTipText = "Create MiniMap (M)";
@@ -619,7 +619,7 @@
             this.BtnAbout.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.BtnAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.BtnAbout.Name = "BtnAbout";
-            this.BtnAbout.Size = new System.Drawing.Size(44, 51);
+            this.BtnAbout.Size = new System.Drawing.Size(56, 51);
             this.BtnAbout.Text = "About";
             this.BtnAbout.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnAbout.ToolTipText = "About (Ctrl-A)";
@@ -640,7 +640,7 @@
             this.Mir3toMir2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.Mir3toMir2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.Mir3toMir2.Name = "Mir3toMir2";
-            this.Mir3toMir2.Size = new System.Drawing.Size(115, 51);
+            this.Mir3toMir2.Size = new System.Drawing.Size(138, 51);
             this.Mir3toMir2.Text = "Invert Mir3 Layer";
             this.Mir3toMir2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.Mir3toMir2.ToolTipText = "(Ctrl-I) Save Mir3 Map As *.Mir3\r\nWith Middle & Front Layers Inverted.\r\nCurrent M" +
@@ -660,7 +660,7 @@
             this.toolStripButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(102, 51);
+            this.toolStripButton1.Size = new System.Drawing.Size(127, 51);
             this.toolStripButton1.Text = "Save As Object.X";
             this.toolStripButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.toolStripButton1.ToolTipText = "(Ctrl-X) Save Map Or \r\nSelection As Object.X";
@@ -692,10 +692,10 @@
             // 
             this.tabMap.BackColor = System.Drawing.Color.Black;
             this.tabMap.Controls.Add(this.tableLayoutPanel1);
-            this.tabMap.Location = new System.Drawing.Point(4, 29);
+            this.tabMap.Location = new System.Drawing.Point(4, 32);
             this.tabMap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabMap.Name = "tabMap";
-            this.tabMap.Size = new System.Drawing.Size(1916, 938);
+            this.tabMap.Size = new System.Drawing.Size(1916, 935);
             this.tabMap.TabIndex = 2;
             this.tabMap.Text = "Map";
             this.tabMap.ToolTipText = "(F5)";
@@ -714,7 +714,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1916, 938);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1916, 935);
             this.tableLayoutPanel1.TabIndex = 10;
             // 
             // vScrollBar
@@ -723,7 +723,7 @@
             this.vScrollBar.LargeChange = 1;
             this.vScrollBar.Location = new System.Drawing.Point(1896, 0);
             this.vScrollBar.Name = "vScrollBar";
-            this.vScrollBar.Size = new System.Drawing.Size(20, 918);
+            this.vScrollBar.Size = new System.Drawing.Size(20, 915);
             this.vScrollBar.TabIndex = 1;
             this.vScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.vScrollBar_Scroll);
             // 
@@ -736,7 +736,7 @@
             this.MapPanel.Location = new System.Drawing.Point(4, 5);
             this.MapPanel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MapPanel.Name = "MapPanel";
-            this.MapPanel.Size = new System.Drawing.Size(1888, 908);
+            this.MapPanel.Size = new System.Drawing.Size(1888, 905);
             this.MapPanel.TabIndex = 9;
             this.MapPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MapPanel_MouseClick);
             this.MapPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MapPanel_MouseDown);
@@ -756,60 +756,60 @@
             this.btnSetLight,
             this.menu_DeleteSelectedCellData});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(345, 164);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(422, 178);
             // 
             // 撤销ToolStripMenuItem
             // 
             this.撤销ToolStripMenuItem.Name = "撤销ToolStripMenuItem";
-            this.撤销ToolStripMenuItem.Size = new System.Drawing.Size(344, 22);
+            this.撤销ToolStripMenuItem.Size = new System.Drawing.Size(421, 24);
             this.撤销ToolStripMenuItem.Text = "UnDo     Z";
             this.撤销ToolStripMenuItem.Click += new System.EventHandler(this.撤销ToolStripMenuItem_Click);
             // 
             // 返回ToolStripMenuItem
             // 
             this.返回ToolStripMenuItem.Name = "返回ToolStripMenuItem";
-            this.返回ToolStripMenuItem.Size = new System.Drawing.Size(344, 22);
+            this.返回ToolStripMenuItem.Size = new System.Drawing.Size(421, 24);
             this.返回ToolStripMenuItem.Text = "ReDo    Ctrl-Z";
             this.返回ToolStripMenuItem.Click += new System.EventHandler(this.返回ToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(341, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(418, 6);
             // 
             // menu_SaveObject
             // 
             this.menu_SaveObject.Name = "menu_SaveObject";
             this.menu_SaveObject.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.menu_SaveObject.Size = new System.Drawing.Size(344, 22);
+            this.menu_SaveObject.Size = new System.Drawing.Size(421, 24);
             this.menu_SaveObject.Text = "Save Selection As Object (.X)";
             this.menu_SaveObject.Click += new System.EventHandler(this.menu_SaveObject_Click);
             // 
             // btnSetDoor
             // 
             this.btnSetDoor.Name = "btnSetDoor";
-            this.btnSetDoor.Size = new System.Drawing.Size(344, 22);
+            this.btnSetDoor.Size = new System.Drawing.Size(421, 24);
             this.btnSetDoor.Text = "Set the Current Coordinates Door Properties";
             this.btnSetDoor.Click += new System.EventHandler(this.btnSetDoor_Click);
             // 
             // btnSetAnimation
             // 
             this.btnSetAnimation.Name = "btnSetAnimation";
-            this.btnSetAnimation.Size = new System.Drawing.Size(344, 22);
+            this.btnSetAnimation.Size = new System.Drawing.Size(421, 24);
             this.btnSetAnimation.Text = "Set the Current Coordinates Animation Attributes ";
             this.btnSetAnimation.Click += new System.EventHandler(this.btnSetAnimation_Click);
             // 
             // btnSetLight
             // 
             this.btnSetLight.Name = "btnSetLight";
-            this.btnSetLight.Size = new System.Drawing.Size(344, 22);
+            this.btnSetLight.Size = new System.Drawing.Size(421, 24);
             this.btnSetLight.Text = "Set the Current Coordinates Brightness Property ";
             this.btnSetLight.Click += new System.EventHandler(this.btnSetLight_Click);
             // 
             // menu_DeleteSelectedCellData
             // 
             this.menu_DeleteSelectedCellData.Name = "menu_DeleteSelectedCellData";
-            this.menu_DeleteSelectedCellData.Size = new System.Drawing.Size(344, 22);
+            this.menu_DeleteSelectedCellData.Size = new System.Drawing.Size(421, 24);
             this.menu_DeleteSelectedCellData.Text = "Delete Selected Cell Data";
             this.menu_DeleteSelectedCellData.Click += new System.EventHandler(this.menu_DeleteSelectedCellData_Click);
             // 
@@ -817,7 +817,7 @@
             // 
             this.hScrollBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hScrollBar.LargeChange = 1;
-            this.hScrollBar.Location = new System.Drawing.Point(0, 918);
+            this.hScrollBar.Location = new System.Drawing.Point(0, 915);
             this.hScrollBar.Name = "hScrollBar";
             this.hScrollBar.Size = new System.Drawing.Size(1896, 20);
             this.hScrollBar.TabIndex = 0;
@@ -832,10 +832,10 @@
             this.tabExine.Controls.Add(this.picWemdeMir2);
             this.tabExine.Controls.Add(this.WemadeExine2LibListBox);
             this.tabExine.Controls.Add(this.WemadeMir2LibListView);
-            this.tabExine.Location = new System.Drawing.Point(4, 29);
+            this.tabExine.Location = new System.Drawing.Point(4, 32);
             this.tabExine.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabExine.Name = "tabExine";
-            this.tabExine.Size = new System.Drawing.Size(1916, 938);
+            this.tabExine.Size = new System.Drawing.Size(1916, 935);
             this.tabExine.TabIndex = 5;
             this.tabExine.Text = "Exine";
             this.tabExine.ToolTipText = "(F1)";
@@ -849,7 +849,7 @@
             this.labWemadeMir2OffSetY.Location = new System.Drawing.Point(1682, 73);
             this.labWemadeMir2OffSetY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labWemadeMir2OffSetY.Name = "labWemadeMir2OffSetY";
-            this.labWemadeMir2OffSetY.Size = new System.Drawing.Size(59, 20);
+            this.labWemadeMir2OffSetY.Size = new System.Drawing.Size(75, 24);
             this.labWemadeMir2OffSetY.TabIndex = 15;
             this.labWemadeMir2OffSetY.Text = "OffSetY";
             // 
@@ -861,7 +861,7 @@
             this.labeWemadeMir2OffSetX.Location = new System.Drawing.Point(1682, 25);
             this.labeWemadeMir2OffSetX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labeWemadeMir2OffSetX.Name = "labeWemadeMir2OffSetX";
-            this.labeWemadeMir2OffSetX.Size = new System.Drawing.Size(60, 20);
+            this.labeWemadeMir2OffSetX.Size = new System.Drawing.Size(76, 24);
             this.labeWemadeMir2OffSetX.TabIndex = 14;
             this.labeWemadeMir2OffSetX.Text = "OffSetX";
             // 
@@ -873,7 +873,7 @@
             this.LabWemadeMir2Height.Location = new System.Drawing.Point(1567, 73);
             this.LabWemadeMir2Height.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabWemadeMir2Height.Name = "LabWemadeMir2Height";
-            this.LabWemadeMir2Height.Size = new System.Drawing.Size(55, 20);
+            this.LabWemadeMir2Height.Size = new System.Drawing.Size(69, 24);
             this.LabWemadeMir2Height.TabIndex = 13;
             this.LabWemadeMir2Height.Text = "Height";
             // 
@@ -885,7 +885,7 @@
             this.LabWemadeMir2Width.Location = new System.Drawing.Point(1567, 25);
             this.LabWemadeMir2Width.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.LabWemadeMir2Width.Name = "LabWemadeMir2Width";
-            this.LabWemadeMir2Width.Size = new System.Drawing.Size(50, 20);
+            this.LabWemadeMir2Width.Size = new System.Drawing.Size(63, 24);
             this.LabWemadeMir2Width.TabIndex = 12;
             this.LabWemadeMir2Width.Text = "Width";
             // 
@@ -906,11 +906,11 @@
             this.WemadeExine2LibListBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.WemadeExine2LibListBox.Font = new System.Drawing.Font("Comic Sans MS", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.WemadeExine2LibListBox.FormattingEnabled = true;
-            this.WemadeExine2LibListBox.ItemHeight = 19;
+            this.WemadeExine2LibListBox.ItemHeight = 24;
             this.WemadeExine2LibListBox.Location = new System.Drawing.Point(0, 0);
             this.WemadeExine2LibListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.WemadeExine2LibListBox.Name = "WemadeExine2LibListBox";
-            this.WemadeExine2LibListBox.Size = new System.Drawing.Size(200, 938);
+            this.WemadeExine2LibListBox.Size = new System.Drawing.Size(200, 935);
             this.WemadeExine2LibListBox.TabIndex = 10;
             this.WemadeExine2LibListBox.SelectedIndexChanged += new System.EventHandler(this.WemadeMir2LibListBox_SelectedIndexChanged);
             // 
@@ -947,10 +947,10 @@
             this.tabShandaMir2.Controls.Add(this.picShandaMir2);
             this.tabShandaMir2.Controls.Add(this.ShandaExine2LibListBox);
             this.tabShandaMir2.Controls.Add(this.ShandaMir2LibListView);
-            this.tabShandaMir2.Location = new System.Drawing.Point(4, 29);
+            this.tabShandaMir2.Location = new System.Drawing.Point(4, 32);
             this.tabShandaMir2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabShandaMir2.Name = "tabShandaMir2";
-            this.tabShandaMir2.Size = new System.Drawing.Size(1916, 938);
+            this.tabShandaMir2.Size = new System.Drawing.Size(1916, 935);
             this.tabShandaMir2.TabIndex = 4;
             this.tabShandaMir2.Text = "ShandaM2";
             this.tabShandaMir2.ToolTipText = "(F2)";
@@ -964,7 +964,7 @@
             this.labshandaMir2OffSetY.Location = new System.Drawing.Point(1674, 70);
             this.labshandaMir2OffSetY.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labshandaMir2OffSetY.Name = "labshandaMir2OffSetY";
-            this.labshandaMir2OffSetY.Size = new System.Drawing.Size(59, 20);
+            this.labshandaMir2OffSetY.Size = new System.Drawing.Size(75, 24);
             this.labshandaMir2OffSetY.TabIndex = 20;
             this.labshandaMir2OffSetY.Text = "OffSetY";
             // 
@@ -976,7 +976,7 @@
             this.labShandaMir2OffSetX.Location = new System.Drawing.Point(1674, 22);
             this.labShandaMir2OffSetX.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labShandaMir2OffSetX.Name = "labShandaMir2OffSetX";
-            this.labShandaMir2OffSetX.Size = new System.Drawing.Size(60, 20);
+            this.labShandaMir2OffSetX.Size = new System.Drawing.Size(76, 24);
             this.labShandaMir2OffSetX.TabIndex = 19;
             this.labShandaMir2OffSetX.Text = "OffSetX";
             // 
@@ -988,7 +988,7 @@
             this.labShandaMir2Height.Location = new System.Drawing.Point(1559, 70);
             this.labShandaMir2Height.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labShandaMir2Height.Name = "labShandaMir2Height";
-            this.labShandaMir2Height.Size = new System.Drawing.Size(55, 20);
+            this.labShandaMir2Height.Size = new System.Drawing.Size(69, 24);
             this.labShandaMir2Height.TabIndex = 18;
             this.labShandaMir2Height.Text = "Height";
             // 
@@ -1000,7 +1000,7 @@
             this.labShandaMir2Width.Location = new System.Drawing.Point(1559, 22);
             this.labShandaMir2Width.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labShandaMir2Width.Name = "labShandaMir2Width";
-            this.labShandaMir2Width.Size = new System.Drawing.Size(50, 20);
+            this.labShandaMir2Width.Size = new System.Drawing.Size(63, 24);
             this.labShandaMir2Width.TabIndex = 17;
             this.labShandaMir2Width.Text = "Width";
             // 
@@ -1021,11 +1021,11 @@
             this.ShandaExine2LibListBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.ShandaExine2LibListBox.Font = new System.Drawing.Font("Comic Sans MS", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ShandaExine2LibListBox.FormattingEnabled = true;
-            this.ShandaExine2LibListBox.ItemHeight = 19;
+            this.ShandaExine2LibListBox.ItemHeight = 24;
             this.ShandaExine2LibListBox.Location = new System.Drawing.Point(0, 0);
             this.ShandaExine2LibListBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ShandaExine2LibListBox.Name = "ShandaExine2LibListBox";
-            this.ShandaExine2LibListBox.Size = new System.Drawing.Size(175, 938);
+            this.ShandaExine2LibListBox.Size = new System.Drawing.Size(175, 935);
             this.ShandaExine2LibListBox.TabIndex = 8;
             this.ShandaExine2LibListBox.SelectedIndexChanged += new System.EventHandler(this.ShandaMir2LibListBox_SelectedIndexChanged);
             // 
@@ -1053,25 +1053,13 @@
             this.ShandaExine2ImageList.ImageSize = new System.Drawing.Size(64, 64);
             this.ShandaExine2ImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // WemadeExine3ImageList
-            // 
-            this.WemadeExine3ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.WemadeExine3ImageList.ImageSize = new System.Drawing.Size(64, 64);
-            this.WemadeExine3ImageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // ShandaExine3ImageList
-            // 
-            this.ShandaExine3ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
-            this.ShandaExine3ImageList.ImageSize = new System.Drawing.Size(64, 64);
-            this.ShandaExine3ImageList.TransparentColor = System.Drawing.Color.Transparent;
-            // 
             // tabObjects
             // 
             this.tabObjects.Controls.Add(this.splitContainer1);
-            this.tabObjects.Location = new System.Drawing.Point(4, 29);
+            this.tabObjects.Location = new System.Drawing.Point(4, 32);
             this.tabObjects.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabObjects.Name = "tabObjects";
-            this.tabObjects.Size = new System.Drawing.Size(1916, 938);
+            this.tabObjects.Size = new System.Drawing.Size(1916, 935);
             this.tabObjects.TabIndex = 8;
             this.tabObjects.Text = "Objects";
             this.tabObjects.ToolTipText = "(R)";
@@ -1090,7 +1078,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1916, 938);
+            this.splitContainer1.Size = new System.Drawing.Size(1916, 935);
             this.splitContainer1.SplitterDistance = 192;
             this.splitContainer1.TabIndex = 8;
             // 
@@ -1099,11 +1087,11 @@
             this.ObjectslistBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ObjectslistBox.Font = new System.Drawing.Font("Comic Sans MS", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ObjectslistBox.FormattingEnabled = true;
-            this.ObjectslistBox.ItemHeight = 19;
+            this.ObjectslistBox.ItemHeight = 24;
             this.ObjectslistBox.Location = new System.Drawing.Point(0, 0);
             this.ObjectslistBox.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.ObjectslistBox.Name = "ObjectslistBox";
-            this.ObjectslistBox.Size = new System.Drawing.Size(192, 938);
+            this.ObjectslistBox.Size = new System.Drawing.Size(192, 935);
             this.ObjectslistBox.TabIndex = 6;
             this.ObjectslistBox.SelectedIndexChanged += new System.EventHandler(this.ObjectslistBox_SelectedIndexChanged);
             // 
@@ -1122,8 +1110,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.picObjects);
-            this.splitContainer2.Size = new System.Drawing.Size(1720, 938);
-            this.splitContainer2.SplitterDistance = 37;
+            this.splitContainer2.Size = new System.Drawing.Size(1720, 935);
+            this.splitContainer2.SplitterDistance = 36;
             this.splitContainer2.TabIndex = 3;
             // 
             // btnRefreshList
@@ -1155,7 +1143,7 @@
             this.picObjects.Location = new System.Drawing.Point(0, 0);
             this.picObjects.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.picObjects.Name = "picObjects";
-            this.picObjects.Size = new System.Drawing.Size(1720, 897);
+            this.picObjects.Size = new System.Drawing.Size(1720, 895);
             this.picObjects.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.picObjects.TabIndex = 0;
             this.picObjects.TabStop = false;
@@ -1164,10 +1152,10 @@
             // 
             this.tabTiles.Controls.Add(this.picTile);
             this.tabTiles.Controls.Add(this.TileslistView);
-            this.tabTiles.Location = new System.Drawing.Point(4, 29);
+            this.tabTiles.Location = new System.Drawing.Point(4, 32);
             this.tabTiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabTiles.Name = "tabTiles";
-            this.tabTiles.Size = new System.Drawing.Size(1916, 938);
+            this.tabTiles.Size = new System.Drawing.Size(1916, 935);
             this.tabTiles.TabIndex = 9;
             this.tabTiles.Text = "Tiles";
             this.tabTiles.ToolTipText = "(T)";
@@ -1196,7 +1184,7 @@
             this.TileslistView.Location = new System.Drawing.Point(0, 0);
             this.TileslistView.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.TileslistView.Name = "TileslistView";
-            this.TileslistView.Size = new System.Drawing.Size(1539, 938);
+            this.TileslistView.Size = new System.Drawing.Size(1539, 935);
             this.TileslistView.TabIndex = 10;
             this.TileslistView.UseCompatibleStateImageBehavior = false;
             this.TileslistView.VirtualMode = true;
@@ -1212,10 +1200,10 @@
             // tabTileCutter
             // 
             this.tabTileCutter.Controls.Add(this.splitContainer3);
-            this.tabTileCutter.Location = new System.Drawing.Point(4, 29);
+            this.tabTileCutter.Location = new System.Drawing.Point(4, 32);
             this.tabTileCutter.Name = "tabTileCutter";
             this.tabTileCutter.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTileCutter.Size = new System.Drawing.Size(1916, 938);
+            this.tabTileCutter.Size = new System.Drawing.Size(1916, 935);
             this.tabTileCutter.TabIndex = 10;
             this.tabTileCutter.Text = "TileCutter";
             this.tabTileCutter.ToolTipText = "(F4)";
@@ -1247,7 +1235,7 @@
             this.splitContainer3.Panel2.Controls.Add(this.pictureBox_Grid);
             this.splitContainer3.Panel2.Controls.Add(this.pictureBox_Image);
             this.splitContainer3.Panel2MinSize = 50;
-            this.splitContainer3.Size = new System.Drawing.Size(1910, 932);
+            this.splitContainer3.Size = new System.Drawing.Size(1910, 929);
             this.splitContainer3.SplitterDistance = 170;
             this.splitContainer3.TabIndex = 0;
             // 
@@ -1290,7 +1278,7 @@
             this.label1.Location = new System.Drawing.Point(21, 141);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(58, 17);
+            this.label1.Size = new System.Drawing.Size(69, 20);
             this.label1.TabIndex = 15;
             this.label1.Text = "Tile Size";
             // 
@@ -1309,12 +1297,12 @@
             this.comboBox_cellSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_cellSize.FormattingEnabled = true;
             this.comboBox_cellSize.Items.AddRange(new object[] {
-            "48 x 32",
-            "96 x 64"});
+            "48 x 24",
+            "96 x 48"});
             this.comboBox_cellSize.Location = new System.Drawing.Point(21, 161);
             this.comboBox_cellSize.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox_cellSize.Name = "comboBox_cellSize";
-            this.comboBox_cellSize.Size = new System.Drawing.Size(99, 25);
+            this.comboBox_cellSize.Size = new System.Drawing.Size(99, 28);
             this.comboBox_cellSize.TabIndex = 14;
             this.comboBox_cellSize.SelectedIndexChanged += new System.EventHandler(this.comboBox_cellSize_SelectedIndexChanged);
             // 
@@ -1367,19 +1355,19 @@
             this.menuSelectAllCells,
             this.menuDeselectAllCells});
             this.contextMenuTileCutter.Name = "contextMenuStrip1";
-            this.contextMenuTileCutter.Size = new System.Drawing.Size(134, 48);
+            this.contextMenuTileCutter.Size = new System.Drawing.Size(154, 52);
             // 
             // menuSelectAllCells
             // 
             this.menuSelectAllCells.Name = "menuSelectAllCells";
-            this.menuSelectAllCells.Size = new System.Drawing.Size(133, 22);
+            this.menuSelectAllCells.Size = new System.Drawing.Size(153, 24);
             this.menuSelectAllCells.Text = "SelectAll";
             this.menuSelectAllCells.Click += new System.EventHandler(this.menuSelectAllCells_Click);
             // 
             // menuDeselectAllCells
             // 
             this.menuDeselectAllCells.Name = "menuDeselectAllCells";
-            this.menuDeselectAllCells.Size = new System.Drawing.Size(133, 22);
+            this.menuDeselectAllCells.Size = new System.Drawing.Size(153, 24);
             this.menuDeselectAllCells.Text = "DeselectAll";
             this.menuDeselectAllCells.Click += new System.EventHandler(this.menuDeselectAllCells_Click);
             // 
@@ -1408,14 +1396,26 @@
             this.tabHelp.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.tabHelp.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabHelp.BackgroundImage")));
             this.tabHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.tabHelp.Location = new System.Drawing.Point(4, 29);
+            this.tabHelp.Location = new System.Drawing.Point(4, 32);
             this.tabHelp.Name = "tabHelp";
             this.tabHelp.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHelp.Size = new System.Drawing.Size(1916, 938);
+            this.tabHelp.Size = new System.Drawing.Size(1916, 935);
             this.tabHelp.TabIndex = 11;
             this.tabHelp.Text = "Help";
             this.tabHelp.ToolTipText = "(H)";
             this.tabHelp.UseVisualStyleBackColor = true;
+            // 
+            // WemadeExine3ImageList
+            // 
+            this.WemadeExine3ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.WemadeExine3ImageList.ImageSize = new System.Drawing.Size(64, 64);
+            this.WemadeExine3ImageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // ShandaExine3ImageList
+            // 
+            this.ShandaExine3ImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.ShandaExine3ImageList.ImageSize = new System.Drawing.Size(64, 64);
+            this.ShandaExine3ImageList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // ObjectsimageList
             // 
@@ -1446,20 +1446,20 @@
             this.menuOpen,
             this.menuSave});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(37, 20);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(46, 20);
             this.toolStripMenuItem1.Text = "File";
             // 
             // menuNew
             // 
             this.menuNew.Name = "menuNew";
-            this.menuNew.Size = new System.Drawing.Size(140, 22);
+            this.menuNew.Size = new System.Drawing.Size(175, 26);
             this.menuNew.Text = "New";
             this.menuNew.Click += new System.EventHandler(this.menuNew_Click);
             // 
             // menuOpen
             // 
             this.menuOpen.Name = "menuOpen";
-            this.menuOpen.Size = new System.Drawing.Size(140, 22);
+            this.menuOpen.Size = new System.Drawing.Size(175, 26);
             this.menuOpen.Text = "Open";
             this.menuOpen.Click += new System.EventHandler(this.menuOpen_Click);
             // 
@@ -1467,7 +1467,7 @@
             // 
             this.menuSave.Name = "menuSave";
             this.menuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.menuSave.Size = new System.Drawing.Size(140, 22);
+            this.menuSave.Size = new System.Drawing.Size(175, 26);
             this.menuSave.Text = "Save";
             this.menuSave.Click += new System.EventHandler(this.menuSave_Click);
             // 
@@ -1479,32 +1479,32 @@
             this.toolStripSeparator1,
             this.menuClearMap});
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(39, 20);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(49, 20);
             this.toolStripMenuItem2.Text = "Edit";
             // 
             // menuUndo
             // 
             this.menuUndo.Name = "menuUndo";
-            this.menuUndo.Size = new System.Drawing.Size(129, 22);
+            this.menuUndo.Size = new System.Drawing.Size(163, 26);
             this.menuUndo.Text = "Undo";
             this.menuUndo.Click += new System.EventHandler(this.menuUndo_Click);
             // 
             // menuRedo
             // 
             this.menuRedo.Name = "menuRedo";
-            this.menuRedo.Size = new System.Drawing.Size(129, 22);
+            this.menuRedo.Size = new System.Drawing.Size(163, 26);
             this.menuRedo.Text = "Redo";
             this.menuRedo.Click += new System.EventHandler(this.menuRedo_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(126, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(160, 6);
             // 
             // menuClearMap
             // 
             this.menuClearMap.Name = "menuClearMap";
-            this.menuClearMap.Size = new System.Drawing.Size(129, 22);
+            this.menuClearMap.Size = new System.Drawing.Size(163, 26);
             this.menuClearMap.Text = "Clear Map";
             this.menuClearMap.Click += new System.EventHandler(this.menuClearMap_Click);
             // 
@@ -1515,20 +1515,20 @@
             this.menuJump,
             this.menuInvertMir3Layer});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // menuFreeMemory
             // 
             this.menuFreeMemory.Name = "menuFreeMemory";
-            this.menuFreeMemory.Size = new System.Drawing.Size(206, 22);
+            this.menuFreeMemory.Size = new System.Drawing.Size(259, 26);
             this.menuFreeMemory.Text = "Free Memory";
             this.menuFreeMemory.Click += new System.EventHandler(this.menuFreeMemory_Click);
             // 
             // menuJump
             // 
             this.menuJump.Name = "menuJump";
-            this.menuJump.Size = new System.Drawing.Size(206, 22);
+            this.menuJump.Size = new System.Drawing.Size(259, 26);
             this.menuJump.Text = "Jump";
             this.menuJump.Click += new System.EventHandler(this.menuJump_Click);
             // 
@@ -1536,7 +1536,7 @@
             // 
             this.menuInvertMir3Layer.Name = "menuInvertMir3Layer";
             this.menuInvertMir3Layer.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-            this.menuInvertMir3Layer.Size = new System.Drawing.Size(206, 22);
+            this.menuInvertMir3Layer.Size = new System.Drawing.Size(259, 26);
             this.menuInvertMir3Layer.Text = "Invert Mir 3 Layer";
             this.menuInvertMir3Layer.Click += new System.EventHandler(this.menuInvertMir3Layer_Click);
             // 
@@ -1546,20 +1546,20 @@
             this.menuZoomIn,
             this.menuZoomOut});
             this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-            this.toolStripMenuItem9.Size = new System.Drawing.Size(45, 20);
+            this.toolStripMenuItem9.Size = new System.Drawing.Size(56, 20);
             this.toolStripMenuItem9.Text = "View";
             // 
             // menuZoomIn
             // 
             this.menuZoomIn.Name = "menuZoomIn";
-            this.menuZoomIn.Size = new System.Drawing.Size(147, 22);
+            this.menuZoomIn.Size = new System.Drawing.Size(184, 26);
             this.menuZoomIn.Text = "Zoom In (+)";
             this.menuZoomIn.Click += new System.EventHandler(this.menuZoomIn_Click);
             // 
             // menuZoomOut
             // 
             this.menuZoomOut.Name = "menuZoomOut";
-            this.menuZoomOut.Size = new System.Drawing.Size(147, 22);
+            this.menuZoomOut.Size = new System.Drawing.Size(184, 26);
             this.menuZoomOut.Text = "Zoom Out (-)";
             this.menuZoomOut.Click += new System.EventHandler(this.menuZoomOut_Click);
             // 
@@ -1568,14 +1568,14 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuAbout});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // menuAbout
             // 
             this.menuAbout.Name = "menuAbout";
             this.menuAbout.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.menuAbout.Size = new System.Drawing.Size(149, 22);
+            this.menuAbout.Size = new System.Drawing.Size(188, 26);
             this.menuAbout.Text = "About";
             this.menuAbout.Click += new System.EventHandler(this.menuAbout_Click);
             // 
@@ -1585,7 +1585,7 @@
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 19F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1924, 1025);
             this.Controls.Add(this.tabControl1);

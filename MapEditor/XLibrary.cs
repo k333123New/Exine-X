@@ -30,14 +30,27 @@ namespace Map_Editor
             //Exine-X (allowed from 0-99) 
 
             //MapLibs[0] = new XLibrary(@".\Data\Map\Exine\Tiles");
-            MapLibs[0] = new XLibrary(@".\Data\Map\Exine\TS_00_Tile");
             //Tiles mean big tiles and big tiles is apply to background image
-            ListItems[0] = new ListItem("Tiles", 0); 
+            for (int i = 0; i < 10; i++)
+            {
+                MapLibs[i] = new XLibrary(@".\Data\Map\Exine\TS_0"+i+"_Tile");
+                ListItems[i] = new ListItem("Tiles"+i, i);
+            }
+            
+            for (int i = 0; i < 10; i++)
+            {
+                MapLibs[i+10] = new XLibrary(@".\Data\Map\Exine\TS_0"+i+"_Static");
+                ListItems[i+10] = new ListItem("Objects"+i, i+10);
+            }
 
-            MapLibs[1] = new XLibrary(@".\Data\Map\Exine\Smtiles");
-            ListItems[1] = new ListItem("Smtiles", 1);
-            MapLibs[2] = new XLibrary(@".\Data\Map\Exine\TS_00_Static");
-            ListItems[2] = new ListItem("Objects", 2);
+            MapLibs[20] = new XLibrary(@".\Data\Map\Exine\Smtiles");
+            ListItems[20] = new ListItem("Smtiles", 20);
+
+            //56:0,57:1,58:2,59:3,116:4
+            //index 99
+            MapLibs[99] = new XLibrary(@".\Data\Map\Exine\LimitTiles");
+            ListItems[99] = new ListItem("LimitTiles", 99);
+
 
             /*
             for (int i = 2; i < 99; i++)
