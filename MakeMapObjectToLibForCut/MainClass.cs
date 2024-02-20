@@ -17,16 +17,44 @@ namespace MakeMapObjectToLibForCut
         {
             Console.WriteLine("Start!");
 
-            string[] filenames = new string[] { "10000.map" };
+            string[] filenames = new string[] { "00001.map" };
             List<String> inputFileNames = new List<string>();
 
-            if (args.Length > 0) filenames = args;
-
-            foreach (string filename in filenames)
+            if (args.Length > 0)
             {
-                if (File.Exists(filename))
+                if (args[0] == "*.map")
                 {
-                    inputFileNames.Add(filename);
+                    //Console.WriteLine("* Map");
+                    //해당 경로에서 파일 목록 가져오기
+
+                    DirectoryInfo di = new DirectoryInfo(@".\\");
+
+                    FileInfo[] files = di.GetFiles("*.map");
+
+                    foreach (FileInfo file in files)
+                    {
+                        Console.WriteLine(file.Name);
+
+                        if (File.Exists(file.Name))
+                        {
+                            inputFileNames.Add(file.Name);
+                        }
+                    }
+                    //return;
+                }
+                else
+                {
+                    filenames = args; 
+                }
+            }
+            else
+            {
+                foreach (string filename in filenames)
+                {
+                    if (File.Exists(filename))
+                    {
+                        inputFileNames.Add(filename);
+                    }
                 }
             }
 
@@ -54,40 +82,77 @@ namespace MakeMapObjectToLibForCut
 
 
                 //draw order sort
+                //그릴때 순서를 정해서 그려야 할듯함.
+                //오른쪽 위부터 대각선으로 내려가고 위쪽을 먼저 그려야함.(가중치를 부여하는 방식으로 변경하여 소팅 및 그리도록함.
+                //실제 이미지의 크기까지 고려하여 한번 더 계산하면 더 정밀해 질 것으로 보임.(Y에 실제 이미지의 크기를 더 반영해서 가중치에 넣을것)
+                //이미지를 실제로 그릴때 왼쪽에 붙어있거나 오른쪽에 붙어있으면 반대편에 이어서 그려지는 문제가 있음.
+                //그림을 그리는 시점에서 너비와 높이를 계산해서 필요 없는 부분은 제외하고 그려야 할듯함.
+                //애니타일 부분도 최소한 1프레임이라도 가져와서 그릴수 있도록 할것.(차후 추가보정)
+
+
+                System.IO.FileInfo fileObjectSizeInfo = new System.IO.FileInfo(".\\CachedObjectSize\\");
+                fileObjectSizeInfo.Directory.Create();
+                string fileType = "";
+
                 var dictionary = new Dictionary<StaticObject, int>(mapFormat.staticObjectInfos.StaticObjects.Length);
                 for (int i = 0; i < mapFormat.staticObjectInfos.StaticObjects.Length; i++)
                 {
+                    //get staticobject frame size
+                    fileType = "";
+                    var item = mapFormat.staticObjectInfos.StaticObjects[i];
+                    if (item.IsAnim == 0x01)
+                    {
+                        fileType = "Anim";
+                        Console.WriteLine("IsAnimObject!");
+                    }
+
+                    int ypfImageSetIdx = (item.ImgIndex - item.World * 1000);
+                    int frameWidth = 0;
+                    int frameHeight = 0;
+
+                    //기존에 크기 정보를 가져온 적이 있으면 그걸 그대로 사용하고 아니면 불러와서 저장한다.
+                    if (File.Exists(".\\CachedObjectSize\\" + fileType + item.World + "_" + ypfImageSetIdx + ".txt"))
+                    {
+                        Console.WriteLine("Exist Frame size! load frame size From Exist Data!");
+                        frameWidth = Convert.ToInt32(File.ReadAllLines(".\\CachedObjectSize\\" + fileType+item.World + "_" + ypfImageSetIdx + ".txt")[0]);
+                        frameHeight = Convert.ToInt32(File.ReadAllLines(".\\CachedObjectSize\\" + fileType+item.World + "_" + ypfImageSetIdx + ".txt")[1]);
+                    }
+                    else
+                    { 
+                        Frame frame = ConvertYpfToRGBA("TS_0" + item.World + "_"+ fileType + "Static.ypf").ypfImageSets[0].FrameInfo.frames[ypfImageSetIdx];
+                        frameWidth = frame.FrameWidth;
+                        frameHeight = frame.FrameHeight;
+                        File.WriteAllText(".\\CachedObjectSize\\" + fileType+item.World + "_" + ypfImageSetIdx + ".txt", frameWidth + "\r\n" + frameHeight); 
+                    }
+
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X);
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X*10 - mapFormat.staticObjectInfos.StaticObjects[i].Y);
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X * 2 - mapFormat.staticObjectInfos.StaticObjects[i].Y);
-                    dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X * 2 - mapFormat.staticObjectInfos.StaticObjects[i].Y*4);
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X * 2 - mapFormat.staticObjectInfos.StaticObjects[i].Y*4);
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.X - frameWidth / 2) * 2 - (item.Y+ frameHeight / 2) * 4);
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.X - frameWidth / 2)*2  + (item.Y + frameHeight / 2)*4);
+
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.X - frameWidth / 2));//OK
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.X - frameWidth / 2)*2 - (item.Y + frameHeight / 2)*4);//OK
+                    //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.X)*2 - (item.Y)*4);//OK
+
+                    dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.Y + frameHeight / 2) * 400000 + (item.X + frameHeight / 2) *1000 );
+                     
                 }
-                
+
                 // Order by values. 
                 // ... Use LINQ to specify sorting by value. 
                 var items = from pair in dictionary 
-                            orderby pair.Value descending 
+                            orderby pair.Value ascending 
                             select pair;
-
-                // Display results. 
-                /*
-                foreach (KeyValuePair<StaticObject, short> pair in items) 
-                { 
-                    Console.WriteLine("{0}: {1}", pair.Key, pair.Value); 
-                }
-                */
-
-
+                
+                bool aniTile = false;
                 //foreach (var item in mapFormat.staticObjectInfos.StaticObjects)
                 foreach (KeyValuePair<StaticObject, int> pair in items)
                 {
                     StaticObject item = pair.Key;
 
-                    if (item.IsAnim==0x01)
-                    {
-                        Console.WriteLine("IsAnimObject!");
-                      //  Console.ReadLine();
-                    }
+                    aniTile = false;
                     Console.Write("World(TS Number):" + item.World);
                     Console.Write("\tImage_Index:" + (item.ImgIndex - item.World * 1000));
                     Console.Write("\tImage_Real_Position:" +"("+item.X+","+item.Y+")");
@@ -103,8 +168,18 @@ namespace MakeMapObjectToLibForCut
                     //한번에 정보를 다 일고 시작함!
                     //if(item.IsAnim==0x01)YPFImageSet[] yPFImageSets =  ConvertYpfToRGBA("TS_0"+ item.World + "_AnimStatic.ypf").ypfImageSets;
 
+                   
+                    YPFImageSet[] yPFImageSets = null;
+                    fileType = "";
+                    if (item.IsAnim == 0x01)
+                    {
+                        fileType = "Anim";
+                        Console.WriteLine("IsAnimObject!");  
+                    }
 
-                    YPFImageSet[] yPFImageSets =  ConvertYpfToRGBA("TS_0"+ item.World + "_Static.ypf").ypfImageSets;
+                    if(aniTile) yPFImageSets =  ConvertYpfToRGBA("TS_0"+ item.World + "_"+ fileType + "Static.ypf").ypfImageSets;
+                    else yPFImageSets = ConvertYpfToRGBA("TS_0" + item.World + "_Static.ypf").ypfImageSets;
+
                     Console.WriteLine("yPFImageSets.Length:"+yPFImageSets.Length );
 
                     Frame image= yPFImageSets[0].FrameInfo.frames[ypfImageSetIdx];
@@ -115,26 +190,24 @@ namespace MakeMapObjectToLibForCut
 
                     //새로운 이미지라면 해당 이미지 정보는 압축을 푼 상태로 그대로 raw파일로 저장해서 cacheFrame폴더에 만들어두기.
                     //해당되는 프레임의 이미지가 이미 풀려져 있는 경우 해당 데이터를 바로 읽어서 사용하는 것으로 처리할것.
-                    //그릴때 순서를 정해서 그려야 할듯함.
-                    //오른쪽 위부터 대각선으로 내려가고 위쪽을 먼저 그려야함.
 
 
+                    
                     byte[] colorDataRGBA = null;
                     System.IO.FileInfo file = new System.IO.FileInfo(".\\CachedObject\\");
                     file.Directory.Create();
-
-                    //if (prevWorld == item.World && prevYpfImageSetIdx == ypfImageSetIdx)
-                    if (File.Exists(".\\CachedObject\\" + item.World + "_" + ypfImageSetIdx+".raw"))
+                     
+                    if (File.Exists(".\\CachedObject\\" + fileType + item.World + "_" + ypfImageSetIdx+".raw"))
                     {
                         Console.WriteLine("Exist Frame Image! load frame image From Exist Data!");
-                        colorDataRGBA =  File.ReadAllBytes(".\\CachedObject\\" + item.World + "_" + ypfImageSetIdx + ".raw");
+                        colorDataRGBA =  File.ReadAllBytes(".\\CachedObject\\" + fileType + item.World + "_" + ypfImageSetIdx + ".raw");
                     }
                     else
                     {
                         prevWorld = item.World;
                         prevYpfImageSetIdx = ypfImageSetIdx;
                         colorDataRGBA = image.GetcolorDataRGBA();
-                        File.WriteAllBytes(".\\CachedObject\\"+ item.World+"_"+ ypfImageSetIdx+".raw", colorDataRGBA);
+                        File.WriteAllBytes(".\\CachedObject\\" + fileType+ item.World+"_"+ ypfImageSetIdx+".raw", colorDataRGBA);
                         
                         //prevColorDataRGBA = new byte[colorDataRGBA.Length];
                         //Buffer.BlockCopy(colorDataRGBA, 0, prevColorDataRGBA, 0, colorDataRGBA.Length);
@@ -142,6 +215,11 @@ namespace MakeMapObjectToLibForCut
 
                     Console.WriteLine("ypfImageSetIdx:"+ ypfImageSetIdx+" imageWidth:" + imageWidth + " imageHeight" + imageHeight);
 
+                    int boundCheck1 = 0;
+                    int boundCheck2 = 0;
+
+                    int boundCheck3 = 0;
+                    int boundCheck4 = 0;
                     for (int x = 0; x < imageWidth * 4; x = x + 4) //174 => 0~173*4 bytes
                     {
                         for (int y = 0; y < imageHeight ; y++)//153 => 174*4*0+0 ~ 174*4*0+152 , 174*4*1+0~174*4*1+152, ...174+2+0
@@ -153,19 +231,39 @@ namespace MakeMapObjectToLibForCut
                             outputImageData[y * (mapWidth * 4) + x + 2] = colorDataRGBA[y * imageWidth * 4 + x + 2];//r
                             outputImageData[y * (mapWidth * 4) + x + 3] = colorDataRGBA[y * imageWidth * 4 + x + 3];//a
                             */
+
                             if (colorDataRGBA[y * (imageWidth * 4) + x + 3] != 0x00)
                             {
+                                boundCheck1 = ((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 0);
+                                boundCheck2 = boundCheck1 + 3;
+
+                                boundCheck3 = y * (imageWidth * 4) + x;
+                                boundCheck4 = boundCheck3 + 3;
+
+                                if (0 > boundCheck1 || outputImageData.Length < boundCheck2) continue;
+                                if (0 > boundCheck3 || colorDataRGBA.Length < boundCheck4) continue;
+
+
                                 try
                                 {
-                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 0)] = colorDataRGBA[y * (imageWidth * 4) + x]; //b//0x00;//b?
-                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 1)] = colorDataRGBA[y * (imageWidth * 4) + x + 1];//g
-                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 2)] = colorDataRGBA[y * (imageWidth * 4) + x + 2];//r
-                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 3)] = colorDataRGBA[y * (imageWidth * 4) + x + 3];//a
+                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 0)] 
+                                        = colorDataRGBA[y * (imageWidth * 4) + x]; //b//0x00;//b?
+
+                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 1)] 
+                                        = colorDataRGBA[y * (imageWidth * 4) + x + 1];//g
+
+                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 2)] 
+                                        = colorDataRGBA[y * (imageWidth * 4) + x + 2];//r
+
+                                    outputImageData[((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 3)] 
+                                        = colorDataRGBA[y * (imageWidth * 4) + x + 3];//a
                                 }
-                                catch(Exception ex)
+                                catch (Exception ex)
                                 {
+                                    Console.WriteLine(ex.Message+"!!!\r\n"+ "outputImageData.Len:"+ outputImageData.Length+ " outputImageDataIdx:" + ((item.Y + image.Top) + y) * (mapWidth * 4) + ((item.X + image.Left) * 4) + (x + 0));
                                     continue;
                                 }
+
                             }
 
 
