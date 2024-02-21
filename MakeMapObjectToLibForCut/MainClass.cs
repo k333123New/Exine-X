@@ -17,7 +17,7 @@ namespace MakeMapObjectToLibForCut
         {
             Console.WriteLine("Start!");
 
-            string[] filenames = new string[] { "00001.map" };
+            string[] filenames = new string[] { "10820.map" };
             List<String> inputFileNames = new List<string>();
 
             if (args.Length > 0)
@@ -25,7 +25,7 @@ namespace MakeMapObjectToLibForCut
                 if (args[0] == "*.map")
                 {
                     //Console.WriteLine("* Map");
-                    //해당 경로에서 파일 목록 가져오기
+                              //해당 경로에서 파일 목록 가져오기
 
                     DirectoryInfo di = new DirectoryInfo(@".\\");
 
@@ -64,11 +64,11 @@ namespace MakeMapObjectToLibForCut
                 Console.WriteLine("Start Convert MapAndObjects to Png Image. Filename:" + filename); 
                 MAPFormat mapFormat = new MAPFormat(ReadByteFile(filename), filename);
                 int mapWidth = mapFormat.mapHeader.Width * 48;
-                int mapHeight = mapFormat.mapHeader.Width * 24;
+                int mapHeight = mapFormat.mapHeader.Height * 24;
 
-                //이 지도에서 필요한 Object 파일 정보를 가져와서 해당 파일만 읽어온다.
-                Console.WriteLine("Real Map Image Size:" + "("+ mapWidth + "," + mapFormat.mapHeader.Height*24 + ")");
-                byte[] outputImageData = new byte[mapWidth *4 * mapHeight * 4];//ARGB
+                        //이 지도에서 필요한 Object 파일 정보를 가져와서 해당 파일만 읽어온다.
+                Console.WriteLine("Real Map Image Size:" + "("+ mapWidth + "," + mapHeight + ")");
+                byte[] outputImageData = new byte[mapWidth *4 * mapHeight * 4];//ARGB 넓게 쓴다고 가정하고 처리
 
                 Console.WriteLine("static object count:"+mapFormat.staticObjectInfos.Count);
                 if (mapFormat.staticObjectInfos == null) return;
@@ -82,12 +82,12 @@ namespace MakeMapObjectToLibForCut
 
 
                 //draw order sort
-                //그릴때 순서를 정해서 그려야 할듯함.
-                //오른쪽 위부터 대각선으로 내려가고 위쪽을 먼저 그려야함.(가중치를 부여하는 방식으로 변경하여 소팅 및 그리도록함.
-                //실제 이미지의 크기까지 고려하여 한번 더 계산하면 더 정밀해 질 것으로 보임.(Y에 실제 이미지의 크기를 더 반영해서 가중치에 넣을것)
-                //이미지를 실제로 그릴때 왼쪽에 붙어있거나 오른쪽에 붙어있으면 반대편에 이어서 그려지는 문제가 있음.
-                //그림을 그리는 시점에서 너비와 높이를 계산해서 필요 없는 부분은 제외하고 그려야 할듯함.
-                //애니타일 부분도 최소한 1프레임이라도 가져와서 그릴수 있도록 할것.(차후 추가보정)
+                        //그릴때 순서를 정해서 그려야 할듯함. 
+                        //오른쪽 위부터 대각선으로 내려가고 위쪽을 먼저 그려야함.(가중치를 부여하는 방식으로 변경하여 소팅 및 그리도록함.
+                        //실제 이미지의 크기까지 고려하여 한번 더 계산하면 더 정밀해 질 것으로 보임.(Y에 실제 이미지의 크기를 더 반영해서 가중치에 넣을것)
+                        //이미지를 실제로 그릴때 왼쪽에 붙어있거나 오른쪽에 붙어있으면 반대편에 이어서 그려지는 문제가 있음.
+                        //그림을 그리는 시점에서 너비와 높이를 계산해서 필요 없는 부분은 제외하고 그려야 할듯함.
+                        //애니타일 부분도 최소한 1프레임이라도 가져와서 그릴수 있도록 할것.(차후 추가보정)
 
 
                 System.IO.FileInfo fileObjectSizeInfo = new System.IO.FileInfo(".\\CachedObjectSize\\");
@@ -99,18 +99,20 @@ namespace MakeMapObjectToLibForCut
                 {
                     //get staticobject frame size
                     fileType = "";
+                    
+                    int frameWidth = 0;
+                    int frameHeight = 0; 
                     var item = mapFormat.staticObjectInfos.StaticObjects[i];
+                    int ypfImageSetIdx = (item.ImgIndex - item.World * 1000);
+
                     if (item.IsAnim == 0x01)
                     {
                         fileType = "Anim";
-                        Console.WriteLine("IsAnimObject!");
+                        Console.WriteLine("IsAnimObject! fileType:" + fileType + " item.World:" + item.World + " ypfImageSetIdx:" + ypfImageSetIdx);
+                        //Console.ReadLine();
                     }
 
-                    int ypfImageSetIdx = (item.ImgIndex - item.World * 1000);
-                    int frameWidth = 0;
-                    int frameHeight = 0;
-
-                    //기존에 크기 정보를 가져온 적이 있으면 그걸 그대로 사용하고 아니면 불러와서 저장한다.
+                               //기존에 크기 정보를 가져온 적이 있으면 그걸 그대로 사용하고 아니면 불러와서 저장한다.
                     if (File.Exists(".\\CachedObjectSize\\" + fileType + item.World + "_" + ypfImageSetIdx + ".txt"))
                     {
                         Console.WriteLine("Exist Frame size! load frame size From Exist Data!");
@@ -118,13 +120,25 @@ namespace MakeMapObjectToLibForCut
                         frameHeight = Convert.ToInt32(File.ReadAllLines(".\\CachedObjectSize\\" + fileType+item.World + "_" + ypfImageSetIdx + ".txt")[1]);
                     }
                     else
-                    { 
-                        Frame frame = ConvertYpfToRGBA("TS_0" + item.World + "_"+ fileType + "Static.ypf").ypfImageSets[0].FrameInfo.frames[ypfImageSetIdx];
+                    {
+                        Console.WriteLine("ypfImageSetIdx:" + ypfImageSetIdx);
+                        //anim's ypfImageSetIdx is ypfImageSets idx...!
+
+                        Frame frame = null;
+                        YPFFormat yPFFormat =  ConvertYpfToRGBA("TS_0" + item.World + "_" + fileType + "Static.ypf");
+                        if (item.IsAnim == 0x01)
+                        {
+                            frame = yPFFormat.ypfImageSets[ypfImageSetIdx].FrameInfo.frames[0];
+                        }
+                        else
+                        {
+                            frame = yPFFormat.ypfImageSets[0].FrameInfo.frames[ypfImageSetIdx];
+                        }
                         frameWidth = frame.FrameWidth;
                         frameHeight = frame.FrameHeight;
                         File.WriteAllText(".\\CachedObjectSize\\" + fileType+item.World + "_" + ypfImageSetIdx + ".txt", frameWidth + "\r\n" + frameHeight); 
                     }
-
+                    #region hidden
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X);
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X*10 - mapFormat.staticObjectInfos.StaticObjects[i].Y);
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], mapFormat.staticObjectInfos.StaticObjects[i].X * 2 - mapFormat.staticObjectInfos.StaticObjects[i].Y);
@@ -135,6 +149,7 @@ namespace MakeMapObjectToLibForCut
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.X - frameWidth / 2));//OK
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.X - frameWidth / 2)*2 - (item.Y + frameHeight / 2)*4);//OK
                     //dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.X)*2 - (item.Y)*4);//OK
+                    #endregion
 
                     dictionary.Add(mapFormat.staticObjectInfos.StaticObjects[i], (item.Y + frameHeight / 2) * 400000 + (item.X + frameHeight / 2) *1000 );
                      
@@ -162,10 +177,10 @@ namespace MakeMapObjectToLibForCut
                     //m2MapMgr.SetFrontImgIdx(staticObjectInfos[i].is)
 
                     int ypfImageSetIdx = (item.ImgIndex - item.World * 1000);
-                    //ts_object 이미지를 불러와서 비트맵 정보와 위치 정보를 기반으로 outputImageData에 데이터를 넣어준다.
+                                 //ts_object 이미지를 불러와서 비트맵 정보와 위치 정보를 기반으로 outputImageData에 데이터를 넣어준다.
                     //TS_04_Static.ypf
 
-                    //한번에 정보를 다 일고 시작함!
+                                 //한번에 정보를 다 일고 시작함!
                     //if(item.IsAnim==0x01)YPFImageSet[] yPFImageSets =  ConvertYpfToRGBA("TS_0"+ item.World + "_AnimStatic.ypf").ypfImageSets;
 
                    
@@ -173,8 +188,10 @@ namespace MakeMapObjectToLibForCut
                     fileType = "";
                     if (item.IsAnim == 0x01)
                     {
+                        aniTile = true;
                         fileType = "Anim";
-                        Console.WriteLine("IsAnimObject!");  
+                        Console.WriteLine("IsAnimObject! fileType:" + fileType + " item.World:" + item.World + " ypfImageSetIdx:" + ypfImageSetIdx);
+                       // Console.ReadLine();
                     }
 
                     if(aniTile) yPFImageSets =  ConvertYpfToRGBA("TS_0"+ item.World + "_"+ fileType + "Static.ypf").ypfImageSets;
@@ -182,7 +199,10 @@ namespace MakeMapObjectToLibForCut
 
                     Console.WriteLine("yPFImageSets.Length:"+yPFImageSets.Length );
 
-                    Frame image= yPFImageSets[0].FrameInfo.frames[ypfImageSetIdx];
+
+                    Frame image = null;
+                    if (aniTile)  image=yPFImageSets[ypfImageSetIdx].FrameInfo.frames[0];
+                    else image = yPFImageSets[0].FrameInfo.frames[ypfImageSetIdx];
                     int imageWidth = image.FrameWidth;
                     int imageHeight = image.FrameHeight;
                     //image.SaveImage("0_" + ypfImageSetIdx + "saveimg.png");
@@ -203,9 +223,7 @@ namespace MakeMapObjectToLibForCut
                         colorDataRGBA =  File.ReadAllBytes(".\\CachedObject\\" + fileType + item.World + "_" + ypfImageSetIdx + ".raw");
                     }
                     else
-                    {
-                        prevWorld = item.World;
-                        prevYpfImageSetIdx = ypfImageSetIdx;
+                    { 
                         colorDataRGBA = image.GetcolorDataRGBA();
                         File.WriteAllBytes(".\\CachedObject\\" + fileType+ item.World+"_"+ ypfImageSetIdx+".raw", colorDataRGBA);
                         
@@ -322,8 +340,9 @@ namespace MakeMapObjectToLibForCut
             byte[] datas = ReadByteFile(filename);
 
             YPFFormat ypfFormat = new YPFFormat(datas);
-            //ypfFormat.SaveFile(filename);//사용 안하면 제거
+                  //ypfFormat.SaveFile(filename);//사용 안하면 제거
             //ypfFormat.ConvertToLib(filename);
+            Console.WriteLine("Finish ConvertYpfToRGBA. Filename:" + filename);
             return ypfFormat;
         }
 

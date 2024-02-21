@@ -14,6 +14,7 @@ using Microsoft.DirectX.Direct3D;
 using Font = System.Drawing.Font;
 using System.Linq;
 
+
 namespace Map_Editor
 {
     public partial class Main : Form
@@ -53,16 +54,11 @@ namespace Map_Editor
         private static int AutoTileRange;
         private static int AutoTileChanges;
         private readonly Editor _editor = new Editor();
-        private readonly Dictionary<int, int> _shandaExine2IndexList = new Dictionary<int, int>();
-        private readonly Dictionary<int, int> _shandaExine3IndexList = new Dictionary<int, int>();
         private readonly Dictionary<int, int> _tilesIndexList = new Dictionary<int, int>();
         private readonly Dictionary<int, int> _wemadeExine2IndexList = new Dictionary<int, int>();
-        private readonly Dictionary<int, int> _wemadeExine3IndexList = new Dictionary<int, int>();
         private readonly List<CellInfoData> bigTilePoints = new List<CellInfoData>();
         private readonly CellInfoControl cellInfoControl = new CellInfoControl();
         private readonly int[] Mir2BigTilesPreviewIndex = {5, 15, 6, 20, 0, 21, 7, 17, 8};
-        private readonly int[] Mir3BigTilesPreviewIndex1 = {10, 20, 11, 25, 0, 26, 12, 22, 13};
-        private readonly int[] Mir3BigTilesPreviewIndex2 = {18, 22, 17, 26, 5, 27, 16, 20, 15};
         private readonly List<CellInfoData> smTilePoints = new List<CellInfoData>();
         private readonly int[] smTilesPreviewIndex = {39, 11, 15, 35, 0, 19, 31, 25, 23};
         public int AnimationCount;
@@ -93,14 +89,10 @@ namespace Map_Editor
         private XLibrary.MImage selectLibMImage;
         private ListItem selectListItem;
         private int selectTilesIndex = -1;
-
-        private ListItem shangdaExine2ListItem;
-        private ListItem shangdaExine3ListItem;
-
+          
         private CellInfoData[] unTemp, reTemp;
 
-        private ListItem wemadeExine2ListItem;
-        private ListItem wemadeExine3ListItem;
+        private ListItem wemadeExine2ListItem; 
 
         //TileCutter
         private bool grid = true;
@@ -168,8 +160,7 @@ namespace Map_Editor
                 AnimationCount++;
             }
 
-            Text = string.Format("FPS: {0}---Map:W {1}:H {2} ----W,S,A,D,--Suprcode--v.1.1--<{3}>", FPS, mapWidth, mapHeight,
-                mapFileName);
+            Text = string.Format("FPS: {0}---Map:W {1}:H {2} ----W,S,A,D,<{3}>", FPS, mapWidth, mapHeight,mapFileName);
         }
 
         private void RenderEnviroment()
@@ -195,51 +186,28 @@ namespace Map_Editor
 
                     OffSetX = MapPanel.Width/(CellWidth*zoomMIN/zoomMAX);
                     OffSetY = MapPanel.Height/(CellHeight*zoomMIN/zoomMAX);
-
-
-                    //back
-                    DrawBack(chkBack.Checked);
-                    //midd
-                    DrawMidd(chkMidd.Checked);
-                    //front
-                    DrawFront(chkFront.Checked);
-                    //Draw Select Object
-                    DrawObject(objectDatas);
-                    //Draw Select TextureImage
-                    DrawSelectTextureImage();
-                    //Draw Limit
-                    DrawLimit();
-                    //door mark
-                    DrawDoorTag(chkDoorSign.Checked);
-                    //Foreground animated marker  
-                    DrawFrontAnimationTag(chkFrontAnimationTag.Checked);
-                    //Background animated markers
-                    DrawMiddleAnimationTag(chkMiddleAnimationTag.Checked);
-                    //highlight mark
-                    DrawLightTag(chkLightTag.Checked);
-                    //Background movement restrictions
-                    DrawBackLimit(chkBackMask.Checked);
-                    //Foreground movement restrictions
-                    DrawFrontMask(chkFrontMask.Checked);
-                    //foreground mark
-                    DrawFrontTag(chkFrontTag.Checked);
-                    //middle layer markup
-                    DrawMiddleTag(chkMiddleTag.Checked);
+                     
+                    DrawBack(chkBack.Checked); //back
+                    DrawMidd(chkMidd.Checked); //midd
+                    DrawFront(chkFront.Checked);//front
+                    DrawObject(objectDatas);//Draw Select Object
+                    DrawSelectTextureImage();//Draw Select TextureImage
+                    DrawLimit();//Draw Limit
+                    DrawDoorTag(chkDoorSign.Checked); //door mark
+                    DrawFrontAnimationTag(chkFrontAnimationTag.Checked);//Foreground animated marker  
+                    DrawMiddleAnimationTag(chkMiddleAnimationTag.Checked);//Background animated markers
+                    DrawLightTag(chkLightTag.Checked);//highlight mark
+                    DrawBackLimit(chkBackMask.Checked);//Background movement restrictions
+                    DrawFrontMask(chkFrontMask.Checked);//Foreground movement restrictions
+                    DrawFrontTag(chkFrontTag.Checked);//foreground mark
+                    DrawMiddleTag(chkMiddleTag.Checked);//middle layer markup
 
                     DXManager.Sprite.End();
                     DXManager.TextSprite.End();
 
                     //grid
-                    //4800 short line version drawing grid
                     DrawGrids(chkDrawGrids.Checked);
-                    //1200 long line version. Draw long lines, cross them, and turn them into grids.
-                    //DrawGrids2(chkDrawGrids.Checked);
-                    //Draw selected rectangle
                     GraspingRectangle();
-
-                    //DXManager.Sprite.End();
-                    //DXManager.TextSprite.End();
-
                     DXManager.Device.EndScene();
                     DXManager.Device.Present();
                 }
@@ -280,8 +248,7 @@ namespace Map_Editor
         {
 
             Libraries.LoadGameLibraries();
-             
-            ReadShandaExine2LibToListBox();
+              
             ReadWemadeExine2LibToListBox();
 
             ReadObjectsToListBox();
@@ -1038,28 +1005,12 @@ namespace Map_Editor
                 }
             }
         }
-
-        private void ReadShandaExine2LibToListBox()
-        {
-            for (var i = 100; i < 200; i++)
-            {
-                if (Libraries.ListItems[i] != null)
-                {
-                    ShandaExine2LibListBox.Items.Add(Libraries.ListItems[i]);
-                }
-            }
-        }
+         
          
         private void Clear()
         {
-            _shandaExine2IndexList.Clear();
-            ShandaExine2ImageList.Images.Clear();
             _wemadeExine2IndexList.Clear();
             WemadeExine2ImageList.Images.Clear();
-            _wemadeExine3IndexList.Clear();
-            WemadeExine3ImageList.Images.Clear();
-            _shandaExine3IndexList.Clear();
-            ShandaExine3ImageList.Images.Clear();
             TilesImageList.Images.Clear();
             _tilesIndexList.Clear();
         }
@@ -1373,6 +1324,7 @@ namespace Map_Editor
             }
         }
 
+        /*
         private void InvertMir3Layer()
         {
             if (X2CellInfo != null)
@@ -1467,32 +1419,7 @@ namespace Map_Editor
             }
         }
 
-        private void ShandaMir2LibListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Clear();
-            shangdaExine2ListItem = (ListItem) ShandaExine2LibListBox.SelectedItem;
-            selectListItem = shangdaExine2ListItem;
-            selectListItem.Version = (byte) MirVerSion.ShandaMir2;
-            ShandaMir2LibListView.VirtualListSize = Libraries.MapLibs[shangdaExine2ListItem.Value].Images.Count;
-            TileslistView.VirtualListSize = Libraries.MapLibs[selectListItem.Value].Images.Count/Exine2BigTileBlock;
-        }
-
-        private void ShandaMir2LiblistView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
-        {
-            int index;
-
-            if (_shandaExine2IndexList.TryGetValue(e.ItemIndex, out index))
-            {
-                e.Item = new ListViewItem {ImageIndex = index, Text = e.ItemIndex.ToString()};
-                return;
-            }
-
-            _shandaExine2IndexList.Add(e.ItemIndex, ShandaExine2ImageList.Images.Count);
-            Libraries.MapLibs[shangdaExine2ListItem.Value].CheckImage(e.ItemIndex);
-            ShandaExine2ImageList.Images.Add(Libraries.MapLibs[shangdaExine2ListItem.Value].GetPreview(e.ItemIndex));
-            e.Item = new ListViewItem {ImageIndex = index, Text = e.ItemIndex.ToString()};
-            Libraries.MapLibs[shangdaExine2ListItem.Value].Images[e.ItemIndex] = null;
-        }
+        */  
 
         private void WemadeMir2LibListView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
         {
@@ -1516,11 +1443,13 @@ namespace Map_Editor
             Clear();
             wemadeExine2ListItem = (ListItem) WemadeExine2LibListBox.SelectedItem;
             selectListItem = wemadeExine2ListItem;
-            selectListItem.Version = (byte) MirVerSion.WemadeMir2;
+            selectListItem.Version = (byte) ExineVerSion.Exine;
             WemadeMir2LibListView.VirtualListSize = Libraries.MapLibs[wemadeExine2ListItem.Value].Images.Count;
             TileslistView.VirtualListSize = Libraries.MapLibs[wemadeExine2ListItem.Value].Images.Count/Exine2BigTileBlock;
         }
-
+        
+        //k333123 remove
+        /*
         private void WemadeMir3LibListView_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
         {
             int index;
@@ -1537,7 +1466,7 @@ namespace Map_Editor
             e.Item = new ListViewItem {ImageIndex = index, Text = e.ItemIndex.ToString()};
             Libraries.MapLibs[wemadeExine3ListItem.Value].Images[e.ItemIndex] = null;
         }
-
+        */
         
 
         private void chkMiddleAnimationTag_Click(object sender, EventArgs e)
@@ -1913,27 +1842,7 @@ namespace Map_Editor
             }
             return false;
         }
-
-        private void ShandaMir2LibListView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            selectListItem = shangdaExine2ListItem;
-            if (ShandaMir2LibListView.SelectedIndices.Count > 0)
-            {
-                selectLibMImage =
-                    Libraries.MapLibs[shangdaExine2ListItem.Value].GetMImage(ShandaMir2LibListView.SelectedIndices[0]);
-                if (selectLibMImage != null)
-                {
-                    selectImageIndex = ShandaMir2LibListView.SelectedIndices[0];
-
-                    picShandaMir2.Image = selectLibMImage.Image;
-                    labShandaMir2Width.Text = "Width : " + selectLibMImage.Width;
-                    labShandaMir2Height.Text = "Height : " + selectLibMImage.Height;
-                    labShandaMir2OffSetX.Text = "OffSetX : " + selectLibMImage.X;
-                    labshandaMir2OffSetY.Text = "OffSetY : " + selectLibMImage.Y;
-                    Libraries.MapLibs[shangdaExine2ListItem.Value].Images[ShandaMir2LibListView.SelectedIndices[0]] = null;
-                }
-            }
-        }
+         
 
         private void chkDrawGrids_Click(object sender, EventArgs e)
         {
@@ -2720,10 +2629,7 @@ namespace Map_Editor
                     e.SuppressKeyPress = true;
                     tabControl1.SelectedTab = tabExine;
                     break;
-                case Keys.F2:
-                    e.SuppressKeyPress = true;
-                    tabControl1.SelectedTab = tabShandaMir2;
-                    break;
+                
                
                 case Keys.F4: //Added by M2P
                     e.SuppressKeyPress = true;
@@ -2886,27 +2792,7 @@ namespace Map_Editor
                 }
             }
         }
-
-        private void ShandaMir2LibListView_Click(object sender, EventArgs e)
-        {
-            selectListItem = shangdaExine2ListItem;
-            if (ShandaMir2LibListView.SelectedIndices.Count > 0)
-            {
-                selectLibMImage =
-                    Libraries.MapLibs[shangdaExine2ListItem.Value].GetMImage(ShandaMir2LibListView.SelectedIndices[0]);
-                if (selectLibMImage != null)
-                {
-                    selectImageIndex = ShandaMir2LibListView.SelectedIndices[0];
-
-                    picShandaMir2.Image = selectLibMImage.Image;
-                    labShandaMir2Width.Text = "Width : " + selectLibMImage.Width;
-                    labShandaMir2Height.Text = "Height : " + selectLibMImage.Height;
-                    labShandaMir2OffSetX.Text = "OffSetX : " + selectLibMImage.X;
-                    labshandaMir2OffSetY.Text = "OffSetY : " + selectLibMImage.Y;
-                    Libraries.MapLibs[shangdaExine2ListItem.Value].Images[ShandaMir2LibListView.SelectedIndices[0]] = null;
-                }
-            }
-        }
+         
 
         private void CreateMir2BigTiles()
         {
@@ -4044,8 +3930,7 @@ namespace Map_Editor
             graphics.InterpolationMode = InterpolationMode.Low;
             switch (selectListItem.Version)
             {
-                case (byte) MirVerSion.WemadeMir2:
-                case (byte) MirVerSion.ShandaMir2:
+                case (byte) ExineVerSion.Exine:
                     if ((selectListView.Text.IndexOf("SmTiles", StringComparison.Ordinal) > -1) ||
                         (selectListView.Text.IndexOf("Smtiles", StringComparison.Ordinal) > -1))
                     {
@@ -4116,106 +4001,7 @@ namespace Map_Editor
                         }
                     }
                     break;
-                case (byte) MirVerSion.WemadeMir3:
-                case (byte) MirVerSion.ShandaMir3:
-                    if ((selectListView.Text.IndexOf("SmTiles", StringComparison.Ordinal) > -1) ||
-                        (selectListView.Text.IndexOf("Smtiles", StringComparison.Ordinal) > -1))
-                    {
-                        var i = 0;
-                        preview = new Bitmap(3*CellWidth, 3*CellHeight);
-                        graphics = Graphics.FromImage(preview);
-                        graphics.InterpolationMode = InterpolationMode.Low;
-
-                        for (var y = 0; y < 3; y++)
-                        {
-                            drawY = y*CellHeight;
-                            for (var x = 0; x < 3; x++)
-                            {
-                                drawX = x*CellWidth;
-                                if (index*smTileBlock + smTilesPreviewIndex[i] >=
-                                    Libraries.MapLibs[selectListView.Value].Images.Count)
-                                {
-                                    continue;
-                                }
-                                Libraries.MapLibs[selectListView.Value].CheckImage(index*smTileBlock +
-                                                                                   smTilesPreviewIndex[i]);
-                                var mi =
-                                    Libraries.MapLibs[selectListView.Value].Images[
-                                        index*smTileBlock + smTilesPreviewIndex[i]];
-                                if (mi.Image == null)
-                                {
-                                    continue;
-                                }
-                                var destRect = new Rectangle(drawX, drawY, mi.Width, mi.Height);
-                                var srcRect = new Rectangle(0, 0, mi.Width, mi.Height);
-                                graphics.DrawImage(mi.Image, destRect, srcRect, GraphicsUnit.Pixel);
-                                Libraries.MapLibs[libIndex].Images[index] = null;
-                                i++;
-                            }
-                        }
-                    }
-                    else if (selectListView.Text.IndexOf("Tiles30", StringComparison.Ordinal) > -1)
-                    {
-                        var i = 0;
-                        int flag;
-                        if (Libraries.MapLibs[selectListView.Value].Images.Count%10 != 0)
-                        {
-                            flag = (Libraries.MapLibs[selectListView.Value].Images.Count + 1)/Exine3BigTileBlock;
-                        }
-                        else
-                        {
-                            flag = Libraries.MapLibs[selectListView.Value].Images.Count/Exine3BigTileBlock;
-                        }
-                        int[] bigTilesIndex;
-                        int tempIndex;
-                        preview = new Bitmap(6*CellWidth, 6*CellHeight);
-                        graphics = Graphics.FromImage(preview);
-                        graphics.InterpolationMode = InterpolationMode.Low;
-                        if (index < flag)
-                        {
-                            bigTilesIndex = Mir3BigTilesPreviewIndex1;
-                        }
-                        else
-                        {
-                            bigTilesIndex = Mir3BigTilesPreviewIndex2;
-                        }
-                        if (index < flag)
-                        {
-                            tempIndex = index;
-                        }
-                        else
-                        {
-                            tempIndex = index - flag;
-                        }
-                        for (var y = 0; y < 3; y++)
-                        {
-                            drawY = y*2*CellHeight;
-                            for (var x = 0; x < 3; x++)
-                            {
-                                drawX = x*2*CellWidth;
-                                if (tempIndex*Exine3BigTileBlock + bigTilesIndex[i] >=
-                                    Libraries.MapLibs[selectListView.Value].Images.Count)
-                                {
-                                    continue;
-                                }
-                                Libraries.MapLibs[selectListView.Value].CheckImage(tempIndex*Exine3BigTileBlock +
-                                                                                   bigTilesIndex[i]);
-                                var mi =
-                                    Libraries.MapLibs[selectListView.Value].Images[
-                                        tempIndex*Exine3BigTileBlock + bigTilesIndex[i]];
-                                if (mi.Image == null)
-                                {
-                                    continue;
-                                }
-                                var destRect = new Rectangle(drawX, drawY, mi.Width, mi.Height);
-                                var srcRect = new Rectangle(0, 0, mi.Width, mi.Height);
-                                graphics.DrawImage(mi.Image, destRect, srcRect, GraphicsUnit.Pixel);
-                                Libraries.MapLibs[libIndex].Images[tempIndex] = null;
-                                i++;
-                            }
-                        }
-                    }
-                    break;
+                
             }
             return preview;
         }
@@ -4527,10 +4313,12 @@ namespace Map_Editor
             }
         }
 
+        /*
         private void menuInvertMir3Layer_Click(object sender, EventArgs e)
         {
             InvertMir3Layer();
         }
+        */
 
         private void menuAbout_Click(object sender, EventArgs e)
         {
@@ -4889,9 +4677,44 @@ namespace Map_Editor
         {
             gridUpdate(false);
         }
-
+        
         private void btn_vCut_Click(object sender, EventArgs e)
+        { 
+            //_mainImage : load full image
+
+            //Create a Library file to save the images in
+            if (SaveLibraryDialog.ShowDialog() != DialogResult.OK) return;
+            if (_library != null) _library.Close();
+            _library = new XLibrary(SaveLibraryDialog.FileName);
+
+            //adds a single blank cell to the library
+            _library.AddImage(null, 0, 0);
+
+            for (int i = 0; i < _mainImage.Width / CellSizeX; i++)
+            {
+                for (int j = 0; j < _mainImage.Height / CellSizeY; j++)
+                {
+                    Bitmap cutImage = new Bitmap(CellSizeX, CellSizeY, PixelFormat.Format32bppArgb);
+
+                    using (Graphics g = Graphics.FromImage(cutImage))
+                    {
+                        g.DrawImage(_mainImage,
+                            new Rectangle(0, 0, cutImage.Width, cutImage.Height),
+                            new Rectangle(CellSizeX * i, CellSizeY * j, cutImage.Width, cutImage.Height),
+                            GraphicsUnit.Pixel);
+
+                        _library.AddImage(cutImage, 0, 0);
+                    }
+                }
+            }
+            _library.Save();
+        }
+
+
+        private void btn_vCut_Click_Old(object sender, EventArgs e)
         {
+
+            /*
             //add the padding to the mainimage
             Bitmap _mainImageTemp = new Bitmap(_mainImage.Width + pictureBox_Image.Padding.Left, _mainImage.Height + pictureBox_Image.Padding.Top);
             using (Graphics g = Graphics.FromImage(_mainImageTemp))
@@ -4993,6 +4816,7 @@ namespace Map_Editor
                 }
             }
             _library.Save();
+            */
         }
 
         private void btnRefreshList_Click(object sender, EventArgs e)
@@ -5233,6 +5057,7 @@ namespace Map_Editor
             BrushMir3BigTiles
         }
 
+        /*
         private enum MirVerSion : byte
         {
             None,
@@ -5241,7 +5066,12 @@ namespace Map_Editor
             WemadeMir3,
             ShandaMir3
         }
-
+        */
+        private enum ExineVerSion : byte
+        {
+            None,
+            Exine
+        }
         private enum TileType
         {
             None = -1,
