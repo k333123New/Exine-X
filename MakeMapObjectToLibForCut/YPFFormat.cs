@@ -761,7 +761,7 @@ namespace NewYPF
             return colorDataRGBA;
         }
 
-        public bool SaveImage(string filename)
+        public bool SaveImage(string filenameWithPath)
         {
             if (colorData == null) return false;
             if (FrameHeight == 0 || FrameWidth == 0)
@@ -802,11 +802,7 @@ namespace NewYPF
 
                 argbIdx = argbIdx + 4;
             }
-
-            DirectoryInfo di = new DirectoryInfo(".\\YPF_OUT");
-            if (!di.Exists) di.Create();
-
-
+             
             Bitmap bitmap = new Bitmap(FrameWidth, FrameHeight, PixelFormat.Format32bppArgb);
             BitmapData bmpData = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.WriteOnly, bitmap.PixelFormat);
             int rowSize = Math.Abs(bmpData.Stride);
@@ -816,7 +812,7 @@ namespace NewYPF
                 Marshal.Copy(colorDataRGBA, y * FrameWidth * 4, IntPtr.Add(bmpScan0, y * rowSize), FrameWidth * 4);
             }
             bitmap.UnlockBits(bmpData);
-            bitmap.Save(".\\YPF_OUT\\" + filename + ".png", ImageFormat.Png);
+            bitmap.Save(filenameWithPath, ImageFormat.Png);
             //bitmap.Save(".\\out\\"+filename+".png", ImageFormat.Png);
             bitmap.Dispose();
 

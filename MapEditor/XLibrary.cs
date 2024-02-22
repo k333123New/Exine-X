@@ -21,9 +21,11 @@ namespace Map_Editor
 
         public const string ObjectsPath = @".\Data\Objects\";
         //Map
-        public static readonly XLibrary[] MapLibs = new XLibrary[400];
+        //public static readonly XLibrary[] MapLibs = new XLibrary[400];
+        //public static readonly ListItem[] ListItems = new ListItem[400];
+        public static readonly XLibrary[] MapLibs = new XLibrary[2000];
+        public static readonly ListItem[] ListItems = new ListItem[2000];
 
-        public static readonly ListItem[] ListItems = new ListItem[400];
 
         static Libraries()
         {
@@ -46,10 +48,45 @@ namespace Map_Editor
             MapLibs[20] = new XLibrary(@".\Data\Map\Exine\Smtiles");
             ListItems[20] = new ListItem("Smtiles", 20);
 
+            for (int i = 1000; i < 2000; i++)
+            {
+                if (File.Exists(@".\Data\Map\Exine\Map_" + (9000 + i) + "_FrontTile.lib"))
+                {
+                    MapLibs[i] = new XLibrary(@".\Data\Map\Exine\Map_" + (9000+i) + "_FrontTile");
+                    ListItems[i] = new ListItem("Map_" + (9000+i) + "_FrontTile", i);
+                }
+            }
+
+            //21~
+            /*
+             * 00000.map, 00001.map                                                                                             //21~22
+             * 10000.map, 10001.map, 10002.map, 10005.map, 10006.map, 10007.map, 10008.map, 10009.map,                          //23~30
+             * 10010.map, 10011.map, 10012.map, 10015.map, 10016.map, 10017.map, 10018.map, 10019.map,                          //31~38
+             * 10020.map, 10021.map, 10040.map, 10041.map, 10042.map, 10060.map,                                                //39~44
+             * 10100.map, 10101.map, 10102.map,                                                                                 //45~47
+             * 10200.map, 10201.map, 10202.map, 10203.map, 10204.map, 10205.map, 10206.map, 10207.map, 10208.map, 10209.map,    //48~47
+             * 10210.map, 10211.map, 10213.map, 10214.map, 10215.map, 10216.map, 10217.map, 
+             * 10230.map, 10231.map, 10232.map, 10233.map, 10234.map, 10235.map, 
+             * 10240.map, 10241.map, 10242.map, 10243.map, 10244.map, 10245.map, 
+             * 10250.map, 10251.map, 10252.map, 10253.map, 10254.map, 10255.map, 
+             * 10260.map, 10261.map, 10262.map, 10263.map, 10264.map, 10265.map, 
+             * 10300.map, 10301.map, 10302.map, 10303.map, 10304.map, 10306.map, 10307.map, 10308.map, 10309.map, 10310.map, 
+             * 10400.map, 10401.map, 10402.map, 10403.map, 10404.map, 10405.map, 10406.map,10407.map, 10408.map, 10409.map, 
+             * 10410.map, 10411.map, 10412.map, 
+             * 10500.map,10501.map, 10502.map, 10503.map, 10504.map, 10505.map, 10506.map, 
+             * 10600.map, 10601.map, 10602.map, 10603.map, 
+             * 10700.map, 10701.map, 10702.map, 10703.map, 10704.map, 10705.map, 10706.map, 10707.map, 
+             * 10800.map, 10801.map, 10802.map, 10803.map, 10804.map, 10805.map, 10806.map, 10807.map, 10808.map, 10809.map, 
+             * 10810.map, 10811.map, 10812.map, 10813.map, 10814.map, 10815.map, 10816.map, 10817.map, 10818.map, 10819.map, 
+             * 10820.map
+             */
+
+
             //56:0,57:1,58:2,59:3,116:4
             //index 99
             MapLibs[99] = new XLibrary(@".\Data\Map\Exine\LimitTiles");
             ListItems[99] = new ListItem("LimitTiles", 99);
+
 
 
             /*
@@ -159,6 +196,49 @@ namespace Map_Editor
             Count = Images.Count;
             IndexList.Clear();
 
+            int offSet = (4 + 4 + 4) + (Count * 4);
+            for (int i = 0; i < Count; i++)
+            {
+                IndexList.Add((int)stream.Length + offSet);
+                Images[i].Save(writer); 
+            }
+            var frameSeek = (int)stream.Length + offSet;
+
+            writer.Flush();
+            byte[] fBytes = stream.ToArray(); 
+
+            _stream = File.Create(FileName);
+            writer = new BinaryWriter(_stream);
+
+            writer.Write(LibVersion);
+            writer.Write(Count);
+            writer.Write(frameSeek);
+
+            for (int i = 0; i < Count; i++)
+                writer.Write(IndexList[i]);
+
+            writer.Write(fBytes);
+
+            writer.Write(0);
+              
+            writer.Flush();
+            writer.Close();
+            writer.Dispose();
+            Close();
+        }
+
+        /*
+        public void Save()
+        {
+            Close();
+
+            MemoryStream stream = new MemoryStream();
+            BinaryWriter writer = new BinaryWriter(stream);
+
+            Count = Images.Count;
+            IndexList.Clear();
+
+            //int offSet = 8 + Count * 4;
             int offSet = 8 + Count * 4;
             for (int i = 0; i < Count; i++)
             {
@@ -183,7 +263,7 @@ namespace Map_Editor
             writer.Close();
             writer.Dispose();
             Close();
-        }
+        }*/
 
         public void CheckImage(int index)
         {

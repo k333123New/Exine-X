@@ -231,6 +231,12 @@ namespace MakeMapObjectToLibForCut
                         //Buffer.BlockCopy(colorDataRGBA, 0, prevColorDataRGBA, 0, colorDataRGBA.Length);
                     }
 
+                    //if not exist .png, save .png
+                    if (!File.Exists(".\\CachedObject\\" + fileType + item.World + "_" + ypfImageSetIdx + ".png"))
+                    {
+                        image.SaveImage(".\\CachedObject\\" + fileType + item.World + "_" + ypfImageSetIdx + ".png");
+                    }
+
                     Console.WriteLine("ypfImageSetIdx:"+ ypfImageSetIdx+" imageWidth:" + imageWidth + " imageHeight" + imageHeight);
 
                     int boundCheck1 = 0;

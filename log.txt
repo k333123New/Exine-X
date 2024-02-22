@@ -1,3 +1,49 @@
+Map Static Object Image -> Tile Cutter -> tile lib(if tile is all alpha, add empty image) -> front layer apply
+Convert Exine map to Exine-X map -> Apply Front Layer from Tile Cutter map or Add Front Layer Overwrite Button!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Shanda has anitile
 
 

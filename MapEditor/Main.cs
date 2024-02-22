@@ -997,7 +997,8 @@ namespace Map_Editor
 
         private void ReadWemadeExine2LibToListBox()
         {
-            for (var i = 0; i < 100; i++)
+            //for (var i = 0; i < 100; i++)
+            for (var i = 0; i < 2000; i++) //k333123
             {
                 if (Libraries.ListItems[i] != null)
                 {
@@ -4679,20 +4680,21 @@ namespace Map_Editor
         }
         
         private void btn_vCut_Click(object sender, EventArgs e)
-        { 
+        {
             //_mainImage : load full image
 
             //Create a Library file to save the images in
+            SaveLibraryDialog.FileName = loadImageDialog.FileName.Replace(".png", "");
             if (SaveLibraryDialog.ShowDialog() != DialogResult.OK) return;
             if (_library != null) _library.Close();
             _library = new XLibrary(SaveLibraryDialog.FileName);
 
             //adds a single blank cell to the library
-            _library.AddImage(null, 0, 0);
+            //_library.AddImage(null, 0, 0);
 
-            for (int i = 0; i < _mainImage.Width / CellSizeX; i++)
+            for (int j = 0; j < _mainImage.Height / CellSizeY; j++)
             {
-                for (int j = 0; j < _mainImage.Height / CellSizeY; j++)
+                for (int i = 0; i < _mainImage.Width / CellSizeX; i++)
                 {
                     Bitmap cutImage = new Bitmap(CellSizeX, CellSizeY, PixelFormat.Format32bppArgb);
 
@@ -4703,7 +4705,28 @@ namespace Map_Editor
                             new Rectangle(CellSizeX * i, CellSizeY * j, cutImage.Width, cutImage.Height),
                             GraphicsUnit.Pixel);
 
-                        _library.AddImage(cutImage, 0, 0);
+                        bool isBlank = true;
+                        for (int h = 0; h < cutImage.Height; h++)
+                        {
+                            for (int w = 0; w < cutImage.Width; w++)
+                            {
+                                Color col = cutImage.GetPixel(w, h);
+                                if (col.A != 0)
+                                {
+                                    isBlank = false;
+                                    break;
+                                }
+                                //MessageBox.Show(col.A.ToString());
+                            }
+                            if (!isBlank)
+                            {
+                                _library.AddImage(cutImage, 0, 0);
+                                break;
+                            }
+                        }
+                        if(isBlank) _library.AddImage(null, 0, 0);
+
+                        //_library.AddImage(cutImage, 0, 0);
                     }
                 }
             }
