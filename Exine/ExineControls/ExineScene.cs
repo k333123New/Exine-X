@@ -252,19 +252,19 @@ namespace Exine.ExineControls
                     MirMessageBox.Show(GameLanguage.ShuttingDown, true);
                     break;
                 case 1:
-                    MirMessageBox.Show("Disconnected: Another user logged onto your account.", true);
+                    MirMessageBox.Show("연결 끊김: 다른 사용자가 귀하의 계정에 로그인했습니다.", true);
                     break;
                 case 2:
-                    MirMessageBox.Show("Disconnected: Packet Error.", true);
+                    MirMessageBox.Show("연결 끊김: 패킷 오류.", true);
                     break;
                 case 3:
-                    MirMessageBox.Show("Disconnected: Server Crashed.", true);
+                    MirMessageBox.Show("연결 끊김: 서버가 충돌했습니다.", true);
                     break;
                 case 4:
-                    MirMessageBox.Show("Disconnected: Kicked by Admin.", true);
+                    MirMessageBox.Show("연결 끊김: 관리자에 의해 추방되었습니다.", true);
                     break;
                 case 5:
-                    MirMessageBox.Show("Disconnected: Maximum connections reached.", true);
+                    MirMessageBox.Show("연결 끊김: 최대 연결에 도달했습니다.", true);
                     break;
             }
 

@@ -35,11 +35,12 @@ namespace Exine.ExineNetwork
 
                 ErrorShown = true;
 
-                MirMessageBox errorBox = new("Error Connecting to Server", MirMessageBoxButtons.Cancel);
+                MirMessageBox errorBox = new("서버에 연결하는 중 오류가 발생했습니다.", MirMessageBoxButtons.Cancel);
                 errorBox.CancelButton.Click += (o, e) => Program.Form.Close();
-                errorBox.Label.Text = $"Maximum Connection Attempts Reached: {MaxAttempts}" +
-                                      $"{Environment.NewLine}Please try again later or check your connection settings.";
+                errorBox.Label.Text = $"최대 연결 시도 횟수에 도달했습니다.: {MaxAttempts}" +
+                                      $"{Environment.NewLine}나중에 다시 시도하거나 연결 설정을 확인하세요..";
                 errorBox.Show();
+                errorBox.BringToFront();
                 return;
             }
 
@@ -71,6 +72,7 @@ namespace Exine.ExineNetwork
                     return;
                 }
 
+                //여기서 메인 화면 표시하거나 하는게 맞음
                 _receiveList = new ConcurrentQueue<Packet>();
                 _sendList = new ConcurrentQueue<Packet>();
                 _rawData = new byte[0];

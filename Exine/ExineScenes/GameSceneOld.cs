@@ -10873,14 +10873,16 @@ namespace Exine.MirScenesOld
                     }
 
                     s = Libraries.MapLibs[fileIndex].GetSize(index);
-                    if (s.Width == CellWidth && s.Height == CellHeight && animation == 0) continue;
-                    if ((s.Width == CellWidth * 2) && (s.Height == CellHeight * 2) && (animation == 0)) continue;
+                    if (s.Width == CellWidth && s.Height == CellHeight && animation == 0) continue; 
+                    if ((s.Width == CellWidth * 2) && (s.Height == CellHeight * 2) && (animation == 0)) continue;//k333123 front tile to object draw!
 
                     if (blend)
                     {
+                        /*
                         if ((fileIndex > 99) & (fileIndex < 199))
                             Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - (3 * CellHeight)), Color.White, true);
                         else
+                        */
                             Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, (index >= 2723 && index <= 2732));
                     }
                     else

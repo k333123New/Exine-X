@@ -13,7 +13,7 @@ namespace Exine.ExineScenes
     public sealed class ExineNewCharScene : ExineScene
     {
         
-        private ExineAnimatedControl _background2, _background, _light1, _light2, _light3, _light4, _genderOrb;
+        private ExineAnimatedControl  _background, _light1, _light2, _light3, _light4, _genderOrb;//_background2
         private MirButton _okBtn, _cancelBtn, _styleBtnL, _styleBtnR, _colorBtnL, _colorBtnR;
         private ExineImageControl _charImage;
         private ExineTextBox _newIdTextBox, _newPwTextBox, _newConfirmPwTextBox;
@@ -26,6 +26,7 @@ namespace Exine.ExineScenes
             SoundManager.PlayMusic(SoundList.ExineIntroMusic, true);
             Disposing += (o, e) => SoundManager.StopMusic();
 
+            /*
             _background2 = new ExineAnimatedControl
             {
                 Animated = true,
@@ -38,7 +39,7 @@ namespace Exine.ExineScenes
                 Parent = this,
                 Visible = false,
                 Location = new Point((1024 - 800) / 2, (768 - 600) / 2),
-            };
+            };*/
 
            
 
@@ -433,7 +434,9 @@ namespace Exine.ExineScenes
             switch (recvPacket.Index)
             {
                 case (short)ServerPacketIds.NewAccount:
-                    Console.Write("result :" + ((S.NewAccount)recvPacket).Result);
+                    Console.Write("Recv ServerPacketIds.NewAccount " + "result :" + ((S.NewAccount)recvPacket).Result);
+                    //password not apply special charactor
+
                     //exist : 7  //ok : 8
                     if (((S.NewAccount)recvPacket).Result == 7 || ((S.NewAccount)recvPacket).Result == 8)
                     {
@@ -449,7 +452,7 @@ namespace Exine.ExineScenes
                     break;
 
                 case (short)ServerPacketIds.LoginSuccess:
-                    Console.WriteLine("Send [NewCha]");
+                    Console.WriteLine("Recv ServerPacketIds.LoginSuccess -> Send [NewCha]");
                     charList.Clear();
                     charList.AddRange(((S.LoginSuccess)recvPacket).Characters);
                     for (int i = 0; i < charList.Count; i++)

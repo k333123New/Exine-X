@@ -41,7 +41,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(200, 213);
             this.Name = "CMain";
-            this.Text = "Legend of Mir";
+            this.Text = "Exine";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CMain_FormClosing);
             this.Load += new System.EventHandler(this.CMain_Load);
             this.ResumeLayout(false);

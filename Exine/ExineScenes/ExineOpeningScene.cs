@@ -15,6 +15,7 @@ namespace Exine.ExineScenes
         
         public ExineOpeningScene()
         {
+            Console.WriteLine("ExineOpeningScene()");
             SoundManager.PlayMusic(SoundList.ExineIntroMusic, true);
             SoundManager.PlaySound(SoundList.ExineIntroWind, false);
 
@@ -36,12 +37,12 @@ namespace Exine.ExineScenes
                 Visible = true,
                 Location = new Point((1024 - 800) / 2, (768 - 600) / 2),
             };
-            /*
+            
             _background.AfterAnimation += (o, e) =>
-            { 
-                MirScene.ActiveScene = new ExineLoginScene();
+            {
+                ExineScene.ActiveScene = new ExineLoginScene();
                 Dispose();
-            };*/
+            };
 
             _background.Click += (o, e) =>
             { 

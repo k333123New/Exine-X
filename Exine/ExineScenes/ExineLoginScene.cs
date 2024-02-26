@@ -17,7 +17,7 @@ namespace Exine.ExineScenes
         public static string idFromNewChar = "";
 
 
-        private ExineAnimatedControl _background, _background2, _orb1, _orb2, _gargoyle;
+        private ExineAnimatedControl _background, _orb1, _orb2, _gargoyle;//_background2, 
         private MirButton _okBtn, _newBtn, _cancelBtn, _quitBtn, _pkBtn, _npkBtn, _upBtn, _downBtn, _serverBtn1, _serverBtn2, _serverBtn3, _serverBtn4, _loginDialog;
         private ExineTextBox _loginIdTextBox, _loginPwTextBox;
         private ExineImageControl _lastLogin;
@@ -38,6 +38,8 @@ namespace Exine.ExineScenes
 
         public ExineLoginScene()
         {
+            Console.WriteLine("ExineLoginScene()");
+
             SoundManager.PlayMusic(SoundList.ExineIntroMusic, true);
             SoundManager.PlaySound(SoundList.ExineGargoyle_Stop, true);
 
@@ -62,7 +64,7 @@ namespace Exine.ExineScenes
             };
 
             //차후 개별 조합으로 변경할것.
-
+            /*
             _background2 = new ExineAnimatedControl
             {
                 Animated = true,
@@ -74,7 +76,7 @@ namespace Exine.ExineScenes
                 Parent = this,
                 Location = new Point((1024 - 800) / 2, (768 - 600) / 2),
                 Visible = false,
-            };
+            };*/
 
             //1 => npk -> pk
             //2 => pk sel
@@ -153,7 +155,7 @@ namespace Exine.ExineScenes
                 Size = new Size(114, 21),
                 Visible=true,
                 Password=true,
-                Text = "12481248",
+                Text = "kang1248",
             };
             _loginIdTextBox = new ExineTextBox
             {
@@ -163,7 +165,7 @@ namespace Exine.ExineScenes
                 Location = new Point(58, 103),
                 Size = new Size(114, 21),
                 Visible = true,
-                Text = "필순이",
+                Text = "test123",//필순이
             };
             _loginDialog.Hide();
 
@@ -658,8 +660,7 @@ namespace Exine.ExineScenes
             switch (p.Result)
             {
                 case 0:
-                    MirMessageBox.Show("Wrong version, please update your game.\nGame will now Close", true);
-
+                    MirMessageBox.Show("버전이 잘못되었습니다.Exine을 업데이트하세요.\nExine이 종료됩니다.", true); 
                     Network.Disconnect();
                     break;
                 case 1:

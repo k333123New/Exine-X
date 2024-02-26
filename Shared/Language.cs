@@ -14,10 +14,10 @@
                          AttackMode_RedBrown = "[Mode: Red/Brown]",
                          AttackMode_All = "[Mode: Attack All]",
 
-                         LogOutTip = "Do you want to log out of Legend of Mir?",
-                         ExitTip = "Do you want to quit Legend of Mir?",
-                         DiedTip = "You have died, Do you want to revive in town?",
-                         DropTip = "Are you sure you want to drop {0}?",
+                         LogOutTip = "Exine에서 로그아웃하시겠습니까?",
+                         ExitTip = "Exine을 종료하시겠습니까?",
+                         DiedTip = "당신은 죽었습니다. 신전에서 부활하시겠습니까?",
+                         DropTip = "정말로 {0}을(를) 버리겠습니까?",
 
                          Inventory = "Inventory ({0})",
                          Character = "Character ({0})",
@@ -97,18 +97,18 @@
                          MAC2 = "MAC + {0}~{1}",
                          Luck = "Luck + {0}",
 
-                         DeleteCharacter = "Are you sure you want to Delete the character {0}",
-                         CharacterDeleted = "Your character was deleted successfully.",
-                         CharacterCreated = "Your character was created successfully.",
+                         DeleteCharacter = "정말로 {0} 캐릭터를 삭제하시겠습니까?",
+                         CharacterDeleted = "캐릭터가 성공적으로 삭제되었습니다.",
+                         CharacterCreated = "캐릭터가 성공적으로 생성되었습니다.",
 
                          Resolution = "Resolution",
                          Autostart = "Auto start",
                          Usrname = "Username",
                          Password = "Password",
 
-                         ShuttingDown = "Disconnected: Server is shutting down.",
-                         MaxCombine = "Max Combine Count : {0}{1}Shift + Left click to split the stack",
-                         Count = " Count {0}",
+                         ShuttingDown = "연결 끊김: 서버가 종료되고 있습니다.",
+                         MaxCombine = "최대 결합 수: {0}{1}스택을 분할하려면 Shift + 왼쪽 클릭",
+                         Count = "개수 {0}",
                          ExtraSlots8 = "Are you sure you would like to buy 8 extra slots for 1,000,000 gold?" +
                          "Next purchase you can unlock 4 extra slots up to a maximum of 40 slots.",
                          ExtraSlots4 = "Are you sure you would like to unlock 4 extra slots? for gold: {0:###,###}",
@@ -263,7 +263,7 @@
                          LowDC = "You do not have enough DC.",
                          LowMC = "You do not have enough MC.",
                          LowSC = "You do not have enough SC.",
-                         GameName = "Legend of Mir 2",
+                         GameName = "Exine",
                          ExpandedStorageExpiresOn = "Expanded Storage Expires On",
 
                          NotFemale = "You are not Female.",

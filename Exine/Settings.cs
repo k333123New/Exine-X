@@ -7,7 +7,7 @@ namespace Exine
         public const long CleanDelay = 600000;
 
         public static int ScreenWidth = 1024, ScreenHeight = 768;
-        private static InIReader Reader = new InIReader(@".\Mir2Config.ini");
+        private static InIReader Reader = new InIReader(@".\ExineConfig.ini");
         private static InIReader QuestTrackingReader = new InIReader(Path.Combine(UserDataPath, @".\QuestTracking.ini"));
 
         private static bool _useTestConfig;
@@ -21,14 +21,14 @@ namespace Exine
             {
                 if (value == true)
                 {
-                    Reader = new InIReader(@".\Mir2Test.ini");
+                    Reader = new InIReader(@".\ExineTest.ini");
                 }
                 _useTestConfig = value;
             }
         }
       
 
-        public const string DataPath = @".\Data\",
+        public const string DataPath = @".\Data\", 
                             MapPath = @".\Map\",
                             SoundPath = @".\Sound\",
                             ExtraDataPath = @".\Data\Extra\",
@@ -64,19 +64,25 @@ namespace Exine
 
 
         //k333123 231205
-        public const string ExArmorWMPath = @".\Data\Exine\AHW\",
-                            ExHairWMPath = @".\Data\Exine\HHW\",
-                            ExShdWMPath = @".\Data\Exine\SHW\",
-                            ExWeapOneWMPath = @".\Data\Exine\WHW\one",
-                            ExWeapTwoWMPath = @".\Data\Exine\WHW\two",
-                            ExWeapBowWMPath = @".\Data\Exine\WHW\bow",
+        public const string ExinePath = DataPath+ @"Exine\",
+                            ExineVideoPath = ExinePath + @"Video\",
+                            ExineUIPath = ExinePath + @"UI\",
+                            ExineHumanPath = ExinePath+ @"Human\", 
 
-                            ExArmorMNPath = @".\Data\Exine\AHM\",
-                            ExHairMNPath = @".\Data\Exine\HHM\",
-                            ExShdMNPath = @".\Data\Exine\SHM\",
-                            ExWeapOneMNPath = @".\Data\Exine\WHM\one",
-                            ExWeapTwoMNPath = @".\Data\Exine\WHM\two",
-                            ExWeapBowMNPath = @".\Data\Exine\WHM\bow";
+                            ExArmorWMPath = ExineHumanPath + @"AHW\",
+                            ExHairWMPath = ExineHumanPath + @"HHW\",
+                            ExShdWMPath = ExineHumanPath + @"SHW\",
+                            ExWeapOneWMPath = ExineHumanPath + @"WHW\one",
+                            ExWeapTwoWMPath = ExineHumanPath + @"WHW\two",
+                            ExWeapBowWMPath = ExineHumanPath + @"WHW\bow",
+
+                            ExArmorMNPath = ExineHumanPath + @"AHM\",
+                            ExHairMNPath = ExineHumanPath + @".HHM\",
+                            ExShdMNPath = ExineHumanPath + @"SHM\",
+                            ExWeapOneMNPath = ExineHumanPath + @"WHM\one",
+                            ExWeapTwoMNPath = ExineHumanPath + @"WHM\two",
+                            ExWeapBowMNPath = ExineHumanPath + @"WHM\bow";
+
 
         //Logs
         public static bool LogErrors = true;
@@ -84,7 +90,8 @@ namespace Exine
         public static int RemainingErrorLogs = 100;
 
         //Graphics
-        public static bool FullScreen = true, Borderless = true, TopMost = true, MouseClip = false;
+        //public static bool FullScreen = true, Borderless = true, TopMost = true, MouseClip = false;
+        public static bool FullScreen = false, Borderless = true, TopMost = true, MouseClip = false;
         public static string FontName = "Arial"; //"MS Sans Serif"
         public static float FontSize = 8F;
         public static bool UseMouseCursors = true;
@@ -95,7 +102,8 @@ namespace Exine
         public static bool DebugMode = false;
 
         //Network
-        public static bool UseConfig = false;
+        //public static bool UseConfig = false;
+        public static bool UseConfig = true;
         public static string IPAddress = "127.0.0.1";
         public static int Port = 7000;
         public const int TimeOut = 5000;
@@ -203,13 +211,15 @@ namespace Exine
 
         //AutoPatcher
         public static bool P_Patcher = true;
-        public static string P_Host = @"http://mirfiles.com/mir2/cmir/patch/";
-        public static string P_PatchFileName = @"PList.gz";
+        //public static string P_Host = @"http://mirfiles.com/mir2/cmir/patch/";
+        public static string P_Host = @"http://127.0.0.1";
+        public static string P_PatchFileName = @"Patch.gz";
         public static bool P_NeedLogin = false;
         public static string P_Login = string.Empty;
         public static string P_Password = string.Empty;
         public static string P_ServerName = string.Empty;
-        public static string P_BrowserAddress = "https://www.lomcn.org/mir2-patchsite/";
+        //public static string P_BrowserAddress = "https://www.lomcn.org/mir2-patchsite/";
+        public static string P_BrowserAddress = "127.0.0.1";
         public static string P_Client = Application.StartupPath + "\\";
         public static bool P_AutoStart = false;
         public static int P_Concurrency = 1;

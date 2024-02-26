@@ -10,6 +10,8 @@ using System.Net.Sockets;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using S = ServerPackets;
+using Newtonsoft.Json;
+
 
 namespace Server.ExineEnvir
 {
@@ -54,8 +56,12 @@ namespace Server.ExineEnvir
         public const int MinVersion = 60;
         public const int Version = 107;
         public const int CustomVersion = 0;
+        /*
         public static readonly string DatabasePath = Path.Combine(".", "Server.MirDB");
         public static readonly string AccountPath = Path.Combine(".", "Server.MirADB");
+        */
+        public static readonly string DatabasePath = Path.Combine(".", "Server.ExineDB");
+        public static readonly string AccountPath = Path.Combine(".", "Server.ExineADB");
         public static readonly string BackUpPath = Path.Combine(".", "Back Up");
         public static readonly string ArchivePath = Path.Combine(".", "Archive");
         public bool ResetGS = false;
@@ -280,6 +286,8 @@ namespace Server.ExineEnvir
 
         private void FillMagicInfoList()
         {
+
+
             //Warrior
             if (!MagicExists(Spell.Fencing)) MagicInfoList.Add(new MagicInfo { Name = "Fencing", Spell = Spell.Fencing, Icon = 2, Level1 = 7, Level2 = 9, Level3 = 12, Need1 = 270, Need2 = 600, Need3 = 1300, Range = 0 });
             if (!MagicExists(Spell.Slaying)) MagicInfoList.Add(new MagicInfo { Name = "Slaying", Spell = Spell.Slaying, Icon = 6, Level1 = 15, Level2 = 17, Level3 = 20, Need1 = 500, Need2 = 1100, Need3 = 1800, Range = 0 });
@@ -905,6 +913,67 @@ namespace Server.ExineEnvir
             for (var i = 0; i < Players.Count; i++) Players[i].HasUpdatedBaseStats = false;
         }
 
+
+        class ExineMapInfo
+        {
+
+        }
+        class ExineDB
+        {
+            public int version = 0;
+            public int customVersion = 0;
+            public int mapIndex = 0;
+            public int itemIndex =0;
+            public int monsterIndex = 0;
+            public int nPCIndex = 0;
+            public int questIndex = 0;
+            public int gameshopIndex = 0;
+            public int conquestIndex = 0;
+            public int respawnIndex = 0;
+
+            public List<MapInfo> exineMapInfoList = new List<MapInfo>();
+            public List<ItemInfo> exineItemInfoList = new List<ItemInfo>();
+            public List<MonsterInfo> exineMonsterInfoList = new List<MonsterInfo>();
+            public List<NPCInfo> exineNPCInfoList = new List<NPCInfo>();
+            public List<QuestInfo> exineQuestInfoList = new List<QuestInfo>();
+            public DragonInfo exineDragonInfo = new DragonInfo();
+            public List<MagicInfo> exineMagicInfoList = new List<MagicInfo>();
+            public List<GameShopItem> exineGameShopList = new List<GameShopItem>();
+            public List<ConquestInfo> exineConquestInfoList = new List<ConquestInfo>();
+            public RespawnTimer exineRespawnTimer = new RespawnTimer();
+        }
+
+        //err! k333123
+        public void SaveDBToJson()
+        {
+            /*
+            string filename = DatabasePath+".json";
+            ExineDB exineDB = new ExineDB();
+            exineDB.version = Version;
+            exineDB.customVersion = CustomVersion;
+            exineDB.mapIndex = MapIndex;
+            exineDB.itemIndex = ItemIndex;
+            exineDB.monsterIndex = MonsterIndex;
+            exineDB.nPCIndex = NPCIndex;
+            exineDB.questIndex = QuestIndex;
+            exineDB.gameshopIndex = GameshopIndex;
+            exineDB.conquestIndex = ConquestIndex;
+            exineDB.respawnIndex = RespawnIndex;
+            exineDB.exineMapInfoList = MapInfoList.ToList();
+            exineDB.exineItemInfoList = ItemInfoList.ToList();
+            exineDB.exineMonsterInfoList = MonsterInfoList.ToList();
+            exineDB.exineNPCInfoList = NPCInfoList.ToList();
+            exineDB.exineQuestInfoList = QuestInfoList.ToList();
+            exineDB.exineDragonInfo = DragonInfo;
+            exineDB.exineMagicInfoList = MagicInfoList.ToList();
+            exineDB.exineGameShopList = GameShopList.ToList();
+            exineDB.exineConquestInfoList = ConquestInfoList.ToList(); 
+            exineDB.exineRespawnTimer = RespawnTick; 
+            var json = JsonConvert.SerializeObject(exineDB); 
+            File.WriteAllText(filename, json);
+            */
+        }
+
         public void SaveDB()
         {
             using (var stream = File.Create(DatabasePath))
@@ -955,6 +1024,8 @@ namespace Server.ExineEnvir
                     ConquestInfoList[i].Save(writer);
 
                 RespawnTick.Save(writer);
+
+                SaveDBToJson();
             }
         }
 
@@ -1020,6 +1091,8 @@ namespace Server.ExineEnvir
             }
         }
 
+         
+        //k333123 make save to json!
         private void SaveAccounts(Stream stream)
         {
             using (var writer = new BinaryWriter(stream))
@@ -1262,6 +1335,13 @@ namespace Server.ExineEnvir
             }
 
             Saving = false;
+        }
+
+        //k333123
+        public bool LoadDBFromJson() 
+        {
+
+            return true;
         }
 
         public bool LoadDB()
@@ -2051,8 +2131,10 @@ namespace Server.ExineEnvir
                 return;
             }
 
-            if (!PasswordReg.IsMatch(p.Password))
+            //if (!PasswordReg.IsMatch(p.Password))
+            if (!string.IsNullOrWhiteSpace(p.Password) && p.Password.Length < 4)
             {
+                Console.WriteLine(p.Password + " is not MatchRegex");
                 c.Enqueue(new ServerPackets.NewAccount { Result = 2 });
                 return;
             }

@@ -674,7 +674,7 @@ namespace Server
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "SMain";
-            this.Text = "Legend of Mir Server";
+            this.Text = "Exine Server";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SMain_FormClosing);
             this.Load += new System.EventHandler(this.SMain_Load);
             this.MainTabs.ResumeLayout(false);

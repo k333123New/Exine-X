@@ -330,7 +330,23 @@ namespace ClientConsoleTest
                     Console.WriteLine("localtion:"+((S.UserLocation)recvPacket).Location.ToString()+ " Direction:"+direction);
                     break;
                 case (short)ServerPacketIds.NewAccount:
-                    Console.Write("result :" + ((S.NewAccount)recvPacket).Result);
+                    int result = ((S.NewAccount)recvPacket).Result;
+                    Console.Write("result :" + result);
+                    //add k333123
+                    if (result == 0) MessageBox.Show("Disable New Account");
+                    else if (result==1) MessageBox.Show("Bad AccountID");
+                    else if (result == 2) MessageBox.Show("Bad Password");
+                    /*
+                    * 0: Disabled
+                    * 1: Bad AccountID
+                    * 2: Bad Password
+                    * 3: Bad Email
+                    * 4: Bad Name
+                    * 5: Bad Question
+                    * 6: Bad Answer
+                    * 7: Account Exists.
+                    * 8: Success
+                    */
                     //exist : 7  //ok : 8
                     if (((S.NewAccount) recvPacket).Result==7 || ((S.NewAccount)recvPacket).Result == 8)
                     {

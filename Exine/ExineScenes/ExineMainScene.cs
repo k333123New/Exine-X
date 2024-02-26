@@ -10329,7 +10329,8 @@ namespace Exine.ExineScenes
         public static List<MapObject> Objects = new List<MapObject>();
 
         public const int CellWidth = 48;
-        public const int CellHeight = 32;
+        //public const int CellHeight = 32;
+        public const int CellHeight = 24;
 
         public static int OffSetX;
         public static int OffSetY;
@@ -10963,14 +10964,16 @@ namespace Exine.ExineScenes
                     }
 
                     s = Libraries.MapLibs[fileIndex].GetSize(index);
-                    if (s.Width == CellWidth && s.Height == CellHeight && animation == 0) continue;
-                    if ((s.Width == CellWidth * 2) && (s.Height == CellHeight * 2) && (animation == 0)) continue;
+                    //if (s.Width == CellWidth && s.Height == CellHeight && animation == 0) continue;                   //k333123 front tile to object draw!
+                    //if ((s.Width == CellWidth * 2) && (s.Height == CellHeight * 2) && (animation == 0)) continue;     //k333123 front tile to object draw!
 
                     if (blend)
                     {
+                        /*
                         if ((fileIndex > 99) & (fileIndex < 199))
                             Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - (3 * CellHeight)), Color.White, true);
                         else
+                        */
                             Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, (index >= 2723 && index <= 2732));
                     }
                     else
@@ -11280,7 +11283,8 @@ namespace Exine.ExineScenes
 
                     p = new Point(
                         (x + OffSetX - MapObject.User.Movement.X) * CellWidth + MapObject.User.OffSetMove.X,
-                        (y + OffSetY - MapObject.User.Movement.Y) * CellHeight + MapObject.User.OffSetMove.Y + 32);
+                        (y + OffSetY - MapObject.User.Movement.Y) * CellHeight + MapObject.User.OffSetMove.Y + 24); //k333123 height?
+                      //(y + OffSetY - MapObject.User.Movement.Y) * CellHeight + MapObject.User.OffSetMove.Y + 32); //k333123 height?
 
 
                     if (M2CellInfo[x, y].FrontAnimationFrame > 0)

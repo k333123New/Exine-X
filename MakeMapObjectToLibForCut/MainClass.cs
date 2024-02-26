@@ -42,6 +42,23 @@ namespace MakeMapObjectToLibForCut
                     }
                     //return;
                 }
+                //png를 넣은경우 타일커터를 적용해서 뽑아내게 하기
+                else if (args[0] == "*.png")
+                {
+                    //Console.WriteLine("* Map");
+                    //해당 경로에서 파일 목록 가져오기
+
+                    DirectoryInfo di = new DirectoryInfo(@".\\");
+
+                    FileInfo[] files = di.GetFiles("*.png");
+
+                    foreach (FileInfo file in files)
+                    {
+                        Console.WriteLine(file.Name);
+                         
+                    }
+                    return;
+                }
                 else
                 {
                     filenames = args; 

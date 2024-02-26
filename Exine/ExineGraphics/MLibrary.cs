@@ -13,93 +13,95 @@ namespace Exine.ExineGraphics
         public static bool Loaded;
         public static int Count, Progress;
 
+        /*
         public static readonly MLibrary
             AHM_0000 = new MLibrary(Settings.DataPath + "AHM_0000");
+        */
 
         public static readonly MLibrary
 
-            ExineOpening = new MLibrary(Settings.DataPath + "ExineOpening"),
-            ExineLogin = new MLibrary(Settings.DataPath + "ExineLogin"),
-            ExineNewChar = new MLibrary(Settings.DataPath + "ExineNewChar"),
-            NewChar = new MLibrary(Settings.DataPath + "NewChar"),
+            ExineOpening = new MLibrary(Settings.ExineVideoPath + "001-Intro"),
+            //ExineLogin = new MLibrary(Settings.ExineUIPath + "ExineLogin"),
+            //ExineNewChar = new MLibrary(Settings.ExineUIPath + "ExineNewChar"),
+            NewChar = new MLibrary(Settings.ExineUIPath + "NewChar"),
 
-            MAINSAMPLE = new MLibrary(Settings.DataPath + "MainSample"),
-            BAZEL = new MLibrary(Settings.DataPath + "bazel"),
-            PANEL0000 = new MLibrary(Settings.DataPath + "PANEL0000"),
-            PANEL0001 = new MLibrary(Settings.DataPath + "PANEL0001"),
-            PANEL0100 = new MLibrary(Settings.DataPath + "PANEL0100"),
-            PANEL0200 = new MLibrary(Settings.DataPath + "PANEL0200"),
-            PANEL0201 = new MLibrary(Settings.DataPath + "PANEL0201"),
-            PANEL0202 = new MLibrary(Settings.DataPath + "PANEL0202"),
-            PANEL0203 = new MLibrary(Settings.DataPath + "PANEL0203"),
-            PANEL0204 = new MLibrary(Settings.DataPath + "PANEL0204"),
-            PANEL0205 = new MLibrary(Settings.DataPath + "PANEL0205"),
-            PANEL0300 = new MLibrary(Settings.DataPath + "PANEL0300"),
-            PANEL0301 = new MLibrary(Settings.DataPath + "PANEL0301"),
-            PANEL0400 = new MLibrary(Settings.DataPath + "PANEL0400"),
-            PANEL0401 = new MLibrary(Settings.DataPath + "PANEL0401"),
-            PANEL0500 = new MLibrary(Settings.DataPath + "PANEL0500"),
-            PANEL0501 = new MLibrary(Settings.DataPath + "PANEL0501"),
-            PANEL0502 = new MLibrary(Settings.DataPath + "PANEL0502"),
-            PANEL0503 = new MLibrary(Settings.DataPath + "PANEL0503"),
-            PANEL0504 = new MLibrary(Settings.DataPath + "PANEL0504"),
-            PANEL0505 = new MLibrary(Settings.DataPath + "PANEL0505"),
-            PANEL0506 = new MLibrary(Settings.DataPath + "PANEL0506"),
-            PANEL0507 = new MLibrary(Settings.DataPath + "PANEL0507"),
-            PANEL0509 = new MLibrary(Settings.DataPath + "PANEL0509"),
-            PANEL0510 = new MLibrary(Settings.DataPath + "PANEL0510"),
-            PANEL0511 = new MLibrary(Settings.DataPath + "PANEL0511"),
-            PANEL0512 = new MLibrary(Settings.DataPath + "PANEL0512"),
-            PANEL0600 = new MLibrary(Settings.DataPath + "PANEL0600"),
-            PANEL0601 = new MLibrary(Settings.DataPath + "PANEL0601"),
-            PANEL0602 = new MLibrary(Settings.DataPath + "PANEL0602"),
-            PANEL0603 = new MLibrary(Settings.DataPath + "PANEL0603"),
-            PANEL0604 = new MLibrary(Settings.DataPath + "PANEL0604"),
-            PANEL0605 = new MLibrary(Settings.DataPath + "PANEL0605"),
-            PANEL0606 = new MLibrary(Settings.DataPath + "PANEL0606"),
-            PANEL0700 = new MLibrary(Settings.DataPath + "PANEL0700"),
-            PANEL0710 = new MLibrary(Settings.DataPath + "PANEL0710"),
-            PANEL0800 = new MLibrary(Settings.DataPath + "PANEL0800"),
-            PANEL0900 = new MLibrary(Settings.DataPath + "PANEL0900"),
-            PANEL0901 = new MLibrary(Settings.DataPath + "PANEL0901"),
-            PANEL0902 = new MLibrary(Settings.DataPath + "PANEL0902"),
-            PANEL0903 = new MLibrary(Settings.DataPath + "PANEL0903"),
-            PANEL0904 = new MLibrary(Settings.DataPath + "PANEL0904"),
-            PANEL0905 = new MLibrary(Settings.DataPath + "PANEL0905"),
-            PANEL1000 = new MLibrary(Settings.DataPath + "PANEL1000"),
-            PANEL1100 = new MLibrary(Settings.DataPath + "PANEL1100"),
-            PANEL1200 = new MLibrary(Settings.DataPath + "PANEL1200"),
-            SAYFRAME = new MLibrary(Settings.DataPath + "SayFrame"),
+            MAINSAMPLE = new MLibrary(Settings.ExineUIPath + "MainSample"),
+            BAZEL = new MLibrary(Settings.ExineUIPath + "bazel"),
+            PANEL0000 = new MLibrary(Settings.ExineUIPath + "PANEL0000"),
+            PANEL0001 = new MLibrary(Settings.ExineUIPath + "PANEL0001"),
+            PANEL0100 = new MLibrary(Settings.ExineUIPath + "PANEL0100"),
+            PANEL0200 = new MLibrary(Settings.ExineUIPath + "PANEL0200"),
+            PANEL0201 = new MLibrary(Settings.ExineUIPath + "PANEL0201"),
+            PANEL0202 = new MLibrary(Settings.ExineUIPath + "PANEL0202"),
+            PANEL0203 = new MLibrary(Settings.ExineUIPath + "PANEL0203"),
+            PANEL0204 = new MLibrary(Settings.ExineUIPath + "PANEL0204"),
+            PANEL0205 = new MLibrary(Settings.ExineUIPath + "PANEL0205"),
+            PANEL0300 = new MLibrary(Settings.ExineUIPath + "PANEL0300"),
+            PANEL0301 = new MLibrary(Settings.ExineUIPath + "PANEL0301"),
+            PANEL0400 = new MLibrary(Settings.ExineUIPath + "PANEL0400"),
+            PANEL0401 = new MLibrary(Settings.ExineUIPath + "PANEL0401"),
+            PANEL0500 = new MLibrary(Settings.ExineUIPath + "PANEL0500"),
+            PANEL0501 = new MLibrary(Settings.ExineUIPath + "PANEL0501"),
+            PANEL0502 = new MLibrary(Settings.ExineUIPath + "PANEL0502"),
+            PANEL0503 = new MLibrary(Settings.ExineUIPath + "PANEL0503"),
+            PANEL0504 = new MLibrary(Settings.ExineUIPath + "PANEL0504"),
+            PANEL0505 = new MLibrary(Settings.ExineUIPath + "PANEL0505"),
+            PANEL0506 = new MLibrary(Settings.ExineUIPath + "PANEL0506"),
+            PANEL0507 = new MLibrary(Settings.ExineUIPath + "PANEL0507"),
+            PANEL0509 = new MLibrary(Settings.ExineUIPath + "PANEL0509"),
+            PANEL0510 = new MLibrary(Settings.ExineUIPath + "PANEL0510"),
+            PANEL0511 = new MLibrary(Settings.ExineUIPath + "PANEL0511"),
+            PANEL0512 = new MLibrary(Settings.ExineUIPath + "PANEL0512"),
+            PANEL0600 = new MLibrary(Settings.ExineUIPath + "PANEL0600"),
+            PANEL0601 = new MLibrary(Settings.ExineUIPath + "PANEL0601"),
+            PANEL0602 = new MLibrary(Settings.ExineUIPath + "PANEL0602"),
+            PANEL0603 = new MLibrary(Settings.ExineUIPath + "PANEL0603"),
+            PANEL0604 = new MLibrary(Settings.ExineUIPath + "PANEL0604"),
+            PANEL0605 = new MLibrary(Settings.ExineUIPath + "PANEL0605"),
+            PANEL0606 = new MLibrary(Settings.ExineUIPath + "PANEL0606"),
+            PANEL0700 = new MLibrary(Settings.ExineUIPath + "PANEL0700"),
+            PANEL0710 = new MLibrary(Settings.ExineUIPath + "PANEL0710"),
+            PANEL0800 = new MLibrary(Settings.ExineUIPath + "PANEL0800"),
+            PANEL0900 = new MLibrary(Settings.ExineUIPath + "PANEL0900"),
+            PANEL0901 = new MLibrary(Settings.ExineUIPath + "PANEL0901"),
+            PANEL0902 = new MLibrary(Settings.ExineUIPath + "PANEL0902"),
+            PANEL0903 = new MLibrary(Settings.ExineUIPath + "PANEL0903"),
+            PANEL0904 = new MLibrary(Settings.ExineUIPath + "PANEL0904"),
+            PANEL0905 = new MLibrary(Settings.ExineUIPath + "PANEL0905"),
+            PANEL1000 = new MLibrary(Settings.ExineUIPath + "PANEL1000"),
+            PANEL1100 = new MLibrary(Settings.ExineUIPath + "PANEL1100"),
+            PANEL1200 = new MLibrary(Settings.ExineUIPath + "PANEL1200"),
+            SAYFRAME = new MLibrary(Settings.ExineUIPath + "SayFrame"),
 
 
 
-            ServerButton = new MLibrary(Settings.DataPath + "ServerButton"),
+            ServerButton = new MLibrary(Settings.ExineUIPath + "ServerButton"),
 
-            BIK_002_Orb1_1 = new MLibrary(Settings.DataPath + "002-Orb1-1"),
-            BIK_003_Orb1_2 = new MLibrary(Settings.DataPath + "003-Orb1-2"),
-            BIK_004_Orb1_3 = new MLibrary(Settings.DataPath + "004-Orb1-3"),
-            BIK_005_Orb1_4 = new MLibrary(Settings.DataPath + "005-Orb1-4"),
-            BIK_006_Orb2_1 = new MLibrary(Settings.DataPath + "006-Orb2-1"),
-            BIK_007_Orb2_2 = new MLibrary(Settings.DataPath + "007-Orb2-2"),
-            BIK_008_Orb2_3 = new MLibrary(Settings.DataPath + "008-Orb2-3"),
-            BIK_009_Orb2_4 = new MLibrary(Settings.DataPath + "009-Orb2-4"),
+            BIK_002_Orb1_1 = new MLibrary(Settings.ExineVideoPath + "002-Orb1-1"),
+            BIK_003_Orb1_2 = new MLibrary(Settings.ExineVideoPath + "003-Orb1-2"),
+            BIK_004_Orb1_3 = new MLibrary(Settings.ExineVideoPath + "004-Orb1-3"),
+            BIK_005_Orb1_4 = new MLibrary(Settings.ExineVideoPath + "005-Orb1-4"),
+            BIK_006_Orb2_1 = new MLibrary(Settings.ExineVideoPath + "006-Orb2-1"),
+            BIK_007_Orb2_2 = new MLibrary(Settings.ExineVideoPath + "007-Orb2-2"),
+            BIK_008_Orb2_3 = new MLibrary(Settings.ExineVideoPath + "008-Orb2-3"),
+            BIK_009_Orb2_4 = new MLibrary(Settings.ExineVideoPath + "009-Orb2-4"),
 
-            BIK_010_Gargoyle_1 = new MLibrary(Settings.DataPath + "010-Gargoyle-1"),
-            BIK_011_Gargoyle_2 = new MLibrary(Settings.DataPath + "011-Gargoyle-2"),
-            BIK_012_Gargoyle_3 = new MLibrary(Settings.DataPath + "012-Gargoyle-3"),
-            BIK_013_Gargoyle_4 = new MLibrary(Settings.DataPath + "013-Gargoyle-4"),
-            BIK_014_Gargoyle_5 = new MLibrary(Settings.DataPath + "014-Gargoyle-5"),
-            BIK_015_Gargoyle_6 = new MLibrary(Settings.DataPath + "015-Gargoyle-6"),
+            BIK_010_Gargoyle_1 = new MLibrary(Settings.ExineVideoPath + "010-Gargoyle-1"),
+            BIK_011_Gargoyle_2 = new MLibrary(Settings.ExineVideoPath + "011-Gargoyle-2"),
+            BIK_012_Gargoyle_3 = new MLibrary(Settings.ExineVideoPath + "012-Gargoyle-3"),
+            BIK_013_Gargoyle_4 = new MLibrary(Settings.ExineVideoPath + "013-Gargoyle-4"),
+            BIK_014_Gargoyle_5 = new MLibrary(Settings.ExineVideoPath + "014-Gargoyle-5"),
+            BIK_015_Gargoyle_6 = new MLibrary(Settings.ExineVideoPath + "015-Gargoyle-6"),
 
-            BIK_016_Orb3_1 = new MLibrary(Settings.DataPath + "016-Orb3-1"),
-            BIK_017_Orb3_2 = new MLibrary(Settings.DataPath + "017-Orb3-2"),
-            BIK_018_Orb3_3 = new MLibrary(Settings.DataPath + "018-Orb3-3"),
-            BIK_019_Orb3_4 = new MLibrary(Settings.DataPath + "019-Orb3-4"),
+            BIK_016_Orb3_1 = new MLibrary(Settings.ExineVideoPath + "016-Orb3-1"),
+            BIK_017_Orb3_2 = new MLibrary(Settings.ExineVideoPath + "017-Orb3-2"),
+            BIK_018_Orb3_3 = new MLibrary(Settings.ExineVideoPath + "018-Orb3-3"),
+            BIK_019_Orb3_4 = new MLibrary(Settings.ExineVideoPath + "019-Orb3-4"),
             
-            BIK_021_Light_1 = new MLibrary(Settings.DataPath + "021-Light-1"),
-            BIK_022_Light_2 = new MLibrary(Settings.DataPath + "022-Light-2"),
-            BIK_023_Light_3 = new MLibrary(Settings.DataPath + "023-Light-3"),
-            BIK_024_Light_4 = new MLibrary(Settings.DataPath + "024-Light-4");
+            BIK_021_Light_1 = new MLibrary(Settings.ExineVideoPath + "021-Light-1"),
+            BIK_022_Light_2 = new MLibrary(Settings.ExineVideoPath + "022-Light-2"),
+            BIK_023_Light_3 = new MLibrary(Settings.ExineVideoPath + "023-Light-3"),
+            BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4");
 
          
         public static readonly MLibrary
@@ -129,7 +131,8 @@ namespace Exine.ExineGraphics
             Dragon = new MLibrary(Settings.DataPath + "Dragon");
 
         //Map
-        public static readonly MLibrary[] MapLibs = new MLibrary[400];
+        //public static readonly MLibrary[] MapLibs = new MLibrary[400];
+        public static readonly MLibrary[] MapLibs = new MLibrary[2000];//k333123
 
         //Items
         public static readonly MLibrary
@@ -207,6 +210,28 @@ namespace Exine.ExineGraphics
             InitLibrary(ref TransformWeaponEffect, Settings.TransformWeaponEffectPath, "00");
 
             #region Maplibs
+
+            for (int i = 0; i < 10; i++)
+            {
+                MapLibs[i] = new MLibrary(Settings.DataPath + "Map\\Exine\\TS_0" + i + "_Tile"); 
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                MapLibs[i + 10] = new MLibrary(Settings.DataPath + "Map\\Exine\\TS_0" + i + "_Static"); 
+            }
+
+            MapLibs[20] = new MLibrary(Settings.DataPath + "Map\\Exine\\Smtiles"); 
+
+            for (int i = 1000; i < 2000; i++)
+            {
+                if (File.Exists(Settings.DataPath + "Map\\Exine\\Map_" + (9000 + i) + "_FrontTile.lib"))
+                {
+                    MapLibs[i] = new MLibrary(Settings.DataPath + "Map\\Exine\\Map_" + (9000 + i) + "_FrontTile"); 
+                }
+            }
+
+            /*
             //wemade mir2 (allowed from 0-99)
             MapLibs[0] = new MLibrary(Settings.DataPath + "Map\\WemadeMir2\\Tiles");
             MapLibs[1] = new MLibrary(Settings.DataPath + "Map\\WemadeMir2\\Smtiles");
@@ -215,6 +240,7 @@ namespace Exine.ExineGraphics
             {
                 MapLibs[i + 1] = new MLibrary(Settings.DataPath + "Map\\WemadeMir2\\Objects" + i.ToString());
             }
+            
             //shanda mir2 (allowed from 100-199)
             MapLibs[100] = new MLibrary(Settings.DataPath + "Map\\ShandaMir2\\Tiles");
             for (int i = 1; i < 10; i++)
@@ -270,6 +296,7 @@ namespace Exine.ExineGraphics
                 MapLibs[312 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Object1c" + Mapstate[i]);
                 MapLibs[313 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Object2c" + Mapstate[i]);
             }
+            */
             #endregion
 
             LoadLibraries();
@@ -322,6 +349,159 @@ namespace Exine.ExineGraphics
 
         static void LoadLibraries()
         {
+            //k333123
+            ExineOpening.Initialize();
+            Progress++;
+            //ExineLogin.Initialize();
+            //ExineNewChar.Initialize();
+            //Progress++;
+            NewChar.Initialize();
+            Progress++;
+            MAINSAMPLE.Initialize();
+            Progress++;
+            BAZEL.Initialize();
+            Progress++;
+            PANEL0000.Initialize();
+            Progress++;
+            PANEL0001.Initialize();
+            Progress++;
+            PANEL0100.Initialize();
+            Progress++;
+            PANEL0200.Initialize();
+            Progress++;
+            PANEL0201.Initialize();
+            Progress++;
+            PANEL0202.Initialize();
+            Progress++;
+            PANEL0203.Initialize();
+            Progress++;
+            PANEL0204.Initialize();
+            Progress++;
+            PANEL0205.Initialize();
+            Progress++;
+            PANEL0300.Initialize();
+            Progress++;
+            PANEL0301.Initialize();
+            Progress++;
+            PANEL0400.Initialize();
+            Progress++;
+            PANEL0401.Initialize();
+            Progress++;
+            PANEL0500.Initialize();
+            Progress++;
+            PANEL0501.Initialize();
+            Progress++;
+            PANEL0502.Initialize();
+            Progress++;
+            PANEL0503.Initialize();
+            Progress++;
+            PANEL0504.Initialize();
+            Progress++;
+            PANEL0505.Initialize();
+            Progress++;
+            PANEL0506.Initialize();
+            Progress++;
+            PANEL0507.Initialize();
+            Progress++;
+            PANEL0509.Initialize();
+            Progress++;
+            PANEL0510.Initialize();
+            Progress++;
+            PANEL0511.Initialize();
+            Progress++;
+            PANEL0512.Initialize();
+            Progress++;
+            PANEL0600.Initialize();
+            Progress++;
+            PANEL0601.Initialize();
+            Progress++;
+            PANEL0602.Initialize();
+            Progress++;
+            PANEL0603.Initialize();
+            Progress++;
+            PANEL0604.Initialize();
+            Progress++;
+            PANEL0605.Initialize();
+            Progress++;
+            PANEL0606.Initialize();
+            Progress++;
+            PANEL0700.Initialize();
+            Progress++;
+            PANEL0710.Initialize();
+            Progress++;
+            PANEL0800.Initialize();
+            Progress++;
+            PANEL0900.Initialize();
+            Progress++;
+            PANEL0901.Initialize();
+            Progress++;
+            PANEL0902.Initialize();
+            Progress++;
+            PANEL0903.Initialize();
+            Progress++;
+            PANEL0904.Initialize();
+            Progress++;
+            PANEL0905.Initialize();
+            Progress++;
+            PANEL1000.Initialize();
+            Progress++;
+            PANEL1100.Initialize();
+            Progress++;
+            PANEL1200.Initialize();
+            Progress++;
+            SAYFRAME.Initialize();
+            Progress++;
+            ServerButton.Initialize();
+            Progress++;
+
+            BIK_002_Orb1_1.Initialize();
+            Progress++;
+            BIK_003_Orb1_2.Initialize();
+            Progress++;
+            BIK_004_Orb1_3.Initialize();
+            Progress++;
+            BIK_005_Orb1_4.Initialize();
+            Progress++;
+            BIK_006_Orb2_1.Initialize();
+            Progress++;
+            BIK_007_Orb2_2.Initialize();
+            Progress++;
+            BIK_008_Orb2_3.Initialize();
+            Progress++;
+            BIK_009_Orb2_4.Initialize();
+            Progress++;
+
+            BIK_010_Gargoyle_1.Initialize();
+            Progress++;
+            BIK_011_Gargoyle_2.Initialize();
+            Progress++;
+            BIK_012_Gargoyle_3.Initialize();
+            Progress++;
+            BIK_013_Gargoyle_4.Initialize();
+            Progress++;
+            BIK_014_Gargoyle_5.Initialize();
+            Progress++;
+            BIK_015_Gargoyle_6.Initialize();
+            Progress++;
+
+            BIK_016_Orb3_1.Initialize();
+            Progress++;
+            BIK_017_Orb3_2.Initialize();
+            Progress++;
+            BIK_018_Orb3_3.Initialize();
+            Progress++;
+            BIK_019_Orb3_4.Initialize();
+            Progress++;
+
+            BIK_021_Light_1.Initialize();
+            Progress++;
+            BIK_022_Light_2.Initialize();
+            Progress++;
+            BIK_023_Light_3.Initialize();
+            Progress++;
+            BIK_024_Light_4.Initialize();
+            Progress++;
+
             ChrSel.Initialize();
             Progress++;
 

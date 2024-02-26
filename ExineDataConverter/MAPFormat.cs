@@ -141,12 +141,13 @@ namespace NewYPF
                         m2MapMgr.SetMidImgIdx((short)(mapTileInfo.Layers[1][exineMapIdx]), j, i);
                     }
 
-                    //커터를 이용하여 나온 Map_10xxx_FrontTile.lib 타일 파일을 읽어서 순서대로 반영시킴
-                    //만약 해당하는 파일이 없으면 아래의 로직을 임시로 추가 할 여지는 있음
-                    m2MapMgr.SetFrontTileSetIdx((short)(mapNumber-9000), j, i);//Select tileset (number => 10007 -> -10000 + 1000 -> 1007 (from file name : 10007.map))
-                    m2MapMgr.SetFrontImgIdx((short)(exineMapIdx), j, i);//tile index
+                    //커터를 이용하여 나온 Map_10xxx_FrontTile.lib 타일 파일을 읽어서 순서대로 반영시킴 
+                    //Select tileset (number => 10007 -> -10000 + 1000 -> 1007 (from file name : 10007.map))
+                    m2MapMgr.SetFrontTileSetIdx((short)(mapNumber-9000), j, i);
+                    m2MapMgr.SetFrontImgIdx((short)(exineMapIdx+1), j, i);//tile index //It must +1
                     if (mapTileInfo.LayerFlags[exineMapIdx] != 0) m2MapMgr.SetFrontLimit(j, i);
 
+                    #region old static object
                     /*
                     //front layer(front는 좌표값 그대로 찍게하면? 타일은 크기값 그대로 하게하면?) - 구조상 불가함.               
                     m2MapMgr.SetFrontTileSetIdx((short)mapHeader.WorldId[2], j, i);
@@ -235,7 +236,7 @@ namespace NewYPF
                         }
                         //m2MapMgr.SetFrontImgIdx(staticObjectInfos[i].is)
                     }*/
-
+                    #endregion old static object
                 }
             }
             /*

@@ -145,7 +145,6 @@ namespace Exine
                 SpellTargetLock = false;
             }
 
-
             if (e.KeyCode == Keys.Oem8)
                 CMain.Tilde = true;
 

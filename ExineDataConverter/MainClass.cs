@@ -62,13 +62,13 @@ namespace NewYPF
                 if (Path.GetFileNameWithoutExtension(filenames[0]).Equals("*"))
                 {
                     Console.WriteLine("Scan File List");
-                    //scan *.dat files
-                    inputFileNames.AddRange(System.IO.Directory.GetFiles(".", filenames[0]));
-                    foreach(var fileName in inputFileNames)
+                    //scan *.dat files 
+                    foreach(var fileName in System.IO.Directory.GetFiles(".", filenames[0]))
                     {
-                        Console.WriteLine(fileName);
+                        Console.WriteLine(fileName.Replace(".\\", ""));
+                        inputFileNames.Add(fileName.Replace(".\\", ""));
                     }
-                }
+                } 
             }
 
             else
@@ -139,7 +139,7 @@ namespace NewYPF
             Console.WriteLine("Start ConvertMapToM2Map. Filename:" + filename);
             byte[] datas = ReadByteFile(filename);
             MAPFormat mapFormat = new MAPFormat(datas,filename);
-            mapFormat.ConvertToM2MAP("M2_"+filename);
+            mapFormat.ConvertToM2MAP(filename);
 
             Console.WriteLine(datas.Length);
         }

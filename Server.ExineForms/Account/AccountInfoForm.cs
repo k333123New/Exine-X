@@ -275,7 +275,7 @@ namespace Server
         
         private void DayBanButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to ban the selected Accounts?", "Ban Selected.", MessageBoxButtons.YesNoCancel) != DialogResult.Yes) return;
+            if (MessageBox.Show("선택한 계정을 차단하시겠습니까??", "차단 선택됨.", MessageBoxButtons.YesNoCancel) != DialogResult.Yes) return;
 
             DateTime expiry = SMain.Envir.Now.AddDays(1);
 
@@ -294,7 +294,7 @@ namespace Server
 
         private void WeekBanButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to ban the selected Accounts?", "Ban Selected.", MessageBoxButtons.YesNoCancel) != DialogResult.Yes) return;
+            if (MessageBox.Show("선택한 계정을 차단하시겠습니까?", "차단 선택됨.", MessageBoxButtons.YesNoCancel) != DialogResult.Yes) return;
 
             DateTime expiry = SMain.Envir.Now.AddDays(7);
 
@@ -313,7 +313,7 @@ namespace Server
 
         private void PermBanButton_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to ban the selected Accounts?", "Ban Selected.", MessageBoxButtons.YesNoCancel) != DialogResult.Yes) return;
+            if (MessageBox.Show("선택한 계정을 차단하시겠습니까?", "차단 선택됨.", MessageBoxButtons.YesNoCancel) != DialogResult.Yes) return;
 
 
             AccountInfoListView.BeginUpdate();
@@ -412,12 +412,12 @@ namespace Server
         {
             if (SMain.Envir.Running)
             {
-                MessageBox.Show("Cannot wipe characters whilst the server is running", "Notice",
+                MessageBox.Show("서버가 실행되는 동안에는 케릭터를 지울 수 없습니다", "알림",
                 MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 return;
             }
 
-            if (MessageBox.Show("Are you sure you want to wipe all characters from the database?", "Notice",
+            if (MessageBox.Show("데이터베이스에서 모든  케릭터를 지우시겠습니까??", "알림",
                  MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
             {
                 for (int i = 0; i < SMain.Envir.AccountList.Count; i++)
@@ -430,7 +430,7 @@ namespace Server
                 SMain.Envir.Auctions.Clear();
                 SMain.Envir.GuildList.Clear();
 
-                MessageBox.Show("All characters and associated data has been cleared", "Notice", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("모든 캐릭터 및 관련 데이터가 삭제되었습니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 
             }
         }
@@ -448,7 +448,7 @@ namespace Server
                     _selectedAccountInfos[i].RequirePasswordChange = true;
                     PasswordChangeCheckBox.CheckState = CheckState.Checked;
                     Update(AccountInfoListView.SelectedItems[i], _selectedAccountInfos[i]);
-                    MessageBox.Show("Password Changed");
+                    MessageBox.Show("비밀번호가 변경되었습니다.");
                 }
 
                 AutoResize();

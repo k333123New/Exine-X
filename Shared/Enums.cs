@@ -1208,6 +1208,49 @@ public enum ItemSet : byte
 
 public enum Spell : byte
 {
+    //방어술(패시브)
+    //lv2 ~ :   닷지(회피율증가)
+    //          가드(방어력증가)
+    //          블록(블록률증가)
+    //lv21~ :   세이프가드(회피율+방어율증가)
+    //          와일드암(방어력+블록률 증가)
+    //lv41~ :   센서블스피릿(기절 확률을 낮춘다)
+    //          랜드앵커(타인의 의지대로 움직이지 않게한다)
+    //lv61~ :   센서블가드(회피율+방어율증가+기절 확률을 낮춘다)
+    //          커버리지(방어력+블록률 증가 + 타인의 의지대로 움직이지 않게한다)
+    //lv81~ :   이베이드(회피율증가)
+    //          아이언바디(방어력증가)
+    //          퍼펙트블록(블록률증가)
+
+    //둔기술
+    //lv2 ~ :   세비지해쉬(40소모, 두손둔기 공격기)
+    //          액스버서커(패시브,도끼 착용시 성능 향상)
+    //          메이스버서커(패시브,몽둥이 착용시 성능 향상)
+    //          해머버서커(패시브,망치 착용시 성능 향상)
+    //lv21~ :   헬맹글링(100소모 세비지해쉬3, 회전연타, 연속종베기)
+    //          립크러쉬(80소모 세비지해쉬3, 일격에공격, 기절)
+    //          브루탈리티(패시브 액스버서커3 메이스버서커3 해머버서커3 ,모든 둔기 착용시 성능 향상, 패시브)
+    //lv41~ :   블러드핵(200소모 세비지해쉬6 헬맹글링3, 대상을 난타)
+    //          매드대쉬(220소모 세비지해쉬6 립크러쉬, 달려가며공격, 천지가흔들리는충격)
+    //lv61~ :   파워스윙(440소모 세비지해쉬9, 여러명 동시공격,휘두르기)
+    //          블러드배쉬(340소모 세비지해쉬9 립크러쉬6 매드대쉬3, 타겟 뒤로 날려짐)
+    //lv81~ :   데몰리션(700소모 파워스윙3 블러드핵6 블러드배쉬3 브루탈리티1, 기를모은 강력한 일격)
+
+
+    //궁술
+    //lv2 ~ :   에임(40소모, 목표물을 일발에 명중시킴)
+    //          궁술(패시브,활 착용시 성능 향상)
+    //lv21~ :   스트림파이어(80소모 에임3, 연사, 기다란 창처럼 보임)
+    //          석궁술(패시브 궁술3 ,석궁 착용시 성능 향상)
+    //lv41~ :   데토네이팅볼트(240소모 에임6 스트림파이어3, 화살폭발, 주변도 데미지)
+    //          샤프슈팅(180소모 에임6 스트림파이어3 , 적의빈틈공격, 방패를 통과하여 타격)
+    //lv61~ :   팬와이즈샷(340소모 에임9 스트림파이어6 데토네이팅볼트3, 여러명 동시공격,석궁을 사용하여 근거리에 접근하는 다수의 적에게 공격 )
+    //          발라스틱스팅거(300소모 궁술1 석궁술1, 관통하여 파괴, 무생물도 파괴)
+    //lv81~ :   아데스티메르(530소모 샤프슈팅6 데토네이팅볼트6 팬와이즈샷3 발라스틱스팅거3, 꿰뚫고 폭발한다.)
+
+
+
+
     None = 0,
 
     //Warrior
@@ -1353,6 +1396,155 @@ public enum Spell : byte
     HornedCommanderRockFall = 217,
     HornedCommanderRockSpike = 218
 }
+/*
+public enum Spell : byte
+{
+    None = 0,
+
+    //Warrior
+    Fencing = 1,
+    Slaying = 2,
+    Thrusting = 3,
+    HalfMoon = 4,
+    ShoulderDash = 5,
+    TwinDrakeBlade = 6,
+    Entrapment = 7,
+    FlamingSword = 8,
+    LionRoar = 9,
+    CrossHalfMoon = 10,
+    BladeAvalanche = 11,
+    ProtectionField = 12,
+    Rage = 13,
+    CounterAttack = 14,
+    SlashingBurst = 15,
+    Fury = 16,
+    ImmortalSkin = 17,
+
+    //Wizard
+    FireBall = 31,
+    Repulsion = 32,
+    ElectricShock = 33,
+    GreatFireBall = 34,
+    HellFire = 35,
+    ThunderBolt = 36,
+    Teleport = 37,
+    FireBang = 38,
+    FireWall = 39,
+    Lightning = 40,
+    FrostCrunch = 41,
+    ThunderStorm = 42,
+    MagicShield = 43,
+    TurnUndead = 44,
+    Vampirism = 45,
+    IceStorm = 46,
+    FlameDisruptor = 47,
+    Mirroring = 48,
+    FlameField = 49,
+    Blizzard = 50,
+    MagicBooster = 51,
+    MeteorStrike = 52,
+    IceThrust = 53,
+    FastMove = 54,
+    StormEscape = 55,
+
+    //Taoist
+    Healing = 61,
+    SpiritSword = 62,
+    Poisoning = 63,
+    SoulFireBall = 64,
+    SummonSkeleton = 65,
+    Hiding = 67,
+    MassHiding = 68,
+    SoulShield = 69,
+    Revelation = 70,
+    BlessedArmour = 71,
+    EnergyRepulsor = 72,
+    TrapHexagon = 73,
+    Purification = 74,
+    MassHealing = 75,
+    Hallucination = 76,
+    UltimateEnhancer = 77,
+    SummonShinsu = 78,
+    Reincarnation = 79,
+    SummonHolyDeva = 80,
+    Curse = 81,
+    Plague = 82,
+    PoisonCloud = 83,
+    EnergyShield = 84,
+    PetEnhancer = 85,
+    HealingCircle = 86,
+
+    //Assassin
+    FatalSword = 91,
+    DoubleSlash = 92,
+    Haste = 93,
+    FlashDash = 94,
+    LightBody = 95,
+    HeavenlySword = 96,
+    FireBurst = 97,
+    Trap = 98,
+    PoisonSword = 99,
+    MoonLight = 100,
+    MPEater = 101,
+    SwiftFeet = 102,
+    DarkBody = 103,
+    Hemorrhage = 104,
+    CrescentSlash = 105,
+    MoonMist = 106,
+    CatTongue = 107,
+
+    //Archer
+    Focus = 121,
+    StraightShot = 122,
+    DoubleShot = 123,
+    ExplosiveTrap = 124,
+    DelayedExplosion = 125,
+    Meditation = 126,
+    BackStep = 127,
+    ElementalShot = 128,
+    Concentration = 129,
+    Stonetrap = 130,
+    ElementalBarrier = 131,
+    SummonVampire = 132,
+    VampireShot = 133,
+    SummonToad = 134,
+    PoisonShot = 135,
+    CrippleShot = 136,
+    SummonSnakes = 137,
+    NapalmShot = 138,
+    OneWithNature = 139,
+    BindingShot = 140,
+    MentalState = 141,
+
+    //Custom
+    Blink = 151,
+    Portal = 152,
+    BattleCry = 153,
+    FireBounce = 154,
+    MeteorShower = 155,
+
+    //Map Events
+    DigOutZombie = 200,
+    Rubble = 201,
+    MapLightning = 202,
+    MapLava = 203,
+    MapQuake1 = 204,
+    MapQuake2 = 205,
+    DigOutArmadillo = 206,
+    GeneralMeowMeowThunder = 207,
+    StoneGolemQuake = 208,
+    EarthGolemPile = 209,
+    TreeQueenRoot = 210,
+    TreeQueenMassRoots = 211,
+    TreeQueenGroundRoots = 212,
+    TucsonGeneralRock = 213,
+    FlyingStatueIceTornado = 214,
+    DarkOmaKingNuke = 215,
+    HornedSorcererDustTornado = 216,
+    HornedCommanderRockFall = 217,
+    HornedCommanderRockSpike = 218
+}
+*/
 
 public enum SpellEffect : byte
 {

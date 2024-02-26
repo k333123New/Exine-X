@@ -197,25 +197,22 @@ namespace Exine.ExineObjects
         {
             if (CMain.Time < Start) return;
 
-
             int index = BaseIndex + (CurrentFrame % FrameCount) + Direction * (Skip + FrameCount);
 
             DrawLocation = new Point((Source.X - MapObject.User.Movement.X + MapControl.OffSetX) * MapControl.CellWidth,
-                                       (Source.Y - MapObject.User.Movement.Y + MapControl.OffSetY) * MapControl.CellHeight);
+                                     (Source.Y - MapObject.User.Movement.Y + MapControl.OffSetY) * MapControl.CellHeight);
             DrawLocation.Offset(MapObject.User.OffSetMove);
 
             int x = (Destination.X - Source.X) * MapControl.CellWidth;
             int y = (Destination.Y - Source.Y) * MapControl.CellHeight;
 
-
             DrawLocation.Offset(x * CurrentFrame / Count, y * CurrentFrame / Count);
 
-            if (!Blend)
+            if (!Blend) 
                 Library.Draw(index, DrawLocation, Color.White, true);
-            else
+            else 
                 Library.DrawBlend(index, DrawLocation, Color.White, true, Rate);
         }
-
     }
 
     public class InterruptionEffect : Effect
