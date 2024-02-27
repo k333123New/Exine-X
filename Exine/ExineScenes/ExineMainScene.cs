@@ -10964,8 +10964,8 @@ namespace Exine.ExineScenes
                     }
 
                     s = Libraries.MapLibs[fileIndex].GetSize(index);
-                    //if (s.Width == CellWidth && s.Height == CellHeight && animation == 0) continue;                   //k333123 front tile to object draw!
-                    //if ((s.Width == CellWidth * 2) && (s.Height == CellHeight * 2) && (animation == 0)) continue;     //k333123 front tile to object draw!
+                    if (s.Width == CellWidth && s.Height == CellHeight && animation == 0) continue;                   //k333123 front tile to object draw!
+                    if ((s.Width == CellWidth * 2) && (s.Height == CellHeight * 2) && (animation == 0)) continue;     //k333123 front tile to object draw!
 
                     if (blend)
                     {
@@ -10974,12 +10974,14 @@ namespace Exine.ExineScenes
                             Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - (3 * CellHeight)), Color.White, true);
                         else
                         */
-                        Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, (index >= 2723 && index <= 2732)); //k333123 maybe apply offset!
-                        //Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, true); //k333123 maybe apply offset!
+                        //Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, (index >= 2723 && index <= 2732)); //k333123 maybe apply offset! k333123 now
+                        // Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, true); //k333123 maybe apply offset!
+                        Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY), Color.White, true); //k333123 maybe apply offset!
                     }
                     else
-                        Libraries.MapLibs[fileIndex].Draw(index, drawX, drawY - s.Height); //k333123 maybe apply offset!
-                        //Libraries.MapLibs[fileIndex].Draw(index, new Point(drawX, drawY - s.Height),Color.White,true); //k333123 maybe apply offset!
+                        //Libraries.MapLibs[fileIndex].Draw(index, drawX, drawY - s.Height); //k333123 maybe apply offset!
+                        //Libraries.MapLibs[fileIndex].Draw(index, new Point(drawX, drawY - s.Height),Color.White,true); //k333123 maybe apply offset! k333123 now
+                        Libraries.MapLibs[fileIndex].Draw(index, new Point(drawX, drawY), Color.White, true); //k333123 maybe apply offset! k333123 now
                     #endregion
                 }
 
