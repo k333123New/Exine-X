@@ -3151,7 +3151,8 @@ namespace Exine.ExineScenes
                 CMain.SetResolution(1024, 768);
             }
 
-            ActiveScene = new SelectScene(p.Characters);
+            //ActiveScene = new LoginScene(p.Characters);
+            ActiveScene = new ExineLoginScene();
 
             Dispose();
         }
@@ -3166,7 +3167,7 @@ namespace Exine.ExineScenes
             if (Settings.Resolution != 1024)
                 CMain.SetResolution(1024, 768);
 
-            ActiveScene = new LoginScene();
+            ActiveScene = new ExineLoginScene();
             Dispose();
             MirMessageBox.Show("The person you was observing has logged off.");
         }
@@ -10725,13 +10726,13 @@ namespace Exine.ExineScenes
 
             for (int y = User.Movement.Y - ViewRangeY; y <= User.Movement.Y + ViewRangeY; y++)
             {
-                if (y <= 0 || y % 2 == 1) continue;
+                //if (y <= 0 || y % 2 == 1) continue; //k333123 
                 if (y >= Height) break;
                 drawY = (y - User.Movement.Y + OffSetY) * CellHeight + User.OffSetMove.Y; //Moving OffSet
 
                 for (int x = User.Movement.X - ViewRangeX; x <= User.Movement.X + ViewRangeX; x++)
                 {
-                    if (x <= 0 || x % 2 == 1) continue;
+                    //if (x <= 0 || x % 2 == 1) continue; //k333123
                     if (x >= Width) break;
                     drawX = (x - User.Movement.X + OffSetX) * CellWidth - OffSetX + User.OffSetMove.X; //Moving OffSet
                     if ((M2CellInfo[x, y].BackImage == 0) || (M2CellInfo[x, y].BackIndex == -1)) continue;

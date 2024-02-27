@@ -6,7 +6,6 @@ using Exine.ExineNetwork;
 using Exine.ExineSounds;
 using S = ServerPackets;
 using C = ClientPackets;
-using static Exine.ExineScenes.LoginScene;
 
 namespace Exine.ExineScenes
 {
