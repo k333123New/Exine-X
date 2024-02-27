@@ -10974,10 +10974,12 @@ namespace Exine.ExineScenes
                             Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - (3 * CellHeight)), Color.White, true);
                         else
                         */
-                            Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, (index >= 2723 && index <= 2732));
+                        Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, (index >= 2723 && index <= 2732)); //k333123 maybe apply offset!
+                        //Libraries.MapLibs[fileIndex].DrawBlend(index, new Point(drawX, drawY - s.Height), Color.White, true); //k333123 maybe apply offset!
                     }
                     else
-                        Libraries.MapLibs[fileIndex].Draw(index, drawX, drawY - s.Height);
+                        Libraries.MapLibs[fileIndex].Draw(index, drawX, drawY - s.Height); //k333123 maybe apply offset!
+                        //Libraries.MapLibs[fileIndex].Draw(index, new Point(drawX, drawY - s.Height),Color.White,true); //k333123 maybe apply offset!
                     #endregion
                 }
 

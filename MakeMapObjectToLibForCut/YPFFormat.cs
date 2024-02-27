@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 
-namespace NewYPF
+namespace MakeMapObjectToLibForCut
 {
     class YPFFormat
     {
@@ -443,10 +443,10 @@ namespace NewYPF
         byte[] colorData = null;
         byte[] colorDataRGBA = null;
 
-        int top = 0;
-        int left = 0;
-        int bottom = 0;
-        int right = 0;
+        public int top = 0;
+        public int left = 0;
+        public int bottom = 0;
+        public int right = 0;
         uint flag = 0;
 
         uint alphaLen = 0;
@@ -948,8 +948,9 @@ namespace NewYPF
         public bool HasBase { get => (flag & 4) != 0x0; }//bits[2] == 1 => hasBase=true
         public bool HasDepth { get => (flag & 1) != 0x0; }//bits[0] == 1 => hasDepth=true
 
-        public int Top { get => top; }
+        public int Top { get => top;  }
         public int Left { get => left; }
+        
 
         public int FrameHeight { get => bottom - top; }
         public int FrameWidth { get => right - left; }

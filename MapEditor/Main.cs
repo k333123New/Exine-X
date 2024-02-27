@@ -299,22 +299,8 @@ namespace Map_Editor
             //if (offSet) point.Offset(mi.X/CellWidth, mi.Y/CellHeight);
             if (index == 46) Console.WriteLine("drawX:" + drawX + " mi.X:" + mi.X+ " w:"+ w);
 
-            //drawX = drawX - (w / 2 * zoomMIN / zoomMAX) - (mi.X * zoomMIN / zoomMAX);
-            //drawY = drawY + (h / 2 * zoomMIN / zoomMAX) + (mi.X * zoomMIN / zoomMAX);
-
-            //drawX = drawX - (w / 2 * zoomMIN / zoomMAX) - (mi.X * zoomMIN / zoomMAX);
-            //drawY = drawY + (h / 2 * zoomMIN / zoomMAX) - (mi.Y * zoomMIN / zoomMAX);
-            //drawY = drawY + ((mi.X / 2) * zoomMIN / zoomMAX) + (h / 2) * zoomMIN / zoomMAX;
-
-
-            //(int)Math.Truncate
-            //drawX = drawX + (int)(mi.Y * zoomMIN / zoomMAX);
-            //drawX = drawX + (int)Math.Ceiling((double)mi.Y * zoomMIN / zoomMAX) + 300;
-            //drawY = drawY + ((mi.X / 2) * zoomMIN / zoomMAX) + (h / 2) * zoomMIN / zoomMAX;
-
-            drawX = drawX - (w / 2 + mi.X) * zoomMIN / zoomMAX - 48;
-            drawY = drawY - (h / 2 + mi.Y) * zoomMIN / zoomMAX;
-
+            drawX = (drawX + mi.X);// * zoomMIN / zoomMAX;
+            drawY = (drawY + mi.Y + mi.Height);// * zoomMIN / zoomMAX;
 
             DXManager.Sprite.Draw2D(mi.ImageTexture, Rectangle.Empty, new SizeF(w * zoomMIN / zoomMAX, h * zoomMIN / zoomMAX), new PointF(drawX , drawY ), Color.White);
         }
@@ -445,8 +431,8 @@ namespace Map_Editor
                     (s.Width != CellWidth*2 || s.Height != CellHeight*2))
                 {
                     drawY = (cellY - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
-                    Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
-                    //Draw(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX,true); //k333123
+                    //Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                    Draw(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX,true); //k333123
                 }
                 else
                 {
@@ -850,8 +836,8 @@ namespace Map_Editor
                             else
                             {
                                 //여기서 움직이지 않는 객체를 그린다.
-                                Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
-                                //Draw(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX,true);//k333123
+                                //Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                                Draw(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX,true);//k333123
 
                                 //DrawExineObject(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX);//실제 좌표를 그린다.
                             }
