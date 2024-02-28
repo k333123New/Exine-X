@@ -28,7 +28,9 @@ namespace Exine.ExineObjects
             Class = info.Class;
             Gender = info.Gender;
             Level = info.Level;
-            Hair = info.Hair;
+
+            //Hair = info.Hair;
+            Hair = (byte)info.ExStyle; //k333123
 
             HP = info.HP;
             MP = info.MP;

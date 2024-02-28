@@ -652,11 +652,15 @@ namespace NewYPF
 
                 if (mLibraryV2DataTemps[j].bitmapMask == null)
                 {
-                    mLibraryV2ReIndex.AddImage(mLibraryV2DataTemps[j].bitmap, mLibraryV2DataTemps[j].xVal, mLibraryV2DataTemps[j].yVal);
+                    //k333123 x와y가 뒤집어졌으나 캐릭터만 그런지 알수없으므로 일단 ReIndex 되는것에 대해서만 다시 뒤집어줌.
+                    //mLibraryV2ReIndex.AddImage(mLibraryV2DataTemps[j].bitmap, mLibraryV2DataTemps[j].xVal, mLibraryV2DataTemps[j].yVal);
+                    mLibraryV2ReIndex.AddImage(mLibraryV2DataTemps[j].bitmap, mLibraryV2DataTemps[j].yVal, mLibraryV2DataTemps[j].xVal);
                 }
                 else
                 {
-                    mLibraryV2ReIndex.AddImage(mLibraryV2DataTemps[j].bitmap, mLibraryV2DataTemps[j].bitmapMask, mLibraryV2DataTemps[j].xVal, mLibraryV2DataTemps[j].yVal);
+                    //k333123 x와y가 뒤집어졌으나 캐릭터만 그런지 알수없으므로 일단 ReIndex 되는것에 대해서만 다시 뒤집어줌.
+                    //mLibraryV2ReIndex.AddImage(mLibraryV2DataTemps[j].bitmap, mLibraryV2DataTemps[j].bitmapMask, mLibraryV2DataTemps[j].xVal, mLibraryV2DataTemps[j].yVal);
+                    mLibraryV2ReIndex.AddImage(mLibraryV2DataTemps[j].bitmap, mLibraryV2DataTemps[j].bitmapMask, mLibraryV2DataTemps[j].yVal, mLibraryV2DataTemps[j].xVal);
                 }
             }
             mLibraryV2ReIndex.Save();

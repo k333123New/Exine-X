@@ -156,16 +156,20 @@
 
             //k333123 231205
             ExPlayer.Add(ExAction.PEACEMODE_STAND, new Frame(0, 20, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_STAND, new Frame(161, 6, 0, 100, 0, 8, 0, 250));
-            ExPlayer.Add(ExAction.TWOHAND_STAND, new Frame(209, 6, 0, 100, 0, 8, 0, 250));
-            ExPlayer.Add(ExAction.BOWHAND_STAND, new Frame(257, 6, 0, 100, 0, 8, 0, 250));
-            ExPlayer.Add(ExAction.PEACEMODE_RUN_LEFT, new Frame(305, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_RUN_LEFT, new Frame(337, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_RUN_LEFT, new Frame(369, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.BOWHAND_RUN_LEFT, new Frame(401, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_STAND, new Frame(161-1, 6, 0, 100, 0, 8, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_STAND, new Frame(209-1, 6, 0, 100, 0, 8, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_STAND, new Frame(257-1, 6, 0, 100, 0, 8, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_WALK_LEFT, new Frame(305-1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_WALK_LEFT, new Frame(337 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_WALK_LEFT, new Frame(369 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_WALK_LEFT, new Frame(401 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_RUN_LEFT, new Frame(305 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_RUN_LEFT, new Frame(337 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_RUN_LEFT, new Frame(369 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_RUN_LEFT, new Frame(401 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.PEACEMODE_SITDOWN, new Frame(433, 5, 0, 100));
             ExPlayer.Add(ExAction.ONEHAND_STUCK, new Frame(473, 1, 0, 100, 392, 3, 0, 100));
-            ExPlayer.Add(ExAction.DIE, new Frame(497, 8, 0, 100));// { Reverse = true });
+            ExPlayer.Add(ExAction.DIE, new Frame(497, 8, 0, 1000));// { Reverse = true });
             ExPlayer.Add(ExAction.ONEHAND_ATTACK1, new Frame(561, 8, 0, 100, 168, 6, 0, 100));
             ExPlayer.Add(ExAction.ONEHAND_ATTACK2, new Frame(625, 8, 0, 100, 216, 6, 0, 100));
             ExPlayer.Add(ExAction.ONEHAND_ATTACK3, new Frame(689, 8, 0, 100, 448, 6, 0, 100));
@@ -175,10 +179,14 @@
             ExPlayer.Add(ExAction.BOWHAND_ATTACK1, new Frame(945, 8, 0, 100, 96, 8, 0, 100));
             ExPlayer.Add(ExAction.MAGIC_CAST, new Frame(1009, 1, 0, 1000, 160, 1, 0, 1000));
             ExPlayer.Add(ExAction.MAGIC_ATTACK, new Frame(1017, 1, 0, 1000, 332, 1, 5, 1000));
-            ExPlayer.Add(ExAction.PEACEMODE_RUN_RIGHT, new Frame(1025, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_RUN_RIGHT, new Frame(1057, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_RUN_RIGHT, new Frame(1089, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.BOWHAND_RUN_RIGHT, new Frame(1121, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_WALK_RIGHT, new Frame(1025 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_WALK_RIGHT, new Frame(1057 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_WALK_RIGHT, new Frame(1089 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_WALK_RIGHT, new Frame(1121 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_RUN_RIGHT, new Frame(1025 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_RUN_RIGHT, new Frame(1057 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_RUN_RIGHT, new Frame(1089 - 1, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_RUN_RIGHT, new Frame(1121 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.PEACEMODE_STANDUP, new Frame(1153, 8, 0, 100));
              
             

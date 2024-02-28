@@ -246,22 +246,7 @@ namespace Exine.ExineScenes
 
             GroupDialog = new GroupDialog { Parent = this, Visible = false };
             GuildDialog = new GuildDialog { Parent = this, Visible = false };
-
-            /*
-            NewHeroDialog = new NewCharacterDialog { Parent = this, Visible = false };
-            NewHeroDialog.TitleLabel.Index = 847;
-            NewHeroDialog.TitleLabel.Location = new Point(246, 11);
-            NewHeroDialog.OnCreateCharacter += (o, e) =>
-            {
-                Network.Enqueue(new C.NewHero
-                {
-                    Name = NewHeroDialog.NameTextBox.Text,
-                    Class = NewHeroDialog.Class,
-                    Gender = NewHeroDialog.Gender
-                });
-            };*/
-
-
+             
             HeroMenuPanel = new HeroMenuPanel(this) { Visible = false };
             HeroBehaviourPanel = new HeroBehaviourPanel { Parent = this, Visible = false };
             HeroManageDialog = new HeroManageDialog { Parent = this, Visible = false };
@@ -5659,7 +5644,7 @@ namespace Exine.ExineScenes
 
             User.SetAction();
 
-            User.ActionFeed.Add(new QueuedAction { Action = ExAction.Standing, Direction = p.Direction, Location = p.Location });
+            User.ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = p.Direction, Location = p.Location });
         }
 
         private void SetConcentration(S.SetConcentration p)
@@ -11588,12 +11573,12 @@ namespace Exine.ExineScenes
                     }
                     if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                     {
-                        User.QueuedAction = new QueuedAction { Action = ExAction.Walking, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                        User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                         return;
                     }
                     if (direction != User.Direction)
                     {
-                        User.QueuedAction = new QueuedAction { Action = ExAction.Standing, Direction = direction, Location = User.CurrentLocation };
+                        User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = direction, Location = User.CurrentLocation };
                         return;
                     }
                     return;
@@ -11687,7 +11672,7 @@ namespace Exine.ExineScenes
                             {
                                 if (direction != User.Direction)
                                 {
-                                    User.QueuedAction = new QueuedAction { Action = ExAction.Standing, Direction = direction, Location = User.CurrentLocation };
+                                    User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = direction, Location = User.CurrentLocation };
                                     return;
                                 }
                                 AutoHit = true;
@@ -11697,12 +11682,12 @@ namespace Exine.ExineScenes
                         if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                         {
 
-                            User.QueuedAction = new QueuedAction { Action = ExAction.Walking, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                            User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                             return;
                         }
                         if (direction != User.Direction)
                         {
-                            User.QueuedAction = new QueuedAction { Action = ExAction.Standing, Direction = direction, Location = User.CurrentLocation };
+                            User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = direction, Location = User.CurrentLocation };
                             return;
                         }
 
@@ -11722,7 +11707,7 @@ namespace Exine.ExineScenes
                         {
                             if (direction != User.Direction)
                             {
-                                User.QueuedAction = new QueuedAction { Action = ExAction.Standing, Direction = direction, Location = User.CurrentLocation };
+                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = direction, Location = User.CurrentLocation };
                             }
                             return;
                         }
@@ -11746,12 +11731,12 @@ namespace Exine.ExineScenes
                         }
                         if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                         {
-                            User.QueuedAction = new QueuedAction { Action = ExAction.Walking, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                            User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                             return;
                         }
                         if (direction != User.Direction)
                         {
-                            User.QueuedAction = new QueuedAction { Action = ExAction.Standing, Direction = direction, Location = User.CurrentLocation };
+                            User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = direction, Location = User.CurrentLocation };
                             return;
                         }
                         break;
@@ -11800,7 +11785,7 @@ namespace Exine.ExineScenes
                     }
                     if (CanWalk(dir))
                     {
-                        User.QueuedAction = new QueuedAction { Action = ExAction.Walking, Direction = dir, Location = Functions.PointMove(User.CurrentLocation, dir, 1) };
+                        User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = dir, Location = Functions.PointMove(User.CurrentLocation, dir, 1) };
 
                         return;
                     }
@@ -11816,7 +11801,7 @@ namespace Exine.ExineScenes
 
             if (!CanWalk(direction, out direction)) return;
 
-            User.QueuedAction = new QueuedAction { Action = ExAction.Walking, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+            User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
         }
 
         public void UseMagic(ClientMagic magic, UserObject actor)
@@ -12223,7 +12208,7 @@ namespace Exine.ExineScenes
         public bool CanFish(ExineDirection dir)
         {
             if (!ExineMainScene.User.HasFishingRod || ExineMainScene.User.FishingTime + 1000 > CMain.Time) return false;
-            if (ExineMainScene.User.CurrentAction != ExAction.Standing) return false;
+            if (ExineMainScene.User.CurrentAction != ExAction.ONEHAND_STAND) return false;
             if (ExineMainScene.User.Direction != dir) return false;
             if (ExineMainScene.User.TransformType >= 6 && ExineMainScene.User.TransformType <= 9) return false;
 

@@ -818,6 +818,72 @@ namespace Exine.ExineGraphics
             }
 
 
+            ///////////////////////////////////////
+            //k333123 add
+            for (int i = 0; i < ExineManHair.Length; i++)
+            {
+                ExineManHair[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineWomanHair.Length; i++)
+            {
+                ExineWomanHair[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineManArmor.Length; i++)
+            {
+                ExineManArmor[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineWomanArmor.Length; i++)
+            {
+                ExineWomanArmor[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineManSheild.Length; i++)
+            {
+                ExineManSheild[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineWomanSheild.Length; i++)
+            {
+                ExineWomanSheild[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineManOneWeapon.Length; i++)
+            {
+                ExineManOneWeapon[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineWomanOneWeapon.Length; i++)
+            {
+                ExineWomanOneWeapon[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineManTwoWeapon.Length; i++)
+            {
+                ExineManTwoWeapon[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineWomanTwoWeapon.Length; i++)
+            {
+                ExineWomanTwoWeapon[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineManBowWeapon.Length; i++)
+            {
+                ExineManBowWeapon[i].Initialize();
+                Progress++;
+            }
+            for (int i = 0; i < ExineWomanBowWeapon.Length; i++)
+            {
+                ExineWomanBowWeapon[i].Initialize();
+                Progress++;
+            }
+            ///////////////////////////////////////
+
+
+
             for (int i = 0; i < CArmours.Length; i++)
             {
                 CArmours[i].Initialize();

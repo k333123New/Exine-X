@@ -83,7 +83,8 @@ namespace Exine.ExineObjects
             ExineMainScene.Scene.MapControl.AddObject(this);
 
             Direction = info.Direction;
-            Hair = info.Hair;
+            //Hair = info.Hair; 
+            Hair = (byte)info.ExStyle; //k333123
 
             HP = info.HP;
             MP = info.MP;
