@@ -64,24 +64,19 @@ namespace Exine
 
 
         //k333123 231205
-        public const string ExinePath = DataPath+ @"Exine\",
+        public const string ExinePath = DataPath + @"Exine\",
                             ExineVideoPath = ExinePath + @"Video\",
                             ExineUIPath = ExinePath + @"UI\",
-                            ExineHumanPath = ExinePath+ @"Human\", 
+                            ExineHumanPath = ExinePath + @"Human\",
 
-                            ExArmorWMPath = ExineHumanPath + @"AHW\",
-                            ExHairWMPath = ExineHumanPath + @"HHW\",
-                            ExShdWMPath = ExineHumanPath + @"SHW\",
-                            ExWeapOneWMPath = ExineHumanPath + @"WHW\one",
-                            ExWeapTwoWMPath = ExineHumanPath + @"WHW\two",
-                            ExWeapBowWMPath = ExineHumanPath + @"WHW\bow",
+                            ExHairPath = ExineHumanPath + @"Hair\",
+                            ExArmorPath = ExineHumanPath + @"Armor\",
+                            ExSheildPath = ExineHumanPath + @"Sheild\",
+                            ExWeaponPath = ExineHumanPath + @"Weapon\",
+                            ExOneHandPath = ExWeaponPath + @"OneHand",
+                            ExTwoHandPath = ExWeaponPath + @"TwoHand",
+                            ExBowPath = ExWeaponPath + @"Bow";
 
-                            ExArmorMNPath = ExineHumanPath + @"AHM\",
-                            ExHairMNPath = ExineHumanPath + @".HHM\",
-                            ExShdMNPath = ExineHumanPath + @"SHM\",
-                            ExWeapOneMNPath = ExineHumanPath + @"WHM\one",
-                            ExWeapTwoMNPath = ExineHumanPath + @"WHM\two",
-                            ExWeapBowMNPath = ExineHumanPath + @"WHM\bow";
 
 
         //Logs

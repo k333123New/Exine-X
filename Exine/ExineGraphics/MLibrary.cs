@@ -5,6 +5,7 @@ using Frame = Exine.ExineObjects.Frame;
 using Exine.ExineObjects;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.IO;
 
 namespace Exine.ExineGraphics
 {
@@ -12,12 +13,25 @@ namespace Exine.ExineGraphics
     {
         public static bool Loaded;
         public static int Count, Progress;
+         
+        public static MLibrary[] ExineManHair = new MLibrary[4];
+        public static MLibrary[] ExineWomanHair = new MLibrary[4];
 
-        /*
-        public static readonly MLibrary
-            AHM_0000 = new MLibrary(Settings.DataPath + "AHM_0000");
-        */
+        public static MLibrary[] ExineManArmor = new MLibrary[23];
+        public static MLibrary[] ExineWomanArmor = new MLibrary[23];
 
+        public static MLibrary[] ExineManSheild = new MLibrary[14];
+        public static MLibrary[] ExineWomanSheild = new MLibrary[14];
+
+        public static MLibrary[] ExineManOneWeapon = new MLibrary[31];
+        public static MLibrary[] ExineWomanOneWeapon = new MLibrary[31];
+
+        public static MLibrary[] ExineManTwoWeapon = new MLibrary[34];
+        public static MLibrary[] ExineWomanTwoWeapon = new MLibrary[34];
+
+        public static MLibrary[] ExineManBowWeapon = new MLibrary[12];
+        public static MLibrary[] ExineWomanBowWeapon = new MLibrary[12];
+         
         public static readonly MLibrary
 
             ExineOpening = new MLibrary(Settings.ExineVideoPath + "001-Intro"),
@@ -97,33 +111,13 @@ namespace Exine.ExineGraphics
             BIK_017_Orb3_2 = new MLibrary(Settings.ExineVideoPath + "017-Orb3-2"),
             BIK_018_Orb3_3 = new MLibrary(Settings.ExineVideoPath + "018-Orb3-3"),
             BIK_019_Orb3_4 = new MLibrary(Settings.ExineVideoPath + "019-Orb3-4"),
-            
+
             BIK_021_Light_1 = new MLibrary(Settings.ExineVideoPath + "021-Light-1"),
             BIK_022_Light_2 = new MLibrary(Settings.ExineVideoPath + "022-Light-2"),
             BIK_023_Light_3 = new MLibrary(Settings.ExineVideoPath + "023-Light-3"),
             BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4");
-
-
-
-        /*
-        library = new MLibrary[count];
-
-        for (int i = 0; i < count; i++)
-        {
-            library[i] = new MLibrary(path + i.ToString(toStringValue) + suffix);
-        }*/
-        public static MLibrary[] HHMs = new MLibrary[10];
-        //AHM
-        //AHW
-        //HHM
-        //HHW
-        //SHM
-        //SHW
-        //WHM
-        //WHW
-
-
-
+         
+        #region Old
         public static readonly MLibrary
             
             Prguse = new MLibrary(Settings.DataPath + "Prguse"),
@@ -193,9 +187,11 @@ namespace Exine.ExineGraphics
                                           TransformMounts,
                                           TransformEffect,
                                           TransformWeaponEffect;
+        #endregion Old
 
         static Libraries()
         {
+            #region Old
             //Wiz/War/Tao
             InitLibrary(ref CArmours, Settings.CArmourPath, "00");
             InitLibrary(ref CHair, Settings.CHairPath, "00");
@@ -230,11 +226,263 @@ namespace Exine.ExineGraphics
             InitLibrary(ref TransformMounts, Settings.TransformMountsPath, "00");
             InitLibrary(ref TransformEffect, Settings.TransformEffectPath, "00");
             InitLibrary(ref TransformWeaponEffect, Settings.TransformWeaponEffectPath, "00");
+            #endregion Old
+            
+            #region Exine Human
+
+            ExineManHair[0] = new MLibrary(Settings.ExHairPath + "HHM_0000_불꽃머리_reidx");
+            ExineManHair[1] = new MLibrary(Settings.ExHairPath + "HHM_0001_말총머리_reidx");
+            ExineManHair[2] = new MLibrary(Settings.ExHairPath + "HHM_0002_바람머리_reidx");
+            ExineManHair[3] = new MLibrary(Settings.ExHairPath + "HHM_1000_대머리_reidx");
+
+            ExineWomanHair[0] = new MLibrary(Settings.ExHairPath + "HHW_0001_세일러문머리_reidx");
+            ExineWomanHair[1] = new MLibrary(Settings.ExHairPath + "HHW_0002_단발머리_reidx");
+            ExineWomanHair[2] = new MLibrary(Settings.ExHairPath + "HHW_0002_올림묶음머리_reidx");
+            ExineWomanHair[3] = new MLibrary(Settings.ExHairPath + "HHW_1000_대머리_reidx");
+
+            ExineManArmor[0] = new MLibrary(Settings.ExArmorPath + "AHM_0000_평상복_reidx");
+            ExineManArmor[1] = new MLibrary(Settings.ExArmorPath + "AHM_0001_퀼트아머_reidx");
+            ExineManArmor[2] = new MLibrary(Settings.ExArmorPath + "AHM_0002_레더아머_reidx");
+            ExineManArmor[3] = new MLibrary(Settings.ExArmorPath + "AHM_0003_스케일아머_reidx");
+            ExineManArmor[4] = new MLibrary(Settings.ExArmorPath + "AHM_0004_브리간딘_reidx");
+            ExineManArmor[5] = new MLibrary(Settings.ExArmorPath + "AHM_0005_브레스트플레이트_reidx");
+            ExineManArmor[6] = new MLibrary(Settings.ExArmorPath + "AHM_0006_하프플레이트_reidx");
+            ExineManArmor[7] = new MLibrary(Settings.ExArmorPath + "AHM_0007_체인메일_reidx");
+            ExineManArmor[8] = new MLibrary(Settings.ExArmorPath + "AHM_0008_오베르_reidx");
+            ExineManArmor[9] = new MLibrary(Settings.ExArmorPath + "AHM_0009_본아머_reidx");
+            ExineManArmor[10] = new MLibrary(Settings.ExArmorPath + "AHM_0010_플레이트메일_reidx");
+            ExineManArmor[11] = new MLibrary(Settings.ExArmorPath + "AHM_0011_컴포지트아머_reidx");
+            ExineManArmor[12] = new MLibrary(Settings.ExArmorPath + "AHM_0012_플레이트아머_reidx");
+            ExineManArmor[13] = new MLibrary(Settings.ExArmorPath + "AHM_0013_풀플레이트메일_reidx");
+            ExineManArmor[14] = new MLibrary(Settings.ExArmorPath + "AHM_0014_플루티드아머_reidx");
+            ExineManArmor[15] = new MLibrary(Settings.ExArmorPath + "AHM_0016_로브_reidx");
+            ExineManArmor[16] = new MLibrary(Settings.ExArmorPath + "AHM_0017_수탄_reidx");
+            ExineManArmor[17] = new MLibrary(Settings.ExArmorPath + "AHM_0018_실크로브_reidx");
+            ExineManArmor[18] = new MLibrary(Settings.ExArmorPath + "AHM_0019_가운_reidx");
+            ExineManArmor[19] = new MLibrary(Settings.ExArmorPath + "AHM_0020_브로케이드_reidx");
+            ExineManArmor[20] = new MLibrary(Settings.ExArmorPath + "AHM_0021_달마티카_reidx");
+            ExineManArmor[21] = new MLibrary(Settings.ExArmorPath + "AHM_0022_팔리움_reidx");
+            ExineManArmor[22] = new MLibrary(Settings.ExArmorPath + "AHM_1001_이벤트복01_reidx");
+
+            ExineWomanArmor[0] = new MLibrary(Settings.ExArmorPath + "AHW_0000_평상복_reidx");
+            ExineWomanArmor[1] = new MLibrary(Settings.ExArmorPath + "AHW_0001_퀼트아머_reidx");
+            ExineWomanArmor[2] = new MLibrary(Settings.ExArmorPath + "AHW_0002_레더아머_reidx");
+            ExineWomanArmor[3] = new MLibrary(Settings.ExArmorPath + "AHW_0003_스케일아머_reidx");
+            ExineWomanArmor[4] = new MLibrary(Settings.ExArmorPath + "AHW_0004_브리간딘_reidx");
+            ExineWomanArmor[5] = new MLibrary(Settings.ExArmorPath + "AHW_0005_브레스트플레이트_reidx");
+            ExineWomanArmor[6] = new MLibrary(Settings.ExArmorPath + "AHW_0006_하프플레이트_reidx");
+            ExineWomanArmor[7] = new MLibrary(Settings.ExArmorPath + "AHW_0007_체인메일_reidx");
+            ExineWomanArmor[8] = new MLibrary(Settings.ExArmorPath + "AHW_0008_오베르_reidx");
+            ExineWomanArmor[9] = new MLibrary(Settings.ExArmorPath + "AHW_0009_본아머_reidx");
+            ExineWomanArmor[10] = new MLibrary(Settings.ExArmorPath + "AHW_0010_플레이트메일_reidx");
+            ExineWomanArmor[11] = new MLibrary(Settings.ExArmorPath + "AHW_0011_컴포지트아머_reidx");
+            ExineWomanArmor[12] = new MLibrary(Settings.ExArmorPath + "AHW_0012_플레이트아머_reidx");
+            ExineWomanArmor[13] = new MLibrary(Settings.ExArmorPath + "AHW_0013_풀플레이트메일_reidx");
+            ExineWomanArmor[14] = new MLibrary(Settings.ExArmorPath + "AHW_0014_플루티드아머_reidx");
+            ExineWomanArmor[15] = new MLibrary(Settings.ExArmorPath + "AHW_0016_로브_reidx");
+            ExineWomanArmor[16] = new MLibrary(Settings.ExArmorPath + "AHW_0017_수탄_reidx");
+            ExineWomanArmor[17] = new MLibrary(Settings.ExArmorPath + "AHW_0018_실크로브_reidx");
+            ExineWomanArmor[18] = new MLibrary(Settings.ExArmorPath + "AHW_0019_가운_reidx");
+            ExineWomanArmor[19] = new MLibrary(Settings.ExArmorPath + "AHW_0020_브로케이드_reidx");
+            ExineWomanArmor[20] = new MLibrary(Settings.ExArmorPath + "AHW_0021_달마티카_reidx");
+            ExineWomanArmor[21] = new MLibrary(Settings.ExArmorPath + "AHW_0022_팔리움_reidx");
+            ExineWomanArmor[22] = new MLibrary(Settings.ExArmorPath + "AHW_1001_이벤트복01_reidx");
+             
+            ExineManSheild[0] = new MLibrary(Settings.ExSheildPath + "SHM_0001_(방)_나무방패_reidx");
+            ExineManSheild[1] = new MLibrary(Settings.ExSheildPath + "SHM_0002_(방)_버클러_reidx");
+            ExineManSheild[2] = new MLibrary(Settings.ExSheildPath + "SHM_0003_(방)_아스피스_reidx");
+            ExineManSheild[3] = new MLibrary(Settings.ExSheildPath + "SHM_0004_(방)_호플론_reidx");
+            ExineManSheild[4] = new MLibrary(Settings.ExSheildPath + "SHM_0005_(방)_본쉴드_reidx");
+            ExineManSheild[5] = new MLibrary(Settings.ExSheildPath + "SHM_0006_(방)_청동카이트_reidx");
+            ExineManSheild[6] = new MLibrary(Settings.ExSheildPath + "SHM_0007_(방)_카이트쉴드_reidx");
+            ExineManSheild[7] = new MLibrary(Settings.ExSheildPath + "SHM_0008_(방)_브론즈파비스_reidx");
+            ExineManSheild[8] = new MLibrary(Settings.ExSheildPath + "SHM_0009_(방)_파비스_reidx");
+            ExineManSheild[9] = new MLibrary(Settings.ExSheildPath + "SHM_0010_(방)_엘다라크_reidx");
+            ExineManSheild[10] = new MLibrary(Settings.ExSheildPath + "SHM_0011_(방)_스큐톰_reidx");
+            ExineManSheild[11] = new MLibrary(Settings.ExSheildPath + "SHM_0012_(방)_둥근풍선_reidx");
+            ExineManSheild[12] = new MLibrary(Settings.ExSheildPath + "SHM_0013_(방)_별풍선_reidx");
+            ExineManSheild[13] = new MLibrary(Settings.ExSheildPath + "SHM_0014_(방)_하트풍선_reidx");
+
+            ExineWomanSheild[0] = new MLibrary(Settings.ExSheildPath + "SHW_0001_(방)_나무방패_reidx");
+            ExineWomanSheild[1] = new MLibrary(Settings.ExSheildPath + "SHW_0002_(방)_버클러_reidx");
+            ExineWomanSheild[2] = new MLibrary(Settings.ExSheildPath + "SHW_0003_(방)_아스피스_reidx");
+            ExineWomanSheild[3] = new MLibrary(Settings.ExSheildPath + "SHW_0004_(방)_호플론_reidx");
+            ExineWomanSheild[4] = new MLibrary(Settings.ExSheildPath + "SHW_0005_(방)_본쉴드_reidx");
+            ExineWomanSheild[5] = new MLibrary(Settings.ExSheildPath + "SHW_0006_(방)_청동카이트_reidx");
+            ExineWomanSheild[6] = new MLibrary(Settings.ExSheildPath + "SHW_0007_(방)_카이트쉴드_reidx");
+            ExineWomanSheild[7] = new MLibrary(Settings.ExSheildPath + "SHW_0008_(방)_브론즈파비스_reidx");
+            ExineWomanSheild[8] = new MLibrary(Settings.ExSheildPath + "SHW_0009_(방)_파비스_reidx");
+            ExineWomanSheild[9] = new MLibrary(Settings.ExSheildPath + "SHW_0010_(방)_엘다라크_reidx");
+            ExineWomanSheild[10] = new MLibrary(Settings.ExSheildPath + "SHW_0011_(방)_스큐톰_reidx");
+            ExineWomanSheild[11] = new MLibrary(Settings.ExSheildPath + "SHW_0012_(방)_둥근풍선_reidx");
+            ExineWomanSheild[12] = new MLibrary(Settings.ExSheildPath + "SHW_0013_(방)_별풍선_reidx");
+            ExineWomanSheild[13] = new MLibrary(Settings.ExSheildPath + "SHW_0014_(방)_하트풍선_reidx");
 
 
+            ExineManOneWeapon[0] = new MLibrary(Settings.ExOneHandPath + "WHM_1001_(원)_숏소드_reidx");
+            ExineManOneWeapon[1] = new MLibrary(Settings.ExOneHandPath + "WHM_1002_(원)_스몰소드_reidx");
+            ExineManOneWeapon[2] = new MLibrary(Settings.ExOneHandPath + "WHM_1003_(원)_글래스소드_reidx");
+            ExineManOneWeapon[3] = new MLibrary(Settings.ExOneHandPath + "WHM_1004_(원)_롱소드_reidx");
+            ExineManOneWeapon[4] = new MLibrary(Settings.ExOneHandPath + "WHM_1005_(원)_샴쉬르_reidx");
+            ExineManOneWeapon[5] = new MLibrary(Settings.ExOneHandPath + "WHM_1006_(원)_세이버_reidx");
+            ExineManOneWeapon[6] = new MLibrary(Settings.ExOneHandPath + "WHM_1007_(원)_바스타드소드_reidx");
+            ExineManOneWeapon[7] = new MLibrary(Settings.ExOneHandPath + "WHM_1008_(원)_레이피어_reidx");
+            ExineManOneWeapon[8] = new MLibrary(Settings.ExOneHandPath + "WHM_1009_(원)_글라디우스_reidx");
+            ExineManOneWeapon[9] = new MLibrary(Settings.ExOneHandPath + "WHM_1010_(원)_다마스커스_reidx");
+            ExineManOneWeapon[10] = new MLibrary(Settings.ExOneHandPath + "WHM_1011_(원)_파타_reidx");
+            ExineManOneWeapon[11] = new MLibrary(Settings.ExOneHandPath + "WHM_1012_(원)_대거_reidx");
+            ExineManOneWeapon[12] = new MLibrary(Settings.ExOneHandPath + "WHM_1013_(원)_발럭나이프_reidx");
+            ExineManOneWeapon[13] = new MLibrary(Settings.ExOneHandPath + "WHM_1014_(원)_배즐러드_reidx");
+            ExineManOneWeapon[14] = new MLibrary(Settings.ExOneHandPath + "WHM_1015_(원)_더크_reidx");
+            ExineManOneWeapon[15] = new MLibrary(Settings.ExOneHandPath + "WHM_1016_(원)_헌팅나이프_reidx");
+            ExineManOneWeapon[16] = new MLibrary(Settings.ExOneHandPath + "WHM_1017_(원)_크리스_reidx");
+            ExineManOneWeapon[17] = new MLibrary(Settings.ExOneHandPath + "WHM_1018_(원)_쿠크리_reidx");
+            ExineManOneWeapon[18] = new MLibrary(Settings.ExOneHandPath + "WHM_1019_(원)_맹고슈_reidx");
+            ExineManOneWeapon[19] = new MLibrary(Settings.ExOneHandPath + "WHM_1020_(원)_스틸레토_reidx");
+            ExineManOneWeapon[20] = new MLibrary(Settings.ExOneHandPath + "WHM_1022_(원)_다트_reidx");
+            ExineManOneWeapon[21] = new MLibrary(Settings.ExOneHandPath + "WHM_1023_(원)_아자가이_reidx");
+            ExineManOneWeapon[22] = new MLibrary(Settings.ExOneHandPath + "WHM_1024_(원)_챠크람_reidx");
+            ExineManOneWeapon[23] = new MLibrary(Settings.ExOneHandPath + "WHM_1027_(원)_완드_reidx");
+            ExineManOneWeapon[24] = new MLibrary(Settings.ExOneHandPath + "WHM_1028_(원)_바통_reidx");
+            ExineManOneWeapon[25] = new MLibrary(Settings.ExOneHandPath + "WHM_1029_(원)_숏스태프_reidx");
+            ExineManOneWeapon[26] = new MLibrary(Settings.ExOneHandPath + "WHM_1030_(원)_본스태프_reidx");
+            ExineManOneWeapon[27] = new MLibrary(Settings.ExOneHandPath + "WHM_1031_(원)_클럽_reidx");
+            ExineManOneWeapon[28] = new MLibrary(Settings.ExOneHandPath + "WHM_1032_(원)_핸드액스_reidx");
+            ExineManOneWeapon[29] = new MLibrary(Settings.ExOneHandPath + "WHM_1033_(원)_액스_reidx");
+            ExineManOneWeapon[30] = new MLibrary(Settings.ExOneHandPath + "WHM_1034_(원)_태극기_reidx");
 
 
-            #region Maplibs
+            ExineWomanOneWeapon[0] = new MLibrary(Settings.ExOneHandPath + "WHW_1001_(원)_숏소드_reidx");
+            ExineWomanOneWeapon[1] = new MLibrary(Settings.ExOneHandPath + "WHW_1002_(원)_스몰소드_reidx");
+            ExineWomanOneWeapon[2] = new MLibrary(Settings.ExOneHandPath + "WHW_1003_(원)_글래스소드_reidx");
+            ExineWomanOneWeapon[3] = new MLibrary(Settings.ExOneHandPath + "WHW_1004_(원)_롱소드_reidx");
+            ExineWomanOneWeapon[4] = new MLibrary(Settings.ExOneHandPath + "WHW_1005_(원)_샴쉬르_reidx");
+            ExineWomanOneWeapon[5] = new MLibrary(Settings.ExOneHandPath + "WHW_1006_(원)_세이버_reidx");
+            ExineWomanOneWeapon[6] = new MLibrary(Settings.ExOneHandPath + "WHW_1007_(원)_바스타드소드_reidx");
+            ExineWomanOneWeapon[7] = new MLibrary(Settings.ExOneHandPath + "WHW_1008_(원)_레이피어_reidx");
+            ExineWomanOneWeapon[8] = new MLibrary(Settings.ExOneHandPath + "WHW_1009_(원)_글라디우스_reidx");
+            ExineWomanOneWeapon[9] = new MLibrary(Settings.ExOneHandPath + "WHW_1010_(원)_다마스커스_reidx");
+            ExineWomanOneWeapon[10] = new MLibrary(Settings.ExOneHandPath + "WHW_1011_(원)_파타_reidx");
+            ExineWomanOneWeapon[11] = new MLibrary(Settings.ExOneHandPath + "WHW_1012_(원)_대거_reidx");
+            ExineWomanOneWeapon[12] = new MLibrary(Settings.ExOneHandPath + "WHW_1013_(원)_발럭나이프_reidx");
+            ExineWomanOneWeapon[13] = new MLibrary(Settings.ExOneHandPath + "WHW_1014_(원)_배즐러드_reidx");
+            ExineWomanOneWeapon[14] = new MLibrary(Settings.ExOneHandPath + "WHW_1015_(원)_더크_reidx");
+            ExineWomanOneWeapon[15] = new MLibrary(Settings.ExOneHandPath + "WHW_1016_(원)_헌팅나이프_reidx");
+            ExineWomanOneWeapon[16] = new MLibrary(Settings.ExOneHandPath + "WHW_1017_(원)_크리스_reidx");
+            ExineWomanOneWeapon[17] = new MLibrary(Settings.ExOneHandPath + "WHW_1018_(원)_쿠크리_reidx");
+            ExineWomanOneWeapon[18] = new MLibrary(Settings.ExOneHandPath + "WHW_1019_(원)_맹고슈_reidx");
+            ExineWomanOneWeapon[19] = new MLibrary(Settings.ExOneHandPath + "WHW_1020_(원)_스틸레토_reidx");
+            ExineWomanOneWeapon[20] = new MLibrary(Settings.ExOneHandPath + "WHW_1022_(원)_다트_reidx");
+            ExineWomanOneWeapon[21] = new MLibrary(Settings.ExOneHandPath + "WHW_1023_(원)_아자가이_reidx");
+            ExineWomanOneWeapon[22] = new MLibrary(Settings.ExOneHandPath + "WHW_1024_(원)_챠크람_reidx");
+            ExineWomanOneWeapon[23] = new MLibrary(Settings.ExOneHandPath + "WHW_1027_(원)_완드_reidx");
+            ExineWomanOneWeapon[24] = new MLibrary(Settings.ExOneHandPath + "WHW_1028_(원)_바통_reidx");
+            ExineWomanOneWeapon[25] = new MLibrary(Settings.ExOneHandPath + "WHW_1029_(원)_숏스태프_reidx");
+            ExineWomanOneWeapon[26] = new MLibrary(Settings.ExOneHandPath + "WHW_1030_(원)_본스태프_reidx");
+            ExineWomanOneWeapon[27] = new MLibrary(Settings.ExOneHandPath + "WHW_1031_(원)_클럽_reidx");
+            ExineWomanOneWeapon[28] = new MLibrary(Settings.ExOneHandPath + "WHW_1032_(원)_핸드액스_reidx");
+            ExineWomanOneWeapon[29] = new MLibrary(Settings.ExOneHandPath + "WHW_1033_(원)_액스_reidx");
+            ExineWomanOneWeapon[30] = new MLibrary(Settings.ExOneHandPath + "WHW_1034_(원)_태극기_reidx");
+
+            ExineManTwoWeapon[0] = new MLibrary(Settings.ExTwoHandPath + "WHM_2001_(투)_투핸드소드_reidx");
+            ExineManTwoWeapon[1] = new MLibrary(Settings.ExTwoHandPath + "WHM_2002_(투)_크루세이더_reidx");
+            ExineManTwoWeapon[2] = new MLibrary(Settings.ExTwoHandPath + "WHM_2003_(투)_클레이모어_reidx");
+            ExineManTwoWeapon[3] = new MLibrary(Settings.ExTwoHandPath + "WHM_2004_(투)_플람베르그_reidx");
+            ExineManTwoWeapon[4] = new MLibrary(Settings.ExTwoHandPath + "WHM_2005_(투)_터크_reidx");
+            ExineManTwoWeapon[5] = new MLibrary(Settings.ExTwoHandPath + "WHM_2007_(투)_숏스피어_reidx");
+            ExineManTwoWeapon[6] = new MLibrary(Settings.ExTwoHandPath + "WHM_2008_(투)_롱스피어_reidx");
+            ExineManTwoWeapon[7] = new MLibrary(Settings.ExTwoHandPath + "WHM_2009_(투)_트라이던트_reidx");
+            ExineManTwoWeapon[8] = new MLibrary(Settings.ExTwoHandPath + "WHM_2010_(투)_아스타_reidx");
+            ExineManTwoWeapon[9] = new MLibrary(Settings.ExTwoHandPath + "WHM_2011_(투)_파이크_reidx");
+            ExineManTwoWeapon[10] = new MLibrary(Settings.ExTwoHandPath + "WHM_2012_(투)_올파이크_reidx");
+            ExineManTwoWeapon[11] = new MLibrary(Settings.ExTwoHandPath + "WHM_2013_(투)_할베르트_reidx");
+            ExineManTwoWeapon[12] = new MLibrary(Settings.ExTwoHandPath + "WHM_2014_(투)_부주_reidx");
+            ExineManTwoWeapon[13] = new MLibrary(Settings.ExTwoHandPath + "WHM_2015_(투)_글레이브_reidx");
+            ExineManTwoWeapon[14] = new MLibrary(Settings.ExTwoHandPath + "WHM_2016_(투)_사이드_reidx");
+            ExineManTwoWeapon[15] = new MLibrary(Settings.ExTwoHandPath + "WHM_2017_(투)_귀자르므_reidx");
+            ExineManTwoWeapon[16] = new MLibrary(Settings.ExTwoHandPath + "WHM_2018_(투)_버디슈_reidx");
+            ExineManTwoWeapon[17] = new MLibrary(Settings.ExTwoHandPath + "WHM_2022_(투)_지팡이_reidx");
+            ExineManTwoWeapon[18] = new MLibrary(Settings.ExTwoHandPath + "WHM_2023_(투)_클로저_reidx");
+            ExineManTwoWeapon[19] = new MLibrary(Settings.ExTwoHandPath + "WHM_2024_(투)_스톤완드_reidx");
+            ExineManTwoWeapon[20] = new MLibrary(Settings.ExTwoHandPath + "WHM_2025_(투)_롱스태프_reidx");
+            ExineManTwoWeapon[21] = new MLibrary(Settings.ExTwoHandPath + "WHM_2026_(투)_오브_reidx");
+            ExineManTwoWeapon[22] = new MLibrary(Settings.ExTwoHandPath + "WHM_2027_(투)_스파이크클럽_reidx");
+            ExineManTwoWeapon[23] = new MLibrary(Settings.ExTwoHandPath + "WHM_2028_(투)_구르즈_reidx");
+            ExineManTwoWeapon[24] = new MLibrary(Settings.ExTwoHandPath + "WHM_2029_(투)_메이스_reidx");
+            ExineManTwoWeapon[25] = new MLibrary(Settings.ExTwoHandPath + "WHM_2030_(투)_모닝스타_reidx");
+            ExineManTwoWeapon[26] = new MLibrary(Settings.ExTwoHandPath + "WHM_2031_(투)_브로드액스_reidx");
+            ExineManTwoWeapon[27] = new MLibrary(Settings.ExTwoHandPath + "WHM_2032_(투)_더블액스_reidx");
+            ExineManTwoWeapon[28] = new MLibrary(Settings.ExTwoHandPath + "WHM_2033_(투)_자이언트액스_reidx");
+            ExineManTwoWeapon[29] = new MLibrary(Settings.ExTwoHandPath + "WHM_2035_(투)_해머_reidx");
+            ExineManTwoWeapon[30] = new MLibrary(Settings.ExTwoHandPath + "WHM_2036_(투)_워해머_reidx");
+            ExineManTwoWeapon[31] = new MLibrary(Settings.ExTwoHandPath + "WHM_2037_(투)_워피크_reidx");
+            ExineManTwoWeapon[32] = new MLibrary(Settings.ExTwoHandPath + "WHM_2038_(투)_말렛_reidx");
+            ExineManTwoWeapon[33] = new MLibrary(Settings.ExTwoHandPath + "WHM_2039_(투)_장미_reidx");
+
+            ExineWomanTwoWeapon[0] = new MLibrary(Settings.ExTwoHandPath + "WHW_2001_(투)_투핸드소드_reidx");
+            ExineWomanTwoWeapon[1] = new MLibrary(Settings.ExTwoHandPath + "WHW_2002_(투)_크루세이더_reidx");
+            ExineWomanTwoWeapon[2] = new MLibrary(Settings.ExTwoHandPath + "WHW_2003_(투)_클레이모어_reidx");
+            ExineWomanTwoWeapon[3] = new MLibrary(Settings.ExTwoHandPath + "WHW_2004_(투)_플람베르그_reidx");
+            ExineWomanTwoWeapon[4] = new MLibrary(Settings.ExTwoHandPath + "WHW_2005_(투)_터크_reidx");
+            ExineWomanTwoWeapon[5] = new MLibrary(Settings.ExTwoHandPath + "WHW_2007_(투)_숏스피어_reidx");
+            ExineWomanTwoWeapon[6] = new MLibrary(Settings.ExTwoHandPath + "WHW_2008_(투)_롱스피어_reidx");
+            ExineWomanTwoWeapon[7] = new MLibrary(Settings.ExTwoHandPath + "WHW_2009_(투)_트라이던트_reidx");
+            ExineWomanTwoWeapon[8] = new MLibrary(Settings.ExTwoHandPath + "WHW_2010_(투)_아스타_reidx");
+            ExineWomanTwoWeapon[9] = new MLibrary(Settings.ExTwoHandPath + "WHW_2011_(투)_파이크_reidx");
+            ExineWomanTwoWeapon[10] = new MLibrary(Settings.ExTwoHandPath + "WHW_2012_(투)_올파이크_reidx");
+            ExineWomanTwoWeapon[11] = new MLibrary(Settings.ExTwoHandPath + "WHW_2013_(투)_할베르트_reidx");
+            ExineWomanTwoWeapon[12] = new MLibrary(Settings.ExTwoHandPath + "WHW_2014_(투)_부주_reidx");
+            ExineWomanTwoWeapon[13] = new MLibrary(Settings.ExTwoHandPath + "WHW_2015_(투)_글레이브_reidx");
+            ExineWomanTwoWeapon[14] = new MLibrary(Settings.ExTwoHandPath + "WHW_2016_(투)_사이드_reidx");
+            ExineWomanTwoWeapon[15] = new MLibrary(Settings.ExTwoHandPath + "WHW_2017_(투)_귀자르므_reidx");
+            ExineWomanTwoWeapon[16] = new MLibrary(Settings.ExTwoHandPath + "WHW_2018_(투)_버디슈_reidx");
+            ExineWomanTwoWeapon[17] = new MLibrary(Settings.ExTwoHandPath + "WHW_2022_(투)_지팡이_reidx");
+            ExineWomanTwoWeapon[18] = new MLibrary(Settings.ExTwoHandPath + "WHW_2023_(투)_클로저_reidx");
+            ExineWomanTwoWeapon[19] = new MLibrary(Settings.ExTwoHandPath + "WHW_2024_(투)_스톤완드_reidx");
+            ExineWomanTwoWeapon[20] = new MLibrary(Settings.ExTwoHandPath + "WHW_2025_(투)_롱스태프_reidx");
+            ExineWomanTwoWeapon[21] = new MLibrary(Settings.ExTwoHandPath + "WHW_2026_(투)_오브_reidx");
+            ExineWomanTwoWeapon[22] = new MLibrary(Settings.ExTwoHandPath + "WHW_2027_(투)_스파이크클럽_reidx");
+            ExineWomanTwoWeapon[23] = new MLibrary(Settings.ExTwoHandPath + "WHW_2028_(투)_구르즈_reidx");
+            ExineWomanTwoWeapon[24] = new MLibrary(Settings.ExTwoHandPath + "WHW_2029_(투)_메이스_reidx");
+            ExineWomanTwoWeapon[25] = new MLibrary(Settings.ExTwoHandPath + "WHW_2030_(투)_모닝스타_reidx");
+            ExineWomanTwoWeapon[26] = new MLibrary(Settings.ExTwoHandPath + "WHW_2031_(투)_브로드액스_reidx");
+            ExineWomanTwoWeapon[27] = new MLibrary(Settings.ExTwoHandPath + "WHW_2032_(투)_더블액스_reidx");
+            ExineWomanTwoWeapon[28] = new MLibrary(Settings.ExTwoHandPath + "WHW_2033_(투)_자이언트액스_reidx");
+            ExineWomanTwoWeapon[29] = new MLibrary(Settings.ExTwoHandPath + "WHW_2035_(투)_해머_reidx");
+            ExineWomanTwoWeapon[30] = new MLibrary(Settings.ExTwoHandPath + "WHW_2036_(투)_워해머_reidx");
+            ExineWomanTwoWeapon[31] = new MLibrary(Settings.ExTwoHandPath + "WHW_2037_(투)_워피크_reidx");
+            ExineWomanTwoWeapon[32] = new MLibrary(Settings.ExTwoHandPath + "WHW_2038_(투)_말렛_reidx");
+            ExineWomanTwoWeapon[33] = new MLibrary(Settings.ExTwoHandPath + "WHW_2039_(투)_장미_reidx");
+
+            ExineManBowWeapon[0] = new MLibrary(Settings.ExBowPath + "WHM_3001_(활)_숏보우_reidx");
+            ExineManBowWeapon[1] = new MLibrary(Settings.ExBowPath + "WHM_3002_(활)_보우_reidx");
+            ExineManBowWeapon[2] = new MLibrary(Settings.ExBowPath + "WHM_3003_(활)_가스트라페테_reidx");
+            ExineManBowWeapon[3] = new MLibrary(Settings.ExBowPath + "WHM_3004_(활)_롱보우_reidx");
+            ExineManBowWeapon[4] = new MLibrary(Settings.ExBowPath + "WHM_3005_(활)_헌터보우_reidx");
+            ExineManBowWeapon[5] = new MLibrary(Settings.ExBowPath + "WHM_3006_(활)_헤비헌터보우_reidx");
+            ExineManBowWeapon[6] = new MLibrary(Settings.ExBowPath + "WHM_3007_(활)_크로스보우_reidx");
+            ExineManBowWeapon[7] = new MLibrary(Settings.ExBowPath + "WHM_3008_(활)_더블보우_reidx");
+            ExineManBowWeapon[8] = new MLibrary(Settings.ExBowPath + "WHM_3009_(활)_컴포지트보우_reidx");
+            ExineManBowWeapon[9] = new MLibrary(Settings.ExBowPath + "WHM_3010_(활)_아발리스트_reidx");
+            ExineManBowWeapon[10] = new MLibrary(Settings.ExBowPath + "WHM_3011_(활)_배틀보우_reidx");
+            ExineManBowWeapon[11] = new MLibrary(Settings.ExBowPath + "WHM_3012_(활)_나이트보우_reidx");
+
+            ExineWomanBowWeapon[0] = new MLibrary(Settings.ExBowPath + "WHW_3001_(활)_숏보우_reidx");
+            ExineWomanBowWeapon[1] = new MLibrary(Settings.ExBowPath + "WHW_3002_(활)_보우_reidx");
+            ExineWomanBowWeapon[2] = new MLibrary(Settings.ExBowPath + "WHW_3003_(활)_가스트라페테_reidx");
+            ExineWomanBowWeapon[3] = new MLibrary(Settings.ExBowPath + "WHW_3004_(활)_롱보우_reidx");
+            ExineWomanBowWeapon[4] = new MLibrary(Settings.ExBowPath + "WHW_3005_(활)_헌터보우_reidx");
+            ExineWomanBowWeapon[5] = new MLibrary(Settings.ExBowPath + "WHW_3006_(활)_헤비헌터보우_reidx");
+            ExineWomanBowWeapon[6] = new MLibrary(Settings.ExBowPath + "WHW_3007_(활)_크로스보우_reidx");
+            ExineWomanBowWeapon[7] = new MLibrary(Settings.ExBowPath + "WHW_3008_(활)_더블보우_reidx");
+            ExineWomanBowWeapon[8] = new MLibrary(Settings.ExBowPath + "WHW_3009_(활)_컴포지트보우_reidx");
+            ExineWomanBowWeapon[9] = new MLibrary(Settings.ExBowPath + "WHW_3010_(활)_아발리스트_reidx");
+            ExineWomanBowWeapon[10] = new MLibrary(Settings.ExBowPath + "WHW_3011_(활)_배틀보우_reidx");
+            ExineWomanBowWeapon[11] = new MLibrary(Settings.ExBowPath + "WHW_3012_(활)_나이트보우_reidx");
+
+            #endregion  Exine Human
+             
+            #region Exine Maplibs
 
             for (int i = 0; i < 10; i++)
             {
@@ -256,7 +504,7 @@ namespace Exine.ExineGraphics
                 }
             }
 
-            #endregion
+            #endregion Exine Maplibs
 
             LoadLibraries();
 
