@@ -201,6 +201,7 @@ namespace Exine.ExineObjects
         private void RefreshEquipmentStats()
         {
             Weapon = -1;
+            Shield = -1;
             WeaponEffect = 0;
             Armour = 0;
             WingEffect = 0;

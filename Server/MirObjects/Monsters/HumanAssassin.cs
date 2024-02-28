@@ -331,6 +331,7 @@ namespace Server.ExineObjects.Monsters
         {
             PlayerObject master = null;
             short weapon = -1;
+            short shield = -1; 
             short armour = 0;
             byte wing = 0;
             if (Master != null && Master is PlayerObject) 
@@ -359,6 +360,7 @@ namespace Server.ExineObjects.Monsters
                 Direction = Direction,
                 Hair = master != null ? master.Hair : (byte)0,
                 Weapon = weapon,
+                Shield = shield,//k333123 add
                 Armour = armour,
                 Light = master != null ? master.Light : Light,
                 Poison = CurrentPoison,

@@ -180,7 +180,7 @@ namespace Server.ExineObjects
         protected bool CheckCellTime = true;
 
         public short TransformType;
-        public short Looks_Armour = 0, Looks_Weapon = -1, Looks_WeaponEffect = 0;
+        public short Looks_Armour = 0, Looks_Weapon = -1, Looks_WeaponEffect = 0, Looks_Shield=-1;
         public byte Looks_Wings = 0;
 
         public int CurrentHandWeight,

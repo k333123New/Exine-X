@@ -1202,6 +1202,7 @@ namespace Server.ExineObjects
                 Hair = Hair,
                 Weapon = Looks_Weapon,
                 WeaponEffect = Looks_WeaponEffect,
+                Shield = Looks_Shield,//k333123 add
                 Armour = Looks_Armour,
                 Light = Light,
                 Poison = CurrentPoison,

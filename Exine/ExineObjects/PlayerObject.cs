@@ -7,6 +7,7 @@ using S = ServerPackets;
 using C = ClientPackets;
 using Exine.ExineScenes.Dialogs;
 using System.Reflection;
+using System.Drawing;
 
 namespace Exine.ExineObjects
 {
@@ -22,6 +23,7 @@ namespace Exine.ExineObjects
             get { return !Dead; }
         }
 
+
         public ExineGender Gender;
         public ExineClass Class;
         public ExineStyle ExStyle;//add k333123
@@ -32,8 +34,8 @@ namespace Exine.ExineObjects
         public byte Hair;
         public ushort Level;
 
-        public MLibrary WeaponLibrary1, WeaponEffectLibrary1, WeaponLibrary2, HairLibrary, WingLibrary, MountLibrary;
-        public int Armour, Weapon, WeaponEffect, ArmourOffSet, HairOffSet, WeaponOffSet, WingOffset, MountOffset;
+        public MLibrary WeaponLibrary1, WeaponEffectLibrary1, WeaponLibrary2, HairLibrary, WingLibrary, MountLibrary, ShieldLibrary; //k333123 add shieldLibrary
+        public int Armour, Weapon, WeaponEffect, ArmourOffSet, HairOffSet, WeaponOffSet, WingOffset, MountOffset, Shield; //k333123 add Shield
 
         public int DieSound, FlinchSound, AttackSound;
 
@@ -145,7 +147,10 @@ namespace Exine.ExineObjects
 
             Weapon = info.Weapon;
 			WeaponEffect = info.WeaponEffect;
-			Armour = info.Armour;
+
+            Shield = info.Shield;//k333123
+
+            Armour = info.Armour;
             Light = info.Light;
 
             Poison = info.Poison;
@@ -186,7 +191,9 @@ namespace Exine.ExineObjects
         {
             Weapon = info.Weapon;
 			WeaponEffect = info.WeaponEffect;
-			Armour = info.Armour;
+            Shield = info.Shield;
+
+            Armour = info.Armour;
             Light = info.Light;
             WingEffect = info.WingEffect;
 
@@ -330,9 +337,12 @@ namespace Exine.ExineObjects
                     case ExAction.ONEHAND_WALK_RIGHT: 
                         Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
                         break; 
-                    case ExAction.Running:
+                    case ExAction.ONEHAND_RUN_LEFT:
                     case ExAction.RunningBow:
-                        Frames.TryGetValue(ExAction.Running, out Frame);
+                        Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame);
+                        break;
+                    case ExAction.ONEHAND_RUN_RIGHT:
+                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
                         break;
                     case ExAction.Attack1:
                     case ExAction.Attack2:
@@ -358,6 +368,7 @@ namespace Exine.ExineObjects
 
                 HairLibrary = null;
                 WeaponLibrary1 = null;
+                ShieldLibrary = null;
                 WeaponLibrary2 = null;
 
                 if (TransformType == 19)
@@ -392,7 +403,7 @@ namespace Exine.ExineObjects
                             switch (CurrentAction)
                             {
                                 case ExAction.ONEHAND_WALK_LEFT:
-                                case ExAction.Running:
+                                case ExAction.ONEHAND_RUN_LEFT:
                                 case ExAction.AttackRange1:
                                 case ExAction.AttackRange2:
                                     altAnim = true;
@@ -483,7 +494,7 @@ namespace Exine.ExineObjects
                                 case ExAction.ONEHAND_STAND:
                                 case ExAction.Stance:
                                 case ExAction.ONEHAND_WALK_LEFT:
-                                case ExAction.Running:
+                                case ExAction.ONEHAND_RUN_LEFT:
                                 case ExAction.Die:
                                 case ExAction.Struck:
                                 case ExAction.Attack1:
@@ -572,22 +583,28 @@ namespace Exine.ExineObjects
                         //BodyLibrary = Armour < Libraries.CArmours.Length ? Libraries.CArmours[Armour] : Libraries.CArmours[0]; 
                         //HairLibrary = Hair < Libraries.CHair.Length ? Libraries.CHair[Hair] : null;
                         BodyLibrary = Armour < Libraries.ExineManArmor.Length ? Libraries.ExineManArmor[Armour] : Libraries.ExineManArmor[0];
-                        HairLibrary = Hair < Libraries.ExineManHair.Length ? Libraries.ExineManHair[Hair] : Libraries.ExineManHair[0];
+                        HairLibrary = Hair < Libraries.ExineManHair.Length ? Libraries.ExineManHair[Hair] : null;
                         #endregion
 
                         #region Weapons
 
                         if (Weapon >= 0)
 						{
-							WeaponLibrary1 = Weapon < Libraries.CWeapons.Length ? Libraries.CWeapons[Weapon] : null;
+                            //WeaponLibrary1 = Weapon < Libraries.CWeapons.Length ? Libraries.CWeapons[Weapon] : null;
+                            WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon] : null;
+                            ShieldLibrary = Shield <  Libraries.ExineManSheild.Length ? Libraries.ExineManSheild[Shield] : null;
+                            /*
 							if (WeaponEffect > 0)
 								WeaponEffectLibrary1 = WeaponEffect < Libraries.CWeaponEffect.Length ? Libraries.CWeaponEffect[WeaponEffect] : null;
 							else
 								WeaponEffectLibrary1 = null;
-						}
+                            */
+                            WeaponEffectLibrary1 = null;
+                        }
 						else
 						{
 							WeaponLibrary1 = null;
+                            ShieldLibrary = null;
 							WeaponEffectLibrary1 = null;
 							WeaponLibrary2 = null;
 						}
@@ -783,7 +800,8 @@ namespace Exine.ExineObjects
             {
                 case ExAction.ONEHAND_WALK_LEFT:
                 case ExAction.ONEHAND_WALK_RIGHT:
-                case ExAction.Running:
+                case ExAction.ONEHAND_RUN_LEFT:
+                case ExAction.ONEHAND_RUN_RIGHT:
                 case ExAction.MountWalking:
                 case ExAction.MountRunning:
                 case ExAction.Pushed:
@@ -801,8 +819,8 @@ namespace Exine.ExineObjects
 
                     var i = 0;
                     if (CurrentAction == ExAction.MountRunning) i = 3;
-                    else if (CurrentAction == ExAction.Running) 
-                        i = (Sprint && !Sneaking ? 3 : 2);
+                    else if (CurrentAction == ExAction.ONEHAND_RUN_LEFT)   i = (Sprint && !Sneaking ? 3 : 2);
+                    else if (CurrentAction == ExAction.ONEHAND_RUN_RIGHT) i = (Sprint && !Sneaking ? 3 : 2);
                     else i = 1;
 
                     if (CurrentAction == ExAction.Jump) i = -JumpDistance;
@@ -914,7 +932,8 @@ namespace Exine.ExineObjects
                 {
                     case ExAction.ONEHAND_WALK_LEFT:
                     case ExAction.ONEHAND_WALK_RIGHT:
-                    case ExAction.Running:
+                    case ExAction.ONEHAND_RUN_LEFT:
+                    case ExAction.ONEHAND_RUN_RIGHT:
                     case ExAction.MountWalking:
                     case ExAction.MountRunning:
                     case ExAction.Pushed:
@@ -952,7 +971,8 @@ namespace Exine.ExineObjects
                         case ExAction.ONEHAND_WALK_RIGHT:
                             CurrentAction = ExAction.MountWalking;
                             break;
-                        case ExAction.Running:
+                        case ExAction.ONEHAND_RUN_LEFT:
+                        case ExAction.ONEHAND_RUN_RIGHT:
                             CurrentAction = ExAction.MountRunning;
                             break;
                         case ExAction.Struck:
@@ -1011,7 +1031,8 @@ namespace Exine.ExineObjects
                         case ExAction.ONEHAND_WALK_RIGHT:
                             CurrentAction = ExAction.MountWalking;
                             break;
-                        case ExAction.Running:
+                        case ExAction.ONEHAND_RUN_LEFT:
+                        case ExAction.ONEHAND_RUN_RIGHT:
                             CurrentAction = ExAction.MountRunning;
                             break;
                         case ExAction.Struck:
@@ -1032,7 +1053,8 @@ namespace Exine.ExineObjects
                 {
                     case ExAction.ONEHAND_WALK_LEFT:
                     case ExAction.ONEHAND_WALK_RIGHT:
-                    case ExAction.Running:
+                    case ExAction.ONEHAND_RUN_LEFT:
+                    case ExAction.ONEHAND_RUN_RIGHT:
                     case ExAction.MountWalking:
                     case ExAction.MountRunning:
                     case ExAction.Pushed:
@@ -1041,7 +1063,8 @@ namespace Exine.ExineObjects
                     case ExAction.Sneek:
                         var steps = 0;
                         if (CurrentAction == ExAction.MountRunning) steps = 3;
-                        else if (CurrentAction == ExAction.Running) steps = (Sprint && !Sneaking ? 3 : 2);
+                        else if (CurrentAction == ExAction.ONEHAND_RUN_LEFT) steps = (Sprint && !Sneaking ? 3 : 2);
+                        else if (CurrentAction == ExAction.ONEHAND_RUN_RIGHT) steps = (Sprint && !Sneaking ? 3 : 2);
                         else steps = 1;
 
                         temp = Functions.PointMove(CurrentLocation, Direction, CurrentAction == ExAction.Pushed ? 0 : -steps);
@@ -1077,7 +1100,7 @@ namespace Exine.ExineObjects
                         break;
                     case ExAction.DashL:
                     case ExAction.DashR:
-                        Frames.TryGetValue(ExAction.Running, out Frame);
+                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
                         break;
                     case ExAction.DashAttack:
                         Frames.TryGetValue(ExAction.DashAttack, out Frame);
@@ -1121,7 +1144,7 @@ namespace Exine.ExineObjects
                         switch (Spell)
                         {
                             case Spell.ShoulderDash:
-                                Frames.TryGetValue(ExAction.Running, out Frame);
+                                Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
                                 CurrentAction = ExAction.DashL;
                                 Direction = olddirection;
                                 CurrentLocation = Functions.PointMove(CurrentLocation, Direction, 1);
@@ -1315,14 +1338,15 @@ namespace Exine.ExineObjects
                         case ExAction.ONEHAND_WALK_RIGHT:
                             Frames.TryGetValue(ExAction.WalkingBow, out Frame);
                             break;
-                        case ExAction.Running:
+                        case ExAction.ONEHAND_RUN_LEFT:
+                        case ExAction.ONEHAND_RUN_RIGHT:
                             Frames.TryGetValue(ExAction.RunningBow, out Frame);
                             break;
                     }
                 }
 
                 //Assassin sneekyness
-                if (Class == ExineClass.Assassin && Sneaking && (CurrentAction == ExAction.ONEHAND_WALK_LEFT|| CurrentAction == ExAction.ONEHAND_WALK_RIGHT || CurrentAction == ExAction.Running))
+                if (Class == ExineClass.Assassin && Sneaking && (CurrentAction == ExAction.ONEHAND_WALK_LEFT|| CurrentAction == ExAction.ONEHAND_WALK_RIGHT || CurrentAction == ExAction.ONEHAND_RUN_LEFT || CurrentAction == ExAction.ONEHAND_RUN_RIGHT))
                 {
                     Frames.TryGetValue(ExAction.Sneek, out Frame);
                 }
@@ -1365,7 +1389,8 @@ namespace Exine.ExineObjects
                             ExineMainScene.CanRun = true;
                             MapControl.NextAction = CMain.Time + 2500;
                             break;
-                        case ExAction.Running:
+                        case ExAction.ONEHAND_RUN_LEFT:
+                        case ExAction.ONEHAND_RUN_RIGHT:
                         case ExAction.MountRunning:
                             ExineMainScene.LastRunTime = CMain.Time;
                             Network.Enqueue(new C.Run { Direction = Direction });
@@ -1548,7 +1573,8 @@ namespace Exine.ExineObjects
                         break;
                     case ExAction.ONEHAND_WALK_LEFT:
                     case ExAction.ONEHAND_WALK_RIGHT:
-                    case ExAction.Running:
+                    case ExAction.ONEHAND_RUN_LEFT:
+                    case ExAction.ONEHAND_RUN_RIGHT:
                     case ExAction.MountWalking:
                     case ExAction.MountRunning:
                     case ExAction.Sneek:
@@ -2345,7 +2371,8 @@ namespace Exine.ExineObjects
             {
                 case ExAction.ONEHAND_WALK_LEFT:
                 case ExAction.ONEHAND_WALK_RIGHT:
-                case ExAction.Running:
+                case ExAction.ONEHAND_RUN_LEFT:
+                case ExAction.ONEHAND_RUN_RIGHT:
                 case ExAction.MountWalking:
                 case ExAction.MountRunning:
                 case ExAction.Sneek:
@@ -3722,7 +3749,8 @@ namespace Exine.ExineObjects
 
             if (RidingMount) moveSound = SoundList.MountWalkL;
 
-            if (CurrentAction == ExAction.Running) moveSound += 2;
+            if (CurrentAction == ExAction.ONEHAND_RUN_LEFT) moveSound += 2;
+            if (CurrentAction == ExAction.ONEHAND_RUN_RIGHT) moveSound += 2;
             if (FrameIndex == 4) moveSound++;
 
             SoundManager.PlaySound(moveSound);
@@ -5165,6 +5193,40 @@ namespace Exine.ExineObjects
             Draw();
             DXManager.SetBlend(false);
         }
+
+        public Color GetColorFromExColor(ExineColor exineColor)
+        {
+            Color[] tintColors = new Color[28];
+            tintColors[0] = Color.FromArgb(150, Color.Black);
+            tintColors[1] = Color.FromArgb(150, Color.Blue);
+            tintColors[2] = Color.FromArgb(150, Color.Brown);
+            tintColors[3] = Color.FromArgb(150, Color.Coral);
+            tintColors[4] = Color.FromArgb(150, Color.Crimson);
+            tintColors[5] = Color.FromArgb(150, Color.Cyan);
+            tintColors[6] = Color.FromArgb(150, Color.Fuchsia);
+            tintColors[7] = Color.FromArgb(150, Color.Gold);
+            tintColors[8] = Color.FromArgb(150, Color.Gray);
+            tintColors[9] = Color.FromArgb(150, Color.Green);
+            tintColors[10] = Color.FromArgb(150, Color.Indigo);
+            tintColors[11] = Color.FromArgb(150, Color.Khaki);
+            tintColors[12] = Color.FromArgb(150, Color.Lavender);
+            tintColors[13] = Color.FromArgb(150, Color.LawnGreen);
+            tintColors[14] = Color.FromArgb(150, Color.Lime);
+            tintColors[15] = Color.FromArgb(150, Color.Linen);
+            tintColors[16] = Color.FromArgb(150, Color.Magenta);
+            tintColors[17] = Color.FromArgb(150, Color.Maroon);
+            tintColors[18] = Color.FromArgb(150, Color.Navy);
+            tintColors[19] = Color.FromArgb(150, Color.Olive);
+            tintColors[20] = Color.FromArgb(150, Color.Orange);
+            tintColors[21] = Color.FromArgb(150, Color.Pink);
+            tintColors[22] = Color.FromArgb(150, Color.Purple);
+            tintColors[23] = Color.FromArgb(150, Color.Red);
+            tintColors[24] = Color.FromArgb(150, Color.Silver);
+            tintColors[25] = Color.FromArgb(150, Color.Violet);
+            tintColors[26] = Color.FromArgb(150, Color.White);
+            tintColors[27] = Color.FromArgb(150, Color.Yellow);
+            return tintColors[(int)exineColor];
+        }
         public void DrawBody()
         {
             //Gender == ExineGender.Male
@@ -5178,12 +5240,14 @@ namespace Exine.ExineObjects
             DXManager.SetGrayscale(oldGrayScale);
             //BodyLibrary.DrawTinted(DrawFrame + ArmourOffSet, DrawLocation, DrawColour, Color.DarkSeaGreen);
             */
+          
 
             bool oldGrayScale = DXManager.GrayScale;
             Color drawColour = ApplyDrawColour();
-
-            if (BodyLibrary != null)
-                BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
+            Color tintColor = GetColorFromExColor(ExColor);
+            
+            //if (BodyLibrary != null) BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
+            if (BodyLibrary != null) BodyLibrary.ExineDrawTinted(DrawFrame + ArmourOffSet, DrawLocation, drawColour,tintColor, true);
 
             DXManager.SetGrayscale(oldGrayScale);
 
@@ -5191,9 +5255,9 @@ namespace Exine.ExineObjects
         public void DrawHead()
         {
             //Gender == ExineGender.Male
-
-            if (HairLibrary != null)
-                HairLibrary.Draw(DrawFrame + HairOffSet, DrawLocation, DrawColour, true);
+            Color tintColor = GetColorFromExColor(ExColor);
+            //if (HairLibrary != null) HairLibrary.Draw(DrawFrame + HairOffSet, DrawLocation, DrawColour, true);
+            if (HairLibrary != null) HairLibrary.ExineDrawTinted(DrawFrame + HairOffSet, DrawLocation, DrawColour, tintColor, true);
         }
 		public void DrawWeapon()
 		{
@@ -5203,8 +5267,9 @@ namespace Exine.ExineObjects
 			if (WeaponLibrary1 != null)
 			{
 				WeaponLibrary1.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true); //original
+                ShieldLibrary.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true);// k333123 add
 
-				if (WeaponEffectLibrary1 != null)
+                if (WeaponEffectLibrary1 != null)
 					WeaponEffectLibrary1.DrawBlend(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true, 0.4F);
 			}
 		}
@@ -5217,6 +5282,7 @@ namespace Exine.ExineObjects
             if (WeaponLibrary2 != null)
                 WeaponLibrary2.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true);
         }
+
         public void DrawWings()
         {
             //Apply to BodyEffect

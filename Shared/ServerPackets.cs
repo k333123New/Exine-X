@@ -860,8 +860,8 @@ namespace ServerPackets
         public ExineDirection Direction;
         public byte Hair;
         public byte Light;
-		public short Weapon, WeaponEffect, Armour;
-		public PoisonType Poison;
+		public short Weapon, WeaponEffect, Armour, Shield; //add k333123 Shield
+        public PoisonType Poison;
         public bool Dead, Hidden;
         public SpellEffect Effect;
         public byte WingEffect;
@@ -903,7 +903,8 @@ namespace ServerPackets
             Light = reader.ReadByte();
             Weapon = reader.ReadInt16();
 			WeaponEffect = reader.ReadInt16();
-			Armour = reader.ReadInt16();
+            Shield = reader.ReadInt16(); //add k333123
+            Armour = reader.ReadInt16();
             Poison = (PoisonType)reader.ReadUInt16();
             Dead = reader.ReadBoolean();
             Hidden = reader.ReadBoolean();
@@ -952,7 +953,8 @@ namespace ServerPackets
             writer.Write(Light);
             writer.Write(Weapon);
 			writer.Write(WeaponEffect);
-			writer.Write(Armour);
+            writer.Write(Shield); //add k333123
+            writer.Write(Armour);
             writer.Write((ushort)Poison);
             writer.Write(Dead);
             writer.Write(Hidden);
@@ -1733,7 +1735,7 @@ namespace ServerPackets
 
         public uint ObjectID;
         public byte Light;
-		public short Weapon, WeaponEffect, Armour;
+		public short Weapon, WeaponEffect, Armour, Shield;//k333123
 		public byte WingEffect;
 
         protected override void ReadPacket(BinaryReader reader)
@@ -1743,7 +1745,8 @@ namespace ServerPackets
             Light = reader.ReadByte();
             Weapon = reader.ReadInt16();
 			WeaponEffect = reader.ReadInt16();
-			Armour = reader.ReadInt16();
+            Shield = reader.ReadInt16();
+            Armour = reader.ReadInt16();
             WingEffect = reader.ReadByte();
         }
 
@@ -1754,7 +1757,8 @@ namespace ServerPackets
             writer.Write(Light);
             writer.Write(Weapon);
 			writer.Write(WeaponEffect);
-			writer.Write(Armour);
+            writer.Write(Shield);
+            writer.Write(Armour);
             writer.Write(WingEffect);
         }
     }

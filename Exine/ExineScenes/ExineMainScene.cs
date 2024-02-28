@@ -11567,7 +11567,7 @@ namespace Exine.ExineScenes
                         }
                         if (!fail)
                         {
-                            User.QueuedAction = new QueuedAction { Action = ExAction.Running, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, distance) };
+                            User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_RUN_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, distance) };
                             return;
                         }
                     }
@@ -11725,7 +11725,7 @@ namespace Exine.ExineScenes
                             }
                             if (!fail)
                             {
-                                User.QueuedAction = new QueuedAction { Action = ExAction.Running, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, User.RidingMount || (User.Sprint && !User.Sneaking) ? 3 : 2) };
+                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_RUN_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, User.RidingMount || (User.Sprint && !User.Sneaking) ? 3 : 2) };
                                 return;
                             }
                         }
@@ -11780,7 +11780,7 @@ namespace Exine.ExineScenes
 
                     if (ExineMainScene.CanRun && CanRun(dir) && CMain.Time > ExineMainScene.NextRunTime && User.HP >= 10 && CurrentPath.Count > (User.RidingMount ? 2 : 1))
                     {
-                        User.QueuedAction = new QueuedAction { Action = ExAction.Running, Direction = dir, Location = Functions.PointMove(User.CurrentLocation, dir, User.RidingMount ? 3 : 2) };
+                        User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_RUN_LEFT, Direction = dir, Location = Functions.PointMove(User.CurrentLocation, dir, User.RidingMount ? 3 : 2) };
                         return;
                     }
                     if (CanWalk(dir))

@@ -383,6 +383,7 @@ namespace Server.ExineObjects.Monsters
                 Direction = Direction,
                 Hair = master != null ? master.Hair : (byte)Envir.Random.Next(0, 5),
                 Weapon = 218,
+                Shield = -1,//k333123 add
                 Armour = 41,
                 Light = master != null ? master.Light : Light,
                 Poison = CurrentPoison,
