@@ -103,9 +103,29 @@ namespace Exine.ExineGraphics
             BIK_023_Light_3 = new MLibrary(Settings.ExineVideoPath + "023-Light-3"),
             BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4");
 
-         
+
+
+        /*
+        library = new MLibrary[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            library[i] = new MLibrary(path + i.ToString(toStringValue) + suffix);
+        }*/
+        public static MLibrary[] HHMs = new MLibrary[10];
+        //AHM
+        //AHW
+        //HHM
+        //HHW
+        //SHM
+        //SHW
+        //WHM
+        //WHW
+
+
+
         public static readonly MLibrary
-            ChrSel = new MLibrary(Settings.DataPath + "ChrSel"),
+            
             Prguse = new MLibrary(Settings.DataPath + "Prguse"),
             Prguse2 = new MLibrary(Settings.DataPath + "Prguse2"),
             Prguse3 = new MLibrary(Settings.DataPath + "Prguse3"),
@@ -143,6 +163,8 @@ namespace Exine.ExineGraphics
         //Deco
         public static readonly MLibrary
             Deco = new MLibrary(Settings.DataPath + "Deco");
+
+
 
         public static MLibrary[] CArmours,
                                           CWeapons,
@@ -209,6 +231,9 @@ namespace Exine.ExineGraphics
             InitLibrary(ref TransformEffect, Settings.TransformEffectPath, "00");
             InitLibrary(ref TransformWeaponEffect, Settings.TransformWeaponEffectPath, "00");
 
+
+
+
             #region Maplibs
 
             for (int i = 0; i < 10; i++)
@@ -231,72 +256,6 @@ namespace Exine.ExineGraphics
                 }
             }
 
-            /*
-            //wemade mir2 (allowed from 0-99)
-            MapLibs[0] = new MLibrary(Settings.DataPath + "Map\\WemadeMir2\\Tiles");
-            MapLibs[1] = new MLibrary(Settings.DataPath + "Map\\WemadeMir2\\Smtiles");
-            MapLibs[2] = new MLibrary(Settings.DataPath + "Map\\WemadeMir2\\Objects");
-            for (int i = 2; i < 27; i++)
-            {
-                MapLibs[i + 1] = new MLibrary(Settings.DataPath + "Map\\WemadeMir2\\Objects" + i.ToString());
-            }
-            
-            //shanda mir2 (allowed from 100-199)
-            MapLibs[100] = new MLibrary(Settings.DataPath + "Map\\ShandaMir2\\Tiles");
-            for (int i = 1; i < 10; i++)
-            {
-                MapLibs[100 + i] = new MLibrary(Settings.DataPath + "Map\\ShandaMir2\\Tiles" + (i + 1));
-            }
-            MapLibs[110] = new MLibrary(Settings.DataPath + "Map\\ShandaMir2\\SmTiles");
-            for (int i = 1; i < 10; i++)
-            {
-                MapLibs[110 + i] = new MLibrary(Settings.DataPath + "Map\\ShandaMir2\\SmTiles" + (i + 1));
-            }
-            MapLibs[120] = new MLibrary(Settings.DataPath + "Map\\ShandaMir2\\Objects");
-            for (int i = 1; i < 31; i++)
-            {
-                MapLibs[120 + i] = new MLibrary(Settings.DataPath + "Map\\ShandaMir2\\Objects" + (i + 1));
-            }
-            MapLibs[190] = new MLibrary(Settings.DataPath + "Map\\ShandaMir2\\AniTiles1");
-            //wemade mir3 (allowed from 200-299)
-            string[] Mapstate = { "", "wood\\", "sand\\", "snow\\", "forest\\"};
-            for (int i = 0; i < Mapstate.Length; i++)
-            {
-                MapLibs[200 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Tilesc");
-                MapLibs[201 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Tiles30c");
-                MapLibs[202 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Tiles5c");
-                MapLibs[203 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Smtilesc");
-                MapLibs[204 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Housesc");
-                MapLibs[205 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Cliffsc");
-                MapLibs[206 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Dungeonsc");
-                MapLibs[207 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Innersc");
-                MapLibs[208 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Furnituresc");
-                MapLibs[209 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Wallsc");
-                MapLibs[210 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "smObjectsc");
-                MapLibs[211 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Animationsc");
-                MapLibs[212 +(i*15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Object1c");
-                MapLibs[213 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\WemadeMir3\\" + Mapstate[i] + "Object2c");
-            }
-            Mapstate = new string[] { "", "wood", "sand", "snow", "forest"};
-            //shanda mir3 (allowed from 300-399)
-            for (int i = 0; i < Mapstate.Length; i++)
-            {
-                MapLibs[300 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Tilesc" + Mapstate[i]);
-                MapLibs[301 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Tiles30c" + Mapstate[i]);
-                MapLibs[302 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Tiles5c" + Mapstate[i]);
-                MapLibs[303 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Smtilesc" + Mapstate[i]);
-                MapLibs[304 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Housesc" + Mapstate[i]);
-                MapLibs[305 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Cliffsc" + Mapstate[i]);
-                MapLibs[306 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Dungeonsc" + Mapstate[i]);
-                MapLibs[307 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Innersc" + Mapstate[i]);
-                MapLibs[308 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Furnituresc" + Mapstate[i]);
-                MapLibs[309 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Wallsc" + Mapstate[i]);
-                MapLibs[310 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "smObjectsc" + Mapstate[i]);
-                MapLibs[311 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Animationsc" + Mapstate[i]);
-                MapLibs[312 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Object1c" + Mapstate[i]);
-                MapLibs[313 + (i * 15)] = new MLibrary(Settings.DataPath + "Map\\ShandaMir3\\" + "Object2c" + Mapstate[i]);
-            }
-            */
             #endregion
 
             LoadLibraries();
@@ -502,9 +461,7 @@ namespace Exine.ExineGraphics
             BIK_024_Light_4.Initialize();
             Progress++;
 
-            ChrSel.Initialize();
-            Progress++;
-
+            
             Prguse.Initialize();
             Progress++;
 

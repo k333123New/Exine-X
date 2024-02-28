@@ -577,12 +577,18 @@ namespace NewYPF
 
                                 if (newMaskX < 0) { loopX = 0; continue; }//231101
                                 if (newMaskY < 0) { loopY = 0; continue; }//231101
-
+                                  
                                 Color maskPixel = maskImg.GetPixel(loopX, loopY);
                                 int brightness = (int)(0.299 * maskPixel.R + 0.587 * maskPixel.G + 0.114 * maskPixel.B);
                                 Color maskGrayPixel = Color.FromArgb(maskPixel.A, brightness, brightness, brightness);
-                                newMaskImg.SetPixel(newMaskX, newMaskY, maskGrayPixel); //color to gray?
-
+                                try
+                                {
+                                    newMaskImg.SetPixel(newMaskX, newMaskY, maskGrayPixel); //color to gray?
+                                }
+                                catch(Exception)
+                                {
+                                    continue;
+                                }
                                 loopX++;
                             }
                             loopX = 0;
