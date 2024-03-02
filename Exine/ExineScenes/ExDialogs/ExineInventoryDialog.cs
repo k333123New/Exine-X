@@ -7,7 +7,7 @@ using C = ClientPackets;
 
 namespace Exine.ExineScenes.ExDialogs
 {
-    public sealed class InventoryDialog : ExineImageControl
+    public sealed class ExineInventoryDialog : ExineImageControl
     {
         public ExineImageControl WeightBar;
         public ExineImageControl[] LockBar = new ExineImageControl[10];
@@ -17,13 +17,16 @@ namespace Exine.ExineScenes.ExDialogs
         public MirButton CloseButton, ItemButton, ItemButton2, QuestButton, AddButton;
         public ExineLabel GoldLabel, WeightLabel;
 
-        public InventoryDialog()
+        public ExineInventoryDialog()
         {
-            Index = 196;
-            Library = Libraries.Title;
-            Movable = true;
+            Index = 0;
+            Library = Libraries.ITEMSLOT;
+            //Movable = true;
+            Movable = false;
+            //Sort = true;
             Sort = true;
             Visible = false;
+            //Location = new Point(Settings.ScreenWidth / 2, 0 + 85+300);
 
             WeightBar = new ExineImageControl
             {
@@ -34,81 +37,84 @@ namespace Exine.ExineScenes.ExDialogs
                 DrawImage = false,
                 NotControl = true,
             };
+           
+          ItemButton = new MirButton
+          {
+              Index = 197,
+              Library = Libraries.Title,
+              Location = new Point(6, 7),
+              Parent = this,
+              Size = new Size(72, 23),
+              Sound = SoundList.ButtonA,
+              Visible=false,
+          };
+          ItemButton.Click += Button_Click;
+            
+         ItemButton2 = new MirButton
+         {
+             Index = 738,
+             Library = Libraries.Title,
+             Location = new Point(76, 7),
+             Parent = this,
+             Size = new Size(72, 23),
+             Sound = SoundList.ButtonA,
+             Visible=false,
+         };
+         ItemButton2.Click += Button_Click;
 
-            ItemButton = new MirButton
-            {
-                Index = 197,
-                Library = Libraries.Title,
-                Location = new Point(6, 7),
-                Parent = this,
-                Size = new Size(72, 23),
-                Sound = SoundList.ButtonA,
-            };
-            ItemButton.Click += Button_Click;
+         QuestButton = new MirButton
+         {
+             Index = 739,
+             Library = Libraries.Title,
+             Location = new Point(146, 7),
+             Parent = this,
+             Size = new Size(72, 23),
+             Sound = SoundList.ButtonA,
+             Visible=false,
+         };
+         QuestButton.Click += Button_Click;
 
-            ItemButton2 = new MirButton
-            {
-                Index = 738,
-                Library = Libraries.Title,
-                Location = new Point(76, 7),
-                Parent = this,
-                Size = new Size(72, 23),
-                Sound = SoundList.ButtonA,
-            };
-            ItemButton2.Click += Button_Click;
+         AddButton = new MirButton
+         {
+             Index = 483,
+             HoverIndex = 484,
+             PressedIndex = 485,
+             Library = Libraries.Title,
+             Location = new Point(235, 5),
+             Parent = this,
+             Size = new Size(72, 23),
+             Sound = SoundList.ButtonA,
+             Visible = false,
+         };
+         AddButton.Click += (o1, e) =>
+         {
+             int openLevel = (ExineMainScene.User.Inventory.Length - 46) / 4;
+             int openGold = (1000000 + openLevel * 1000000);
+             MirMessageBox messageBox = new MirMessageBox(string.Format(GameLanguage.ExtraSlots4, openGold), MirMessageBoxButtons.OKCancel);
 
-            QuestButton = new MirButton
-            {
-                Index = 739,
-                Library = Libraries.Title,
-                Location = new Point(146, 7),
-                Parent = this,
-                Size = new Size(72, 23),
-                Sound = SoundList.ButtonA,
-            };
-            QuestButton.Click += Button_Click;
-
-            AddButton = new MirButton
-            {
-                Index = 483,
-                HoverIndex = 484,
-                PressedIndex = 485,
-                Library = Libraries.Title,
-                Location = new Point(235, 5),
-                Parent = this,
-                Size = new Size(72, 23),
-                Sound = SoundList.ButtonA,
-                Visible = false,
-            };
-            AddButton.Click += (o1, e) =>
-            {
-                int openLevel = (ExineMainScene.User.Inventory.Length - 46) / 4;
-                int openGold = (1000000 + openLevel * 1000000);
-                MirMessageBox messageBox = new MirMessageBox(string.Format(GameLanguage.ExtraSlots4, openGold), MirMessageBoxButtons.OKCancel);
-
-                messageBox.OKButton.Click += (o, a) =>
-                {
-                    Network.Enqueue(new C.Chat { Message = "@ADDINVENTORY" });
-                };
-                messageBox.Show();
-            };
-
-            CloseButton = new MirButton
-            {
-                HoverIndex = 361,
-                Index = 360,
-                Location = new Point(289, 3),
-                Library = Libraries.Prguse2,
-                Parent = this,
-                PressedIndex = 362,
-                Sound = SoundList.ButtonA,
-            };
-            CloseButton.Click += (o, e) => Hide();
-
+             messageBox.OKButton.Click += (o, a) =>
+             {
+                 Network.Enqueue(new C.Chat { Message = "@ADDINVENTORY" });
+             };
+             messageBox.Show();
+         };
+            /*
+           CloseButton = new MirButton
+           {
+               HoverIndex = 361,
+               Index = 360,
+               Location = new Point(289, 3),
+               Library = Libraries.Prguse2,
+               Parent = this,
+               PressedIndex = 362,
+               Sound = SoundList.ButtonA,
+           };
+           CloseButton.Click += (o, e) => Hide();
+           
             GoldLabel = new ExineLabel
             {
                 Parent = this,
-                Location = new Point(40, 212),
+                Location = new Point(40+283, 212+241),
                 Size = new Size(111, 14),
                 Sound = SoundList.Gold,
             };
@@ -117,22 +123,26 @@ namespace Exine.ExineScenes.ExDialogs
                 if (ExineMainScene.SelectedCell == null)
                     ExineMainScene.PickedUpGold = !ExineMainScene.PickedUpGold && ExineMainScene.Gold > 0;
             };
-
+             */
 
             Grid = new MirItemCell[8 * 10];
 
-            for (int x = 0; x < 8; x++)
+            //for (int x = 0; x < 8; x++)
+            for (int x = 0; x < 10; x++)
             {
-                for (int y = 0; y < 10; y++)
+                //for (int y = 0; y < 10; y++)
+                for (int y = 0; y < 8; y++)
                 {
-                    int idx = 8 * y + x;
+                    //int idx = 8 * y + x;
+                    int idx = 10 * y + x;
                     Grid[idx] = new MirItemCell
                     {
                         ItemSlot = 6 + idx,
                         GridType = MirGridType.Inventory,
                         Library = Libraries.Items,
                         Parent = this,
-                        Location = new Point(x * 36 + 9 + x, y % 5 * 32 + 37 + y % 5),
+                        //Location = new Point(x * 33 + 9 + x -8, y % 5 * 33 + 37 + y % 5 -36),
+                        Location = new Point(x * 33 + 1 + x, y % 5 * 33 + 1 + y % 5),
                     };
 
                     if (idx >= 40)
@@ -298,7 +308,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             WeightLabel.Text = ExineMainScene.User.Inventory.Count(t => t == null).ToString();
             //WeightLabel.Text = (MapObject.User.MaxBagWeight - MapObject.User.CurrentBagWeight).ToString();
-            GoldLabel.Text = ExineMainScene.Gold.ToString("###,###,##0");
+            //GoldLabel.Text = ExineMainScene.Gold.ToString("###,###,##0");
         }
 
 

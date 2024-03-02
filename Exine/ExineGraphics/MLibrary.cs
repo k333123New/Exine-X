@@ -86,9 +86,7 @@ namespace Exine.ExineGraphics
             PANEL1100 = new MLibrary(Settings.ExineUIPath + "PANEL1100"),
             PANEL1200 = new MLibrary(Settings.ExineUIPath + "PANEL1200"),
             SAYFRAME = new MLibrary(Settings.ExineUIPath + "SayFrame"),
-
-
-
+            ITEMSLOT = new MLibrary(Settings.ExineUIPath + "ItemSlot"),
             ServerButton = new MLibrary(Settings.ExineUIPath + "ServerButton"),
 
             BIK_002_Orb1_1 = new MLibrary(Settings.ExineVideoPath + "002-Orb1-1"),
@@ -116,7 +114,7 @@ namespace Exine.ExineGraphics
             BIK_022_Light_2 = new MLibrary(Settings.ExineVideoPath + "022-Light-2"),
             BIK_023_Light_3 = new MLibrary(Settings.ExineVideoPath + "023-Light-3"),
             BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4");
-         
+        
         #region Old
         public static readonly MLibrary
             
@@ -150,9 +148,12 @@ namespace Exine.ExineGraphics
 
         //Items
         public static readonly MLibrary
-            Items = new MLibrary(Settings.DataPath + "Items"),
-            StateItems = new MLibrary(Settings.DataPath + "StateItem"),
-            FloorItems = new MLibrary(Settings.DataPath + "DNItems");
+            //Items = new MLibrary(Settings.DataPath + "Items"),
+            //StateItems = new MLibrary(Settings.DataPath + "StateItem"),
+            //FloorItems = new MLibrary(Settings.DataPath + "DNItems");
+            Items = new MLibrary(Settings.ExineUIPath + "0-Item"),
+            StateItems = new MLibrary(Settings.ExineUIPath + "1-EquippedItem"),
+            FloorItems = new MLibrary(Settings.ExineUIPath + "2-DroppedItem");
 
         //Deco
         public static readonly MLibrary

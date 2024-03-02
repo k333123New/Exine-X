@@ -143,13 +143,14 @@ namespace Exine.ExineScenes.ExDialogs
                 Hint = string.Format(GameLanguage.Inventory, CMain.InputKeys.GetKey(KeybindOptions.Inventory))
                 
             };
+            /*
             InventoryButton.Click += (o, e) =>
             {
                 if (ExineMainScene.Scene.InventoryDialog.Visible)
                     ExineMainScene.Scene.InventoryDialog.Hide();
                 else
                     ExineMainScene.Scene.InventoryDialog.Show();
-            };
+            };*/
 
             CharacterButton = new MirButton
             {

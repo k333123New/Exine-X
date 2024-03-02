@@ -184,11 +184,13 @@ namespace Exine.ExineControls
 
         public MirItemCell()
         {
-            Size = new Size(36, 32);
+            //Size = new Size(36, 32);
+            Size = new Size(32, 32);//k333123
             GridType = MirGridType.None;
             DrawImage = false;
 
-            BorderColour = Color.Lime;
+            //BorderColour = Color.Lime;//k333123
+            BorderColour = Color.White;//k333123
 
             BackColour = Color.FromArgb(255, 255, 125, 125);
             Opacity = 0.5F;
@@ -376,7 +378,7 @@ namespace Exine.ExineControls
 
             if ((GridType != MirGridType.Inventory && GridType != MirGridType.Storage && GridType != MirGridType.HeroInventory) || Item == null || !CanUseItem() || ExineMainScene.SelectedCell == this) return;
 
-            CharacterDialog dialog = ExineMainScene.Scene.CharacterDialog;
+            ExineCharacterDialog dialog = ExineMainScene.Scene.CharacterDialog;
             UserObject actor = ExineMainScene.User;
             if (HeroGridType)
             {

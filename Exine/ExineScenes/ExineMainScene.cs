@@ -65,10 +65,12 @@ namespace Exine.ExineScenes
         public ExineMainDialog ExMainDialog;
         public ExineChatDialog ExChatDialog;
         public ExineChatControlBar ExChatControl;
+        
 
-        public InventoryDialog InventoryDialog;
-        public CharacterDialog CharacterDialog;
-        public CharacterDialog HeroDialog;
+
+        public ExineInventoryDialog InventoryDialog;
+        public ExineCharacterDialog CharacterDialog;
+        public ExineCharacterDialog HeroDialog;
         public HeroInventoryDialog HeroInventoryDialog;
         public HeroManageDialog HeroManageDialog;
         public CraftDialog CraftDialog;
@@ -220,7 +222,7 @@ namespace Exine.ExineScenes
 
 
 
-            InventoryDialog = new InventoryDialog { Parent = this };
+            InventoryDialog = new ExineInventoryDialog { Parent = this };
             BeltDialog = new BeltDialog { Parent = this, Visible=false };//임시로 꺼둠
 
             StorageDialog = new StorageDialog { Parent = this, Visible = false };
@@ -537,10 +539,11 @@ namespace Exine.ExineScenes
                     case KeybindOptions.HeroSkill6: UseSpell(22); break;
                     case KeybindOptions.HeroSkill7: UseSpell(23); break;
                     case KeybindOptions.HeroSkill8: UseSpell(24); break;
+
                     case KeybindOptions.Inventory:
                     case KeybindOptions.Inventory2:
-                        if (!InventoryDialog.Visible) InventoryDialog.Show();
-                        else InventoryDialog.Hide();
+                        //if (!InventoryDialog.Visible) InventoryDialog.Show();
+                        //else InventoryDialog.Hide();
                         break;
                     case KeybindOptions.Equipment:
                     case KeybindOptions.Equipment2:
@@ -548,9 +551,17 @@ namespace Exine.ExineScenes
                         {
                             CharacterDialog.Show();
                             CharacterDialog.ShowCharacterPage();
+                            InventoryDialog.Location = new Point(541, 378);//k333123
+                            InventoryDialog.Show();//k33123 add
+
                         }
-                        else CharacterDialog.Hide();
+                        else
+                        {
+                            CharacterDialog.Hide();
+                            InventoryDialog.Hide();//k33123 add
+                        }
                         break;
+
                     case KeybindOptions.Skills:
                     case KeybindOptions.Skills2:
                         if (!CharacterDialog.Visible || !CharacterDialog.SkillPage.Visible)
@@ -1244,6 +1255,7 @@ namespace Exine.ExineScenes
 
             MapControl.Process();
             ExMainDialog.Process();
+            CharacterDialog.Process();  //k333123
             InventoryDialog.Process();
             GameShopDialog.Process();
             MiniMapDialog.Process();
@@ -2153,7 +2165,7 @@ namespace Exine.ExineScenes
             Gold = p.Gold;
             Credit = p.Credit;
 
-            CharacterDialog = new CharacterDialog(MirGridType.Equipment, User) { Parent = this, Visible = false };
+            CharacterDialog = new ExineCharacterDialog(MirGridType.Equipment, User) { Parent = this, Visible = false };
             InventoryDialog.RefreshInventory();
             foreach (SkillBarDialog Bar in SkillBarDialogs)
                 Bar.Update();
@@ -6279,7 +6291,7 @@ namespace Exine.ExineScenes
             if (p.MPItemIndex > 0)
                 Hero.MPItem[0] = new UserItem(GetItemInfo(p.MPItemIndex));
 
-            HeroDialog = new CharacterDialog(MirGridType.HeroEquipment, Hero) { Parent = this, Visible = false };
+            HeroDialog = new ExineCharacterDialog(MirGridType.HeroEquipment, Hero) { Parent = this, Visible = false };
             HeroInventoryDialog = new HeroInventoryDialog { Parent = this };
             HeroBeltDialog = new HeroBeltDialog { Parent = this };
             HeroBuffsDialog = new BuffDialog
@@ -6594,7 +6606,7 @@ namespace Exine.ExineScenes
             inputBox.OKButton.Click += (o1, e1) =>
             {
                 ExineMainScene.Scene.MailComposeParcelDialog.ComposeMail(inputBox.InputTextBox.Text);
-                ExineMainScene.Scene.InventoryDialog.Show();
+                //ExineMainScene.Scene.InventoryDialog.Show();
 
                 //open letter dialog, pass in name
                 inputBox.Dispose();
@@ -11482,6 +11494,7 @@ namespace Exine.ExineScenes
                 MapObject.TargetObjectID = 0;
         }
 
+        int test = 0;//k333123
         private void CheckInput()
         {
             if (AwakeningAction == true) return;
@@ -11550,6 +11563,9 @@ namespace Exine.ExineScenes
             }
 
 
+
+           
+
             ExineDirection direction;
             if (MouseControl == this)
             {
@@ -11573,6 +11589,7 @@ namespace Exine.ExineScenes
                     }
                     if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                     {
+                        Console.WriteLine("@111");
                         User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                         return;
                     }
@@ -11682,7 +11699,15 @@ namespace Exine.ExineScenes
                         if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                         {
 
-                            User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                            test++;
+
+                            //Console.WriteLine("@222");
+                            if (test % 2 == 0)
+                            {
+                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                                test = 0;
+                            }
+                            else User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_RIGHT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                             return;
                         }
                         if (direction != User.Direction)
@@ -11731,6 +11756,7 @@ namespace Exine.ExineScenes
                         }
                         if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                         {
+                            Console.WriteLine("@333");
                             User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                             return;
                         }
@@ -11785,6 +11811,7 @@ namespace Exine.ExineScenes
                     }
                     if (CanWalk(dir))
                     {
+                        Console.WriteLine("@444");
                         User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = dir, Location = Functions.PointMove(User.CurrentLocation, dir, 1) };
 
                         return;
@@ -11801,6 +11828,7 @@ namespace Exine.ExineScenes
 
             if (!CanWalk(direction, out direction)) return;
 
+            Console.WriteLine("@555");
             User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
         }
 

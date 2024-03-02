@@ -5,17 +5,20 @@ using Exine.ExineSounds;
 
 namespace Exine.ExineScenes.ExDialogs
 {
-    public sealed class CharacterDialog : ExineImageControl
+    /// <summary>
+    /// 캐릭터 장비 창
+    /// </summary>
+    public sealed class ExineCharacterDialog : ExineImageControl
     {
-        public MirButton CloseButton, CharacterButton, StatusButton, StateButton, SkillButton;
-        public ExineImageControl CharacterPage, StatusPage, StatePage, SkillPage, ClassImage;
+        public MirButton CloseButton, SkillButton;//,  CharacterButton,StatusButton, StateButton;
+        public ExineImageControl CharacterPage, SkillPage; //StatusPage, StatePage,  ClassImage;
 
-        public ExineLabel NameLabel, GuildLabel, LoverLabel;
-        public ExineLabel ACLabel, MACLabel, DCLabel, MCLabel, SCLabel, HealthLabel, ManaLabel;
-        public ExineLabel CritRLabel, CritDLabel, LuckLabel, AttkSpdLabel, AccLabel, AgilLabel;
-        public ExineLabel ExpPLabel, BagWLabel, WearWLabel, HandWLabel, MagicRLabel, PoisonRecLabel, HealthRLabel, ManaRLabel, PoisonResLabel, HolyTLabel, FreezeLabel, PoisonAtkLabel;
-        public ExineLabel HeadingLabel, StatLabel;
-        public MirButton NextButton, BackButton;
+        public ExineLabel NameLabel, GuildLabel, LoverLabel, GoldLabel, WeightLabel, WeightMaxLabel;
+        //public ExineLabel ACLabel, MACLabel, DCLabel, MCLabel, SCLabel, HealthLabel, ManaLabel;
+        //public ExineLabel CritRLabel, CritDLabel, LuckLabel, AttkSpdLabel, AccLabel, AgilLabel;
+        //public ExineLabel ExpPLabel, BagWLabel, WearWLabel, HandWLabel, MagicRLabel, PoisonRecLabel, HealthRLabel, ManaRLabel, PoisonResLabel, HolyTLabel, FreezeLabel, PoisonAtkLabel;
+        //public ExineLabel HeadingLabel, StatLabel;
+        //public MirButton NextButton, BackButton;
 
         public MirItemCell[] Grid;
         private MirGridType GridType;
@@ -24,29 +27,39 @@ namespace Exine.ExineScenes.ExDialogs
         public int StartIndex;
         private UserObject Actor;
 
-        public CharacterDialog(MirGridType gridType, UserObject actor)
+        public ExineCharacterDialog(MirGridType gridType, UserObject actor)
         {
             Actor = actor;
             GridType = gridType;
 
-            Index = 504;
-            Library = Libraries.Title;
-            Location = new Point(Settings.ScreenWidth - 264, 0);
-            Movable = true;
-            Sort = true;            
-
+            //Index = 505;
+            //Library = Libraries.Title;
+            //Movable = true;
+            //Sort = true;            
+            Index = 0;
+            Library = Libraries.PANEL0600;
+            //Location = new Point(Settings.ScreenWidth - 264, 0);
+            Location = new Point(Settings.ScreenWidth/2, 0+85);
+            Movable = false; 
             BeforeDraw += (o, e) => RefreshInterface();
+
+           
 
             CharacterPage = new ExineImageControl
             {
-                Index = 340,
+                //Index = 340,
+                Index = 0,
                 Parent = this,
-                Library = Libraries.Prguse,
-                Location = new Point(8, 90),
+                //Library = Libraries.Prguse,
+                Library = Libraries.PANEL0600,
+                //Location = new Point(8, 90),
+                Location = new Point(0, 0),
             };
             CharacterPage.AfterDraw += (o, e) =>
             {
                 if (Libraries.StateItems == null) return;
+
+                //실제 장비 착용 보여주는 부분
                 ItemInfo RealItem = null;
                 if (Grid[(int)EquipmentSlot.Armour].Item != null)
                 {
@@ -57,21 +70,26 @@ namespace Exine.ExineScenes.ExDialogs
                         int genderOffset = actor.Gender == ExineGender.Male ? 0 : 1;
 
                         Libraries.Prguse2.DrawBlend(1200 + wingOffset + genderOffset, DisplayLocation, Color.White, true, 1F);
+                        //Equipment Item으로 변경할것.
                     }
-
+                    //64 75
                     RealItem = Functions.GetRealItem(Grid[(int)EquipmentSlot.Armour].Item.Info, actor.Level, actor.Class, ExineMainScene.ItemInfoList);
-                    Libraries.StateItems.Draw(RealItem.Image, DisplayLocation, Color.White, true, 1F);
+                    //Libraries.StateItems.Draw(RealItem.Image, DisplayLocation, Color.White, true, 1F);
+                    Libraries.StateItems.Draw(RealItem.Image, new Point(DisplayLocation.X+105+63, DisplayLocation.Y+124-39), Color.White, true, 1F);
 
                 }
+
+                //26 69
                 if (Grid[(int)EquipmentSlot.Weapon].Item != null)
                 {
                     RealItem = Functions.GetRealItem(Grid[(int)EquipmentSlot.Weapon].Item.Info, actor.Level, actor.Class, ExineMainScene.ItemInfoList);
-                    Libraries.StateItems.Draw(RealItem.Image, DisplayLocation, Color.White, true, 1F);
+                    //Libraries.StateItems.Draw(RealItem.Image, DisplayLocation, Color.White, true, 1F);
+                    Libraries.StateItems.Draw(RealItem.Image, new Point( DisplayLocation.X+23, DisplayLocation.Y+104), Color.White, true, 1F);
 
                 }
 
                 if (Grid[(int)EquipmentSlot.Helmet].Item != null)
-                    Libraries.StateItems.Draw(Grid[(int)EquipmentSlot.Helmet].Item.Info.Image, DisplayLocation, Color.White, true, 1F);
+                    Libraries.StateItems.Draw(Grid[(int)EquipmentSlot.Helmet].Item.Info.Image, new Point(DisplayLocation.X+170 , DisplayLocation.Y+10), Color.White, true, 1F);
                 else
                 {
                     int hair = 441 + actor.Hair + (actor.Class == ExineClass.Assassin ? 20 : 0) + (actor.Gender == ExineGender.Male ? 0 : 40);
@@ -81,8 +99,25 @@ namespace Exine.ExineScenes.ExDialogs
 
                     Libraries.Prguse.Draw(hair, new Point(DisplayLocation.X + offSetX, DisplayLocation.Y + offSetY), Color.White, true, 1F);
                 }
-            };
 
+                //add 
+                if (Grid[(int)EquipmentSlot.Boots].Item != null)
+                {
+                    RealItem = Functions.GetRealItem(Grid[(int)EquipmentSlot.Boots].Item.Info, actor.Level, actor.Class, ExineMainScene.ItemInfoList);
+                    //Libraries.StateItems.Draw(RealItem.Image, DisplayLocation, Color.White, true, 1F);
+                    Libraries.StateItems.Draw(RealItem.Image, new Point(DisplayLocation.X + 23+128, DisplayLocation.Y + 204+37), Color.White, true, 1F);
+
+                }
+
+                //add 
+                if (Grid[(int)EquipmentSlot.Belt].Item != null)
+                {
+                    RealItem = Functions.GetRealItem(Grid[(int)EquipmentSlot.Belt].Item.Info, actor.Level, actor.Class, ExineMainScene.ItemInfoList);
+                    //Libraries.StateItems.Draw(RealItem.Image, DisplayLocation, Color.White, true, 1F);
+                    Libraries.StateItems.Draw(RealItem.Image, new Point(DisplayLocation.X+309 , DisplayLocation.Y+80 ), Color.White, true, 1F);
+                }
+            };
+            /*
             StatusPage = new ExineImageControl
             {
                 Index = 506,
@@ -131,7 +166,7 @@ namespace Exine.ExineScenes.ExDialogs
                 FreezeLabel.Text = string.Format("+{0}", actor.Stats[Stat.Freezing]);
                 PoisonAtkLabel.Text = string.Format("+{0}", actor.Stats[Stat.PoisonAttack]);
             };
-
+            */
 
             SkillPage = new ExineImageControl
             {
@@ -142,40 +177,41 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = false
             };
 
+            /*
+           CharacterButton = new MirButton
+           {
+               Index = 500,
+               Library = Libraries.Title,
+               Location = new Point(8, 70),
+               Parent = this,
+               PressedIndex = 500,
+               Size = new Size(64, 20),
+               Sound = SoundList.ButtonA,
+           };
+           CharacterButton.Click += (o, e) => ShowCharacterPage();
 
-            CharacterButton = new MirButton
-            {
-                Index = 500,
-                Library = Libraries.Title,
-                Location = new Point(8, 70),
-                Parent = this,
-                PressedIndex = 500,
-                Size = new Size(64, 20),
-                Sound = SoundList.ButtonA,
-            };
-            CharacterButton.Click += (o, e) => ShowCharacterPage();
-            StatusButton = new MirButton
-            {
-                Library = Libraries.Title,
-                Location = new Point(70, 70),
-                Parent = this,
-                PressedIndex = 501,
-                Size = new Size(64, 20),
-                Sound = SoundList.ButtonA
-            };
-            StatusButton.Click += (o, e) => ShowStatusPage();
+           StatusButton = new MirButton
+           {
+               Library = Libraries.Title,
+               Location = new Point(70, 70),
+               Parent = this,
+               PressedIndex = 501,
+               Size = new Size(64, 20),
+               Sound = SoundList.ButtonA
+           };
+           StatusButton.Click += (o, e) => ShowStatusPage();
 
-            StateButton = new MirButton
-            {
-                Library = Libraries.Title,
-                Location = new Point(132, 70),
-                Parent = this,
-                PressedIndex = 502,
-                Size = new Size(64, 20),
-                Sound = SoundList.ButtonA
-            };
-            StateButton.Click += (o, e) => ShowStatePage();
-
+           StateButton = new MirButton
+           {
+               Library = Libraries.Title,
+               Location = new Point(132, 70),
+               Parent = this,
+               PressedIndex = 502,
+               Size = new Size(64, 20),
+               Sound = SoundList.ButtonA
+           };
+           StateButton.Click += (o, e) => ShowStatePage();
+           */
             SkillButton = new MirButton
             {
                 Library = Libraries.Title,
@@ -185,19 +221,23 @@ namespace Exine.ExineScenes.ExDialogs
                 Size = new Size(64, 20),
                 Sound = SoundList.ButtonA
             };
-            SkillButton.Click += (o, e) => ShowSkillPage();
+            //SkillButton.Click += (o, e) => ShowSkillPage();
 
             CloseButton = new MirButton
             {
-                HoverIndex = 361,
-                Index = 360,
-                Location = new Point(241, 3),
-                Library = Libraries.Prguse2,
+                HoverIndex = 90,
+                Index = 89,
+                Location = new Point(241+102, 3+434),
+                Library = Libraries.PANEL0600,
                 Parent = this,
-                PressedIndex = 362,
+                PressedIndex = 91,
                 Sound = SoundList.ButtonA,
             };
-            CloseButton.Click += (o, e) => Hide();
+            CloseButton.Click += (o, e) =>
+            {
+                Hide();
+                ExineMainScene.Scene.InventoryDialog.Hide();
+            };
 
             NameLabel = new ExineLabel
             {
@@ -215,6 +255,46 @@ namespace Exine.ExineScenes.ExDialogs
                 Size = new Size(264, 30),
                 NotControl = true,
             };
+            GoldLabel = new ExineLabel
+            {
+                DrawFormat = TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter,
+                Parent = this,
+                Location = new Point(0+231+74, 55+207+6),
+                Size = new Size(111, 14),
+                Sound = SoundList.Gold,
+                NotControl = true,
+                //Sound = SoundList.Gold,
+                //Text = "111",
+            };
+            
+            GoldLabel.Click += (o, e) =>
+            {
+                if (ExineMainScene.SelectedCell == null)
+                    ExineMainScene.PickedUpGold = !ExineMainScene.PickedUpGold && ExineMainScene.Gold > 0;
+            };
+
+            WeightLabel = new ExineLabel
+            {
+                DrawFormat = TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter,
+                Parent = this,
+                Location = new Point(0 + 231 + 74-32, 55 + 207 + 6-27),
+                Size = new Size(111, 14), 
+                NotControl = true,
+                //Sound = SoundList.Gold,
+                //Text = "111",
+            };
+            WeightMaxLabel = new ExineLabel
+            {
+                DrawFormat = TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter,
+                Parent = this,
+                Location = new Point(0 + 231 + 74, 55 + 207 + 6-27),
+                Size = new Size(111, 14), 
+                NotControl = true,
+                //Sound = SoundList.Gold,
+                //Text = "111",
+            };
+
+            /*
             ClassImage = new ExineImageControl
             {
                 Index = 100,
@@ -222,26 +302,9 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(15, 33),
                 Parent = this,
                 NotControl = true,
-            };
+            };*/
 
             Grid = new MirItemCell[Enum.GetNames(typeof(EquipmentSlot)).Length];
-
-            Grid[(int)EquipmentSlot.Weapon] = new MirItemCell
-            {
-                ItemSlot = (int)EquipmentSlot.Weapon,
-                GridType = gridType,
-                Parent = CharacterPage,
-                Location = new Point(123, 7),
-            };
-
-
-            Grid[(int)EquipmentSlot.Armour] = new MirItemCell
-            {
-                ItemSlot = (int)EquipmentSlot.Armour,
-                GridType = gridType,
-                Parent = CharacterPage,
-                Location = new Point(163, 7),
-            };
 
 
             Grid[(int)EquipmentSlot.Helmet] = new MirItemCell
@@ -249,35 +312,26 @@ namespace Exine.ExineScenes.ExDialogs
                 ItemSlot = (int)EquipmentSlot.Helmet,
                 GridType = gridType,
                 Parent = CharacterPage,
-                Location = new Point(203, 7),
+                Location = new Point(203 - 21, 7 + 29),
             };
 
 
+         
 
-            Grid[(int)EquipmentSlot.Torch] = new MirItemCell
+            Grid[(int)EquipmentSlot.Weapon] = new MirItemCell
             {
-                ItemSlot = (int)EquipmentSlot.Torch,
+                ItemSlot = (int)EquipmentSlot.Weapon,
                 GridType = gridType,
                 Parent = CharacterPage,
-                Location = new Point(203, 134),
+                Location = new Point(123-65, 7+135),
             };
-
-
-            Grid[(int)EquipmentSlot.Necklace] = new MirItemCell
-            {
-                ItemSlot = (int)EquipmentSlot.Necklace,
-                GridType = gridType,
-                Parent = CharacterPage,
-                Location = new Point(203, 98),
-            };
-
 
             Grid[(int)EquipmentSlot.BraceletL] = new MirItemCell
             {
                 ItemSlot = (int)EquipmentSlot.BraceletL,
                 GridType = gridType,
                 Parent = CharacterPage,
-                Location = new Point(8, 170),
+                Location = new Point(8 + 99, 170 - 117),
             };
 
             Grid[(int)EquipmentSlot.BraceletR] = new MirItemCell
@@ -285,15 +339,32 @@ namespace Exine.ExineScenes.ExDialogs
                 ItemSlot = (int)EquipmentSlot.BraceletR,
                 GridType = gridType,
                 Parent = CharacterPage,
-                Location = new Point(203, 170),
+                Location = new Point(203 + 53, 170 - 117),
             };
+            Grid[(int)EquipmentSlot.Necklace] = new MirItemCell
+            {
+                ItemSlot = (int)EquipmentSlot.Necklace,
+                GridType = gridType,
+                Parent = CharacterPage,
+                Location = new Point(203 - 95, 98 - 5),
+            };
+
+            Grid[(int)EquipmentSlot.Armour] = new MirItemCell
+            {
+                ItemSlot = (int)EquipmentSlot.Armour,
+                GridType = gridType,
+                Parent = CharacterPage,
+                Location = new Point(163 + 18, 7 + 135),
+            };
+             
+        
 
             Grid[(int)EquipmentSlot.RingL] = new MirItemCell
             {
                 ItemSlot = (int)EquipmentSlot.RingL,
                 GridType = gridType,
                 Parent = CharacterPage,
-                Location = new Point(8, 206),
+                Location = new Point(8+ 105, 206-18),
             };
 
             Grid[(int)EquipmentSlot.RingR] = new MirItemCell
@@ -301,27 +372,45 @@ namespace Exine.ExineScenes.ExDialogs
                 ItemSlot = (int)EquipmentSlot.RingR,
                 GridType = gridType,
                 Parent = CharacterPage,
-                Location = new Point(203, 206),
+                Location = new Point(203+52, 206-18),
             };
-
-
-            Grid[(int)EquipmentSlot.Amulet] = new MirItemCell
-            {
-                ItemSlot = (int)EquipmentSlot.Amulet,
-                GridType = gridType,
-                Parent = CharacterPage,
-                Location = new Point(8, 242),
-            };
-
 
             Grid[(int)EquipmentSlot.Boots] = new MirItemCell
             {
                 ItemSlot = (int)EquipmentSlot.Boots,
                 GridType = gridType,
                 Parent = CharacterPage,
-                Location = new Point(48, 242),
+                Location = new Point(48 + 128, 242),
             };
 
+            Grid[(int)EquipmentSlot.Torch] = new MirItemCell
+            {
+                ItemSlot = (int)EquipmentSlot.Torch,
+                GridType = gridType,
+                Parent = CharacterPage,
+                Location = new Point(203 - 140, 134 + 110),
+            };
+
+            //Belt를 Sheild로 변경할 예정임.
+            Grid[(int)EquipmentSlot.Belt] = new MirItemCell
+            {
+                ItemSlot = (int)EquipmentSlot.Belt,
+                GridType = gridType,
+                Parent = CharacterPage,
+                Location = new Point(88+ 229, 242-97),
+            };
+
+            /*
+            Grid[(int)EquipmentSlot.Amulet] = new MirItemCell
+            {
+                ItemSlot = (int)EquipmentSlot.Amulet,
+                GridType = gridType,
+                Parent = CharacterPage,
+                Location = new Point(8, 242),
+            };*/
+
+
+            /*
             Grid[(int)EquipmentSlot.Belt] = new MirItemCell
             {
                 ItemSlot = (int)EquipmentSlot.Belt,
@@ -345,8 +434,8 @@ namespace Exine.ExineScenes.ExDialogs
                 GridType = gridType,
                 Parent = CharacterPage,
                 Location = new Point(203, 62),
-            };
-
+            };*/
+            /*
             // STATS I
             HealthLabel = new ExineLabel
             {
@@ -546,7 +635,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(126, 218),
                 NotControl = true
             };
-
+            */
             Magics = new MagicButton[7];
 
             for (int i = 0; i < Magics.Length; i++)
@@ -557,7 +646,7 @@ namespace Exine.ExineScenes.ExDialogs
                     Location = new Point(8, 8 + i * 33),
                     HeroMagic = gridType == MirGridType.HeroEquipment
                 };
-
+            /*
             NextButton = new MirButton
             {
                 Index = 396,
@@ -590,7 +679,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 StartIndex -= 7;
                 RefreshInterface();
-            };
+            };*/
         }
 
         public override void Show()
@@ -608,15 +697,15 @@ namespace Exine.ExineScenes.ExDialogs
         public void ShowCharacterPage()
         {
             CharacterPage.Visible = true;
-            StatusPage.Visible = false;
-            StatePage.Visible = false;
+            //StatusPage.Visible = false;
+            //StatePage.Visible = false;
             SkillPage.Visible = false;
-            CharacterButton.Index = 500;
-            StatusButton.Index = -1;
-            StateButton.Index = -1;
+            //CharacterButton.Index = 500;
+            //StatusButton.Index = -1;
+            //StateButton.Index = -1;
             SkillButton.Index = -1;
         }
-
+        /*
         private void ShowStatusPage()
         {
             CharacterPage.Visible = false;
@@ -640,27 +729,28 @@ namespace Exine.ExineScenes.ExDialogs
             StateButton.Index = 502;
             SkillButton.Index = -1;
         }
-
+        */
         public void ShowSkillPage()
         {
             CharacterPage.Visible = false;
-            StatusPage.Visible = false;
-            StatePage.Visible = false;
+            //StatusPage.Visible = false;
+            //StatePage.Visible = false;
             SkillPage.Visible = true;
-            CharacterButton.Index = -1;
-            StatusButton.Index = -1;
-            StateButton.Index = -1;
+            //CharacterButton.Index = -1;
+            //StatusButton.Index = -1;
+            //StateButton.Index = -1;
             SkillButton.Index = 503;
             StartIndex = 0;
         }
-
+        
         private void RefreshInterface()
         {
             int offSet = Actor.Gender == ExineGender.Male ? 0 : 1;
-
+            /*
             Index = 504;// +offSet;
             CharacterPage.Index = 340 + offSet;
-
+            */
+            /*
             switch (Actor.Class)
             {
                 case ExineClass.Warrior:
@@ -679,10 +769,10 @@ namespace Exine.ExineScenes.ExDialogs
                     ClassImage.Index = 104;// + offSet * 5;
                     break;
             }
-
+            */
             NameLabel.Text = Actor.Name;
             GuildLabel.Text = Actor.GuildName + " " + Actor.GuildRankName;
-
+              
             for (int i = 0; i < Magics.Length; i++)
             {
                 if (i + StartIndex >= Actor.Magics.Count)
@@ -694,6 +784,13 @@ namespace Exine.ExineScenes.ExDialogs
                 Magics[i].Visible = true;
                 Magics[i].Update(Actor.Magics[i + StartIndex]);
             }
+        }
+        public void Process()
+        { 
+            GoldLabel.Text = ExineMainScene.Gold.ToString("###,###,##0");
+
+            WeightLabel.Text = MapObject.User.CurrentBagWeight.ToString();
+            WeightMaxLabel.Text= MapObject.User.Stats[Stat.BagWeight].ToString();
         }
 
         public MirItemCell GetCell(ulong id)

@@ -332,9 +332,11 @@ namespace Exine.ExineObjects
                         break;
                     case ExAction.ONEHAND_WALK_LEFT:
                     case ExAction.WalkingBow:
+                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame)");
                         Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
                         break;
-                    case ExAction.ONEHAND_WALK_RIGHT: 
+                    case ExAction.ONEHAND_WALK_RIGHT:
+                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame)");
                         Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
                         break; 
                     case ExAction.ONEHAND_RUN_LEFT:
@@ -368,7 +370,7 @@ namespace Exine.ExineObjects
 
                 HairLibrary = null;
                 WeaponLibrary1 = null;
-                ShieldLibrary = null;
+                //ShieldLibrary = null;
                 WeaponLibrary2 = null;
 
                 if (TransformType == 19)
@@ -592,7 +594,7 @@ namespace Exine.ExineObjects
 						{
                             //WeaponLibrary1 = Weapon < Libraries.CWeapons.Length ? Libraries.CWeapons[Weapon] : null;
                             WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon] : null;
-                            ShieldLibrary = Shield <  Libraries.ExineManSheild.Length ? Libraries.ExineManSheild[Shield] : null;
+                           // ShieldLibrary = Shield <  Libraries.ExineManSheild.Length ? Libraries.ExineManSheild[Shield] : null;
                             /*
 							if (WeaponEffect > 0)
 								WeaponEffectLibrary1 = WeaponEffect < Libraries.CWeaponEffect.Length ? Libraries.CWeaponEffect[WeaponEffect] : null;
@@ -604,12 +606,14 @@ namespace Exine.ExineObjects
 						else
 						{
 							WeaponLibrary1 = null;
-                            ShieldLibrary = null;
+                            //ShieldLibrary = null;
 							WeaponEffectLibrary1 = null;
 							WeaponLibrary2 = null;
 						}
 
 						#endregion
+
+
 
 						#region WingEffects
 						if (WingEffect > 0 && WingEffect < 100)
@@ -5267,12 +5271,16 @@ namespace Exine.ExineObjects
 			if (WeaponLibrary1 != null)
 			{
 				WeaponLibrary1.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true); //original
-                ShieldLibrary.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true);// k333123 add
+                
 
                 if (WeaponEffectLibrary1 != null)
 					WeaponEffectLibrary1.DrawBlend(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true, 0.4F);
 			}
-		}
+            //if (ShieldLibrary != null)
+            //{
+            //    ShieldLibrary.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true);// k333123 add
+            //}
+        }
 		public void DrawWeapon2()
         {
             //Apply To Sheild
