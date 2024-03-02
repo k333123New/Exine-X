@@ -65,11 +65,12 @@ namespace Exine.ExineScenes
         public ExineMainDialog ExMainDialog;
         public ExineChatDialog ExChatDialog;
         public ExineChatControlBar ExChatControl;
-        
-
 
         public ExineInventoryDialog InventoryDialog;
         public ExineCharacterDialog CharacterDialog;
+        public ExineStateDialog StateDialog;
+
+
         public ExineCharacterDialog HeroDialog;
         public HeroInventoryDialog HeroInventoryDialog;
         public HeroManageDialog HeroManageDialog;
@@ -218,10 +219,7 @@ namespace Exine.ExineScenes
             
             ExMainDialog = new ExineMainDialog { Parent = this }; //add k333123 mod
             ExChatDialog = new ExineChatDialog { Parent = this }; //add k333123 mod
-            ExChatControl = new ExineChatControlBar { Parent = this }; //add k333123 mod
-
-
-
+            ExChatControl = new ExineChatControlBar { Parent = this }; //add k333123 mod  
             InventoryDialog = new ExineInventoryDialog { Parent = this };
             BeltDialog = new BeltDialog { Parent = this, Visible=false };//임시로 꺼둠
 
@@ -541,10 +539,16 @@ namespace Exine.ExineScenes
                     case KeybindOptions.HeroSkill8: UseSpell(24); break;
 
                     case KeybindOptions.Inventory:
-                    case KeybindOptions.Inventory2:
                         //if (!InventoryDialog.Visible) InventoryDialog.Show();
                         //else InventoryDialog.Hide();
                         break;
+
+                    case KeybindOptions.Inventory2:
+                        if (!StateDialog.Visible) StateDialog.Show();
+                        else StateDialog.Hide();
+                        break;
+
+
                     case KeybindOptions.Equipment:
                     case KeybindOptions.Equipment2:
                         if (!CharacterDialog.Visible || !CharacterDialog.CharacterPage.Visible)
@@ -2166,6 +2170,7 @@ namespace Exine.ExineScenes
             Credit = p.Credit;
 
             CharacterDialog = new ExineCharacterDialog(MirGridType.Equipment, User) { Parent = this, Visible = false };
+            StateDialog = new ExineStateDialog(MirGridType.Equipment, User) { Parent = this, Visible = false };
             InventoryDialog.RefreshInventory();
             foreach (SkillBarDialog Bar in SkillBarDialogs)
                 Bar.Update();

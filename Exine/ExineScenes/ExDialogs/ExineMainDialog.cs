@@ -104,9 +104,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this,
             };
 
-
-
-
+           
             LeftCap = new ExineImageControl
             {
                 Index = 12,
