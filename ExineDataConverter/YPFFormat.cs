@@ -247,6 +247,33 @@ namespace NewYPF
                     int pcRunRightStateLen = 4;
                     int pcStandUpStateLen = 5;
                     bool isExistPeaceModeFrame = false;
+
+
+                    int oneHandStandStateLen = 6;
+                    int oneHandRunLeftStateLen = 4;  
+                    int oneHandStuckStateLen = 1;
+                    int oneHandAtk1StateLen = 8;
+                    int oneHandAtk2StateLen = 8;
+                    int oneHandAtk3StateLen = 8;
+                    int oneHandRunRightStateLen = 4;
+                    bool isOneHandFrame = false;
+
+                    int twoHandStandStateLen = 6;
+                    int twoHandRunLeftStateLen = 4;
+                    int twoHandStuckStateLen = 1;
+                    int twoHandAtk1StateLen = 8;
+                    int twoHandAtk2StateLen = 8;
+                    int twoHandAtk3StateLen = 8;
+                    int twoHandRunRightStateLen = 4;
+                    bool isTwoHandFrame = false;
+
+                    int bowHandStandStateLen = 6;
+                    int bowHandRunLeftStateLen = 4;
+                    int bowHandStuckStateLen = 1;
+                    int bowHandAtk1StateLen = 8;
+                    int bowHandRunRightStateLen = 4;
+                    bool isBowHandFrame = false;
+
                     for (int j = 0; j < actionIndexMaps.Count; j++)
                     {
                         if (actionIndexMaps[j].actionType == types[0])
@@ -284,9 +311,100 @@ namespace NewYPF
                             isExistPeaceModeFrame = true;
                             break;
                         }
+                        
+                        //OneHand Frame Check
+                        else if (actionIndexMaps[j].actionType == types[5])
+                        { 
+                            isOneHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[9])
+                        {
+                            isOneHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[13])
+                        {
+                            isOneHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[14])
+                        {
+                            isOneHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[15])
+                        {
+                            isOneHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[23])
+                        {
+                            isOneHandFrame = true;
+                            break;
+                        }
+
+
+                        //TwoHand Frame Check
+                        else if (actionIndexMaps[j].actionType == types[6])
+                        {
+                            isTwoHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[10])
+                        {
+                            isTwoHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[16])
+                        {
+                            isTwoHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[17])
+                        {
+                            isTwoHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[18])
+                        {
+                            isTwoHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[24])
+                        {
+                            isTwoHandFrame = true;
+                            break;
+                        }
+
+                        //Bow Frame Check
+                        else if (actionIndexMaps[j].actionType == types[7])
+                        {
+                            isBowHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[11])
+                        {
+                            isBowHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[19])
+                        {
+                            isBowHandFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[25])
+                        {
+                            isBowHandFrame = true;
+                            break;
+                        }
+
+
                     }
 
-                    if(!isExistPeaceModeFrame)
+
+                    #region not exist Peace
+                    if (!isExistPeaceModeFrame)
                     {
                         //Console.WriteLine("No Peace Mode Frame!");
                         //Console.ReadLine();
@@ -452,6 +570,148 @@ namespace NewYPF
                         }
                     }
 
+                    #endregion not exist Peace
+
+                    //add k333123 240304
+                    #region not exist ownhand
+                    /*
+                    if (!isOneHandFrame)
+                    {
+                        //Console.WriteLine("No Peace Mode Frame!");
+                        //Console.ReadLine();
+                        //have to set start position
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < oneHandStandStateLen; j++)
+                            {
+                                //use only frameidx;
+                                actionIndexMaps.Add(new ExActionIndexMap(8 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < oneHandRunLeftStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(40 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < oneHandStuckStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(72 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < oneHandAtk1StateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(104 + directionIdx, j, 0));
+                            }
+                        }
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < oneHandAtk2StateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(112 + directionIdx, j, 0));
+                            }
+                        }
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < oneHandAtk3StateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(120 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < oneHandRunRightStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(177 + directionIdx, j, 0));
+                            }
+                        }
+                       
+                        //Console.ReadLine();
+                    }
+                   
+
+                    for (int typesIdx = 0; typesIdx < types.Length; typesIdx++)
+                    {
+                        tempMap.Clear();
+                        for (int j = 0; j < actionIndexMaps.Count; j++)
+                        {
+                           
+                            if (actionIndexMaps[j].actionType == types[1])//"ONEHAND_STAND";
+                            {  
+                                tempMap.Add(actionIndexMaps[j]);
+                            }
+                        }
+
+                        for (int j = 0; j < tempMap.Count; j++)
+                        {
+                            if (tempMap[j].actionDirection == "UP")
+                            {
+                                tempMap2.Add(tempMap[j]);
+                            }
+                        }
+
+                        for (int j = 0; j < tempMap.Count; j++)
+                        {
+                            if (tempMap[j].actionDirection == "UPRIGHT")
+                            {
+                                tempMap2.Add(tempMap[j]);
+                            }
+                        }
+                        for (int j = 0; j < tempMap.Count; j++)
+                        {
+                            if (tempMap[j].actionDirection == "RIGHT")
+                            {
+                                tempMap2.Add(tempMap[j]);
+                            }
+                        }
+                        for (int j = 0; j < tempMap.Count; j++)
+                        {
+                            if (tempMap[j].actionDirection == "DOWNRIGHT")
+                            {
+                                tempMap2.Add(tempMap[j]);
+                            }
+                        }
+                        for (int j = 0; j < tempMap.Count; j++)
+                        {
+                            if (tempMap[j].actionDirection == "DOWN")
+                            {
+                                tempMap2.Add(tempMap[j]);
+                            }
+                        }
+                        for (int j = 0; j < tempMap.Count; j++)
+                        {
+                            if (tempMap[j].actionDirection == "DOWNLEFT")
+                            {
+                                tempMap2.Add(tempMap[j]);
+                            }
+                        }
+                        for (int j = 0; j < tempMap.Count; j++)
+                        {
+                            if (tempMap[j].actionDirection == "LEFT")
+                            {
+                                tempMap2.Add(tempMap[j]);
+                            }
+                        }
+                        for (int j = 0; j < tempMap.Count; j++)
+                        {
+                            if (tempMap[j].actionDirection == "UPLEFT")
+                            {
+                                tempMap2.Add(tempMap[j]);
+                            }
+                        }
+                    }
+                    */
+                    #endregion 
 
                     /*
                     List<string> actionIndexMapTextList = new List<string>();

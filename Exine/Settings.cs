@@ -73,9 +73,9 @@ namespace Exine
                             ExArmorPath = ExineHumanPath + @"Armor\",
                             ExSheildPath = ExineHumanPath + @"Sheild\",
                             ExWeaponPath = ExineHumanPath + @"Weapon\",
-                            ExOneHandPath = ExWeaponPath + @"OneHand",
-                            ExTwoHandPath = ExWeaponPath + @"TwoHand",
-                            ExBowPath = ExWeaponPath + @"Bow";
+                            ExOneHandPath = ExWeaponPath + @"OneHand\",
+                            ExTwoHandPath = ExWeaponPath + @"TwoHand\",
+                            ExBowPath = ExWeaponPath + @"Bow\";
 
 
 

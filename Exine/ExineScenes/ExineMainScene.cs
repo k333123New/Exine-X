@@ -11500,6 +11500,7 @@ namespace Exine.ExineScenes
         }
 
         int test = 0;//k333123
+
         private void CheckInput()
         {
             if (AwakeningAction == true) return;
@@ -11709,10 +11710,15 @@ namespace Exine.ExineScenes
                             //Console.WriteLine("@222");
                             if (test % 2 == 0)
                             {
+                                //Console.WriteLine("@222 ONEHAND_WALK_LEFT");
                                 User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                                 test = 0;
                             }
-                            else User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_RIGHT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                            else
+                            {
+                                //Console.WriteLine("@222 ONEHAND_WALK_RIGHT");
+                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_RIGHT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                            }
                             return;
                         }
                         if (direction != User.Direction)
@@ -11762,7 +11768,21 @@ namespace Exine.ExineScenes
                         if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                         {
                             Console.WriteLine("@333");
-                            User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                            test++;
+
+                            //Console.WriteLine("@222");
+                            if (test % 2 == 0)
+                            {
+                                Console.WriteLine("@333 ONEHAND_WALK_LEFT");
+                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                                test = 0;
+                            }
+                            else
+                            {
+                                Console.WriteLine("@333 ONEHAND_WALK_RIGHT");
+                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_RIGHT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+                            }
+                            //User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                             return;
                         }
                         if (direction != User.Direction)

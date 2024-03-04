@@ -48,33 +48,33 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = true,
             };
             StatusPage.BeforeDraw += (o, e) =>
-            {
-                ACLabel.Text = string.Format("ACLabel{0}-{1}", actor.Stats[Stat.MinAC], actor.Stats[Stat.MaxAC]);
-                MACLabel.Text = string.Format("MACLabel{0}-{1}", actor.Stats[Stat.MinMAC], actor.Stats[Stat.MaxMAC]);
-                DCLabel.Text = string.Format("DCLabel{0}-{1}", actor.Stats[Stat.MinDC], actor.Stats[Stat.MaxDC]);
-                MCLabel.Text = string.Format("MCLabel{0}-{1}", actor.Stats[Stat.MinMC], actor.Stats[Stat.MaxMC]);
-                SCLabel.Text = string.Format("SCLabel{0}-{1}", actor.Stats[Stat.MinSC], actor.Stats[Stat.MaxSC]);
-                HealthLabel.Text = string.Format("HealthLabel{0}/{1}", actor.HP, actor.Stats[Stat.HP]);
-                ManaLabel.Text = string.Format("ManaLabel{0}/{1}", actor.MP, actor.Stats[Stat.MP]);
-                CritRLabel.Text = string.Format("CritRLabel{0}%", actor.Stats[Stat.CriticalRate]);
-                CritDLabel.Text = string.Format("CritDLabel{0}", actor.Stats[Stat.CriticalDamage]);
-                AttkSpdLabel.Text = string.Format("AttkSpdLabel{0}", actor.Stats[Stat.AttackSpeed]);
-                AccLabel.Text = string.Format("AccLabel+{0}", actor.Stats[Stat.Accuracy]);
-                AgilLabel.Text = string.Format("AgilLabel+{0}", actor.Stats[Stat.Agility]);
-                LuckLabel.Text = string.Format("LuckLabel{0}", actor.Stats[Stat.Luck]);
+            { 
+                ACLabel.Text = string.Format("물방{0}-{1}", actor.Stats[Stat.MinAC], actor.Stats[Stat.MaxAC]);
+                MACLabel.Text = string.Format("마방{0}-{1}", actor.Stats[Stat.MinMAC], actor.Stats[Stat.MaxMAC]);
+                DCLabel.Text = string.Format("물공{0}-{1}", actor.Stats[Stat.MinDC], actor.Stats[Stat.MaxDC]);
+                MCLabel.Text = string.Format("마공{0}-{1}", actor.Stats[Stat.MinMC], actor.Stats[Stat.MaxMC]);
+                SCLabel.Text = string.Format("정신공격력{0}-{1}", actor.Stats[Stat.MinSC], actor.Stats[Stat.MaxSC]);
+                HealthLabel.Text = string.Format("체력{0}/{1}", actor.HP, actor.Stats[Stat.HP]);
+                ManaLabel.Text = string.Format("마력{0}/{1}", actor.MP, actor.Stats[Stat.MP]);
+                CritRLabel.Text = string.Format("크리비율{0}%", actor.Stats[Stat.CriticalRate]);
+                CritDLabel.Text = string.Format("크리뎀{0}", actor.Stats[Stat.CriticalDamage]);
+                AttkSpdLabel.Text = string.Format("공속{0}", actor.Stats[Stat.AttackSpeed]);
+                AccLabel.Text = string.Format("정확도+{0}", actor.Stats[Stat.Accuracy]);
+                AgilLabel.Text = string.Format("민첩+{0}", actor.Stats[Stat.Agility]);
+                LuckLabel.Text = string.Format("운{0}", actor.Stats[Stat.Luck]);
 
-                ExpPLabel.Text = string.Format("ExpPLabel{0:0.##%}", actor.Experience / (double)actor.MaxExperience);
-                BagWLabel.Text = string.Format("BagWLabel{0}/{1}", actor.CurrentBagWeight, actor.Stats[Stat.BagWeight]);
-                WearWLabel.Text = string.Format("WearWLabel{0}/{1}", actor.CurrentWearWeight, actor.Stats[Stat.WearWeight]);
-                HandWLabel.Text = string.Format("HandWLabel{0}/{1}", actor.CurrentHandWeight, actor.Stats[Stat.HandWeight]);
-                MagicRLabel.Text = string.Format("MagicRLabel+{0}", actor.Stats[Stat.MagicResist]);
-                PoisonResLabel.Text = string.Format("PoisonResLabel+{0}", actor.Stats[Stat.PoisonResist]);
-                HealthRLabel.Text = string.Format("HealthRLabel+{0}", actor.Stats[Stat.HealthRecovery]);
-                ManaRLabel.Text = string.Format("ManaRLabel+{0}", actor.Stats[Stat.SpellRecovery]);
-                PoisonRecLabel.Text = string.Format("PoisonRecLabel+{0}", actor.Stats[Stat.PoisonRecovery]);
-                HolyTLabel.Text = string.Format("HolyTLabel+{0}", actor.Stats[Stat.Holy]);
-                FreezeLabel.Text = string.Format("FreezeLabel+{0}", actor.Stats[Stat.Freezing]);
-                PoisonAtkLabel.Text = string.Format("PoisonAtkLabel+{0}", actor.Stats[Stat.PoisonAttack]);
+                ExpPLabel.Text = string.Format("경험치{0:0.##%}", actor.Experience / (double)actor.MaxExperience);
+                BagWLabel.Text = string.Format("가방무게{0}/{1}", actor.CurrentBagWeight, actor.Stats[Stat.BagWeight]);
+                WearWLabel.Text = string.Format("입는무게{0}/{1}", actor.CurrentWearWeight, actor.Stats[Stat.WearWeight]);
+                HandWLabel.Text = string.Format("손무게{0}/{1}", actor.CurrentHandWeight, actor.Stats[Stat.HandWeight]);
+                MagicRLabel.Text = string.Format("마법저항+{0}", actor.Stats[Stat.MagicResist]);
+                PoisonResLabel.Text = string.Format("독저항+{0}", actor.Stats[Stat.PoisonResist]);
+                HealthRLabel.Text = string.Format("체력회복+{0}", actor.Stats[Stat.HealthRecovery]);
+                ManaRLabel.Text = string.Format("마법회복+{0}", actor.Stats[Stat.SpellRecovery]);
+                PoisonRecLabel.Text = string.Format("독회복+{0}", actor.Stats[Stat.PoisonRecovery]);
+                HolyTLabel.Text = string.Format("성스러운+{0}", actor.Stats[Stat.Holy]);
+                FreezeLabel.Text = string.Format("동결+{0}", actor.Stats[Stat.Freezing]);
+                PoisonAtkLabel.Text = string.Format("독공격+{0}", actor.Stats[Stat.PoisonAttack]);
             };
 
             StatePage = new ExineImageControl

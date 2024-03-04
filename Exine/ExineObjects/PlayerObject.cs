@@ -590,10 +590,13 @@ namespace Exine.ExineObjects
 
                         #region Weapons
 
-                        if (Weapon >= 0)
-						{
+                        //if (Weapon >= 0)
+                        if (Weapon >= 1)
+                        {
+                            Console.WriteLine("@555 Weapon:" + Weapon+ "Libraries.ExineManOneWeapon.Length:"+ Libraries.ExineManOneWeapon.Length);
+
                             //WeaponLibrary1 = Weapon < Libraries.CWeapons.Length ? Libraries.CWeapons[Weapon] : null;
-                            WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon] : null;
+                            WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon-1] : null;
                            // ShieldLibrary = Shield <  Libraries.ExineManSheild.Length ? Libraries.ExineManSheild[Shield] : null;
                             /*
 							if (WeaponEffect > 0)
@@ -5044,6 +5047,7 @@ namespace Exine.ExineObjects
 
             DrawMount();
 
+            //그리는 순서 문제임.
             if (!RidingMount)
             {
                 if (Direction == ExineDirection.Left || Direction == ExineDirection.Up || Direction == ExineDirection.UpLeft || Direction == ExineDirection.DownLeft)
@@ -5053,6 +5057,8 @@ namespace Exine.ExineObjects
             }
 
             DrawBody();
+
+
 
             if (Direction == ExineDirection.Up || Direction == ExineDirection.UpLeft || Direction == ExineDirection.UpRight || Direction == ExineDirection.Right || Direction == ExineDirection.Left)
             {
@@ -5270,11 +5276,12 @@ namespace Exine.ExineObjects
 
 			if (WeaponLibrary1 != null)
 			{
-				WeaponLibrary1.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true); //original
+                Console.WriteLine("@777 Weapon:" + (DrawFrame + WeaponOffSet)+ " DrawFrame:"+ DrawFrame+ "WeaponOffSet"+ WeaponOffSet);
+                WeaponLibrary1.Draw((DrawFrame + WeaponOffSet), DrawLocation, DrawColour, true); //original
                 
 
                 if (WeaponEffectLibrary1 != null)
-					WeaponEffectLibrary1.DrawBlend(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true, 0.4F);
+					WeaponEffectLibrary1.DrawBlend((DrawFrame + WeaponOffSet), DrawLocation, DrawColour, true, 0.4F);
 			}
             //if (ShieldLibrary != null)
             //{
