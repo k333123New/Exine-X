@@ -274,6 +274,13 @@ namespace NewYPF
                     int bowHandRunRightStateLen = 4;
                     bool isBowHandFrame = false;
 
+                    int magicCastStateLen = 8;
+                    int magicAtk1StateLen = 1;
+                    bool isMagicFrame = false;
+
+                    int unknownStateLen = 1;
+                    bool isUnknownFrame = false;
+
                     for (int j = 0; j < actionIndexMaps.Count; j++)
                     {
                         if (actionIndexMaps[j].actionType == types[0])
@@ -304,17 +311,19 @@ namespace NewYPF
 
                             isExistPeaceModeFrame = true;
                             break;
-                        }
+                        } 
                         else if (actionIndexMaps[j].actionType == types[27])
                         {
 
                             isExistPeaceModeFrame = true;
                             break;
                         }
-                        
+                    }
+                    for (int j = 0; j < actionIndexMaps.Count; j++)
+                    {
                         //OneHand Frame Check
-                        else if (actionIndexMaps[j].actionType == types[5])
-                        { 
+                        if (actionIndexMaps[j].actionType == types[5])
+                        {
                             isOneHandFrame = true;
                             break;
                         }
@@ -343,10 +352,12 @@ namespace NewYPF
                             isOneHandFrame = true;
                             break;
                         }
-
+                    }
+                    for (int j = 0; j < actionIndexMaps.Count; j++)
+                    {
 
                         //TwoHand Frame Check
-                        else if (actionIndexMaps[j].actionType == types[6])
+                        if (actionIndexMaps[j].actionType == types[6])
                         {
                             isTwoHandFrame = true;
                             break;
@@ -376,9 +387,11 @@ namespace NewYPF
                             isTwoHandFrame = true;
                             break;
                         }
-
+                    }
+                    for (int j = 0; j < actionIndexMaps.Count; j++)
+                    {
                         //Bow Frame Check
-                        else if (actionIndexMaps[j].actionType == types[7])
+                        if (actionIndexMaps[j].actionType == types[7])
                         {
                             isBowHandFrame = true;
                             break;
@@ -398,12 +411,66 @@ namespace NewYPF
                             isBowHandFrame = true;
                             break;
                         }
-
-
                     }
 
+                    for (int j = 0; j < actionIndexMaps.Count; j++)
+                    {
+                        //Magic Frame Check
+                        if (actionIndexMaps[j].actionType == types[20])
+                        {
+                            isMagicFrame = true;
+                            break;
+                        }
+                        else if (actionIndexMaps[j].actionType == types[21])
+                        {
+                            isMagicFrame = true;
+                            break;
+                        } 
+                    }
+
+                    for (int j = 0; j < actionIndexMaps.Count; j++)
+                    {
+                        //Unknown Frame Check
+                        if (actionIndexMaps[j].actionType == types[26])
+                        {
+                            isUnknownFrame = true;
+                            break;
+                        } 
+                    }
+
+                    /*
+                   * sudo code
+                   * int pcStandStateLen = 19 * 8; //19 frames, 8 direction
+                   * int pcRunLeftStateLen = 4 * 8;
+                   * int pcSitdownStateLen = 5 * 8;
+                   * int pcDieStateLen = 8 * 8;
+                   * int pcRunRightStateLen = 4 * 8;
+                   * int pcStandUpStateLen = 5 * 8;
+                   * bool isPcMode=false
+                   * for(int i=0;i<temp.lenth;i++)
+                   * {
+                   *  if(temp[i]=="pc")
+                   *  {
+                   *      isPcMode=true;
+                   *      break;
+                   *   }
+                   *  }
+                   *  
+                   *  if(isPcMode)
+                   *  {
+                   *      for(int i=0;i<pcStandStateLen;i++)
+                   *      {
+                   *          add (pcStandState,0);
+                   *      }
+                   *      for(int i=0;i<pcRestStateLen;i++)
+                   *      {
+                   *          add (pcRestState,0);
+                   *      }
+                   *  }
+                   */
 
                     #region not exist Peace
+
                     if (!isExistPeaceModeFrame)
                     {
                         //Console.WriteLine("No Peace Mode Frame!");
@@ -453,134 +520,18 @@ namespace NewYPF
                             for (int j = 0; j < pcStandUpStateLen; j++)
                             {
                                 actionIndexMaps.Add(new ExActionIndexMap(202 + directionIdx, j, 0));
-                                Console.WriteLine("standup" + 27 * 8 + directionIdx + " " + j);
                             }
                         }
 
                         //Console.ReadLine();
                     }
-                    /*
-                     * sudo code
-                     * int pcStandStateLen = 19 * 8; //19 frames, 8 direction
-                     * int pcRunLeftStateLen = 4 * 8;
-                     * int pcSitdownStateLen = 5 * 8;
-                     * int pcDieStateLen = 8 * 8;
-                     * int pcRunRightStateLen = 4 * 8;
-                     * int pcStandUpStateLen = 5 * 8;
-                     * bool isPcMode=false
-                     * for(int i=0;i<temp.lenth;i++)
-                     * {
-                     *  if(temp[i]=="pc")
-                     *  {
-                     *      isPcMode=true;
-                     *      break;
-                     *   }
-                     *  }
-                     *  
-                     *  if(isPcMode)
-                     *  {
-                     *      for(int i=0;i<pcStandStateLen;i++)
-                     *      {
-                     *          add (pcStandState,0);
-                     *      }
-                     *      for(int i=0;i<pcRestStateLen;i++)
-                     *      {
-                     *          add (pcRestState,0);
-                     *      }
-                     *  }
-                     */
-
-
-                    for (int typesIdx = 0; typesIdx < types.Length; typesIdx++)
-                    {
-                        tempMap.Clear();
-                        for (int j = 0; j < actionIndexMaps.Count; j++)
-                        {
-                            if(typesIdx==27)
-                            {
-                                Console.WriteLine("Check PC Standup typesIdx==27");
-                                Console.WriteLine("actionIndexMaps[j].actionType:" + actionIndexMaps[j].actionType + " types[typesIdx]:" + types[typesIdx]);
-                                //Console.ReadLine();
-                            }
-                            if (actionIndexMaps[j].actionType == types[typesIdx])
-                            {
-
-                                if (typesIdx == 27)
-                                { Console.WriteLine("PC Standup Add OK!"); }
-                                tempMap.Add(actionIndexMaps[j]);
-                            }
-                        }
-
-                        for (int j = 0; j < tempMap.Count; j++)
-                        {
-                            if (tempMap[j].actionDirection == "UP")
-                            {
-                                tempMap2.Add(tempMap[j]);
-                            }
-                        }
-
-                        for (int j = 0; j < tempMap.Count; j++)
-                        {
-                            if (tempMap[j].actionDirection == "UPRIGHT")
-                            {
-                                tempMap2.Add(tempMap[j]);
-                            }
-                        }
-                        for (int j = 0; j < tempMap.Count; j++)
-                        {
-                            if (tempMap[j].actionDirection == "RIGHT")
-                            {
-                                tempMap2.Add(tempMap[j]);
-                            }
-                        }
-                        for (int j = 0; j < tempMap.Count; j++)
-                        {
-                            if (tempMap[j].actionDirection == "DOWNRIGHT")
-                            {
-                                tempMap2.Add(tempMap[j]);
-                            }
-                        }
-                        for (int j = 0; j < tempMap.Count; j++)
-                        {
-                            if (tempMap[j].actionDirection == "DOWN")
-                            {
-                                tempMap2.Add(tempMap[j]);
-                            }
-                        }
-                        for (int j = 0; j < tempMap.Count; j++)
-                        {
-                            if (tempMap[j].actionDirection == "DOWNLEFT")
-                            {
-                                tempMap2.Add(tempMap[j]);
-                            }
-                        }
-                        for (int j = 0; j < tempMap.Count; j++)
-                        {
-                            if (tempMap[j].actionDirection == "LEFT")
-                            {
-                                tempMap2.Add(tempMap[j]);
-                            }
-                        }
-                        for (int j = 0; j < tempMap.Count; j++)
-                        {
-                            if (tempMap[j].actionDirection == "UPLEFT")
-                            {
-                                tempMap2.Add(tempMap[j]);
-                            }
-                        }
-                    }
-
+                  
                     #endregion not exist Peace
 
-                    //add k333123 240304
-                    #region not exist ownhand
-                    /*
+                    //add k333123 240305
+                    #region not exist ownhand 
                     if (!isOneHandFrame)
-                    {
-                        //Console.WriteLine("No Peace Mode Frame!");
-                        //Console.ReadLine();
-                        //have to set start position
-
+                    {  
                         for (int directionIdx = 0; directionIdx < 8; directionIdx++)
                         {
                             for (int j = 0; j < oneHandStandStateLen; j++)
@@ -634,20 +585,171 @@ namespace NewYPF
                             {
                                 actionIndexMaps.Add(new ExActionIndexMap(177 + directionIdx, j, 0));
                             }
+                        }  
+                    }
+                    #endregion
+
+                    //add k333123 240305
+                    #region not exist twohand 
+                    if (!isTwoHandFrame)
+                    {
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < twoHandStandStateLen; j++)
+                            {
+                                //use only frameidx;
+                                actionIndexMaps.Add(new ExActionIndexMap(16 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < twoHandRunLeftStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(48 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < twoHandStuckStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(80 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < twoHandAtk1StateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(128 + directionIdx, j, 0));
+                            }
+                        }
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < twoHandAtk2StateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(136 + directionIdx, j, 0));
+                            }
+                        }
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < twoHandAtk3StateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(144 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < twoHandRunRightStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(185 + directionIdx, j, 0));
+                            }
+                        }
+                    }
+                    #endregion
+
+                    //add k333123 240305
+                    #region not exist bowhand 
+                    if (!isBowHandFrame)
+                    {
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < bowHandStandStateLen; j++)
+                            {
+                                //use only frameidx;
+                                actionIndexMaps.Add(new ExActionIndexMap(24 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < bowHandRunLeftStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(56 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < bowHandStuckStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(88 + directionIdx, j, 0));
+                            }
+                        }
+
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < bowHandAtk1StateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(152 + directionIdx, j, 0));
+                            }
                         }
                        
-                        //Console.ReadLine();
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < bowHandRunRightStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(193 + directionIdx, j, 0));
+                            }
+                        }
                     }
-                   
+                    #endregion
+                    
+                    //add k333123 240305
+                    #region not exist magicFrame
+                    if (!isMagicFrame)
+                    { 
+                        for (int directionIdx = 0; directionIdx < 1; directionIdx++)//Direction only up
+                        {
+                            for (int j = 0; j < magicCastStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(160 + directionIdx, j, 0));
+                            }
+                        }
 
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j < magicAtk1StateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(161 + directionIdx, j, 0));
+                            }
+                        }
+                         
+                    }
+                    #endregion
+
+                    //add k333123 240305
+                    #region not exist Unknown
+                    if (!isUnknownFrame)
+                    {
+                        for (int directionIdx = 0; directionIdx < 8; directionIdx++)
+                        {
+                            for (int j = 0; j <unknownStateLen; j++)
+                            {
+                                actionIndexMaps.Add(new ExActionIndexMap(201 + directionIdx, j, 0));
+                            }
+                        } 
+                    }
+                    #endregion
+
+
+
+                    #region ReIdx
                     for (int typesIdx = 0; typesIdx < types.Length; typesIdx++)
                     {
                         tempMap.Clear();
                         for (int j = 0; j < actionIndexMaps.Count; j++)
                         {
-                           
-                            if (actionIndexMaps[j].actionType == types[1])//"ONEHAND_STAND";
-                            {  
+                            if(typesIdx==27)
+                            {
+                                Console.WriteLine("Check PC Standup typesIdx==27");
+                                Console.WriteLine("actionIndexMaps[j].actionType:" + actionIndexMaps[j].actionType + " types[typesIdx]:" + types[typesIdx]);
+                                //Console.ReadLine();
+                            }
+                            if (actionIndexMaps[j].actionType == types[typesIdx])
+                            {
                                 tempMap.Add(actionIndexMaps[j]);
                             }
                         }
@@ -710,8 +812,10 @@ namespace NewYPF
                             }
                         }
                     }
-                    */
-                    #endregion 
+                    #endregion ReIdx
+
+
+                   
 
                     /*
                     List<string> actionIndexMapTextList = new List<string>();

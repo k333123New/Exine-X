@@ -11705,20 +11705,22 @@ namespace Exine.ExineScenes
                         if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                         {
 
-                            test++;
+                           // test++;
 
                             //Console.WriteLine("@222");
-                            if (test % 2 == 0)
-                            {
-                                //Console.WriteLine("@222 ONEHAND_WALK_LEFT");
+                           // if (test % 2 == 0)
+                           //{
+                               // Console.WriteLine("@222 ONEHAND_WALK_LEFT");
                                 User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
-                                test = 0;
-                            }
-                            else
-                            {
-                                //Console.WriteLine("@222 ONEHAND_WALK_RIGHT");
-                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_RIGHT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
-                            }
+
+                              //  test = 0;
+                            //}
+                            //else
+                           // {
+                            //    Console.WriteLine("@222 ONEHAND_WALK_RIGHT");
+                           //     User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_RIGHT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
+
+                            //}
                             return;
                         }
                         if (direction != User.Direction)

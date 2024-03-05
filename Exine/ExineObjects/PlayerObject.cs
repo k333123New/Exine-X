@@ -8,6 +8,7 @@ using C = ClientPackets;
 using Exine.ExineScenes.Dialogs;
 using System.Reflection;
 using System.Drawing;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Exine.ExineObjects
 {
@@ -271,8 +272,45 @@ namespace Exine.ExineObjects
         }
 
 
+        int leftRightToggleFlag = 0;
         public virtual void SetLibraries()
         {
+            //add k333123 240305
+            //Console.WriteLine("@777 SetLibraries CurrentAction: "+(int)CurrentAction+ " TransformType:"+ TransformType);
+            switch (CurrentAction)
+            {
+                case ExAction.ONEHAND_WALK_LEFT:
+                    leftRightToggleFlag++;
+                    if (leftRightToggleFlag % 2 == 0)
+                    {
+                        leftRightToggleFlag = 0;
+                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame)");
+                        Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame)");
+                        Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
+                    }
+                    break;
+
+                case ExAction.ONEHAND_RUN_LEFT:
+                    leftRightToggleFlag++;
+                    if (leftRightToggleFlag % 2 == 0)
+                    {
+                        leftRightToggleFlag = 0;
+                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame)");
+                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame)");
+                        Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame);
+                    }
+                    break;
+
+            }
+
             //fishing broken
             //10
             //11
@@ -291,6 +329,7 @@ namespace Exine.ExineObjects
             bool showMount = true;
             bool showFishing = true;
 
+            //
             if (TransformType > -1)
             {
                 #region Transform
@@ -331,20 +370,18 @@ namespace Exine.ExineObjects
                         Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
                         break;
                     case ExAction.ONEHAND_WALK_LEFT:
-                    case ExAction.WalkingBow:
-                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame)");
-                        Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
-                        break;
-                    case ExAction.ONEHAND_WALK_RIGHT:
-                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame)");
+                    case ExAction.WalkingBow: 
                         Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
+                        break;
+                    case ExAction.ONEHAND_WALK_RIGHT: 
+                        Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
                         break; 
                     case ExAction.ONEHAND_RUN_LEFT:
                     case ExAction.RunningBow:
-                        Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame);
+                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
                         break;
                     case ExAction.ONEHAND_RUN_RIGHT:
-                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                        Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame);
                         break;
                     case ExAction.Attack1:
                     case ExAction.Attack2:
@@ -593,7 +630,7 @@ namespace Exine.ExineObjects
                         //if (Weapon >= 0)
                         if (Weapon >= 1)
                         {
-                            Console.WriteLine("@555 Weapon:" + Weapon+ "Libraries.ExineManOneWeapon.Length:"+ Libraries.ExineManOneWeapon.Length);
+                            //Console.WriteLine("@555 Weapon:" + Weapon+ "Libraries.ExineManOneWeapon.Length:"+ Libraries.ExineManOneWeapon.Length);
 
                             //WeaponLibrary1 = Weapon < Libraries.CWeapons.Length ? Libraries.CWeapons[Weapon] : null;
                             WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon-1] : null;
@@ -2393,12 +2430,17 @@ namespace Exine.ExineObjects
                     //if (CMain.Time < NextMotion) return;
                     if (SkipFrames) UpdateFrame();
 
-
+                    //add 240305 left-right togle
+                    /*
+                    if ((int)CurrentAction == (int)ExAction.ONEHAND_WALK_LEFT) {
+                         Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
+                    }
+                    else if ((int)CurrentAction == (int)ExAction.ONEHAND_WALK_RIGHT){
+                        Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
+                    }*/
 
                     if (UpdateFrame(false) >= Frame.Count)
                     {
-
-
                         FrameIndex = Frame.Count - 1;
                         SetAction();
                     }
@@ -2424,6 +2466,7 @@ namespace Exine.ExineObjects
                             NextMotion2 += EffectFrameInterval;
                     }
                     break;
+
                  case ExAction.Jump:
                     if (!ExineMainScene.CanMove) return;
                     ExineMainScene.Scene.MapControl.TextureValid = false;
@@ -5276,7 +5319,7 @@ namespace Exine.ExineObjects
 
 			if (WeaponLibrary1 != null)
 			{
-                Console.WriteLine("@777 Weapon:" + (DrawFrame + WeaponOffSet)+ " DrawFrame:"+ DrawFrame+ "WeaponOffSet"+ WeaponOffSet);
+                //Console.WriteLine("@777 Weapon:" + (DrawFrame + WeaponOffSet)+ " DrawFrame:"+ DrawFrame+ "WeaponOffSet"+ WeaponOffSet);
                 WeaponLibrary1.Draw((DrawFrame + WeaponOffSet), DrawLocation, DrawColour, true); //original
                 
 
