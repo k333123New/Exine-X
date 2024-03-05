@@ -32,7 +32,7 @@ namespace Exine.ExineScenes.ExDialogs
         //203,563
         //exine ui
         public ExineImageControl _ExPortraitDialog, _ExChatDialog, _ExBelt, _ExAPModeBtn, _ExMinimapDialog, _ExHPBar, _ExMPBar;//, _ExExperienceBar;
-        public ExineLabel _ExRingLabel, _ExRingAKALabel, _ExAKALabel, _ExNameLabel, _ExLevelLabel;
+        public ExineLabel _ExRingLabel, _ExRingAKALabel, _ExAKALabel, _ExNameLabel, _ExLevelLabel, _ExHPLabel, _ExMPLabel;
 
         public bool HPOnly
         {
@@ -69,6 +69,9 @@ namespace Exine.ExineScenes.ExDialogs
                 //NotControl = true,
                 
             };
+            //100-5
+
+
             //이 안쪽에 피가 추가되어야함.
             //33,34
             _ExHPBar = new ExineImageControl
@@ -81,6 +84,16 @@ namespace Exine.ExineScenes.ExDialogs
             };
             _ExHPBar.BeforeDraw += _ExHPBar_BeforeDraw;
 
+            _ExHPLabel = new ExineLabel
+            {
+                Font = new Font(Settings.FontName, 9F),
+                ForeColour = Color.FromArgb(10, Color.White),
+                AutoSize = true,
+                Parent = _ExHPBar,
+                NotControl = true,
+                Visible = true,//add k333123
+            };
+
             _ExMPBar = new ExineImageControl
             {
                 Index = 34,
@@ -90,7 +103,15 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = _ExPortraitDialog,
             };
             _ExMPBar.BeforeDraw += _ExMPBar_BeforeDraw;
-
+            _ExMPLabel = new ExineLabel
+            {
+                Font = new Font(Settings.FontName, 9F),
+                ForeColour = Color.FromArgb(10, Color.White),
+                AutoSize = true,
+                Parent = _ExMPBar,
+                NotControl = true,
+                Visible = true,//add k333123
+            };
 
 
             //ring, ringaka, aka, name, lv
@@ -124,7 +145,7 @@ namespace Exine.ExineScenes.ExDialogs
             _ExNameLabel = new ExineLabel
             {
                 Parent = _ExPortraitDialog,
-                Location = new Point(92, 70),
+                Location = new Point(92, 72),
                 Size = new Size(99, 20),
                 Visible = true,
                 NotControl = true,
@@ -135,7 +156,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 Parent = _ExPortraitDialog,
                 Visible = true,//add k333123
-                Location = new Point(173, 70)
+                Location = new Point(173, 72)
             };
 
             _ExBelt = new ExineImageControl
@@ -669,11 +690,17 @@ namespace Exine.ExineScenes.ExDialogs
             _ExAKALabel.Text = "";//k333123 must add!!!
             _ExLevelLabel.Text = User.Level.ToString();
 
-          
+            _ExHPLabel.Text = string.Format("{0}/{1}", MapObject.User.HP , MapObject.User.Stats[Stat.HP]);
+            _ExHPLabel.Location = new Point((_ExHPBar.Size.Width / 2) - 20, -2);
+
+            _ExMPLabel.Text = string.Format("{0}/{1}", MapObject.User.MP , MapObject.User.Stats[Stat.MP]);
+            _ExMPLabel.Location = new Point((_ExMPBar.Size.Width / 2) - 20, -2);
+
 
 
             ExperienceLabel.Text = string.Format("{0:#0.##%}", User.Experience / (double)User.MaxExperience);
-            ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 20, -10);
+            ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 20, -2);
+
             GoldLabel.Text = ExineMainScene.Gold.ToString("###,###,##0"); 
             SpaceLabel.Text = User.Inventory.Count(t => t == null).ToString();
             WeightLabel.Text = (MapObject.User.Stats[Stat.BagWeight] - MapObject.User.CurrentBagWeight).ToString();
