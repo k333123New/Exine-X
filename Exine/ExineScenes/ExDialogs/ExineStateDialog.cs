@@ -10,8 +10,8 @@ namespace Exine.ExineScenes.ExDialogs
     /// </summary>
     public sealed class ExineStateDialog : ExineImageControl
     {
-        public MirButton CloseButton, StatusButton, SkillButton, StateButton;//,  CharacterButton,StatusButton, StateButton;
-        public ExineImageControl StatusPage, StatePage, SkillPage;//,  ClassImage;
+        public MirButton CloseButton, StatusButton,  RingButton, FamilyButton, AKAButton, SkillButton;//,  CharacterButton,StatusButton, StateButton;
+        public ExineImageControl StatusPage, RingPage, FamilyPage, AKAPage, SkillPage;//,  ClassImage;
 
         public ExineLabel NameLabel, GuildLabel, LoverLabel;//, GoldLabel, WeightLabel, WeightMaxLabel;
         public ExineLabel ACLabel, MACLabel, DCLabel, MCLabel, SCLabel, HealthLabel, ManaLabel;
@@ -37,8 +37,6 @@ namespace Exine.ExineScenes.ExDialogs
             Movable = false; 
             BeforeDraw += (o, e) => RefreshInterface();
 
-            
-            
             StatusPage = new ExineImageControl
             {
                 Index = 0,
@@ -77,31 +75,44 @@ namespace Exine.ExineScenes.ExDialogs
                 PoisonAtkLabel.Text = string.Format("독공격+{0}", actor.Stats[Stat.PoisonAttack]);
             };
 
-            StatePage = new ExineImageControl
+            RingPage = new ExineImageControl
             {
-                Index = 507,
+                Index = 0,
                 Parent = this,
-                Library = Libraries.Title,
-                Location = new Point(8, 90),
+                Library = Libraries.PANEL0504,
+                Location = new Point(0, 0),
                 Visible = false
             };
-            StatePage.BeforeDraw += (o, e) =>
-            {/*
-                ExpPLabel.Text = string.Format("{0:0.##%}", actor.Experience / (double)actor.MaxExperience);
-                BagWLabel.Text = string.Format("{0}/{1}", actor.CurrentBagWeight, actor.Stats[Stat.BagWeight]);
-                WearWLabel.Text = string.Format("{0}/{1}", actor.CurrentWearWeight, actor.Stats[Stat.WearWeight]);
-                HandWLabel.Text = string.Format("{0}/{1}", actor.CurrentHandWeight, actor.Stats[Stat.HandWeight]);
-                MagicRLabel.Text = string.Format("+{0}", actor.Stats[Stat.MagicResist]);
-                PoisonResLabel.Text = string.Format("+{0}", actor.Stats[Stat.PoisonResist]);
-                HealthRLabel.Text = string.Format("+{0}", actor.Stats[Stat.HealthRecovery]);
-                ManaRLabel.Text = string.Format("+{0}", actor.Stats[Stat.SpellRecovery]);
-                PoisonRecLabel.Text = string.Format("+{0}", actor.Stats[Stat.PoisonRecovery]);
-                HolyTLabel.Text = string.Format("+{0}", actor.Stats[Stat.Holy]);
-                FreezeLabel.Text = string.Format("+{0}", actor.Stats[Stat.Freezing]);
-                PoisonAtkLabel.Text = string.Format("+{0}", actor.Stats[Stat.PoisonAttack]);
-                */
+            RingPage.BeforeDraw += (o, e) =>
+            { 
+
             };
-            
+
+            FamilyPage = new ExineImageControl
+            {
+                Index = 0,
+                Parent = this,
+                Library = Libraries.PANEL0505,
+                Location = new Point(0, 0),
+                Visible = false
+            };
+            FamilyPage.BeforeDraw += (o, e) =>
+            {
+
+            };
+
+            AKAPage = new ExineImageControl
+            {
+                Index = 0,
+                Parent = this,
+                Library = Libraries.PANEL0506,
+                Location = new Point(0, 0),
+                Visible = false
+            };
+            AKAPage.BeforeDraw += (o, e) =>
+            {
+
+            }; 
 
             SkillPage = new ExineImageControl
             {
@@ -111,38 +122,62 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(8, 90),
                 Visible = false
             };
-
              
-           StatusButton = new MirButton
-           {
-               Library = Libraries.Title,
-               Location = new Point(70, 70),
-               Parent = this,
-               PressedIndex = 501,
-               Size = new Size(64, 20),
-               Sound = SoundList.ButtonA
-           };
-           StatusButton.Click += (o, e) => ShowStatusPage();
+            StatusButton = new MirButton
+            {
+                Library = Libraries.PANEL0503,
+                Location = new Point(365, 50),
+                Parent = this,
+                PressedIndex = 0,
+                Size = new Size(36, 74),
+                Sound = SoundList.ButtonA,
+                Visible = true
+            };
+            StatusButton.Click += (o, e) => ShowStatusPage();
 
-           StateButton = new MirButton
-           {
-               Library = Libraries.Title,
-               Location = new Point(132, 70),
-               Parent = this,
-               PressedIndex = 502,
-               Size = new Size(64, 20),
-               Sound = SoundList.ButtonA
-           };
-           StateButton.Click += (o, e) => ShowStatePage();
-           
+            RingButton = new MirButton
+            {
+                Library = Libraries.PANEL0503,
+                Location = new Point(365, 124),
+                Parent = this,
+                PressedIndex = 8,
+                Size = new Size(36, 74),
+                Sound = SoundList.ButtonA
+            };
+            RingButton.Click += (o, e) => ShowRingPage();
+
+            FamilyButton = new MirButton
+            {
+                Library = Libraries.PANEL0503,
+                Location = new Point(365, 198),
+                Parent = this,
+                PressedIndex = 16,
+                Size = new Size(36, 74),
+                Sound = SoundList.ButtonA
+            };
+            FamilyButton.Click += (o, e) => ShowFamilyPage();
+
+
+            AKAButton = new MirButton
+            {
+                Library = Libraries.PANEL0503,
+                Location = new Point(365, 272),
+                Parent = this,
+                PressedIndex = 24,
+                Size = new Size(36, 74),
+                Sound = SoundList.ButtonA
+            };
+            AKAButton.Click += (o, e) => ShowAKAPage();
+
             SkillButton = new MirButton
             {
                 Library = Libraries.Title,
-                Location = new Point(194, 70),
+                Location = new Point(365, 70),
                 Parent = this,
                 PressedIndex = 503,
                 Size = new Size(64, 20),
-                Sound = SoundList.ButtonA
+                Sound = SoundList.ButtonA,
+                Visible = false//k333123
             };
             //SkillButton.Click += (o, e) => ShowSkillPage();
 
@@ -150,7 +185,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 HoverIndex = 90,
                 Index = 89,
-                Location = new Point(241+102+22, 3+434-17),
+                Location = new Point(365, 3+434-17),
                 Library = Libraries.PANEL0600,
                 Parent = this,
                 PressedIndex = 91,
@@ -166,7 +201,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 DrawFormat = TextFormatFlags.VerticalCenter | TextFormatFlags.HorizontalCenter,
                 Parent = this,
-                Location = new Point(0, 12),
+                Location = new Point(0+136, 12+43),
                 Size = new Size(264, 20),
                 NotControl = true,
             };
@@ -184,7 +219,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 20),
+                Location = new Point(126-61, 20+117),
                 NotControl = true,
                 Text = "0-0",
             };
@@ -193,93 +228,55 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 38),
+                Location = new Point(126+111, 38+97),
                 NotControl = true,
                 Text = "0-0",
             };
 
+            //물방
             ACLabel = new ExineLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 56),
+                Location = new Point(126-13, 56-276),
                 NotControl = true,
                 Text = "0-0",
             };
 
-            MACLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Parent = StatusPage,
-                Location = new Point(126, 74),
-                NotControl = true,
-                Text = "0-0",
-            };
+           
             DCLabel = new ExineLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 92),
+                Location = new Point(126-13, 92-219),
                 NotControl = true,
                 Text = "0-0"
             };
-            MCLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Parent = StatusPage,
-                Location = new Point(126, 110),
-                NotControl = true,
-                Text = "0/0"
-            };
-            SCLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Parent = StatusPage,
-                Location = new Point(126, 128),
-                NotControl = true,
-                Text = "0/0"
-            };
-            //Breezer - New Labels
-            CritRLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Parent = StatusPage,
-                Location = new Point(126, 146),
-                NotControl = true
-            };
-            CritDLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Parent = StatusPage,
-                Location = new Point(126, 164),
-                NotControl = true
-            };
-            AttkSpdLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Parent = StatusPage,
-                Location = new Point(126, 182),
-                NotControl = true
-            };
+
+           
+
+            //명중률
             AccLabel = new ExineLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 200),
+                Location = new Point(126-13, 200+153),
                 NotControl = true
             };
+
+            //민첩
             AgilLabel = new ExineLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 218),
+                Location = new Point(126-66, 218+28),
                 NotControl = true
             };
             LuckLabel = new ExineLabel
             {
                 AutoSize = true,
                 Parent = StatusPage,
-                Location = new Point(126, 236),
+                Location = new Point(126+95, 236+9),
                 NotControl = true
             };
 
@@ -289,17 +286,76 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 20+236),
+                Location = new Point(126-23, 20+236-147),
                 NotControl = true,
                 Text = "0-0",
             };
 
+           
+            MagicRLabel = new ExineLabel
+            {
+                AutoSize = true,
+                //Parent = StatePage,
+                Parent = StatusPage,
+                Location = new Point(126+157, 92 + 236-19),
+                NotControl = true,
+                Text = "0-0"
+            };
+
+            //보류
+            #region 보류
+            MACLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = StatusPage,
+                Location = new Point(126 + 255, 74),
+                NotControl = true,
+                Text = "0-0",
+            };
+            MCLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = StatusPage,
+                Location = new Point(126 + 255, 110),
+                NotControl = true,
+                Text = "0/0"
+            };
+            SCLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = StatusPage,
+                Location = new Point(126 + 255, 128),
+                NotControl = true,
+                Text = "0/0"
+            };
+            //Breezer - New Labels
+            CritRLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = StatusPage,
+                Location = new Point(126 + 255, 146),
+                NotControl = true
+            };
+            CritDLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = StatusPage,
+                Location = new Point(126 + 255, 164),
+                NotControl = true
+            };
+            AttkSpdLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = StatusPage,
+                Location = new Point(126 + 255, 182),
+                NotControl = true
+            };
             BagWLabel = new ExineLabel
             {
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 38 + 236),
+                Location = new Point(126 + 255, 38 + 236),
                 NotControl = true,
                 Text = "0-0",
             };
@@ -309,7 +365,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 56 + 236),
+                Location = new Point(126 + 255, 56 + 236),
                 NotControl = true,
                 Text = "0-0",
             };
@@ -319,25 +375,16 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 74 + 236),
+                Location = new Point(126 + 255, 74 + 236),
                 NotControl = true,
                 Text = "0-0",
-            };
-            MagicRLabel = new ExineLabel
-            {
-                AutoSize = true,
-                //Parent = StatePage,
-                Parent = StatusPage,
-                Location = new Point(126, 92 + 236),
-                NotControl = true,
-                Text = "0-0"
             };
             PoisonResLabel = new ExineLabel
             {
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 110 + 236),
+                Location = new Point(126 + 255, 110 + 236),
                 NotControl = true,
                 Text = "0/0"
             };
@@ -346,7 +393,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 128 + 236),
+                Location = new Point(126 + 255, 128 + 236),
                 NotControl = true,
                 Text = "0/0"
             };
@@ -356,7 +403,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 146 + 236),
+                Location = new Point(126 + 255, 146 + 236),
                 NotControl = true
             };
             PoisonRecLabel = new ExineLabel
@@ -364,7 +411,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 164 + 236),
+                Location = new Point(126 + 255, 164 + 236),
                 NotControl = true
             };
             HolyTLabel = new ExineLabel
@@ -372,7 +419,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 182 + 236),
+                Location = new Point(126 + 255, 182 + 236),
                 NotControl = true
             };
             FreezeLabel = new ExineLabel
@@ -380,7 +427,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 200 + 236),
+                Location = new Point(126 + 255, 200 + 236),
                 NotControl = true
             };
             PoisonAtkLabel = new ExineLabel
@@ -388,10 +435,11 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true,
                 //Parent = StatePage,
                 Parent = StatusPage,
-                Location = new Point(126, 218 + 236),
+                Location = new Point(126 + 255, 218 + 236),
                 NotControl = true
             };
-            
+            #endregion 보류
+
             Magics = new MagicButton[7];
 
             for (int i = 0; i < Magics.Length; i++)
@@ -455,30 +503,70 @@ namespace Exine.ExineScenes.ExDialogs
         private void ShowStatusPage()
         {
             StatusPage.Visible = true;
-            StatePage.Visible = false;
+            RingPage.Visible = false;
+            FamilyPage.Visible = false;
+            AKAPage.Visible = false;
             SkillPage.Visible = false;
-            StatusButton.Index = 501;
-            StateButton.Index = -1;
+            StatusButton.Index = 0+4;
+            RingButton.Index = 8;
+            FamilyButton.Index = 16;
+            AKAButton.Index = 24;
             SkillButton.Index = -1;
         }
 
-        private void ShowStatePage()
+        private void ShowRingPage()
         {
             StatusPage.Visible = false;
-            StatePage.Visible = true;
+            RingPage.Visible = true;
+            FamilyPage.Visible = false;
+            AKAPage.Visible = false;
             SkillPage.Visible = false;
-            StatusButton.Index = -1;
-            StateButton.Index = 502;
+            StatusButton.Index = 0;
+            RingButton.Index = 8 + 4;
+            FamilyButton.Index = 16;
+            AKAButton.Index = 24;
             SkillButton.Index = -1;
         }
-        
+
+        private void ShowFamilyPage()
+        {
+            StatusPage.Visible = false;
+            RingPage.Visible = false;
+            FamilyPage.Visible = true;
+            AKAPage.Visible = false;
+            SkillPage.Visible = false;
+            StatusButton.Index = 0;
+            RingButton.Index = 8;
+            FamilyButton.Index = 16 + 4;
+            AKAButton.Index = 24;
+            SkillButton.Index = -1;
+        }
+         
+        private void ShowAKAPage()
+        {
+            StatusPage.Visible = false;
+            RingPage.Visible = false;
+            FamilyPage.Visible = false;
+            AKAPage.Visible = true;
+            SkillPage.Visible = false;
+            StatusButton.Index = 0;
+            RingButton.Index = 8;
+            FamilyButton.Index = 16;
+            AKAButton.Index = 24 + 4;
+            SkillButton.Index = -1;
+        }
+
         public void ShowSkillPage()
         {
             StatusPage.Visible = false;
-            StatePage.Visible = false;
+            RingPage.Visible = false;
+            FamilyPage.Visible = false;
+            AKAPage.Visible = false;
             SkillPage.Visible = true;
             StatusButton.Index = -1;
-            StateButton.Index = -1;
+            RingButton.Index = -1;
+            FamilyButton.Index = -1;
+            AKAButton.Index = -1;
             SkillButton.Index = 503;
             StartIndex = 0;
         }

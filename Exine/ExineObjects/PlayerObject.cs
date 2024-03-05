@@ -284,12 +284,12 @@ namespace Exine.ExineObjects
                     if (leftRightToggleFlag % 2 == 0)
                     {
                         leftRightToggleFlag = 0;
-                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame)");
+                        //Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame)");
                         Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
                     }
                     else
                     {
-                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame)");
+                        //Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame)");
                         Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
                     }
                     break;
