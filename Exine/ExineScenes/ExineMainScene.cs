@@ -13,6 +13,7 @@ using Effect = Exine.ExineObjects.Effect;
 using Exine.Utils;
 using Exine.ExineScenes.ExDialogs;
 
+
 namespace Exine.ExineScenes
 {
     public sealed class ExineMainScene : ExineScene
@@ -1268,6 +1269,7 @@ namespace Exine.ExineScenes
 
             MapControl.Process();
             ExMainDialog.Process();
+            ExChatDialog.Process(); //k333123
             CharacterDialog.Process();  //k333123
             InventoryDialog.Process();
             GameShopDialog.Process();

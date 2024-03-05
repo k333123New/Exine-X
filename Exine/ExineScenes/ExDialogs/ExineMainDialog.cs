@@ -31,8 +31,8 @@ namespace Exine.ExineScenes.ExDialogs
 
         //203,563
         //exine ui
-        public ExineImageControl _ExPortraitDialog, _ExChatDialog, _ExBelt, _ExAPModeBtn, _ExMinimapDialog, _ExExperienceBar;
-        public ExineLabel _ExRingLabel, _ExRingAKALabel, _ExAKALabel, _ExNameLabel, _ExLevelLabel, _ExExperienceLabel;
+        public ExineImageControl _ExPortraitDialog, _ExChatDialog, _ExBelt, _ExAPModeBtn, _ExMinimapDialog, _ExHPBar, _ExMPBar;//, _ExExperienceBar;
+        public ExineLabel _ExRingLabel, _ExRingAKALabel, _ExAKALabel, _ExNameLabel, _ExLevelLabel;
 
         public bool HPOnly
         {
@@ -69,6 +69,29 @@ namespace Exine.ExineScenes.ExDialogs
                 //NotControl = true,
                 
             };
+            //이 안쪽에 피가 추가되어야함.
+            //33,34
+            _ExHPBar = new ExineImageControl
+            {
+                Index = 33,
+                Library = Libraries.PANEL0100,
+                Location = new Point(22, 98),
+                Visible = true,
+                Parent = _ExPortraitDialog,
+            };
+            _ExHPBar.BeforeDraw += _ExHPBar_BeforeDraw;
+
+            _ExMPBar = new ExineImageControl
+            {
+                Index = 34,
+                Library = Libraries.PANEL0100,
+                Location = new Point(21, 116),
+                Visible = true,
+                Parent = _ExPortraitDialog,
+            };
+            _ExMPBar.BeforeDraw += _ExMPBar_BeforeDraw;
+
+
 
             //ring, ringaka, aka, name, lv
             _ExRingLabel = new ExineLabel
@@ -144,25 +167,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this,
             };*/
 
-            _ExExperienceBar = new ExineImageControl
-            {
-                Index = 14,
-                Library = Libraries.PANEL0201,
-                Location = new Point(218+27, 536+17),
-                Parent = this,
-                DrawImage = false,
-                NotControl = true,
-                Visible = true,//add k333123
-            };
-            _ExExperienceBar.BeforeDraw += _ExExperienceBar_BeforeDraw;
-
-            _ExExperienceLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Parent = _ExExperienceBar,
-                NotControl = true,
-                Visible = true,//add k333123
-            };
+           
 
             LeftCap = new ExineImageControl
             {
@@ -397,6 +402,7 @@ namespace Exine.ExineScenes.ExDialogs
                 NotControl = true,
                 Visible = false,//add k333123
             };
+            
             _ExMinimapDialog = new ExineImageControl
             {
                 Index = 0,
@@ -528,6 +534,58 @@ namespace Exine.ExineScenes.ExDialogs
             
         }
 
+        private void _ExHPBar_BeforeDraw(object sender, EventArgs e)
+        {
+            if (_ExHPBar.Library == null) return;
+
+            //double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
+            double percent = (double)MapObject.User.PercentHealth;//MAXHP ?
+            if (percent > 1) percent = 1;
+            if (percent <= 0) return;
+
+            Rectangle section = new Rectangle
+            {
+                Size = new Size((int)((_ExHPBar.Size.Width - 3) * percent), _ExHPBar.Size.Height)
+            };
+
+            _ExHPBar.Library.Draw(_ExHPBar.Index, section, _ExHPBar.DisplayLocation, Color.White, false);
+        }
+
+        private void _ExMPBar_BeforeDraw(object sender, EventArgs e)
+        {
+            if (_ExMPBar.Library == null) return;
+
+            //double percent = MapObject.User.HP / (double)MapObject.User.PercentHealth;//MAXHP ?
+            double percent = (double)MapObject.User.PercentMana;//MAXHP ?
+            if (percent > 1) percent = 1;
+            if (percent <= 0) return;
+
+            Rectangle section = new Rectangle
+            {
+                Size = new Size((int)((_ExMPBar.Size.Width - 3) * percent), _ExMPBar.Size.Height)
+            };
+
+            _ExMPBar.Library.Draw(_ExMPBar.Index, section, _ExMPBar.DisplayLocation, Color.White, false);
+        }
+
+
+        private void ExperienceBar_BeforeDraw(object sender, EventArgs e)
+        {
+            if (ExperienceBar.Library == null) return;
+
+            double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
+            if (percent > 1) percent = 1;
+            if (percent <= 0) return;
+
+            Rectangle section = new Rectangle
+            {
+                Size = new Size((int)((ExperienceBar.Size.Width - 3) * percent), ExperienceBar.Size.Height)
+            };
+
+            ExperienceBar.Library.Draw(ExperienceBar.Index, section, ExperienceBar.DisplayLocation, Color.White, false);
+        }
+
+
         public void Process()
         {
             switch (ExineMainScene.Scene.AMode)
@@ -611,8 +669,7 @@ namespace Exine.ExineScenes.ExDialogs
             _ExAKALabel.Text = "";//k333123 must add!!!
             _ExLevelLabel.Text = User.Level.ToString();
 
-            _ExExperienceLabel.Text = string.Format("{0:#0.##%}", User.Experience / (double)User.MaxExperience);
-            _ExExperienceLabel.Location = new Point((_ExExperienceLabel.Size.Width / 2) - 20, -10);
+          
 
 
             ExperienceLabel.Text = string.Format("{0:#0.##%}", User.Experience / (double)User.MaxExperience);
@@ -672,37 +729,7 @@ namespace Exine.ExineScenes.ExDialogs
             Libraries.Prguse.Draw(4, r, new Point(((Settings.ScreenWidth / 2) - (Size.Width / 2)) + 51, HealthOrb.DisplayLocation.Y + 80 - height), Color.White, false);
         }
 
-        private void _ExExperienceBar_BeforeDraw(object sender, EventArgs e)
-        {
-            if (_ExExperienceBar.Library == null) return;
-
-            double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
-            percent = 99;//test
-            if (percent > 1) percent = 1;
-            if (percent <= 0) return;
-
-            Rectangle section = new Rectangle
-            {
-                Size = new Size((int)((_ExExperienceBar.Size.Width - 3) * percent), _ExExperienceBar.Size.Height)
-            };
-            _ExExperienceBar.Library.Draw(_ExExperienceBar.Index, section, _ExExperienceBar.DisplayLocation,Color.White,false);
-        }
-
-        private void ExperienceBar_BeforeDraw(object sender, EventArgs e)
-        {
-            if (ExperienceBar.Library == null) return;
-
-            double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
-            if (percent > 1) percent = 1;
-            if (percent <= 0) return;
-
-            Rectangle section = new Rectangle
-            {
-                Size = new Size((int)((ExperienceBar.Size.Width - 3) * percent), ExperienceBar.Size.Height)
-            };
-
-            ExperienceBar.Library.Draw(ExperienceBar.Index, section, ExperienceBar.DisplayLocation, Color.White, false);
-        }
+       
 
         private void WeightBar_BeforeDraw(object sender, EventArgs e)
         {
@@ -1104,8 +1131,9 @@ namespace Exine.ExineScenes.ExDialogs
         public List<ExineLabel> LinkedItemButtons = new List<ExineLabel>();
 
         public MirButton HomeButton, UpButton, EndButton, DownButton, PositionBar;
-        public ExineImageControl CountBar;
+        public ExineImageControl CountBar, _ExExperienceBar;
         public ExineTextBox ChatTextBox;
+        public ExineLabel _ExExperienceLabel;
         public Font ChatFont = new Font(Settings.FontName, 8F);
         public string LastPM = string.Empty;
 
@@ -1129,6 +1157,7 @@ namespace Exine.ExineScenes.ExDialogs
             KeyDown += ChatPanel_KeyDown;
             MouseWheel += ChatPanel_MouseWheel;
 
+            
 
             //채팅 입력 상자 부분
             ChatTextBox = new ExineTextBox
@@ -1241,6 +1270,62 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.None,
             };
             PositionBar.OnMoving += PositionBar_OnMoving;
+
+            _ExExperienceBar = new ExineImageControl
+            {
+                Index = 14,
+                Library = Libraries.PANEL0201,
+                Location = new Point(42,87),
+                Parent = this,
+                DrawImage = false,
+                NotControl = true,
+                Visible = true,//add k333123
+            };
+            _ExExperienceBar.BeforeDraw += _ExExperienceBar_BeforeDraw;
+            _ExExperienceBar.MouseUp += _ExExperienceBar_IsMouseUp;
+            _ExExperienceBar.MouseLeave += _ExExperienceBar_MouseLeave;
+
+            _ExExperienceLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = _ExExperienceBar,
+                NotControl = true,
+                Visible = false,//add k333123
+            };
+        }
+
+       
+
+        public void Process()
+        {
+            _ExExperienceLabel.Text = string.Format("{0:#0.##%}", MapObject.User.Experience / (double)MapObject.User.MaxExperience);
+            _ExExperienceLabel.Location = new Point((_ExExperienceLabel.Size.Width / 2) - 20, -10);
+        }
+
+        private void _ExExperienceBar_BeforeDraw(object sender, EventArgs e)
+        {
+            if (_ExExperienceBar.Library == null) return;
+
+            double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
+            percent = 99;//test
+            if (percent > 1) percent = 1;
+            if (percent <= 0) return;
+
+            Rectangle section = new Rectangle
+            {
+                Size = new Size((int)((_ExExperienceBar.Size.Width - 3) * percent), _ExExperienceBar.Size.Height/2)
+            };
+            _ExExperienceBar.Library.Draw(_ExExperienceBar.Index, section, _ExExperienceBar.DisplayLocation, Color.White, false);
+        }
+
+        private void _ExExperienceBar_IsMouseUp(object sender, EventArgs e)
+        {
+            _ExExperienceLabel.Visible = true;
+        }
+
+        private void _ExExperienceBar_MouseLeave(object sender, EventArgs e)
+        {
+            _ExExperienceLabel.Visible = false;
         }
 
         public void SetChatText(string newText)
@@ -1824,6 +1909,7 @@ namespace Exine.ExineScenes.ExDialogs
             }
 
             Index -= offset;
+            
         }
 
         public class ChatHistory
@@ -2025,6 +2111,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void Process()
         {
+
             ProcessSkillDelay();
         }
 

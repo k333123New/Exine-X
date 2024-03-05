@@ -294,7 +294,7 @@ namespace Exine.ExineScenes
 
                 Library = Libraries.PANEL0000,
                 Parent = this,
-                Location = new Point((1024 - 800) / 2 + 663, (768 - 600) / 2 + 364),
+                Location = new Point((1024 - 800) / 2 + 663-1, (768 - 600) / 2 + 364-2),
                 Visible = true,
             };
             _okBtn.Click += (o, e) =>

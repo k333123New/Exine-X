@@ -126,7 +126,7 @@ namespace Exine.ExineScenes.ExDialogs
             StatusButton = new MirButton
             {
                 Library = Libraries.PANEL0503,
-                Location = new Point(365, 50),
+                Location = new Point(365-10, 50-13),
                 Parent = this,
                 PressedIndex = 0,
                 Size = new Size(36, 74),
@@ -138,7 +138,7 @@ namespace Exine.ExineScenes.ExDialogs
             RingButton = new MirButton
             {
                 Library = Libraries.PANEL0503,
-                Location = new Point(365, 124),
+                Location = new Point(365-10, 124- 13),
                 Parent = this,
                 PressedIndex = 8,
                 Size = new Size(36, 74),
@@ -149,7 +149,7 @@ namespace Exine.ExineScenes.ExDialogs
             FamilyButton = new MirButton
             {
                 Library = Libraries.PANEL0503,
-                Location = new Point(365, 198),
+                Location = new Point(365-10, 198- 13),
                 Parent = this,
                 PressedIndex = 16,
                 Size = new Size(36, 74),
@@ -161,7 +161,7 @@ namespace Exine.ExineScenes.ExDialogs
             AKAButton = new MirButton
             {
                 Library = Libraries.PANEL0503,
-                Location = new Point(365, 272),
+                Location = new Point(365-10, 272- 13),
                 Parent = this,
                 PressedIndex = 24,
                 Size = new Size(36, 74),
@@ -185,7 +185,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 HoverIndex = 90,
                 Index = 89,
-                Location = new Point(365, 3+434-17),
+                Location = new Point(365-1, 3+434-17+2),
                 Library = Libraries.PANEL0600,
                 Parent = this,
                 PressedIndex = 91,
