@@ -7,6 +7,7 @@ using Exine.ExineSounds;
 using SlimDX;
 using Font = System.Drawing.Font;
 using C = ClientPackets;
+using Microsoft.VisualBasic.ApplicationServices;
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -21,7 +22,7 @@ namespace Exine.ExineScenes.ExDialogs
         public ExineImageControl ExperienceBar, WeightBar, LeftCap, RightCap;
         public MirButton GameShopButton, MenuButton, InventoryButton, CharacterButton, SkillButton, QuestButton, OptionButton;
         public ExineControl HealthOrb;
-        public ExineLabel HealthLabel, ManaLabel, TopLabel, BottomLabel, LevelLabel, CharacterName, ExperienceLabel, GoldLabel, WeightLabel, SpaceLabel, AModeLabel, PModeLabel, SModeLabel;
+        public ExineLabel HealthLabel, ManaLabel, TopLabel, BottomLabel, ExperienceLabel, GoldLabel, WeightLabel, SpaceLabel, AModeLabel, PModeLabel, SModeLabel;
         public HeroInfoPanel HeroInfoPanel;
         public HeroBehaviourPanel HeroBehaviourPanel;
 
@@ -30,7 +31,8 @@ namespace Exine.ExineScenes.ExDialogs
 
         //203,563
         //exine ui
-        public ExineImageControl _ExPortraitDialog, _ExChatDialog, _ExBelt, _ExAPModeBtn, _ExMinimapDialog;
+        public ExineImageControl _ExPortraitDialog, _ExChatDialog, _ExBelt, _ExAPModeBtn, _ExMinimapDialog, _ExExperienceBar;
+        public ExineLabel _ExRingLabel, _ExRingAKALabel, _ExAKALabel, _ExNameLabel, _ExLevelLabel, _ExExperienceLabel;
 
         public bool HPOnly
         {
@@ -51,6 +53,7 @@ namespace Exine.ExineScenes.ExDialogs
             Library = Libraries.MAINSAMPLE;
             Location = new Point((1024 - 800) / 2, (768 - 600) / 2);
             ForeColour = Color.Black;
+            BackColour = Color.Black;
             PixelDetect = true;
 
             _ExPortraitDialog = new ExineImageControl
@@ -66,7 +69,52 @@ namespace Exine.ExineScenes.ExDialogs
                 //NotControl = true,
                 
             };
-             
+
+            //ring, ringaka, aka, name, lv
+            _ExRingLabel = new ExineLabel
+            {
+                Parent = _ExPortraitDialog,
+                Location = new Point(92, 10),
+                Size = new Size(99, 20),
+                Visible = true,
+                NotControl = true,
+            };
+
+            _ExRingAKALabel = new ExineLabel
+            {
+                Parent = _ExPortraitDialog,
+                Location = new Point(92, 30),
+                Size = new Size(99, 20),
+                Visible = true,
+                NotControl = true,
+            };
+
+            _ExAKALabel = new ExineLabel
+            {
+                Parent = _ExPortraitDialog,
+                Location = new Point(92, 50),
+                Size = new Size(99, 20),
+                Visible = true,
+                NotControl = true,
+            };
+
+            _ExNameLabel = new ExineLabel
+            {
+                Parent = _ExPortraitDialog,
+                Location = new Point(92, 70),
+                Size = new Size(99, 20),
+                Visible = true,
+                NotControl = true,
+            };
+
+            _ExLevelLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = _ExPortraitDialog,
+                Visible = true,//add k333123
+                Location = new Point(173, 70)
+            };
+
             _ExBelt = new ExineImageControl
             {
                 Index = 0,
@@ -95,16 +143,27 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = true,
                 Parent = this,
             };*/
-            _ExMinimapDialog = new ExineImageControl
+
+            _ExExperienceBar = new ExineImageControl
             {
-                Index = 0,
-                Library = Libraries.PANEL0301,
-                Location = new Point(600, 468),
-                Visible = true,
+                Index = 14,
+                Library = Libraries.PANEL0201,
+                Location = new Point(218+27, 536+17),
                 Parent = this,
+                DrawImage = false,
+                NotControl = true,
+                Visible = true,//add k333123
+            };
+            _ExExperienceBar.BeforeDraw += _ExExperienceBar_BeforeDraw;
+
+            _ExExperienceLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = _ExExperienceBar,
+                NotControl = true,
+                Visible = true,//add k333123
             };
 
-           
             LeftCap = new ExineImageControl
             {
                 Index = 12,
@@ -316,23 +375,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = HealthOrb,
             };
 
-            LevelLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Parent = this,
-                Visible = false,//add k333123
-                Location = new Point(5, 108)
-                
-            };
-
-            CharacterName = new ExineLabel
-            {
-                DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
-                Parent = this,
-                Location = new Point(6, 120),
-                Visible = false,//add k333123
-                Size = new Size(90, 16)
-            };
+          
 
 
             ExperienceBar = new ExineImageControl
@@ -354,6 +397,18 @@ namespace Exine.ExineScenes.ExDialogs
                 NotControl = true,
                 Visible = false,//add k333123
             };
+            _ExMinimapDialog = new ExineImageControl
+            {
+                Index = 0,
+                Library = Libraries.PANEL0301,
+                Location = new Point(600, 468),
+                Visible = true,
+                BackColour = Color.Black,
+                Parent = this,
+            };
+
+           
+
 
             GoldLabel = new ExineLabel
             {
@@ -549,11 +604,20 @@ namespace Exine.ExineScenes.ExDialogs
                 ManaLabel.Text = string.Empty;
             }
 
-            LevelLabel.Text = User.Level.ToString();
+            _ExNameLabel.Text = User.Name;
+            _ExNameLabel.ForeColour = User.NameColour;
+            _ExRingLabel.Text = User.GuildName;
+            _ExRingAKALabel.Text = ""; //k333123 must add!!!
+            _ExAKALabel.Text = "";//k333123 must add!!!
+            _ExLevelLabel.Text = User.Level.ToString();
+
+            _ExExperienceLabel.Text = string.Format("{0:#0.##%}", User.Experience / (double)User.MaxExperience);
+            _ExExperienceLabel.Location = new Point((_ExExperienceLabel.Size.Width / 2) - 20, -10);
+
+
             ExperienceLabel.Text = string.Format("{0:#0.##%}", User.Experience / (double)User.MaxExperience);
             ExperienceLabel.Location = new Point((ExperienceBar.Size.Width / 2) - 20, -10);
-            GoldLabel.Text = ExineMainScene.Gold.ToString("###,###,##0");
-            CharacterName.Text = User.Name;
+            GoldLabel.Text = ExineMainScene.Gold.ToString("###,###,##0"); 
             SpaceLabel.Text = User.Inventory.Count(t => t == null).ToString();
             WeightLabel.Text = (MapObject.User.Stats[Stat.BagWeight] - MapObject.User.CurrentBagWeight).ToString();
         }
@@ -606,6 +670,22 @@ namespace Exine.ExineScenes.ExDialogs
             r = new Rectangle(51, 80 - height, 50, height);
 
             Libraries.Prguse.Draw(4, r, new Point(((Settings.ScreenWidth / 2) - (Size.Width / 2)) + 51, HealthOrb.DisplayLocation.Y + 80 - height), Color.White, false);
+        }
+
+        private void _ExExperienceBar_BeforeDraw(object sender, EventArgs e)
+        {
+            if (_ExExperienceBar.Library == null) return;
+
+            double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
+            percent = 99;//test
+            if (percent > 1) percent = 1;
+            if (percent <= 0) return;
+
+            Rectangle section = new Rectangle
+            {
+                Size = new Size((int)((_ExExperienceBar.Size.Width - 3) * percent), _ExExperienceBar.Size.Height)
+            };
+            _ExExperienceBar.Library.Draw(_ExExperienceBar.Index, section, _ExExperienceBar.DisplayLocation,Color.White,false);
         }
 
         private void ExperienceBar_BeforeDraw(object sender, EventArgs e)
@@ -2064,7 +2144,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Library = Libraries.Prguse,
                 Visible = false,
                 NotControl = true
-            };
+        };
 
             BigMapButton = new MirButton
             {

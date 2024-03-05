@@ -249,7 +249,8 @@ namespace LibraryEditor
             Images[Index] = mImage;
         }
 
-        public void InsertImage(int index, Bitmap image, short x, short y, bool removeBlack = true)
+        //public void InsertImage(int index, Bitmap image, short x, short y, bool removeBlack = true)
+        public void InsertImage(int index, Bitmap image, short x, short y, bool removeBlack = false)//k333123
         {
             MImage mImage = new MImage(image, removeBlack) { X = x, Y = y };
 
@@ -344,7 +345,8 @@ namespace LibraryEditor
                 this.Height = Height;
             }
 
-            public MImage(Bitmap image, bool removeBlack = true)
+            //public MImage(Bitmap image, bool removeBlack = true)
+            public MImage(Bitmap image, bool removeBlack = false)
             {
                 if (image == null)
                 {
@@ -405,7 +407,8 @@ namespace LibraryEditor
                 return input;
             }
 
-            private unsafe byte[] ConvertBitmapToArray(Bitmap input, bool removeBlack = true)
+            //private unsafe byte[] ConvertBitmapToArray(Bitmap input, bool removeBlack = true)
+            private unsafe byte[] ConvertBitmapToArray(Bitmap input, bool removeBlack = false)
             {
                 BitmapData data = input.LockBits(new Rectangle(0, 0, input.Width, input.Height), ImageLockMode.ReadOnly,
                                                  PixelFormat.Format32bppArgb);

@@ -184,6 +184,7 @@ namespace Exine.ExineControls
             ForeColour = Color.White;
             _autoSize = true;
             TintColour = Color.Red; //k333123
+            BorderColour = Color.Transparent;//k333123 240305
         }
 
         protected internal override void DrawControl()

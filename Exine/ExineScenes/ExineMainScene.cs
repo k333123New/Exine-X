@@ -71,6 +71,8 @@ namespace Exine.ExineScenes
         public ExineStateDialog StateDialog;
 
 
+
+
         public ExineCharacterDialog HeroDialog;
         public HeroInventoryDialog HeroInventoryDialog;
         public HeroManageDialog HeroManageDialog;
@@ -217,11 +219,18 @@ namespace Exine.ExineScenes
 
             KeyDown += GameScene_KeyDown;
             
-            ExMainDialog = new ExineMainDialog { Parent = this }; //add k333123 mod
-            ExChatDialog = new ExineChatDialog { Parent = this }; //add k333123 mod
-            ExChatControl = new ExineChatControlBar { Parent = this }; //add k333123 mod  
+            ExMainDialog = new ExineMainDialog { Parent = this, BackColour = Color.Black}; //add k333123 mod
+            ExChatDialog = new ExineChatDialog { Parent = this, Visible=true }; //add k333123 mod
+            ExChatControl = new ExineChatControlBar { Parent = this }; //add k333123 mod   
+
             InventoryDialog = new ExineInventoryDialog { Parent = this };
             BeltDialog = new BeltDialog { Parent = this, Visible=false };//임시로 꺼둠
+            
+             
+
+
+
+
 
             StorageDialog = new StorageDialog { Parent = this, Visible = false };
             CraftDialog = new CraftDialog { Parent = this, Visible = false };

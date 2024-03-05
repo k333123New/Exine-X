@@ -5298,7 +5298,7 @@ namespace Exine.ExineObjects
             bool oldGrayScale = DXManager.GrayScale;
             Color drawColour = ApplyDrawColour();
             Color tintColor = GetColorFromExColor(ExColor);
-            
+
             //if (BodyLibrary != null) BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
             if (BodyLibrary != null) BodyLibrary.ExineDrawTinted(DrawFrame + ArmourOffSet, DrawLocation, drawColour,tintColor, true);
 
