@@ -81,7 +81,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Index = 5,
                 Library = new MLibrary(Settings.ExineUIPath + "PANEL0100"),
 
-                Location = new Point(0, 0), 
+                Location = new Point(15, 15), 
                 Visible = true,
                 Parent = _ExPortraitDialog,  
             };
@@ -102,7 +102,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             _ExHPLabel = new ExineLabel
             {
-                Font = new Font(Settings.FontName, 9F),
+                Font = new Font(Settings.FontName, 9F, FontStyle.Bold),
                 ForeColour = Color.FromArgb(10, Color.White),
                 AutoSize = true,
                 Parent = _ExHPBar,
@@ -121,7 +121,7 @@ namespace Exine.ExineScenes.ExDialogs
             _ExMPBar.BeforeDraw += _ExMPBar_BeforeDraw;
             _ExMPLabel = new ExineLabel
             {
-                Font = new Font(Settings.FontName, 9F),
+                Font = new Font(Settings.FontName, 9F, FontStyle.Bold),
                 ForeColour = Color.FromArgb(10, Color.White),
                 AutoSize = true,
                 Parent = _ExMPBar,
@@ -589,20 +589,17 @@ namespace Exine.ExineScenes.ExDialogs
                 Bitmap objectPortrait = GetBitmapFromBytes(photoDatas);
                 isPhotoUpdateOK = true;
 
-                /*
-                MLibraryForSave temp = new MLibraryForSave("photo");
-                if(temp.Images.Count!=0)
+                NewYPF.MLibraryForSave temp = new NewYPF.MLibraryForSave("photo.lib");
+                if (temp.Images.Count != 0)
                 {
                     temp.RemoveImage(0);
                 }
                 temp.AddImage(objectPortrait, 0, 0);
+                temp.Save();
                 temp.Close();
 
-                //MLibrary temp = new MLibrary("photo");
                 _ExPhoto.Library = new MLibrary("photo");
-                _ExPhoto.Index = 0;
-                
-                */
+                _ExPhoto.Index = 0; 
             }
         }
         public Bitmap GetBitmapFromBytes(byte[] imageBytes)
