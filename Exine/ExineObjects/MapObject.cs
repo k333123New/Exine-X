@@ -4,6 +4,7 @@ using Exine.ExineScenes;
 using Exine.ExineSounds;
 using Exine.ExineScenes.Dialogs;
 using SlimDX;
+using NAudio.Gui;
 
 namespace Exine.ExineObjects
 {
@@ -377,21 +378,22 @@ namespace Exine.ExineObjects
                 Location = new Point(0, 0),
                 Parent = ExineMainScene.ActiveScene,
                 NotControl = true,
-                Visible = true,
-                
+                Visible = true, 
+
             };
 
             ChatMiniPortrait = new ExineImageControl
             {
                 Index = 0,
-                Library = new MLibrary(Settings.DataPath + "SayFrame"), //ID Name - Chatting with Contaion user name?
-                Size = new Size(10,10), 
+                Library = Libraries.SAYFRAME, //ID Name - Chatting with Contaion user name?
+                Size = new Size(10, 10),
                 Location = new Point(0, 0),
                 Parent = ChatLabelBackImage,
                 NotControl = true,
                 Visible = true,
             };
-            
+            ChatMiniPortrait.BeforeDraw += ChatMiniPortrait_BeforeDraw;
+
             ChatLabel = new ExineLabel
             {
                 AutoSize = true,
@@ -413,37 +415,48 @@ namespace Exine.ExineObjects
             //panel203 - 0
            
         }
+
+        private void ChatMiniPortrait_BeforeDraw(object sender, EventArgs e)
+        {
+            if (File.Exists(User.Name + ".jpg") && File.Exists("photo.lib"))
+            {
+                ChatMiniPortrait.Index = 1;
+                ChatMiniPortrait.Library = new MLibrary("photo.lib"); //ID Name - Chatting with Contaion user name?
+                ChatMiniPortrait.Location = new Point(-20, -25);
+            }
+        }
+
         public virtual void DrawChat()
         {
             if (ChatLabel == null || ChatLabel.IsDisposed) return;
 
             if (CMain.Time > ChatTime)
             {
-
                 ChatLabel.Dispose();
                 ChatLabel = null;
+                 
 
                 ChatLabelBackImage.Dispose();//add k333123
                 ChatLabelBackImage = null;//add k333123
+
+                ChatMiniPortrait.Dispose();//add k333123
+                ChatMiniPortrait = null;//add k333123
                 return;
             }
              
             ChatLabel.ForeColour = Dead ? Color.Gray : Color.White;
             ChatLabel.Location = new Point(DisplayRectangle.X + (48 - ChatLabel.Size.Width) / 2, DisplayRectangle.Y - (60 + ChatLabel.Size.Height) - (Dead ? 35 : 0));
-             
+            
             ChatLabelBackImage.Location = 
                 new Point
                 (
-                    DisplayRectangle.X + (48 - ChatLabel.Size.Width) / 2 - 32,
-                    DisplayRectangle.Y - (60 + ChatLabel.Size.Height) - 24  - (Dead ? 35 : 0)
+                    DisplayRectangle.X + (40 - ChatLabel.Size.Width) / 2 ,
+                    DisplayRectangle.Y - (50 + ChatLabel.Size.Height)   - (Dead ? 35 : 0)
                 );
-            
-
+             
             //add k333123
             //이 시점에서 그리기 전에 초상화 부분 불러온 정보를 가지고 mirimageobject를 만든것을 Location잡고 그려준다. 그후 채팅을 그려준다.
-
-            //ChatLabelBackImage.Draw();
-            ChatLabel.Draw();
+           ChatLabel.Draw(); 
         }
 
         public virtual void CreateLabel()

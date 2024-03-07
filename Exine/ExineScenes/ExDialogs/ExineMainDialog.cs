@@ -587,14 +587,26 @@ namespace Exine.ExineScenes.ExDialogs
                 byte[] photoDatas = new byte[MapObject.User.ExPortraitLen];
                 Buffer.BlockCopy(MapObject.User.ExPortraitBytes, 0, photoDatas, 0, photoDatas.Length);
                 Bitmap objectPortrait = GetBitmapFromBytes(photoDatas);
+                
                 isPhotoUpdateOK = true;
 
+                // 사이즈가 변경된 이미지(1/2로 축소)
+                int width = objectPortrait.Width / 2;
+                int height = objectPortrait.Height / 2;
+                Size resize = new Size(width, height);
+                Bitmap objectPortraitSmall = new Bitmap(objectPortrait, resize);
+
+                File.Delete("photo.lib");
                 NewYPF.MLibraryForSave temp = new NewYPF.MLibraryForSave("photo.lib");
                 if (temp.Images.Count != 0)
                 {
-                    temp.RemoveImage(0);
+                    for (int i = 0; i < temp.Images.Count; i++)
+                    {
+                        temp.RemoveImage(0);
+                    }
                 }
                 temp.AddImage(objectPortrait, 0, 0);
+                temp.AddImage(objectPortraitSmall, 0, 0);
                 temp.Save();
                 temp.Close();
 
