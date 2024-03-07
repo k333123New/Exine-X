@@ -725,6 +725,14 @@ namespace Server.ExineNetwork
                 case (short)ClientPacketIds.Rest:
                     FishingCast((C.FishingCast)p);
                     break;
+
+                //Server Recv ClientPacketIds.UpdatePhoto packet
+                case (short)ClientPacketIds.UpdatePhoto:
+                    Console.WriteLine("@@@333 UpdatePhoto");
+                    Console.WriteLine("ExineConnection_ProcessPacket_case (short)ClientPacketIds.UpdatePhoto");
+                    UpdatePhoto((C.UpdatePhoto)p);
+                    break;
+
                 default:
                     MessageQueue.Enqueue(string.Format("Invalid packet received. Index : {0}", p.Index));
                     break;
@@ -865,6 +873,7 @@ namespace Server.ExineNetwork
             MessageQueue.Enqueue(SessionID + ", " + IPAddress + ", Password being changed.");
             Envir.ChangePassword(p, this);
         }
+        
         private void Login(C.Login p)
         {
             if (Stage != GameStage.Login) return;
@@ -1682,6 +1691,7 @@ namespace Server.ExineNetwork
             Player.FishingCast(p.CastOut, true);
         }
 
+
         private void FishingChangeAutocast(C.FishingChangeAutocast p)
         {
             if (Stage != GameStage.Game) return;
@@ -1916,6 +1926,13 @@ namespace Server.ExineNetwork
 
             Player.AddMemo(p.CharacterIndex, p.Memo);
         }
+
+        private void UpdatePhoto(C.UpdatePhoto p)
+        {
+            Console.WriteLine("@@@222 UpdatePhoto");
+            if (Stage != GameStage.Game) return; 
+            Player.UpdatePhoto(p.photoDataLen, p.photoData);
+        }
         private void GuildBuffUpdate(C.GuildBuffUpdate p)
         {
             if (Stage != GameStage.Game) return;
@@ -2091,5 +2108,6 @@ namespace Server.ExineNetwork
             //Player.FishingCast(p.CastOut, true);
             //Player.Rest(p.RestOut, true);
         }
+
     }
 }

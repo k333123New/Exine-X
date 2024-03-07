@@ -2170,10 +2170,51 @@ namespace Exine.ExineScenes
             BigMapDialog.SetTargetMap(info.MapIndex);
             BigMapDialog.SetTargetNPC(info.NPCIndex);
         }
+
+        public byte[] GetBytesFromJpg(string path)
+        {
+            //max 8000bytes`
+            //\Exine\RData\Profiles\charname.jpg  72*72
+            Stream jpgStream = File.Open(Application.StartupPath + path, FileMode.Open);
+            Image image = Image.FromStream(jpgStream);
+            var stream = new MemoryStream();
+            //image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            byte[] imageBytes = stream.ToArray();
+            Console.WriteLine("imageBytes[0] : {0}, imageBytes.Length:{1}", imageBytes[0], imageBytes.Length);
+            jpgStream.Close();
+            return imageBytes;
+        }
+
         private void UserInformation(S.UserInformation p)
         {
-            User = new UserObject(p.ObjectID);
+            User = new UserObject(p.ObjectID); 
             User.Load(p);
+
+            Console.WriteLine("***111222 File.Exists Check " + User.Name + ".jpg");
+
+            if (File.Exists(User.Name + ".jpg"))
+            {
+                Console.WriteLine("***222333 File.Exists!");
+                byte[] tempPhotoData = GetBytesFromJpg(User.Name + ".jpg");
+                User.ExPortraitLen = tempPhotoData.Length;
+
+                if (tempPhotoData.Length <= 8000)
+                {
+                    Buffer.BlockCopy(tempPhotoData, 0, User.ExPortraitBytes, 0, tempPhotoData.Length);
+                    Console.WriteLine("Send C.UpdatePhoto from UserInformation!!!");
+
+
+                    //k333123 240307 now!
+                    //SendToServer(C.UpdatePhoto)
+
+                    Console.WriteLine("@@@444 UpdatePhoto");
+                    Network.Enqueue(new C.UpdatePhoto { photoData = User.ExPortraitBytes, photoDataLen = User.ExPortraitLen }); //this cause server disconnect!
+
+                }
+            }
+
             ExMainDialog.PModeLabel.Visible = User.Class == ExineClass.Wizard || User.Class == ExineClass.Taoist;
             HasHero = p.HasHero;
             HeroBehaviourPanel.UpdateBehaviour(p.HeroBehaviour);
@@ -2229,7 +2270,7 @@ namespace Exine.ExineScenes
             ExChatDialog.ReceiveChat(p.Message, p.Type);
         }
         private void ObjectPlayer(S.ObjectPlayer p)
-        {
+        { 
             PlayerObject player = new PlayerObject(p.ObjectID);
             player.Load(p);
         }

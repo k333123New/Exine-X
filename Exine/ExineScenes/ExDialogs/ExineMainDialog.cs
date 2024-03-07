@@ -31,7 +31,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         //203,563
         //exine ui
-        public ExineImageControl _ExPortraitDialog, _ExChatDialog, _ExBelt, _ExAPModeBtn, _ExMinimapDialog, _ExHPBar, _ExMPBar;//, _ExExperienceBar;
+        public ExineImageControl _ExPortraitDialog, _ExPhoto, _ExHPBar, _ExMPBar, _ExChatDialog, _ExBelt, _ExAPModeBtn, _ExMinimapDialog;//, _ExExperienceBar;
         public ExineLabel _ExRingLabel, _ExRingAKALabel, _ExAKALabel, _ExNameLabel, _ExLevelLabel, _ExHPLabel, _ExMPLabel;
 
         public bool HPOnly
@@ -56,6 +56,8 @@ namespace Exine.ExineScenes.ExDialogs
             BackColour = Color.Black;
             PixelDetect = true;
 
+
+
             _ExPortraitDialog = new ExineImageControl
             {
                 Index = 0,
@@ -69,7 +71,21 @@ namespace Exine.ExineScenes.ExDialogs
                 //NotControl = true,
                 
             };
-            //100-5
+
+            _ExPhoto = new ExineImageControl
+            { 
+                //bitmap to lib!(bitmap is info.xxx)
+                //GetBytesFromJpg("test.jpg")
+                //Bitmap objectPortrait = GetBitmapFromBytes(MapObject.User.ExPortraitBytes)
+                //objectPortrait.Save(temp.Name + ".jpg");
+                Index = 5,
+                Library = new MLibrary(Settings.ExineUIPath + "PANEL0100"),
+
+                Location = new Point(0, 0), 
+                Visible = true,
+                Parent = _ExPortraitDialog,  
+            };
+            _ExPhoto.BeforeDraw += _ExPhoto_BeforeDraw;
 
 
             //이 안쪽에 피가 추가되어야함.
@@ -554,6 +570,50 @@ namespace Exine.ExineScenes.ExDialogs
             };
             
         }
+
+        bool isPhotoUpdateOK = false;
+        private void _ExPhoto_BeforeDraw(object sender, EventArgs e)
+        {
+            if (isPhotoUpdateOK == true) return;
+            //bitmap to lib!(bitmap is info.xxx)
+            //GetBytesFromJpg("test.jpg")
+            //Bitmap objectPortrait = GetBitmapFromBytes(MapObject.User.ExPortraitBytes)
+            //objectPortrait.Save(temp.Name + ".jpg");
+            if (MapObject.User.ExPortraitLen!=0)
+            {
+                //_ExPhoto.Index = 0; 
+                Console.WriteLine("_ExPhoto_BeforeDraw and MapObject.User.ExPortraitLen!=0");
+                Console.WriteLine("MapObject.User.ExPortraitLen:" + MapObject.User.ExPortraitLen);
+                byte[] photoDatas = new byte[MapObject.User.ExPortraitLen];
+                Buffer.BlockCopy(MapObject.User.ExPortraitBytes, 0, photoDatas, 0, photoDatas.Length);
+                Bitmap objectPortrait = GetBitmapFromBytes(photoDatas);
+                isPhotoUpdateOK = true;
+
+                /*
+                MLibraryForSave temp = new MLibraryForSave("photo");
+                if(temp.Images.Count!=0)
+                {
+                    temp.RemoveImage(0);
+                }
+                temp.AddImage(objectPortrait, 0, 0);
+                temp.Close();
+
+                //MLibrary temp = new MLibrary("photo");
+                _ExPhoto.Library = new MLibrary("photo");
+                _ExPhoto.Index = 0;
+                
+                */
+            }
+        }
+        public Bitmap GetBitmapFromBytes(byte[] imageBytes)
+        {
+            Image recvImage = Image.FromStream(new MemoryStream(imageBytes));
+            Bitmap recvBitmap = new Bitmap(recvImage);
+            return recvBitmap;
+        }
+        
+
+
 
         private void _ExHPBar_BeforeDraw(object sender, EventArgs e)
         {

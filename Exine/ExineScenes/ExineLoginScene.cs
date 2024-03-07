@@ -579,10 +579,13 @@ namespace Exine.ExineScenes
              
         }
 
+        
         private void Login()
-        {
-            Network.Enqueue(new C.Login { AccountID = _loginIdTextBox.Text, Password = _loginPwTextBox.Text });
+        { 
+             Network.Enqueue(new C.Login { AccountID = _loginIdTextBox.Text, Password = _loginPwTextBox.Text });
         }
+
+
         static string ServerPackIdsToString(ServerPacketIds serverPacketIds)
         {
             return serverPacketIds.ToString();

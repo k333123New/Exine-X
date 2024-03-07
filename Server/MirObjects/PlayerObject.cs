@@ -1540,6 +1540,8 @@ namespace Server.ExineObjects
             };
 
             Console.WriteLine("ExStyle C:" + ExStyle);
+            Console.WriteLine("ExPortraitLen:" + ExPortraitLen);
+
             //Copy this method to prevent modification before sending packet information.
             for (int i = 0; i < Info.Magics.Count; i++)
                 packet.Magics.Add(Info.Magics[i].CreateClientMagic());
@@ -7198,6 +7200,15 @@ namespace Server.ExineObjects
 
             Enqueue(new S.GainedGold { Gold = gold });
         }
+
+        public void UpdatePhoto(int len, byte[] datas)
+        {
+            Console.WriteLine("@@@111 UpdatePhoto");
+            //Apply to info.Data
+            Info.ExPortraitLen = len;
+            Info.ExPortraitBytes = datas;  
+        }
+
         public void GainCredit(uint credit)
         {
             if (credit == 0) return;
@@ -11577,6 +11588,8 @@ namespace Server.ExineObjects
         }
 
         #endregion
+
+      
 
         #region Refining
 

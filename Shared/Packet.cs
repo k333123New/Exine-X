@@ -364,6 +364,10 @@ public abstract class Packet
                 return new C.ConfirmItemRental();
             case (short)ClientPacketIds.Rest://add k333123
                 return new C.Rest();
+            case (short)ClientPacketIds.UpdatePhoto://add k333123
+
+                Console.WriteLine("@@@444 UpdatePhoto");
+                return new C.UpdatePhoto();
             default:
                 return null;
         }

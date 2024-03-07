@@ -1234,7 +1234,7 @@ namespace Exine.ExineGraphics
             if (point.X >= Settings.ScreenWidth || point.Y >= Settings.ScreenHeight || point.X + mi.Width < 0 || point.Y + mi.Height < 0)
                 return;
 
-            DXManager.DrawOpaque(mi.Image, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), colour, opacity); 
+            DXManager.DrawOpaque(mi.Image, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), colour, opacity);
 
             mi.CleanTime = CMain.Time + Settings.CleanDelay;
         }
@@ -1299,7 +1299,7 @@ namespace Exine.ExineGraphics
             if (section.Bottom > mi.Height)
                 section.Height -= section.Bottom - mi.Height;
 
-            DXManager.DrawOpaque(mi.Image, section, new Vector3((float)point.X, (float)point.Y, 0.0F), colour, opacity); 
+            DXManager.DrawOpaque(mi.Image, section, new Vector3((float)point.X, (float)point.Y, 0.0F), colour, opacity);
 
             mi.CleanTime = CMain.Time + Settings.CleanDelay;
         }
@@ -1318,7 +1318,7 @@ namespace Exine.ExineGraphics
 
             Matrix matrix = Matrix.Scaling(scaleX, scaleY, 0);
             DXManager.Sprite.Transform = matrix;
-            DXManager.Draw(mi.Image, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X / scaleX, (float)point.Y / scaleY, 0.0F), Color.White); 
+            DXManager.Draw(mi.Image, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X / scaleX, (float)point.Y / scaleY, 0.0F), Color.White);
 
             DXManager.Sprite.Transform = Matrix.Identity;
 
@@ -1347,7 +1347,7 @@ namespace Exine.ExineGraphics
             mi.CleanTime = CMain.Time + Settings.CleanDelay;
         }
 
-        public void ExineDrawTinted(int index, Point point, Color colour, Color Tint, bool offSet = false, bool isBlending=false, float rate = 1 )
+        public void ExineDrawTinted(int index, Point point, Color colour, Color Tint, bool offSet = false, bool isBlending = false, float rate = 1)
         {
             if (!CheckImage(index))
                 return;
@@ -1434,7 +1434,9 @@ namespace Exine.ExineGraphics
         }
     }
 
-    public sealed class MImage
+        
+
+        public sealed class MImage
     {
         public short Width, Height, X, Y, ShadowX, ShadowY;
         public byte Shadow;

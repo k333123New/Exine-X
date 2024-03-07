@@ -109,7 +109,8 @@ namespace ClientPackets
             writer.Write(CurrentPassword);
             writer.Write(NewPassword);
         }
-    }
+    } 
+
     public sealed class Login : Packet
     {
         public override short Index
@@ -119,16 +120,18 @@ namespace ClientPackets
 
         public string AccountID = string.Empty;
         public string Password = string.Empty;
+      
 
         protected override void ReadPacket(BinaryReader reader)
         {
             AccountID = reader.ReadString();
-            Password = reader.ReadString();
+            Password = reader.ReadString(); 
         }
         protected override void WritePacket(BinaryWriter writer)
         {
             writer.Write(AccountID);
-            writer.Write(Password);
+            writer.Write(Password); 
+
         }
     }
     public sealed class NewCharacter : Packet
@@ -244,6 +247,24 @@ namespace ClientPackets
         {
             writer.Write((byte)Direction);
             writer.Write(IsRest);
+        }
+    }
+
+    public sealed class UpdatePhoto : Packet //add
+    {
+        public override short Index { get { return (short)ClientPacketIds.UpdatePhoto; } }
+        public byte[] photoData;
+        public int photoDataLen;
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            photoData = reader.ReadBytes(8000);
+            photoDataLen = reader.ReadInt32();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(photoData);
+            writer.Write(photoDataLen);
         }
     }
 

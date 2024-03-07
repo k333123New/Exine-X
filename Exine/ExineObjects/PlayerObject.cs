@@ -119,6 +119,23 @@ namespace Exine.ExineObjects
             Frames = FrameSet.ExPlayer;
         }
 
+        public static byte[] GetBytesFromJpg(string path)
+        {
+            //max 8000bytes`
+            //\Exine\RData\Profiles\charname.jpg  72*72
+            Stream jpgStream = File.Open(Application.StartupPath + path, FileMode.Open);
+            Image image = Image.FromStream(jpgStream);
+            var stream = new MemoryStream();
+            //image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            byte[] imageBytes = stream.ToArray();
+            Console.WriteLine("imageBytes[0] : {0}, imageBytes.Length:{1}", imageBytes[0], imageBytes.Length);
+            jpgStream.Close();
+            return imageBytes;
+        }
+
+        ///maybe it is other player!
         public void Load(S.ObjectPlayer info)
         {
             Name = info.Name;
@@ -133,6 +150,8 @@ namespace Exine.ExineObjects
             ExPortraitBytes = info.ExPortraitBytes;//add k333123
 
             Console.WriteLine("info.ExStyle:" + info.ExStyle);
+            Console.WriteLine("info.ExPortraitBytes.Length:" + info.ExPortraitBytes.Length);
+           
 
             info.Hair = (byte)ExStyle;
 

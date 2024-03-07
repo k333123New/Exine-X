@@ -426,6 +426,23 @@ namespace Exine.ExineScenes
         }
 
         public static List<SelectInfo> charList = new List<SelectInfo>();
+
+        public static byte[] GetBytesFromJpg(string path)
+        {
+            //max 8000bytes`
+            //\Exine\RData\Profiles\charname.jpg  72*72
+            Stream jpgStream = File.Open(Application.StartupPath + path, FileMode.Open);
+            Image image = Image.FromStream(jpgStream);
+            var stream = new MemoryStream();
+            //image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            byte[] imageBytes = stream.ToArray();
+            Console.WriteLine("imageBytes[0] : {0}, imageBytes.Length:{1}", imageBytes[0], imageBytes.Length);
+            jpgStream.Close();
+            return imageBytes;
+        }
+
         override
         public void ProcessPacket(Packet recvPacket)
         {
@@ -440,11 +457,25 @@ namespace Exine.ExineScenes
                     if (((S.NewAccount)recvPacket).Result == 7 || ((S.NewAccount)recvPacket).Result == 8)
                     {
                         Console.WriteLine(" > Send [Login]");
+
+                        //load Photo data from file 
+                        int photoDataLen = 0;
+                        byte[] photoData = new byte[8000];
+                        if (File.Exists(_newIdTextBox.Text + ".jpg"))
+                        {
+                            byte[] filedata = GetBytesFromJpg(_newIdTextBox.Text + ".jpg");
+                            if (filedata.Length <= 8000)
+                            {
+                                Buffer.BlockCopy(filedata, 0, photoData, 0, filedata.Length);
+                                photoDataLen = filedata.Length;
+                            }
+                        }
+
                         Network.Enqueue(
                             new C.Login
                             {
                                 AccountID = _newIdTextBox.Text,
-                                Password = _newPwTextBox.Text,
+                                Password = _newPwTextBox.Text
                             }
                         );
                     }

@@ -2003,6 +2003,7 @@ public enum ServerPacketIds : short
     GroupMembersMap,
     SendMemberLocation,
     ObjectRest, //add k333123
+    UserUpdatePhoto,//add k333123 240307
 }
 
 public enum ClientPacketIds : short
@@ -2158,7 +2159,8 @@ public enum ClientPacketIds : short
     ItemRentalLockFee,
     ItemRentalLockItem,
     ConfirmItemRental,
-    Rest //add k333123
+    Rest, //add k333123 
+    UpdatePhoto
 }
 
 public enum ConquestType : byte
