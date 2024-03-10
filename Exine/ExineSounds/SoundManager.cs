@@ -89,7 +89,11 @@ namespace Exine.ExineSounds
                 if (split.Length <= 1 || !int.TryParse(split[0], out index)) continue;
 
                 if (!IndexList.ContainsKey(index))
+                {
                     IndexList.Add(index, split[split.Length - 1]);
+
+                    Console.WriteLine("LoadSoundList index:" + index + " name:" + split[split.Length - 1]);
+                }
             }
         }
 
@@ -221,6 +225,7 @@ namespace Exine.ExineSounds
             ExineGargoyle_Stop = 372,
             ExineGargoyle_Breath =373,
             ExineGargoyle_Halwling = 374,
+
 
 
             None = 0,
