@@ -40,6 +40,7 @@ namespace Exine.ExineSounds.Libraries
                 }
             }
 
+            Console.WriteLine("NAudioLibrary_TryCreate fileName:" + fileName + " fileType:" + fileType);
             if (SoundManager.SupportedFileTypes.Contains(fileType) &&
                 File.Exists(fileName))
             {

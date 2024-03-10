@@ -39,14 +39,16 @@ namespace Exine.ExineScenes
         public ExineLoginScene()
         {
             Console.WriteLine("ExineLoginScene()");
+              
 
             SoundManager.PlayMusic(SoundList.ExineIntroMusic, true);
-            SoundManager.PlaySound(SoundList.ExineGargoyle_Stop, true);
+            SoundManager.PlaySound(SoundList.ExineGargoyle_Stop, false);
 
             Disposing += (o, e) =>
             {
+                Console.WriteLine("ExineLoginScene() Disposing");
+                SoundManager.StopSound(SoundList.ExineGargoyle_Halwling);
                 SoundManager.StopMusic();
-                SoundManager.StopSound(SoundList.ExineGargoyle_Breath);
             };
 
 
@@ -306,7 +308,7 @@ namespace Exine.ExineScenes
                     _loginDialog.Show();
 
                     // SoundManager.StopSound(SoundList.Gargoyle_Breath);
-                    SoundManager.PlaySound(SoundList.ExineGargoyle_Halwling, false);
+                    SoundManager.PlaySound(SoundList.ExineGargoyle_Halwling, true);
                     
                     if (_pkBtn.Index == 24) //pk pressed
                     {
@@ -319,7 +321,7 @@ namespace Exine.ExineScenes
                             _gargoyle.Library = Libraries.BIK_012_Gargoyle_3;
                             _gargoyle.AnimationCount = 48;
                             //SoundManager.StopSound(SoundList.ExineGargoyle_Halwling);
-                            SoundManager.PlaySound(SoundList.ExineGargoyle_Breath, true);
+                            SoundManager.PlaySound(SoundList.ExineGargoyle_Breath, false);
                         };
                     }
 
@@ -334,7 +336,7 @@ namespace Exine.ExineScenes
                             _gargoyle.Library = Libraries.BIK_015_Gargoyle_6;
                             _gargoyle.AnimationCount = 48;
                             //SoundManager.StopSound(SoundList.ExineGargoyle_Halwling);
-                            SoundManager.PlaySound(SoundList.ExineGargoyle_Breath, true);
+                            SoundManager.PlaySound(SoundList.ExineGargoyle_Breath, false);
                         };
                     }
                 }
@@ -854,7 +856,6 @@ namespace Exine.ExineScenes
                             CMain.SetResolution(1920, 1080);
                             break;
                     }*/
-
                     ActiveScene = new ExineMainScene();
                     Dispose();
                     break;

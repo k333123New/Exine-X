@@ -84,6 +84,7 @@ namespace Exine.ExineSounds
             for (int i = 0; i < lines.Length; i++)
             {
                 string[] split = lines[i].Replace(" ", "").Split(':', '\t');
+                //string[] split = lines[i].Replace(" ", "").Split(':', '\t');
 
                 int index;
                 if (split.Length <= 1 || !int.TryParse(split[0], out index)) continue;
@@ -148,14 +149,21 @@ namespace Exine.ExineSounds
 
         public static void PlayMusic(int index, bool loop = false)
         {
+            StopMusic();//add k333123 240310
+
+            Console.WriteLine("PlayMusic index:" + index  + " loop" + loop.ToString());
             if (IndexList.TryGetValue(index, out string value))
             {
                 Music = GetSound(index, value, MusicVol, loop);
+                Console.WriteLine("PlayMusic  IndexList.TryGetValue index:" + index + " Value:" + value + " MusicVol:" + MusicVol + " loop" + loop.ToString());
+                //Music.Play(MusicVol);
             }
+
         }
 
         public static void StopMusic()
         {
+            Console.WriteLine("StopMusic");
             Music?.Stop();
             Music?.Dispose();
         }
@@ -199,6 +207,10 @@ namespace Exine.ExineSounds
         static ISoundLibrary GetSound(int index, string fileName, int volume, bool loop)
         {
             var sound = NAudioLibrary.TryCreate(index, fileName, volume, loop);
+            if(sound==null)
+            {
+                Console.WriteLine("NAudioLibrary.TryCreate(index, fileName, volume, loop); is null!");
+            }
 
             return sound == null ? new NullLibrary(index, fileName, loop) : sound;
         }

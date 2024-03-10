@@ -210,6 +210,8 @@ namespace Exine.ExineScenes
 
         public ExineMainScene()
         {
+            
+
             MapControl.AutoRun = false;
             MapControl.AutoHit = false;
 
@@ -10547,17 +10549,21 @@ namespace Exine.ExineScenes
 
             PathFinder = new PathFinder(this);
 
+            Console.WriteLine("Music:" + Music + " SetMusic:" + SetMusic);
+
             try
             {
                 if (SetMusic != Music)
                 {
-                    SoundManager.Music?.Dispose();
-                    SoundManager.PlayMusic(Music, true);
+                    //SoundManager.Music?.Dispose();
+                    SoundManager.StopMusic();//add k333123
+                    SoundManager.PlayMusic((int)Music, true);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Do nothing. index was not valid.
+                Console.WriteLine(ex.ToString());
             }
 
             SetMusic = Music;
