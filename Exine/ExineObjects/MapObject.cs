@@ -5,6 +5,7 @@ using Exine.ExineSounds;
 using Exine.ExineScenes.Dialogs;
 using SlimDX;
 using NAudio.Gui;
+using System.Xml;
 
 namespace Exine.ExineObjects
 {
@@ -114,7 +115,7 @@ namespace Exine.ExineObjects
         public MLibrary BodyLibrary;
         public Color DrawColour = Color.White, NameColour = Color.White, LightColour = Color.White;
         public ExineLabel NameLabel, ChatLabel, GuildLabel;
-        public ExineImageControl ChatLabelBackImage, ChatMiniPortrait; //add k333123 
+        public ExineImageControl ChatLabelBackImage, ChatLabelRightDownBackImage, ChatMiniPortrait; //add k333123 
 
 
         public long ChatTime;
@@ -349,8 +350,17 @@ namespace Exine.ExineObjects
                 ChatLabel.Dispose();
                 ChatLabel = null;
 
+                
                 ChatLabelBackImage.Dispose();//add k333123
                 ChatLabelBackImage = null;
+
+               
+                ChatLabelRightDownBackImage.Dispose();
+                ChatLabelRightDownBackImage = null; //add k333123
+
+                ChatMiniPortrait.Dispose();//add k333123
+                ChatMiniPortrait = null;//add k333123 
+                
             }
 
             //const int chatWidth = 200;
@@ -382,6 +392,18 @@ namespace Exine.ExineObjects
 
             };
 
+            //add k333123
+            ChatLabelRightDownBackImage = new ExineImageControl
+            {
+                Index = 1,
+                Library = Libraries.SAYFRAME,
+                Location = new Point(0, 0),
+                Parent = ExineMainScene.ActiveScene,
+                NotControl = true,
+                Visible = true,
+
+            };
+
             ChatMiniPortrait = new ExineImageControl
             {
                 Index = 0,
@@ -399,12 +421,13 @@ namespace Exine.ExineObjects
                 AutoSize = true,
                 //BackColour = Color.Transparent,
                 //Size = new Size(100,100),
-                BackColour = Color.FromArgb(50,Color.Black),
+                BackColour = Color.FromArgb(30,Color.Black),
                 ForeColour = Color.White,
-                OutLine = true,
-                OutLineColour = Color.Black,
-                DrawFormat = TextFormatFlags.HorizontalCenter,
-                Text = text,
+                //OutLine = true,
+                //OutLineColour = Color.Black,
+                //DrawFormat = TextFormatFlags.HorizontalCenter,
+                //DrawFormat = TextFormatFlags.Default,
+                Text = "\r\n "+text+ "\r\n",
             };
             if(ChatLabel.Size.Height<40)
             {
@@ -422,41 +445,58 @@ namespace Exine.ExineObjects
             {
                 ChatMiniPortrait.Index = 1;
                 ChatMiniPortrait.Library = new MLibrary("photo.lib"); //ID Name - Chatting with Contaion user name?
-                ChatMiniPortrait.Location = new Point(-20, -25);
+                ChatMiniPortrait.Location = new Point(-20, -28);
             }
         }
 
         public virtual void DrawChat()
         {
+
             if (ChatLabel == null || ChatLabel.IsDisposed) return;
 
             if (CMain.Time > ChatTime)
             {
                 ChatLabel.Dispose();
                 ChatLabel = null;
-                 
-
-                ChatLabelBackImage.Dispose();//add k333123
-                ChatLabelBackImage = null;//add k333123
-
-                ChatMiniPortrait.Dispose();//add k333123
-                ChatMiniPortrait = null;//add k333123
+                ChatLabelBackImage.Hide();
+                ChatLabelRightDownBackImage.Hide();//add k333123
+                ChatMiniPortrait.Hide();
                 return;
             }
-             
-            ChatLabel.ForeColour = Dead ? Color.Gray : Color.White;
-            ChatLabel.Location = new Point(DisplayRectangle.X + (48 - ChatLabel.Size.Width) / 2, DisplayRectangle.Y - (60 + ChatLabel.Size.Height) - (Dead ? 35 : 0));
-            
+
+
+
+            //ChatLabel.ForeColour = Dead ? Color.Gray : Color.White;
+            //ChatLabel.Location = new Point(DisplayRectangle.X + (48 - ChatLabel.Size.Width) / 2, DisplayRectangle.Y - (60 + ChatLabel.Size.Height) - (Dead ? 35 : 0));
+            ChatLabel.ForeColour = Dead ? Color.Gray : Color.WhiteSmoke;
+            ChatLabel.Location = new Point(DisplayRectangle.X + (48 - ChatLabel.Size.Width) / 2 - 20, DisplayRectangle.Y - (60 + ChatLabel.Size.Height) - (Dead ? 35 : 0) - 26); //k333123
+
             ChatLabelBackImage.Location = 
                 new Point
                 (
-                    DisplayRectangle.X + (40 - ChatLabel.Size.Width) / 2 ,
-                    DisplayRectangle.Y - (50 + ChatLabel.Size.Height)   - (Dead ? 35 : 0)
+                    //DisplayRectangle.X + (40 - ChatLabel.Size.Width) / 2 ,
+                    //DisplayRectangle.Y - (50 + ChatLabel.Size.Height)   - (Dead ? 35 : 0)
+                    DisplayRectangle.X + (40 - ChatLabel.Size.Width) / 2 - 24,
+                    DisplayRectangle.Y - (50 + ChatLabel.Size.Height) - (Dead ? 35 : 0) - 27
+                
                 );
-             
+
+            ChatLabelRightDownBackImage.Location =
+               new Point
+               (
+                   //DisplayRectangle.X + (40 - ChatLabel.Size.Width) / 2 ,
+                   //DisplayRectangle.Y - (50 + ChatLabel.Size.Height)   - (Dead ? 35 : 0)
+                   DisplayRectangle.X + (40 - ChatLabel.Size.Width) / 2 - 24 + ChatLabel.Size.Width+9,
+                   DisplayRectangle.Y - (50 + ChatLabel.Size.Height) - (Dead ? 35 : 0) - 47 + ChatLabel.Size.Height+7
+
+               );
+
             //add k333123
-            //이 시점에서 그리기 전에 초상화 부분 불러온 정보를 가지고 mirimageobject를 만든것을 Location잡고 그려준다. 그후 채팅을 그려준다.
-           ChatLabel.Draw(); 
+            //이 시점에서 그리기 전에 초상화 부분 불러온 정보를 가지고 mirimageobject를 만든것을 Location잡고 그려준다. 그후 채팅을 그려준다. 
+            ChatLabel.Draw();
+            ChatLabelBackImage.Show();
+            ChatLabelRightDownBackImage.Show();
+            ChatMiniPortrait.Show();
         }
 
         public virtual void CreateLabel()
@@ -495,7 +535,8 @@ namespace Exine.ExineObjects
             if (NameLabel == null) return;
             
             NameLabel.Text = Name;
-            NameLabel.Location = new Point(DisplayRectangle.X + (50 - NameLabel.Size.Width) / 2, DisplayRectangle.Y - (32 - NameLabel.Size.Height / 2) + (Dead ? 35 : 8)); //was 48 -
+            NameLabel.Location = new Point(DisplayRectangle.X + (50 - NameLabel.Size.Width) / 2, DisplayRectangle.Y - (32 - NameLabel.Size.Height / 2) + (Dead ? 35 : 8) ); //was 48 -
+            //NameLabel.Location = new Point(DisplayRectangle.X + 8, DisplayRectangle.Y - 64);
             NameLabel.Draw();
         }
         public virtual void DrawBlend()
@@ -541,7 +582,8 @@ namespace Exine.ExineObjects
                 if (!ShouldDrawHealth()) return;
             }
 
-            Libraries.Prguse2.Draw(0, DisplayRectangle.X + 8, DisplayRectangle.Y - 64);
+            //Libraries.Prguse2.Draw(0, DisplayRectangle.X + 8, DisplayRectangle.Y - 64);
+            Libraries.Prguse2.Draw(0, DisplayRectangle.X + 8-25, DisplayRectangle.Y - 64 -18);//k333123 240310
             int index = 1;
 
             switch (Race)
@@ -557,7 +599,8 @@ namespace Exine.ExineObjects
                     break;
             }
 
-            Libraries.Prguse2.Draw(index, new Rectangle(0, 0, (int)(32 * PercentHealth / 100F), 4), new Point(DisplayRectangle.X + 8, DisplayRectangle.Y - 64), Color.White, false);
+            //Libraries.Prguse2.Draw(index, new Rectangle(0, 0, (int)(32 * PercentHealth / 100F), 4), new Point(DisplayRectangle.X + 8, DisplayRectangle.Y - 64), Color.White, false);
+            Libraries.Prguse2.Draw(index, new Rectangle(0, 0, (int)(32 * PercentHealth / 100F), 4), new Point(DisplayRectangle.X + 8 -25, DisplayRectangle.Y - 64 -18), Color.White, false);
         }
 
         public void DrawPoison()

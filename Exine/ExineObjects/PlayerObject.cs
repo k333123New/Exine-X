@@ -5543,6 +5543,7 @@ namespace Exine.ExineObjects
             CreateGuildLabel();
         }
 
+        //k333123 240310
         public override void DrawName()
         {
             CreateLabel();
@@ -5550,14 +5551,18 @@ namespace Exine.ExineObjects
             if (GuildLabel != null && !string.IsNullOrEmpty(GuildName))
             {
                 GuildLabel.Text = GuildName;
-                GuildLabel.Location = new Point(DisplayRectangle.X + (50 - GuildLabel.Size.Width) / 2, DisplayRectangle.Y - (19 - GuildLabel.Size.Height / 2) + (Dead ? 35 : 8)); //was 48 -
+                GuildLabel.ForeColour = Color.LimeGreen;
+                //GuildLabel.Location = new Point(DisplayRectangle.X + (50 - GuildLabel.Size.Width) / 2, DisplayRectangle.Y - (19 - GuildLabel.Size.Height / 2) + (Dead ? 35 : 8) ); //was 48 -
+                GuildLabel.Location = new Point(DisplayRectangle.X + (50 - GuildLabel.Size.Width) / 2 - 25, DisplayRectangle.Y - (19 - GuildLabel.Size.Height / 2) + (Dead ? 35 : 8) - 80); //was 48 -
                 GuildLabel.Draw();
             }
 
             if (NameLabel != null)
             {
                 NameLabel.Text = Name;
-                NameLabel.Location = new Point(DisplayRectangle.X + (50 - NameLabel.Size.Width) / 2, DisplayRectangle.Y - (31 - NameLabel.Size.Height / 2) + (Dead ? 35 : 8)); //was 48 -
+                NameLabel.ForeColour = Color.Cyan;
+                //NameLabel.Location = new Point(DisplayRectangle.X + (50 - NameLabel.Size.Width) / 2, DisplayRectangle.Y - (31 - NameLabel.Size.Height / 2) + (Dead ? 35 : 8)); //was 48 -
+                NameLabel.Location = new Point(DisplayRectangle.X + (50 - NameLabel.Size.Width) / 2 - 25, DisplayRectangle.Y - (31 - NameLabel.Size.Height / 2) + (Dead ? 35 : 8) - 80); //was 48 -
                 NameLabel.Draw();
             }
         }
