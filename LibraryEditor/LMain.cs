@@ -768,11 +768,12 @@ namespace LibraryEditor
                 _exportImage = _library.GetMImage(i);
                 if (_exportImage.Image == null)
                 {
-                    blank.Save(_folder + i.ToString() + ".bmp", ImageFormat.Bmp);
+                    //blank.Save(_folder + i.ToString() + ".bmp", ImageFormat.Bmp);
+                    blank.Save(_folder + i.ToString() + ".png", ImageFormat.Png);
                 }
                 else
                 {
-                    _exportImage.Image.Save(_folder + i.ToString() + ".bmp", ImageFormat.Bmp);
+                    _exportImage.Image.Save(_folder + i.ToString() + ".png", ImageFormat.Png);
                 }
 
                 toolStripProgressBar.Value++;
