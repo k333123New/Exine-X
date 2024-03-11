@@ -808,8 +808,8 @@ public enum ExAction : byte
     MountAttack,
 
     FishingCast,
-    FishingWait,
-    FishingReel
+    FishingReel,
+    FishingWait
 }
 
 public enum MirAction : byte

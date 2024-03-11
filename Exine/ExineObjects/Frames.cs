@@ -156,7 +156,7 @@
 
             //k333123 231205
             ExPlayer.Add(ExAction.PEACEMODE_STAND, new Frame(0, 20, 0, 100));//split!0~6 : PEACEMODE_STAND_WAIT
-            ExPlayer.Add(ExAction.PEACEMODE_STAND_WAIT, new Frame(0, 6, 20, 1000));//split!0~6 : PEACEMODE_STAND_WAIT
+            ExPlayer.Add(ExAction.PEACEMODE_STAND_WAIT, new Frame(0, 6, 14, 100));//split!0~6 : PEACEMODE_STAND_WAIT
 
 
             ExPlayer.Add(ExAction.ONEHAND_STAND, new Frame(161-1, 6, 0, 100, 0, 8, 0, 100));
@@ -170,7 +170,7 @@
             ExPlayer.Add(ExAction.ONEHAND_RUN_LEFT, new Frame(337 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.TWOHAND_RUN_LEFT, new Frame(369 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.BOWHAND_RUN_LEFT, new Frame(401 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN, new Frame(433-1, 4, 0, 100)); 
+            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN, new Frame(433-1, 5, 0, 100)); 
             ExPlayer.Add(ExAction.PEACEMODE_SITDOWN_WAIT, new Frame(435, 1, 4, 100));//433,5,0,100
 
             ExPlayer.Add(ExAction.ONEHAND_STUCK, new Frame(473, 1, 0, 100, 392, 3, 0, 100));
@@ -192,7 +192,7 @@
             ExPlayer.Add(ExAction.ONEHAND_RUN_RIGHT, new Frame(1057 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.TWOHAND_RUN_RIGHT, new Frame(1089 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.BOWHAND_RUN_RIGHT, new Frame(1121 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_STANDUP, new Frame(1153, 8, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_STANDUP, new Frame(1153-1, 6, 0, 100));
              
             
             //Common
@@ -234,10 +234,12 @@
             ExPlayer.Add(ExAction.MountAttack, new Frame(584, 6, 0, 100, 616, 6, 0, 100));
 
             //Fishing
-            ExPlayer.Add(ExAction.FishingCast, new Frame(632, 8, 0, 100));
-            ExPlayer.Add(ExAction.FishingWait, new Frame(696, 6, 0, 120));
-            ExPlayer.Add(ExAction.FishingReel, new Frame(744, 8, 0, 100));
-            
+            //ExPlayer.Add(ExAction.PEACEMODE_SITDOWN_1, new Frame(632, 8, 0, 100));
+            //ExPlayer.Add(ExAction.PEACEMODE_SITDOWN_WAIT_1, new Frame(696, 6, 0, 120));
+            //ExPlayer.Add(ExAction.PEACEMODE_STANDUP_1, new Frame(744, 8, 0, 100));
+            ExPlayer.Add(ExAction.FishingCast, new Frame(433 - 1, 4, 0, 100));
+            ExPlayer.Add(ExAction.FishingReel, new Frame(435, 1, 4, 100));
+            ExPlayer.Add(ExAction.FishingWait, new Frame(1153, 8, 0, 100)); 
             #endregion
         }
     }

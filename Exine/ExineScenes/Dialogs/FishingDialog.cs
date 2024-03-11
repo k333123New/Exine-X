@@ -244,7 +244,7 @@ namespace Exine.ExineScenes.Dialogs
             };
             FishButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.FishingCast { CastOut = false });
+                Network.Enqueue(new C.FishingCast { Sitdown = false });
             };
 
             AutoCastButton = new MirButton
@@ -376,7 +376,7 @@ namespace Exine.ExineScenes.Dialogs
         public void Cancel()
         {
             if (Visible)
-                Network.Enqueue(new C.FishingCast { CastOut = false });
+                Network.Enqueue(new C.FishingCast { Sitdown = false });
             Hide();
 
         }

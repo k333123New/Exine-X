@@ -151,7 +151,7 @@ namespace Exine.ExineObjects
             ExPortraitLen = info.ExPortraitLen;//add k333123
             ExPortraitBytes = info.ExPortraitBytes;//add k333123
             ExinePeaceMode = info.ExinePeaceMode;//add k333123 240311
-            ExineRestMode = info.ExineRestMode;
+            ExineRestMode = info.ExineRestMode;//add k333123 240311
 
             Console.WriteLine("info.ExStyle:" + info.ExStyle);
             Console.WriteLine("info.ExPortraitBytes.Length:" + info.ExPortraitBytes.Length);
@@ -279,7 +279,7 @@ namespace Exine.ExineObjects
                 }
                 else
                 {
-                    QueuedAction action = new QueuedAction { Action = ExAction.FishingReel, Direction = dir, Location = CurrentLocation };
+                    QueuedAction action = new QueuedAction { Action = ExAction.FishingWait, Direction = dir, Location = CurrentLocation };
                     ActionFeed.Add(action);
                 }
 
@@ -362,7 +362,17 @@ namespace Exine.ExineObjects
                     if (MapObject.User.ExinePeaceMode)
                     {
                         Console.WriteLine("MapObject.User.ExinePeaceMode Standing!");
-                        Frames.TryGetValue(ExAction.PEACEMODE_STAND_WAIT, out Frame); //k333123 add 
+                        if(MapObject.User.ExineRestMode)
+                        {
+                            //Frames.TryGetValue(ExAction.PEACEMODE_SITDOWN_WAIT, out Frame); //k333123 add 
+                            ActionFeed.Clear();
+                            ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_SITDOWN, Direction = Direction, Location = CurrentLocation });
+                            SetAction();
+                        }
+                        else
+                        {
+                            Frames.TryGetValue(ExAction.PEACEMODE_STAND_WAIT, out Frame); //k333123 add 
+                        }
                     }
                     else
                     {
@@ -808,7 +818,7 @@ namespace Exine.ExineObjects
             //Fishing
             if (HasFishingRod && showFishing)
             {
-                if (CurrentAction == ExAction.FishingCast || CurrentAction == ExAction.FishingWait || CurrentAction == ExAction.FishingReel)
+                if (CurrentAction == ExAction.FishingCast || CurrentAction == ExAction.FishingReel || CurrentAction == ExAction.FishingWait)
                 {
                     WeaponLibrary1 = 0 < Libraries.Fishing.Length ? Libraries.Fishing[Weapon - 49] : null;
                     WeaponLibrary2 = null;
@@ -1148,12 +1158,9 @@ namespace Exine.ExineObjects
                     else
                         CurrentAction = CMain.Time > StanceTime ? ExAction.ONEHAND_STAND : ExAction.Stance;
                 }
+                 
 
-                1
-
-
-
-                if (Fishing) CurrentAction = ExAction.FishingWait;
+                if (Fishing) CurrentAction = ExAction.FishingReel;
 
                 Frames.TryGetValue(CurrentAction, out Frame);
                 FrameIndex = 0;
@@ -2539,7 +2546,7 @@ namespace Exine.ExineObjects
                 case ExAction.Sneek:
                 case ExAction.DashAttack:
                     if (!ExineMainScene.CanMove) return;
-                    
+
 
                     ExineMainScene.Scene.MapControl.TextureValid = false;
 
@@ -2584,7 +2591,7 @@ namespace Exine.ExineObjects
                     }
                     break;
 
-                 case ExAction.Jump:
+                case ExAction.Jump:
                     if (!ExineMainScene.CanMove) return;
                     ExineMainScene.Scene.MapControl.TextureValid = false;
                     if (this == User) ExineMainScene.Scene.MapControl.FloorValid = false;
@@ -2696,12 +2703,65 @@ namespace Exine.ExineObjects
                         else
                             NextMotion2 += EffectFrameInterval;
                     }
-                    break;  
+                    break;
 
+
+                    //부드럽게 전환시키기 위해서 아래와 같이 해야함.(dad, die, rivival 참고)
+                case ExAction.PEACEMODE_SITDOWN: //ref dad
+                    if (CMain.Time >= NextMotion)
+                    {
+                        ExineMainScene.Scene.MapControl.TextureValid = false;
+
+                        if (SkipFrames) UpdateFrame();
+
+                        if (UpdateFrame() >= Frame.Count)
+                        {
+                           // FrameIndex = Frame.Count - 1;
+                            ActionFeed.Clear();
+                            ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_SITDOWN_WAIT, Direction = Direction, Location = CurrentLocation });
+                            SetAction();
+                        }
+                        else
+                        { 
+                            //if (FrameIndex == 1)  PlayDieSound(); 
+                            NextMotion += FrameInterval;
+                        }
+                    }
+                    break;
+
+                case ExAction.PEACEMODE_SITDOWN_WAIT:
+                    if(!ExineRestMode)
+                    {
+                        //FrameIndex = Frame.Count - 1;
+                        ActionFeed.Clear();
+                        ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_STANDUP, Direction = Direction, Location = CurrentLocation });
+                        SetAction();
+                    }
+                    break;
+                case ExAction.PEACEMODE_STANDUP:
+                    if (CMain.Time >= NextMotion)
+                    {
+                        ExineMainScene.Scene.MapControl.TextureValid = false;
+
+                        if (SkipFrames) UpdateFrame();
+
+                        if (UpdateFrame() >= Frame.Count)
+                        {
+                            //FrameIndex = Frame.Count - 1;
+                            ActionFeed.Clear();
+                            ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                            SetAction();
+                        }
+                        else
+                        {
+                            NextMotion += FrameInterval;
+                        }
+                    }
+                    break;
 
                 case ExAction.FishingCast:             
-                case ExAction.FishingReel:
                 case ExAction.FishingWait:
+                case ExAction.FishingReel:
                     if (CMain.Time >= NextMotion)
                     {
                         ExineMainScene.Scene.MapControl.TextureValid = false;
@@ -2724,10 +2784,10 @@ namespace Exine.ExineObjects
                                             SoundManager.PlaySound(SoundList.FishingThrow);
                                             ((ExineAnimatedButton)ExineMainScene.Scene.FishingStatusDialog.FishButton).Visible = false;
                                             break;
-                                        case ExAction.FishingReel:
+                                        case ExAction.FishingWait:
                                             SoundManager.PlaySound(SoundList.FishingPull);
                                             break;
-                                        case ExAction.FishingWait:
+                                        case ExAction.FishingReel:
                                             if (FoundFish)
                                             {
                                                 MapControl.Effects.Add(new Effect(Libraries.Effect, 671, 6, 720, FishingPoint) { Light = 0 });

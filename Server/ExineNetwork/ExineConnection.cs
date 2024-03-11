@@ -723,7 +723,7 @@ namespace Server.ExineNetwork
                     ConfirmItemRental();
                     break;
                 case (short)ClientPacketIds.Rest:
-                    FishingCast((C.FishingCast)p);
+                    Rest((C.Rest)p);
                     break;
 
                 //Server Recv ClientPacketIds.UpdatePhoto packet
@@ -1688,7 +1688,7 @@ namespace Server.ExineNetwork
         {
             if (Stage != GameStage.Game) return;
 
-            Player.FishingCast(p.CastOut, true);
+            Player.FishingCast(p.Sitdown, true);
         }
 
 
@@ -2105,8 +2105,8 @@ namespace Server.ExineNetwork
         {
             if (Stage != GameStage.Game) return;
 
-            //Player.FishingCast(p.CastOut, true);
-            //Player.Rest(p.RestOut, true);
+            //Player.Rest(p.Rest, true);
+            
         }
 
     }

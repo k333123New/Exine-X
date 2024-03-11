@@ -1792,15 +1792,15 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.FishingCast; } }
 
-        public bool CastOut;
+        public bool Sitdown;
 
         protected override void ReadPacket(BinaryReader reader)
         {
-            CastOut = reader.ReadBoolean();
+            Sitdown = reader.ReadBoolean();
         }
         protected override void WritePacket(BinaryWriter writer)
         {
-            writer.Write(CastOut);
+            writer.Write(Sitdown);
         }
     }
 

@@ -3651,7 +3651,7 @@ namespace Exine.ExineScenes.ExDialogs
                     ExineMainScene.Scene.MountDialog.Hide();
                 else ExineMainScene.Scene.MountDialog.Show();
             };
-
+            /*
             FishingButton = new MirButton
             {
                 Index = 1979,
@@ -3668,7 +3668,7 @@ namespace Exine.ExineScenes.ExDialogs
                     ExineMainScene.Scene.FishingDialog.Hide();
                 else ExineMainScene.Scene.FishingDialog.Show();
             };
-
+            */
             FriendButton = new MirButton
             {
                 Index = 1982,

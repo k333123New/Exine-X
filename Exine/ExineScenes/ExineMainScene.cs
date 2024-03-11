@@ -1877,7 +1877,7 @@ namespace Exine.ExineScenes
                     EquipSlotItem((S.EquipSlotItem)p);
                     break;
                 case (short)ServerPacketIds.FishingUpdate:
-                    FishingUpdate((S.FishingUpdate)p);
+                    RestingUpdate((S.FishingUpdate)p);
                     break;
                 case (short)ServerPacketIds.ChangeQuest:
                     ChangeQuest((S.ChangeQuest)p);
@@ -3068,7 +3068,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void FishingUpdate(S.FishingUpdate p)
+        private void RestingUpdate(S.FishingUpdate p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -11797,7 +11797,7 @@ namespace Exine.ExineScenes
                         if (CanFish(direction))
                         {
                             User.FishingTime = CMain.Time;
-                            Network.Enqueue(new C.FishingCast { CastOut = true });
+                            Network.Enqueue(new C.FishingCast { Sitdown = true });
                             return;
                         }
 

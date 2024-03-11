@@ -136,13 +136,15 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (Visible) return;
 
+            //240311
+            
             if (!ExineMainScene.User.HasFishingRod)
             {
                 MirMessageBox messageBox = new MirMessageBox(GameLanguage.NoFishingRod, MirMessageBoxButtons.OK);
                 messageBox.Show();
                 return;
             }
-
+            
             Visible = true;
         }
 
@@ -244,7 +246,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             FishButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.FishingCast { CastOut = false });
+                Network.Enqueue(new C.FishingCast { Sitdown = false });
             };
 
             AutoCastButton = new MirButton
@@ -376,7 +378,7 @@ namespace Exine.ExineScenes.ExDialogs
         public void Cancel()
         {
             if (Visible)
-                Network.Enqueue(new C.FishingCast { CastOut = false });
+                Network.Enqueue(new C.FishingCast { Sitdown = false });
             Hide();
 
         }
