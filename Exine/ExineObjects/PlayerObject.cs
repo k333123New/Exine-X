@@ -31,6 +31,7 @@ namespace Exine.ExineObjects
         public ExineColor ExColor;//add k333123
         public int ExPortraitLen; //max 8000 //add k333123
         public byte[] ExPortraitBytes = new byte[8000]; //add k333123
+        public bool ExinePeaceMode; //add k333123 240311
 
         public byte Hair;
         public ushort Level;
@@ -148,6 +149,7 @@ namespace Exine.ExineObjects
             ExColor = info.ExColor;//add k333123
             ExPortraitLen = info.ExPortraitLen;//add k333123
             ExPortraitBytes = info.ExPortraitBytes;//add k333123
+            ExinePeaceMode = info.ExinePeaceMode;//add k333123 240311
 
             Console.WriteLine("info.ExStyle:" + info.ExStyle);
             Console.WriteLine("info.ExPortraitBytes.Length:" + info.ExPortraitBytes.Length);

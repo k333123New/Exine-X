@@ -39,7 +39,6 @@ namespace Exine.ExineScenes
         public ExineLoginScene()
         {
             Console.WriteLine("ExineLoginScene()");
-              
 
             SoundManager.PlayMusic(SoundList.ExineIntroMusic, true);
             SoundManager.PlaySound(SoundList.ExineGargoyle_Stop, false);
@@ -50,7 +49,6 @@ namespace Exine.ExineScenes
                 SoundManager.StopSound(SoundList.ExineGargoyle_Halwling);
                 SoundManager.StopMusic();
             };
-
 
             _background = new ExineAnimatedControl
             {

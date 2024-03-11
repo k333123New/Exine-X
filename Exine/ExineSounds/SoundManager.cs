@@ -93,7 +93,7 @@ namespace Exine.ExineSounds
                 {
                     IndexList.Add(index, split[split.Length - 1]);
 
-                    Console.WriteLine("LoadSoundList index:" + index + " name:" + split[split.Length - 1]);
+                    //Console.WriteLine("LoadSoundList index:" + index + " name:" + split[split.Length - 1]);
                 }
             }
         }

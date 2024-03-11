@@ -219,7 +219,8 @@ namespace Exine.ExineScenes.Dialogs
                 new ShortcutInfo(CMain.InputKeys.GetKey(KeybindOptions.Options), "Option window (open / close)"),
                 new ShortcutInfo(CMain.InputKeys.GetKey(KeybindOptions.Help), "Help window (open / close)"),
                 new ShortcutInfo(CMain.InputKeys.GetKey(KeybindOptions.Mount), "Mount / Dismount ride"),
-                new ShortcutInfo(CMain.InputKeys.GetKey(KeybindOptions.TargetSpellLockOn), "Lock spell onto target not cursor location")
+                new ShortcutInfo(CMain.InputKeys.GetKey(KeybindOptions.TargetSpellLockOn), "Lock spell onto target not cursor location"),
+                new ShortcutInfo(CMain.InputKeys.GetKey(KeybindOptions.ExinePeaceModeChange), "Exine PeaceMode Toggle (PeaceMode/BattleMode)"), //k333123 add
             };
 
             LoadKeyBinds();

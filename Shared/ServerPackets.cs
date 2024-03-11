@@ -855,6 +855,7 @@ namespace ServerPackets
         public ExineColor ExColor;//add k333123
         public int ExPortraitLen; //max 8000 //add k333123
         public byte[] ExPortraitBytes = new byte[8000]; //add k333123
+        public bool ExinePeaceMode; //add k333123
 
         public ushort Level;
         public Point Location;

@@ -21,6 +21,7 @@ namespace Server.ExineDatabase
         public ExineColor ExColor;//add k333123
         public int ExPortraitLen; //max 8000 //add k333123
         public byte[] ExPortraitBytes = new byte[8000]; //add k333123
+        public bool ExinePeaceMode = false;//add k333123
 
         public byte Hair;
         public int GuildIndex = -1;

@@ -355,6 +355,7 @@ namespace Server.ExineObjects.Monsters
                 ExColor = master != null ? master.ExColor : ExineColor.Color0, //add k333123
                 ExPortraitLen = master !=null ? master.ExPortraitLen : 0,//add k333123
                 ExPortraitBytes = master !=null ? master.ExPortraitBytes : new byte[8000],//add k333123
+                ExinePeaceMode = master != null ? master.ExinePeaceMode :false,//add k333123
 
                 Location = CurrentLocation,
                 Direction = Direction,

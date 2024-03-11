@@ -113,6 +113,11 @@ namespace Server.ExineObjects
             get { return Info.ExPortraitBytes; }
         }//add k333123
 
+        public bool ExinePeaceMode
+        {
+            get { return Info.ExinePeaceMode; }
+        }//add k333123
+        
 
 
         public override List<Buff> Buffs

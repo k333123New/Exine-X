@@ -100,7 +100,8 @@
         HeroEquipment,
         HeroSkills,
         TargetSpellLockOn,
-        PetmodeFocusMasterTarget
+        PetmodeFocusMasterTarget,
+        ExinePeaceModeChange //k333123 add 240311
     }
 
     public class KeyBind
@@ -332,7 +333,8 @@
             list.Add(InputKey);
             InputKey = new KeyBind { Group = "General", Description = "Mount/Dismount", function = KeybindOptions.Mount, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.M };
             list.Add(InputKey);
-            InputKey = new KeyBind { Group = "General", Description = "Pickup Floor Item", function = KeybindOptions.Pickup, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Tab };
+            //InputKey = new KeyBind { Group = "General", Description = "Pickup Floor Item", function = KeybindOptions.Pickup, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Tab };
+            InputKey = new KeyBind { Group = "General", Description = "Pickup Floor Item", function = KeybindOptions.Pickup, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.None };
             list.Add(InputKey);
             InputKey = new KeyBind { Group = "General", Description = "Creature Item Pickup", function = KeybindOptions.CreaturePickup, RequireAlt = 0, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.X };
             list.Add(InputKey);
@@ -375,9 +377,14 @@
             list.Add(InputKey);
             InputKey = new KeyBind { Group = "Toggle", Description = "Take Screenshot", function = KeybindOptions.Screenshot, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.PrintScreen };
             list.Add(InputKey);
-            InputKey = new KeyBind { Group = "Toggle", Description = "Toggle Dropview", function = KeybindOptions.DropView, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Tab };
+            //InputKey = new KeyBind { Group = "Toggle", Description = "Toggle Dropview", function = KeybindOptions.DropView, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Tab };
+            InputKey = new KeyBind { Group = "Toggle", Description = "Toggle Dropview", function = KeybindOptions.DropView, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.None };
             list.Add(InputKey);
             InputKey = new KeyBind { Group = "Combat", Description = "Hold to enable target spell lock-on", function = KeybindOptions.TargetSpellLockOn, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.None };
+            list.Add(InputKey);
+
+            //k333123 add
+            InputKey = new KeyBind { Group = "Toggle", Description = "Toggle Attack Mode", function = KeybindOptions.ExinePeaceModeChange, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Tab };
             list.Add(InputKey);
         }
 

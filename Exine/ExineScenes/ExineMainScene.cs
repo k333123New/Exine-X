@@ -884,6 +884,12 @@ namespace Exine.ExineScenes
 
                         ExineMainScene.Scene.GroupDialog.AddMember(MapObject.MouseObject.Name);
                         break;
+
+                    case KeybindOptions.ExinePeaceModeChange:
+                        Console.WriteLine("ExinePeaceModeChange!!!");
+                        MapObject.User.ExinePeaceMode = !MapObject.User.ExinePeaceMode; //k333123 add 240311
+                        Console.WriteLine("ExinePeaceModeChange!!! Now : "+ MapObject.User.ExinePeaceMode);
+                        break;
                 }
             }
         }
@@ -928,6 +934,7 @@ namespace Exine.ExineScenes
 
         public void ChangeAttackMode()
         {
+            Console.WriteLine(AMode);
             switch (AMode)
             {
                 case AttackMode.Peace:
@@ -2215,7 +2222,7 @@ namespace Exine.ExineScenes
                     Network.Enqueue(new C.UpdatePhoto { photoData = User.ExPortraitBytes, photoDataLen = User.ExPortraitLen }); //this cause server disconnect!
 
                 }
-            }
+            } 
 
             ExMainDialog.PModeLabel.Visible = User.Class == ExineClass.Wizard || User.Class == ExineClass.Taoist;
             HasHero = p.HasHero;

@@ -1009,8 +1009,6 @@ namespace Exine.ExineScenes.ExDialogs
                 ToggleChatFilter("Whisper");
             };
 
-            
-
             GuildButton = new MirButton
             {
                 /*
@@ -1390,8 +1388,6 @@ namespace Exine.ExineScenes.ExDialogs
             };
         }
 
-       
-
         public void Process()
         {
             _ExExperienceLabel.Text = string.Format("{0:#0.##%}", MapObject.User.Experience / (double)MapObject.User.MaxExperience);
@@ -1476,6 +1472,7 @@ namespace Exine.ExineScenes.ExDialogs
                     ChatTextBox.Text = string.Empty;
                     LinkedItems.Clear();
                     break;
+
                 case (char)Keys.Escape:
                     e.Handled = true;
                     ChatTextBox.Visible = false;
@@ -1759,7 +1756,6 @@ namespace Exine.ExineScenes.ExDialogs
                         Size size = TextRenderer.MeasureText(CMain.Graphics, text, temp.Font, temp.Size, TextFormatFlags.TextBoxControl);
 
                         ChatLink(values[0], ulong.Parse(values[1]), temp.Location.Add(new Point(size.Width - 10, 0)));
-                        
                     }
                     catch (Exception ex)
                     {
@@ -1815,7 +1811,6 @@ namespace Exine.ExineScenes.ExDialogs
                 LinkedItemButtons.Add(temp);
             }
         }
-
 
         private void ChatPanel_KeyDown(object sender, KeyEventArgs e)
         {
