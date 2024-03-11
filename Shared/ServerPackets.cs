@@ -856,6 +856,7 @@ namespace ServerPackets
         public int ExPortraitLen; //max 8000 //add k333123
         public byte[] ExPortraitBytes = new byte[8000]; //add k333123
         public bool ExinePeaceMode; //add k333123
+        public bool ExineRestMode;
 
         public ushort Level;
         public Point Location;

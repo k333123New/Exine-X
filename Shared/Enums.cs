@@ -724,6 +724,7 @@ public enum Monster : ushort
 public enum ExAction : byte
 {
     PEACEMODE_STAND,    //0,20,0,100
+    PEACEMODE_STAND_WAIT,//0,6,20,100
     ONEHAND_STAND,      //161,6,0,100, 0,8,0,250(humeff.lib)
     TWOHAND_STAND,      //209,6,0,100, 0,8,0,250
     BOWHAND_STAND,      //257,6,0,100, 0,8,0,250
@@ -736,6 +737,8 @@ public enum ExAction : byte
     TWOHAND_RUN_LEFT,   //369,4,0,100, 112,6,0,100
     BOWHAND_RUN_LEFT,   //401,4,0,100, 112,6,0,100
     PEACEMODE_SITDOWN,  //433,5,0,100
+    PEACEMODE_SITDOWN_WAIT,  //433,5,0,100
+
     ONEHAND_STUCK,      //473,1,0,100, 392,3,0,100
     DIE,                //497,8,0,100
     ONEHAND_ATTACK1,    //561,8,0,100, 168,6,0,100

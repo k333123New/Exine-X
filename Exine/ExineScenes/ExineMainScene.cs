@@ -11804,6 +11804,17 @@ namespace Exine.ExineScenes
                         break;
                     case MouseButtons.Right:
                         if (MapObject.MouseObject is PlayerObject && MapObject.MouseObject != User && CMain.Ctrl) break;
+
+                        //peacemode rest add!
+                        if (MapObject.User.ExinePeaceMode && (CMain.Time > ExineMainScene.NextRunTime))
+                        {
+                            //Console.WriteLine("PeaceMode and right click -> Goto Toggle Rest Mode!");
+                            Console.WriteLine("@@@Goto Toggle Rest Mode! ExineRestMode:" + MapObject.User.ExineRestMode);
+                            MapObject.User.ExineRestMode = !MapObject.User.ExineRestMode;
+                            ExineMainScene.NextRunTime = CMain.Time + 250; //add 
+                            break;
+                        } 
+
                         if (Settings.NewMove) break;
 
                         if (Functions.InRange(MapLocation, User.CurrentLocation, 2))
@@ -11834,19 +11845,19 @@ namespace Exine.ExineScenes
                         }
                         if ((CanWalk(direction, out direction)) && (CheckDoorOpen(Functions.PointMove(User.CurrentLocation, direction, 1))))
                         {
-                            Console.WriteLine("@333");
+                           // Console.WriteLine("@333");
                             test++;
 
                             //Console.WriteLine("@222");
                             if (test % 2 == 0)
                             {
-                                Console.WriteLine("@333 ONEHAND_WALK_LEFT");
+                                //Console.WriteLine("@333 ONEHAND_WALK_LEFT");
                                 User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                                 test = 0;
                             }
                             else
                             {
-                                Console.WriteLine("@333 ONEHAND_WALK_RIGHT");
+                                //Console.WriteLine("@333 ONEHAND_WALK_RIGHT");
                                 User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_RIGHT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };
                             }
                             //User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, 1) };

@@ -155,7 +155,10 @@
             #region Player
 
             //k333123 231205
-            ExPlayer.Add(ExAction.PEACEMODE_STAND, new Frame(0, 20, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_STAND, new Frame(0, 20, 0, 100));//split!0~6 : PEACEMODE_STAND_WAIT
+            ExPlayer.Add(ExAction.PEACEMODE_STAND_WAIT, new Frame(0, 6, 20, 1000));//split!0~6 : PEACEMODE_STAND_WAIT
+
+
             ExPlayer.Add(ExAction.ONEHAND_STAND, new Frame(161-1, 6, 0, 100, 0, 8, 0, 100));
             ExPlayer.Add(ExAction.TWOHAND_STAND, new Frame(209-1, 6, 0, 100, 0, 8, 0, 100));
             ExPlayer.Add(ExAction.BOWHAND_STAND, new Frame(257-1, 6, 0, 100, 0, 8, 0, 100));
@@ -167,7 +170,9 @@
             ExPlayer.Add(ExAction.ONEHAND_RUN_LEFT, new Frame(337 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.TWOHAND_RUN_LEFT, new Frame(369 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.BOWHAND_RUN_LEFT, new Frame(401 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN, new Frame(433, 5, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN, new Frame(433-1, 4, 0, 100)); 
+            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN_WAIT, new Frame(435, 1, 4, 100));//433,5,0,100
+
             ExPlayer.Add(ExAction.ONEHAND_STUCK, new Frame(473, 1, 0, 100, 392, 3, 0, 100));
             ExPlayer.Add(ExAction.DIE, new Frame(497, 8, 0, 1000));// { Reverse = true });
             ExPlayer.Add(ExAction.ONEHAND_ATTACK1, new Frame(561, 8, 0, 100, 168, 6, 0, 100));

@@ -32,6 +32,7 @@ namespace Exine.ExineObjects
         public int ExPortraitLen; //max 8000 //add k333123
         public byte[] ExPortraitBytes = new byte[8000]; //add k333123
         public bool ExinePeaceMode; //add k333123 240311
+        public bool ExineRestMode; //add k333123 240311
 
         public byte Hair;
         public ushort Level;
@@ -150,6 +151,7 @@ namespace Exine.ExineObjects
             ExPortraitLen = info.ExPortraitLen;//add k333123
             ExPortraitBytes = info.ExPortraitBytes;//add k333123
             ExinePeaceMode = info.ExinePeaceMode;//add k333123 240311
+            ExineRestMode = info.ExineRestMode;
 
             Console.WriteLine("info.ExStyle:" + info.ExStyle);
             Console.WriteLine("info.ExPortraitBytes.Length:" + info.ExPortraitBytes.Length);
@@ -262,6 +264,8 @@ namespace Exine.ExineObjects
             PlayMountSound();
         }
 
+
+
         public void FishingUpdate(S.FishingUpdate p)
         {
             if (Fishing != p.Fishing)
@@ -306,12 +310,20 @@ namespace Exine.ExineObjects
                     {
                         leftRightToggleFlag = 0;
                         //Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame)");
-                        Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
+                        if (MapObject.User.ExinePeaceMode)
+                        { 
+                            Frames.TryGetValue(ExAction.PEACEMODE_WALK_LEFT, out Frame);
+                        }
+                        else Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
                     }
                     else
                     {
                         //Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame)");
-                        Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
+                        if (MapObject.User.ExinePeaceMode)
+                        {
+                            Frames.TryGetValue(ExAction.PEACEMODE_WALK_RIGHT, out Frame);
+                        }
+                        else Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
                     }
                     break;
 
@@ -321,15 +333,43 @@ namespace Exine.ExineObjects
                     {
                         leftRightToggleFlag = 0;
                         Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame)");
-                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                        if (MapObject.User.ExinePeaceMode)
+                        {
+                            Frames.TryGetValue(ExAction.PEACEMODE_RUN_LEFT, out Frame); //k333123 add
+                        }
+                        else
+                        {
+                            Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                        }
                     }
                     else
                     {
                         Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame)");
-                        Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame);
+                        if (MapObject.User.ExinePeaceMode)
+                        {
+                            Frames.TryGetValue(ExAction.PEACEMODE_RUN_RIGHT, out Frame);
+                             
+                        }
+                        else
+                        {
+                            Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                        }
                     }
                     break;
 
+                    
+                case ExAction.ONEHAND_STAND:  //k333123 add 240311
+                    if (MapObject.User.ExinePeaceMode)
+                    {
+                        Console.WriteLine("MapObject.User.ExinePeaceMode Standing!");
+                        Frames.TryGetValue(ExAction.PEACEMODE_STAND_WAIT, out Frame); //k333123 add 
+                    }
+                    else
+                    {
+                        Console.WriteLine("MapObject.User.ExineBattleMode Standing!");
+                        Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
+                    }
+                    break; 
             }
 
             //fishing broken
@@ -350,103 +390,150 @@ namespace Exine.ExineObjects
             bool showMount = true;
             bool showFishing = true;
 
-            //
+            //어차피 여기로 들어오지 않음.
             if (TransformType > -1)
             {
+
                 #region Transform
-                
-                switch (TransformType)
-                {
-                    case 4:
-                    case 5:
-                    case 7:
-                    case 8:                
-                    case 26:
-                    case 28:
-                    case 29:
-                    case 30:
-                    case 31:
-                    case 32:
-                    case 33:
-                    case 34:
-                    case 35:
-                    case 36:
-                    case 37:
-                    case 38:
-                        showFishing = false;
-                        break;
-                    case 6:
-                    case 9:
-                        showMount = false;
-                        showFishing = false;
-                        break;
-                    default:
-                        break;
-                }
+                /*
+               switch (TransformType)
+               {
+                   case 4:
+                   case 5:
+                   case 7:
+                   case 8:                
+                   case 26:
+                   case 28:
+                   case 29:
+                   case 30:
+                   case 31:
+                   case 32:
+                   case 33:
+                   case 34:
+                   case 35:
+                   case 36:
+                   case 37:
+                   case 38:
+                       showFishing = false;
+                       break;
+                   case 6:
+                   case 9:
+                       showMount = false;
+                       showFishing = false;
+                       break;
+                   default:
+                       break;
+               }
 
-                switch (CurrentAction)
-                {
-                    case ExAction.ONEHAND_STAND:
-                    case ExAction.Jump:
-                        Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
-                        break;
-                    case ExAction.ONEHAND_WALK_LEFT:
-                    case ExAction.WalkingBow: 
-                        Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
-                        break;
-                    case ExAction.ONEHAND_WALK_RIGHT: 
-                        Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
-                        break; 
-                    case ExAction.ONEHAND_RUN_LEFT:
-                    case ExAction.RunningBow:
-                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
-                        break;
-                    case ExAction.ONEHAND_RUN_RIGHT:
-                        Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame);
-                        break;
-                    case ExAction.Attack1:
-                    case ExAction.Attack2:
-                    case ExAction.Attack3:
-                    case ExAction.Attack4:
-                    case ExAction.AttackRange1:
-                    case ExAction.AttackRange2:
-                    case ExAction.AttackRange3:
-                        Frames.TryGetValue(ExAction.Attack1, out Frame);
-                        break;
-                }
+               switch (CurrentAction)
+               {
+                   case ExAction.ONEHAND_STAND:
+                   case ExAction.Jump:
+                       if (MapObject.User.ExinePeaceMode)
+                       {
+                           Console.WriteLine("MapObject.User.ExinePeaceMode Standing!");
+                           Frames.TryGetValue(ExAction.PEACEMODE_STAND, out Frame); //k333123 add
+                       }
+                       else
+                       {
+                           Console.WriteLine("MapObject.User.ExineBattleMode Standing!");
+                           Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
+                       }
 
-                if (MountType > 6 && RidingMount)
-                {
-                    ArmourOffSet = -416;
-                    BodyLibrary = TransformType < Libraries.TransformMounts.Length ? Libraries.TransformMounts[TransformType] : Libraries.TransformMounts[0];
-                }
-                else
-                {
-                    ArmourOffSet = 0;
-                    BodyLibrary = TransformType < Libraries.Transform.Length ? Libraries.Transform[TransformType] : Libraries.Transform[0];
-                }
+                       break;
+                   case ExAction.ONEHAND_WALK_LEFT:
+                   case ExAction.WalkingBow:
+                       if (MapObject.User.ExinePeaceMode)
+                       {
+                           Frames.TryGetValue(ExAction.PEACEMODE_WALK_LEFT, out Frame); //k333123 add
+                       }
+                       else
+                       {
+                           Frames.TryGetValue(ExAction.ONEHAND_WALK_LEFT, out Frame);
+                       }
+                       break;
+                   case ExAction.ONEHAND_WALK_RIGHT:
+                       if (MapObject.User.ExinePeaceMode)
+                       {
+                           Frames.TryGetValue(ExAction.PEACEMODE_WALK_RIGHT, out Frame); //k333123 add
+                       }
+                       else
+                       {
+                           Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
+                       }
+                       break; 
+                   case ExAction.ONEHAND_RUN_LEFT:
+                   case ExAction.RunningBow:
+                       if (MapObject.User.ExinePeaceMode)
+                       {
+                           Frames.TryGetValue(ExAction.PEACEMODE_RUN_LEFT, out Frame); //k333123 add
+                       }
+                       else
+                       {
+                           Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                       }
+                       break;
+                   case ExAction.ONEHAND_RUN_RIGHT:
+                       if (MapObject.User.ExinePeaceMode)
+                       {
+                           Frames.TryGetValue(ExAction.PEACEMODE_RUN_RIGHT, out Frame); //k333123 add
+                       }
+                       else
+                       {
+                           Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame);
+                       }
+                       break;
+                   case ExAction.Attack1:
+                   case ExAction.Attack2:
+                   case ExAction.Attack3:
+                   case ExAction.Attack4:
+                   case ExAction.AttackRange1:
+                   case ExAction.AttackRange2:
+                   case ExAction.AttackRange3:
+                       if (MapObject.User.ExinePeaceMode)
+                       {
 
-                HairLibrary = null;
-                WeaponLibrary1 = null;
-                //ShieldLibrary = null;
-                WeaponLibrary2 = null;
+                       }
+                       else
+                       {
+                           Frames.TryGetValue(ExAction.Attack1, out Frame);
+                       }
+                       break;
+               }
 
-                if (TransformType == 19)
-                {
-                    WingEffect = 2;
-                    WingLibrary = WingEffect - 1 < Libraries.TransformEffect.Length ? Libraries.TransformEffect[WingEffect - 1] : null;
-                }
-                else
-                {
-                    WingLibrary = null;
-                }
+               if (MountType > 6 && RidingMount)
+               {
+                   ArmourOffSet = -416;
+                   BodyLibrary = TransformType < Libraries.TransformMounts.Length ? Libraries.TransformMounts[TransformType] : Libraries.TransformMounts[0];
+               }
+               else
+               {
+                   ArmourOffSet = 0;
+                   BodyLibrary = TransformType < Libraries.Transform.Length ? Libraries.Transform[TransformType] : Libraries.Transform[0];
+               }
 
-                HairOffSet = 0;
-                WeaponOffSet = 0;
-                WingOffset = 0;
-                MountOffset = 0;
+               HairLibrary = null;
+               WeaponLibrary1 = null;
+               //ShieldLibrary = null;
+               WeaponLibrary2 = null;
 
+               if (TransformType == 19)
+               {
+                   WingEffect = 2;
+                   WingLibrary = WingEffect - 1 < Libraries.TransformEffect.Length ? Libraries.TransformEffect[WingEffect - 1] : null;
+               }
+               else
+               {
+                   WingLibrary = null;
+               }
+
+               HairOffSet = 0;
+               WeaponOffSet = 0;
+               WingOffset = 0;
+               MountOffset = 0;
+                 */
                 #endregion
+
             }
             else
             {
@@ -643,6 +730,11 @@ namespace Exine.ExineObjects
                         //BodyLibrary = Armour < Libraries.CArmours.Length ? Libraries.CArmours[Armour] : Libraries.CArmours[0]; 
                         //HairLibrary = Hair < Libraries.CHair.Length ? Libraries.CHair[Hair] : null;
                         BodyLibrary = Armour < Libraries.ExineManArmor.Length ? Libraries.ExineManArmor[Armour] : Libraries.ExineManArmor[0];
+
+                        if (User.ExinePeaceMode) //add k333123 240311
+                        {
+                            BodyLibrary = Libraries.ExineManArmor[0];
+                        }
                         HairLibrary = Hair < Libraries.ExineManHair.Length ? Libraries.ExineManHair[Hair] : null;
                         #endregion
 
@@ -1056,6 +1148,10 @@ namespace Exine.ExineObjects
                     else
                         CurrentAction = CMain.Time > StanceTime ? ExAction.ONEHAND_STAND : ExAction.Stance;
                 }
+
+                1
+
+
 
                 if (Fishing) CurrentAction = ExAction.FishingWait;
 
