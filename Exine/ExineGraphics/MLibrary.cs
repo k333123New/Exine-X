@@ -32,7 +32,7 @@ namespace Exine.ExineGraphics
         public static MLibrary[] ExineManBowWeapon = new MLibrary[12];
         public static MLibrary[] ExineWomanBowWeapon = new MLibrary[12];
 
-        public static MLibrary[] ExineNPCs = new MLibrary[35];
+        public static MLibrary[] ExineNPCs = new MLibrary[36];
          
         public static readonly MLibrary
 
@@ -512,34 +512,42 @@ namespace Exine.ExineGraphics
             #endregion Exine Maplibs
 
             #region ExineNPC
-            ExineNPCs[0] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[1] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[2] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[3] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[4] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[5] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[6] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[7] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[8] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[9] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[10] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[11] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[12] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[13] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[14] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[15] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[16] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[17] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[18] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[19] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[20] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[21] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[22] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[23] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[24] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[25] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[26] = new MLibrary(Settings.ExineNPCPath + "");
-            ExineNPCs[27] = new MLibrary(Settings.ExineNPCPath + "bronze_statue");
+            ExineNPCs[0] = new MLibrary(Settings.ExineNPCPath + "ZM_02_517_마법상인01_reidx");//일랜 시약
+            ExineNPCs[1] = new MLibrary(Settings.ExineNPCPath + "ZM_02_517_마법상인01_reidx");//다이나 시약
+            ExineNPCs[2] = new MLibrary(Settings.ExineNPCPath + "ZM_02_512_여관주인01_reidx");//실버레인 여관
+            ExineNPCs[3] = new MLibrary(Settings.ExineNPCPath + "ZM_01_257_성인남01_reidx");//안토니오 재단
+            ExineNPCs[4] = new MLibrary(Settings.ExineNPCPath + "ZM_02_513_성인여01_reidx");//그레이스 잡화
+            ExineNPCs[5] = new MLibrary(Settings.ExineNPCPath + "ZM_01_259_대장장이01_reidx");//마이트 대장장
+            ExineNPCs[6] = new MLibrary(Settings.ExineNPCPath + "ZM_02_513_성인여01_reidx");//아니타 무기
+            ExineNPCs[7] = new MLibrary(Settings.ExineNPCPath + "ZM_02_514_주점주인01_reidx");//마틸다 주점
+            ExineNPCs[8] = new MLibrary(Settings.ExineNPCPath + "ZM_01_257_성인남01_reidx");//잭 주점
+            ExineNPCs[9] = new MLibrary(Settings.ExineNPCPath + "ZM_02_513_성인여01_reidx");//티파니 악세
+            ExineNPCs[10] = new MLibrary(Settings.ExineNPCPath + "ZM_01_262_장인01_reidx");//올랜드 가구
+            ExineNPCs[11] = new MLibrary(Settings.ExineNPCPath + "ZM_01_256_영주01_reidx");//베르제스 영주
+            ExineNPCs[12] = new MLibrary(Settings.ExineNPCPath + "ZM_01_258_성인남02_reidx");//아론 신관
+            ExineNPCs[13] = new MLibrary(Settings.ExineNPCPath + "ZM_01_258_성인남02_reidx");//아론 레블리
+            ExineNPCs[14] = new MLibrary(Settings.ExineNPCPath + "ZM_01_258_성인남02_reidx");//아론 오토
+            ExineNPCs[15] = new MLibrary(Settings.ExineNPCPath + "ZM_01_258_성인남02_reidx");//아론 마케르
+            ExineNPCs[16] = new MLibrary(Settings.ExineNPCPath + "ZM_02_516_재단사01_reidx");//재단사 루피아
+            ExineNPCs[17] = new MLibrary(Settings.ExineNPCPath + "ZM_02_517_마법상인01_reidx");//마리 시약
+            ExineNPCs[18] = new MLibrary(Settings.ExineNPCPath + "ZM_01_257_성인남01_reidx");//랄크 감정
+            ExineNPCs[19] = new MLibrary(Settings.ExineNPCPath + "ZM_01_261_꼬마남01_reidx");//텔레포터(남)
+            ExineNPCs[20] = new MLibrary(Settings.ExineNPCPath + "ZM_02_515_꼬마여01_reidx");//텔레포터(여)
+            ExineNPCs[21] = new MLibrary(Settings.ExineNPCPath + "ZM_01_261_꼬마남01_reidx");//꼬마(남)
+            ExineNPCs[22] = new MLibrary(Settings.ExineNPCPath + "ZM_02_515_꼬마여01_reidx");//꼬마(여)
+            ExineNPCs[23] = new MLibrary(Settings.ExineNPCPath + "ZM_02_513_성인여01_reidx");//루이루이 도박
+            ExineNPCs[24] = new MLibrary(Settings.ExineNPCPath + "ZM_01_260_경비원01_reidx");//오스틴 격장관리
+            ExineNPCs[25] = new MLibrary(Settings.ExineNPCPath + "ZM_01_260_경비원01_reidx");//로디 병사
+            ExineNPCs[26] = new MLibrary(Settings.ExineNPCPath + "ZM_01_260_경비원01_reidx");//레이스 병사
+            ExineNPCs[27] = new MLibrary(Settings.ExineNPCPath + "ZM_01_260_경비원01_reidx");//비에모크 병사
+            ExineNPCs[28] = new MLibrary(Settings.ExineNPCPath + "ZM_01_260_경비원01_reidx");//루제르 병사
+            ExineNPCs[29] = new MLibrary(Settings.ExineNPCPath + "ZM_01_260_경비원01_reidx");//신전경비 병사
+            ExineNPCs[30] = new MLibrary(Settings.ExineNPCPath + "ZM_01_260_경비원01_reidx");//글루디오 병사
+            ExineNPCs[31] = new MLibrary(Settings.ExineNPCPath + "ZM_01_260_경비원01_reidx");//발켄 병사
+            ExineNPCs[32] = new MLibrary(Settings.ExineNPCPath + "ZM_01_257_성인남01_reidx");//하드로더 상인
+            ExineNPCs[33] = new MLibrary(Settings.ExineNPCPath + "ZM_01_257_성인남01_reidx");//그랑쉬에르 미용
+            ExineNPCs[34] = new MLibrary(Settings.ExineNPCPath + "ZM_02_519_요정01_reidx");//요정
+            ExineNPCs[35] = new MLibrary(Settings.ExineNPCPath + "bronze_statue");//용사동
             /*
 
 ZM_01_256_영주01_reidx.lib
