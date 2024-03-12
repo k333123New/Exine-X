@@ -192,7 +192,7 @@
             ExPlayer.Add(ExAction.ONEHAND_RUN_RIGHT, new Frame(1057 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.TWOHAND_RUN_RIGHT, new Frame(1089 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.BOWHAND_RUN_RIGHT, new Frame(1121 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_STANDUP, new Frame(1153-1, 6, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_STANDUP, new Frame(1153, 5, 1, 100));
              
             
             //Common

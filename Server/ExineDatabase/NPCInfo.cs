@@ -140,11 +140,9 @@ namespace Server.ExineDatabase
         }
 
         public static void FromText(string text)
-        {
-            string[] data = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-            if (data.Length < 6) return;
-
+        { 
+            string[] data = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries); 
+            if (data.Length < 6) return; 
             NPCInfo info = new NPCInfo { Name = data[0] };
 
             int x, y;
@@ -152,23 +150,22 @@ namespace Server.ExineDatabase
             info.FileName = data[0];
             info.MapIndex = EditEnvir.MapInfoList.Where(d => d.FileName == data[1]).FirstOrDefault().Index;
 
-            if (!int.TryParse(data[2], out x)) return;
-            if (!int.TryParse(data[3], out y)) return;
+            if (!int.TryParse(data[2], out x)) return; 
+            if (!int.TryParse(data[3], out y)) return; 
 
             info.Location = new Point(x, y);
 
             info.Name = data[4];
 
-            if (!ushort.TryParse(data[5], out info.Image)) return;
-            if (!ushort.TryParse(data[6], out info.Rate)) return;
-
-            if (!bool.TryParse(data[7], out info.ShowOnBigMap)) return;
-            if (!int.TryParse(data[8], out info.BigMapIcon)) return;
-            if (!bool.TryParse(data[9], out info.CanTeleportTo)) return;
-            if (!bool.TryParse(data[10], out info.ConquestVisible)) return;
+            if (!ushort.TryParse(data[5], out info.Image)) return; 
+            if (!ushort.TryParse(data[6], out info.Rate)) return; 
+            if (!bool.TryParse(data[7], out info.ShowOnBigMap)) return; 
+            if (!int.TryParse(data[8], out info.BigMapIcon)) return; 
+            if (!bool.TryParse(data[9], out info.CanTeleportTo)) return; 
+            if (!bool.TryParse(data[10], out info.ConquestVisible)) return; 
 
             info.Index = ++EditEnvir.NPCIndex;
-            EditEnvir.NPCInfoList.Add(info);
+            EditEnvir.NPCInfoList.Add(info); 
         }
         public string ToText()
         {

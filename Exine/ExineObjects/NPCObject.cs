@@ -74,8 +74,12 @@ namespace Exine.ExineObjects
 
         public void LoadLibrary()
         {
+            /*
             if (Image < Libraries.NPCs.Length)
                 BodyLibrary = Libraries.NPCs[Image];
+            */
+            if (Image < Libraries.ExineNPCs.Length)
+                BodyLibrary = Libraries.ExineNPCs[Image];
             else if (Image >= 1000 && Image < 1100)
                 BodyLibrary = Libraries.Flags[Image - 1000];
         }

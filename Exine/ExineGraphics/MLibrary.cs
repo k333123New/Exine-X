@@ -31,6 +31,8 @@ namespace Exine.ExineGraphics
 
         public static MLibrary[] ExineManBowWeapon = new MLibrary[12];
         public static MLibrary[] ExineWomanBowWeapon = new MLibrary[12];
+
+        public static MLibrary[] ExineNPCs = new MLibrary[35];
          
         public static readonly MLibrary
 
@@ -114,9 +116,8 @@ namespace Exine.ExineGraphics
             BIK_021_Light_1 = new MLibrary(Settings.ExineVideoPath + "021-Light-1"),
             BIK_022_Light_2 = new MLibrary(Settings.ExineVideoPath + "022-Light-2"),
             BIK_023_Light_3 = new MLibrary(Settings.ExineVideoPath + "023-Light-3"),
-            BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4");
+            BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4"); 
 
-        
 
         #region Old
         public static readonly MLibrary
@@ -184,7 +185,7 @@ namespace Exine.ExineGraphics
                                           Flags,
                                           Siege,
                                           Mounts,
-                                          NPCs,
+                                          //NPCs,
                                           Fishing,
                                           Pets,
                                           Transform,
@@ -222,7 +223,7 @@ namespace Exine.ExineGraphics
             InitLibrary(ref Gates, Settings.GatePath, "00");
             InitLibrary(ref Flags, Settings.FlagPath, "00");
             InitLibrary(ref Siege, Settings.SiegePath, "00");
-            InitLibrary(ref NPCs, Settings.NPCPath, "00");
+            //InitLibrary(ref NPCs, Settings.NPCPath, "00");
             InitLibrary(ref Mounts, Settings.MountPath, "00");
             InitLibrary(ref Fishing, Settings.FishingPath, "00");
             InitLibrary(ref Pets, Settings.PetsPath, "00");
@@ -510,6 +511,61 @@ namespace Exine.ExineGraphics
 
             #endregion Exine Maplibs
 
+            #region ExineNPC
+            ExineNPCs[0] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[1] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[2] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[3] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[4] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[5] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[6] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[7] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[8] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[9] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[10] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[11] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[12] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[13] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[14] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[15] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[16] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[17] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[18] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[19] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[20] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[21] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[22] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[23] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[24] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[25] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[26] = new MLibrary(Settings.ExineNPCPath + "");
+            ExineNPCs[27] = new MLibrary(Settings.ExineNPCPath + "bronze_statue");
+            /*
+
+ZM_01_256_영주01_reidx.lib
+ZM_01_257_성인남01_reidx.lib
+ZM_01_258_성인남02_reidx.lib
+ZM_01_259_대장장이01_reidx.lib
+ZM_01_260_경비원01_reidx.lib
+ZM_01_261_꼬마남01_reidx.lib
+ZM_01_262_장인01_reidx.lib
+ZM_01_263__reidx.lib
+ZM_02_512_여관주인01_reidx.lib
+ZM_02_513_성인여01_reidx.lib
+ZM_02_514_주점주인01_reidx.lib
+ZM_02_515_꼬마여01_reidx.lib
+ZM_02_516_재단사01_reidx.lib
+ZM_02_517_마법상인01_reidx.lib
+ZM_02_518_악세사리상인01_reidx.lib
+ZM_02_519_요정01_reidx.lib
+            bronze_statue.Lib
+            */
+
+            #endregion ExineNPC
+
+
+
+
             LoadLibraries();
 
             Thread thread = new Thread(LoadGameLibraries) { IsBackground = true };
@@ -730,7 +786,7 @@ namespace Exine.ExineGraphics
 
         private static void LoadGameLibraries()
         {
-            Count = MapLibs.Length + Monsters.Length + Gates.Length + Flags.Length + Siege.Length + NPCs.Length + CArmours.Length +
+            Count = MapLibs.Length + Monsters.Length + Gates.Length + Flags.Length + Siege.Length + CArmours.Length +
                 CHair.Length + CWeapons.Length + CWeaponEffect.Length + AArmours.Length + AHair.Length + AWeaponsL.Length + AWeaponsR.Length +
                 ARArmours.Length + ARHair.Length + ARWeapons.Length + ARWeaponsS.Length +
                 CHumEffect.Length + AHumEffect.Length + ARHumEffect.Length + Mounts.Length + Fishing.Length + Pets.Length +
@@ -815,13 +871,13 @@ namespace Exine.ExineGraphics
                 Siege[i].Initialize();
                 Progress++;
             }
-
+            /*
             for (int i = 0; i < NPCs.Length; i++)
             {
                 NPCs[i].Initialize();
                 Progress++;
             }
-
+            */
 
             ///////////////////////////////////////
             //k333123 add 

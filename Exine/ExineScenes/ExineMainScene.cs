@@ -266,7 +266,8 @@ namespace Exine.ExineScenes
             BigMapDialog = new BigMapDialog { Parent = this, Visible = false };
             TrustMerchantDialog = new TrustMerchantDialog { Parent = this, Visible = false };
             CharacterDuraPanel = new CharacterDuraPanel { Parent = this, Visible = false };
-            DuraStatusPanel = new DuraStatusDialog { Parent = this, Visible = true };
+            //DuraStatusPanel = new DuraStatusDialog { Parent = this, Visible = true };
+            DuraStatusPanel = new DuraStatusDialog { Parent = this, Visible = false };
             TradeDialog = new TradeDialog { Parent = this, Visible = false };
             GuestTradeDialog = new GuestTradeDialog { Parent = this, Visible = false };
 
@@ -11810,7 +11811,8 @@ namespace Exine.ExineScenes
                             Console.WriteLine("@@@Goto Toggle Rest Mode! ExineRestMode:" + MapObject.User.ExineRestMode);
                             MapObject.User.ExineRestMode = !MapObject.User.ExineRestMode;
                             ExineMainScene.NextRunTime = CMain.Time + 250; //add 
-                            break;
+                            //break;
+                            return;
                         } 
 
                         if (Settings.NewMove) break;

@@ -372,12 +372,20 @@ namespace Exine.ExineObjects
                         else
                         {
                             Frames.TryGetValue(ExAction.PEACEMODE_STAND_WAIT, out Frame); //k333123 add 
+                            /*
+                            ActionFeed.Clear();
+                            ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_STAND_WAIT, Direction = Direction, Location = CurrentLocation });
+                            SetAction();
+                            */
                         }
                     }
                     else
                     {
                         Console.WriteLine("MapObject.User.ExineBattleMode Standing!");
                         Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
+                        //ActionFeed.Clear();
+                        //ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                        //SetAction();
                     }
                     break; 
             }
@@ -1122,7 +1130,7 @@ namespace Exine.ExineObjects
 
             if (ActionFeed.Count == 0)
             {
-                CurrentAction = ExAction.ONEHAND_STAND;
+                CurrentAction = ExAction.ONEHAND_STAND; 
 
                 CurrentAction = CMain.Time > BlizzardStopTime ? CurrentAction : ExAction.Stance2;
                 //CurrentAction = CMain.Time > SlashingBurstTime ? CurrentAction : MirAction.Lunge;
@@ -2733,6 +2741,7 @@ namespace Exine.ExineObjects
                     if(!ExineRestMode)
                     {
                         //FrameIndex = Frame.Count - 1;
+                        FrameIndex = 0;
                         ActionFeed.Clear();
                         ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_STANDUP, Direction = Direction, Location = CurrentLocation });
                         SetAction();
@@ -2748,7 +2757,32 @@ namespace Exine.ExineObjects
                         if (UpdateFrame() >= Frame.Count)
                         {
                             //FrameIndex = Frame.Count - 1;
+                            //FrameIndex = 0;
                             ActionFeed.Clear();
+                            //ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                            ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_STAND_WAIT, Direction = Direction, Location = CurrentLocation });
+                            SetAction();
+                        }
+                        else
+                        {
+                            NextMotion += FrameInterval;
+                        }
+                    }
+                    break;
+
+                case ExAction.PEACEMODE_STAND_WAIT:
+                    if (CMain.Time >= NextMotion)
+                    {
+                        ExineMainScene.Scene.MapControl.TextureValid = false;
+
+                        if (SkipFrames) UpdateFrame();
+
+                        if (UpdateFrame() >= Frame.Count)
+                        {
+                            //FrameIndex = Frame.Count - 1;
+                            //FrameIndex = 0;
+                            ActionFeed.Clear();
+                            //ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
                             ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
                             SetAction();
                         }

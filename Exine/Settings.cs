@@ -66,9 +66,10 @@ namespace Exine
         //k333123 231205
         public const string ExinePath = DataPath + @"Exine\",
                             ExineVideoPath = ExinePath + @"Video\",
-                            ExineUIPath = ExinePath + @"UI\",
-                            ExineHumanPath = ExinePath + @"Human\",
 
+                            ExineUIPath = ExinePath + @"UI\",
+                            ExineNPCPath = ExinePath + @"NPC\", 
+                            ExineHumanPath = ExinePath + @"Human\", 
                             ExHairPath = ExineHumanPath + @"Hair\",
                             ExArmorPath = ExineHumanPath + @"Armor\",
                             ExSheildPath = ExineHumanPath + @"Sheild\",

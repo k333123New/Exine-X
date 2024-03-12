@@ -343,7 +343,7 @@ namespace Server
             foreach (var m in npcs)
             {
                 try
-                {
+                { 
                     NPCInfo.FromText(m);
                 }
                 catch { }
