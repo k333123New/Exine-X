@@ -646,7 +646,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             MouseMove += UpdateBigMapCoordinates;
 
-            Size = Libraries.MiniMap.GetSize(index);
+            Size = Libraries.ExineMiniMap.GetSize(index);
             Rectangle viewRect = new Rectangle(0, 0, Math.Min(568, Size.Width), Math.Min(380, Size.Height));
 
             viewRect.X = 14 + (568 - viewRect.Width) / 2;
@@ -673,7 +673,7 @@ namespace Exine.ExineScenes.ExDialogs
             if (viewRect.X < 0) viewRect.X = 0;
             if (viewRect.Y < 0) viewRect.Y = 0;
 
-            Libraries.MiniMap.Draw(index, DisplayLocation, Size, Color.FromArgb(255, 255, 255));
+            Libraries.ExineMiniMap.Draw(index, DisplayLocation, Size, Color.FromArgb(255, 255, 255));
 
             int startPointX = (int)(viewRect.X / ScaleX);
             int startPointY = (int)(viewRect.Y / ScaleY);

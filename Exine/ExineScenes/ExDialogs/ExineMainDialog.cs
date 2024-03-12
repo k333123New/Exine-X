@@ -2263,22 +2263,26 @@ namespace Exine.ExineScenes.ExDialogs
 
     public sealed class MiniMapDialog : ExineImageControl
     {
-        public ExineImageControl LightSetting, NewMail;
-        public MirButton ToggleButton, BigMapButton, MailButton;
+        //public ExineImageControl LightSetting, NewMail;
+        //public MirButton ToggleButton, BigMapButton, MailButton;
+        public ExineImageControl LightSetting;
         public ExineLabel LocationLabel, MapNameLabel;
         private float _fade = 1F;
-        private bool _bigMode = true;
+        //private bool _bigMode = true;
 
-        public ExineLabel AModeLabel, PModeLabel;
+        //public ExineLabel AModeLabel, PModeLabel;
 
         public List<ExineLabel> QuestIcons = new List<ExineLabel>();
 
         public MiniMapDialog()
         {
-            Index = 2090;
-            Library = Libraries.Prguse;
-            Location = new Point(Settings.ScreenWidth - 126, 0);
+            //Index = 2090;
+            //Library = Libraries.Prguse;
+            Index = 0;
+            Library = Libraries.PANEL0301;
+            Location = new Point(715, 555);
             PixelDetect = true;
+            Visible = true;
 
             BeforeDraw += MiniMap_BeforeDraw;
             AfterDraw += MiniMapDialog_AfterDraw;
@@ -2288,7 +2292,7 @@ namespace Exine.ExineScenes.ExDialogs
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
                 Parent = this,
                 Size = new Size(120, 18),
-                Location = new Point(2, 2),
+                Location = new Point(2-18, 2+110),
                 NotControl = true,
             };
 
@@ -2297,126 +2301,55 @@ namespace Exine.ExineScenes.ExDialogs
                 DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
                 Parent = this,
                 Size = new Size(56, 18),
-                Location = new Point(46, 131),
+                Location = new Point(46 + 83, 30 + 77),
                 NotControl = true,
             };
-
-            MailButton = new MirButton
-            {
-                Index = 2099,
-                HoverIndex = 2100,
-                PressedIndex = 2101,
-                Parent = this,
-                Location = new Point(4, 131),
-                Library = Libraries.Prguse,
-                Sound = SoundList.ButtonA,
-                Hint = GameLanguage.Mail
-            };
-            MailButton.Click += (o, e) => ExineMainScene.Scene.MailListDialog.Toggle();
-
-            NewMail = new ExineImageControl
-            {
-                Index = 544,
-                Location = new Point(5, 132),
-                Parent = this,
-                Library = Libraries.Prguse,
-                Visible = false,
-                NotControl = true
-        };
-
-            BigMapButton = new MirButton
-            {
-                Index = 2096,
-                HoverIndex = 2097,
-                PressedIndex = 2098,
-                Parent = this,
-                Location = new Point(25, 131),
-                Library = Libraries.Prguse,
-                Sound = SoundList.ButtonA,
-                Hint = string.Format(GameLanguage.BigMap, CMain.InputKeys.GetKey(KeybindOptions.Bigmap))
-            };
-            BigMapButton.Click += (o, e) => ExineMainScene.Scene.BigMapDialog.Toggle();
-
-            ToggleButton = new MirButton
-            {
-                Index = 2102,
-                HoverIndex = 2103,
-                PressedIndex = 2104,
-                Parent = this,
-                Location = new Point(109, 3),
-                Library = Libraries.Prguse,
-                Sound = SoundList.ButtonA,
-                Hint = "MiniMap (" + CMain.InputKeys.GetKey(KeybindOptions.Minimap) + ")"
-            };
-            ToggleButton.Click += (o, e) => Toggle();
 
             LightSetting = new ExineImageControl
             {
                 Index = 2093,
                 Library = Libraries.Prguse,
                 Parent = this,
-                Location = new Point(102, 131),
+                Location = new Point(102, 30),
+                Visible = false,
             };
-
-
-            AModeLabel = new ExineLabel
-            {
-                AutoSize = true,
-                ForeColour = Color.Yellow,
-                OutLineColour = Color.Black,
-                Parent = this,
-                Location = new Point(115, 125)
-            };
-
-            PModeLabel = new ExineLabel
-            {
-                AutoSize = true,
-                ForeColour = Color.Yellow,
-                OutLineColour = Color.Black,
-                Parent = this,
-                Location = new Point(230, 125),
-                Visible = false
-            };
-        }
-
-        private void MiniMapDialog_AfterDraw(object sender, EventArgs e)
-        {
 
         }
 
         private void MiniMap_BeforeDraw(object sender, EventArgs e)
         {
 
+        } 
+
+        private void MiniMapDialog_AfterDraw(object sender, EventArgs e)
+        {  
             foreach (var icon in QuestIcons)
                 icon.Dispose();
 
             QuestIcons.Clear();
 
             MapControl map = ExineMainScene.Scene.MapControl;
-            if (map == null) return;
+            if (map == null) return; 
 
-            if (map.MiniMap == 0 && Index != 2091)
-            {
-                SetSmallMode();
-            }
-            else if (map.MiniMap > 0 && _bigMode && Index == 2091)
-            {
-                SetBigMode();
-            }
-
-            if (map.MiniMap <= 0 || Index != 2090 || Libraries.MiniMap == null)
+            //if (map.MiniMap == 0 && Index != 2091)
+            //SetSmallMode();
+             
+            //if (map.MiniMap <= 0 || Index != 2090 || Libraries.ExineMiniMap == null)
+            if (map.MiniMap < 0  || Libraries.ExineMiniMap == null)
             {
                 return;
-            }
+            } 
 
-            Rectangle viewRect = new Rectangle(0, 0, 120, 108);
+            ////182,92
+            //Rectangle viewRect = new Rectangle(0, 0, 120, 108);
+            Rectangle viewRect = new Rectangle(0, 0, 182, 92); //k333123
             Point drawLocation = Location;
-            drawLocation.Offset(3, 22);
+            drawLocation.Offset(3+8, 22-8);
 
-            Size miniMapSize = Libraries.MiniMap.GetSize(map.MiniMap);
+            Size miniMapSize = Libraries.ExineMiniMap.GetSize(map.MiniMap);
             float scaleX = miniMapSize.Width / (float)map.Width;
             float scaleY = miniMapSize.Height / (float)map.Height;
-
+             
             viewRect.Location = new Point(
                 (int)(scaleX * MapObject.User.CurrentLocation.X) - viewRect.Width / 2,
                 (int)(scaleY * MapObject.User.CurrentLocation.Y) - viewRect.Height / 2);
@@ -2430,7 +2363,10 @@ namespace Exine.ExineScenes.ExDialogs
             if (viewRect.X < 0) viewRect.X = 0;
             if (viewRect.Y < 0) viewRect.Y = 0;
 
-            Libraries.MiniMap.Draw(map.MiniMap, viewRect, drawLocation, Color.FromArgb(255, 255, 255), _fade);
+            //Console.WriteLine("%%%map.MiniMap:" + map.MiniMap+ "drawLocation.x:"+ drawLocation.X+ " drawLocation.y:"+ drawLocation.Y);
+
+            Libraries.ExineMiniMap.Draw(map.MiniMap, viewRect, drawLocation, Color.FromArgb(255, 255, 255), _fade);
+            //Libraries.ExineMiniMap.Draw(map.MiniMap, viewRect, new Point(727,571), Color.FromArgb(255, 255, 255), _fade);
 
 
             int startPointX = (int)(viewRect.X / scaleX);
@@ -2520,38 +2456,13 @@ namespace Exine.ExineScenes.ExDialogs
 
             }
         }
-
-        public void Toggle()
-        {
-            if (_fade == 0F)
-            {
-                _bigMode = true;
-                SetBigMode();
-                _fade = 1F;
-            }
-            //else if(_fade == 1F)
-            //{
-            //    _bigMode = true;
-            //    SetBigMode();
-            //    _fade = 0.8F;
-            //}
-            else
-            {
-                _bigMode = false;
-                SetSmallMode();
-                _fade = 0;
-            }
-
-            Redraw();
-        }
+         
 
         private void SetSmallMode()
         {
             Index = 2091;
             int y = Size.Height - 23;
-            MailButton.Location = new Point(4, y);
-            NewMail.Location = new Point(5, y + 1);
-            BigMapButton.Location = new Point(25, y);
+             
             LocationLabel.Location = new Point(46, y);
             LightSetting.Location = new Point(102, y);
 
@@ -2561,16 +2472,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         private void SetBigMode()
         {
-            Index = 2090;
-            int y = Size.Height - 23;
-            MailButton.Location = new Point(4, y);
-            NewMail.Location = new Point(5, y + 1);
-            BigMapButton.Location = new Point(25, y);
-            LocationLabel.Location = new Point(46, y);
-            LightSetting.Location = new Point(102, y);
-
-            ExineMainScene.Scene.DuraStatusPanel.Location = new Point(ExineMainScene.Scene.MiniMapDialog.Location.X + 86,
-            ExineMainScene.Scene.MiniMapDialog.Size.Height);
+             
         }
 
         public void Process()
@@ -2588,6 +2490,7 @@ namespace Exine.ExineScenes.ExDialogs
             ExineMainScene.Scene.ExMainDialog.PModeLabel.Location = new Point((ExineMainScene.Scene.MiniMapDialog.Location.X - 3) - ExineMainScene.Scene.ExMainDialog.Location.X,
             (ExineMainScene.Scene.MiniMapDialog.Size.Height + 180) - Settings.ScreenHeight);
 
+            /*
             if (ExineMainScene.Scene.NewMail)
             {
                 double time = (CMain.Time) / 100D;
@@ -2610,6 +2513,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 NewMail.Visible = false;
             }
+            */
         }
     }
     public sealed class InspectDialog : ExineImageControl

@@ -93,7 +93,7 @@ namespace NewYPF
                     switch (GetExt(filename).ToLower())
                     {
                         case ".ypf": ConvertYpfToRGBA(filename).ConvertToLib(filename); break;
-                        case ".map": ConvertMapToM2Map(filename); break;
+                        case ".map": ConvertMapToM2Map(filename); break;//Todo : Apply Shadow At Map Object
                         case ".png": ConvertPngToLib(filename, -48, +24); break;//To One Lib
                         case ".dat": ExtractDat(filename); break;
                     }

@@ -1887,7 +1887,7 @@ namespace Exine.ExineScenes.Dialogs
                 SetBigMode();
             }
 
-            if (map.MiniMap <= 0 || Index != 2090 || Libraries.MiniMap == null)
+            if (map.MiniMap <= 0 || Index != 2090 || Libraries.ExineMiniMap == null)
             {
                 return;
             }
@@ -1896,7 +1896,7 @@ namespace Exine.ExineScenes.Dialogs
             Point drawLocation = Location;
             drawLocation.Offset(3, 22);
 
-            Size miniMapSize = Libraries.MiniMap.GetSize(map.MiniMap);
+            Size miniMapSize = Libraries.ExineMiniMap.GetSize(map.MiniMap);
             float scaleX = miniMapSize.Width / (float)map.Width;
             float scaleY = miniMapSize.Height / (float)map.Height;
 
@@ -1913,7 +1913,7 @@ namespace Exine.ExineScenes.Dialogs
             if (viewRect.X < 0) viewRect.X = 0;
             if (viewRect.Y < 0) viewRect.Y = 0;
 
-            Libraries.MiniMap.Draw(map.MiniMap, viewRect, drawLocation, Color.FromArgb(255, 255, 255), _fade);
+            Libraries.ExineMiniMap.Draw(map.MiniMap, viewRect, drawLocation, Color.FromArgb(255, 255, 255), _fade);
 
 
             int startPointX = (int)(viewRect.X / scaleX);

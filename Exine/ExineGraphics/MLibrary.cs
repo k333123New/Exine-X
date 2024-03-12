@@ -88,6 +88,7 @@ namespace Exine.ExineGraphics
             SAYFRAME = new MLibrary(Settings.ExineUIPath + "SayFrame"),
             ITEMSLOT = new MLibrary(Settings.ExineUIPath + "ItemSlot"),
             ServerButton = new MLibrary(Settings.ExineUIPath + "ServerButton"),
+            ExineMiniMap = new MLibrary(Settings.ExineUIPath + "ExineMiniMap"),
 
             BIK_002_Orb1_1 = new MLibrary(Settings.ExineVideoPath + "002-Orb1-1"),
             BIK_003_Orb1_2 = new MLibrary(Settings.ExineVideoPath + "003-Orb1-2"),
@@ -114,7 +115,9 @@ namespace Exine.ExineGraphics
             BIK_022_Light_2 = new MLibrary(Settings.ExineVideoPath + "022-Light-2"),
             BIK_023_Light_3 = new MLibrary(Settings.ExineVideoPath + "023-Light-3"),
             BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4");
+
         
+
         #region Old
         public static readonly MLibrary
             
@@ -123,7 +126,7 @@ namespace Exine.ExineGraphics
             Prguse3 = new MLibrary(Settings.DataPath + "Prguse3"),
             BuffIcon = new MLibrary(Settings.DataPath + "BuffIcon"),
             Help = new MLibrary(Settings.DataPath + "Help"),
-            MiniMap = new MLibrary(Settings.DataPath + "MMap"),
+            //ExineMiniMap = new MLibrary(Settings.DataPath + "MMap"),
             MapLinkIcon = new MLibrary(Settings.DataPath + "MapLinkIcon"),
             Title = new MLibrary(Settings.DataPath + "Title"),
             MagIcon = new MLibrary(Settings.DataPath + "MagIcon"),
@@ -661,6 +664,8 @@ namespace Exine.ExineGraphics
             Progress++;
             ServerButton.Initialize();
             Progress++;
+            ExineMiniMap.Initialize();
+            Progress++;
 
             BIK_002_Orb1_1.Initialize();
             Progress++;
@@ -710,7 +715,6 @@ namespace Exine.ExineGraphics
             BIK_024_Light_4.Initialize();
             Progress++;
 
-            
             Prguse.Initialize();
             Progress++;
 
@@ -741,8 +745,8 @@ namespace Exine.ExineGraphics
             Help.Initialize();
             Progress++;
 
-            MiniMap.Initialize();
-            Progress++;
+            //ExineMiniMap.Initialize();
+            //Progress++;
             MapLinkIcon.Initialize();
             Progress++;
 
@@ -820,7 +824,9 @@ namespace Exine.ExineGraphics
 
 
             ///////////////////////////////////////
-            //k333123 add
+            //k333123 add 
+           
+
             for (int i = 0; i < ExineManHair.Length; i++)
             {
                 ExineManHair[i].Initialize();

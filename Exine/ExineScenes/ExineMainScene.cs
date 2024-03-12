@@ -776,9 +776,7 @@ namespace Exine.ExineScenes
                     case KeybindOptions.Logout:
                         LogOut();
                         break;
-                    case KeybindOptions.Minimap:
-                        MiniMapDialog.Toggle();
-                        break;
+                    
                     case KeybindOptions.Bigmap:
                         BigMapDialog.Toggle();
                         break;
