@@ -11,14 +11,15 @@ using System.Diagnostics;
 
 namespace Exine.ExineScenes.ExDialogs
 {
-    public sealed class NPCDialog : ExineImageControl
+    public sealed class ExineNPCDialog : ExineImageControl
     {
         public static Regex R = new Regex(@"<((.*?)\/(\@.*?))>");
         public static Regex C = new Regex(@"{((.*?)\/(.*?))}");
         public static Regex L = new Regex(@"\(((.*?)\/(.*?))\)");
         public static Regex B = new Regex(@"<<((.*?)\/(\@.*?))>>");
 
-        public MirButton CloseButton, UpButton, DownButton, PositionBar, QuestButton, HelpButton;
+        //public MirButton CloseButton, UpButton, DownButton, PositionBar, QuestButton, HelpButton;
+        public MirButton CloseButton, UpButton, DownButton, PositionBar, QuestButton;
         public ExineLabel[] TextLabel;
         public List<ExineLabel> TextButtons;
         public List<BigButton> BigButtons;
@@ -32,16 +33,22 @@ namespace Exine.ExineScenes.ExDialogs
         private int _index = 0;
         public int MaximumLines = 8;
 
-        public NPCDialog()
+        public ExineNPCDialog()
         {
-            Index = 995;
-            Library = Libraries.Prguse;
+            //talk dialog! k333123
+            //Index = 995;
+            //Library = Libraries.Prguse;
+            Index = 0;
+            Library = Libraries.PANEL0510;
+            Location = new Point(114, 82);
+            
 
             TextLabel = new ExineLabel[30];
             TextButtons = new List<ExineLabel>();
             BigButtons = new List<BigButton>();
-            Size = Size;
-            AutoSize = false;
+            //Size = Size;
+            //AutoSize = false;
+            AutoSize = true;
 
             MouseWheel += NPCDialog_MouseWheel;
 
@@ -117,28 +124,16 @@ namespace Exine.ExineScenes.ExDialogs
 
             CloseButton = new MirButton
             {
-                HoverIndex = 361,
-                Index = 360,
-                Location = new Point(413, 3),
-                Library = Libraries.Prguse2,
+                HoverIndex = 11,
+                Index = 9,
+                Location = new Point(413-67, 3+493),
+                Library = Libraries.PANEL0510,
                 Parent = this,
-                PressedIndex = 362,
+                PressedIndex = 10,
                 Sound = SoundList.ButtonA,
             };
             CloseButton.Click += (o, e) => Hide();
-
-            HelpButton = new MirButton
-            {
-                Index = 257,
-                HoverIndex = 258,
-                PressedIndex = 259,
-                Library = Libraries.Prguse2,
-                Parent = this,
-                Location = new Point(390, 3),
-                Sound = SoundList.ButtonA,
-            };
-            HelpButton.Click += (o, e) => ExineMainScene.Scene.HelpDialog.DisplayPage("Purchasing");
-
+             
             BigButtonDialog = new BigButtonDialog()
             {
                 Parent = this,               
@@ -164,7 +159,7 @@ namespace Exine.ExineScenes.ExDialogs
         }
 
         void NPCDialog_MouseWheel(object sender, MouseEventArgs e)
-        {
+        { 
             int count = e.Delta / SystemInformation.MouseWheelScrollDelta;
 
             if (_index == 0 && count >= 0) return;
@@ -182,7 +177,8 @@ namespace Exine.ExineScenes.ExDialogs
         }
 
         void PositionBar_OnMoving(object sender, MouseEventArgs e)
-        {
+        { 
+
             int x = 417;
             int y = PositionBar.Location.Y;
 
@@ -203,6 +199,8 @@ namespace Exine.ExineScenes.ExDialogs
 
         private void UpdatePositionBar()
         {
+            //return;
+
             if (CurrentLines.Count <= MaximumLines) return;
 
             int interval = 108 / (CurrentLines.Count - MaximumLines);
@@ -218,6 +216,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         private void ButtonClicked(string action)
         {
+            
             if (action == "@Exit")
             {
                 Hide();
@@ -233,6 +232,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void NewText(List<string> lines, bool resetIndex = true)
         {
+            
             Size = TrueSize;
 
             if (resetIndex)
@@ -309,14 +309,14 @@ namespace Exine.ExineScenes.ExDialogs
             
             if (lines.Count > MaximumLines)
             {
-                Index = 385;
+                //Index = 385; //k333123 remove
                 UpButton.Visible = true;
                 DownButton.Visible = true;
                 PositionBar.Visible = true;
             }
             else
             {
-                Index = 384;
+                //Index = 384; //k333123 remove
                 UpButton.Visible = false;
                 DownButton.Visible = false;
                 PositionBar.Visible = false;                
@@ -457,6 +457,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void CheckQuestButtonDisplay()
         {
+            return;
             NameLabel.Text = string.Empty;
 
             QuestButton.Visible = false;
@@ -484,14 +485,14 @@ namespace Exine.ExineScenes.ExDialogs
             ExineMainScene.Scene.StorageDialog.Hide();
             ExineMainScene.Scene.TrustMerchantDialog.Hide();
             ExineMainScene.Scene.QuestListDialog.Hide();
-            ExineMainScene.Scene.InventoryDialog.Location = new Point(0, 0);
+            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(0, 0);
             ExineMainScene.Scene.RollControl.Hide();
             BigButtonDialog.Hide();
         }
 
         public override void Show()
         {
-            ExineMainScene.Scene.InventoryDialog.Location = new Point(Size.Width + 5, 0);
+            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(Size.Width + 5, 0);
             Visible = true;
 
             CheckQuestButtonDisplay();
@@ -858,10 +859,10 @@ namespace Exine.ExineScenes.ExDialogs
                 Cells[i].Recipe = PType == PanelType.Craft;
             }
 
-            Location = new Point(Location.X, ExineMainScene.Scene.NPCDialog.Size.Height);
+            Location = new Point(Location.X, ExineMainScene.Scene.ExNPCDialog.Size.Height);
             Visible = true;
 
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Show();
         }
     }
     public sealed class NPCDropDialog : ExineImageControl
@@ -1176,7 +1177,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             Index = 351;
             Library = Libraries.Prguse2;
-            Location = new Point(264, ExineMainScene.Scene.NPCDialog.Size.Height);
+            Location = new Point(264, ExineMainScene.Scene.ExNPCDialog.Size.Height);
 
             ConfirmButton.HoverIndex = 291;
             ConfirmButton.Index = 290;
@@ -1294,7 +1295,7 @@ namespace Exine.ExineScenes.ExDialogs
         public override void Show()
         {
             Hold = false;
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Show();
             Visible = true;
         }
     }
@@ -1673,8 +1674,8 @@ namespace Exine.ExineScenes.ExDialogs
         {
             Visible = true;
 
-            ExineMainScene.Scene.InventoryDialog.Location = new Point(Size.Width + 5, 0);
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(Size.Width + 5, 0);
+            ExineMainScene.Scene.ExInventoryDialog.Show();
         }
     }
     public sealed class CraftDialog : ExineImageControl
@@ -1817,7 +1818,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         void CraftDialog_BeforeDraw(object sender, EventArgs e)
         {
-            if (!ExineMainScene.Scene.InventoryDialog.Visible)
+            if (!ExineMainScene.Scene.ExInventoryDialog.Visible)
             {
                 Hide();
                 return;
@@ -1873,7 +1874,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             Visible = true;
 
-            Location = new Point(ExineMainScene.Scene.InventoryDialog.Location.X - 12, ExineMainScene.Scene.InventoryDialog.Location.Y + 236);
+            Location = new Point(ExineMainScene.Scene.ExInventoryDialog.Location.X - 12, ExineMainScene.Scene.ExInventoryDialog.Location.Y + 236);
         }
 
         private void AutoFill()
@@ -1895,7 +1896,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                     if (slot == null || tool.Info.Index != slot.Info.Index || slot.CurrentDura < 1000M) continue;
 
-                    var cell = ExineMainScene.Scene.InventoryDialog.GetCell(slot.UniqueID) ?? ExineMainScene.Scene.BeltDialog.GetCell(slot.UniqueID);
+                    var cell = ExineMainScene.Scene.ExInventoryDialog.GetCell(slot.UniqueID) ?? ExineMainScene.Scene.BeltDialog.GetCell(slot.UniqueID);
 
                     if (cell.Locked) continue;
 
@@ -1922,7 +1923,7 @@ namespace Exine.ExineScenes.ExDialogs
                     if (slot.Count < ingredient.Count) continue;
                     if (ingredient.CurrentDura < ingredient.MaxDura && slot.CurrentDura < ingredient.CurrentDura) continue;
 
-                    var cell = ExineMainScene.Scene.InventoryDialog.GetCell(slot.UniqueID) ?? ExineMainScene.Scene.BeltDialog.GetCell(slot.UniqueID);
+                    var cell = ExineMainScene.Scene.ExInventoryDialog.GetCell(slot.UniqueID) ?? ExineMainScene.Scene.BeltDialog.GetCell(slot.UniqueID);
 
                     if (cell.Locked) continue;
 
@@ -2366,7 +2367,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public override void Show()
         {
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Show();
             RefreshStorage1();
 
             Visible = true;

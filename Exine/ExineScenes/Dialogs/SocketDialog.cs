@@ -106,13 +106,13 @@ namespace Exine.ExineScenes.Dialogs
             {
                 case MirGridType.Inventory:
                     Location = new Point(
-                        ExineMainScene.Scene.InventoryDialog.Location.X + ((ExineMainScene.Scene.InventoryDialog.Size.Width - Size.Width) / 2),
-                        ExineMainScene.Scene.InventoryDialog.Location.Y + ExineMainScene.Scene.InventoryDialog.Size.Height + 5);
+                        ExineMainScene.Scene.ExInventoryDialog.Location.X + ((ExineMainScene.Scene.ExInventoryDialog.Size.Width - Size.Width) / 2),
+                        ExineMainScene.Scene.ExInventoryDialog.Location.Y + ExineMainScene.Scene.ExInventoryDialog.Size.Height + 5);
                     break;
                 case MirGridType.Equipment:
                     Location = new Point(
-                        ExineMainScene.Scene.CharacterDialog.Location.X + ((ExineMainScene.Scene.CharacterDialog.Size.Width - Size.Width) / 2),
-                        ExineMainScene.Scene.CharacterDialog.Location.Y + ExineMainScene.Scene.CharacterDialog.Size.Height + 5);
+                        ExineMainScene.Scene.ExCharacterDialog.Location.X + ((ExineMainScene.Scene.ExCharacterDialog.Size.Width - Size.Width) / 2),
+                        ExineMainScene.Scene.ExCharacterDialog.Location.Y + ExineMainScene.Scene.ExCharacterDialog.Size.Height + 5);
                     break;
             }
 

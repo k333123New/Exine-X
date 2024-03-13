@@ -180,7 +180,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void OpenItemRentalDialog()
         {
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Show();
 
             Show();
             RefreshInterface();

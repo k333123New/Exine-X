@@ -236,7 +236,7 @@ namespace Exine.ExineScenes.ExDialogs
             CloseButton.Click += (o, e) =>
             {
                 Hide();
-                ExineMainScene.Scene.InventoryDialog.Hide();
+                ExineMainScene.Scene.ExInventoryDialog.Hide();
             };
 
             NameLabel = new ExineLabel

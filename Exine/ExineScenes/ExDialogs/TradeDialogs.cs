@@ -151,8 +151,8 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void TradeAccept()
         {
-            ExineMainScene.Scene.InventoryDialog.Location = new Point(Settings.ScreenWidth - ExineMainScene.Scene.InventoryDialog.Size.Width, 0);
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(Settings.ScreenWidth - ExineMainScene.Scene.ExInventoryDialog.Size.Width, 0);
+            ExineMainScene.Scene.ExInventoryDialog.Show();
 
             RefreshInterface();
 

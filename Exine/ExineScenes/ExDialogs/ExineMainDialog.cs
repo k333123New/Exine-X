@@ -265,12 +265,12 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CharacterButton.Click += (o, e) =>
             {
-                if (ExineMainScene.Scene.CharacterDialog.Visible && ExineMainScene.Scene.CharacterDialog.CharacterPage.Visible)
-                    ExineMainScene.Scene.CharacterDialog.Hide();
+                if (ExineMainScene.Scene.ExCharacterDialog.Visible && ExineMainScene.Scene.ExCharacterDialog.CharacterPage.Visible)
+                    ExineMainScene.Scene.ExCharacterDialog.Hide();
                 else
                 {
-                    ExineMainScene.Scene.CharacterDialog.Show();
-                    ExineMainScene.Scene.CharacterDialog.ShowCharacterPage();
+                    ExineMainScene.Scene.ExCharacterDialog.Show();
+                    ExineMainScene.Scene.ExCharacterDialog.ShowCharacterPage();
                 }
             };
 
@@ -288,12 +288,12 @@ namespace Exine.ExineScenes.ExDialogs
             };
             SkillButton.Click += (o, e) =>
             {
-                if (ExineMainScene.Scene.CharacterDialog.Visible && ExineMainScene.Scene.CharacterDialog.SkillPage.Visible)
-                    ExineMainScene.Scene.CharacterDialog.Hide();
+                if (ExineMainScene.Scene.ExCharacterDialog.Visible && ExineMainScene.Scene.ExCharacterDialog.SkillPage.Visible)
+                    ExineMainScene.Scene.ExCharacterDialog.Hide();
                 else
                 {
-                    ExineMainScene.Scene.CharacterDialog.Show();
-                    ExineMainScene.Scene.CharacterDialog.ShowSkillPage();
+                    ExineMainScene.Scene.ExCharacterDialog.Show();
+                    ExineMainScene.Scene.ExCharacterDialog.ShowSkillPage();
                 }
             };
 
@@ -4328,19 +4328,19 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void GetCharacterDura()
         {
-            if (ExineMainScene.Scene.CharacterDialog.Grid[0].Item == null) { Weapon.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[1].Item == null) { Armour.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[2].Item == null) { Helmet.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[3].Item == null) { Torch.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[4].Item == null) { Necklace.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[5].Item == null) { LeftBracelet.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[6].Item == null) { RightBracelet.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[7].Item == null) { LeftRing.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[8].Item == null) { RightRing.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[9].Item == null) { Amulet.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[10].Item == null) { Belt.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[11].Item == null) { Boots.Index = -1; }
-            if (ExineMainScene.Scene.CharacterDialog.Grid[12].Item == null) { Stone.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[0].Item == null) { Weapon.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[1].Item == null) { Armour.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[2].Item == null) { Helmet.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[3].Item == null) { Torch.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[4].Item == null) { Necklace.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[5].Item == null) { LeftBracelet.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[6].Item == null) { RightBracelet.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[7].Item == null) { LeftRing.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[8].Item == null) { RightRing.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[9].Item == null) { Amulet.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[10].Item == null) { Belt.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[11].Item == null) { Boots.Index = -1; }
+            if (ExineMainScene.Scene.ExCharacterDialog.Grid[12].Item == null) { Stone.Index = -1; }
 
             for (int i = 0; i < MapObject.User.Equipment.Length; i++)
             {
@@ -4398,7 +4398,7 @@ namespace Exine.ExineScenes.ExDialogs
                         Boots.Index = -1;
                     break;
                 case ItemType.Bracelet:
-                    if (ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.BraceletR].Item != null && item.UniqueID == ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.BraceletR].Item.UniqueID)
+                    if (ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.BraceletR].Item != null && item.UniqueID == ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.BraceletR].Item.UniqueID)
                     {
                         if (item.CurrentDura > Warning)
                             RightBracelet.Index = 2143;
@@ -4409,7 +4409,7 @@ namespace Exine.ExineScenes.ExDialogs
                         if (item.CurrentDura == 0)
                             RightBracelet.Index = -1;
                     }
-                    else if (ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.BraceletL].Item != null && item.UniqueID == ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.BraceletL].Item.UniqueID)
+                    else if (ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.BraceletL].Item != null && item.UniqueID == ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.BraceletL].Item.UniqueID)
                     {
                         if (item.CurrentDura > Warning)
                             LeftBracelet.Index = 2143;
@@ -4442,7 +4442,7 @@ namespace Exine.ExineScenes.ExDialogs
                         Necklace.Index = -1;
                     break;
                 case ItemType.Ring:
-                    if (ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.RingR].Item != null && item.UniqueID == ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.RingR].Item.UniqueID)
+                    if (ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.RingR].Item != null && item.UniqueID == ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.RingR].Item.UniqueID)
                     {
                         if (item.CurrentDura > Warning)
                             RightRing.Index = 2131;
@@ -4453,7 +4453,7 @@ namespace Exine.ExineScenes.ExDialogs
                         if (item.CurrentDura == 0)
                             RightRing.Index = -1;
                     }
-                    else if (ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.RingL].Item != null && item.UniqueID == ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.RingL].Item.UniqueID)
+                    else if (ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.RingL].Item != null && item.UniqueID == ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.RingL].Item.UniqueID)
                     {
                         if (item.CurrentDura > Warning)
                             LeftRing.Index = 2131;

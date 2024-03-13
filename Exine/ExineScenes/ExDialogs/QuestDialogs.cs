@@ -33,7 +33,7 @@ namespace Exine.ExineScenes.ExDialogs
             Library = Libraries.Prguse;
             Movable = true;
             Sort = true;
-            Location = new Point(ExineMainScene.Scene.NPCDialog.Size.Width + 47, 0);
+            Location = new Point(ExineMainScene.Scene.ExNPCDialog.Size.Width + 47, 0);
 
             ExineImageControl TitleLabel = new ExineImageControl
             {
@@ -272,7 +272,7 @@ namespace Exine.ExineScenes.ExDialogs
             if (!Visible) return;
             Visible = false;
 
-            ExineMainScene.Scene.NPCDialog.Hide();
+            ExineMainScene.Scene.ExNPCDialog.Hide();
         }
 
         public void Toggle()

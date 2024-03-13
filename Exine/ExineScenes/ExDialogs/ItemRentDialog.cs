@@ -148,7 +148,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void OpenItemRentDialog()
         {
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Show();
 
             Show();
             RefreshInterface();

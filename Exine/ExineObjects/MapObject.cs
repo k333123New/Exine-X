@@ -177,7 +177,7 @@ namespace Exine.ExineObjects
             if (ObjectID != ExineMainScene.NPCID) return;
 
             ExineMainScene.NPCID = 0;
-            ExineMainScene.Scene.NPCDialog.Hide();
+            ExineMainScene.Scene.ExNPCDialog.Hide();
         }
 
         public abstract void Process();

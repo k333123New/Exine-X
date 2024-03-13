@@ -6,7 +6,7 @@ using Exine.ExineSounds;
 using SlimDX;
 using SlimDX.Direct3D9;
 using Font = System.Drawing.Font;
-using S = ServerPackets;
+using S = ServerPackets; 
 using C = ClientPackets;
 using Effect = Exine.ExineObjects.Effect;
 //using Client.MirScenes.Dialogs;
@@ -65,12 +65,17 @@ namespace Exine.ExineScenes
 
         public ExineMainDialog ExMainDialog;
         public ExineChatDialog ExChatDialog;
-        public ExineChatControlBar ExChatControl;
+        public ExineChatControlBar ExChatControl; 
+        public ExineInventoryDialog ExInventoryDialog;
+        public ExineCharacterDialog ExCharacterDialog;
+        public ExineStateDialog ExStateDialog;
 
-        public ExineInventoryDialog InventoryDialog;
-        public ExineCharacterDialog CharacterDialog;
-        public ExineStateDialog StateDialog;
-
+        public ExineNPCDialog ExNPCDialog;
+        public NPCGoodsDialog NPCGoodsDialog;
+        public NPCGoodsDialog NPCSubGoodsDialog;
+        public NPCGoodsDialog NPCCraftGoodsDialog;
+        public NPCDropDialog NPCDropDialog;
+        public NPCAwakeDialog NPCAwakeDialog;
 
 
 
@@ -84,12 +89,7 @@ namespace Exine.ExineScenes
         public InspectDialog InspectDialog;
         public OptionDialog OptionDialog;
         public MenuDialog MenuDialog;
-        public NPCDialog NPCDialog;
-        public NPCGoodsDialog NPCGoodsDialog;
-        public NPCGoodsDialog NPCSubGoodsDialog;
-        public NPCGoodsDialog NPCCraftGoodsDialog;
-        public NPCDropDialog NPCDropDialog;
-        public NPCAwakeDialog NPCAwakeDialog;
+       
         public HelpDialog HelpDialog;
         public MountDialog MountDialog;
         public FishingDialog FishingDialog;
@@ -226,10 +226,10 @@ namespace Exine.ExineScenes
             ExChatDialog = new ExineChatDialog { Parent = this, Visible=true }; //add k333123 mod
             ExChatControl = new ExineChatControlBar { Parent = this }; //add k333123 mod   
 
-            InventoryDialog = new ExineInventoryDialog { Parent = this };
+            ExInventoryDialog = new ExineInventoryDialog { Parent = this };
             BeltDialog = new BeltDialog { Parent = this, Visible=false };//임시로 꺼둠
-            
-             
+            ExNPCDialog = new ExineNPCDialog { Parent = this, Visible = false };
+
 
 
 
@@ -241,7 +241,8 @@ namespace Exine.ExineScenes
             InspectDialog = new InspectDialog { Parent = this, Visible = false };
             OptionDialog = new OptionDialog { Parent = this, Visible = false };
             MenuDialog = new MenuDialog { Parent = this, Visible = false };
-            NPCDialog = new NPCDialog { Parent = this, Visible = false };
+            
+            
             NPCGoodsDialog = new NPCGoodsDialog(PanelType.Buy) { Parent = this, Visible = false };
             NPCSubGoodsDialog = new NPCGoodsDialog(PanelType.BuySub) { Parent = this, Visible = false };
             NPCCraftGoodsDialog = new NPCGoodsDialog(PanelType.Craft) { Parent = this, Visible = false };
@@ -557,36 +558,36 @@ namespace Exine.ExineScenes
                         break;
 
                     case KeybindOptions.Inventory2:
-                        if (!StateDialog.Visible) StateDialog.Show();
-                        else StateDialog.Hide();
+                        if (!ExStateDialog.Visible) ExStateDialog.Show();
+                        else ExStateDialog.Hide();
                         break;
 
 
                     case KeybindOptions.Equipment:
                     case KeybindOptions.Equipment2:
-                        if (!CharacterDialog.Visible || !CharacterDialog.CharacterPage.Visible)
+                        if (!ExCharacterDialog.Visible || !ExCharacterDialog.CharacterPage.Visible)
                         {
-                            CharacterDialog.Show();
-                            CharacterDialog.ShowCharacterPage();
-                            InventoryDialog.Location = new Point(541, 378);//k333123
-                            InventoryDialog.Show();//k33123 add
+                            ExCharacterDialog.Show();
+                            ExCharacterDialog.ShowCharacterPage();
+                            ExInventoryDialog.Location = new Point(541, 378);//k333123
+                            ExInventoryDialog.Show();//k33123 add
 
                         }
                         else
                         {
-                            CharacterDialog.Hide();
-                            InventoryDialog.Hide();//k33123 add
+                            ExCharacterDialog.Hide();
+                            ExInventoryDialog.Hide();//k33123 add
                         }
                         break;
 
                     case KeybindOptions.Skills:
                     case KeybindOptions.Skills2:
-                        if (!CharacterDialog.Visible || !CharacterDialog.SkillPage.Visible)
+                        if (!ExCharacterDialog.Visible || !ExCharacterDialog.SkillPage.Visible)
                         {
-                            CharacterDialog.Show();
-                            CharacterDialog.ShowSkillPage();
+                            ExCharacterDialog.Show();
+                            ExCharacterDialog.ShowSkillPage();
                         }
-                        else CharacterDialog.Hide();
+                        else ExCharacterDialog.Hide();
                         break;
                     case KeybindOptions.HeroInventory:
                         if (Hero == null)
@@ -676,11 +677,11 @@ namespace Exine.ExineScenes
                         return;
 
                     case KeybindOptions.Closeall:
-                        InventoryDialog.Hide();
-                        CharacterDialog.Hide();
+                        ExInventoryDialog.Hide();
+                        ExCharacterDialog.Hide();
                         OptionDialog.Hide();
                         MenuDialog.Hide();
-                        if (NPCDialog.Visible) NPCDialog.Hide();
+                        if (ExNPCDialog.Visible) ExNPCDialog.Hide();
                         HelpDialog.Hide();
                         KeyboardLayoutDialog.Hide();
                         RankingDialog.Hide();
@@ -1278,8 +1279,8 @@ namespace Exine.ExineScenes
             MapControl.Process();
             ExMainDialog.Process();
             ExChatDialog.Process(); //k333123
-            CharacterDialog.Process();  //k333123
-            InventoryDialog.Process();
+            ExCharacterDialog.Process();  //k333123
+            ExInventoryDialog.Process();
             GameShopDialog.Process();
             MiniMapDialog.Process();
 
@@ -2229,9 +2230,9 @@ namespace Exine.ExineScenes
             Gold = p.Gold;
             Credit = p.Credit;
 
-            CharacterDialog = new ExineCharacterDialog(MirGridType.Equipment, User) { Parent = this, Visible = false };
-            StateDialog = new ExineStateDialog(MirGridType.Equipment, User) { Parent = this, Visible = false };
-            InventoryDialog.RefreshInventory();
+            ExCharacterDialog = new ExineCharacterDialog(MirGridType.Equipment, User) { Parent = this, Visible = false };
+            ExStateDialog = new ExineStateDialog(MirGridType.Equipment, User) { Parent = this, Visible = false };
+            ExInventoryDialog.RefreshInventory();
             foreach (SkillBarDialog Bar in SkillBarDialogs)
                 Bar.Update();
             AllowObserve = p.AllowObserve;
@@ -2367,7 +2368,7 @@ namespace Exine.ExineScenes
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
-                    fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
+                    fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
                     break;
                 case MirGridType.Storage:
                     fromCell = StorageDialog.Grid[p.From];
@@ -2388,7 +2389,7 @@ namespace Exine.ExineScenes
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
-                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
                     break;
                 case MirGridType.Storage:
                     toCell = StorageDialog.Grid[p.To];
@@ -2433,14 +2434,14 @@ namespace Exine.ExineScenes
                     toCell = HeroDialog.Grid[p.To];
                     break;
                 default:
-                    toCell = CharacterDialog.Grid[p.To];
+                    toCell = ExCharacterDialog.Grid[p.To];
                     break;
             }
 
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
-                    fromCell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+                    fromCell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
                     break;
                 case MirGridType.Storage:
                     fromCell = StorageDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
@@ -2491,7 +2492,7 @@ namespace Exine.ExineScenes
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
-                    fromCell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+                    fromCell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
                     break;
                 case MirGridType.Storage:
                     fromCell = StorageDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
@@ -2520,8 +2521,8 @@ namespace Exine.ExineScenes
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
-                    fromCell = InventoryDialog.GetCell(p.IDFrom) ?? BeltDialog.GetCell(p.IDFrom);
-                    toCell = InventoryDialog.GetCell(p.IDTo) ?? BeltDialog.GetCell(p.IDTo);
+                    fromCell = ExInventoryDialog.GetCell(p.IDFrom) ?? BeltDialog.GetCell(p.IDFrom);
+                    toCell = ExInventoryDialog.GetCell(p.IDTo) ?? BeltDialog.GetCell(p.IDTo);
                     break;
                 case MirGridType.HeroInventory:
                     fromCell = HeroInventoryDialog.GetCell(p.IDFrom) ?? HeroBeltDialog.GetCell(p.IDFrom);
@@ -2558,13 +2559,13 @@ namespace Exine.ExineScenes
             switch (p.GridFrom)
             {
                 case MirGridType.Inventory:
-                    fromCell = InventoryDialog.GetCell(p.IDFrom) ?? BeltDialog.GetCell(p.IDFrom);
+                    fromCell = ExInventoryDialog.GetCell(p.IDFrom) ?? BeltDialog.GetCell(p.IDFrom);
                     break;
                 case MirGridType.Storage:
                     fromCell = StorageDialog.GetCell(p.IDFrom);
                     break;
                 case MirGridType.Equipment:
-                    fromCell = CharacterDialog.GetCell(p.IDFrom);
+                    fromCell = ExCharacterDialog.GetCell(p.IDFrom);
                     break;
                 case MirGridType.Trade:
                     fromCell = TradeDialog.GetCell(p.IDFrom);
@@ -2585,13 +2586,13 @@ namespace Exine.ExineScenes
             switch (p.GridTo)
             {
                 case MirGridType.Inventory:
-                    toCell = InventoryDialog.GetCell(p.IDTo) ?? BeltDialog.GetCell(p.IDTo);
+                    toCell = ExInventoryDialog.GetCell(p.IDTo) ?? BeltDialog.GetCell(p.IDTo);
                     break;
                 case MirGridType.Storage:
                     toCell = StorageDialog.GetCell(p.IDTo);
                     break;
                 case MirGridType.Equipment:
-                    toCell = CharacterDialog.GetCell(p.IDTo);
+                    toCell = ExCharacterDialog.GetCell(p.IDTo);
                     break;
                 case MirGridType.Trade:
                     toCell = TradeDialog.GetCell(p.IDTo);
@@ -2641,7 +2642,7 @@ namespace Exine.ExineScenes
             {
                 if (MapObject.User.Equipment[i] == null || MapObject.User.Equipment[i].UniqueID != p.UniqueID) continue;
                 index = i;
-                fromCell = CharacterDialog.Grid[index];
+                fromCell = ExCharacterDialog.Grid[index];
                 break;
             }
 
@@ -2659,7 +2660,7 @@ namespace Exine.ExineScenes
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
-                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
                     break;
                 case MirGridType.Storage:
                     toCell = StorageDialog.Grid[p.To];
@@ -2709,7 +2710,7 @@ namespace Exine.ExineScenes
             switch (p.GridTo)
             {
                 case MirGridType.Inventory:
-                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
                     break;
                 case MirGridType.Storage:
                     toCell = StorageDialog.Grid[p.To];
@@ -2733,7 +2734,7 @@ namespace Exine.ExineScenes
         {
             MirItemCell fromCell = StorageDialog.Grid[p.From];
 
-            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
 
             if (toCell == null || fromCell == null) return;
 
@@ -2748,7 +2749,7 @@ namespace Exine.ExineScenes
         }
         private void StoreItem(S.StoreItem p)
         {
-            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
+            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
 
             MirItemCell toCell = StorageDialog.Grid[p.To];
 
@@ -2764,7 +2765,7 @@ namespace Exine.ExineScenes
         }
         private void DepositRefineItem(S.DepositRefineItem p)
         {
-            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
+            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
 
             MirItemCell toCell = RefineDialog.Grid[p.To];
 
@@ -2782,7 +2783,7 @@ namespace Exine.ExineScenes
         private void RetrieveRefineItem(S.RetrieveRefineItem p)
         {
             MirItemCell fromCell = RefineDialog.Grid[p.From];
-            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
 
             if (toCell == null || fromCell == null) return;
 
@@ -2811,11 +2812,11 @@ namespace Exine.ExineScenes
                     break;
                 }
             }
-            NPCDialog.Hide();
+            ExNPCDialog.Hide();
         }
         private void DepositTradeItem(S.DepositTradeItem p)
         {
-            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
+            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
 
             MirItemCell toCell = TradeDialog.Grid[p.To];
 
@@ -2833,7 +2834,7 @@ namespace Exine.ExineScenes
         private void RetrieveTradeItem(S.RetrieveTradeItem p)
         {
             MirItemCell fromCell = TradeDialog.Grid[p.From];
-            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
 
             if (toCell == null || fromCell == null) return;
 
@@ -2911,7 +2912,7 @@ namespace Exine.ExineScenes
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
-                    cell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+                    cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
                     break;
                 case MirGridType.Storage:
                     cell = StorageDialog.GetCell(p.UniqueID);
@@ -2936,7 +2937,7 @@ namespace Exine.ExineScenes
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
-                    cell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+                    cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
                     break;
                 case MirGridType.HeroInventory:
                     cell = HeroInventoryDialog.GetCell(p.UniqueID) ?? HeroBeltDialog.GetCell(p.UniqueID);
@@ -2965,7 +2966,7 @@ namespace Exine.ExineScenes
             }
             else
             {
-                cell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+                cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
             }
 
 
@@ -2995,7 +2996,7 @@ namespace Exine.ExineScenes
         {
             MirItemCell fromCell = p.From < User.HeroBeltIdx ? HeroBeltDialog.Grid[p.From] : HeroInventoryDialog.Grid[p.From - User.HeroBeltIdx];
 
-            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
 
             if (toCell == null || fromCell == null) return;
 
@@ -3012,7 +3013,7 @@ namespace Exine.ExineScenes
 
         private void TransferHeroItem(S.TransferHeroItem p)
         {
-            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
+            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
 
             MirItemCell toCell = p.To < User.HeroBeltIdx ? HeroBeltDialog.Grid[p.To] : HeroInventoryDialog.Grid[p.To - User.HeroBeltIdx];
 
@@ -3934,14 +3935,14 @@ namespace Exine.ExineScenes
         private void NPCResponse(S.NPCResponse p)
         {
             NPCTime = 0;
-            NPCDialog.BigButtons.Clear();
-            NPCDialog.BigButtonDialog.Hide();
-            NPCDialog.NewText(p.Page);
+            ExNPCDialog.BigButtons.Clear();
+            ExNPCDialog.BigButtonDialog.Hide();
+            ExNPCDialog.NewText(p.Page);
 
-            if (p.Page.Count > 0 || NPCDialog.BigButtons.Count > 0)
-                NPCDialog.Show();
+            if (p.Page.Count > 0 || ExNPCDialog.BigButtons.Count > 0)
+                ExNPCDialog.Show();
             else
-                NPCDialog.Hide();
+                ExNPCDialog.Hide();
 
             NPCGoodsDialog.Hide();
             NPCSubGoodsDialog.Hide();
@@ -4278,7 +4279,7 @@ namespace Exine.ExineScenes
             NPCRate = p.Rate;
             HideAddedStoreStats = p.HideAddedStats;
 
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
 
             switch (p.Type)
             {
@@ -4309,7 +4310,7 @@ namespace Exine.ExineScenes
 
             NPCRate = p.Rate;
 
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
 
             NPCGoodsDialog.UsePearls = true;
             NPCGoodsDialog.NewGoods(p.List);
@@ -4318,20 +4319,20 @@ namespace Exine.ExineScenes
 
         private void NPCSell()
         {
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Sell;
             NPCDropDialog.Show();
         }
         private void NPCRepair(S.NPCRepair p)
         {
             NPCRate = p.Rate;
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Repair;
             NPCDropDialog.Show();
         }
         private void NPCStorage()
         {
-            if (NPCDialog.Visible)
+            if (ExNPCDialog.Visible)
                 StorageDialog.Show();
         }
         private void NPCRequestInput(S.NPCRequestInput p)
@@ -4349,7 +4350,7 @@ namespace Exine.ExineScenes
         private void NPCSRepair(S.NPCSRepair p)
         {
             NPCRate = p.Rate;
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.SpecialRepair;
             NPCDropDialog.Show();
         }
@@ -4357,12 +4358,12 @@ namespace Exine.ExineScenes
         private void NPCRefine(S.NPCRefine p)
         {
             NPCRate = p.Rate;
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Refine;
             if (p.Refining)
             {
                 NPCDropDialog.Hide();
-                NPCDialog.Hide();
+                ExNPCDialog.Hide();
             }
             else
                 NPCDropDialog.Show();
@@ -4370,20 +4371,20 @@ namespace Exine.ExineScenes
 
         private void NPCCheckRefine(S.NPCCheckRefine p)
         {
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.CheckRefine;
             NPCDropDialog.Show();
         }
 
         private void NPCCollectRefine(S.NPCCollectRefine p)
         {
-            if (!NPCDialog.Visible) return;
-            NPCDialog.Hide();
+            if (!ExNPCDialog.Visible) return;
+            ExNPCDialog.Hide();
         }
 
         private void NPCReplaceWedRing(S.NPCReplaceWedRing p)
         {
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCRate = p.Rate;
             NPCDropDialog.PType = PanelType.ReplaceWedRing;
             NPCDropDialog.Show();
@@ -4392,7 +4393,7 @@ namespace Exine.ExineScenes
 
         private void SellItem(S.SellItem p)
         {
-            MirItemCell cell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+            MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
 
             if (cell == null) return;
 
@@ -4409,7 +4410,7 @@ namespace Exine.ExineScenes
         }
         private void RepairItem(S.RepairItem p)
         {
-            MirItemCell cell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+            MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
 
             if (cell == null) return;
 
@@ -4640,7 +4641,7 @@ namespace Exine.ExineScenes
             switch (grid)
             {
                 case MirGridType.Inventory:
-                    InventoryDialog.DisplayItemGridEffect(item.UniqueID, 0);
+                    ExInventoryDialog.DisplayItemGridEffect(item.UniqueID, 0);
                     break;
                 case MirGridType.HeroInventory:
                     HeroInventoryDialog.DisplayItemGridEffect(item.UniqueID, 0);
@@ -5823,7 +5824,7 @@ namespace Exine.ExineScenes
 
         private void NPCConsign()
         {
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Consign;
             NPCDropDialog.Show();
         }
@@ -5852,7 +5853,7 @@ namespace Exine.ExineScenes
         }
         private void ConsignItem(S.ConsignItem p)
         {
-            MirItemCell cell = InventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
+            MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
 
             if (cell == null) return;
 
@@ -6147,7 +6148,7 @@ namespace Exine.ExineScenes
                     toCell.Item = p.Item.Item;
                     Bind(toCell.Item);
                     if (p.User != User.Id) return;
-                    fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
+                    fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
                     fromCell.Locked = false;
                     if (fromCell != null)
                         fromCell.Item = null;
@@ -6164,7 +6165,7 @@ namespace Exine.ExineScenes
                         fromCell.Item = null;
                         return;
                     }
-                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
                     if (toCell == null) return;
                     toCell.Locked = false;
                     toCell.Item = fromCell.Item;
@@ -6187,7 +6188,7 @@ namespace Exine.ExineScenes
                         Bind(fromCell.Item);
                     break;
                 case 3://failstore
-                    fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
+                    fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
                     toCell = GuildDialog.StorageGrid[p.To];
 
                     if (toCell == null || fromCell == null) return;
@@ -6196,7 +6197,7 @@ namespace Exine.ExineScenes
                     fromCell.Locked = false;
                     break;
                 case 4://failretrieve
-                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+                    toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
                     fromCell = GuildDialog.StorageGrid[p.From];
 
                     if (toCell == null || fromCell == null) return;
@@ -6542,19 +6543,19 @@ namespace Exine.ExineScenes
         }
         private void NPCDisassemble()
         {
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Disassemble;
             NPCDropDialog.Show();
         }
         private void NPCDowngrade()
         {
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Downgrade;
             NPCDropDialog.Show();
         }
         private void NPCReset()
         {
-            if (!NPCDialog.Visible) return;
+            if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Reset;
             NPCDropDialog.Show();
         }
@@ -6564,7 +6565,7 @@ namespace Exine.ExineScenes
         }
         private void AwakeningLockedItem(S.AwakeningLockedItem p)
         {
-            MirItemCell cell = InventoryDialog.GetCell(p.UniqueID);
+            MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID);
             if (cell != null)
                 cell.Locked = p.Locked;
         }
@@ -6572,21 +6573,21 @@ namespace Exine.ExineScenes
         {
             if (NPCAwakeDialog.Visible)
                 NPCAwakeDialog.Hide();
-            if (InventoryDialog.Visible)
-                InventoryDialog.Hide();
+            if (ExInventoryDialog.Visible)
+                ExInventoryDialog.Hide();
 
-            MirItemCell cell = InventoryDialog.GetCell((ulong)p.removeID);
+            MirItemCell cell = ExInventoryDialog.GetCell((ulong)p.removeID);
             if (cell != null)
             {
                 cell.Locked = false;
                 cell.Item = null;
             }
 
-            for (int i = 0; i < InventoryDialog.Grid.Length; i++)
+            for (int i = 0; i < ExInventoryDialog.Grid.Length; i++)
             {
-                if (InventoryDialog.Grid[i].Locked == true)
+                if (ExInventoryDialog.Grid[i].Locked == true)
                 {
-                    InventoryDialog.Grid[i].Locked = false;
+                    ExInventoryDialog.Grid[i].Locked = false;
 
                     //if (InventoryDialog.Grid[i].Item.UniqueID == (ulong)p.removeID)
                     //{
@@ -6659,7 +6660,7 @@ namespace Exine.ExineScenes
 
         private void MailLockedItem(S.MailLockedItem p)
         {
-            MirItemCell cell = InventoryDialog.GetCell(p.UniqueID);
+            MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID);
             if (cell != null)
                 cell.Locked = p.Locked;
         }
@@ -6682,11 +6683,11 @@ namespace Exine.ExineScenes
 
         private void MailSent(S.MailSent p)
         {
-            for (int i = 0; i < InventoryDialog.Grid.Length; i++)
+            for (int i = 0; i < ExInventoryDialog.Grid.Length; i++)
             {
-                if (InventoryDialog.Grid[i].Locked == true)
+                if (ExInventoryDialog.Grid[i].Locked == true)
                 {
-                    InventoryDialog.Grid[i].Locked = false;
+                    ExInventoryDialog.Grid[i].Locked = false;
                 }
             }
 
@@ -6722,7 +6723,7 @@ namespace Exine.ExineScenes
         private void ResizeInventory(S.ResizeInventory p)
         {
             Array.Resize(ref User.Inventory, p.Size);
-            InventoryDialog.RefreshInventory2();
+            ExInventoryDialog.RefreshInventory2();
         }
 
         private void ResizeStorage(S.ResizeStorage p)
@@ -10169,7 +10170,7 @@ namespace Exine.ExineScenes
 
         private void DepositRentalItem(S.DepositRentalItem p)
         {
-            var fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : InventoryDialog.Grid[p.From - User.BeltIdx];
+            var fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
             var toCell = ItemRentingDialog.ItemCell;
 
             if (toCell == null || fromCell == null)
@@ -10192,7 +10193,7 @@ namespace Exine.ExineScenes
         private void RetrieveRentalItem(S.RetrieveRentalItem p)
         {
             var fromCell = ItemRentingDialog.ItemCell;
-            var toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : InventoryDialog.Grid[p.To - User.BeltIdx];
+            var toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
 
             if (toCell == null || fromCell == null)
                 return;
@@ -10317,15 +10318,15 @@ namespace Exine.ExineScenes
                 ExMainDialog = null;
                 ExChatDialog = null;
                 ExChatControl = null;
-                InventoryDialog = null;
-                CharacterDialog = null;
+                ExInventoryDialog = null;
+                ExCharacterDialog = null;
                 StorageDialog = null;
                 BeltDialog = null;
                 MiniMapDialog = null;
                 InspectDialog = null;
                 OptionDialog = null;
                 MenuDialog = null;
-                NPCDialog = null;
+                ExNPCDialog = null;
                 QuestDetailDialog = null;
                 QuestListDialog = null;
                 QuestLogDialog = null;
@@ -10514,7 +10515,7 @@ namespace Exine.ExineScenes
 
         public void ResetMap()
         {
-            ExineMainScene.Scene.NPCDialog.Hide();
+            ExineMainScene.Scene.ExNPCDialog.Hide();
 
             MapObject.MouseObjectID = 0;
             MapObject.TargetObjectID = 0;
@@ -11401,7 +11402,7 @@ namespace Exine.ExineScenes
                         if (npc != null)
                         {
                             if (npc.ObjectID == ExineMainScene.NPCID &&
-                                (CMain.Time <= ExineMainScene.NPCTime || ExineMainScene.Scene.NPCDialog.Visible))
+                                (CMain.Time <= ExineMainScene.NPCTime || ExineMainScene.Scene.ExNPCDialog.Visible))
                             {
                                 return;
                             }

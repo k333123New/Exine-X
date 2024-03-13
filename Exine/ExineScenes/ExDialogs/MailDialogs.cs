@@ -708,7 +708,7 @@ namespace Exine.ExineScenes.ExDialogs
             Size = new Size(236, 384);
             Movable = true;
             Sort = true;
-            Location = new Point(ExineMainScene.Scene.InventoryDialog.Size.Width + 10, 0);
+            Location = new Point(ExineMainScene.Scene.ExInventoryDialog.Size.Width + 10, 0);
 
             CloseButton = new MirButton
             {

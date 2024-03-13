@@ -484,14 +484,14 @@ namespace Exine.ExineScenes.Dialogs
             ExineMainScene.Scene.StorageDialog.Hide();
             ExineMainScene.Scene.TrustMerchantDialog.Hide();
             ExineMainScene.Scene.QuestListDialog.Hide();
-            ExineMainScene.Scene.InventoryDialog.Location = new Point(0, 0);
+            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(0, 0);
             ExineMainScene.Scene.RollControl.Hide();
             BigButtonDialog.Hide();
         }
 
         public override void Show()
         {
-            ExineMainScene.Scene.InventoryDialog.Location = new Point(Size.Width + 5, 0);
+            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(Size.Width + 5, 0);
             Visible = true;
 
             CheckQuestButtonDisplay();
@@ -858,10 +858,10 @@ namespace Exine.ExineScenes.Dialogs
                 Cells[i].Recipe = PType == PanelType.Craft;
             }
 
-            Location = new Point(Location.X, ExineMainScene.Scene.NPCDialog.Size.Height);
+            Location = new Point(Location.X, ExineMainScene.Scene.ExNPCDialog.Size.Height);
             Visible = true;
 
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Show();
         }
     }
     public sealed class NPCDropDialog : ExineImageControl
@@ -1176,7 +1176,7 @@ namespace Exine.ExineScenes.Dialogs
 
             Index = 351;
             Library = Libraries.Prguse2;
-            Location = new Point(264, ExineMainScene.Scene.NPCDialog.Size.Height);
+            Location = new Point(264, ExineMainScene.Scene.ExNPCDialog.Size.Height);
 
             ConfirmButton.HoverIndex = 291;
             ConfirmButton.Index = 290;
@@ -1294,7 +1294,7 @@ namespace Exine.ExineScenes.Dialogs
         public override void Show()
         {
             Hold = false;
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Show();
             Visible = true;
         }
     }
@@ -1673,8 +1673,8 @@ namespace Exine.ExineScenes.Dialogs
         {
             Visible = true;
 
-            ExineMainScene.Scene.InventoryDialog.Location = new Point(Size.Width + 5, 0);
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(Size.Width + 5, 0);
+            ExineMainScene.Scene.ExInventoryDialog.Show();
         }
     }
     public sealed class CraftDialog : ExineImageControl
@@ -1817,7 +1817,7 @@ namespace Exine.ExineScenes.Dialogs
 
         void CraftDialog_BeforeDraw(object sender, EventArgs e)
         {
-            if (!ExineMainScene.Scene.InventoryDialog.Visible)
+            if (!ExineMainScene.Scene.ExInventoryDialog.Visible)
             {
                 Hide();
                 return;
@@ -1873,7 +1873,7 @@ namespace Exine.ExineScenes.Dialogs
         {
             Visible = true;
 
-            Location = new Point(ExineMainScene.Scene.InventoryDialog.Location.X - 12, ExineMainScene.Scene.InventoryDialog.Location.Y + 236);
+            Location = new Point(ExineMainScene.Scene.ExInventoryDialog.Location.X - 12, ExineMainScene.Scene.ExInventoryDialog.Location.Y + 236);
         }
 
         private void AutoFill()
@@ -1895,7 +1895,7 @@ namespace Exine.ExineScenes.Dialogs
 
                     if (slot == null || tool.Info.Index != slot.Info.Index || slot.CurrentDura < 1000M) continue;
 
-                    var cell = ExineMainScene.Scene.InventoryDialog.GetCell(slot.UniqueID) ?? ExineMainScene.Scene.BeltDialog.GetCell(slot.UniqueID);
+                    var cell = ExineMainScene.Scene.ExInventoryDialog.GetCell(slot.UniqueID) ?? ExineMainScene.Scene.BeltDialog.GetCell(slot.UniqueID);
 
                     if (cell.Locked) continue;
 
@@ -1922,7 +1922,7 @@ namespace Exine.ExineScenes.Dialogs
                     if (slot.Count < ingredient.Count) continue;
                     if (ingredient.CurrentDura < ingredient.MaxDura && slot.CurrentDura < ingredient.CurrentDura) continue;
 
-                    var cell = ExineMainScene.Scene.InventoryDialog.GetCell(slot.UniqueID) ?? ExineMainScene.Scene.BeltDialog.GetCell(slot.UniqueID);
+                    var cell = ExineMainScene.Scene.ExInventoryDialog.GetCell(slot.UniqueID) ?? ExineMainScene.Scene.BeltDialog.GetCell(slot.UniqueID);
 
                     if (cell.Locked) continue;
 
@@ -2366,7 +2366,7 @@ namespace Exine.ExineScenes.Dialogs
 
         public override void Show()
         {
-            ExineMainScene.Scene.InventoryDialog.Show();
+            ExineMainScene.Scene.ExInventoryDialog.Show();
             RefreshStorage1();
 
             Visible = true;

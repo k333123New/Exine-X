@@ -378,7 +378,7 @@ namespace Exine.ExineControls
 
             if ((GridType != MirGridType.Inventory && GridType != MirGridType.Storage && GridType != MirGridType.HeroInventory) || Item == null || !CanUseItem() || ExineMainScene.SelectedCell == this) return;
 
-            ExineCharacterDialog dialog = ExineMainScene.Scene.CharacterDialog;
+            ExineCharacterDialog dialog = ExineMainScene.Scene.ExCharacterDialog;
             UserObject actor = ExineMainScene.User;
             if (HeroGridType)
             {
@@ -536,7 +536,7 @@ namespace Exine.ExineControls
                                         if (ItemArray[i] != null && ItemArray[i].Info == Item.Info)
                                         {
                                             Network.Enqueue(new C.MoveItem { Grid = MirGridType.Inventory, From = i, To = ItemSlot });
-                                            ExineMainScene.Scene.InventoryDialog.Grid[i - ExineMainScene.User.BeltIdx].Locked = true;
+                                            ExineMainScene.Scene.ExInventoryDialog.Grid[i - ExineMainScene.User.BeltIdx].Locked = true;
                                             break;
                                         }
                                 }
@@ -572,7 +572,7 @@ namespace Exine.ExineControls
                                     if (ItemArray[i] != null && ItemArray[i].Info == Item.Info)
                                     {
                                         Network.Enqueue(new C.MoveItem { Grid = MirGridType.Inventory, From = i, To = ItemSlot });
-                                        ExineMainScene.Scene.InventoryDialog.Grid[i - ExineMainScene.User.BeltIdx].Locked = true;
+                                        ExineMainScene.Scene.ExInventoryDialog.Grid[i - ExineMainScene.User.BeltIdx].Locked = true;
                                         break;
                                     }
                             }
@@ -771,7 +771,7 @@ namespace Exine.ExineControls
 
             for (int i = 0; i < ExineMainScene.User.Inventory.Length; i++)
             {
-                MirItemCell itemCell = i < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[i] : ExineMainScene.Scene.InventoryDialog.Grid[i - ExineMainScene.User.BeltIdx];
+                MirItemCell itemCell = i < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[i] : ExineMainScene.Scene.ExInventoryDialog.Grid[i - ExineMainScene.User.BeltIdx];
 
                 if (itemCell.Item == null) count++;
             }
@@ -784,7 +784,7 @@ namespace Exine.ExineControls
 
                 for (int i = 0; i < ExineMainScene.User.Inventory.Length; i++)
                 {
-                    MirItemCell itemCell = i < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[i] : ExineMainScene.Scene.InventoryDialog.Grid[i - ExineMainScene.User.BeltIdx];
+                    MirItemCell itemCell = i < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[i] : ExineMainScene.Scene.ExInventoryDialog.Grid[i - ExineMainScene.User.BeltIdx];
 
                     if (itemCell.Item == null || itemCell.Item.Info != Item.Info) continue;
 
@@ -809,11 +809,11 @@ namespace Exine.ExineControls
 
                 if (Item.Info.Type == ItemType.Amulet)
                 {
-                    itemCell = i < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[i] : ExineMainScene.Scene.InventoryDialog.Grid[i - ExineMainScene.User.BeltIdx];
+                    itemCell = i < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[i] : ExineMainScene.Scene.ExInventoryDialog.Grid[i - ExineMainScene.User.BeltIdx];
                 }
                 else
                 {
-                    itemCell = i < (ExineMainScene.User.Inventory.Length - ExineMainScene.User.BeltIdx) ? ExineMainScene.Scene.InventoryDialog.Grid[i] : ExineMainScene.Scene.BeltDialog.Grid[i - ExineMainScene.User.Inventory.Length];
+                    itemCell = i < (ExineMainScene.User.Inventory.Length - ExineMainScene.User.BeltIdx) ? ExineMainScene.Scene.ExInventoryDialog.Grid[i] : ExineMainScene.Scene.BeltDialog.Grid[i - ExineMainScene.User.Inventory.Length];
                 }
 
                 if (itemCell.Item != null) continue;
@@ -824,15 +824,15 @@ namespace Exine.ExineControls
 
                     if (GridType == MirGridType.Fishing)
                     {
-                        if (ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.Weapon].Item == null) return;
+                        if (ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.Weapon].Item == null) return;
 
-                        fromID = ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.Weapon].Item.UniqueID;
+                        fromID = ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.Weapon].Item.UniqueID;
                     }
                     else if (GridType == MirGridType.Mount)
                     {
-                        if (ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.Mount].Item == null) return;
+                        if (ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.Mount].Item == null) return;
 
-                        fromID = ExineMainScene.Scene.CharacterDialog.Grid[(byte)EquipmentSlot.Mount].Item.UniqueID;
+                        fromID = ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.Mount].Item.UniqueID;
                     }
                     else
                     {
@@ -1010,7 +1010,7 @@ namespace Exine.ExineControls
                                     {
                                         Network.Enqueue(new C.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = x });
 
-                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.InventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
+                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
                                         if (temp != null) temp.Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1063,7 +1063,7 @@ namespace Exine.ExineControls
                                     {
                                         Network.Enqueue(new C.TakeBackItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
-                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.InventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
+                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
                                         if (temp != null) temp.Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1134,7 +1134,7 @@ namespace Exine.ExineControls
                                     {
                                         Network.Enqueue(new C.RetrieveTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
-                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.InventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
+                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
                                         if (temp != null) temp.Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1199,7 +1199,7 @@ namespace Exine.ExineControls
                                     {
                                         Network.Enqueue(new C.RetrieveRefineItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
-                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.InventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
+                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
                                         if (temp != null) temp.Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1276,7 +1276,7 @@ namespace Exine.ExineControls
                                     {
                                         Network.Enqueue(new C.TakeBackHeroItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
-                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.InventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
+                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
                                         if (temp != null) temp.Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
