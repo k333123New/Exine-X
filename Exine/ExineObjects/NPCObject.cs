@@ -298,7 +298,8 @@ namespace Exine.ExineObjects
 
             //BodyLibrary.Draw(DrawFrame, DrawLocation, DrawColour, true);
 
-            BodyLibrary.DrawTinted(DrawFrame, DrawLocation, DrawColour, Colour, true);
+            //BodyLibrary.DrawTinted(DrawFrame, DrawLocation, DrawColour, Colour, true);
+            BodyLibrary.ExineDrawTinted(DrawFrame, DrawLocation, DrawColour, Colour, true);//k333123
 
             if (QuestIcon == QuestIcon.None) return;
 
@@ -306,8 +307,10 @@ namespace Exine.ExineObjects
             var size = BodyLibrary.GetSize(BaseIndex);
 
             int imageIndex = 981 + ((int)QuestIcon * 2) + QuestIndex;
-            
+
             Libraries.Prguse.Draw(imageIndex, DrawLocation.Add(offSet).Add(size.Width / 2 - 28, -40), Color.White, false);
+            
+
         }
 
         public override bool MouseOver(Point p)

@@ -83,6 +83,12 @@
             ExportButton = new Button();
             ImportButton = new Button();
             ExportSelectedButton = new Button();
+            label16 = new Label();
+            label17 = new Label();
+            label18 = new Label();
+            NColorBlueTextBox = new TextBox();
+            NColorGreenTextBox = new TextBox();
+            NColorRedTextBox = new TextBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -104,6 +110,12 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(NColorRedTextBox);
+            tabPage1.Controls.Add(NColorGreenTextBox);
+            tabPage1.Controls.Add(NColorBlueTextBox);
+            tabPage1.Controls.Add(label18);
+            tabPage1.Controls.Add(label17);
+            tabPage1.Controls.Add(label16);
             tabPage1.Controls.Add(TeleportToCheckBox);
             tabPage1.Controls.Add(label15);
             tabPage1.Controls.Add(BigMapIconTextBox);
@@ -143,7 +155,7 @@
             TeleportToCheckBox.Location = new Point(293, 268);
             TeleportToCheckBox.Margin = new Padding(4, 3, 4, 3);
             TeleportToCheckBox.Name = "TeleportToCheckBox";
-            TeleportToCheckBox.Size = new Size(107, 19);
+            TeleportToCheckBox.Size = new Size(111, 19);
             TeleportToCheckBox.TabIndex = 63;
             TeleportToCheckBox.Text = "Can Teleport To";
             TeleportToCheckBox.UseVisualStyleBackColor = true;
@@ -175,7 +187,7 @@
             ShowBigMapCheckBox.Location = new Point(31, 269);
             ShowBigMapCheckBox.Margin = new Padding(4, 3, 4, 3);
             ShowBigMapCheckBox.Name = "ShowBigMapCheckBox";
-            ShowBigMapCheckBox.Size = new Size(116, 19);
+            ShowBigMapCheckBox.Size = new Size(119, 19);
             ShowBigMapCheckBox.TabIndex = 60;
             ShowBigMapCheckBox.Text = "Show on BigMap";
             ShowBigMapCheckBox.UseVisualStyleBackColor = true;
@@ -230,7 +242,7 @@
             label11.Location = new Point(28, 40);
             label11.Margin = new Padding(4, 0, 4, 0);
             label11.Name = "label11";
-            label11.Size = new Size(63, 15);
+            label11.Size = new Size(64, 15);
             label11.TabIndex = 23;
             label11.Text = "File Name:";
             // 
@@ -329,7 +341,7 @@
             label1.Location = new Point(23, 8);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(66, 15);
+            label1.Size = new Size(67, 15);
             label1.TabIndex = 4;
             label1.Text = "NPC Index:";
             // 
@@ -359,7 +371,7 @@
             label28.Location = new Point(155, 132);
             label28.Margin = new Padding(4, 0, 4, 0);
             label28.Name = "label28";
-            label28.Size = new Size(48, 15);
+            label28.Size = new Size(49, 15);
             label28.TabIndex = 10;
             label28.Text = "From Y:";
             // 
@@ -369,7 +381,7 @@
             label30.Location = new Point(44, 132);
             label30.Margin = new Padding(4, 0, 4, 0);
             label30.Name = "label30";
-            label30.Size = new Size(48, 15);
+            label30.Size = new Size(49, 15);
             label30.TabIndex = 3;
             label30.Text = "From X:";
             // 
@@ -420,7 +432,7 @@
             ConquestVisible_checkbox.Location = new Point(200, 135);
             ConquestVisible_checkbox.Margin = new Padding(4, 3, 4, 3);
             ConquestVisible_checkbox.Name = "ConquestVisible_checkbox";
-            ConquestVisible_checkbox.Size = new Size(152, 19);
+            ConquestVisible_checkbox.Size = new Size(155, 19);
             ConquestVisible_checkbox.TabIndex = 56;
             ConquestVisible_checkbox.Text = "Visible during Conquest";
             ConquestVisible_checkbox.UseVisualStyleBackColor = true;
@@ -442,7 +454,7 @@
             label12.Location = new Point(48, 104);
             label12.Margin = new Padding(4, 0, 4, 0);
             label12.Name = "label12";
-            label12.Size = new Size(76, 15);
+            label12.Size = new Size(77, 15);
             label12.TabIndex = 54;
             label12.Text = "Needed Flag:";
             // 
@@ -452,7 +464,7 @@
             label10.Location = new Point(48, 73);
             label10.Margin = new Padding(4, 0, 4, 0);
             label10.Name = "label10";
-            label10.Size = new Size(76, 15);
+            label10.Size = new Size(80, 15);
             label10.TabIndex = 53;
             label10.Text = "Day to Show:";
             // 
@@ -510,7 +522,7 @@
             label8.Location = new Point(200, 198);
             label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
-            label8.Size = new Size(71, 15);
+            label8.Size = new Size(72, 15);
             label8.TabIndex = 48;
             label8.Text = "End Minute:";
             // 
@@ -520,7 +532,7 @@
             label9.Location = new Point(63, 198);
             label9.Margin = new Padding(4, 0, 4, 0);
             label9.Name = "label9";
-            label9.Size = new Size(60, 15);
+            label9.Size = new Size(61, 15);
             label9.TabIndex = 47;
             label9.Text = "End Hour:";
             // 
@@ -553,7 +565,7 @@
             TimeVisible_checkbox.Location = new Point(35, 135);
             TimeVisible_checkbox.Margin = new Padding(4, 3, 4, 3);
             TimeVisible_checkbox.Name = "TimeVisible_checkbox";
-            TimeVisible_checkbox.Size = new Size(153, 19);
+            TimeVisible_checkbox.Size = new Size(158, 19);
             TimeVisible_checkbox.TabIndex = 44;
             TimeVisible_checkbox.Text = "Only Visible at set Times";
             TimeVisible_checkbox.UseVisualStyleBackColor = true;
@@ -565,7 +577,7 @@
             label7.Location = new Point(195, 7);
             label7.Margin = new Padding(4, 0, 4, 0);
             label7.Name = "label7";
-            label7.Size = new Size(63, 15);
+            label7.Size = new Size(64, 15);
             label7.TabIndex = 43;
             label7.Text = "Max Level:";
             // 
@@ -585,7 +597,7 @@
             label6.Location = new Point(36, 37);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
-            label6.Size = new Size(87, 15);
+            label6.Size = new Size(88, 15);
             label6.TabIndex = 40;
             label6.Text = "Class Required:";
             // 
@@ -595,7 +607,7 @@
             label5.Location = new Point(200, 168);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
-            label5.Size = new Size(75, 15);
+            label5.Size = new Size(77, 15);
             label5.TabIndex = 37;
             label5.Text = "Start Minute:";
             // 
@@ -605,7 +617,7 @@
             label4.Location = new Point(63, 168);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
-            label4.Size = new Size(64, 15);
+            label4.Size = new Size(66, 15);
             label4.TabIndex = 36;
             label4.Text = "Start Hour:";
             // 
@@ -615,7 +627,7 @@
             label3.Location = new Point(65, 7);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(61, 15);
+            label3.Size = new Size(62, 15);
             label3.TabIndex = 34;
             label3.Text = "Min Level:";
             // 
@@ -719,6 +731,66 @@
             ExportSelectedButton.UseVisualStyleBackColor = true;
             ExportSelectedButton.Click += ExportSelected_Click;
             // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(372, 8);
+            label16.Margin = new Padding(4, 0, 4, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(48, 15);
+            label16.TabIndex = 64;
+            label16.Text = "Color_R";
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(372, 40);
+            label17.Margin = new Padding(4, 0, 4, 0);
+            label17.Name = "label17";
+            label17.Size = new Size(49, 15);
+            label17.TabIndex = 65;
+            label17.Text = "Color_G";
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(372, 70);
+            label18.Margin = new Padding(4, 0, 4, 0);
+            label18.Name = "label18";
+            label18.Size = new Size(48, 15);
+            label18.TabIndex = 66;
+            label18.Text = "Color_B";
+            // 
+            // NColorBlueTextBox
+            // 
+            NColorBlueTextBox.Location = new Point(428, 67);
+            NColorBlueTextBox.Margin = new Padding(4, 3, 4, 3);
+            NColorBlueTextBox.MaxLength = 5;
+            NColorBlueTextBox.Name = "NColorBlueTextBox";
+            NColorBlueTextBox.Size = new Size(42, 23);
+            NColorBlueTextBox.TabIndex = 67;
+            NColorBlueTextBox.TextChanged += NColorBlueTextBox_TextChanged;
+            // 
+            // NColorGreenTextBox
+            // 
+            NColorGreenTextBox.Location = new Point(428, 37);
+            NColorGreenTextBox.Margin = new Padding(4, 3, 4, 3);
+            NColorGreenTextBox.MaxLength = 5;
+            NColorGreenTextBox.Name = "NColorGreenTextBox";
+            NColorGreenTextBox.Size = new Size(42, 23);
+            NColorGreenTextBox.TabIndex = 68;
+            NColorGreenTextBox.TextChanged += NColorGreenTextBox_TextChanged;
+            // 
+            // NColorRedTextBox
+            // 
+            NColorRedTextBox.Location = new Point(428, 5);
+            NColorRedTextBox.Margin = new Padding(4, 3, 4, 3);
+            NColorRedTextBox.MaxLength = 5;
+            NColorRedTextBox.Name = "NColorRedTextBox";
+            NColorRedTextBox.Size = new Size(42, 23);
+            NColorRedTextBox.TabIndex = 69;
+            NColorRedTextBox.TextChanged += NColorRedTextBox_TextChanged;
+            // 
             // NPCInfoForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -805,5 +877,11 @@
         private System.Windows.Forms.CheckBox ShowBigMapCheckBox;
         private System.Windows.Forms.CheckBox TeleportToCheckBox;
         private CheckBox ConquestVisible_checkbox;
+        private Label label18;
+        private Label label17;
+        private Label label16;
+        private TextBox NColorRedTextBox;
+        private TextBox NColorGreenTextBox;
+        private TextBox NColorBlueTextBox;
     }
 }

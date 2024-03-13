@@ -89,6 +89,10 @@ namespace Server
                 ShowBigMapCheckBox.Checked = false;
                 BigMapIconTextBox.Text = string.Empty;
                 ConquestVisible_checkbox.Checked = true;
+
+                NColorRedTextBox.Text = string.Empty;
+                NColorGreenTextBox.Text = string.Empty;
+                NColorBlueTextBox.Text = string.Empty;
                 return;
             }
 
@@ -120,6 +124,11 @@ namespace Server
             BigMapIconTextBox.Text = info.BigMapIcon.ToString();
             TeleportToCheckBox.Checked = info.CanTeleportTo;
             ConquestVisible_checkbox.Checked = info.ConquestVisible;
+
+            NColorRedTextBox.Text = info.Colour.R.ToString();
+            NColorGreenTextBox.Text = info.Colour.G.ToString();
+            NColorBlueTextBox.Text = info.Colour.B.ToString();
+
 
 
             for (int i = 1; i < _selectedNPCInfos.Count; i++)
@@ -343,7 +352,7 @@ namespace Server
             foreach (var m in npcs)
             {
                 try
-                { 
+                {
                     NPCInfo.FromText(m);
                 }
                 catch { }
@@ -611,6 +620,44 @@ namespace Server
 
             for (int i = 0; i < _selectedNPCInfos.Count; i++)
                 _selectedNPCInfos[i].ConquestVisible = ConquestVisible_checkbox.Checked;
+        }
+
+        private void NColorRedTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ActiveControl != sender) return;
+            int red = 0;
+            int.TryParse(ActiveControl.Text, out red); 
+
+            for (int i = 0; i < _selectedNPCInfos.Count; i++)
+                _selectedNPCInfos[i].Colour = Color.FromArgb(red, _selectedNPCInfos[i].Colour.G, _selectedNPCInfos[i].Colour.B);
+
+            RefreshNPCList();
+        }
+
+        private void NColorGreenTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ActiveControl != sender) return;
+
+            int green = 0;
+            int.TryParse(ActiveControl.Text, out green);
+
+            for (int i = 0; i < _selectedNPCInfos.Count; i++)
+                _selectedNPCInfos[i].Colour = Color.FromArgb(_selectedNPCInfos[i].Colour.R, green, _selectedNPCInfos[i].Colour.B);
+
+            RefreshNPCList();
+        }
+
+        private void NColorBlueTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (ActiveControl != sender) return;
+
+            int blue = 0;
+            int.TryParse(ActiveControl.Text, out blue);
+
+            for (int i = 0; i < _selectedNPCInfos.Count; i++)
+                _selectedNPCInfos[i].Colour = Color.FromArgb(_selectedNPCInfos[i].Colour.R, _selectedNPCInfos[i].Colour.G, blue);
+
+            RefreshNPCList();
         }
     }
 }

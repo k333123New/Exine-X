@@ -99,6 +99,21 @@ namespace Server.ExineDatabase
             {
                 ConquestVisible = reader.ReadBoolean();
             }
+
+            //add color k333123
+            try
+            {
+                int colorR = reader.ReadByte();
+                int colorG = reader.ReadByte();
+                int colorB = reader.ReadByte();
+                Colour = Color.FromArgb(colorR, colorG, colorB);
+               
+                
+            }
+            catch(Exception)
+            {
+                Colour = Color.FromArgb(255, 255, 255);
+            }
         }
         public void Save(BinaryWriter writer)
         {
@@ -137,6 +152,11 @@ namespace Server.ExineDatabase
             writer.Write(BigMapIcon);
             writer.Write(CanTeleportTo);
             writer.Write(ConquestVisible);
+
+            writer.Write(Colour.R);
+            writer.Write(Colour.G);
+            writer.Write(Colour.B); 
+
         }
 
         public static void FromText(string text)
@@ -162,15 +182,17 @@ namespace Server.ExineDatabase
             if (!bool.TryParse(data[7], out info.ShowOnBigMap)) return; 
             if (!int.TryParse(data[8], out info.BigMapIcon)) return; 
             if (!bool.TryParse(data[9], out info.CanTeleportTo)) return; 
-            if (!bool.TryParse(data[10], out info.ConquestVisible)) return; 
+            if (!bool.TryParse(data[10], out info.ConquestVisible)) return;
+
+            info.Colour = Color.FromArgb(int.Parse(data[11]), int.Parse(data[12]), int.Parse(data[13]));
 
             info.Index = ++EditEnvir.NPCIndex;
             EditEnvir.NPCInfoList.Add(info); 
         }
         public string ToText()
         {
-            return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}",
-                FileName, EditEnvir.MapInfoList.Where(d => d.Index == MapIndex).FirstOrDefault().FileName, Location.X, Location.Y, Name, Image, Rate, ShowOnBigMap, BigMapIcon, CanTeleportTo);
+            return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
+                FileName, EditEnvir.MapInfoList.Where(d => d.Index == MapIndex).FirstOrDefault().FileName, Location.X, Location.Y, Name, Image, Rate, ShowOnBigMap, BigMapIcon, CanTeleportTo, Colour.R, Colour.G, Colour.B);
         }
 
         public override string ToString()
