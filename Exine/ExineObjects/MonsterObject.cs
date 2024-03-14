@@ -335,15 +335,14 @@ namespace Exine.ExineObjects
             ProcessFrames();
 
             if (Frame == null)
-            {
+            { 
                 DrawFrame = 0;
                 DrawWingFrame = 0;
             }
             else
             {
                 DrawFrame = Frame.Start + (Frame.OffSet * (byte)Direction) + FrameIndex;
-                DrawWingFrame = Frame.EffectStart + (Frame.EffectOffSet * (byte)Direction) + EffectFrameIndex;
-
+                DrawWingFrame = Frame.EffectStart + (Frame.EffectOffSet * (byte)Direction) + EffectFrameIndex; 
             }
 
 

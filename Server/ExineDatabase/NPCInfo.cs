@@ -18,6 +18,8 @@ namespace Server.ExineDatabase
         public ushort Rate = 100;
         public ushort Image;
         public Color Colour;
+        
+        public int Direction=0; //k333123 add 240314
 
         public bool TimeVisible = false;
         public byte HourStart = 0;
@@ -106,14 +108,26 @@ namespace Server.ExineDatabase
                 int colorR = reader.ReadByte();
                 int colorG = reader.ReadByte();
                 int colorB = reader.ReadByte();
-                Colour = Color.FromArgb(colorR, colorG, colorB);
-               
-                
+                Colour = Color.FromArgb(colorR, colorG, colorB); 
             }
             catch(Exception)
             {
                 Colour = Color.FromArgb(255, 255, 255);
             }
+
+            //add direction k333123
+            
+            try
+            {
+                Direction = reader.ReadInt32(); 
+            }
+            catch (Exception)
+            {
+                Direction = 0;
+            }
+            
+           
+
         }
         public void Save(BinaryWriter writer)
         {
@@ -155,14 +169,19 @@ namespace Server.ExineDatabase
 
             writer.Write(Colour.R);
             writer.Write(Colour.G);
-            writer.Write(Colour.B); 
+            writer.Write(Colour.B);
+
+            writer.Write(Direction);
 
         }
 
         public static void FromText(string text)
-        { 
+        {
+          
             string[] data = text.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries); 
-            if (data.Length < 6) return; 
+            if (data.Length < 6) return;
+
+            Console.WriteLine("!!!!! data.len:"+ data.Length);
             NPCInfo info = new NPCInfo { Name = data[0] };
 
             int x, y;
@@ -184,15 +203,21 @@ namespace Server.ExineDatabase
             if (!bool.TryParse(data[9], out info.CanTeleportTo)) return; 
             if (!bool.TryParse(data[10], out info.ConquestVisible)) return;
 
+            Console.WriteLine("!!!@@");
+
             info.Colour = Color.FromArgb(int.Parse(data[11]), int.Parse(data[12]), int.Parse(data[13]));
+            info.Direction =int.Parse(data[14]);
 
             info.Index = ++EditEnvir.NPCIndex;
+
+           
+
             EditEnvir.NPCInfoList.Add(info); 
         }
         public string ToText()
         {
-            return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
-                FileName, EditEnvir.MapInfoList.Where(d => d.Index == MapIndex).FirstOrDefault().FileName, Location.X, Location.Y, Name, Image, Rate, ShowOnBigMap, BigMapIcon, CanTeleportTo, Colour.R, Colour.G, Colour.B);
+            return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}",
+                FileName, EditEnvir.MapInfoList.Where(d => d.Index == MapIndex).FirstOrDefault().FileName, Location.X, Location.Y, Name, Image, Rate, ShowOnBigMap, BigMapIcon, CanTeleportTo, Colour.R, Colour.G, Colour.B, Direction);
         }
 
         public override string ToString()

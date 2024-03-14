@@ -90,7 +90,9 @@ Client Map Draw : private void MapInformation(S.MapInformation p)
 
 
 
-
+npc speech
+[SPEECH]
+10 test...
 
 
 

@@ -30,6 +30,12 @@
         {
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
+            NColorRedTextBox = new TextBox();
+            NColorGreenTextBox = new TextBox();
+            NColorBlueTextBox = new TextBox();
+            label18 = new Label();
+            label17 = new Label();
+            label16 = new Label();
             TeleportToCheckBox = new CheckBox();
             label15 = new Label();
             BigMapIconTextBox = new TextBox();
@@ -83,12 +89,8 @@
             ExportButton = new Button();
             ImportButton = new Button();
             ExportSelectedButton = new Button();
-            label16 = new Label();
-            label17 = new Label();
-            label18 = new Label();
-            NColorBlueTextBox = new TextBox();
-            NColorGreenTextBox = new TextBox();
-            NColorRedTextBox = new TextBox();
+            DirectionComboBox = new ComboBox();
+            label19 = new Label();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             tabPage2.SuspendLayout();
@@ -110,6 +112,8 @@
             // 
             // tabPage1
             // 
+            tabPage1.Controls.Add(label19);
+            tabPage1.Controls.Add(DirectionComboBox);
             tabPage1.Controls.Add(NColorRedTextBox);
             tabPage1.Controls.Add(NColorGreenTextBox);
             tabPage1.Controls.Add(NColorBlueTextBox);
@@ -148,6 +152,66 @@
             tabPage1.TabIndex = 0;
             tabPage1.Text = "Info";
             tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // NColorRedTextBox
+            // 
+            NColorRedTextBox.Location = new Point(428, 5);
+            NColorRedTextBox.Margin = new Padding(4, 3, 4, 3);
+            NColorRedTextBox.MaxLength = 5;
+            NColorRedTextBox.Name = "NColorRedTextBox";
+            NColorRedTextBox.Size = new Size(42, 23);
+            NColorRedTextBox.TabIndex = 69;
+            NColorRedTextBox.TextChanged += NColorRedTextBox_TextChanged;
+            // 
+            // NColorGreenTextBox
+            // 
+            NColorGreenTextBox.Location = new Point(428, 37);
+            NColorGreenTextBox.Margin = new Padding(4, 3, 4, 3);
+            NColorGreenTextBox.MaxLength = 5;
+            NColorGreenTextBox.Name = "NColorGreenTextBox";
+            NColorGreenTextBox.Size = new Size(42, 23);
+            NColorGreenTextBox.TabIndex = 68;
+            NColorGreenTextBox.TextChanged += NColorGreenTextBox_TextChanged;
+            // 
+            // NColorBlueTextBox
+            // 
+            NColorBlueTextBox.Location = new Point(428, 67);
+            NColorBlueTextBox.Margin = new Padding(4, 3, 4, 3);
+            NColorBlueTextBox.MaxLength = 5;
+            NColorBlueTextBox.Name = "NColorBlueTextBox";
+            NColorBlueTextBox.Size = new Size(42, 23);
+            NColorBlueTextBox.TabIndex = 67;
+            NColorBlueTextBox.TextChanged += NColorBlueTextBox_TextChanged;
+            // 
+            // label18
+            // 
+            label18.AutoSize = true;
+            label18.Location = new Point(372, 70);
+            label18.Margin = new Padding(4, 0, 4, 0);
+            label18.Name = "label18";
+            label18.Size = new Size(48, 15);
+            label18.TabIndex = 66;
+            label18.Text = "Color_B";
+            // 
+            // label17
+            // 
+            label17.AutoSize = true;
+            label17.Location = new Point(372, 40);
+            label17.Margin = new Padding(4, 0, 4, 0);
+            label17.Name = "label17";
+            label17.Size = new Size(49, 15);
+            label17.TabIndex = 65;
+            label17.Text = "Color_G";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(372, 8);
+            label16.Margin = new Padding(4, 0, 4, 0);
+            label16.Name = "label16";
+            label16.Size = new Size(48, 15);
+            label16.TabIndex = 64;
+            label16.Text = "Color_R";
             // 
             // TeleportToCheckBox
             // 
@@ -731,65 +795,27 @@
             ExportSelectedButton.UseVisualStyleBackColor = true;
             ExportSelectedButton.Click += ExportSelected_Click;
             // 
-            // label16
+            // DirectionComboBox
             // 
-            label16.AutoSize = true;
-            label16.Location = new Point(372, 8);
-            label16.Margin = new Padding(4, 0, 4, 0);
-            label16.Name = "label16";
-            label16.Size = new Size(48, 15);
-            label16.TabIndex = 64;
-            label16.Text = "Color_R";
+            DirectionComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            DirectionComboBox.FormattingEnabled = true;
+            DirectionComboBox.Items.AddRange(new object[] { "Up", "UpRight", "Right", "DownRight", "Down", "DownLeft", "Left", "UpLeft" });
+            DirectionComboBox.Location = new Point(428, 97);
+            DirectionComboBox.Margin = new Padding(4, 3, 4, 3);
+            DirectionComboBox.Name = "DirectionComboBox";
+            DirectionComboBox.Size = new Size(153, 23);
+            DirectionComboBox.TabIndex = 70;
+            DirectionComboBox.SelectedIndexChanged += DirectionComboBox_SelectedIndexChanged;
             // 
-            // label17
+            // label19
             // 
-            label17.AutoSize = true;
-            label17.Location = new Point(372, 40);
-            label17.Margin = new Padding(4, 0, 4, 0);
-            label17.Name = "label17";
-            label17.Size = new Size(49, 15);
-            label17.TabIndex = 65;
-            label17.Text = "Color_G";
-            // 
-            // label18
-            // 
-            label18.AutoSize = true;
-            label18.Location = new Point(372, 70);
-            label18.Margin = new Padding(4, 0, 4, 0);
-            label18.Name = "label18";
-            label18.Size = new Size(48, 15);
-            label18.TabIndex = 66;
-            label18.Text = "Color_B";
-            // 
-            // NColorBlueTextBox
-            // 
-            NColorBlueTextBox.Location = new Point(428, 67);
-            NColorBlueTextBox.Margin = new Padding(4, 3, 4, 3);
-            NColorBlueTextBox.MaxLength = 5;
-            NColorBlueTextBox.Name = "NColorBlueTextBox";
-            NColorBlueTextBox.Size = new Size(42, 23);
-            NColorBlueTextBox.TabIndex = 67;
-            NColorBlueTextBox.TextChanged += NColorBlueTextBox_TextChanged;
-            // 
-            // NColorGreenTextBox
-            // 
-            NColorGreenTextBox.Location = new Point(428, 37);
-            NColorGreenTextBox.Margin = new Padding(4, 3, 4, 3);
-            NColorGreenTextBox.MaxLength = 5;
-            NColorGreenTextBox.Name = "NColorGreenTextBox";
-            NColorGreenTextBox.Size = new Size(42, 23);
-            NColorGreenTextBox.TabIndex = 68;
-            NColorGreenTextBox.TextChanged += NColorGreenTextBox_TextChanged;
-            // 
-            // NColorRedTextBox
-            // 
-            NColorRedTextBox.Location = new Point(428, 5);
-            NColorRedTextBox.Margin = new Padding(4, 3, 4, 3);
-            NColorRedTextBox.MaxLength = 5;
-            NColorRedTextBox.Name = "NColorRedTextBox";
-            NColorRedTextBox.Size = new Size(42, 23);
-            NColorRedTextBox.TabIndex = 69;
-            NColorRedTextBox.TextChanged += NColorRedTextBox_TextChanged;
+            label19.AutoSize = true;
+            label19.Location = new Point(364, 100);
+            label19.Margin = new Padding(4, 0, 4, 0);
+            label19.Name = "label19";
+            label19.Size = new Size(56, 15);
+            label19.TabIndex = 71;
+            label19.Text = "Direction";
             // 
             // NPCInfoForm
             // 
@@ -883,5 +909,7 @@
         private TextBox NColorRedTextBox;
         private TextBox NColorGreenTextBox;
         private TextBox NColorBlueTextBox;
+        private Label label19;
+        private ComboBox DirectionComboBox;
     }
 }

@@ -93,6 +93,7 @@ namespace Server
                 NColorRedTextBox.Text = string.Empty;
                 NColorGreenTextBox.Text = string.Empty;
                 NColorBlueTextBox.Text = string.Empty;
+                DirectionComboBox.SelectedIndex = -1;
                 return;
             }
 
@@ -128,7 +129,7 @@ namespace Server
             NColorRedTextBox.Text = info.Colour.R.ToString();
             NColorGreenTextBox.Text = info.Colour.G.ToString();
             NColorBlueTextBox.Text = info.Colour.B.ToString();
-
+            DirectionComboBox.SelectedIndex = info.Direction;
 
 
             for (int i = 1; i < _selectedNPCInfos.Count; i++)
@@ -355,7 +356,7 @@ namespace Server
                 {
                     NPCInfo.FromText(m);
                 }
-                catch { }
+                catch(Exception ex) { Console.WriteLine(ex.ToString()); }
             }
 
             UpdateInterface();
@@ -626,7 +627,7 @@ namespace Server
         {
             if (ActiveControl != sender) return;
             int red = 0;
-            int.TryParse(ActiveControl.Text, out red); 
+            int.TryParse(ActiveControl.Text, out red);
 
             for (int i = 0; i < _selectedNPCInfos.Count; i++)
                 _selectedNPCInfos[i].Colour = Color.FromArgb(red, _selectedNPCInfos[i].Colour.G, _selectedNPCInfos[i].Colour.B);
@@ -658,6 +659,16 @@ namespace Server
                 _selectedNPCInfos[i].Colour = Color.FromArgb(_selectedNPCInfos[i].Colour.R, _selectedNPCInfos[i].Colour.G, blue);
 
             RefreshNPCList();
+        }
+
+        private void DirectionComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ActiveControl != sender) return;
+
+            for (int i = 0; i < _selectedNPCInfos.Count; i++)
+            {
+                _selectedNPCInfos[i].Direction = DirectionComboBox.SelectedIndex;
+            }
         }
     }
 }

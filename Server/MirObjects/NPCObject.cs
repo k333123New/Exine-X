@@ -49,6 +49,7 @@ namespace Server.ExineObjects
             NameColour = Color.Lime;
 
             Direction = (ExineDirection)Envir.Random.Next(3);
+
             TurnTime = Envir.Time + Envir.Random.Next(100);
 
             Envir.NPCs.Add(this);
@@ -363,6 +364,7 @@ namespace Server.ExineObjects
             return false;
         }
 
+        //k333123 add 240314
         public override Packet GetInfo()
         {
             return new S.ObjectNPC
@@ -373,7 +375,7 @@ namespace Server.ExineObjects
                 Image = Info.Image,
                 Colour = Info.Colour,
                 Location = CurrentLocation,
-                Direction = Direction,
+                Direction = (ExineDirection)Info.Direction,
                 QuestIDs = (from q in Quests
                             select q.Index).ToList()
             };
@@ -385,7 +387,8 @@ namespace Server.ExineObjects
             {
                 ObjectID = ObjectID,
                 Image = Info.Image,
-                Colour = Info.Colour
+                Colour = Info.Colour,
+                 //Location = CurrentLocation,
             };
         }
 

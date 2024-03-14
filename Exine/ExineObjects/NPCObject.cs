@@ -62,10 +62,46 @@ namespace Exine.ExineObjects
             Image = info.Image;
             Colour = info.Colour;
 
+            
+
             LoadLibrary();
+            
+            switch(Image)
+            {
+                //12~15 : SN2
+                case 12:
+                case 13:
+                case 14:
+                case 15:
 
-            Frames = BodyLibrary.Frames ?? FrameSet.DefaultNPC;
+                //24~31 : Gaurd
+                case 24:
+                case 25:
+                case 26:
+                case 27:
+                case 28:
+                case 29:
+                case 30:
+                case 31:
+                    Frames = BodyLibrary.Frames ?? FrameSet.ExineGuardNPC;
+                    break;
 
+                case 35: //bronze
+                    Frames = BodyLibrary.Frames ?? FrameSet.ExineBronzeStatueNPC;
+                    break;
+
+                case 9:  //as
+                case 10: //ji
+                case 16: //jds
+                case 17: //ms
+                case 34: //elf
+                
+                default:
+                    Frames = BodyLibrary.Frames ?? FrameSet.ExineDefaultNPC;
+                    break;
+            }
+
+            Console.WriteLine("info.Direction:" + info.Direction);
             Light = 10;
             BaseIndex = 0;
 
@@ -96,12 +132,13 @@ namespace Exine.ExineObjects
             }
 
             if (Frame == null)
-            {
+            { 
                 DrawFrame = 0;
                 DrawWingFrame = 0;
             }
             else
             {
+                
                 DrawFrame = Frame.Start + (Frame.OffSet * (byte)Direction) + FrameIndex;
                 DrawWingFrame = Frame.EffectStart + (Frame.EffectOffSet * (byte)Direction) + EffectFrameIndex;
             }
@@ -299,6 +336,7 @@ namespace Exine.ExineObjects
             //BodyLibrary.Draw(DrawFrame, DrawLocation, DrawColour, true);
 
             //BodyLibrary.DrawTinted(DrawFrame, DrawLocation, DrawColour, Colour, true);
+            //Console.WriteLine("DrawFrame:" + DrawFrame);
             BodyLibrary.ExineDrawTinted(DrawFrame, DrawLocation, DrawColour, Colour, true);//k333123
 
             if (QuestIcon == QuestIcon.None) return;

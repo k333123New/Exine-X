@@ -3,7 +3,7 @@
     public class FrameSet : Dictionary<ExAction, Frame>
     {
         public static FrameSet ExPlayer;
-        public static FrameSet DefaultNPC, DefaultMonster;
+        public static FrameSet ExineDefaultNPC, ExineGuardNPC, ExineBronzeStatueNPC, DefaultMonster;
         public static List<FrameSet> DragonStatue, GreatFoxSpirit, HellBomb, CaveStatue;
 
         static FrameSet()
@@ -12,11 +12,36 @@
 
             ExPlayer = new FrameSet();
 
+
+            /*
+             * NPC Frame Set
+             * 
+             * yj, sn1, djj , kn1,ygji, sy1, jjji, Gy, 161~, 4f
+             * sn2, gb 0~,4f
+             * 
+             * ji 263 New!!!
+             * jds New2!!!
+             * ms New3!!!
+             * as New4!!!
+             * elf New5!!!
+             */
+
             //Default NPC
-            DefaultNPC = new FrameSet
-            {
-                { ExAction.Standing, new Frame(0, 4, 0, 450) },
-                { ExAction.Harvest, new Frame(12, 10, 0, 200) }
+            ExineDefaultNPC = new FrameSet
+            { 
+                { ExAction.Standing, new Frame(161-1, 4, 0, 200) },
+                { ExAction.Harvest, new Frame(161-1, 4, 0, 200) }
+            };
+
+            ExineGuardNPC = new FrameSet
+            { 
+                { ExAction.Standing, new Frame(0, 4, 0, 200) },
+                { ExAction.Harvest, new Frame(0, 4, 0, 200) }
+            };
+            ExineBronzeStatueNPC = new FrameSet
+            { 
+                { ExAction.Standing, new Frame(0, 1, 0, 200) },
+                { ExAction.Harvest, new Frame(0, 1, 0, 200) }
             };
 
             //Default Monster
