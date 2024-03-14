@@ -26,6 +26,7 @@ namespace Exine.ExineScenes.ExDialogs
         public BigButtonDialog BigButtonDialog;
 
         public ExineLabel NameLabel;
+        public ExineImageControl PortraitImage;
 
         Font font = new Font(Settings.FontName, 9F);
 
@@ -53,6 +54,17 @@ namespace Exine.ExineScenes.ExDialogs
             MouseWheel += NPCDialog_MouseWheel;
 
             Sort = true;
+
+
+            PortraitImage = new ExineImageControl
+            {
+                Index = 1,
+                Library = Libraries.ExineNPCPortrait,
+                Parent = this,
+                Location = new Point(0, 0),
+                Visible = true
+            }; 
+
 
             NameLabel = new ExineLabel
             {
@@ -158,6 +170,8 @@ namespace Exine.ExineScenes.ExDialogs
             QuestButton.Click += (o, e) => ExineMainScene.Scene.QuestListDialog.Toggle();
         }
 
+       
+
         void NPCDialog_MouseWheel(object sender, MouseEventArgs e)
         { 
             int count = e.Delta / SystemInformation.MouseWheelScrollDelta;
@@ -229,6 +243,11 @@ namespace Exine.ExineScenes.ExDialogs
             Network.Enqueue(new C.CallNPC { ObjectID = ExineMainScene.NPCID, Key = $"[{action}]" });
         }
 
+        public void UpdatePortrait()
+        {
+            NPCObject npc = (NPCObject)MapControl.GetObject(ExineMainScene.NPCID);
+            PortraitImage.Index = npc.Image;
+        }
 
         public void NewText(List<string> lines, bool resetIndex = true)
         {
@@ -456,8 +475,7 @@ namespace Exine.ExineScenes.ExDialogs
         }
 
         public void CheckQuestButtonDisplay()
-        {
-            return;
+        { 
             NameLabel.Text = string.Empty;
 
             QuestButton.Visible = false;
@@ -496,6 +514,8 @@ namespace Exine.ExineScenes.ExDialogs
             Visible = true;
 
             CheckQuestButtonDisplay();
+            UpdatePortrait();
+            
         }
     }
     public sealed class NPCGoodsDialog : ExineImageControl

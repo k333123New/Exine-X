@@ -88,9 +88,12 @@ namespace Exine.ExineGraphics
             PANEL1100 = new MLibrary(Settings.ExineUIPath + "PANEL1100"),
             PANEL1200 = new MLibrary(Settings.ExineUIPath + "PANEL1200"),
             SAYFRAME = new MLibrary(Settings.ExineUIPath + "SayFrame"),
+            CORVERICON = new MLibrary(Settings.ExineUIPath + "CoverIcon"),
+            MINI_PORTRAIT = new MLibrary(Settings.ExineUIPath + "MiniPortrait"),
             ITEMSLOT = new MLibrary(Settings.ExineUIPath + "ItemSlot"),
             ServerButton = new MLibrary(Settings.ExineUIPath + "ServerButton"),
             ExineMiniMap = new MLibrary(Settings.ExineUIPath + "ExineMiniMap"),
+            ExineNPCPortrait = new MLibrary(Settings.ExineUIPath + "NPC"),
 
             BIK_002_Orb1_1 = new MLibrary(Settings.ExineVideoPath + "002-Orb1-1"),
             BIK_003_Orb1_2 = new MLibrary(Settings.ExineVideoPath + "003-Orb1-2"),

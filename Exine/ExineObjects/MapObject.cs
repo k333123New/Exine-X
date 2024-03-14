@@ -343,8 +343,11 @@ namespace Exine.ExineObjects
             return null;
         }
 
-        public void Chat(string text)
+        public void Chat(string text, int type=0)
         {
+            //type==0 user
+            //type==1 other
+            //type==2 npc
             if (ChatLabel != null && !ChatLabel.IsDisposed)
             {
                 ChatLabel.Dispose();
@@ -414,7 +417,8 @@ namespace Exine.ExineObjects
                 NotControl = true,
                 Visible = true,
             };
-            ChatMiniPortrait.BeforeDraw += ChatMiniPortrait_BeforeDraw;
+            //ChatMiniPortrait.BeforeDraw += ChatMiniPortrait_BeforeDraw;
+           
 
             ChatLabel = new ExineLabel
             {
@@ -429,24 +433,56 @@ namespace Exine.ExineObjects
                 //DrawFormat = TextFormatFlags.Default,
                 Text = "\r\n "+text+ "\r\n",
             };
-            if(ChatLabel.Size.Height<40)
+            
+            if (ChatLabel.Size.Height<40)
             {
                 ChatLabel.Size = new Size(ChatLabel.Size.Width, 40);
             }
+
+            if (type == 0) //user 
+            {
+                if (File.Exists(User.Name + ".jpg") && File.Exists("photo.lib"))
+                {
+                    ChatMiniPortrait.Index = 1;
+                    ChatMiniPortrait.Library = new MLibrary("photo.lib"); //ID Name - Chatting with Contaion user name?
+                    ChatMiniPortrait.Location = new Point(-20, -28);
+                }
+                ChatLabel.ForeColour = Color.WhiteSmoke;
+                ChatMiniPortrait.Visible = true;
+            }
+            else if (type == 2) //npc speech
+            {
+                //ChatMiniPortrait.Visible = false;
+                ChatMiniPortrait.Index = 0;
+                ChatMiniPortrait.Library = Libraries.MINI_PORTRAIT;
+                ChatMiniPortrait.Location = new Point(-20, -28);
+                ChatMiniPortrait.Visible = true;
+                ChatLabel.ForeColour = Color.LimeGreen;
+            }
+            else //Other
+            {
+                //ChatMiniPortrait.Visible = false;
+                ChatMiniPortrait.Index = 0;
+                ChatMiniPortrait.Library = Libraries.MINI_PORTRAIT;
+                ChatMiniPortrait.Location = new Point(-20, -28);
+                ChatMiniPortrait.Visible = true;
+                ChatLabel.ForeColour = Color.WhiteSmoke;
+            } 
             ChatTime = CMain.Time + 5000;
 
             //panel203 - 0
            
         }
-
+        //remove
         private void ChatMiniPortrait_BeforeDraw(object sender, EventArgs e)
-        {
+        { /*
             if (File.Exists(User.Name + ".jpg") && File.Exists("photo.lib"))
             {
                 ChatMiniPortrait.Index = 1;
                 ChatMiniPortrait.Library = new MLibrary("photo.lib"); //ID Name - Chatting with Contaion user name?
                 ChatMiniPortrait.Location = new Point(-20, -28);
-            }
+            } 
+            */
         }
 
         public virtual void DrawChat()
@@ -468,7 +504,8 @@ namespace Exine.ExineObjects
 
             //ChatLabel.ForeColour = Dead ? Color.Gray : Color.White;
             //ChatLabel.Location = new Point(DisplayRectangle.X + (48 - ChatLabel.Size.Width) / 2, DisplayRectangle.Y - (60 + ChatLabel.Size.Height) - (Dead ? 35 : 0));
-            ChatLabel.ForeColour = Dead ? Color.Gray : Color.WhiteSmoke;
+            
+            //ChatLabel.ForeColour = Dead ? Color.Gray : Color.WhiteSmoke; //remove
             ChatLabel.Location = new Point(DisplayRectangle.X + (48 - ChatLabel.Size.Width) / 2 - 20, DisplayRectangle.Y - (60 + ChatLabel.Size.Height) - (Dead ? 35 : 0) - 26); //k333123
 
             ChatLabelBackImage.Location = 
@@ -523,10 +560,7 @@ namespace Exine.ExineObjects
                 Text = Name,
             };
             NameLabel.Disposing += (o, e) => LabelList.Remove(NameLabel);
-            LabelList.Add(NameLabel);
-
-
-
+            LabelList.Add(NameLabel); 
         }
         public virtual void DrawName()
         {

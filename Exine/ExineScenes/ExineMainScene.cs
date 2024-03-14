@@ -2355,8 +2355,20 @@ namespace Exine.ExineScenes
             {
                 MapObject ob = MapControl.Objects[i];
                 if (ob.ObjectID != p.ObjectID) continue;
-                
-                ob.Chat(RegexFunctions.CleanChatString(p.Text));
+
+                //add k333123 
+                if (ob is UserObject)
+                {
+                    ob.Chat(RegexFunctions.CleanChatString(p.Text));
+                }
+                else if (ob is NPCObject)
+                {
+                    ob.Chat(RegexFunctions.CleanChatString(p.Text),2);
+                }
+                else
+                {
+                    ob.Chat(RegexFunctions.CleanChatString(p.Text),1);
+                }
                 return;
             }
 
@@ -3930,7 +3942,7 @@ namespace Exine.ExineScenes
         private void ObjectNPC(S.ObjectNPC p)
         {
             NPCObject ob = new NPCObject(p.ObjectID);
-            ob.Load(p);
+            ob.Load(p); 
         }
         private void NPCResponse(S.NPCResponse p)
         {
@@ -3938,6 +3950,7 @@ namespace Exine.ExineScenes
             ExNPCDialog.BigButtons.Clear();
             ExNPCDialog.BigButtonDialog.Hide();
             ExNPCDialog.NewText(p.Page);
+            
 
             if (p.Page.Count > 0 || ExNPCDialog.BigButtons.Count > 0)
                 ExNPCDialog.Show();
