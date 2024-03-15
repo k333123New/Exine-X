@@ -4,6 +4,7 @@
 #define SAVE_JSON
 
 using ExineUnpacker;
+using NewYPF;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -61,6 +62,8 @@ namespace ExineEffectConvert
         {
             // if (Path.GetFileNameWithoutExtension(target) != "Effect01")
             //     return;
+
+            MLibraryV2 mLibraryV2 = new MLibraryV2(target + ".lib");
 
             ByteReader br = new ByteReader(target);
 
@@ -599,6 +602,15 @@ namespace ExineEffectConvert
 
                                     //bitmap.Save(savePath, ImageFormat.Png);
                                     bitmap.Save(savePath, ImageFormat.Bmp);
+
+                                    
+                                    MLibraryV2.MImage image = new MLibraryV2.MImage(bitmap);
+                                    image.X = top;
+                                    image.Y = left;
+                                    mLibraryV2.Images.Add(image); 
+                                    mLibraryV2.Save();
+                                   
+
                                     bitmap.Dispose();
                                 }
                                 else
@@ -661,6 +673,12 @@ namespace ExineEffectConvert
 
                                     //bitmap.Save(savePath, ImageFormat.Png);
                                     bitmap.Save(savePath, ImageFormat.Bmp);
+                                    MLibraryV2.MImage image = new MLibraryV2.MImage(bitmap);
+                                    image.X = top;
+                                    image.Y = left;
+                                    mLibraryV2.Images.Add(image);
+                                    mLibraryV2.Save();
+
                                     bitmap.Dispose();
                                 }
                             }
@@ -713,6 +731,11 @@ namespace ExineEffectConvert
 
                                     //bitmap.Save(savePath, ImageFormat.Png);
                                     bitmap.Save(savePath, ImageFormat.Bmp);
+                                    MLibraryV2.MImage image = new MLibraryV2.MImage(bitmap);
+                                    image.X = top;
+                                    image.Y = left;
+                                    mLibraryV2.Images.Add(image);
+                                    mLibraryV2.Save();
                                     bitmap.Dispose();
                                 }
                                 else
@@ -749,12 +772,18 @@ namespace ExineEffectConvert
 
                                     //bitmap.Save(savePath, ImageFormat.Png);
                                     bitmap.Save(savePath, ImageFormat.Bmp);
+                                    MLibraryV2.MImage image = new MLibraryV2.MImage(bitmap);
+                                    image.X = top;
+                                    image.Y = left;
+                                    mLibraryV2.Images.Add(image);
+                                    mLibraryV2.Save();
                                     bitmap.Dispose();
                                 }
                             }
                         }
 #endif
                     }
+                    mLibraryV2.Close();
 
                     DWriteLine($"{br.index:X8} frameCount {frameCount}");
                     DWriteLine($"{br.index:X8} End image");
