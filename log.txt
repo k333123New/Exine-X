@@ -280,6 +280,41 @@ UserListSortBy : 유저리스트 소팅 버튼?
 CorverIcon : 초상화부분, 아이콘 부분 빈칸.
 
 
+NPC Portrait
+00 empty
+01 yj
+02 JACK
+03 SN
+04 gamjung
+05 sin jun sang in
+06 sin jun sang in
+07 auto (sin jun sang in)
+08 Fight Zone Admin
+09 might(djji)
+10 Guard
+11 Guard
+12 Guard
+13 Gn, TelN
+14 Jangin
+15 empty
+16 hdrd
+17 ygji
+18 ???????
+19 JabHwa?
+20 LuiLui
+21 jjji
+22 Gy, TelY
+23 JDS(Lupia)
+24 ma sang
+25 AKsae
+26 ELF
+27 empty
+28 Antonio
+29 DJJI Wife
+30 Bank N
+31 Bank Y
+32 miyoung
+
 
 
 10000 99 39 15 아르케잡화점

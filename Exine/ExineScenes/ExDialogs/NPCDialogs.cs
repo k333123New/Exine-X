@@ -25,7 +25,7 @@ namespace Exine.ExineScenes.ExDialogs
         public List<BigButton> BigButtons;
         public BigButtonDialog BigButtonDialog;
 
-        public ExineLabel NameLabel;
+        public ExineLabel NameLabel, JobNameLabel;//k333123
         public ExineImageControl PortraitImage;
 
         Font font = new Font(Settings.FontName, 9F);
@@ -53,26 +53,36 @@ namespace Exine.ExineScenes.ExDialogs
 
             MouseWheel += NPCDialog_MouseWheel;
 
-            Sort = true;
-
-
+            //Sort = true;
+             
             PortraitImage = new ExineImageControl
             {
                 Index = 1,
                 Library = Libraries.ExineNPCPortrait,
                 Parent = this,
-                Location = new Point(0, 0),
+                Location = new Point(15, 28),
                 Visible = true
-            }; 
-
+            };
+            
+            JobNameLabel = new ExineLabel
+            {
+                Text = "",
+                Parent = this,
+                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
+                //ForeColour = Color.BurlyWood,
+                ForeColour = Color.White,
+                Location = new Point(30 - 14, 6 + 178),
+                AutoSize = true
+            };
 
             NameLabel = new ExineLabel
             {
                 Text = "",
                 Parent = this,
                 Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
-                ForeColour = Color.BurlyWood,
-                Location = new Point(30, 6),
+                //ForeColour = Color.BurlyWood,
+                ForeColour = Color.White,
+                Location = new Point(30 - 14, 6 + 178 + 15),
                 AutoSize = true
             };
 
@@ -138,7 +148,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 HoverIndex = 11,
                 Index = 9,
-                Location = new Point(413-67, 3+493),
+                Location = new Point(413-67+3, 3+493-57),
                 Library = Libraries.PANEL0510,
                 Parent = this,
                 PressedIndex = 10,
@@ -247,6 +257,8 @@ namespace Exine.ExineScenes.ExDialogs
         {
             NPCObject npc = (NPCObject)MapControl.GetObject(ExineMainScene.NPCID);
             PortraitImage.Index = npc.Image;
+            //PortraitImage.Location = new Point(13-npc.OffSetMove.X,28 - npc.OffSetMove.Y);// Location = new Point(13, 28),
+            PortraitImage.Location = new Point(13, 28);
         }
 
         public void NewText(List<string> lines, bool resetIndex = true)
@@ -363,8 +375,10 @@ namespace Exine.ExineScenes.ExDialogs
                     DrawFormat = TextFormatFlags.WordBreak,
                     Visible = true,
                     Parent = this,
-                    Size = new Size(420, 20),
-                    Location = new Point(8, 34 + (i - _index) * 18),
+                    //Size = new Size(420, 20),
+                    //Location = new Point(8, 34 + (i - _index) * 18),
+                    Size = new Size(330, 20),
+                    Location = new Point(8 + 25, 34 + (i - _index) * 18 + 210),
                     NotControl = true
                 };
 
@@ -393,15 +407,16 @@ namespace Exine.ExineScenes.ExDialogs
                     currentLine = currentLine.Remove(capture.Index - 1 - offSet, capture.Length + 2).Insert(capture.Index - 1 - offSet, txt);
                     string text = currentLine.Substring(0, capture.Index - 1 - offSet) + " ";
                     Size size = TextRenderer.MeasureText(CMain.Graphics, text, TextLabel[i].Font, TextLabel[i].Size, TextFormatFlags.TextBoxControl);
-
+                     
                     if (R.Match(match.Value).Success)
-                        NewButton(txt, action, TextLabel[i].Location.Add(new Point(size.Width - 10, 0)));
+                        NewButton(txt, action, TextLabel[i].Location.Add(new Point(size.Width - 10, 0))); 
 
                     if (C.Match(match.Value).Success)
-                        NewColour(txt, action, TextLabel[i].Location.Add(new Point(size.Width - 10, 0)));
+                        NewColour(txt, action, TextLabel[i].Location.Add(new Point(size.Width - 10, 0))); 
 
                     if (L.Match(match.Value).Success)
-                        NewButton(txt, null, TextLabel[i].Location.Add(new Point(size.Width - 10, 0)), action);
+                        NewButton(txt, null, TextLabel[i].Location.Add(new Point(size.Width - 10, 0)), action); 
+                     
                 }
 
                 TextLabel[i].Text = currentLine;
@@ -418,11 +433,13 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this,
                 Location = p,
                 Text = text,
-                ForeColour = Color.Yellow,
+                //ForeColour = Color.Yellow,
+                ForeColour = Color.LimeGreen,
                 Sound = SoundList.ButtonC,
                 Font = font
             };
 
+            temp.Location = new Point(temp.Location.X, temp.Location.Y + 95);//k333123
             temp.MouseEnter += (o, e) => temp.ForeColour = Color.Red;
             temp.MouseLeave += (o, e) => temp.ForeColour = Color.Yellow;
             temp.MouseDown += (o, e) => temp.ForeColour = Color.Yellow;
@@ -477,14 +494,17 @@ namespace Exine.ExineScenes.ExDialogs
         public void CheckQuestButtonDisplay()
         { 
             NameLabel.Text = string.Empty;
+            JobNameLabel.Text = String.Empty;
 
             QuestButton.Visible = false;
 
             NPCObject npc = (NPCObject)MapControl.GetObject(ExineMainScene.NPCID);
             if (npc != null)
             {
+                
                 string[] nameSplit = npc.Name.Split('_');
-                NameLabel.Text = nameSplit[0];
+                JobNameLabel.Text = nameSplit[0];
+                NameLabel.Text = nameSplit[1];
 
                 if (npc.GetAvailableQuests().Any())
                     QuestButton.Visible = true;
@@ -515,7 +535,6 @@ namespace Exine.ExineScenes.ExDialogs
 
             CheckQuestButtonDisplay();
             UpdatePortrait();
-            
         }
     }
     public sealed class NPCGoodsDialog : ExineImageControl

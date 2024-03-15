@@ -68,33 +68,28 @@ namespace Exine.ExineObjects
             
             switch(Image)
             {
-                //12~15 : SN2
-                case 12:
-                case 13:
-                case 14:
-                case 15:
+                //5~7 : SN2
+                case 5:
+                case 6:
+                case 7:
 
-                //24~31 : Gaurd
-                case 24:
-                case 25:
-                case 26:
-                case 27:
-                case 28:
-                case 29:
-                case 30:
-                case 31:
+                //8, 10~12 : Gaurd
+                case 8:
+                case 10:
+                case 11:
+                case 12:
                     Frames = BodyLibrary.Frames ?? FrameSet.ExineGuardNPC;
                     break;
 
-                case 35: //bronze
+                case 33: //bronze
                     Frames = BodyLibrary.Frames ?? FrameSet.ExineBronzeStatueNPC;
                     break;
 
-                case 9:  //as
-                case 10: //ji
-                case 16: //jds
-                case 17: //ms
-                case 34: //elf
+                case 25:  //as
+                case 14: //ji
+                case 23: //jds
+                case 24: //ms
+                case 26: //elf
                 
                 default:
                     Frames = BodyLibrary.Frames ?? FrameSet.ExineDefaultNPC;
