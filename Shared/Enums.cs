@@ -1414,6 +1414,11 @@ public enum Spell : byte
     FireBounce = 154,
     MeteorShower = 155,
 
+
+    //Exine Magic
+    ExSkillHealing = 156, //k333123
+
+
     //Map Events
     DigOutZombie = 200,
     Rubble = 201,
@@ -1433,7 +1438,9 @@ public enum Spell : byte
     DarkOmaKingNuke = 215,
     HornedSorcererDustTornado = 216,
     HornedCommanderRockFall = 217,
-    HornedCommanderRockSpike = 218
+    HornedCommanderRockSpike = 218,
+
+    
 }
 /*
 public enum Spell : byte

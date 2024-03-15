@@ -3,10 +3,17 @@ FrameSet Change
 ->ExineMainScene.cs -> Player!!!
 
 
+//ADD Skill
+Shared/Enums.cs > Spell add skill
+Envir.cs => FillMagicInfoList add skill
+Add Item (book,) and Shape = Shared/Enums.cs.Spell number
 
 
 
-
+ case Spell.Healing:
+     Effects.Add(new Effect(Libraries.Magic, 200, 10, Frame.Count * FrameInterval, this));
+     SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+     break;
 
 
 

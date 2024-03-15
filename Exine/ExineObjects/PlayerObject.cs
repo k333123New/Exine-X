@@ -1881,6 +1881,14 @@ namespace Exine.ExineObjects
 
                         switch (Spell)
                         {
+
+                            #region ExineSkill
+                            case Spell.ExSkillHealing:
+                                Effects.Add(new Effect(Libraries.Magic, 200, 10, Frame.Count * FrameInterval, this));
+                                SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+                                break; 
+                            #endregion ExineSkill
+
                             #region FireBall
 
                             case Spell.FireBall:
