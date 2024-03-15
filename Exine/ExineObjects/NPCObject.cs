@@ -380,7 +380,12 @@ namespace Exine.ExineObjects
                 CreateNPCLabel(splitName[s], s);
 
                 TempLabel.Text = splitName[s];
-                TempLabel.Location = new Point(DisplayRectangle.X + (48 - TempLabel.Size.Width) / 2, DisplayRectangle.Y - (32 - TempLabel.Size.Height / 2) + (Dead ? 35 : 8) - (((splitName.Count() - 1) * 10) / 2) + (s * 12));
+                TempLabel.Location = new Point(
+                    //DisplayRectangle.X + (48 - TempLabel.Size.Width) / 2 ,
+                    //DisplayRectangle.Y - (32 - TempLabel.Size.Height / 2) + (Dead ? 35 : 8) - (((splitName.Count() - 1) * 10) / 2) + (s * 12)
+                    DisplayRectangle.X + (48 - TempLabel.Size.Width) / 2 - 27, //k333123
+                    DisplayRectangle.Y - (32 - TempLabel.Size.Height / 2) + (Dead ? 35 : 8) - (((splitName.Count() - 1) * 10) / 2) + (s * 12) - 90 //k333123
+                    );
                 TempLabel.Draw();
             }
         }
