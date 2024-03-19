@@ -18,5 +18,7 @@ class Program
         filename = "Effect03.ypf";
         Ypf.UnYpf(filename, ".");
 
+        //effect2 58~67 pawn
+
     }
 }

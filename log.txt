@@ -17,6 +17,11 @@ Add Item (book,) and Shape = Shared/Enums.cs.Spell number
 
 
 
+ MapControl.Effects.Add(new Effect(Libraries.Effect, 671, 6, 720, FishingPoint) { Light = 0 });
+
+ pwan 
+//effect2 58~67 pawn
+
 
 
 

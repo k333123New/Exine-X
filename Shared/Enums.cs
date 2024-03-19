@@ -197,6 +197,8 @@ public enum IntelligentCreatureType : byte
     MedicalRat = 14,
 }
 
+
+//k333123 240319 mob image number!
 //2 blank mob files
 public enum Monster : ushort
 {

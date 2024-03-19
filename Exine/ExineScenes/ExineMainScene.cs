@@ -13,6 +13,7 @@ using Effect = Exine.ExineObjects.Effect;
 using Exine.Utils;
 using Exine.ExineScenes.ExDialogs;
 
+//effect2 58~67 pawn
 
 namespace Exine.ExineScenes
 {

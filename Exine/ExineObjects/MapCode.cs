@@ -58,6 +58,14 @@
 
             for (int i = 0; i < CellObjects.Count; i++)
             {
+                if (CellObjects[i].Race == ObjectType.Monster)
+                {
+                    if (!CellObjects[i].Dead)
+                    {
+                        //Console.WriteLine(((MonsterObject)CellObjects[i]).Name); 
+                        CellObjects[i].Draw();
+                    }
+                }
                 if (!CellObjects[i].Dead)
                 {
                     CellObjects[i].Draw();
@@ -65,8 +73,9 @@
                 }
 
                 if(CellObjects[i].Race == ObjectType.Monster)
-                {
-                    switch(((MonsterObject)CellObjects[i]).BaseImage)
+                { 
+
+                    switch (((MonsterObject)CellObjects[i]).BaseImage)
                     {
                         case Monster.PalaceWallLeft:
                         case Monster.PalaceWall1:

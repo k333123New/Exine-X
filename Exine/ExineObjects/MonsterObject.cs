@@ -83,6 +83,7 @@ namespace Exine.ExineObjects
             AI = info.AI;
             Light = info.Light;
 
+
             Direction = info.Direction;
             Dead = info.Dead;
             Poison = info.Poison;
@@ -132,6 +133,9 @@ namespace Exine.ExineObjects
             }
 
             Stage = info.ExtraByte;
+
+            //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            //Console.WriteLine("Monster Name:" + Name + " BaseImage:" + BaseImage + " (short)BaseImage:" + (short)BaseImage);
 
             //Library
             switch (BaseImage)
@@ -191,8 +195,9 @@ namespace Exine.ExineObjects
                 case Monster.CaveStatue:
                     BodyLibrary = Libraries.Monsters[(ushort)Monster.CaveStatue];
                     break;
-                default:
+                default: 
                     BodyLibrary = Libraries.Monsters[(ushort)BaseImage];
+                    ///Console.WriteLine("######################################################");
                     break;
             }
 
@@ -260,7 +265,29 @@ namespace Exine.ExineObjects
                 default:
                     if (BodyLibrary != null)
                     {
-                        Frames = BodyLibrary.Frames ?? FrameSet.DefaultMonster;
+                        //Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+                        //Frames = BodyLibrary.Frames ?? FrameSet.DefaultMonster; 
+                        Frames = FrameSet.DefaultMonster;
+                        /*
+                        //k333123 mod 240319 
+                        if (BodyLibrary.Frames != null)
+                        {
+                            //기존 파일에 내용이 있었으며 이름 변경됨.
+                            //나중에 가능하면 추가할것.
+                            Console.WriteLine("BodyLibrary.Frames != null Frames = BodyLibrary.Frames");
+                            //Frames = BodyLibrary.Frames;
+                            Frames = FrameSet.DefaultMonster;
+                        }
+                        else
+                        {
+                            Console.WriteLine(" Frames = FrameSet.DefaultMonster");
+                            Frames = FrameSet.DefaultMonster;
+                        }
+                        //ActionFeed.Add(new QueuedAction { Action = ExAction.Appear, Direction = Direction, Location = CurrentLocation });
+                        */
+                        //Effects.Add(new BuffEffect(Libraries.Magic3, 190, 7, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
+                        Effects.Add(new BuffEffect(Libraries.ExEffect2, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
+                        
                     }
                     break;
             }
@@ -495,10 +522,23 @@ namespace Exine.ExineObjects
 
             if (ActionFeed.Count == 0)
             {
+                Console.WriteLine("%%%%%%%%%%%%%%%%%%%%%%%%%%");
                 CurrentAction = Stoned ? ExAction.Stoned : ExAction.Standing;
+
+
                 if (CurrentAction == ExAction.Standing) CurrentAction = SitDown ? ExAction.SitDown : ExAction.Standing;
 
+                Console.WriteLine("^^^^^^^^^^^CurrentAction: " + CurrentAction);
+
                 Frames.TryGetValue(CurrentAction, out Frame);
+                if (Frames != null)
+                {
+                    Console.WriteLine("&&&&&&&&&&&&&Frames is not null! Frames.Count: " + Frames.Count);
+                }
+                if (Frame != null)
+                {
+                    Console.WriteLine("*************Frame is not null! Frame.Count: " + Frame.Count);
+                }
 
                 if (MapLocation != CurrentLocation)
                 {
@@ -4297,20 +4337,44 @@ namespace Exine.ExineObjects
         }
         public override void Draw()
         {
+           
             DrawBehindEffects(Settings.Effect);
 
             float oldOpacity = DXManager.Opacity;
             if (Hidden && !DXManager.Blending) DXManager.SetOpacity(0.5F);
+            //Console.WriteLine("Draw Monster!!!!!!0");
+            if (BodyLibrary==null)
+            {
+                //Console.WriteLine("Draw Monster!!!!!!0 BodyLibrary==null");
+            }
+            if(Frame == null)
+            {
+                //here!
+                //Console.WriteLine("Draw Monster!!!!!!0 Frame==null");
+            }
 
             if (BodyLibrary == null || Frame == null) return;
-
+           // Console.WriteLine("Draw Monster!!!!!!000");
             bool oldGrayScale = DXManager.GrayScale;
             Color drawColour = ApplyDrawColour();
-            
+
             if (!DXManager.Blending && Frame.Blend)
+            {
                 BodyLibrary.DrawBlend(DrawFrame, DrawLocation, drawColour, true);
+               // Console.WriteLine("Draw Monster!!!!!!1");
+            }
             else
+            {
                 BodyLibrary.Draw(DrawFrame, DrawLocation, drawColour, true);
+                //Console.WriteLine("Draw Monster!!!!!!2");
+            }
+
+            //effect??? add k333123 240319
+
+
+
+
+
 
             DXManager.SetGrayscale(oldGrayScale);
             DXManager.SetOpacity(oldOpacity);
@@ -4324,6 +4388,8 @@ namespace Exine.ExineObjects
 
         public override void DrawBehindEffects(bool effectsEnabled)
         {
+            //Console.WriteLine("Monster DrawBehindEffects");
+
             for (int i = 0; i < Effects.Count; i++)
             {
                 if (!Effects[i].DrawBehind) continue;
@@ -4333,7 +4399,9 @@ namespace Exine.ExineObjects
 
         public override void DrawEffects(bool effectsEnabled)
         {
+            
             if (!effectsEnabled) return;
+            Console.WriteLine("Monster DrawEffects effectsEnabled:" + effectsEnabled+ " Effects.Count:"+ Effects.Count);
 
             for (int i = 0; i < Effects.Count; i++)
             {
