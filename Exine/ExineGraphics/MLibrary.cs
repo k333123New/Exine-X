@@ -122,8 +122,12 @@ namespace Exine.ExineGraphics
             BIK_021_Light_1 = new MLibrary(Settings.ExineVideoPath + "021-Light-1"),
             BIK_022_Light_2 = new MLibrary(Settings.ExineVideoPath + "022-Light-2"),
             BIK_023_Light_3 = new MLibrary(Settings.ExineVideoPath + "023-Light-3"),
-            BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4"), 
-            ExEffect2 = new MLibrary(Settings.ExineEffectPath + "Effect02");
+            BIK_024_Light_4 = new MLibrary(Settings.ExineVideoPath + "024-Light-4"),
+
+            ExEffect00 = new MLibrary(Settings.ExineEffectPath + "Effect00"),
+            ExEffect01 = new MLibrary(Settings.ExineEffectPath + "Effect01"),
+            ExEffect02 = new MLibrary(Settings.ExineEffectPath + "Effect02"),
+            ExEffect03 = new MLibrary(Settings.ExineEffectPath + "Effect03");
 
 
 

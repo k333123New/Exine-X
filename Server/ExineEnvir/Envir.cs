@@ -288,7 +288,7 @@ namespace Server.ExineEnvir
         {
 
             //Exine
-            if (!MagicExists(Spell.ExSkillHealing)) MagicInfoList.Add(new MagicInfo { Name = "힐링", Spell = Spell.ExSkillHealing, Icon = 1, Level1 = 1, Level2 = 11, Level3 = 14, Need1 = 150, Need2 = 350, Need3 = 700, BaseCost = 3, LevelCost = 2, MPowerBase = 14, Range = 9 });
+            if (!MagicExists(Spell.ExSkillHealing)) MagicInfoList.Add(new MagicInfo { Name = "힐링", Spell = Spell.ExSkillHealing, Icon = 1, Level1 = 1, Level2 = 11, Level3 = 14, Need1 = 150, Need2 = 350, Need3 = 700, BaseCost = 0, LevelCost = 0, MPowerBase = 14, Range = 9 });
 
             #region OLD
             //Warrior

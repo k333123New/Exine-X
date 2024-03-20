@@ -23,6 +23,14 @@ Add Item (book,) and Shape = Shared/Enums.cs.Spell number
 //effect2 58~67 pawn
 
 
+saint
+622~+10
+
+
+949~958
+959~967
+968~976
+
 
 
 

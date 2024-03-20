@@ -145,7 +145,7 @@ namespace Exine.ExineObjects
                     Name = " ";
                     BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage-20000];
                     Frames = FrameSet.ExineStaticObjectNPC;
-                    Effects.Add(new BuffEffect(Libraries.ExEffect2, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
+                    Effects.Add(new BuffEffect(Libraries.ExEffect02, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
                     break;
             }
 
@@ -301,7 +301,7 @@ namespace Exine.ExineObjects
                         //ActionFeed.Add(new QueuedAction { Action = ExAction.Appear, Direction = Direction, Location = CurrentLocation });
                         */
                         //Effects.Add(new BuffEffect(Libraries.Magic3, 190, 7, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
-                        Effects.Add(new BuffEffect(Libraries.ExEffect2, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
+                        //Effects.Add(new BuffEffect(Libraries.ExEffect2, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
                         
                     }
                     break;

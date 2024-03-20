@@ -1884,7 +1884,15 @@ namespace Exine.ExineObjects
 
                             #region ExineSkill
                             case Spell.ExSkillHealing:
-                                Effects.Add(new Effect(Libraries.Magic, 200, 10, Frame.Count * FrameInterval, this));
+                                //Effects.Add(new Effect(Libraries.Magic, 200, 10, Frame.Count * FrameInterval, this));
+                                //FrameInterval = (int)(FrameInterval * 0.46f); //46% Animation Speed
+                                //Effects.Add(new Effect(Libraries.ExEffect00, 21, 10, Frame.Count * FrameInterval, this));
+                                //949~958
+                                //959~967
+                                //968~976
+                                Effects.Add(new Effect(Libraries.ExEffect01, 949, 10, 1600, this));
+                                Effects.Add(new Effect(Libraries.ExEffect01, 959, 9, 1600, this));
+                                Effects.Add(new Effect(Libraries.ExEffect01, 968, 9, 1600, this));
                                 SoundManager.PlaySound(20000 + (ushort)Spell * 10);
                                 break; 
                             #endregion ExineSkill
