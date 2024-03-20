@@ -82,7 +82,7 @@ namespace Exine.ExineObjects
                     break;
 
                 case 33: //bronze
-                    Frames = BodyLibrary.Frames ?? FrameSet.ExineBronzeStatueNPC;
+                    Frames = BodyLibrary.Frames ?? FrameSet.ExineStaticObjectNPC;
                     break;
 
                 case 25:  //as

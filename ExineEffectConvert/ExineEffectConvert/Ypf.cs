@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ExineEffectConvert
 {
@@ -605,8 +606,10 @@ namespace ExineEffectConvert
 
                                     
                                     MLibraryV2.MImage image = new MLibraryV2.MImage(bitmap);
-                                    image.X = top;
-                                    image.Y = left;
+                                    //image.X = top;
+                                    //image.Y = left;
+                                    image.X = left;
+                                    image.Y = top;
                                     mLibraryV2.Images.Add(image); 
                                     mLibraryV2.Save();
                                    
@@ -674,8 +677,10 @@ namespace ExineEffectConvert
                                     //bitmap.Save(savePath, ImageFormat.Png);
                                     bitmap.Save(savePath, ImageFormat.Bmp);
                                     MLibraryV2.MImage image = new MLibraryV2.MImage(bitmap);
-                                    image.X = top;
-                                    image.Y = left;
+                                    //image.X = top;
+                                    //image.Y = left;
+                                    image.X = left;
+                                    image.Y = top;
                                     mLibraryV2.Images.Add(image);
                                     mLibraryV2.Save();
 
@@ -732,8 +737,10 @@ namespace ExineEffectConvert
                                     //bitmap.Save(savePath, ImageFormat.Png);
                                     bitmap.Save(savePath, ImageFormat.Bmp);
                                     MLibraryV2.MImage image = new MLibraryV2.MImage(bitmap);
-                                    image.X = top;
-                                    image.Y = left;
+                                    //image.X = top;
+                                    //image.Y = left;
+                                    image.X = left;
+                                    image.Y = top;
                                     mLibraryV2.Images.Add(image);
                                     mLibraryV2.Save();
                                     bitmap.Dispose();
@@ -773,8 +780,10 @@ namespace ExineEffectConvert
                                     //bitmap.Save(savePath, ImageFormat.Png);
                                     bitmap.Save(savePath, ImageFormat.Bmp);
                                     MLibraryV2.MImage image = new MLibraryV2.MImage(bitmap);
-                                    image.X = top;
-                                    image.Y = left;
+                                    //image.X = top;
+                                    //image.Y = left;
+                                    image.X = left;
+                                    image.Y = top;
                                     mLibraryV2.Images.Add(image);
                                     mLibraryV2.Save();
                                     bitmap.Dispose();

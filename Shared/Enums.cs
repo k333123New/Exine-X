@@ -721,6 +721,10 @@ public enum Monster : ushort
     AngryBird = 10012,
     Foxey = 10013,
     MedicalRat = 10014,
+
+    //Exine
+    ExFountain=20000,
+
 }
 
 public enum ExAction : byte

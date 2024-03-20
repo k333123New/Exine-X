@@ -3,7 +3,7 @@
     public class FrameSet : Dictionary<ExAction, Frame>
     {
         public static FrameSet ExPlayer;
-        public static FrameSet ExineDefaultNPC, ExineGuardNPC, ExineBronzeStatueNPC, DefaultMonster;
+        public static FrameSet ExineDefaultNPC, ExineGuardNPC, ExineStaticObjectNPC, DefaultMonster;
         public static List<FrameSet> DragonStatue, GreatFoxSpirit, HellBomb, CaveStatue;
 
         static FrameSet()
@@ -38,11 +38,13 @@
                 { ExAction.Standing, new Frame(0, 4, 0, 200) },
                 { ExAction.Harvest, new Frame(0, 4, 0, 200) }
             };
-            ExineBronzeStatueNPC = new FrameSet
+            ExineStaticObjectNPC = new FrameSet
             { 
                 { ExAction.Standing, new Frame(0, 1, 0, 200) },
                 { ExAction.Harvest, new Frame(0, 1, 0, 200) }
             };
+
+
 
             //Default Monster
             DefaultMonster = new FrameSet

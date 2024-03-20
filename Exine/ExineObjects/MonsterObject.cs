@@ -137,6 +137,19 @@ namespace Exine.ExineObjects
             //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
             //Console.WriteLine("Monster Name:" + Name + " BaseImage:" + BaseImage + " (short)BaseImage:" + (short)BaseImage);
 
+            //ExineMonsterLib
+            //k333123 240320 add
+            switch(BaseImage)
+            {
+                case Monster.ExFountain:
+                    Name = " ";
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage-20000];
+                    Frames = FrameSet.ExineStaticObjectNPC;
+                    Effects.Add(new BuffEffect(Libraries.ExEffect2, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
+                    break;
+            }
+
+
             //Library
             switch (BaseImage)
             {
@@ -262,6 +275,8 @@ namespace Exine.ExineObjects
                 case Monster.CaveStatue:
                     Frames = FrameSet.CaveStatue[(byte)Direction];
                     break;
+
+
                 default:
                     if (BodyLibrary != null)
                     {
@@ -4401,7 +4416,7 @@ namespace Exine.ExineObjects
         {
             
             if (!effectsEnabled) return;
-            Console.WriteLine("Monster DrawEffects effectsEnabled:" + effectsEnabled+ " Effects.Count:"+ Effects.Count);
+            //Console.WriteLine("Monster DrawEffects effectsEnabled:" + effectsEnabled+ " Effects.Count:"+ Effects.Count);
 
             for (int i = 0; i < Effects.Count; i++)
             {
