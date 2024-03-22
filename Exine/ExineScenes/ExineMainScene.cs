@@ -78,10 +78,10 @@ namespace Exine.ExineScenes
         public NPCGoodsDialog NPCCraftGoodsDialog;
         public NPCDropDialog NPCDropDialog;
         public NPCAwakeDialog NPCAwakeDialog;
+        
 
 
-
-        public ExineCharacterDialog HeroDialog;
+        public ExineCharacterDialog HeroDialog; 
         public HeroInventoryDialog HeroInventoryDialog;
         public HeroManageDialog HeroManageDialog;
         public CraftDialog CraftDialog;
@@ -231,7 +231,7 @@ namespace Exine.ExineScenes
             ExInventoryDialog = new ExineInventoryDialog { Parent = this };
             BeltDialog = new BeltDialog { Parent = this, Visible=false };//임시로 꺼둠
             ExNPCDialog = new ExineNPCDialog { Parent = this, Visible = false };
-
+            MiniMapDialog = new MiniMapDialog { Parent = this };
 
 
 
@@ -239,7 +239,7 @@ namespace Exine.ExineScenes
 
             StorageDialog = new StorageDialog { Parent = this, Visible = false };
             CraftDialog = new CraftDialog { Parent = this, Visible = false };
-            MiniMapDialog = new MiniMapDialog { Parent = this };
+            
             InspectDialog = new InspectDialog { Parent = this, Visible = false };
             OptionDialog = new OptionDialog { Parent = this, Visible = false };
             MenuDialog = new MenuDialog { Parent = this, Visible = false };
@@ -4770,7 +4770,6 @@ namespace Exine.ExineScenes
                 action.Params.Add(p.Cast);
                 action.Params.Add(p.Level);
                 action.Params.Add(p.SecondaryTargetIDs);
-               
 
                 ob.ActionFeed.Add(action);
                 return;

@@ -34,7 +34,7 @@ namespace Exine.ExineGraphics
 
         public static MLibrary[] ExineNPCs = new MLibrary[36];
         public static MLibrary[] ExineMonsters = new MLibrary[73];
-        
+
 
         public static readonly MLibrary
 
@@ -127,8 +127,9 @@ namespace Exine.ExineGraphics
             ExEffect00 = new MLibrary(Settings.ExineEffectPath + "Effect00"),
             ExEffect01 = new MLibrary(Settings.ExineEffectPath + "Effect01"),
             ExEffect02 = new MLibrary(Settings.ExineEffectPath + "Effect02"),
-            ExEffect03 = new MLibrary(Settings.ExineEffectPath + "Effect03");
+            ExEffect03 = new MLibrary(Settings.ExineEffectPath + "Effect03"),
 
+            ActionTree = new MLibrary(Settings.ExineUIPath + "ActionTree");
 
 
         #region Old
@@ -901,6 +902,9 @@ ZM_02_519_요정01_reidx.lib
             BIK_023_Light_3.Initialize();
             Progress++;
             BIK_024_Light_4.Initialize();
+            Progress++;
+
+            ActionTree.Initialize();
             Progress++;
 
             Prguse.Initialize();

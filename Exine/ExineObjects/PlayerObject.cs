@@ -1944,6 +1944,9 @@ namespace Exine.ExineObjects
                             #endregion ExineSkill Casting Effect
 
 
+
+
+
                             #region FireBall
 
                             case Spell.FireBall:
@@ -3863,6 +3866,19 @@ namespace Exine.ExineObjects
                                 Effect effect;
                                 switch (Spell)
                                 {
+
+                                    #region ExineSkill Effect
+                                    case Spell.ExSkillHealing:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        if (ob == null)
+                                            //MapControl.Effects.Add(new Effect(Libraries.Magic, 370, 10, 800, TargetPoint));
+                                            MapControl.Effects.Add(new Effect(Libraries.ExEffect01, 292, 10, 800, TargetPoint));
+                                        else
+                                            ob.Effects.Add(new Effect(Libraries.ExEffect01, 292, 10, 800, ob));
+                                        break;
+                                    #endregion ExineSkill
+
+
                                     #region FireBall
 
                                     case Spell.FireBall:
@@ -3901,16 +3917,7 @@ namespace Exine.ExineObjects
 
                                     #endregion
 
-                                    #region ExineSkill Effect
-                                    case Spell.ExSkillHealing:
-                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
-                                        if (ob == null)
-                                            //MapControl.Effects.Add(new Effect(Libraries.Magic, 370, 10, 800, TargetPoint));
-                                            MapControl.Effects.Add(new Effect(Libraries.ExEffect01, 292, 10, 800, TargetPoint));
-                                        else
-                                            ob.Effects.Add(new Effect(Libraries.ExEffect01, 292, 10, 800, ob));
-                                        break;
-                                    #endregion ExineSkill
+                                   
 
                                     #region Healing
 

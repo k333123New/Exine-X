@@ -210,7 +210,7 @@
             ExPlayer.Add(ExAction.TWOHAND_ATTACK3, new Frame(881, 8, 0, 100, 448, 6, 0, 100));
             ExPlayer.Add(ExAction.BOWHAND_ATTACK1, new Frame(945, 8, 0, 100, 96, 8, 0, 100));
             ExPlayer.Add(ExAction.MAGIC_CAST, new Frame(1009, 1, 0, 1000, 160, 1, 0, 1000));
-            ExPlayer.Add(ExAction.MAGIC_ATTACK, new Frame(1017, 1, 0, 1000, 332, 1, 5, 1000));
+            ExPlayer.Add(ExAction.MAGIC_ATTACK, new Frame(1017-1, 1, 0, 1000, 332, 1, 5, 1000));
             ExPlayer.Add(ExAction.PEACEMODE_WALK_RIGHT, new Frame(1025 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.ONEHAND_WALK_RIGHT, new Frame(1057 - 1, 4, 0, 100, 112, 6, 0, 100));
             ExPlayer.Add(ExAction.TWOHAND_WALK_RIGHT, new Frame(1089 - 1, 4, 0, 100, 112, 6, 0, 100));
@@ -232,7 +232,8 @@
             ExPlayer.Add(ExAction.Attack2, new Frame(184, 6, 0, 100, 216, 6, 0, 100));
             ExPlayer.Add(ExAction.Attack3, new Frame(232, 8, 0, 100, 264, 8, 0, 100));
             ExPlayer.Add(ExAction.Attack4, new Frame(416, 6, 0, 100, 448, 6, 0, 100));
-            ExPlayer.Add(ExAction.Spell, new Frame(296, 6, 0, 100, 328, 6, 0, 100));
+            //ExPlayer.Add(ExAction.Spell, new Frame(296, 6, 0, 100, 328, 6, 0, 100));
+            ExPlayer.Add(ExAction.Spell, new Frame(1016, 1, 0, 1000, 332, 1, 5, 1000));
             ExPlayer.Add(ExAction.Harvest, new Frame(344, 2, 0, 300, 376, 2, 0, 300));
             ExPlayer.Add(ExAction.Struck, new Frame(360, 3, 0, 100, 392, 3, 0, 100));
             ExPlayer.Add(ExAction.Die, new Frame(384, 4, 0, 100, 416, 4, 0, 100));

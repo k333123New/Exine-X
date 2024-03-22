@@ -139,6 +139,9 @@ Shanda has anitile
 
 Client Project Output : Console Application
 
+
+ActionTree - 0~22 : Skill Tree
+
 --------------
 panel100 - 0   => 초상화, 링명, ???, 칭호, 캐릭명, 레벨
 panel100 - 33 => HP이미지

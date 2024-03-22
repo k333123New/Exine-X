@@ -10,8 +10,11 @@ namespace Exine.ExineScenes.ExDialogs
     /// </summary>
     public sealed class ExineCharacterDialog : ExineImageControl
     {
-        public MirButton CloseButton, SkillButton;//,  CharacterButton,StatusButton, StateButton;
-        public ExineImageControl CharacterPage, SkillPage; //StatusPage, StatePage,  ClassImage;
+        public MirButton CloseButton, SkillTabButton, MagicTabButton,MakerSkillTab, RingSkillTab, CreationSkillTab, SkillButton;//,  CharacterButton,StatusButton, StateButton;
+
+        public MirButton[] SkillTypeButton = new MirButton[9];//,  CharacterButton,StatusButton, StateButton;
+
+        public ExineImageControl CharacterPage, SkillPage, ActionTree; //StatusPage, StatePage,  ClassImage;
 
         public ExineLabel NameLabel, GuildLabel, LoverLabel, GoldLabel, WeightLabel, WeightMaxLabel;
         //public ExineLabel ACLabel, MACLabel, DCLabel, MCLabel, SCLabel, HealthLabel, ManaLabel;
@@ -168,6 +171,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             */
 
+            /*
             SkillPage = new ExineImageControl
             {
                 Index = 508,
@@ -175,7 +179,99 @@ namespace Exine.ExineScenes.ExDialogs
                 Library = Libraries.Title,
                 Location = new Point(8, 90),
                 Visible = false
+            };*/
+            SkillPage = new ExineImageControl
+            {
+                Index = 0,
+                Parent = this,
+                Library = Libraries.PANEL0601,
+                Location = new Point(0, 0),
+                Visible = false
             };
+
+            //ActionTree
+            ActionTree = new ExineImageControl
+            {
+                Index = 0,
+                Parent = SkillPage,
+                Library = Libraries.ActionTree,
+                Location = new Point(49, 83+11),
+                Visible = true
+            };
+
+            //606
+            SkillTabButton = new MirButton
+            {
+                Index = 0,
+                PressedIndex = 5,
+                Parent = SkillPage,
+                Library = Libraries.PANEL0606,
+                Location = new Point(0, 0),
+                Visible = true
+            };
+            SkillTabButton.Click += (o, e) =>
+            {
+                SkillPage.Library = Libraries.PANEL0601;
+            };
+
+            //MagicTabButton,MakerSkillTab, RingSkillTab, CreationSkillTab,
+
+            for (int i = 0; i < SkillTypeButton.Length; i++)
+            {
+                int x = 0;
+                int y = 0;
+                y = (i / 7) * 20;
+                x = (i * 46) % 322;
+
+                SkillTypeButton[i] = new MirButton
+                {
+                    Index = i * 8 + 1,
+                    PressedIndex = i * 8 + 1 + 5,
+                    Parent = SkillPage,
+                    Library = Libraries.PANEL0601,
+                    Location = new Point(x + 21, y + 35),
+                    Visible = true
+                };
+                 
+            }
+            SkillTypeButton[0].Click += (o, e) =>
+            { 
+                ActionTree.Index = 0;
+            };
+            SkillTypeButton[1].Click += (o, e) =>
+            {
+                ActionTree.Index = 1;
+            };
+            SkillTypeButton[2].Click += (o, e) =>
+            {
+                ActionTree.Index = 2;
+            };
+            SkillTypeButton[3].Click += (o, e) =>
+            {
+                ActionTree.Index = 3;
+            };
+            SkillTypeButton[4].Click += (o, e) =>
+            {
+                ActionTree.Index = 4;
+            };
+            SkillTypeButton[5].Click += (o, e) =>
+            {
+                ActionTree.Index = 5;
+            };
+            SkillTypeButton[6].Click += (o, e) =>
+            {
+                ActionTree.Index = 6;
+            };
+            SkillTypeButton[7].Click += (o, e) =>
+            {
+                ActionTree.Index = 7;
+            };
+            SkillTypeButton[8].Click += (o, e) =>
+            {
+                ActionTree.Index = 8;
+            };
+
+
 
             /*
            CharacterButton = new MirButton
@@ -227,7 +323,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 HoverIndex = 90,
                 Index = 89,
-                Location = new Point(241+102, 3+434),
+                Location = new Point(241+102+20, 3+434-16),
                 Library = Libraries.PANEL0600,
                 Parent = this,
                 PressedIndex = 91,
@@ -636,13 +732,25 @@ namespace Exine.ExineScenes.ExDialogs
                 NotControl = true
             };
             */
-            Magics = new MagicButton[7];
 
+            //k333123 Skill Page Button
+            /*
+            Magics = new MagicButton[7]; 
             for (int i = 0; i < Magics.Length; i++)
                 Magics[i] = new MagicButton 
                 { 
                     Parent = SkillPage, 
                     Visible = false, 
+                    Location = new Point(8, 8 + i * 33),
+                    HeroMagic = gridType == MirGridType.HeroEquipment
+                };
+            */
+            Magics = new MagicButton[12];
+            for (int i = 0; i < Magics.Length; i++)
+                Magics[i] = new MagicButton
+                {
+                    Parent = SkillPage,
+                    Visible = false,
                     Location = new Point(8, 8 + i * 33),
                     HeroMagic = gridType == MirGridType.HeroEquipment
                 };
@@ -681,6 +789,8 @@ namespace Exine.ExineScenes.ExDialogs
                 RefreshInterface();
             };*/
         }
+
+       
 
         public override void Show()
         {
@@ -781,7 +891,8 @@ namespace Exine.ExineScenes.ExDialogs
                     continue;
                 }
 
-                Magics[i].Visible = true;
+                //Magics[i].Visible = true; //k333123 test
+                Magics[i].Visible = false; //k333123 임시로 꺼둠
                 Magics[i].Update(Actor.Magics[i + StartIndex]);
             }
         }
