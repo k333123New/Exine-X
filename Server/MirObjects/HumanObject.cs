@@ -3484,6 +3484,10 @@ namespace Server.ExineObjects
             byte level = magic.Level;
             switch (spell)
             {
+                case Spell.ExSkillHealing:
+                    cast = true; //k333123 240322
+                    break;
+
                 case Spell.FireBall:
                 case Spell.GreatFireBall:
                 case Spell.FrostCrunch:
@@ -3751,8 +3755,11 @@ namespace Server.ExineObjects
                 case Spell.FireBounce:
                     if (!FireBounce(target, magic, this)) targetID = 0;
                     break;
+
+
                 default:
-                    cast = false;
+                    cast = false;//여기서 걸림! //따로 케이스를 추가해 줘야함.
+                    //cast = true; //k333123!!! 240322
                     break;
             }
 

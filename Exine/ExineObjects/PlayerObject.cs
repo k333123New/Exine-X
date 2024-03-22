@@ -1315,6 +1315,53 @@ namespace Exine.ExineObjects
                         Spell = (Spell)action.Params[0];
                         Frames.TryGetValue(Spell == Spell.TwinDrakeBlade || Spell == Spell.FlamingSword ? ExAction.Attack1 : CurrentAction, out Frame);
                         break;
+
+                    /*
+                    case ExAction.MAGIC_CAST:
+                        Console.WriteLine("#################################################");
+                        //k333123!!!!!!  test!!!
+                        Spell = (Spell)action.Params[0];
+                        TargetID = (uint)action.Params[1];
+                        TargetPoint = (Point)action.Params[2]; 
+                        SpellLevel = (byte)action.Params[3];
+                        Frames.TryGetValue(ExAction.MAGIC_CAST, out Frame);
+                        if (CMain.Time >= NextMotion)
+                        { 
+                            Console.WriteLine("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
+                            Console.WriteLine("%%%%%%%%%%%%%%%%%%%%%");
+                            ExineMainScene.Scene.MapControl.TextureValid = false;
+
+                            if (SkipFrames) UpdateFrame();
+
+                            if (UpdateFrame() >= Frame.Count)
+                            { 
+                                ActionFeed.Clear();
+                                QueuedAction queAction= new QueuedAction { Action = ExAction.Spell, Direction = Direction, Location = CurrentLocation, Params = new List<object>() };
+                                queAction.Params.Add(Spell);
+                                queAction.Params.Add(TargetID);
+                                queAction.Params.Add(TargetPoint);
+                                //queAction.Params.Add(Cast);
+                                queAction.Params.Add(SpellLevel);
+                                //queAction.Params.Add(SecondaryTargetIDs);
+                                ActionFeed.Add(queAction);
+                                SetAction();
+                            }
+                            else
+                            {
+                                //if (FrameIndex == 1)  PlayDieSound(); 
+                                NextMotion += FrameInterval;
+                            }
+                        }
+                        else
+                        {
+                            ActionFeed.Clear();
+                            QueuedAction queAction = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation};
+                            ActionFeed.Add(queAction);
+                            SetAction();
+                        } 
+                        break;
+                    */
                     case ExAction.Spell:
                         Spell = (Spell)action.Params[0];
                         switch (Spell)
@@ -1879,23 +1926,23 @@ namespace Exine.ExineObjects
                             SecondaryTargetIDs = (List<uint>)action.Params[5];
                         }
 
+
+                        //Cast Effect!!!
                         switch (Spell)
                         {
+                            #region ExineSkill Casting Effect
 
-                            #region ExineSkill
-                            case Spell.ExSkillHealing:
-                                //Effects.Add(new Effect(Libraries.Magic, 200, 10, Frame.Count * FrameInterval, this));
-                                //FrameInterval = (int)(FrameInterval * 0.46f); //46% Animation Speed
-                                //Effects.Add(new Effect(Libraries.ExEffect00, 21, 10, Frame.Count * FrameInterval, this));
-                                //949~958
-                                //959~967
-                                //968~976
+                            case Spell.ExSkillHealing: 
+                                //Casting
                                 Effects.Add(new Effect(Libraries.ExEffect01, 949, 10, 1600, this));
                                 Effects.Add(new Effect(Libraries.ExEffect01, 959, 9, 1600, this));
                                 Effects.Add(new Effect(Libraries.ExEffect01, 968, 9, 1600, this));
+                                //////////////////////////////////////////////////////////////////// 
                                 SoundManager.PlaySound(20000 + (ushort)Spell * 10);
-                                break; 
-                            #endregion ExineSkill
+                                break;
+
+                            #endregion ExineSkill Casting Effect
+
 
                             #region FireBall
 
@@ -2728,9 +2775,8 @@ namespace Exine.ExineObjects
                             NextMotion2 += EffectFrameInterval;
                     }
                     break;
-
-
-                    //부드럽게 전환시키기 위해서 아래와 같이 해야함.(dad, die, rivival 참고)
+                     
+                //부드럽게 전환시키기 위해서 아래와 같이 해야함.(dad, die, rivival 참고)
                 case ExAction.PEACEMODE_SITDOWN: //ref dad
                     if (CMain.Time >= NextMotion)
                     {
@@ -3246,7 +3292,10 @@ namespace Exine.ExineObjects
                             NextMotion2 += EffectFrameInterval;
                     }
                     break;
-                case ExAction.Spell:
+
+                    //240322
+                    /*
+                case ExAction.MAGIC_ATTACK:
                     if (CMain.Time >= NextMotion)
                     {
                         ExineMainScene.Scene.MapControl.TextureValid = false;
@@ -3255,6 +3304,556 @@ namespace Exine.ExineObjects
 
                         if (UpdateFrame() >= Frame.Count)
                         {
+                            if (Cast)
+                            {
+
+                                MapObject ob = MapControl.GetObject(TargetID);
+
+                                Missile missile;
+                                Effect effect;
+                                switch (Spell)
+                                {
+
+                                    //Type [Missile - Target, Healing , Poisoning, HellFire, FireBang, SoulShield, 
+                                    //Type FireBall : Missile, if(target is not null and alive, complete ->  explosion Effect) 
+                                    //Type Healing : if ob(map object) is null => draw mouse point, else draw at ob(map object)
+                                    //Type Poisoning :  if ob(map object) is not null =>  draw at ob(map object), it looks like dust
+                                    //Type HellFire : ??? may be it is looks like kof's kyo fire attack?
+                                    //Type FireBang : 
+
+                                    #region FireBall
+
+                                    case Spell.FireBall:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        missile = CreateProjectile(10, Libraries.Magic, true, 6, 30, 4);
+
+                                        if (missile.Target != null)
+                                        {
+                                            missile.Complete += (o, e) =>
+                                            {
+                                                if (missile.Target.CurrentAction == ExAction.Dead) return;
+                                                missile.Target.Effects.Add(new Effect(Libraries.Magic, 170, 10, 600, missile.Target));
+                                                SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 2);
+                                            };
+                                        }
+                                        break;
+
+                                    #endregion
+
+                                    #region ExineSkill Magic Effect
+                                    case Spell.ExSkillHealing:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        if (ob == null)
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic, 370, 10, 800, TargetPoint));
+                                        else
+                                            ob.Effects.Add(new Effect(Libraries.Magic, 370, 10, 800, ob));
+                                        break;
+                                    #endregion ExineSkill
+
+                                    #region Healing
+
+                                    case Spell.Healing:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        if (ob == null)
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic, 370, 10, 800, TargetPoint));
+                                        else
+                                            ob.Effects.Add(new Effect(Libraries.Magic, 370, 10, 800, ob));
+                                        break;
+
+                                    #endregion
+
+                                    #region Poisoning
+
+                                    case Spell.Poisoning:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        if (ob != null)
+                                            ob.Effects.Add(new Effect(Libraries.Magic, 770, 10, 1000, ob));
+                                        break;
+                                    #endregion
+
+                                    #region HellFire
+
+                                    case Spell.HellFire:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+
+
+                                        Point dest = CurrentLocation;
+                                        for (int i = 0; i < 4; i++)
+                                        {
+                                            dest = Functions.PointMove(dest, Direction, 1);
+                                            if (!ExineMainScene.Scene.MapControl.ValidPoint(dest)) break;
+                                            effect = new Effect(Libraries.Magic, 930, 6, 500, dest) { Rate = 0.7F };
+
+                                            effect.SetStart(CMain.Time + i * 50);
+                                            MapControl.Effects.Add(effect);
+                                        }
+
+                                        if (SpellLevel == 3)
+                                        {
+                                            ExineDirection dir = (ExineDirection)(((int)Direction + 1) % 8);
+                                            dest = CurrentLocation;
+                                            for (int r = 0; r < 4; r++)
+                                            {
+                                                dest = Functions.PointMove(dest, dir, 1);
+                                                if (!ExineMainScene.Scene.MapControl.ValidPoint(dest)) break;
+                                                effect = new Effect(Libraries.Magic, 930, 6, 500, dest) { Rate = 0.7F };
+
+                                                effect.SetStart(CMain.Time + r * 50);
+                                                MapControl.Effects.Add(effect);
+                                            }
+
+                                            dir = (ExineDirection)(((int)Direction - 1 + 8) % 8);
+                                            dest = CurrentLocation;
+                                            for (int r = 0; r < 4; r++)
+                                            {
+                                                dest = Functions.PointMove(dest, dir, 1);
+                                                if (!ExineMainScene.Scene.MapControl.ValidPoint(dest)) break;
+                                                effect = new Effect(Libraries.Magic, 930, 6, 500, dest) { Rate = 0.7F };
+
+                                                effect.SetStart(CMain.Time + r * 50);
+                                                MapControl.Effects.Add(effect);
+                                            }
+                                        }
+                                        break;
+
+                                    #endregion
+
+                                    #region EnergyShield
+
+                                    case Spell.EnergyShield:
+
+                                        //Effects.Add(new Effect(Libraries.Magic2, 1880, 9, Frame.Count * FrameInterval, this));
+                                        //SoundManager.PlaySound(20000 + (ushort)Spell * 9);
+                                        break;
+
+                                    #endregion
+
+                                    #region FireBang
+
+                                    case Spell.FireBang:
+
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        MapControl.Effects.Add(new Effect(Libraries.Magic, 1660, 10, 1000, TargetPoint));
+                                        break;
+
+                                    #endregion
+
+                                    
+
+                                    #region SoulShield
+
+                                    case Spell.SoulShield:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+                                        missile = CreateProjectile(1160, Libraries.Magic, true, 3, 30, 7);
+                                        missile.Explode = true;
+
+                                        missile.Complete += (o, e) =>
+                                        {
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic, 1320, 15, 1200, TargetPoint));
+                                            SoundManager.PlaySound(20000 + (ushort)Spell.SoulShield * 10 + 1);
+                                        };
+                                        break;
+
+                                    #endregion
+                                         
+
+                                    #region FireWall
+
+                                    case Spell.FireWall:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        break;
+
+                                    #endregion
+
+
+                                    #region HealingCircle
+
+                                    case Spell.HealingCircle:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        MapControl.Effects.Add(new Effect(Libraries.Magic3, 620, 10, 1200, TargetPoint));
+                                        break;
+
+                                    #endregion
+
+                                    #region IceStorm
+
+                                    case Spell.IceStorm:
+
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        MapControl.Effects.Add(new Effect(Libraries.Magic, 3850, 20, 1300, TargetPoint));
+                                        break;
+
+                                    #endregion
+
+                                    #region TurnUndead
+
+                                    case Spell.TurnUndead:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        if (ob == null)
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic, 3930, 15, 1000, TargetPoint));
+                                        else
+                                            ob.Effects.Add(new Effect(Libraries.Magic, 3930, 15, 1000, ob));
+                                        break;
+                                    #endregion
+
+                                    #region IceThrust
+
+                                    case Spell.IceThrust:
+
+                                        Point location = Functions.PointMove(CurrentLocation, Direction, 1);
+
+                                        MapControl.Effects.Add(new Effect(Libraries.Magic2, 1790 + (int)Direction * 10, 10, 10 * FrameInterval, location));
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+                                        break;
+
+                                    #endregion
+
+                                    #region Revelation
+
+                                    case Spell.Revelation:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        if (ob == null)
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic, 3990, 10, 1000, TargetPoint));
+                                        else
+                                            ob.Effects.Add(new Effect(Libraries.Magic, 3990, 10, 1000, ob));
+                                        break;
+                                    #endregion
+
+                                    #region FlameDisruptor
+
+                                    case Spell.FlameDisruptor:
+
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+
+                                        if (ob == null)
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic2, 140, 10, 600, TargetPoint));
+                                        else
+                                            ob.Effects.Add(new Effect(Libraries.Magic2, 140, 10, 600, ob));
+                                        break;
+
+                                    #endregion
+
+                                    #region CatTongue
+                                    case Spell.CatTongue:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+                                        missile = CreateProjectile(260, Libraries.Magic3, true, 6, 30, 4);
+
+                                        if (missile.Target != null)
+                                        {
+                                            missile.Complete += (o, e) =>
+                                            {
+                                                if (missile.Target.CurrentAction == ExAction.Dead) return;
+                                                missile.Target.Effects.Add(new Effect(Libraries.Magic3, 420, 8, 800, missile.Target));
+                                                SoundManager.PlaySound(20000 + (ushort)Spell.CatTongue * 10 + 1);
+                                            };
+                                        }
+                                        break;
+
+                                    #endregion
+
+                                    #region FrostCrunch
+
+                                    case Spell.FrostCrunch:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        missile = CreateProjectile(410, Libraries.Magic2, true, 4, 30, 6);
+
+                                        if (missile.Target != null)
+                                        {
+                                            missile.Complete += (o, e) =>
+                                            {
+                                                if (missile.Target.CurrentAction == ExAction.Dead) return;
+                                                missile.Target.Effects.Add(new Effect(Libraries.Magic2, 570, 8, 600, missile.Target));
+                                                SoundManager.PlaySound(20000 + (ushort)Spell.FrostCrunch * 10 + 2);
+                                            };
+                                        }
+                                        break;
+
+                                    #endregion
+
+                                    #region Purification
+
+                                    case Spell.Purification:
+                                        if (ob == null)
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic2, 620, 10, 800, TargetPoint));
+                                        else
+                                            ob.Effects.Add(new Effect(Libraries.Magic2, 620, 10, 800, ob));
+                                        break;
+
+                                    #endregion
+
+                                    #region Curse
+
+                                    case Spell.Curse:
+                                        missile = CreateProjectile(1160, Libraries.Magic, true, 3, 30, 7);
+                                        missile.Explode = true;
+
+                                        missile.Complete += (o, e) =>
+                                        {
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic2, 950, 24, 2000, TargetPoint));
+                                            SoundManager.PlaySound(20000 + (ushort)Spell.Curse * 10);
+                                        };
+                                        break;
+
+                                    #endregion
+
+                                    #region Hallucination
+
+                                    case Spell.Hallucination:
+                                        missile = CreateProjectile(1160, Libraries.Magic, true, 3, 48, 7);
+
+                                        if (missile.Target != null)
+                                        {
+                                            missile.Complete += (o, e) =>
+                                            {
+                                                if (missile.Target.CurrentAction == ExAction.Dead) return;
+                                                missile.Target.Effects.Add(new Effect(Libraries.Magic2, 1110, 10, 1000, missile.Target));
+                                                SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+                                            };
+                                        }
+                                        break;
+
+                                    #endregion
+
+                                    #region Lightning
+
+                                    case Spell.Lightning:
+                                        Effects.Add(new Effect(Libraries.Magic, 970 + (int)Direction * 20, 6, Frame.Count * FrameInterval, this));
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+                                        break;
+
+                                    #endregion
+
+                                    #region Vampirism
+
+                                    case Spell.Vampirism:
+
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+
+                                        if (ob == null)
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic2, 1060, 20, 1000, TargetPoint));
+                                        else
+                                        {
+                                            ob.Effects.Add(effect = new Effect(Libraries.Magic2, 1060, 20, 1000, ob));
+                                            effect.Complete += (o, e) =>
+                                            {
+                                                SoundManager.PlaySound(20000 + (ushort)Spell.Vampirism * 10 + 2);
+                                                Effects.Add(new Effect(Libraries.Magic2, 1090, 10, 500, this));
+                                            };
+                                        }
+                                        break;
+
+                                    #endregion
+
+                                    #region PoisonCloud
+
+                                    case Spell.PoisonCloud:
+                                        missile = CreateProjectile(1160, Libraries.Magic, true, 3, 30, 7);
+                                        missile.Explode = true;
+
+                                        missile.Complete += (o, e) =>
+                                        {
+                                            SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+                                        };
+
+                                        break;
+
+                                    #endregion
+
+                                    #region Blizzard
+
+                                    case Spell.Blizzard:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        //BlizzardFreezeTime = CMain.Time + 3000;
+                                        break;
+
+                                    #endregion
+
+                                    #region MeteorStrike
+
+                                    case Spell.MeteorStrike:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 2);
+                                        //BlizzardFreezeTime = CMain.Time + 3000;
+                                        break;
+
+                                    #endregion
+
+                                    #region Reincarnation
+
+                                    case Spell.Reincarnation:
+                                        ReincarnationStopTime = 0;
+                                        break;
+
+                                    #endregion
+
+                                    #region SummonHolyDeva
+
+                                    case Spell.SummonHolyDeva:
+                                        Effects.Add(new Effect(Libraries.Magic, 1500, 10, Frame.Count * FrameInterval, this));
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10);
+                                        break;
+
+                                    #endregion
+
+                                    #region UltimateEnhancer
+
+                                    case Spell.UltimateEnhancer:
+                                        if (ob != null && ob != User)
+                                            ob.Effects.Add(new Effect(Libraries.Magic2, 160, 15, 1000, ob));
+                                        break;
+
+                                    #endregion
+
+                                    #region Plague
+
+                                    case Spell.Plague:
+                                        //SoundManager.PlaySound(20000 + (ushort)Spell.SoulShield * 10);
+                                        missile = CreateProjectile(1160, Libraries.Magic, true, 3, 30, 7);
+                                        missile.Explode = true;
+
+                                        missile.Complete += (o, e) =>
+                                        {
+                                            MapControl.Effects.Add(new Effect(Libraries.Magic3, 110, 10, 1200, TargetPoint));
+                                            SoundManager.PlaySound(20000 + (ushort)Spell.Plague * 10 + 3);
+                                        };
+                                        break;
+
+                                    #endregion
+
+                                    #region TrapHexagon
+
+                                    case Spell.TrapHexagon:
+                                        if (ob != null)
+                                            SoundManager.PlaySound(20000 + (ushort)Spell.TrapHexagon * 10 + 1);
+                                        break;
+
+                                    #endregion
+
+                                    #region Trap
+
+                                    case Spell.Trap:
+                                        if (ob != null)
+                                            SoundManager.PlaySound(20000 + (ushort)Spell.Trap * 10 + 1);
+                                        break;
+
+                                    #endregion
+
+                                    #region CrescentSlash
+
+                                    case Spell.CrescentSlash:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 2);
+                                        break;
+
+                                    #endregion
+
+                                    #region NapalmShot
+
+                                    case Spell.NapalmShot:
+
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        MapControl.Effects.Add(new Effect(Libraries.Magic3, 1660, 10, 1000, TargetPoint));
+                                        break;
+
+                                    #endregion
+
+
+                                    #region FireBounce
+
+                                    case Spell.FireBounce:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell.GreatFireBall * 10 + 1);
+
+                                        missile = CreateProjectile(410, Libraries.Magic, true, 6, 30, 4);
+
+                                        if (missile.Target != null)
+                                        {
+                                            missile.Complete += (o, e) =>
+                                            {
+                                                if (missile.Target.CurrentAction == ExAction.Dead) return;
+                                                missile.Target.Effects.Add(new Effect(Libraries.Magic, 570, 10, 600, missile.Target));
+                                                SoundManager.PlaySound(20000 + (ushort)Spell.GreatFireBall * 10 + 2);
+                                            };
+                                        }
+                                        break;
+
+                                    #endregion
+
+                                    #region MeteorShower
+
+                                    case Spell.MeteorShower:
+
+                                        SoundManager.PlaySound(20000 + (ushort)Spell.GreatFireBall * 10 + 1);
+
+                                        var targetIDs = new List<uint> { TargetID };
+
+                                        if (SecondaryTargetIDs != null)
+                                        {
+                                            targetIDs.AddRange(SecondaryTargetIDs);
+                                        }
+
+                                        foreach (var targetID in targetIDs)
+                                        {
+                                            missile = CreateProjectile(410, Libraries.Magic, true, 6, 30, 4, targetID: targetID);
+
+                                            if (missile.Target != null)
+                                            {
+                                                missile.Complete += (o, e) =>
+                                                {
+                                                    var sender = (Missile)o;
+
+                                                    if (sender.Target.CurrentAction == ExAction.Dead) return;
+                                                    sender.Target.Effects.Add(new Effect(Libraries.Magic, 570, 10, 600, sender.Target));
+                                                    SoundManager.PlaySound(20000 + (ushort)Spell.GreatFireBall * 10 + 2);
+                                                };
+                                            }
+                                        }
+
+                                        break;
+
+                                        #endregion
+
+                                }
+
+
+                                Cast = false;
+                            }
+                            //if (ActionFeed.Count == 0)
+                            //    ActionFeed.Add(new QueuedAction { Action = MirAction.Stance, Direction = Direction, Location = CurrentLocation });
+
+                            StanceTime = CMain.Time + StanceDelay;
+                            FrameIndex = Frame.Count - 1;
+                            SetAction();
+
+                        }
+                        else
+                        {
+                            NextMotion += FrameInterval;
+
+                        }
+                    }
+                    if (WingEffect > 0 && CMain.Time >= NextMotion2)
+                    {
+                        ExineMainScene.Scene.MapControl.TextureValid = false;
+
+                        if (SkipFrames) UpdateFrame2();
+
+                        if (UpdateFrame2() >= Frame.EffectCount)
+                            EffectFrameIndex = Frame.EffectCount - 1;
+                        else
+                            NextMotion2 += EffectFrameInterval;
+                    }
+                    break;
+                    */
+                case ExAction.Spell:
+                    //Cast=true;
+                    //Console.WriteLine("&&&&&&&&&&&&&& Spell Cast:" + Cast);
+                    if (CMain.Time >= NextMotion)
+                    {
+                        ExineMainScene.Scene.MapControl.TextureValid = false;
+
+                        if (SkipFrames) UpdateFrame();
+
+                        if (UpdateFrame() >= Frame.Count)
+                        { 
                             if (Cast)
                             {
 
@@ -3301,6 +3900,17 @@ namespace Exine.ExineObjects
                                         break;
 
                                     #endregion
+
+                                    #region ExineSkill Effect
+                                    case Spell.ExSkillHealing:
+                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 1);
+                                        if (ob == null)
+                                            //MapControl.Effects.Add(new Effect(Libraries.Magic, 370, 10, 800, TargetPoint));
+                                            MapControl.Effects.Add(new Effect(Libraries.ExEffect01, 292, 10, 800, TargetPoint));
+                                        else
+                                            ob.Effects.Add(new Effect(Libraries.ExEffect01, 292, 10, 800, ob));
+                                        break;
+                                    #endregion ExineSkill
 
                                     #region Healing
 

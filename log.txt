@@ -31,10 +31,27 @@ saint
 959~967
 968~976
 
+shared > Globals.cs >  public static Spell[] RangedSpells = new Spell[]
+    {
+        Spell.FireBall,
+        Spell.ThunderBolt,
+        Spell.FireBang,
+        Spell.FireWall,
+        Spell.FrostCrunch,
+        Spell.Vampirism,
+        Spell.FlameDisruptor,
+        Spell.IceStorm,
+        Spell.MeteorStrike,
+        Spell.Blizzard,
+        Spell.SoulFireBall
+    };
 
 
 
 
+
+    Cast Check
+    Server.library > HumanObject.cs >     public void Magic(Spell spell, ExineDirection dir, uint targetID, Point location, bool spellTargetLock = false) > Switch case > default : Cast=false;
 
 
 

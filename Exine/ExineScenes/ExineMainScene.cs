@@ -12,6 +12,7 @@ using Effect = Exine.ExineObjects.Effect;
 //using Client.MirScenes.Dialogs;
 using Exine.Utils;
 using Exine.ExineScenes.ExDialogs;
+using System;
 
 //effect2 58~67 pawn
 
@@ -4761,6 +4762,7 @@ namespace Exine.ExineScenes
                 MapObject ob = MapControl.Objects[i];
                 if (ob.ObjectID != p.ObjectID) continue;
 
+                //QueuedAction action = new QueuedAction { Action = ExAction.MAGIC_CAST, Direction = p.Direction, Location = p.Location, Params = new List<object>() };
                 QueuedAction action = new QueuedAction { Action = ExAction.Spell, Direction = p.Direction, Location = p.Location, Params = new List<object>() };
                 action.Params.Add(p.Spell);
                 action.Params.Add(p.TargetID);
@@ -4768,6 +4770,7 @@ namespace Exine.ExineScenes
                 action.Params.Add(p.Cast);
                 action.Params.Add(p.Level);
                 action.Params.Add(p.SecondaryTargetIDs);
+               
 
                 ob.ActionFeed.Add(action);
                 return;
@@ -12178,6 +12181,7 @@ namespace Exine.ExineScenes
 
             if (actor == User)
             {
+                //User.QueuedAction = new QueuedAction { Action = ExAction.MAGIC_CAST, Direction = dir, Location = User.CurrentLocation, Params = new List<object>() };
                 User.QueuedAction = new QueuedAction { Action = ExAction.Spell, Direction = dir, Location = User.CurrentLocation, Params = new List<object>() };
                 User.QueuedAction.Params.Add(magic.Spell);
                 User.QueuedAction.Params.Add(targetID);

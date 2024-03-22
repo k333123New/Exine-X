@@ -287,8 +287,7 @@ namespace Server.ExineEnvir
         private void FillMagicInfoList()
         {
 
-            //Exine
-            if (!MagicExists(Spell.ExSkillHealing)) MagicInfoList.Add(new MagicInfo { Name = "힐링", Spell = Spell.ExSkillHealing, Icon = 1, Level1 = 1, Level2 = 11, Level3 = 14, Need1 = 150, Need2 = 350, Need3 = 700, BaseCost = 0, LevelCost = 0, MPowerBase = 14, Range = 9 });
+           
 
             #region OLD
             //Warrior
@@ -412,6 +411,9 @@ namespace Server.ExineEnvir
             if (!MagicExists(Spell.FireBounce)) MagicInfoList.Add(new MagicInfo { Name = "FireBounce", Spell = Spell.FireBounce, Icon = 4, Level1 = 15, Level2 = 18, Level3 = 21, Need1 = 2000, Need2 = 2700, Need3 = 3500, BaseCost = 5, LevelCost = 1, MPowerBase = 6, PowerBase = 10, Range = 9 });
             if (!MagicExists(Spell.MeteorShower)) MagicInfoList.Add(new MagicInfo { Name = "MeteorShower", Spell = Spell.MeteorShower, Icon = 4, Level1 = 15, Level2 = 18, Level3 = 21, Need1 = 2000, Need2 = 2700, Need3 = 3500, BaseCost = 5, LevelCost = 1, MPowerBase = 6, PowerBase = 10, Range = 9 });
             #endregion OLD
+
+            //Exine
+            if (!MagicExists(Spell.ExSkillHealing)) MagicInfoList.Add(new MagicInfo { Name = "힐링", Spell = Spell.ExSkillHealing, Icon = 1, Level1 = 1, Level2 = 11, Level3 = 14, Need1 = 150, Need2 = 350, Need3 = 700, BaseCost = 0, LevelCost = 0, MPowerBase = 14, Range = 9 });
 
         }
 
