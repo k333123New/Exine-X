@@ -3665,6 +3665,29 @@ namespace Exine.ExineScenes.ExDialogs
 
     //k333123 add 240324
 
+    public sealed class ExMagicInactiveButton : ExineControl
+    {
+        public MirButton MagicInactiveIcon;
+        public ExMagicInactiveButton()
+        {
+            MagicInactiveIcon = new MirButton
+            {
+                Index = 0,
+                PressedIndex = 0,
+                Library = Libraries.ArtsIcon,//Libraries.ArtsIcon,//4-Arts.lib
+                Parent = this,
+                Location = new Point(0, 0),
+                //Location = new Point(36, 0),
+                Sound = SoundList.ButtonA,
+            };
+
+            MagicInactiveIcon.Click += (o, e) =>
+            {
+                Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@Click!!!");
+            };
+        }
+    }
+
 
     public sealed class ExMagicButton : ExineControl
     {

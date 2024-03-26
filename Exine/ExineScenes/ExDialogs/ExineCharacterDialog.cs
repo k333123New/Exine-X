@@ -26,7 +26,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public MirItemCell[] Grid;
         private MirGridType GridType;
-        public ExineImageControl[] MagicInactiveIcons; //background Magic Icon!(Not Active Magic Icon)
+        public ExMagicInactiveButton[] exMagicInactiveButtons; //background Magic Icon!(Not Active Magic Icon)
         public ExMagicButton[] Magics;//Active Magic Icon!
 
 
@@ -48,8 +48,8 @@ namespace Exine.ExineScenes.ExDialogs
             Location = new Point(Settings.ScreenWidth/2, 0+85);
             Movable = false; 
             BeforeDraw += (o, e) => RefreshInterface();
+            
 
-           
 
             CharacterPage = new ExineImageControl
             {
@@ -198,7 +198,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Index = 0,
                 Parent = SkillPage,
                 Library = Libraries.ActionTree,
-                Location = new Point(49, 83+11),
+                Location = new Point(62+2, 20+32+8+23-2),
                 Visible = true,
             };
 
@@ -259,6 +259,8 @@ namespace Exine.ExineScenes.ExDialogs
                 SkillTypeButton[8].Click += (o, e) => { ActionTree.Index = 8; };
                 //RefreshInterface();
             };
+           
+
             SkillTabButton = new MirButton
             {
                 Index = 9,
@@ -387,6 +389,9 @@ namespace Exine.ExineScenes.ExDialogs
             };
             DivienSkillTabButton.Click += (o, e) =>
             {
+                SkillTabIndexInit();
+                RingSkillTabButton.Index = RingSkillTabButton.PressedIndex;
+
                 SkillPage.Library = Libraries.PANEL0605;
                 ActionTree.Visible = false;
                  
@@ -399,10 +404,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
             //MagicTabButton,MakerSkillTab, RingSkillTab, CreationSkillTab,
-
-
-
-
+             
 
             /*
            CharacterButton = new MirButton
@@ -446,7 +448,8 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this,
                 PressedIndex = 503,
                 Size = new Size(64, 20),
-                Sound = SoundList.ButtonA
+                Sound = SoundList.ButtonA,
+                Visible =false, //k333123 add
             };
             //SkillButton.Click += (o, e) => ShowSkillPage();
 
@@ -866,19 +869,22 @@ namespace Exine.ExineScenes.ExDialogs
 
             //k333123 Skill Page Button
 
-            MagicInactiveIcons = new ExineImageControl[12];
-            for(int i=0;i<MagicInactiveIcons.Length;i++)
+            exMagicInactiveButtons = new ExMagicInactiveButton[12];
+            for(int i=0;i<exMagicInactiveButtons.Length;i++)
             {
-                MagicInactiveIcons[i] = new ExineImageControl
-                {
-                    Index = 0,
-                    Library = Libraries.ArtsIcon,
-                    Parent = SkillPage,
-                    Visible = false,
-                    Location = new Point(0, 0),
-                    Opacity = 0.75f,
-                };
+                
+                exMagicInactiveButtons[i] = new ExMagicInactiveButton();
+                exMagicInactiveButtons[i].Parent = SkillPage;
+                exMagicInactiveButtons[i].Visible = true;
+                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                exMagicInactiveButtons[i].MagicInactiveIcon.Library = Libraries.ArtsIcon; 
+                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = false;
+                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(0, 0);
+                exMagicInactiveButtons[i].MagicInactiveIcon.GrayScale = true;
+                exMagicInactiveButtons[i].MagicInactiveIcon.Border = false;
+                exMagicInactiveButtons[i].MagicInactiveIcon.BorderColour = Color.DarkGreen; 
             }
+            
 
             /*
             Magics = new MagicButton[7]; 
@@ -1002,7 +1008,8 @@ namespace Exine.ExineScenes.ExDialogs
             SkillButton.Index = 503;
             StartIndex = 0;
         }
-        
+       
+
         private void RefreshInterface()
         {
             Console.WriteLine("RefreshInterface()");
@@ -1050,7 +1057,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             int basicIndex = 0;
             //for (int i = 0; i < Magics.Length; i++)
-            for (int i = 0; i < MagicInactiveIcons.Length; i++) 
+            for (int i = 0; i < exMagicInactiveButtons.Length; i++) 
             { 
                 /*
                  if (i + StartIndex >= Actor.Magics.Count)
@@ -1060,57 +1067,61 @@ namespace Exine.ExineScenes.ExDialogs
                  }
                 */
 
-                MagicInactiveIcons[i].Visible = false;
+                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = false;
+
+                //Assign img at update function???
                 if (SkillPage.Library == Libraries.PANEL0601) //skill
                 {
-                    MagicInactiveIcons[i].Library = Libraries.ArtsIcon;
+                    exMagicInactiveButtons[i].MagicInactiveIcon.Library = Libraries.ArtsIcon;
                     if (ActionTree.Index == 9)//sword
                     {
                         basicIndex = 1;
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                exMagicInactiveButtons[i].Hint = string.Format("slash\n\n basic sword skill");
                                 break;
+
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1123,59 +1134,59 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1188,52 +1199,54 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
+
+                                //add 1,7
 
                             default:
                                 break;
@@ -1245,75 +1258,75 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 10:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 11:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1326,57 +1339,57 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1389,71 +1402,71 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 10:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1466,75 +1479,75 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 10:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 11:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1547,63 +1560,63 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1616,63 +1629,63 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY1);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY2);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY2);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY5);
-                                MagicInactiveIcons[i].Index = 0;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1683,58 +1696,58 @@ namespace Exine.ExineScenes.ExDialogs
 
                 else if (SkillPage.Library == Libraries.PANEL0602) //magic
                 {
-                    MagicInactiveIcons[i].Library = Libraries.MagicIcon;
+                    exMagicInactiveButtons[i].MagicInactiveIcon.Library = Libraries.MagicIcon;
                     if (ActionTree.Index == 0)//Fire Magic
                     {
                         basicIndex = 1;
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1747,51 +1760,51 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1804,45 +1817,45 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1855,53 +1868,53 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY3);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY4);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1914,48 +1927,48 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY1);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY2);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY2);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY5);
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -1968,57 +1981,48 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -2031,63 +2035,63 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -2100,63 +2104,63 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -2169,51 +2173,51 @@ namespace Exine.ExineScenes.ExDialogs
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -2225,304 +2229,405 @@ namespace Exine.ExineScenes.ExDialogs
                 else if (SkillPage.Library == Libraries.PANEL0603) //maker
                 {//maker (1~52 items)
 
-                    MagicInactiveIcons[i].Library = Libraries.ManufactureSkillIcon;
-                    //weapon maker(1~10)
-                    //guard maker(11~21)
-                    //accessory maker(22~32) - 금속세공
-                    //magic equipment(33~43)
-                    //magic item(44~52)
+                    
+                    exMagicInactiveButtons[i].MagicInactiveIcon.Library = Libraries.ManufactureSkillIcon;
                     //우선 미구현
-                    if (ActionTree.Index == 18)//Fire Magic
+                    if (ActionTree.Index == 18)//weapon make
                     {
-                        basicIndex = 1;
+                       /*mk1
+                   * 1,1  3,1 5,1 7,1
+                   * 3,2
+                   * 3,3
+                   * 3,4
+                   * 1,5 3,5 5,5
+                   */
+                      basicIndex = 1;
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                    else if (ActionTree.Index == 19)//Water Magic
-                    {
-                        basicIndex = 1 + 8;
-                        switch (i)
-                        {
-                            case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                    else if (ActionTree.Index == 20)//Air Magic
-                    {
-                        basicIndex = 1 + 8 + 8;
-                        switch (i)
-                        {
-                            case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX2, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                    else if (ActionTree.Index == 21)//Land Magic
-                    {
-                        basicIndex = 1 + 8 + 8 + 7;
-                        switch (i)
-                        {
-                            case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX7, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
-                                break;
-
-                            case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 9:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
                                 break;
                         }
                     }
-                    else if (ActionTree.Index == 22)//Curse Magic
+                    else if (ActionTree.Index == 19)//guard maker
                     {
-                        basicIndex = 1 + 8 + 8 + 7 + 10;
+                        /* mk2
+                     * 1,1 3,1 5,1 7,1
+                     * 1,2 3,2
+                     * 3,3
+                     * 3,4
+                     * 1,5 3,5 5,5 7,5
+                     */
+                        basicIndex = 1 + 10;
                         switch (i)
                         {
                             case 0:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 1:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY1);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 2:
-                                MagicInactiveIcons[i].Location = new Point(positionX3, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 3:
-                                MagicInactiveIcons[i].Location = new Point(positionX4, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 4:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 5:
-                                MagicInactiveIcons[i].Location = new Point(positionX6, positionY2);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 6:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY3);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 7:
-                                MagicInactiveIcons[i].Location = new Point(positionX5, positionY4);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             case 8:
-                                MagicInactiveIcons[i].Location = new Point(positionX1, positionY5);
-                                MagicInactiveIcons[i].Index = i + basicIndex;
-                                MagicInactiveIcons[i].Visible = true;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 9:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 10:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 11:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 20)//accessory maker
+                    {
+                        /* mk3
+                     * 3,1 7,1
+                     * 3,2 5,2
+                     * 3,3 7,3
+                     * 3,4 7,4
+                     * 1,5 3,5 5,5
+                     */ 
+                        basicIndex = 1 + 10 + 12;
+                        switch (i)
+                        {
+                            case 0:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 1:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 2:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 3:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 4:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 5:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 6:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 7:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 8:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+                            case 9:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+                            case 10:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 21)//magic equipmen
+                    {
+                        /*mk4
+                     * 1,1 4,1 7,1
+                     * 3,2 5,2
+                     * 3,3 5,3
+                     * 3,4 5,4
+                     * 3,5 5,5
+                     */
+                        basicIndex = 1 + 10 + 12 + 11;
+                        switch (i)
+                        {
+                            case 0:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX1, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 1:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 2:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX7, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 3:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 4:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 5:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 6:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 7:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 8:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 9:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX3, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 10:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX5, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 22)//magic item
+                    {/*   
+                     * mk5
+                     * 4,1
+                     * 2,2 4,2 6,2
+                     * 2,3 4,3 6,3
+                     * 2,4 6,4
+                     * 4,5 ->?
+                     */ 
+                        basicIndex = 1 + 10 + 12 + 11 +11;
+                        switch (i)
+                        {
+                            case 0:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY1);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 1:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 2:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 3:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY2);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 4:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 5:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 6:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY3);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 7:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX2, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 8:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX6, positionY4);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = i + basicIndex;
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
+                                break;
+
+                            case 9:
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Location = new Point(positionX4, positionY5);
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Index = 0; //must have check!
+                                exMagicInactiveButtons[i].MagicInactiveIcon.Visible = true;
                                 break;
 
                             default:
@@ -2531,23 +2636,23 @@ namespace Exine.ExineScenes.ExDialogs
                     }
                 }
 
-                else if (SkillPage.Library == Libraries.PANEL0604) //maker
+                else if (SkillPage.Library == Libraries.PANEL0604) //Ring
                 {
                     //ring skill page
                     //not implement (No Icon)
                     //maker (1~52 items)
 
-                    MagicInactiveIcons[i].Library = Libraries.RingSkillIcon;  
+                    exMagicInactiveButtons[i].MagicInactiveIcon.Library = Libraries.RingSkillIcon;  
                 }
                 
-                else if (SkillPage.Library == Libraries.PANEL0605) //maker
+                else if (SkillPage.Library == Libraries.PANEL0605) //Divine
                 {
                     //Divine skill page
                     //(ICON : 1~20)
                     //not implement (Skill Tree)
                     //maker (1~52 items)
 
-                    MagicInactiveIcons[i].Library = Libraries.DivineSkillIcon; 
+                    exMagicInactiveButtons[i].MagicInactiveIcon.Library = Libraries.DivineSkillIcon; 
                 }
 
                 // MagicInactiveIcons[i].Visible = true; //k333123 test
@@ -2556,6 +2661,12 @@ namespace Exine.ExineScenes.ExDialogs
                 // Magics[i].Update(Actor.Magics[i + StartIndex]); //assign icon
             }
         }
+
+        private void ExineCharacterDialog_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Process()
         { 
             GoldLabel.Text = ExineMainScene.Gold.ToString("###,###,##0");
