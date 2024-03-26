@@ -973,8 +973,12 @@ namespace NewYPF
                     for (int j = 0; j < imagesWithPosition[i].bitmaps.Count; j++)
                     {
                         var img = imagesWithPosition[i].bitmaps[j];
-                        var x = (short)imagesWithPosition[i].xVals[j];
-                        var y = (short)imagesWithPosition[i].yVals[j];
+                        //var x = (short)imagesWithPosition[i].xVals[j];
+                        //var y = (short)imagesWithPosition[i].yVals[j];
+
+                        //no mask img x<->y !!! k333123 240326
+                        var x = (short)imagesWithPosition[i].yVals[j];
+                        var y = (short)imagesWithPosition[i].xVals[j];
                         mLibraryV2.AddImage(img, x, y);
                         mLibraryV2DataTemps.Add(new ImageWithPosition(img, null, x, y)); //add k333123
                         Console.Write(".");
