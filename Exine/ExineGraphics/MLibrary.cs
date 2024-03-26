@@ -129,7 +129,16 @@ namespace Exine.ExineGraphics
             ExEffect02 = new MLibrary(Settings.ExineEffectPath + "Effect02"),
             ExEffect03 = new MLibrary(Settings.ExineEffectPath + "Effect03"),
 
-            ActionTree = new MLibrary(Settings.ExineUIPath + "ActionTree");
+            ActionTree = new MLibrary(Settings.ExineUIPath + "ActionTree"),
+            MagicIcon = new MLibrary(Settings.ExineUIPath + "3-Magic"),
+            ArtsIcon = new MLibrary(Settings.ExineUIPath + "4-Arts"),
+            ManufactureSkillIcon = new MLibrary(Settings.ExineUIPath + "5-ManufactureSkill"),
+            RingSkillIcon = new MLibrary(Settings.ExineUIPath + "6-RingSkill"),
+            DivineSkillIcon = new MLibrary(Settings.ExineUIPath + "7-DivineSkill");
+            
+            
+            
+
 
 
         #region Old

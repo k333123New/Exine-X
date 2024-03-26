@@ -450,9 +450,6 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this,
             };
 
-           
-
-
             GoldLabel = new ExineLabel
             {
                 DrawFormat = TextFormatFlags.VerticalCenter,
@@ -620,9 +617,6 @@ namespace Exine.ExineScenes.ExDialogs
             Bitmap recvBitmap = new Bitmap(recvImage);
             return recvBitmap;
         }
-        
-
-
 
         private void _ExHPBar_BeforeDraw(object sender, EventArgs e)
         {
@@ -2011,7 +2005,9 @@ namespace Exine.ExineScenes.ExDialogs
         }
     }
 
-
+    /// <summary>
+    /// skill bar!!!
+    /// </summary>
     public sealed class SkillBarDialog : ExineImageControl
     {
         private readonly MirButton _switchBindsButton;
@@ -3666,6 +3662,215 @@ namespace Exine.ExineScenes.ExDialogs
 
 
     }
+
+    //k333123 add 240324
+
+
+    public sealed class ExMagicButton : ExineControl
+    {
+        public ExineImageControl LevelImage, ExpImage;
+        public MirButton SkillButton;
+        public ExineLabel LevelLabel, NameLabel, ExpLabel, KeyLabel;
+        public ClientMagic Magic;
+        public ExineImageControl CoolDown;
+        public bool HeroMagic;
+
+        string[] Prefixes = new string[] { "", "CTRL", "Shift" };
+
+        public ExMagicButton()
+        {
+            Size = new Size(231, 33);
+
+            SkillButton = new MirButton
+            {
+                Index = 0,
+                PressedIndex = 0,
+                Library = Libraries.ArtsIcon,//Libraries.ArtsIcon,//4-Arts.lib
+                Parent = this,
+                Location = new Point(0, 0),
+                //Location = new Point(36, 0),
+                Sound = SoundList.ButtonA,
+            };
+            SkillButton.Click += (o, e) =>
+            {
+                if (HeroMagic)
+                {
+                    if (ExineMainScene.Hero == null || ExineMainScene.Hero.Dead)
+                        return;
+                    new AssignKeyPanel(Magic, 17, new string[]
+                        {
+                            "Shift" + Environment.NewLine + "F1",
+                            "Shift" + Environment.NewLine + "F2",
+                            "Shift" + Environment.NewLine + "F3",
+                            "Shift" + Environment.NewLine + "F4",
+                            "Shift" + Environment.NewLine + "F5",
+                            "Shift" + Environment.NewLine + "F6",
+                            "Shift" + Environment.NewLine + "F7",
+                            "Shift" + Environment.NewLine + "F8"
+                        })
+                    { Actor = ExineMainScene.Hero };
+                }
+                else
+                {
+                    new AssignKeyPanel(Magic, 1, new string[]
+                        {
+                            "F1",
+                            "F2",
+                            "F3",
+                            "F4",
+                            "F5",
+                            "F6",
+                            "F7",
+                            "F8",
+                            "Ctrl" + Environment.NewLine + "F1",
+                            "Ctrl" + Environment.NewLine + "F2",
+                            "Ctrl" + Environment.NewLine + "F3",
+                            "Ctrl" + Environment.NewLine + "F4",
+                            "Ctrl" + Environment.NewLine + "F5",
+                            "Ctrl" + Environment.NewLine + "F6",
+                            "Ctrl" + Environment.NewLine + "F7",
+                            "Ctrl" + Environment.NewLine + "F8"
+                        })
+                    { Actor = ExineMainScene.User };
+                }
+            };
+
+            LevelImage = new ExineImageControl
+            {
+                Index = 516,
+                Library = Libraries.Title,
+                Location = new Point(73, 7),
+                Parent = this,
+                NotControl = true,
+            };
+
+            ExpImage = new ExineImageControl
+            {
+                Index = 517,
+                Library = Libraries.Title,
+                Location = new Point(73, 19),
+                Parent = this,
+                NotControl = true,
+            };
+
+            LevelLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = this,
+                Location = new Point(88, 2),
+                NotControl = true,
+            };
+
+            NameLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = this,
+                Location = new Point(109, 2),
+                NotControl = true,
+            };
+
+            ExpLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = this,
+                Location = new Point(109, 15),
+                NotControl = true,
+            };
+
+            KeyLabel = new ExineLabel
+            {
+                AutoSize = true,
+                Parent = this,
+                Location = new Point(2, 2),
+                NotControl = true,
+            };
+
+            CoolDown = new ExineImageControl
+            {
+                Library = Libraries.Prguse2,
+                Parent = this,
+                Location = new Point(36, 0),
+                Opacity = 0.6F,
+                NotControl = true,
+                UseOffSet = true,
+            };
+        }
+
+        public void Update(ClientMagic magic)
+        {
+            Magic = magic;
+
+            NameLabel.Text = Magic.Name;
+
+            LevelLabel.Text = Magic.Level.ToString();
+            switch (Magic.Level)
+            {
+                case 0:
+                    ExpLabel.Text = string.Format("{0}/{1}", Magic.Experience, Magic.Need1);
+                    break;
+                case 1:
+                    ExpLabel.Text = string.Format("{0}/{1}", Magic.Experience, Magic.Need2);
+                    break;
+                case 2:
+                    ExpLabel.Text = string.Format("{0}/{1}", Magic.Experience, Magic.Need3);
+                    break;
+                case 3:
+                    ExpLabel.Text = "-";
+                    break;
+            }
+
+            KeyLabel.Text = Magic.Key == 0 ? string.Empty : string.Format("{0}{1}F{2}",
+                Prefixes[(Magic.Key - 1) / 8],
+                Magic.Key > 8 ? Environment.NewLine : string.Empty,
+                (Magic.Key - 1) % 8 + 1);
+
+            switch (magic.Spell)
+            {  //Warrior
+                case Spell.Fencing:
+                    SkillButton.Hint = string.Format("Fencing \n\nHitting accuracy will be increased in accordance\nwith practice level.\nPassive Skill\nCurrent Skill Level {0}\nNext Level {1}", Magic.Level, Magic.Level == 0 ? Magic.Level1 : Magic.Level == 1 ? Magic.Level2 : Magic.Level == 2 ? Magic.Level3 : 0);
+                    break;
+
+                default:
+
+                    break;
+            }
+
+            SkillButton.Index = Magic.Icon ;
+            SkillButton.PressedIndex = Magic.Icon ;
+
+            //SkillButton.Index = Magic.Icon * 2;
+            //SkillButton.PressedIndex = Magic.Icon * 2 + 1;
+
+            SetDelay();
+        }
+
+        public void SetDelay()
+        {
+            if (Magic == null) return;
+
+            int totalFrames = 34;
+
+            long timeLeft = Magic.CastTime + Magic.Delay - CMain.Time;
+
+            if (timeLeft < 100)
+            {
+                CoolDown.Visible = false;
+                return;
+            }
+
+            int delayPerFrame = (int)(Magic.Delay / totalFrames);
+            int startFrame = totalFrames - (int)(timeLeft / delayPerFrame);
+
+            if ((CMain.Time <= Magic.CastTime + Magic.Delay))
+            {
+                CoolDown.Visible = true;
+                CoolDown.Index = 1290 + startFrame;
+            }
+        }
+    }
+
+
+    /*
     public sealed class MagicButton : ExineControl
     {
         public ExineImageControl LevelImage, ExpImage;
@@ -4118,6 +4323,7 @@ namespace Exine.ExineScenes.ExDialogs
             }
         }
     }
+    */
     public sealed class AssignKeyPanel : ExineImageControl
     {
         public MirButton SaveButton, NoneButton;

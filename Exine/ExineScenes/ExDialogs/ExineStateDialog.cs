@@ -22,7 +22,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public MirItemCell[] Grid;
         private MirGridType GridType;
-        public MagicButton[] Magics;
+        public ExMagicButton[] Magics;
 
         public int StartIndex;
         private UserObject Actor;
@@ -440,10 +440,10 @@ namespace Exine.ExineScenes.ExDialogs
             };
             #endregion 보류
 
-            Magics = new MagicButton[7];
+            Magics = new ExMagicButton[7];
 
             for (int i = 0; i < Magics.Length; i++)
-                Magics[i] = new MagicButton 
+                Magics[i] = new ExMagicButton
                 { 
                     Parent = SkillPage, 
                     Visible = false, 

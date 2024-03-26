@@ -10,9 +10,10 @@ namespace Exine.ExineScenes.ExDialogs
     /// </summary>
     public sealed class ExineCharacterDialog : ExineImageControl
     {
-        public MirButton CloseButton, SkillTabButton, MagicTabButton,MakerSkillTab, RingSkillTab, CreationSkillTab, SkillButton;//,  CharacterButton,StatusButton, StateButton;
+        public MirButton CloseButton, SkillTabButton, MagicTabButton,MakerSkillTabButton, RingSkillTabButton, DivienSkillTabButton, SkillButton;//,  CharacterButton,StatusButton, StateButton;
 
         public MirButton[] SkillTypeButton = new MirButton[9];//,  CharacterButton,StatusButton, StateButton;
+
 
         public ExineImageControl CharacterPage, SkillPage, ActionTree; //StatusPage, StatePage,  ClassImage;
 
@@ -25,7 +26,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public MirItemCell[] Grid;
         private MirGridType GridType;
-        public MagicButton[] Magics;
+        public ExMagicButton[] Magics;  
 
         public int StartIndex;
         private UserObject Actor;
@@ -192,7 +193,7 @@ namespace Exine.ExineScenes.ExDialogs
             //ActionTree
             ActionTree = new ExineImageControl
             {
-                Index = 0,
+                Index = 9,
                 Parent = SkillPage,
                 Library = Libraries.ActionTree,
                 Location = new Point(49, 83+11),
@@ -206,70 +207,167 @@ namespace Exine.ExineScenes.ExDialogs
                 PressedIndex = 5,
                 Parent = SkillPage,
                 Library = Libraries.PANEL0606,
-                Location = new Point(0, 0),
+                Location = new Point(356, 72*0),
                 Visible = true
             };
             SkillTabButton.Click += (o, e) =>
             {
                 SkillPage.Library = Libraries.PANEL0601;
+                SkillTypeButton = new MirButton[9];
+
+                for (int i = 0; i < SkillTypeButton.Length; i++)
+                {
+                    int x = 0;
+                    int y = 0;
+                    y = (i / 7) * 20;
+                    x = (i * 46) % 322;
+
+                    SkillTypeButton[i] = new MirButton
+                    {
+                        Index = i * 8 + 1,
+                        PressedIndex = i * 8 + 1 + 5,
+                        Parent = SkillPage,
+                        Library = SkillPage.Library,
+                        Location = new Point(x + 21, y + 35),
+                        Visible = true
+                    };
+                }
+                SkillTypeButton[0].Click += (o, e) =>{ActionTree.Index = 9;};
+                SkillTypeButton[1].Click += (o, e) =>{ActionTree.Index = 10;};
+                SkillTypeButton[2].Click += (o, e) =>{ActionTree.Index = 11;};
+                SkillTypeButton[3].Click += (o, e) =>{ActionTree.Index = 12;};
+                SkillTypeButton[4].Click += (o, e) =>{ActionTree.Index = 13;};
+                SkillTypeButton[5].Click += (o, e) =>{ActionTree.Index = 14;};
+                SkillTypeButton[6].Click += (o, e) =>{ActionTree.Index = 15;};
+                SkillTypeButton[7].Click += (o, e) =>{ActionTree.Index = 16;};
+                SkillTypeButton[8].Click += (o, e) =>{ActionTree.Index = 17;};
+            };
+
+            MagicTabButton = new MirButton
+            {
+                Index = 9,
+                PressedIndex = 14,
+                Parent = SkillPage,
+                Library = Libraries.PANEL0606,
+                Location = new Point(356, 72 * 1),
+                Visible = true
+            };
+            MagicTabButton.Click += (o, e) =>
+            {
+                SkillPage.Library = Libraries.PANEL0602;
+                SkillTypeButton = new MirButton[9];
+
+                for (int i = 0; i < SkillTypeButton.Length; i++)
+                {
+                    int x = 0;
+                    int y = 0;
+                    y = (i / 7) * 20;
+                    x = (i * 46) % 322;
+
+                    SkillTypeButton[i] = new MirButton
+                    {
+                        Index = i * 8 + 1,
+                        PressedIndex = i * 8 + 1 + 5,
+                        Parent = SkillPage,
+                        Library = SkillPage.Library,
+                        Location = new Point(x + 21, y + 35),
+                        Visible = true
+                    };
+                }
+                SkillTypeButton[0].Click += (o, e) => { ActionTree.Index = 0; };
+                SkillTypeButton[1].Click += (o, e) => { ActionTree.Index = 1; };
+                SkillTypeButton[2].Click += (o, e) => { ActionTree.Index = 2; };
+                SkillTypeButton[3].Click += (o, e) => { ActionTree.Index = 3; };
+                SkillTypeButton[4].Click += (o, e) => { ActionTree.Index = 4; };
+                SkillTypeButton[5].Click += (o, e) => { ActionTree.Index = 5; };
+                SkillTypeButton[6].Click += (o, e) => { ActionTree.Index = 6; };
+                SkillTypeButton[7].Click += (o, e) => { ActionTree.Index = 7; };
+                SkillTypeButton[8].Click += (o, e) => { ActionTree.Index = 8; };
+            };
+
+            MakerSkillTabButton = new MirButton
+            {
+                Index = 18,
+                PressedIndex = 23,
+                Parent = SkillPage,
+                Library = Libraries.PANEL0606,
+                Location = new Point(356, 72 * 2),
+                Visible = true
+            };
+            MakerSkillTabButton.Click += (o, e) =>
+            {
+                SkillPage.Library = Libraries.PANEL0603;
+                SkillTypeButton = new MirButton[5];
+
+                for (int i = 0; i < SkillTypeButton.Length; i++)
+                {
+                    int x = 0;
+                    int y = 0;
+                    y = (i / 7) * 20;
+                    x = (i * 46) % 322;
+
+                    SkillTypeButton[i] = new MirButton
+                    {
+                        Index = i * 8 + 1,
+                        PressedIndex = i * 8 + 1 + 5,
+                        Parent = SkillPage,
+                        Library = SkillPage.Library,
+                        Location = new Point(x + 21, y + 35),
+                        Visible = true
+                    };
+                }
+                SkillTypeButton[0].Click += (o, e) => { ActionTree.Index = 18; };
+                SkillTypeButton[1].Click += (o, e) => { ActionTree.Index = 19; };
+                SkillTypeButton[2].Click += (o, e) => { ActionTree.Index = 20; };
+                SkillTypeButton[3].Click += (o, e) => { ActionTree.Index = 21; };
+                SkillTypeButton[4].Click += (o, e) => { ActionTree.Index = 22; };
+            };
+
+            RingSkillTabButton = new MirButton
+            {
+                Index = 27,
+                PressedIndex = 32,
+                Parent = SkillPage,
+                Library = Libraries.PANEL0606,
+                Location = new Point(356, 72 * 3),
+                Visible = true
+            };
+            RingSkillTabButton.Click += (o, e) =>
+            {
+                SkillPage.Library = Libraries.PANEL0604;
+
+
+                for (int i = 0; i < SkillTypeButton.Length; i++)
+                {
+                    SkillTypeButton[i].Visible = false;
+                    SkillTypeButton[i].Click += (o, e) => { };
+                }
+            };
+
+            DivienSkillTabButton = new MirButton
+            {
+                Index = 36,
+                PressedIndex = 41,
+                Parent = SkillPage,
+                Library = Libraries.PANEL0606,
+                Location = new Point(356, 72 * 4),
+                Visible = true
+            };
+            DivienSkillTabButton.Click += (o, e) =>
+            {
+                SkillPage.Library = Libraries.PANEL0605;
+
+
+                for (int i = 0; i < SkillTypeButton.Length; i++)
+                {
+                    SkillTypeButton[i].Visible = false;
+                    SkillTypeButton[i].Click += (o, e) => { };
+                }
             };
 
             //MagicTabButton,MakerSkillTab, RingSkillTab, CreationSkillTab,
 
-            for (int i = 0; i < SkillTypeButton.Length; i++)
-            {
-                int x = 0;
-                int y = 0;
-                y = (i / 7) * 20;
-                x = (i * 46) % 322;
 
-                SkillTypeButton[i] = new MirButton
-                {
-                    Index = i * 8 + 1,
-                    PressedIndex = i * 8 + 1 + 5,
-                    Parent = SkillPage,
-                    Library = Libraries.PANEL0601,
-                    Location = new Point(x + 21, y + 35),
-                    Visible = true
-                };
-                 
-            }
-            SkillTypeButton[0].Click += (o, e) =>
-            { 
-                ActionTree.Index = 0;
-            };
-            SkillTypeButton[1].Click += (o, e) =>
-            {
-                ActionTree.Index = 1;
-            };
-            SkillTypeButton[2].Click += (o, e) =>
-            {
-                ActionTree.Index = 2;
-            };
-            SkillTypeButton[3].Click += (o, e) =>
-            {
-                ActionTree.Index = 3;
-            };
-            SkillTypeButton[4].Click += (o, e) =>
-            {
-                ActionTree.Index = 4;
-            };
-            SkillTypeButton[5].Click += (o, e) =>
-            {
-                ActionTree.Index = 5;
-            };
-            SkillTypeButton[6].Click += (o, e) =>
-            {
-                ActionTree.Index = 6;
-            };
-            SkillTypeButton[7].Click += (o, e) =>
-            {
-                ActionTree.Index = 7;
-            };
-            SkillTypeButton[8].Click += (o, e) =>
-            {
-                ActionTree.Index = 8;
-            };
 
 
 
@@ -745,13 +843,14 @@ namespace Exine.ExineScenes.ExDialogs
                     HeroMagic = gridType == MirGridType.HeroEquipment
                 };
             */
-            Magics = new MagicButton[12];
+            Magics = new ExMagicButton[12];
             for (int i = 0; i < Magics.Length; i++)
-                Magics[i] = new MagicButton
+                Magics[i] = new ExMagicButton
                 {
                     Parent = SkillPage,
                     Visible = false,
-                    Location = new Point(8, 8 + i * 33),
+                    //Location = new Point(8, 8 + i * 33),
+                    Location = new Point(0, 0),
                     HeroMagic = gridType == MirGridType.HeroEquipment
                 };
             /*
@@ -882,7 +981,21 @@ namespace Exine.ExineScenes.ExDialogs
             */
             NameLabel.Text = Actor.Name;
             GuildLabel.Text = Actor.GuildName + " " + Actor.GuildRankName;
-              
+
+            int positionX1 = 68;
+            int positionX2 = 108;//maybe
+            int positionX3 = 148;
+            int positionX4 = 188;//maybe
+            int positionX5 = 228;
+            int positionX6 = 268;//maybe
+            int positionX7 = 308;
+
+            int positionY1 = 98;
+            int positionY2 = 168;
+            int positionY3 = 237;
+            int positionY4 = 308;
+            int positionY5 = 378;
+
             for (int i = 0; i < Magics.Length; i++)
             {
                 if (i + StartIndex >= Actor.Magics.Count)
@@ -891,8 +1004,1060 @@ namespace Exine.ExineScenes.ExDialogs
                     continue;
                 }
 
-                //Magics[i].Visible = true; //k333123 test
-                Magics[i].Visible = false; //k333123 임시로 꺼둠
+                if (SkillPage.Library == Libraries.PANEL0601) //skill
+                {
+                    //if(skilltype==sword)
+                    if (ActionTree.Index == 9)//sword
+                    {
+                        switch (i)
+                        {
+                            case 0:
+
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+                            case 2:
+                                Magics[i].Location = new Point(positionX1, positionY2);
+                                break;
+                            case 3:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+                            case 4:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default: 
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 10)//assasin weapon
+                    {
+                        switch (i)
+                        {
+                            case 0:
+
+                                Magics[i].Location = new Point(positionX1, positionY1);
+                                break;
+                            case 1:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+                            case 2:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+                            case 3:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+                            case 4:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 11)//Spear Weapon
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX1, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX5, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 12)//Heavy Weapon
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX5, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX6, positionY1);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX4, positionY2);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX6, positionY2);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX4, positionY3);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX2, positionY4);
+                                break;
+
+                            case 10:
+                                Magics[i].Location = new Point(positionX4, positionY4);
+                                break;
+
+                            case 11:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 13)//Bow Weapon
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX7, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+ 
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 14)//Hand Weapon
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX2, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX4, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX6, positionY1);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX2, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX4, positionY2);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX2, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX6, positionY3);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX2, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX4, positionY4);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX2, positionY5);
+                                break;
+
+                            case 10:
+                                Magics[i].Location = new Point(positionX6, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 15)//Guard
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX2, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX4, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX6, positionY1);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX5, positionY3);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX2, positionY5);
+                                break;
+
+                            case 10:
+                                Magics[i].Location = new Point(positionX4, positionY5);
+                                break;
+
+                            case 11:
+                                Magics[i].Location = new Point(positionX6, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 16)//Search
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX5, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX1, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX7, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX7, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX5, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 17)//Trap
+                    {
+                        //미구현
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX1, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX1, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX7, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX5, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                else if (SkillPage.Library == Libraries.PANEL0602) //magic
+                { 
+                    if (ActionTree.Index == 0)//Fire Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX5, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX3, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 1)//Water Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX1, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 2)//Air Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX4, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX6, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX2, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX2, positionY3);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX4, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX2, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX4, positionY5);
+                                break;
+                           
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 3)//Land Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX5, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY4);
+                                break;
+                            
+                            case 8:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+                            
+                            case 9:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+                                 
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 4)//Curse Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX1, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX4, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX6, positionY2);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX1, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 5)//Bless Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX1, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX4, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX6, positionY2);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX1, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 6)//Status abnormality Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX1, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX5, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX7, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX5, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX3, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX1, positionY5);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX7, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 7)//Healing Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX1, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX5, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX7, positionY3);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX3, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX5, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 8)//summoner Magic
+                    {
+                        //미구현
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX1, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                else if (SkillPage.Library == Libraries.PANEL0603) //maker
+                {//maker (1~52 items)
+
+                    //weapon maker(1~10)
+                    //guard maker(11~21)
+                    //accessory maker(22~32) - 금속세공
+                    //magic equipment(33~43)
+                    //magic item(44~52)
+                    //우선 미구현
+                    if (ActionTree.Index == 18)//Fire Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX5, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX3, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 19)//Water Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX1, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX3, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 20)//Air Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX4, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX6, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX2, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX2, positionY3);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX4, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX2, positionY4);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX4, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 21)//Land Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX7, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX5, positionY3);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY4);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX3, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 9:
+                                Magics[i].Location = new Point(positionX3, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                    else if (ActionTree.Index == 22)//Curse Magic
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                Magics[i].Location = new Point(positionX1, positionY1);
+                                break;
+
+                            case 1:
+                                Magics[i].Location = new Point(positionX3, positionY1);
+                                break;
+
+                            case 2:
+                                Magics[i].Location = new Point(positionX3, positionY2);
+                                break;
+
+                            case 3:
+                                Magics[i].Location = new Point(positionX4, positionY2);
+                                break;
+
+                            case 4:
+                                Magics[i].Location = new Point(positionX5, positionY2);
+                                break;
+
+                            case 5:
+                                Magics[i].Location = new Point(positionX6, positionY2);
+                                break;
+
+                            case 6:
+                                Magics[i].Location = new Point(positionX1, positionY3);
+                                break;
+
+                            case 7:
+                                Magics[i].Location = new Point(positionX5, positionY4);
+                                break;
+
+                            case 8:
+                                Magics[i].Location = new Point(positionX1, positionY5);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+
+                //ring skill page
+                //not implement (No Icon)
+                 
+                //Divine skill page
+                //(ICON : 1~20)
+                //not implement (Skill Tree)
+
+
+                Magics[i].Visible = true; //k333123 test
+                //Magics[i].Visible = false; //k333123 임시로 꺼둠
                 Magics[i].Update(Actor.Magics[i + StartIndex]);
             }
         }

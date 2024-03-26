@@ -112,6 +112,14 @@ Client Map Draw : private void MapInformation(S.MapInformation p)
 
 
 
+how to learn Skill
+sinjun : auto - stat & stat reset
+dae jesajang aron - skill select(select two skill tree)
+
+how to use skill
+1)drag skill icon on skill page to skill bar
+2)right mouse button click to target
+
 
 
 
