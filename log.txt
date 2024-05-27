@@ -1,3 +1,378 @@
+eff0
+old mg circle
+action0 : 0
+action1 : +10(1~10)
+action2 : +10(11~20)
+action3 : +10(21~30)
+action4 : +1(31)
+action5 : +1(32)
+action6 : +1(33)
+
+
+eff1
+===================================
+[???]
+-------------------------
+
+action3 : +8 : ?blue ring - Ellipse
+-------------------------  
+action5 : +6 : ? weapon break(land)?
+action6 : +5 : ? weapon break(land)?
+-------------------------  
+action8 : +4 : ?
+action9 : +4 : ?
+------------------------- 
+action11 : +40: ? 
+-------------------------
+action12 : +6 : ? : green particle
+-------------------------
+action13 : +5 : ? : yellow particle
+-------------------------
+action14 : +5 : ? : blue ring - circle
+-------------------------
+action15 : +5 : ? : light particle (gather in the center)
+-------------------------
+action16 : +7 : ? : plazma?
+-------------------------
+action17 : +5 : ? : bomb(fire)
+-------------------------
+action18 : +7 : ? : spike(fire)
+-------------------------
+action19 : +4 : ? : point(light)
+-------------------------
+action20 : +6 : ? : circle to ellipse
+-------------------------
+action21 : +5 : ? : green particle
+-------------------------
+action22 : +10: ? : casting particle
+-------------------------
+action23 : +6 : ? : pupple storm
+-------------------------
+action24 : +6 : ? : buff circle
+-------------------------
+action25 : +10 : ? : green poison?
+-------------------------
+action26 : +9 : ? : pupple poision?
+-------------------------
+action27 : +9 : ? : pupple gate?
+-------------------------
+action28 : +6 : ? : target mark?(appear)
+action29 : +10: ? : target mark(opening)
+-------------------------
+===================================
+
+
+
+===================================
+[Curse mgc]
+-------------------------
+<Gloom>
+action30 : +5 : ? : blue eyes with tear
+-------------------------
+<Tired>
+action31 : +5 : ? : blue OTL
+-------------------------
+<Reduce Earth>
+action32 : +5 : ? : green mgc triangle(curse?)
+-------------------------
+<Reduce Water>
+action33 : +5 : ? : blue water mgc triangle(curse?)
+-------------------------
+<Reduce Fire>
+action34 : +5 : ? : red fire mgc triangle(curse?)
+-------------------------
+<Reduce Air>
+action35 : +5 : ? : white thunder mgc triangle(curse?)
+-------------------------
+<Reduce Regist>
+action36 : +5 : ? : red bisyop mgc triangle(curse?)
+-------------------------
+<Weak>
+action37 : +5 : ? : red smile mgc triangle(curse?)
+-------------------------
+<Curse>
+action38 : +10: ? : red smile mgc
+-------------------------
+===================================
+
+
+
+===================================
+[Bless MGC]
+-------------------------
+<Cheer>
+action52 : +9 : blue sword bless?
+-------------------------
+<Gry>
+action53 : +9 : yellow bless?(sheild?)
+-------------------------
+<Earth Force>
+action54 : +8 : green bless with wing?(<->curse)
+action55 : +8 : green bless particle?
+-------------------------
+<Water Force>
+action56 : +8 : blue bless with wing?(<->curse)
+action57 : +11: blue bless particle?
+-------------------------
+<Fire Force>
+action58 : +8 : red bless with wing?(<->curse)
+action59 : +8 : red bless particle?
+-------------------------
+<Air Force>
+action60 : +8 : white bless with wing?(<->curse)
+action61 : +8 : white bless particle?
+-------------------------
+<Charm>
+action62 : +11 :Charm
+-------------------------
+<Regist Force>
+action63 : +10 :Regist Force
+action64 : +8 : particle?
+-------------------------
+<Bless OK>
+action65 : +4 : ?
+action66 :+10 : Bless
+action67 : +9 : particle?
+action67~67: ???
+-------------------------
+===================================
+
+
+
+===================================
+[Healing MGC]
+<Cure>
+action39 : +8 : ? : blue white particle
+-------------------------
+<Brighten>
+action40 : +9 : ? : blue white particle
+-------------------------
+<Wakening>
+action41 : +6 : ? : green circle + rhombus
+-------------------------
+<Healing>
+action42 : +6 : ? : yellow circle
+-------------------------
+<Skater>
+action43 : +6 : ? : green circle + rhombus + 4 circle
+-------------------------
+<Saint Heal>
+action44 : +6 : ? : yellow circle + star
+-------------------------
+<Neutlerize>
+action45 : +6 : ? : green circle + star
+-------------------------
+<Restolation>
+action46 : +7 : green The Cross
+action47 : +8 : ? : green+blue particle
+-------------------------
+<Holy Grace>
+action48 : +10: saint heal? (blue wing)
+action49 : +8 : saint heal particle?
+-------------------------
+<Dispell OK>
+action50 : +10: saint heal? (green wing)
+action51 : +8 : saint heal particle?
+===================================
+
+
+
+
+===================================
+[State MGC]
+-------------------------
+<MUD>
+action70 : 
+-------------------------
+<Flash>
+action71 : 
+action72 : particle
+-------------------------
+<Silence>
+action85 :
+-------------------------
+<Poision>
+-------------------------
+...
+===================================
+
+
+===================================
+[Land MGC]
+-------------------------
+<magic arrow(land)>
+action0 : 0~55 : magic arrow(land)
+action1 : +6   : magic arrow explosion(land)
+-------------------------
+<stone peak(land)>
+action2 : +5 : stone peak(land)
+-------------------------
+<Incentation>
+action3 : 
+-------------------------
+<land slice(land)>
+action4 : +49 : land slice(land)
+-------------------------
+<Waepon Break>
+action5:
+-------------------------
+<rise wall(land)>
+action7 : +7 : 
+-------------------------
+<rock crash(land)>
+action10 : +49: rock crash(land)
+-------------------------
+<Bust Armor>
+
+-------------------------
+<Extermination>
+
+-------------------------
+
+===================================
+
+
+
+===================================
+[Fire MGC]
+-------------------------
+<Fire Ball>
+action86 : 
+-------------------------
+<Fire Register>
+action88 : 
+-------------------------
+<prominence>
+action87 : 
+-------------------------
+<Fire Wall>
+action92 : 
+-------------------------
+<incinerate>
+action91 : 
+-------------------------
+<Wheel of fire>
+action90 : 
+-------------------------
+<Meteo>
+?
+-------------------------
+<Inferno>
+?
+===================================
+
+===================================
+[Water MGC]
+-------------------------
+<Crystal Spake>
+action106:
+action107:bomb
+-------------------------
+<Storm>
+action109:
+-------------------------
+<ICE Touch>
+action110:
+-------------------------
+<Crystal Orb>
+action108:
+-------------------------
+<Tempest>
+action115:
+-------------------------
+<Ice Rain>
+action 116:???
+-------------------------
+<Watery grave>
+dagagsun+MagicCicle+horn
+action117:
+action118:
+action119:
+action120:bomb
+-------------------------
+<Water Regist>
+-------------------------
+===================================
+
+
+
+===================================
+[Air MGC]
+-------------------------
+<lightening volt>
+action121:
+-------------------------
+<Air Regist>
+action:134:
+-------------------------
+<Energy Spark>
+action122:
+-------------------------
+<Chain Lightening>
+
+-------------------------
+<DisCharge>
+
+-------------------------
+<Nova>
+action125:
+action126:
+-------------------------
+<Thunder Crash>
+action129:
+action130:
+action131:
+action132:
+action133:bomb?
+-------------------------
+===================================
+
+
+
+eff2
+eff3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 FrameSet Change
 ->PlayerObject.cs
 ->ExineMainScene.cs -> Player!!!

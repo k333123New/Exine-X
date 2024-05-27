@@ -669,10 +669,15 @@ namespace Server.ExineEnvir
                     http = new HttpServer();
                     http.Start();
                 }
+              
+                //CPU STRESS START!!!!!
                 try
                 {
                     while (Running)
                     {
+                        Thread.Sleep(1); //add for CPU Stress Down k333123
+                       
+
                         Time = Stopwatch.ElapsedMilliseconds;
 
                         if (Time >= processTime)
@@ -717,8 +722,10 @@ namespace Server.ExineEnvir
                             startTime = Time;
                         }
 
+                       
                         if (Settings.Multithreaded)
                         {
+                            
                             for (var j = 1; j < MobThreads.Length; j++)
                             {
                                 var Info = MobThreads[j];
@@ -727,13 +734,17 @@ namespace Server.ExineEnvir
                                 Info.EndTime = Time + 10;
                                 Info.Stop = false;
                             }
+                            
                             lock (_locker)
                             {
                                 Monitor.PulseAll(_locker); //changing a blocking condition. (this makes the threads wake up!)
-                            }
+                            } 
+                            
                             //run the first loop in the main thread so the main thread automaticaly 'halts' until the other threads are finished
                             ThreadLoop(MobThreads[0]);
+                            
                         }
+                         
 
                         var TheEnd = false;
                         var Start = Stopwatch.ElapsedMilliseconds;
@@ -796,6 +807,7 @@ namespace Server.ExineEnvir
 
                         //   if (Players.Count == 0) Thread.Sleep(1);
                         //   GC.Collect();
+                         
                     }
                 }
                 catch (Exception ex)
@@ -839,6 +851,7 @@ namespace Server.ExineEnvir
 
         private void ThreadLoop(MobThread Info)
         {
+            //CPU Stress Test k333123
             Info.Stop = false;
 
             try
@@ -848,9 +861,11 @@ namespace Server.ExineEnvir
                 if (Info._current == null)
                     Info._current = Info.ObjectsList.First;
                 stopping = Info._current == null;
+                
 
                 while (Running)
                 {
+                    Thread.Sleep(1);//CPU Stress Test k333123
                     if (Info._current == null)
                         Info._current = Info.ObjectsList.First;
                     else

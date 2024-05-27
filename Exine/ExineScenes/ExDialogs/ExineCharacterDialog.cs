@@ -2685,6 +2685,5 @@ namespace Exine.ExineScenes.ExDialogs
             }
             return null;
         }
-
     }
 }
