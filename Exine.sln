@@ -35,9 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Exine", "Exine\Exine.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeMapObjectToLibForCut", "MakeMapObjectToLibForCut\MakeMapObjectToLibForCut.csproj", "{F8F0AAA0-E353-4021-894C-ACC6AA566347}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExineEffectConvert", "ExineEffectConvert\ExineEffectConvert\ExineEffectConvert.csproj", "{E3A89E38-4344-4467-852A-49899FD60C31}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleServerTest", "ConsoleServerTest\ConsoleServerTest.csproj", "{10A10DAD-7F5F-477A-8752-1624AA66651A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExineEffectConvert", "ExineEffectConvert\ExineEffectConvert\ExineEffectConvert.csproj", "{E3A89E38-4344-4467-852A-49899FD60C31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,10 +91,6 @@ Global
 		{E3A89E38-4344-4467-852A-49899FD60C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3A89E38-4344-4467-852A-49899FD60C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3A89E38-4344-4467-852A-49899FD60C31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{10A10DAD-7F5F-477A-8752-1624AA66651A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{10A10DAD-7F5F-477A-8752-1624AA66651A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{10A10DAD-7F5F-477A-8752-1624AA66651A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{10A10DAD-7F5F-477A-8752-1624AA66651A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
