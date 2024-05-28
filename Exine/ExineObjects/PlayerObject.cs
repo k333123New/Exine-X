@@ -6310,9 +6310,11 @@ namespace Exine.ExineObjects
 
         private void CreateNameLabel()
         {
+            NameLabel = null;  //add k333123 for memory leak
             for (int i = 0; i < LabelList.Count; i++)
             {
-                if (LabelList[i].Text != Name || LabelList[i].ForeColour != NameColour) continue;
+                //if (LabelList[i].Text != Name || LabelList[i].ForeColour != NameColour) continue;
+                if (LabelList[i].Text != Name) continue; //mod k333123 for memory leak
                 NameLabel = LabelList[i];
                 break;
             }
