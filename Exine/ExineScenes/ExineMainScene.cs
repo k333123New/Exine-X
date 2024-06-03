@@ -30,17 +30,6 @@ namespace Exine.ExineScenes
             set { MapObject.User = value; }
         }
 
-        public static UserHeroObject Hero
-        {
-            get { return MapObject.Hero; }
-            set { MapObject.Hero = value; }
-        }
-        public static HeroObject HeroObject
-        {
-            get { return MapObject.HeroObject; }
-            set { MapObject.HeroObject = value; }
-        }
-
         public static long MoveTime, AttackTime, NextRunTime, LogTime, LastRunTime;
         public static bool CanMove, CanRun;
 
@@ -53,7 +42,6 @@ namespace Exine.ExineScenes
                 if (hasHero == value) return;
 
                 hasHero = value;
-                ExMainDialog.HeroSummonButton.Visible = value;
             }
         }
         public HeroSpawnState HeroSpawnState;
@@ -81,9 +69,8 @@ namespace Exine.ExineScenes
         
 
 
-        public ExineCharacterDialog HeroDialog; 
-        public HeroInventoryDialog HeroInventoryDialog;
-        public HeroManageDialog HeroManageDialog;
+
+
         public CraftDialog CraftDialog;
         public StorageDialog StorageDialog;
         public BeltDialog BeltDialog;
@@ -102,7 +89,7 @@ namespace Exine.ExineScenes
         public GuildDialog GuildDialog;
 
         //public NewCharacterDialog NewHeroDialog;
-        public HeroBeltDialog HeroBeltDialog;
+
 
         public BigMapDialog BigMapDialog;
         public TrustMerchantDialog TrustMerchantDialog;
@@ -111,8 +98,7 @@ namespace Exine.ExineScenes
         public TradeDialog TradeDialog;
         public GuestTradeDialog GuestTradeDialog;
 
-        public HeroMenuPanel HeroMenuPanel;
-        public HeroBehaviourPanel HeroBehaviourPanel;
+      
         public SocketDialog SocketDialog;
 
         public List<SkillBarDialog> SkillBarDialogs = new List<SkillBarDialog>();
@@ -261,11 +247,7 @@ namespace Exine.ExineScenes
 
             GroupDialog = new GroupDialog { Parent = this, Visible = false };
             GuildDialog = new GuildDialog { Parent = this, Visible = false };
-             
-            HeroMenuPanel = new HeroMenuPanel(this) { Visible = false };
-            HeroBehaviourPanel = new HeroBehaviourPanel { Parent = this, Visible = false };
-            HeroManageDialog = new HeroManageDialog { Parent = this, Visible = false };
-
+            
             BigMapDialog = new BigMapDialog { Parent = this, Visible = false };
             TrustMerchantDialog = new TrustMerchantDialog { Parent = this, Visible = false };
             CharacterDuraPanel = new CharacterDuraPanel { Parent = this, Visible = false };
@@ -591,32 +573,7 @@ namespace Exine.ExineScenes
                         }
                         else ExCharacterDialog.Hide();
                         break;
-                    case KeybindOptions.HeroInventory:
-                        if (Hero == null)
-                            break;
-                        if (!HeroInventoryDialog.Visible) HeroInventoryDialog.Show();
-                        else HeroInventoryDialog.Hide();
-                        break;
-                    case KeybindOptions.HeroEquipment:
-                        if (Hero == null)
-                            break;
-                        if (!HeroDialog.Visible || !HeroDialog.CharacterPage.Visible)
-                        {
-                            HeroDialog.Show();
-                            HeroDialog.ShowCharacterPage();
-                        }
-                        else HeroDialog.Hide();
-                        break;
-                    case KeybindOptions.HeroSkills:
-                        if (Hero == null)
-                            break;
-                        if (!HeroDialog.Visible || !HeroDialog.SkillPage.Visible)
-                        {
-                            HeroDialog.Show();
-                            HeroDialog.ShowSkillPage();
-                        }
-                        else HeroDialog.Hide();
-                        break;
+                   
                     case KeybindOptions.Creature:
                         if (!IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Show();
                         else IntelligentCreatureDialog.Hide();
@@ -716,9 +673,7 @@ namespace Exine.ExineScenes
                         MailReadParcelDialog.Hide();
                         ItemRentalDialog.Hide();
                         NoticeDialog.Hide();
-                        HeroInventoryDialog?.Hide();
-                        HeroManageDialog?.Hide();
-                        HeroDialog?.Hide();
+
 
                         ExineMainScene.Scene.DisposeItemLabel();
                         break;
@@ -771,11 +726,11 @@ namespace Exine.ExineScenes
                         break;
                     case KeybindOptions.Belt7:
                     case KeybindOptions.Belt7Alt:
-                        HeroBeltDialog?.Grid[0].UseItem();
+
                         break;
                     case KeybindOptions.Belt8:
                     case KeybindOptions.Belt8Alt:
-                        HeroBeltDialog?.Grid[1].UseItem();
+
                         break;
                     case KeybindOptions.Logout:
                         LogOut();
@@ -963,12 +918,7 @@ namespace Exine.ExineScenes
         public void UseSpell(int key)
         {
             UserObject actor = User;
-            if (key > 16)
-            {
-                if (HeroObject == null) return;
-                actor = Hero;
-            }
-
+            
             if (actor.Dead || actor.RidingMount || actor.Fishing) return;
 
             if (!actor.HasClassWeapon && actor.Weapon >= 0)
@@ -1008,7 +958,7 @@ namespace Exine.ExineScenes
             }
 
             int cost;
-            string prefix = actor == Hero ? "(Hero) " : string.Empty;
+            string prefix = string.Empty;
             switch (magic.Spell)
             {
                 case Spell.Fencing:
@@ -1060,10 +1010,7 @@ namespace Exine.ExineScenes
                     }
                     actor.TwinDrakeBlade = true;
                     SendSpellToggle(actor, magic.Spell, true);
-                    if (actor == Hero)
-                        HeroObject?.Effects.Add(new Effect(Libraries.Magic2, 210, 6, 500, HeroObject));
-                    else
-                        actor.Effects.Add(new Effect(Libraries.Magic2, 210, 6, 500, actor));
+                    actor.Effects.Add(new Effect(Libraries.Magic2, 210, 6, 500, actor));
                     break;
                 case Spell.FlamingSword:
                     if (CMain.Time < ToggleTime) return;
@@ -1099,8 +1046,6 @@ namespace Exine.ExineScenes
                     actor.NextMagicObject = MapObject.MouseObject;
                     actor.NextMagicDirection = MapControl.MouseDirection();
 
-                    if (actor == Hero)
-                        MapControl.UseMagic(Hero.NextMagic, Hero);
                     break;
             }
         }
@@ -1355,9 +1300,6 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.ObjectPlayer:
                     ObjectPlayer((S.ObjectPlayer)p);
                     break;
-                case (short)ServerPacketIds.ObjectHero:
-                    ObjectHero((S.ObjectHero)p);
-                    break;
                 case (short)ServerPacketIds.ObjectRemove:
                     ObjectRemove((S.ObjectRemove)p);
                     break;
@@ -1427,12 +1369,7 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.DropItem:
                     DropItem((S.DropItem)p);
                     break;
-                case (short)ServerPacketIds.TakeBackHeroItem:
-                    TakeBackHeroItem((S.TakeBackHeroItem)p);
-                    break;
-                case (short)ServerPacketIds.TransferHeroItem:
-                    TransferHeroItem((S.TransferHeroItem)p);
-                    break;
+                
                 case (short)ServerPacketIds.PlayerUpdate:
                     PlayerUpdate((S.PlayerUpdate)p);
                     break;
@@ -1499,9 +1436,6 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.HealthChanged:
                     HealthChanged((S.HealthChanged)p);
                     break;
-                case (short)ServerPacketIds.HeroHealthChanged:
-                    HeroHealthChanged((S.HeroHealthChanged)p);
-                    break;
                 case (short)ServerPacketIds.DeleteItem:
                     DeleteItem((S.DeleteItem)p);
                     break;
@@ -1523,14 +1457,8 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.GainExperience:
                     GainExperience((S.GainExperience)p);
                     break;
-                case (short)ServerPacketIds.GainHeroExperience:
-                    GainHeroExperience((S.GainHeroExperience)p);
-                    break;
                 case (short)ServerPacketIds.LevelChanged:
                     LevelChanged((S.LevelChanged)p);
-                    break;
-                case (short)ServerPacketIds.HeroLevelChanged:
-                    HeroLevelChanged((S.HeroLevelChanged)p);
                     break;
                 case (short)ServerPacketIds.ObjectLeveled:
                     ObjectLeveled((S.ObjectLeveled)p);
@@ -1764,9 +1692,6 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.BaseStatsInfo:
                     BaseStatsInfo((S.BaseStatsInfo)p);
                     break;
-                case (short)ServerPacketIds.HeroBaseStatsInfo:
-                    HeroBaseStatsInfo((S.HeroBaseStatsInfo)p);
-                    break;
                 case (short)ServerPacketIds.UserName:
                     UserName((S.UserName)p);
                     break;
@@ -1805,33 +1730,6 @@ namespace Exine.ExineScenes
                     break;
                 case (short)ServerPacketIds.HeroCreateRequest:
                     HeroCreateRequest((S.HeroCreateRequest)p);
-                    break;
-                case (short)ServerPacketIds.NewHero:
-                    NewHero((S.NewHero)p);
-                    break;
-                case (short)ServerPacketIds.HeroInformation:
-                    HeroInformation((S.HeroInformation)p);
-                    break;
-                case (short)ServerPacketIds.UpdateHeroSpawnState:
-                    UpdateHeroSpawnState((S.UpdateHeroSpawnState)p);
-                    break;
-                case (short)ServerPacketIds.UnlockHeroAutoPot:
-                    UnlockHeroAutoPot(true);
-                    break;
-                case (short)ServerPacketIds.SetAutoPotValue:
-                    SetAutoPotValue((S.SetAutoPotValue)p);
-                    break;
-                case (short)ServerPacketIds.SetHeroBehaviour:
-                    SetHeroBehaviour((S.SetHeroBehaviour)p);
-                    break;
-                case (short)ServerPacketIds.SetAutoPotItem:
-                    SetAutoPotItem((S.SetAutoPotItem)p);
-                    break;
-                case (short)ServerPacketIds.ManageHeroes:
-                    ManageHeroes((S.ManageHeroes)p);
-                    break;
-                case (short)ServerPacketIds.ChangeHero:
-                    ChangeHero((S.ChangeHero)p);
                     break;
                 case (short)ServerPacketIds.DefaultNPC:
                     DefaultNPC((S.DefaultNPC)p);
@@ -2228,7 +2126,6 @@ namespace Exine.ExineScenes
 
             ExMainDialog.PModeLabel.Visible = User.Class == ExineClass.Wizard || User.Class == ExineClass.Taoist;
             HasHero = p.HasHero;
-            HeroBehaviourPanel.UpdateBehaviour(p.HeroBehaviour);
             Gold = p.Gold;
             Credit = p.Credit;
 
@@ -2285,16 +2182,7 @@ namespace Exine.ExineScenes
             PlayerObject player = new PlayerObject(p.ObjectID);
             player.Load(p);
         }
-
-        private void ObjectHero(S.ObjectHero p)
-        {
-            HeroObject hero = new HeroObject(p.ObjectID);
-            hero.Load(p);
-
-            if (p.ObjectID == Hero?.ObjectID)
-                HeroObject = hero;
-        }
-
+  
         private void ObjectRemove(S.ObjectRemove p)
         {
             if (p.ObjectID == User.ObjectID) return;
@@ -2322,10 +2210,7 @@ namespace Exine.ExineScenes
         private void ObjectWalk(S.ObjectWalk p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
-
-            if (p.ObjectID == Hero?.ObjectID)
-                Hero.CurrentLocation = p.Location;
-
+              
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
                 MapObject ob = MapControl.Objects[i];
@@ -2337,10 +2222,7 @@ namespace Exine.ExineScenes
         private void ObjectRun(S.ObjectRun p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
-
-            if (p.ObjectID == Hero?.ObjectID)
-                Hero.CurrentLocation = p.Location;
-
+             
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
                 MapObject ob = MapControl.Objects[i];
@@ -2393,9 +2275,6 @@ namespace Exine.ExineScenes
                 case MirGridType.Refine:
                     fromCell = RefineDialog.Grid[p.From];
                     break;
-                case MirGridType.HeroInventory:
-                    fromCell = p.From < User.HeroBeltIdx ? HeroBeltDialog.Grid[p.From] : HeroInventoryDialog.Grid[p.From - User.HeroBeltIdx];
-                    break;
                 default:
                     return;
             }
@@ -2413,9 +2292,6 @@ namespace Exine.ExineScenes
                     break;
                 case MirGridType.Refine:
                     toCell = RefineDialog.Grid[p.To];
-                    break;
-                case MirGridType.HeroInventory:
-                    toCell = p.To < User.HeroBeltIdx ? HeroBeltDialog.Grid[p.To] : HeroInventoryDialog.Grid[p.To - User.HeroBeltIdx];
                     break;
                 default:
                     return;
@@ -2444,9 +2320,6 @@ namespace Exine.ExineScenes
 
             switch (p.Grid)
             {
-                case MirGridType.HeroInventory:
-                    toCell = HeroDialog.Grid[p.To];
-                    break;
                 default:
                     toCell = ExCharacterDialog.Grid[p.To];
                     break;
@@ -2460,9 +2333,7 @@ namespace Exine.ExineScenes
                 case MirGridType.Storage:
                     fromCell = StorageDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
                     break;
-                case MirGridType.HeroInventory:
-                    fromCell = HeroInventoryDialog.GetCell(p.UniqueID) ?? HeroBeltDialog.GetCell(p.UniqueID);
-                    break;
+                
                 default:
                     return;
             }
@@ -2478,10 +2349,7 @@ namespace Exine.ExineScenes
             fromCell.Item = toCell.Item;
             toCell.Item = i;
             CharacterDuraPanel.UpdateCharacterDura(i);
-            if (p.Grid == MirGridType.HeroInventory)
-                Hero.RefreshStats();
-            else
-                User.RefreshStats();
+            User.RefreshStats();
         }
         private void EquipSlotItem(S.EquipSlotItem p)
         {
@@ -2538,10 +2406,6 @@ namespace Exine.ExineScenes
                     fromCell = ExInventoryDialog.GetCell(p.IDFrom) ?? BeltDialog.GetCell(p.IDFrom);
                     toCell = ExInventoryDialog.GetCell(p.IDTo) ?? BeltDialog.GetCell(p.IDTo);
                     break;
-                case MirGridType.HeroInventory:
-                    fromCell = HeroInventoryDialog.GetCell(p.IDFrom) ?? HeroBeltDialog.GetCell(p.IDFrom);
-                    toCell = HeroInventoryDialog.GetCell(p.IDTo) ?? HeroBeltDialog.GetCell(p.IDTo);
-                    break;
             }
 
             if (toCell == null || fromCell == null) return;
@@ -2559,9 +2423,6 @@ namespace Exine.ExineScenes
             {
                 case MirGridType.Inventory:
                     User.RefreshStats();
-                    break;
-                case MirGridType.HeroInventory:
-                    Hero.RefreshStats();
                     break;
             }
         }
@@ -2587,12 +2448,6 @@ namespace Exine.ExineScenes
                 case MirGridType.Fishing:
                     fromCell = FishingDialog.GetCell(p.IDFrom);
                     break;
-                case MirGridType.HeroEquipment:
-                    fromCell = HeroDialog.GetCell(p.IDFrom);
-                    break;
-                case MirGridType.HeroInventory:
-                    fromCell = HeroInventoryDialog.GetCell(p.IDFrom) ?? HeroBeltDialog.GetCell(p.IDFrom);
-                    break;
                 default:
                     return;
             }
@@ -2614,12 +2469,7 @@ namespace Exine.ExineScenes
                 case MirGridType.Fishing:
                     toCell = FishingDialog.GetCell(p.IDTo);
                     break;
-                case MirGridType.HeroEquipment:
-                    toCell = HeroDialog.GetCell(p.IDTo);
-                    break;
-                case MirGridType.HeroInventory:
-                    toCell = HeroInventoryDialog.GetCell(p.IDTo) ?? HeroBeltDialog.GetCell(p.IDTo);
-                    break;
+                
                 default:
                     return;
             }
@@ -2660,17 +2510,7 @@ namespace Exine.ExineScenes
                 break;
             }
 
-            if (index == -1 && Hero != null)
-            {
-                for (int i = 0; i < MapObject.Hero.Equipment.Length; i++)
-                {
-                    if (MapObject.Hero.Equipment[i] == null || MapObject.Hero.Equipment[i].UniqueID != p.UniqueID) continue;
-                    index = i;
-                    fromCell = HeroDialog.Grid[index];
-                    break;
-                }
-            }
-
+           
             switch (p.Grid)
             {
                 case MirGridType.Inventory:
@@ -2679,9 +2519,7 @@ namespace Exine.ExineScenes
                 case MirGridType.Storage:
                     toCell = StorageDialog.Grid[p.To];
                     break;
-                case MirGridType.HeroInventory:
-                    toCell = p.To < User.HeroBeltIdx ? HeroBeltDialog.Grid[p.To] : HeroInventoryDialog.Grid[p.To - User.HeroBeltIdx];
-                    break;
+               
                 default:
                     return;
             }
@@ -2695,10 +2533,7 @@ namespace Exine.ExineScenes
             toCell.Item = fromCell.Item;
             fromCell.Item = null;
             CharacterDuraPanel.GetCharacterDura();
-            if (p.Grid == MirGridType.HeroInventory)
-                Hero.RefreshStats();
-            else
-                User.RefreshStats();
+            User.RefreshStats();
 
         }
         private void RemoveSlotItem(S.RemoveSlotItem p)
@@ -2953,10 +2788,6 @@ namespace Exine.ExineScenes
                 case MirGridType.Inventory:
                     cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
                     break;
-                case MirGridType.HeroInventory:
-                    cell = HeroInventoryDialog.GetCell(p.UniqueID) ?? HeroBeltDialog.GetCell(p.UniqueID);
-                    hero = true;
-                    break;
             }
 
             if (cell == null) return;
@@ -2966,22 +2797,13 @@ namespace Exine.ExineScenes
             if (!p.Success) return;
             if (cell.Item.Count > 1) cell.Item.Count--;
             else cell.Item = null;
-            if (hero)
-                Hero.RefreshStats();
-            else
-                User.RefreshStats();
+
+            User.RefreshStats();
         }
         private void DropItem(S.DropItem p)
         {
             MirItemCell cell;
-            if (p.HeroItem)
-            {
-                cell = HeroInventoryDialog.GetCell(p.UniqueID) ?? HeroBeltDialog.GetCell(p.UniqueID);
-            }
-            else
-            {
-                cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
-            }
+            cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
 
 
             if (cell == null) return;
@@ -2994,54 +2816,9 @@ namespace Exine.ExineScenes
                 cell.Item = null;
             else
                 cell.Item.Count -= p.Count;
-
-            if (p.HeroItem)
-            {
-                Hero.RefreshStats();
-            }
-            else
-            {
-                User.RefreshStats();
-            }
-
-        }
-
-        private void TakeBackHeroItem(S.TakeBackHeroItem p)
-        {
-            MirItemCell fromCell = p.From < User.HeroBeltIdx ? HeroBeltDialog.Grid[p.From] : HeroInventoryDialog.Grid[p.From - User.HeroBeltIdx];
-
-            MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
-
-            if (toCell == null || fromCell == null) return;
-
-            toCell.Locked = false;
-            fromCell.Locked = false;
-
-            if (!p.Success) return;
-            toCell.Item = fromCell.Item;
-            fromCell.Item = null;
+            
             User.RefreshStats();
-            Hero.RefreshStats();
-            CharacterDuraPanel.GetCharacterDura();
-        }
 
-        private void TransferHeroItem(S.TransferHeroItem p)
-        {
-            MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
-
-            MirItemCell toCell = p.To < User.HeroBeltIdx ? HeroBeltDialog.Grid[p.To] : HeroInventoryDialog.Grid[p.To - User.HeroBeltIdx];
-
-            if (toCell == null || fromCell == null) return;
-
-            toCell.Locked = false;
-            fromCell.Locked = false;
-
-            if (!p.Success) return;
-            toCell.Item = fromCell.Item;
-            fromCell.Item = null;
-            User.RefreshStats();
-            Hero.RefreshStats();
-            CharacterDuraPanel.GetCharacterDura();
         }
 
         private void MountUpdate(S.MountUpdate p)
@@ -3632,14 +3409,6 @@ namespace Exine.ExineScenes
 
             User.PercentHealth = (byte)(User.HP / (float)User.Stats[Stat.HP] * 100);
         }
-        private void HeroHealthChanged(S.HeroHealthChanged p)
-        {
-            Hero.HP = p.HP;
-            Hero.MP = p.MP;
-
-            Hero.PercentHealth = (byte)(Hero.HP / (float)Hero.Stats[Stat.HP] * 100);
-            Hero.PercentMana = (byte)(Hero.MP / (float)Hero.Stats[Stat.MP] * 100);
-        }
 
         private void DeleteQuestItem(S.DeleteQuestItem p)
         {
@@ -3722,74 +3491,6 @@ namespace Exine.ExineScenes
                     else
                         item.Count -= p.Count;
                     actor = User;
-                }
-            }
-
-            if (Hero != null && actor == null)
-            {
-                for (int i = 0; i < Hero.Inventory.Length; i++)
-                {
-                    if (actor != null) break;
-                    UserItem item = Hero.Inventory[i];
-
-                    if (item != null && item.Slots.Length > 0)
-                    {
-                        for (int j = 0; j < item.Slots.Length; j++)
-                        {
-                            UserItem slotItem = item.Slots[j];
-
-                            if (slotItem == null || slotItem.UniqueID != p.UniqueID) continue;
-
-                            if (slotItem.Count == p.Count)
-                                item.Slots[j] = null;
-                            else
-                                slotItem.Count -= p.Count;
-                            actor = Hero;
-                            break;
-                        }
-                    }
-
-                    if (item == null || item.UniqueID != p.UniqueID) continue;
-
-                    if (item.Count == p.Count)
-                        User.Inventory[i] = null;
-                    else
-                        item.Count -= p.Count;
-                    actor = Hero;
-                }
-
-                if (actor == null)
-                {
-                    for (int i = 0; i < Hero.Equipment.Length; i++)
-                    {
-                        if (actor != null) break;
-                        UserItem item = Hero.Equipment[i];
-
-                        if (item != null && item.Slots.Length > 0)
-                        {
-                            for (int j = 0; j < item.Slots.Length; j++)
-                            {
-                                UserItem slotItem = item.Slots[j];
-
-                                if (slotItem == null || slotItem.UniqueID != p.UniqueID) continue;
-
-                                if (slotItem.Count == p.Count)
-                                    item.Slots[j] = null;
-                                else
-                                    slotItem.Count -= p.Count;
-                                actor = Hero;
-                                break;
-                            }
-                        }
-
-                        if (item == null || item.UniqueID != p.UniqueID) continue;
-
-                        if (item.Count == p.Count)
-                            User.Equipment[i] = null;
-                        else
-                            item.Count -= p.Count;
-                        actor = Hero;
-                    }
                 }
             }
 
@@ -3882,11 +3583,6 @@ namespace Exine.ExineScenes
             MapObject.User.Experience += p.Amount;
         }
 
-        private void GainHeroExperience(S.GainHeroExperience p)
-        {
-            OutputMessage(string.Format(GameLanguage.HeroExperienceGained, p.Amount));
-            MapObject.Hero.Experience += p.Amount;
-        }
         private void LevelChanged(S.LevelChanged p)
         {
             User.Level = p.Level;
@@ -3898,18 +3594,7 @@ namespace Exine.ExineScenes
             SoundManager.PlaySound(SoundList.LevelUp);
             ExChatDialog.ReceiveChat(GameLanguage.LevelUp, ChatType.LevelUp);
         }
-        private void HeroLevelChanged(S.HeroLevelChanged p)
-        {
-            Hero.Level = p.Level;
-            Hero.Experience = p.Experience;
-            Hero.MaxExperience = p.MaxExperience;
-            Hero.RefreshStats();
-            //OutputMessage(GameLanguage.LevelUp);
-            Hero.Effects.Add(new Effect(Libraries.Magic2, 1200, 20, 2000, User));
-            SoundManager.PlaySound(SoundList.LevelUp);
-            //ChatDialog.ReceiveChat(GameLanguage.LevelUp, ChatType.LevelUp);
-            ExMainDialog.HeroInfoPanel.Update();
-        }
+        
         private void ObjectLeveled(S.ObjectLeveled p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
@@ -4462,33 +4147,6 @@ namespace Exine.ExineScenes
                 }
             }
 
-            if (Hero != null)
-            {
-                if (item == null)
-                {
-                    for (int i = 0; i < Hero.Inventory.Length; i++)
-                    {
-                        if (Hero.Inventory[i] != null && Hero.Inventory[i].UniqueID == p.UniqueID)
-                        {
-                            item = Hero.Inventory[i];
-                            break;
-                        }
-                    }
-                }
-
-                if (item == null)
-                {
-                    for (int i = 0; i < Hero.Equipment.Length; i++)
-                    {
-                        if (Hero.Equipment[i] != null && Hero.Equipment[i].UniqueID == p.UniqueID)
-                        {
-                            item = Hero.Equipment[i];
-                            break;
-                        }
-                    }
-                }
-            }
-
             if (item == null) return;
 
             item.MaxDura = p.MaxDura;
@@ -4525,33 +4183,7 @@ namespace Exine.ExineScenes
                 }
             }
 
-            if (Hero != null)
-            {
-                if (item == null)
-                {
-                    for (int i = 0; i < Hero.Inventory.Length; i++)
-                    {
-                        if (Hero.Inventory[i] != null && Hero.Inventory[i].UniqueID == p.UniqueID)
-                        {
-                            item = Hero.Inventory[i];
-                            break;
-                        }
-                    }
-                }
-
-                if (item == null)
-                {
-                    for (int i = 0; i < Hero.Equipment.Length; i++)
-                    {
-                        if (Hero.Equipment[i] != null && Hero.Equipment[i].UniqueID == p.UniqueID)
-                        {
-                            item = Hero.Equipment[i];
-                            break;
-                        }
-                    }
-                }
-            }
-
+            
             if (item == null) return;
 
             item.SetSlotSize(p.SlotSize);
@@ -4581,33 +4213,7 @@ namespace Exine.ExineScenes
                 }
             }
 
-            if (Hero != null)
-            {
-                if (item == null)
-                {
-                    for (int i = 0; i < Hero.Inventory.Length; i++)
-                    {
-                        if (Hero.Inventory[i] != null && Hero.Inventory[i].UniqueID == p.UniqueID)
-                        {
-                            item = Hero.Inventory[i];
-                            break;
-                        }
-                    }
-                }
-
-                if (item == null)
-                {
-                    for (int i = 0; i < Hero.Equipment.Length; i++)
-                    {
-                        if (Hero.Equipment[i] != null && Hero.Equipment[i].UniqueID == p.UniqueID)
-                        {
-                            item = Hero.Equipment[i];
-                            break;
-                        }
-                    }
-                }
-            }
-
+            
             if (item == null) return;
 
             item.SealedInfo = new SealedInfo { ExpiryDate = p.ExpiryDate };
@@ -4632,18 +4238,6 @@ namespace Exine.ExineScenes
                 }
             }
 
-            if (item == null && Hero != null)
-            {
-                for (int i = 0; i < Hero.Inventory.Length; i++)
-                {
-                    if (Hero.Inventory[i] != null && Hero.Inventory[i].UniqueID == p.Item.UniqueID)
-                    {
-                        item = Hero.Inventory[i];
-                        grid = MirGridType.HeroInventory;
-                        break;
-                    }
-                }
-            }
 
             if (item == null) return;
 
@@ -4658,9 +4252,7 @@ namespace Exine.ExineScenes
                 case MirGridType.Inventory:
                     ExInventoryDialog.DisplayItemGridEffect(item.UniqueID, 0);
                     break;
-                case MirGridType.HeroInventory:
-                    HeroInventoryDialog.DisplayItemGridEffect(item.UniqueID, 0);
-                    break;
+                
             }
 
 
@@ -4676,9 +4268,7 @@ namespace Exine.ExineScenes
             ClientMagic magic = p.Magic;
 
             UserObject actor = User;
-            if (p.Hero)
-                actor = Hero;
-
+            
             actor.Magics.Add(magic);
             actor.RefreshStats();
             foreach (SkillBarDialog Bar in SkillBarDialogs)
@@ -4699,7 +4289,7 @@ namespace Exine.ExineScenes
 
         private void MagicLeveled(S.MagicLeveled p)
         {
-            UserObject actor = p.ObjectID == Hero?.ObjectID ? Hero : User;
+            UserObject actor = User;
 
             for (int i = 0; i < actor.Magics.Count; i++)
             {
@@ -4734,10 +4324,8 @@ namespace Exine.ExineScenes
         private void MagicDelay(S.MagicDelay p)
         {
             ClientMagic magic;
-            if (p.ObjectID == Hero?.ObjectID)
-                magic = Hero.GetMagic(p.Spell);
-            else
-                magic = User.GetMagic(p.Spell);
+           
+            magic = User.GetMagic(p.Spell);
             magic.Delay = p.Delay;
         }
 
@@ -4750,12 +4338,6 @@ namespace Exine.ExineScenes
         private void ObjectMagic(S.ObjectMagic p)
         {
             if (p.SelfBroadcast == false && p.ObjectID == User.ObjectID && !Observing) return;
-
-            if (p.ObjectID == Hero?.ObjectID && p.Cast)
-            {
-                ClientMagic magic = Hero.GetMagic(p.Spell);
-                magic.CastTime = CMain.Time;
-            }
 
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -5169,13 +4751,7 @@ namespace Exine.ExineScenes
         private void SpellToggle(S.SpellToggle p)
         {
             UserObject actor = User;
-            string prefix = string.Empty;
-
-            if (p.ObjectID == Hero?.ObjectID)
-            {
-                actor = Hero;
-                prefix = "(Hero) ";
-            }
+            string prefix = string.Empty; 
 
             switch (p.Spell)
             {
@@ -5211,9 +4787,6 @@ namespace Exine.ExineScenes
 
         private void ObjectHealth(S.ObjectHealth p)
         {
-            if (p.ObjectID == Hero?.ObjectID)
-                Hero.PercentHealth = p.Percent;
-
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
                 MapObject ob = MapControl.Objects[i];
@@ -5226,9 +4799,6 @@ namespace Exine.ExineScenes
 
         private void ObjectMana(S.ObjectMana p)
         {
-            if (p.ObjectID == Hero?.ObjectID)
-                Hero.PercentMana = p.Percent;
-
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
                 MapObject ob = MapControl.Objects[i];
@@ -5333,22 +4903,6 @@ namespace Exine.ExineScenes
                 User.RefreshStats();
             }
 
-            if (Hero != null && buff.ObjectID == Hero.ObjectID)
-            {
-                for (int i = 0; i < HeroBuffsDialog.Buffs.Count; i++)
-                {
-                    if (HeroBuffsDialog.Buffs[i].Type != buff.Type) continue;
-
-                    HeroBuffsDialog.Buffs[i] = buff;
-                    Hero.RefreshStats();
-                    return;
-                }
-
-                HeroBuffsDialog.Buffs.Add(buff);
-                HeroBuffsDialog.CreateBuff(buff);
-
-                Hero.RefreshStats();
-            }
 
             if (!buff.Visible || buff.ObjectID <= 0) return;
 
@@ -5393,27 +4947,6 @@ namespace Exine.ExineScenes
                 User.RefreshStats();
             }
 
-            if (Hero != null && Hero.ObjectID == p.ObjectID)
-            {
-                for (int i = 0; i < HeroBuffsDialog.Buffs.Count; i++)
-                {
-                    if (HeroBuffsDialog.Buffs[i].Type != p.Type) continue;
-
-                    switch (HeroBuffsDialog.Buffs[i].Type)
-                    {
-                        case BuffType.SwiftFeet:
-                            Hero.Sprint = false;
-                            break;
-                        case BuffType.Transform:
-                            Hero.TransformType = -1;
-                            break;
-                    }
-
-                    HeroBuffsDialog.RemoveBuff(i);
-                    HeroBuffsDialog.Buffs.RemoveAt(i);
-                }
-                Hero.RefreshStats();
-            }
 
             if (p.ObjectID <= 0) return;
 
@@ -5450,29 +4983,6 @@ namespace Exine.ExineScenes
                     else
                     {
                         BuffsDialog.Buffs[i].ExpireTime += CMain.Time;
-                    }
-                }
-            }
-
-            if (Hero != null && Hero.ObjectID == p.ObjectID)
-            {
-                for (int i = 0; i < HeroBuffsDialog.Buffs.Count; i++)
-                {
-                    if (HeroBuffsDialog.Buffs[i].Type != p.Type) continue;
-
-                    Hero.RefreshStats();
-
-                    if (HeroBuffsDialog.Buffs[i].Paused == p.Paused) return;
-
-                    HeroBuffsDialog.Buffs[i].Paused = p.Paused;
-
-                    if (p.Paused)
-                    {
-                        HeroBuffsDialog.Buffs[i].ExpireTime -= CMain.Time;
-                    }
-                    else
-                    {
-                        HeroBuffsDialog.Buffs[i].ExpireTime += CMain.Time;
                     }
                 }
             }
@@ -5546,29 +5056,6 @@ namespace Exine.ExineScenes
                     User.Equipment[i] = p.Item;
                     User.RefreshStats();
                     return;
-                }
-            }
-
-            if (Hero != null)
-            {
-                for (int i = 0; i < Hero.Inventory.Length; i++)
-                {
-                    if (Hero.Inventory[i] != null && Hero.Inventory[i].UniqueID == p.Item.UniqueID)
-                    {
-                        Hero.Inventory[i] = p.Item;
-                        Hero.RefreshStats();
-                        return;
-                    }
-                }
-
-                for (int i = 0; i < Hero.Equipment.Length; i++)
-                {
-                    if (Hero.Equipment[i] != null && Hero.Equipment[i].UniqueID == p.Item.UniqueID)
-                    {
-                        Hero.Equipment[i] = p.Item;
-                        Hero.RefreshStats();
-                        return;
-                    }
                 }
             }
         }
@@ -5948,14 +5435,6 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
 
-        private void HeroBaseStatsInfo(S.HeroBaseStatsInfo p)
-        {
-            if (Hero == null) return;
-
-            Hero.CoreStats = p.Stats;
-            Hero.RefreshStats();
-        }
-
         private void UserName(S.UserName p)
         {
             for (int i = 0; i < UserIdList.Count; i++)
@@ -6259,154 +5738,9 @@ namespace Exine.ExineScenes
             */
         }
 
-        private void ManageHeroes(S.ManageHeroes p)
-        {
-            if (p.Heroes != null)
-            {
-                for (int i = 0; i < p.Heroes.Length; i++)
-                    AddHeroInformation(p.Heroes[i], i);
-            }
-
-            MaximumHeroCount = p.MaximumCount;
-            HeroManageDialog.SetCurrentHero(p.CurrentHero);
-            HeroManageDialog.Show();
-        }
-
-        private void ChangeHero(S.ChangeHero p)
-        {
-            ClientHeroInformation temp = HeroStorage[p.FromIndex];
-            HeroStorage[p.FromIndex] = HeroManageDialog.CurrentAvatar.Info;
-            HeroManageDialog.SetCurrentHero(temp);
-            HeroManageDialog.RefreshInterface();
-        }
-
         public int HeroAvatar(ExineClass job, ExineGender gender) => 1400 + (byte)job + 10 * (byte)gender;
 
-        private void UnlockHeroAutoPot(bool value)
-        {
-            if (Hero == null) return;
-
-            Hero.AutoPot = value;
-            HeroInventoryDialog.RefreshInterface();
-        }
-
-        private void SetAutoPotValue(S.SetAutoPotValue p)
-        {
-            if (Hero == null) return;
-
-            if (p.Stat == Stat.HP)
-                Hero.AutoHPPercent = p.Value;
-            else
-                Hero.AutoMPPercent = p.Value;
-
-            HeroInventoryDialog.RefreshInterface();
-        }
-
-        private void SetAutoPotItem(S.SetAutoPotItem p)
-        {
-            if (Hero == null) return;
-
-            if (p.Grid == MirGridType.HeroHPItem)
-                Hero.HPItem[0] = p.ItemIndex > 0 ? new UserItem(GetItemInfo(p.ItemIndex)) : null;
-            else
-                Hero.MPItem[0] = p.ItemIndex > 0 ? new UserItem(GetItemInfo(p.ItemIndex)) : null;
-        }
-
-        private void SetHeroBehaviour(S.SetHeroBehaviour p)
-        {
-            if (Hero == null) return;
-            HeroBehaviourPanel.UpdateBehaviour(p.Behaviour);
-        }
-
-        private void NewHero(S.NewHero p)
-        {
-            /*
-            NewHeroDialog.OKButton.Enabled = true;
-
-            switch (p.Result)
-            {
-                case 0:
-                    MirMessageBox.Show("Creating new heroes is currently disabled.");
-                    NewHeroDialog.Hide();
-                    break;
-                case 1:
-                    MirMessageBox.Show("Your Hero Name is not acceptable.");
-                    NewHeroDialog.NameTextBox.SetFocus();
-                    break;
-                case 2:
-                    MirMessageBox.Show("The gender you selected does not exist.\n Contact a GM for assistance.");
-                    break;
-                case 3:
-                    MirMessageBox.Show("The class you selected does not exist.\n Contact a GM for assistance.");
-                    break;
-                case 4:
-                    MirMessageBox.Show("You cannot make anymore Heroes.");
-                    NewHeroDialog.Hide();
-                    break;
-                case 5:
-                    MirMessageBox.Show("A Character with this name already exists.");
-                    NewHeroDialog.NameTextBox.SetFocus();
-                    break;
-                case 6:
-                    MirMessageBox.Show("No bag space.");
-                    NewHeroDialog.Hide();
-                    break;
-                case 10:
-                    MirMessageBox.Show("Hero created successfully.");
-                    NewHeroDialog.Hide();
-                    break;
-            }
-            */
-        }
-
-        private void HeroInformation(S.HeroInformation p)
-        {
-            Hero = new UserHeroObject(p.ObjectID);
-            Hero.Load(p);
-
-            Hero.AutoPot = p.AutoPot;
-            Hero.AutoHPPercent = p.AutoHPPercent;
-            Hero.AutoMPPercent = p.AutoMPPercent;
-
-            if (p.HPItemIndex > 0)
-                Hero.HPItem[0] = new UserItem(GetItemInfo(p.HPItemIndex));
-            if (p.MPItemIndex > 0)
-                Hero.MPItem[0] = new UserItem(GetItemInfo(p.MPItemIndex));
-
-            HeroDialog = new ExineCharacterDialog(MirGridType.HeroEquipment, Hero) { Parent = this, Visible = false };
-            HeroInventoryDialog = new HeroInventoryDialog { Parent = this };
-            HeroBeltDialog = new HeroBeltDialog { Parent = this };
-            HeroBuffsDialog = new BuffDialog
-            {
-                Parent = this,
-                Visible = true,
-                Location = new Point(Settings.ScreenWidth - 170, 80),
-                GetExpandedParameter = () => { return Settings.ExpandedHeroBuffWindow; },
-                SetExpandedParameter = (value) => { Settings.ExpandedHeroBuffWindow = value; }
-            };
-            ExMainDialog.HeroInfoPanel.Update();
-
-            Hero.RefreshStats();
-        }
-
-        private void UpdateHeroSpawnState(S.UpdateHeroSpawnState p)
-        {
-            HeroSpawnState = p.State;
-
-            HasHero = p.State > HeroSpawnState.None;
-            ExMainDialog.HeroInfoPanel.Visible = p.State > HeroSpawnState.Unsummoned;
-            ExMainDialog.HeroMenuButton.Visible = p.State > HeroSpawnState.Unsummoned;
-            HeroBehaviourPanel.Visible = p.State > HeroSpawnState.Unsummoned;
-            HeroMenuPanel.Visible = HeroMenuPanel.Visible && ExMainDialog.HeroMenuButton.Visible;
-
-            if (p.State < HeroSpawnState.Summoned)
-            {
-                HeroInventoryDialog.Dispose();
-                HeroDialog.Dispose();
-                HeroBeltDialog.Dispose();
-                HeroBuffsDialog.Dispose();
-            }
-        }
+        
 
         private void MarriageRequest(S.MarriageRequest p)
         {
@@ -10351,9 +9685,6 @@ namespace Exine.ExineScenes
                 MentorDialog = null;
 
                 //NewHeroDialog = null; //add k333123
-                HeroInventoryDialog = null;
-                HeroDialog = null;
-                HeroBeltDialog = null;
 
                 RelationshipDialog = null;
                 CharacterDuraPanel = null;
@@ -10400,11 +9731,6 @@ namespace Exine.ExineScenes
             set { MapObject.User = value; }
         }
 
-        public static UserHeroObject Hero
-        {
-            get { return MapObject.Hero; }
-            set { MapObject.Hero = value; }
-        }
 
         public static List<MapObject> Objects = new List<MapObject>();
 
@@ -11455,18 +10781,6 @@ namespace Exine.ExineScenes
 
                         if (CMain.Ctrl)
                         {
-                            HeroObject hero = MapObject.MouseObject as HeroObject;
-
-                            if (hero != null &&
-                                hero.ObjectID != (Hero is null ? 0 : Hero.ObjectID) &&
-                                CMain.Time >= ExineMainScene.InspectTime)
-                            {
-                                ExineMainScene.InspectTime = CMain.Time + 500;
-                                InspectDialog.InspectID = hero.ObjectID;
-                                Network.Enqueue(new C.Inspect { ObjectID = hero.ObjectID, Hero = true });
-                                return;
-                            }
-
                             PlayerObject player = MapObject.MouseObject as PlayerObject;
 
                             if (player != null &&
@@ -11523,7 +10837,7 @@ namespace Exine.ExineScenes
                         {
                             UniqueID = cell.Item.UniqueID,
                             Count = 1,
-                            HeroInventory = cell.GridType == MirGridType.HeroInventory
+                            HeroInventory = false
                         });
 
                         cell.Locked = true;
@@ -11541,7 +10855,7 @@ namespace Exine.ExineScenes
                         {
                             UniqueID = cell.Item.UniqueID,
                             Count = (ushort)amountBox.Amount,
-                            HeroInventory = cell.GridType == MirGridType.HeroInventory
+                            HeroInventory = false
                         });
 
                         cell.Locked = true;
@@ -12130,8 +11444,7 @@ namespace Exine.ExineScenes
                     }
                     break;
                 case Spell.Reincarnation:
-                    if (actor == Hero && actor.NextMagicObject == null)
-                        actor.NextMagicObject = User;
+                    
                     if (actor.NextMagicObject != null)
                     {
                         if (actor.NextMagicObject.Dead && actor.NextMagicObject.Race == ObjectType.Player)

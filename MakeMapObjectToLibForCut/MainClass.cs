@@ -95,6 +95,7 @@ namespace MakeMapObjectToLibForCut
 
                 for (int i = 0; i < staticObjectInfos.StaticObjects.Length; i++)
                 {
+                    fileType = "";
                     frame = null;
                     yPFFormat = null;
 
@@ -118,18 +119,24 @@ namespace MakeMapObjectToLibForCut
                     //anim's ypfImageSetIdx is ypfImageSets idx...!
 
                     yPFFormat = ConvertYpfToRGBA("TS_0" + staticObject.World + "_" + fileType + "Static.ypf");
-                    if (staticObject.IsAnim == 0x01)
+                    //if (staticObject.IsAnim == 0x01)
+                    if (fileType == "Anim")
                     {
+                        Console.WriteLine("staticObject.IsAnim == 0x01");
                         frame = yPFFormat.ypfImageSets[ypfImageSetIdx].FrameInfo.frames[0];
                     }
                     else
                     {
                         try
                         {
+                            Console.WriteLine("TS_0" + staticObject.World + "_" + fileType + "Static.ypf Load!!!");
+                            Console.WriteLine("staticObject.IsAnim != 0x01 yPFFormat.ypfImageSets.Len:"+ yPFFormat.ypfImageSets.Length+ " yPFFormat.ypfImageSets[0].FrameInfo.frames.len:"+ yPFFormat.ypfImageSets[0].FrameInfo.frames.Length+ "ypfImageSetIdx:"+ ypfImageSetIdx);
                             frame = yPFFormat.ypfImageSets[0].FrameInfo.frames[ypfImageSetIdx];
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            Console.WriteLine(ex.ToString());
+                            Console.ReadLine();
                             continue;
                         }
                     }

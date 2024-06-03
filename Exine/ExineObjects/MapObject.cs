@@ -15,8 +15,6 @@ namespace Exine.ExineObjects
         public static List<ExineLabel> LabelList = new List<ExineLabel>();
 
         public static UserObject User;
-        public static UserHeroObject Hero;
-        public static HeroObject HeroObject;
         public static MapObject MouseObject, TargetObject, MagicObject;
 
         private static uint mouseObjectID;
@@ -170,9 +168,6 @@ namespace Exine.ExineObjects
 
             MapControl.Objects.Remove(this);
             ExineMainScene.Scene.MapControl.RemoveObject(this);
-
-            if (ObjectID == Hero?.ObjectID)
-                HeroObject = null;
 
             if (ObjectID != ExineMainScene.NPCID) return;
 
@@ -627,9 +622,6 @@ namespace Exine.ExineObjects
                     break;
                 case ObjectType.Monster:
                     if (GroupDialog.GroupList.Contains(name) || name == User.Name) index = 11;
-                    break;
-                case ObjectType.Hero:
-                    if (GroupDialog.GroupList.Contains(name) || name == ExineMainScene.Hero.Name) index = 11;
                     break;
             }
 

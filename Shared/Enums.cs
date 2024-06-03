@@ -1057,11 +1057,7 @@ public enum MirGridType : byte
     Renting = 17,
     GuestRenting = 18,
     Craft = 19,
-    Socket = 20,
-    HeroEquipment = 21,
-    HeroInventory = 22,
-    HeroHPItem = 23,
-    HeroMPItem = 24
+    Socket = 20
 }
 
 public enum EquipmentSlot : byte

@@ -555,7 +555,7 @@ namespace Exine.ExineScenes.Dialogs
                     Parent = SkillPage, 
                     Visible = false, 
                     Location = new Point(8, 8 + i * 33),
-                    HeroMagic = gridType == MirGridType.HeroEquipment
+                    HeroMagic = false
                 };
 
             NextButton = new MirButton

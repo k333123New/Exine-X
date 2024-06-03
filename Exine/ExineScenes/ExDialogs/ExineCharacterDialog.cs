@@ -905,7 +905,7 @@ namespace Exine.ExineScenes.ExDialogs
                     Visible = false,
                     //Location = new Point(8, 8 + i * 33),
                     Location = new Point(0, 0),
-                    HeroMagic = gridType == MirGridType.HeroEquipment
+                    HeroMagic = false
                 };
 
 

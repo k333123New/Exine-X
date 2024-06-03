@@ -96,14 +96,6 @@ namespace Exine.ExineControls
                         return CraftDialog.Slots;
                     case MirGridType.Socket:
                         return ExineMainScene.SelectedItem?.Slots;
-                    case MirGridType.HeroEquipment:
-                        return MapObject.Hero.Equipment;
-                    case MirGridType.HeroInventory:
-                        return MapObject.Hero.Inventory;
-                    case MirGridType.HeroHPItem:
-                        return MapObject.Hero.HPItem;
-                    case MirGridType.HeroMPItem:
-                        return MapObject.Hero.MPItem;
 
                     default:
                         throw new NotImplementedException();
@@ -289,10 +281,6 @@ namespace Exine.ExineControls
                         ExineMainScene.Scene.NPCDropDialog.ItemCell.OnMouseClick(e); // emulate click to drop control
                         ExineMainScene.Scene.NPCDropDialog.ConfirmButton.OnMouseClick(e); //emulate OK to confirm trade
                     }
-                    //Add support for ALT + click to sell quickly
-
-                    else if ((GridType == MirGridType.HeroHPItem || GridType == MirGridType.HeroMPItem) && ExineMainScene.SelectedCell == null && Item != null)
-                        Network.Enqueue(new C.SetAutoPotItem { Grid = GridType, ItemIndex = 0 });
 
                     else MoveItem();
                     break;
@@ -349,13 +337,13 @@ namespace Exine.ExineControls
             ExineMainScene.Scene.SocketDialog.Show(GridType, Item);
         }
 
-        private bool HeroGridType => GridType == MirGridType.HeroInventory || GridType == MirGridType.HeroEquipment;
+
 
         public void UseItem()
         {
             if (Locked || GridType == MirGridType.Inspect || GridType == MirGridType.TrustMerchant || GridType == MirGridType.GuildStorage || GridType == MirGridType.Craft) return;
 
-            if (!HeroGridType && MapObject.User.Fishing) return;
+           
             if (MapObject.User.RidingMount && Item.Info.Type != ItemType.Scroll && Item.Info.Type != ItemType.Potion && Item.Info.Type != ItemType.Torch) return;
 
             if (GridType == MirGridType.BuyBack)
@@ -370,29 +358,13 @@ namespace Exine.ExineControls
                 return;
             }
 
-            if (GridType == MirGridType.HeroEquipment)
-            {
-                RemoveHeroItem();
-                return;
-            }
-
-            if ((GridType != MirGridType.Inventory && GridType != MirGridType.Storage && GridType != MirGridType.HeroInventory) || Item == null || !CanUseItem() || ExineMainScene.SelectedCell == this) return;
+            if ((GridType != MirGridType.Inventory && GridType != MirGridType.Storage ) || Item == null || !CanUseItem() || ExineMainScene.SelectedCell == this) return;
 
             ExineCharacterDialog dialog = ExineMainScene.Scene.ExCharacterDialog;
             UserObject actor = ExineMainScene.User;
-            if (HeroGridType)
-            {
-                dialog = ExineMainScene.Scene.HeroDialog;
-                actor = ExineMainScene.Hero;
 
-                if (Item.SoulBoundId != -1 && MapObject.Hero.Id != Item.SoulBoundId)
-                    return;
-            }
-            else
-            {
-                if (Item.SoulBoundId != -1 && MapObject.User.Id != Item.SoulBoundId)
-                    return;
-            }
+            if (Item.SoulBoundId != -1 && MapObject.User.Id != Item.SoulBoundId)
+                return;
             
 
             switch (Item.Info.Type)
@@ -464,7 +436,7 @@ namespace Exine.ExineControls
                     {
                         if (dialog.Grid[(int)EquipmentSlot.Amulet].Item.Info == Item.Info && dialog.Grid[(int)EquipmentSlot.Amulet].Item.Count < dialog.Grid[(int)EquipmentSlot.Amulet].Item.Info.StackSize)
                         {
-                            Network.Enqueue(new C.MergeItem { GridFrom = GridType, GridTo = GridType == MirGridType.HeroInventory ? MirGridType.HeroEquipment : MirGridType.Equipment, IDFrom = Item.UniqueID, IDTo = dialog.Grid[(int)EquipmentSlot.Amulet].Item.UniqueID });
+                            Network.Enqueue(new C.MergeItem { GridFrom = GridType, GridTo = MirGridType.Equipment, IDFrom = Item.UniqueID, IDTo = dialog.Grid[(int)EquipmentSlot.Amulet].Item.UniqueID });
 
                             Locked = true;
                             return;
@@ -520,7 +492,7 @@ namespace Exine.ExineControls
                 case ItemType.Deco:
                 case ItemType.MonsterSpawn:
                 case ItemType.SealedHero:
-                    if (CanUseItem() && (GridType == MirGridType.Inventory || GridType == MirGridType.HeroInventory))
+                    if (CanUseItem() && (GridType == MirGridType.Inventory))
                     {
                         if (CMain.Time < ExineMainScene.UseItemTime) return;
                         if (Item.Info.Type == ItemType.Potion && Item.Info.Shape == 4)
@@ -551,21 +523,7 @@ namespace Exine.ExineControls
 
                         Network.Enqueue(new C.UseItem { UniqueID = Item.UniqueID, Grid = GridType });
 
-                        if (HeroGridType)
-                        {
-                            if (Item.Count == 1 && ItemSlot < ExineMainScene.User.HeroBeltIdx)
-                            {
-                                for (int i = ExineMainScene.User.HeroBeltIdx; i < ExineMainScene.Hero.Inventory.Length; i++)
-                                    if (ItemArray[i] != null && ItemArray[i].Info == Item.Info)
-                                    {
-                                        Network.Enqueue(new C.MoveItem { Grid = MirGridType.HeroInventory, From = i, To = ItemSlot });
-                                        ExineMainScene.Scene.HeroInventoryDialog.Grid[i - ExineMainScene.User.HeroBeltIdx].Locked = true;
-                                        break;
-                                    }
-                            }
-                        }
-                        else
-                        {
+                       
                             if (Item.Count == 1 && ItemSlot < ExineMainScene.User.BeltIdx)
                             {
                                 for (int i = ExineMainScene.User.BeltIdx; i < ExineMainScene.User.Inventory.Length; i++)
@@ -575,8 +533,7 @@ namespace Exine.ExineControls
                                         ExineMainScene.Scene.ExInventoryDialog.Grid[i - ExineMainScene.User.BeltIdx].Locked = true;
                                         break;
                                     }
-                            }
-                        }                        
+                            }                   
 
                         Locked = true;
                     }
@@ -855,69 +812,7 @@ namespace Exine.ExineControls
             }
         }
 
-        public void RemoveHeroItem()
-        {
-            int count = 0;
-            if (ExineMainScene.Hero == null || ExineMainScene.Hero.Dead) return;
-
-            for (int i = 0; i < ExineMainScene.Hero.Inventory.Length; i++)
-            {
-                MirItemCell itemCell = i < ExineMainScene.User.HeroBeltIdx ? ExineMainScene.Scene.HeroBeltDialog.Grid[i] : ExineMainScene.Scene.HeroInventoryDialog.Grid[i - ExineMainScene.User.HeroBeltIdx];
-
-                if (itemCell.Item == null) count++;
-            }
-
-            if (Item == null || count < 1 || (MapObject.Hero.RidingMount && Item.Info.Type != ItemType.Torch)) return;
-
-            if (Item.Info.StackSize > 1)
-            {
-                UserItem item = null;
-
-                for (int i = 0; i < ExineMainScene.Hero.Inventory.Length; i++)
-                {
-                    MirItemCell itemCell = i < ExineMainScene.User.HeroBeltIdx ? ExineMainScene.Scene.HeroBeltDialog.Grid[i] : ExineMainScene.Scene.HeroInventoryDialog.Grid[i - ExineMainScene.User.HeroBeltIdx];
-
-                    if (itemCell.Item == null || itemCell.Item.Info != Item.Info) continue;
-
-                    item = itemCell.Item;
-                }
-
-                if (item != null && ((item.Count + Item.Count) <= item.Info.StackSize))
-                {
-                    //Merge.
-                    Network.Enqueue(new C.MergeItem { GridFrom = GridType, GridTo = MirGridType.Inventory, IDFrom = Item.UniqueID, IDTo = item.UniqueID });
-
-                    Locked = true;
-
-                    PlayItemSound();
-                    return;
-                }
-            }
-
-            for (int i = 0; i < ExineMainScene.Hero.Inventory.Length; i++)
-            {
-                MirItemCell itemCell;
-
-                if (Item.Info.Type == ItemType.Amulet)
-                {
-                    itemCell = i < ExineMainScene.User.HeroBeltIdx ? ExineMainScene.Scene.HeroBeltDialog.Grid[i] : ExineMainScene.Scene.HeroInventoryDialog.Grid[i - ExineMainScene.User.HeroBeltIdx];
-                }
-                else
-                {
-                    itemCell = i < (ExineMainScene.Hero.Inventory.Length - ExineMainScene.User.HeroBeltIdx) ? ExineMainScene.Scene.HeroInventoryDialog.Grid[i] : ExineMainScene.Scene.HeroBeltDialog.Grid[i - ExineMainScene.Hero.Inventory.Length];
-                }
-
-                if (itemCell.Item != null) continue;
-
-                Network.Enqueue(new C.RemoveItem { Grid = MirGridType.HeroInventory, UniqueID = Item.UniqueID, To = itemCell.ItemSlot });
-
-                Locked = true;
-
-                PlayItemSound();
-                break;
-            }
-        }
-
+       
         private void MoveItem()
         {
             if (GridType == MirGridType.BuyBack || GridType == MirGridType.DropPanel || GridType == MirGridType.Inspect || GridType == MirGridType.TrustMerchant || GridType == MirGridType.Craft) return;
@@ -1230,61 +1125,7 @@ namespace Exine.ExineControls
 
                                 break;
                             #endregion
-                            #region From Hero Inventory
-                            case MirGridType.HeroInventory:
-                                if (ExineMainScene.Hero == null || ExineMainScene.Hero.Dead)
-                                    return;
-                                if (Item != null && ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Amulet)
-                                {
-                                    if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
-                                    {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
-
-                                        Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                }
-
-                                if (Item != null)
-                                {
-                                    if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
-                                    {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
-
-                                        Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                }
-
-
-                                if (Item == null)
-                                {
-                                    Network.Enqueue(new C.TakeBackHeroItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
-
-                                    Locked = true;
-                                    ExineMainScene.SelectedCell.Locked = true;
-                                    ExineMainScene.SelectedCell = null;
-                                    return;
-                                }
-
-                                for (int x = 6; x < ItemArray.Length; x++)
-                                    if (ItemArray[x] == null)
-                                    {
-                                        Network.Enqueue(new C.TakeBackHeroItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
-
-                                        MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
-
-                                        if (temp != null) temp.Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                break;
-                                #endregion
+                           
                         }
                         break;
                     #endregion
@@ -1791,204 +1632,7 @@ namespace Exine.ExineControls
                         }
                         break;
                     #endregion
-                    #region To Hero Inventory
-                    case MirGridType.HeroInventory:
-                        if (ExineMainScene.Hero == null || ExineMainScene.Hero.Dead)
-                            return;
-                        switch (ExineMainScene.SelectedCell.GridType)
-                        {
-                            #region From Hero Inventory
-                            case MirGridType.HeroInventory:
-                                if (Item != null)
-                                {
-                                    if (CMain.Ctrl)
-                                    {
-                                        MirMessageBox messageBox = new MirMessageBox("Do you want to try and combine these items?", MirMessageBoxButtons.YesNo);
-                                        messageBox.YesButton.Click += (o, e) =>
-                                        {
-                                            //Combine
-                                            Network.Enqueue(new C.CombineItem { Grid = ExineMainScene.SelectedCell.GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
-                                            Locked = true;
-                                            ExineMainScene.SelectedCell.Locked = true;
-                                            ExineMainScene.SelectedCell = null;
-                                        };
-
-                                        messageBox.Show();
-                                        return;
-                                    }
-
-                                    if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
-                                    {
-                                        //Merge
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
-
-                                        Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                }
-
-                                Network.Enqueue(new C.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
-
-                                Locked = true;
-                                ExineMainScene.SelectedCell.Locked = true;
-                                ExineMainScene.SelectedCell = null;
-                                return;
-                            #endregion
-                            #region From Hero Equipment
-                            case MirGridType.HeroEquipment:
-                                if (Item != null && ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Amulet)
-                                {
-                                    if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
-                                    {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
-
-                                        Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                }
-
-                                if (!CanRemoveItem(ExineMainScene.SelectedCell.Item))
-                                {
-                                    ExineMainScene.SelectedCell = null;
-                                    return;
-                                }
-                                if (Item == null)
-                                {
-                                    Network.Enqueue(new C.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = ItemSlot });
-
-                                    Locked = true;
-                                    ExineMainScene.SelectedCell.Locked = true;
-                                    ExineMainScene.SelectedCell = null;
-                                    return;
-                                }
-
-                                for (int x = 2; x < ItemArray.Length; x++)
-                                    if (ItemArray[x] == null)
-                                    {
-                                        Network.Enqueue(new C.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = x });
-
-                                        MirItemCell temp = x < ExineMainScene.User.HeroBeltIdx ? ExineMainScene.Scene.HeroBeltDialog.Grid[x] : ExineMainScene.Scene.HeroInventoryDialog.Grid[x - ExineMainScene.User.HeroBeltIdx];
-
-                                        if (temp != null) temp.Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                break;
-                            #endregion
-                            #region From Inventory
-                            case MirGridType.Inventory:
-                                if (Item != null && ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Amulet)
-                                {
-                                    if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
-                                    {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
-
-                                        Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                }
-
-                                if (ExineMainScene.SelectedCell.Item.Weight + MapObject.User.CurrentBagWeight > MapObject.User.Stats[Stat.BagWeight])
-                                {
-                                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("Too heavy to transfer.", ChatType.System);
-                                    ExineMainScene.SelectedCell = null;
-                                    return;
-                                }
-
-                                if (Item != null)
-                                {
-                                    if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
-                                    {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
-
-                                        Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                }
-
-
-                                if (Item == null)
-                                {
-                                    Network.Enqueue(new C.TransferHeroItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
-
-                                    Locked = true;
-                                    ExineMainScene.SelectedCell.Locked = true;
-                                    ExineMainScene.SelectedCell = null;
-                                    return;
-                                }
-
-                                for (int x = 2; x < ItemArray.Length; x++)
-                                    if (ItemArray[x] == null)
-                                    {
-                                        Network.Enqueue(new C.TransferHeroItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
-
-                                        MirItemCell temp = x < ExineMainScene.User.HeroBeltIdx ? ExineMainScene.Scene.HeroBeltDialog.Grid[x] : ExineMainScene.Scene.HeroInventoryDialog.Grid[x - ExineMainScene.User.HeroBeltIdx];
-
-                                        if (temp != null) temp.Locked = true;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        ExineMainScene.SelectedCell = null;
-                                        return;
-                                    }
-                                break;
-                                #endregion
-                        }
-                        break;
-                    #endregion
-                    #region To Hero Equipment
-                    case MirGridType.HeroEquipment:
-
-                        if (ExineMainScene.SelectedCell.GridType != MirGridType.HeroInventory) return;
-                        if (ExineMainScene.Hero == null || ExineMainScene.Hero.Dead)
-                            return;
-
-                        if (Item != null && ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Amulet)
-                        {
-                            if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
-                            {
-                                Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
-
-                                Locked = true;
-                                ExineMainScene.SelectedCell.Locked = true;
-                                ExineMainScene.SelectedCell = null;
-                                return;
-                            }
-                        }
-
-                        if (CorrectSlot(ExineMainScene.SelectedCell.Item, ExineMainScene.SelectedCell.GridType))
-                        {
-                            if (CanWearItem(ExineMainScene.Hero, ExineMainScene.SelectedCell.Item))
-                            {
-                                Network.Enqueue(new C.EquipItem { Grid = ExineMainScene.SelectedCell.GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = ItemSlot });
-                                Locked = true;
-                                ExineMainScene.SelectedCell.Locked = true;
-                            }
-                            ExineMainScene.SelectedCell = null;
-                        }
-                        return;
-                    #endregion
-                    #region To Hero AutoPot
-                    case MirGridType.HeroHPItem:
-                    case MirGridType.HeroMPItem:
-                        if (ExineMainScene.SelectedCell.GridType != MirGridType.HeroInventory) return;
-                        if (ExineMainScene.Hero == null || ExineMainScene.Hero.Dead)
-                            return;
-                        if (ExineMainScene.SelectedCell.Item.Info.Type != ItemType.Potion || ExineMainScene.SelectedCell.Item.Info.Shape > 1)
-                            return;
-
-                        Network.Enqueue(new C.SetAutoPotItem { Grid = GridType, ItemIndex = ExineMainScene.SelectedCell.Item.Info.Index });
-                        ExineMainScene.SelectedCell = null;
-
-                        return;
-                        #endregion
+                   
                 }
 
                 return;
@@ -2066,10 +1710,6 @@ namespace Exine.ExineControls
                     if (grid != MirGridType.Inventory && grid != MirGridType.Storage)
                         return false;
                     break;
-                case MirGridType.HeroEquipment:
-                    if (grid != MirGridType.HeroInventory)
-                        return false;
-                    break;                
             }
 
             switch ((EquipmentSlot)ItemSlot)
@@ -2111,9 +1751,7 @@ namespace Exine.ExineControls
             if (Item == null) return false;
 
             UserObject actor = ExineMainScene.User;
-            if (HeroGridType)
-                actor = ExineMainScene.Hero;
-
+            
             switch (actor.Gender)
             {
                 case ExineGender.Male:
@@ -2290,9 +1928,6 @@ namespace Exine.ExineControls
         private bool CanWearItem(UserObject actor, UserItem i)
         {
             if (i == null) return false;
-
-            if (actor == ExineMainScene.Hero && actor.Dead)
-                return false;
 
             //If Can remove;
 

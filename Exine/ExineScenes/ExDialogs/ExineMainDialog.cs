@@ -23,12 +23,7 @@ namespace Exine.ExineScenes.ExDialogs
         public MirButton GameShopButton, MenuButton, InventoryButton, CharacterButton, SkillButton, QuestButton, OptionButton;
         public ExineControl HealthOrb;
         public ExineLabel HealthLabel, ManaLabel, TopLabel, BottomLabel, ExperienceLabel, GoldLabel, WeightLabel, SpaceLabel, AModeLabel, PModeLabel, SModeLabel;
-        public HeroInfoPanel HeroInfoPanel;
-        public HeroBehaviourPanel HeroBehaviourPanel;
-
-        public MirButton HeroMenuButton, HeroSummonButton;
-
-
+        
         //203,563
         //exine ui
         public ExineImageControl _ExPortraitDialog, _ExPhoto, _ExHPBar, _ExMPBar, _ExChatDialog, _ExBelt, _ExAPModeBtn, _ExMinimapDialog;//, _ExExperienceBar;
@@ -494,45 +489,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = false,//add k333123
             };
 
-            HeroMenuButton = new MirButton
-            {
-                Index = 2164,
-                HoverIndex = 2165,
-                PressedIndex = 2166,
-                Library = Libraries.Prguse,
-                Parent = this,
-                Location = new Point(Size.Width - 160, 65),
-                Size = new Size(20, 20),
-                Sound = SoundList.ButtonA,
-                Visible = false
-            };
-            HeroMenuButton.Click += (o, e) =>
-            {
-                ExineMainScene.Scene.HeroMenuPanel.Toggle();
-            };
-
-            HeroSummonButton = new MirButton
-            {
-                Index = 2167,
-                HoverIndex = 2168,
-                PressedIndex = 2169,
-                Library = Libraries.Prguse,
-                Parent = this,
-                Location = new Point(this.Size.Width - 160, 90),
-                Size = new Size(20, 20),
-                Sound = SoundList.ButtonA,
-                Visible = false
-            };
-            HeroSummonButton.Click += (o, e) =>
-            {
-                Network.Enqueue(new C.Chat
-                {
-                    Message = "@SUMMONHERO",
-                });
-            };
-
-            HeroInfoPanel = new HeroInfoPanel { Parent = this, Visible = false };
-
+            
             AModeLabel = new ExineLabel
             {
                 AutoSize = true,
@@ -3716,25 +3673,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             SkillButton.Click += (o, e) =>
             {
-                if (HeroMagic)
-                {
-                    if (ExineMainScene.Hero == null || ExineMainScene.Hero.Dead)
-                        return;
-                    new AssignKeyPanel(Magic, 17, new string[]
-                        {
-                            "Shift" + Environment.NewLine + "F1",
-                            "Shift" + Environment.NewLine + "F2",
-                            "Shift" + Environment.NewLine + "F3",
-                            "Shift" + Environment.NewLine + "F4",
-                            "Shift" + Environment.NewLine + "F5",
-                            "Shift" + Environment.NewLine + "F6",
-                            "Shift" + Environment.NewLine + "F7",
-                            "Shift" + Environment.NewLine + "F8"
-                        })
-                    { Actor = ExineMainScene.Hero };
-                }
-                else
-                {
+               
                     new AssignKeyPanel(Magic, 1, new string[]
                         {
                             "F1",
@@ -3755,7 +3694,7 @@ namespace Exine.ExineScenes.ExDialogs
                             "Ctrl" + Environment.NewLine + "F8"
                         })
                     { Actor = ExineMainScene.User };
-                }
+                
             };
 
             LevelImage = new ExineImageControl
