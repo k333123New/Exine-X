@@ -523,6 +523,7 @@ namespace Exine.ExineGraphics
 
             MapLibs[20] = new MLibrary(Settings.DataPath + "Map\\Exine\\Smtiles"); 
 
+            //object tile
             for (int i = 1000; i < 2000; i++)
             {
                 if (File.Exists(Settings.DataPath + "Map\\Exine\\Map_" + (9000 + i) + "_FrontTile.lib"))

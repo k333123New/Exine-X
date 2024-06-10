@@ -10340,6 +10340,13 @@ namespace Exine.ExineScenes
 
                     int fileIndex = M2CellInfo[x, y].FrontIndex;
                     if (fileIndex == -1) continue;
+
+                    //k333123 240610 map static object check!
+                    //fileIndex : 10000 ~ 20000 => Map_10000_FrontTile.lib
+                    //if(fileIndex>9999) Console.WriteLine("fileIndex:" + fileIndex);
+                    //Console.WriteLine("!!!!!!!!!!!!!fileIndex:" + fileIndex + " index:"+ index);
+
+
                     animation = M2CellInfo[x, y].FrontAnimationFrame;
 
                     if ((animation & 0x80) > 0)

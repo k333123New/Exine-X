@@ -119,8 +119,10 @@ namespace MakeMapObjectToLibForCut
                     //anim's ypfImageSetIdx is ypfImageSets idx...!
 
                     yPFFormat = ConvertYpfToRGBA("TS_0" + staticObject.World + "_" + fileType + "Static.ypf");
-                    //if (staticObject.IsAnim == 0x01)
-                    if (fileType == "Anim")
+
+
+                    if (staticObject.IsAnim == 0x01)
+                    //if (fileType == "Anim")
                     {
                         Console.WriteLine("staticObject.IsAnim == 0x01");
                         frame = yPFFormat.ypfImageSets[ypfImageSetIdx].FrameInfo.frames[0];
@@ -130,7 +132,7 @@ namespace MakeMapObjectToLibForCut
                         try
                         {
                             Console.WriteLine("TS_0" + staticObject.World + "_" + fileType + "Static.ypf Load!!!");
-                            Console.WriteLine("staticObject.IsAnim != 0x01 yPFFormat.ypfImageSets.Len:"+ yPFFormat.ypfImageSets.Length+ " yPFFormat.ypfImageSets[0].FrameInfo.frames.len:"+ yPFFormat.ypfImageSets[0].FrameInfo.frames.Length+ "ypfImageSetIdx:"+ ypfImageSetIdx);
+                            Console.WriteLine("!!!staticObject.IsAnim != 0x01 yPFFormat.ypfImageSets.Len:"+ yPFFormat.ypfImageSets.Length+ " yPFFormat.ypfImageSets[0].FrameInfo.frames.len:"+ yPFFormat.ypfImageSets[0].FrameInfo.frames.Length+ "ypfImageSetIdx:"+ ypfImageSetIdx);
                             frame = yPFFormat.ypfImageSets[0].FrameInfo.frames[ypfImageSetIdx];
                         }
                         catch (Exception ex)
@@ -203,7 +205,13 @@ namespace MakeMapObjectToLibForCut
                     {
                         Console.WriteLine("Found ImgFile : " + imgFileName);
                         bitmap = new Bitmap(imgFileName);
-                       
+                        /*
+                        if(imgFileName.Contains("1_0.png"))
+                        {
+                            Console.WriteLine("Found Gate Image!!!");
+                            Console.ReadLine();
+                        }
+                        */
                     }
                     else
                     {

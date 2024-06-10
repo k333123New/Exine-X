@@ -155,7 +155,7 @@ namespace Exine.ExineScenes
                 Size = new Size(114, 21),
                 Visible=true,
                 Password=true,
-                Text = "kang1248",
+                Text = "12481248",
             };
             _loginIdTextBox = new ExineTextBox
             {
