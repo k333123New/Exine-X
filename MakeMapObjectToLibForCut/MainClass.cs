@@ -11,7 +11,17 @@ using System.Threading.Tasks;
 namespace MakeMapObjectToLibForCut
 {
     //기존방식 : 고정객체의 배치를 맞추고 이미지 레이어로 선택 -> 고정객체 앞뒤 판단이 불가
-    //신규 예정 : 고정객체의 배치를 맞추고 동일한 고정 객체여도 좌표값을 새로 수정하여 별도로 저장 및 맵별 lib 저장 및 좌표 정보 저장
+    //신규 : 고정객체의 배치를 맞추고 동일한 고정 객체여도 좌표값을 새로 수정하여 별도로 저장 및 맵별 lib 저장 및 좌표 정보 저장
+    //저장경로는 반드시 다음과 같이 배치하여야 한다.
+
+    //입력
+    //D:\ExineX\Src\Build\Server Tools\MakeMapObjectToLibForCut\Release\net7.0\
+    //*.map *.ypf(TS_xx_Tile.ypf, TS_xx_StaticShadows.ypf TS_xx_Static.ypf TS_xx_AnimStaticShadows.ypf  TS_xx_AnimStatic.ypf)
+
+    //출력
+    //MakeMapObjectToLibForCut\Release\net7.0\ .lib 파일 =>  Client\Data\Map\Exine
+    //MakeMapObjectToLibForCut\Release\net7.0\MAP_OUT\ .map파일 =>  Client\Map, Server\Maps
+
     class FrameWithPosition
     {
         public Frame frame;

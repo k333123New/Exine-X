@@ -21,7 +21,7 @@ Add Item (book,) and Shape = Shared/Enums.cs.Spell number
 
  pwan 
 //effect2 58~67 pawn
-
+=> map 10000 position : 78,88 clear front limit!!!!!!!
 
 saint
 622~+10
