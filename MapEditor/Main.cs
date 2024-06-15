@@ -297,7 +297,7 @@ namespace Map_Editor
 
             //Point point = new Point(drawX, drawY); 
             //if (offSet) point.Offset(mi.X/CellWidth, mi.Y/CellHeight);
-            if (index == 46) Console.WriteLine("drawX:" + drawX + " mi.X:" + mi.X+ " w:"+ w);
+            //if (index == 46) Console.WriteLine("drawX:" + drawX + " mi.X:" + mi.X+ " w:"+ w);
 
             drawX = (drawX + mi.X);// * zoomMIN / zoomMAX;
             drawY = (drawY + mi.Y + mi.Height);// * zoomMIN / zoomMAX;
