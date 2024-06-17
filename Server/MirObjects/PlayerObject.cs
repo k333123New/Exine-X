@@ -3968,11 +3968,7 @@ namespace Server.ExineObjects
                     case MirGridType.Storage:
                         array = Info.AccountInfo.Storage;
                         break;
-                    case MirGridType.HeroInventory:
-                        if (!HasHero || !HeroSpawned)
-                            return text;
-                        array = CurrentHero.Inventory;
-                        break;
+                   
                     default:
                         continue;
                 }
@@ -4772,16 +4768,7 @@ namespace Server.ExineObjects
                     fromArray = Info.Equipment;
                     fromGrid = MirGridType.Equipment;
                     break;
-                case MirGridType.HeroInventory:
-                    if (!HasHero || !HeroSpawned)
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-                    toArray = CurrentHero.Inventory;
-                    fromArray = CurrentHero.Equipment;
-                    fromGrid = MirGridType.HeroEquipment;
-                    break;
+                
                 default:
                     Enqueue(p);
                     return;
@@ -4836,16 +4823,17 @@ namespace Server.ExineObjects
                 toArray[to] = temp;
                 p.Success = true;
                 Enqueue(p);
+                /*
                 if (grid == MirGridType.HeroInventory)
                 {
                     Hero.RefreshStats();
                     Hero.Broadcast(GetUpdateInfo());
                 }
                 else
-                {
+                {*/
                     RefreshStats();
                     Broadcast(GetUpdateInfo());
-                }
+                //}
 
                 Report.ItemMoved(temp, fromGrid, grid, index, to);
 
@@ -5022,6 +5010,7 @@ namespace Server.ExineObjects
                 case MirGridType.Refine:
                     array = Info.Refine;
                     break;
+                    /*
                 case MirGridType.HeroInventory:
                     if (!HasHero || !HeroSpawned)
                     {
@@ -5030,6 +5019,7 @@ namespace Server.ExineObjects
                     }
                     array = CurrentHero.Inventory;
                     break;
+                    */
                 default:
                     Enqueue(p);
                     return;
@@ -5209,7 +5199,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     toArray = Info.Equipment;
                     break;
-                case MirGridType.HeroInventory:
+                /*case MirGridType.HeroInventory:
                     if (HasHero && HeroSpawned && !Hero.Dead)
                     {
                         toArray = CurrentHero.Equipment;
@@ -5217,6 +5207,7 @@ namespace Server.ExineObjects
                         actor = Hero;
                     }                        
                     break;
+                */
             }
 
             if (toArray == null || to < 0 || to >= toArray.Length)
@@ -5252,6 +5243,7 @@ namespace Server.ExineObjects
                     }
                     array = Account.Storage;
                     break;
+                    /*
                 case MirGridType.HeroInventory:
                     if (!HasHero || !HeroSpawned)
                     {
@@ -5260,6 +5252,7 @@ namespace Server.ExineObjects
                     }
                     array = CurrentHero.Inventory;
                     break;
+                    */
                 default:
                     Enqueue(p);
                     return;
@@ -5332,9 +5325,11 @@ namespace Server.ExineObjects
 
                 p.Success = true;
                 Enqueue(p);
+                /*
                 if (toGrid == MirGridType.HeroEquipment)
                     Hero.RefreshStats();
                 else
+                */
                     RefreshStats();
 
                 //Broadcast(GetUpdateInfo());
@@ -5377,7 +5372,7 @@ namespace Server.ExineObjects
                 Info.Inventory[to] = temp;
                 CurrentHero.Inventory[from] = null;
 
-                Report.ItemMoved(temp, MirGridType.HeroInventory, MirGridType.Inventory, from, to);
+                //Report.ItemMoved(temp, MirGridType.HeroInventory, MirGridType.Inventory, from, to);
 
                 p.Success = true;
                 RefreshBagWeight();
@@ -5436,7 +5431,7 @@ namespace Server.ExineObjects
                 CurrentHero.Inventory[to] = temp;
                 Info.Inventory[from] = null;
 
-                Report.ItemMoved(temp, MirGridType.Inventory, MirGridType.HeroInventory, from, to);
+                //Report.ItemMoved(temp, MirGridType.Inventory, MirGridType.HeroInventory, from, to);
 
                 p.Success = true;
                 RefreshBagWeight();
@@ -6136,6 +6131,7 @@ namespace Server.ExineObjects
                     }
                     arrayFrom = Info.Equipment[(int)EquipmentSlot.Weapon].Slots;
                     break;
+                    /*
                 case MirGridType.HeroInventory:
                     if (!HasHero || !HeroSpawned)
                     {
@@ -6152,6 +6148,7 @@ namespace Server.ExineObjects
                     }
                     arrayFrom = CurrentHero.Equipment;
                     break;
+                    */
                 default:
                     Enqueue(p);
                     return;
@@ -6195,6 +6192,7 @@ namespace Server.ExineObjects
                     }
                     arrayTo = Info.Equipment[(int)EquipmentSlot.Weapon].Slots;
                     break;
+                    /*
                 case MirGridType.HeroInventory:
                     if (!HasHero || !HeroSpawned)
                     {
@@ -6211,6 +6209,7 @@ namespace Server.ExineObjects
                     }
                     arrayTo = CurrentHero.Equipment;
                     break;
+                    */
                 default:
                     Enqueue(p);
                     return;
@@ -6292,10 +6291,12 @@ namespace Server.ExineObjects
                 case MirGridType.Inventory:
                     array = Info.Inventory;
                     break;
+                    /*
                 case MirGridType.HeroInventory:
                     if (HasHero && HeroSpawned)
                         array = CurrentHero.Inventory;
                     break;
+                    */
             }
 
             if (array == null)
@@ -6712,9 +6713,11 @@ namespace Server.ExineObjects
                 case MirGridType.Inventory:
                     RefreshBagWeight();
                     break;
+                    /*
                 case MirGridType.HeroInventory:
                     Hero.RefreshBagWeight();
                     break;
+                    */
             }
 
             if (canRepair && array[indexTo] != null)
@@ -7237,9 +7240,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     array = Account.Storage;
                     break;
-                case MirGridType.HeroInventory:
-                    array = CurrentHero.Inventory;
-                    break;
+                
                 default:
                     return false;
             }
@@ -8935,9 +8936,7 @@ namespace Server.ExineObjects
             if (Envir.GetItemInfo(ItemIndex) == null)
                 ItemIndex = 0;
 
-            if (Grid == MirGridType.HeroHPItem)
-                Hero.HPItemIndex = ItemIndex;
-            else
+            
                 Hero.MPItemIndex = ItemIndex;
             Enqueue(new S.SetAutoPotItem() { Grid = Grid, ItemIndex = ItemIndex });
         }

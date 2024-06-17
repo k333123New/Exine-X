@@ -1150,9 +1150,11 @@ namespace Server.ExineNetwork
                 case MirGridType.Inventory:
                     Player.UseItem(p.UniqueID);
                     break;
+                    /*
                 case MirGridType.HeroInventory:
                     Player.HeroUseItem(p.UniqueID);
                     break;
+                    */
             }            
         }
         private void DropItem(C.DropItem p)

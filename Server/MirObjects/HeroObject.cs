@@ -303,8 +303,10 @@ namespace Server.ExineObjects
         public override MapObject DefaultMagicTarget => Owner;
         public override void UseItem(ulong id)
         {
+            return;
+            /*
             S.UseItem p = new S.UseItem { UniqueID = id, Grid = MirGridType.HeroInventory, Success = false };
-
+            
             UserItem item = null;
             int index = -1;
 
@@ -581,6 +583,7 @@ namespace Server.ExineObjects
 
             p.Success = true;
             Owner.Enqueue(p);
+            */
         }
         public override void Die()
         {
