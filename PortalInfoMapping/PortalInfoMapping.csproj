@@ -11,6 +11,9 @@
     <None Update="MapInfoExport.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="PortalLinkInfo.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Portals.tbl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
