@@ -44,6 +44,9 @@ namespace Server.Database
             Modified.ValueType = typeof(bool);
             MonsterIndex.ValueType = typeof(int);
             MonsterName.ValueType = typeof(string);
+            MonsterColor_R.ValueType = typeof(byte); //k333123 add for monster color set
+            MonsterColor_G.ValueType = typeof(byte); //k333123 add for monster color set
+            MonsterColor_B.ValueType = typeof(byte); //k333123 add for monster color set
             MonsterAI.ValueType = typeof(byte);
             MonsterEffect.ValueType = typeof(byte);
             MonsterLevel.ValueType = typeof(ushort);
@@ -126,7 +129,8 @@ namespace Server.Database
 
             foreach (DataGridViewColumn col in monsterInfoGridView.Columns)
             {
-                Table.Columns.Add(col.DataPropertyName, col.ValueType);
+                Console.WriteLine(col.DataPropertyName +" "+ col.ValueType.ToString());
+                Table.Columns.Add(col.DataPropertyName, col.ValueType); 
             }
 
             foreach (ExineDatabase.MonsterInfo item in Envir.MonsterInfoList)
@@ -136,9 +140,11 @@ namespace Server.Database
                 row["Modified"] = false;
 
                 row["MonsterIndex"] = item.Index;
-                row["MonsterName"] = item.Name;
-
+                row["MonsterName"] = item.Name; 
                 row["MonsterImage"] = item.Image;
+                row["MonsterColor_R"] = item.ColorR;
+                row["MonsterColor_G"] = item.ColorG;
+                row["MonsterColor_B"] = item.ColorB;
                 row["MonsterAI"] = item.AI;
                 row["MonsterLevel"] = item.Level;
                 row["MonsterEffect"] = item.Effect;
@@ -218,6 +224,11 @@ namespace Server.Database
  
                 monster.Name = (string)row.Cells["MonsterName"].Value;
                 monster.Image = (Monster)row.Cells["MonsterImage"].Value;
+
+                monster.ColorR = (byte)row.Cells["MonsterColor_R"].Value;
+                monster.ColorG = (byte)row.Cells["MonsterColor_G"].Value;
+                monster.ColorB = (byte)row.Cells["MonsterColor_B"].Value;
+
                 monster.AI = (byte)row.Cells["MonsterAI"].Value;
                 monster.Level = (ushort)row.Cells["MonsterLevel"].Value;
                 monster.Effect = (byte)row.Cells["MonsterEffect"].Value;
@@ -575,6 +586,11 @@ namespace Server.Database
 
             row.Cells["MonsterName"].Value = "";
             row.Cells["MonsterImage"].Value = (Monster)0;
+
+            row.Cells["MonsterColor_R"].Value = (byte)0;
+            row.Cells["MonsterColor_G"].Value = (byte)0;
+            row.Cells["MonsterColor_B"].Value = (byte)0;
+
             row.Cells["MonsterAI"].Value = (byte)0;
             row.Cells["MonsterLevel"].Value = (ushort)0;
             row.Cells["MonsterEffect"].Value = (byte)0;

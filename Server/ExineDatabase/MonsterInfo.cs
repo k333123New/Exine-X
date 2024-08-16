@@ -24,7 +24,9 @@ namespace Server.ExineDatabase
         public string Name = string.Empty;
 
         public Monster Image;
+        public byte ColorR, ColorG, ColorB = 0;
         public byte AI, Effect, ViewRange = 7, CoolEye;
+
         public ushort Level;
 
         public byte Light;
@@ -54,6 +56,15 @@ namespace Server.ExineDatabase
             Name = reader.ReadString();
 
             Image = (Monster) reader.ReadUInt16();
+            //temp
+            /*
+            ColorR = 0x00;
+            ColorG = 0x00;
+            ColorB = 0x00;
+            */
+            ColorR = reader.ReadByte();//k333123 add for monster color set
+            ColorG = reader.ReadByte();//k333123 add for monster color set
+            ColorB = reader.ReadByte();//k333123 add for monster color set
             AI = reader.ReadByte();
             Effect = reader.ReadByte();
 
@@ -146,6 +157,9 @@ namespace Server.ExineDatabase
             writer.Write(Name);
 
             writer.Write((ushort) Image);
+            writer.Write(ColorR);//k333123 for mob color
+            writer.Write(ColorG);//k333123 for mob color
+            writer.Write(ColorB);//k333123 for mob color
             writer.Write(AI);
             writer.Write(Effect);
             writer.Write(Level);
@@ -180,11 +194,21 @@ namespace Server.ExineDatabase
             ushort image;
             if (!ushort.TryParse(data[1], out image)) return;
             info.Image = (Monster) image;
-
+            /*
             if (!byte.TryParse(data[2], out info.AI)) return;
             if (!byte.TryParse(data[3], out info.Effect)) return;
             if (!ushort.TryParse(data[4], out info.Level)) return;
             if (!byte.TryParse(data[5], out info.ViewRange)) return;
+            */
+            if (!byte.TryParse(data[2], out info.ColorR)) return;
+            if (!byte.TryParse(data[3], out info.ColorG)) return;
+            if (!byte.TryParse(data[4], out info.ColorB)) return;
+
+            if (!byte.TryParse(data[5], out info.AI)) return;
+            if (!byte.TryParse(data[6], out info.Effect)) return;
+            if (!ushort.TryParse(data[7], out info.Level)) return;
+            if (!byte.TryParse(data[8], out info.ViewRange)) return;
+
 
             //if (!int.TryParse(data[6], out info.HP)) return;
 

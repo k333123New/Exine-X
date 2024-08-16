@@ -725,9 +725,97 @@ public enum Monster : ushort
 
 
     //Exine
-    ExFountain=20000,
-    호아친=20001,
+    /*
+     * 
+     */ 
 
+    ExFountain=20000,
+    ExFlaty = 20001,
+    ExArmadil=20002,
+    ExClikat = 20003,
+    ExScol = 20004,
+    ExAnt = 20005,
+    ExTenaga = 20006,
+    ExAnt2 = 20007,
+
+
+
+
+    /*
+     *  ExineMonsters[0] = new MLibrary(Settings.ExineMonsterPath + "empty");
+            ExineMonsters[1] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_768_플래티_reidx");
+            ExineMonsters[2] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_769_아르마딜_reidx");
+            ExineMonsters[3] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_770_크릭켓_reidx");
+            ExineMonsters[4] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_771_스콜_reidx");
+            ExineMonsters[5] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_772_개미_reidx");
+            ExineMonsters[6] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_773_테나가_reidx");
+            ExineMonsters[7] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_774__reidx");
+            ExineMonsters[8] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1024_거스웜_reidx");
+            ExineMonsters[9] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1025_딩고_reidx");
+            ExineMonsters[10] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1026_쇼크_reidx");
+            ExineMonsters[11] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1027_크로틀_reidx");
+            ExineMonsters[12] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1028_스토마_reidx");
+            ExineMonsters[13] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1029_빅프로거_reidx");
+            ExineMonsters[14] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1030_스몰 프로거_reidx");
+            ExineMonsters[15] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1031_호아친_reidx");
+            ExineMonsters[16] = new MLibrary(Settings.ExineMonsterPath + "ZM_04_1032_켈피_reidx");
+            ExineMonsters[17] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1280_델피네_reidx");
+            ExineMonsters[18] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1281_사마엘_reidx");
+            ExineMonsters[19] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1282_하피_reidx");
+            ExineMonsters[20] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1283__reidx");
+            ExineMonsters[21] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1284__reidx"); 
+            ExineMonsters[22] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1285_로비아탈_reidx");
+            ExineMonsters[23] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1286__reidx");
+            ExineMonsters[24] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1287__reidx");
+            ExineMonsters[25] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1288_반트_reidx");
+            ExineMonsters[26] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1289_카룬_reidx");
+            ExineMonsters[27] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1290__reidx");
+            ExineMonsters[28] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1291_세이렌_reidx");
+            ExineMonsters[29] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1292_즈라촉_reidx");
+            ExineMonsters[30] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1293_켈베로스리치_reidx");
+            ExineMonsters[31] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1294__reidx");
+            ExineMonsters[32] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1295__reidx"); 
+            ExineMonsters[33] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1296__reidx");
+            ExineMonsters[34] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1297__reidx");
+            ExineMonsters[35] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1298__reidx");
+            ExineMonsters[36] = new MLibrary(Settings.ExineMonsterPath + "ZM_05_1299__reidx");
+            ExineMonsters[37] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1536__reidx");
+            ExineMonsters[38] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1537__reidx");
+            ExineMonsters[39] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1538_라돈_reidx");
+            ExineMonsters[40] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1539_닌트_reidx");
+            ExineMonsters[41] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1540_빅혼_reidx");
+            ExineMonsters[42] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1541_차쿠_reidx");
+            ExineMonsters[43] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1542__reidx"); 
+            ExineMonsters[44] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1543_물고기_reidx");
+            ExineMonsters[45] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1544_바트라코스_reidx");
+            ExineMonsters[46] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1545_스노우자이언트_reidx");
+            ExineMonsters[47] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1546_루츠_reidx");
+            ExineMonsters[48] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1547_카엘_reidx");
+            ExineMonsters[49] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1548__reidx");
+            ExineMonsters[50] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1549_리트라코_reidx");
+            ExineMonsters[51] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1550__reidx");
+            ExineMonsters[52] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1551__reidx");
+            ExineMonsters[53] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1552_가르콘오크_reidx");
+            ExineMonsters[54] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1553_크루델오크_reidx"); 
+            ExineMonsters[55] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1554_쿠겔오크_reidx");
+            ExineMonsters[56] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1555__reidx");
+            ExineMonsters[57] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1556__reidx");
+            ExineMonsters[58] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1557__reidx");
+            ExineMonsters[59] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1558__reidx");
+            ExineMonsters[60] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1559__reidx");
+            ExineMonsters[61] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1560_그란트라코_reidx");
+            ExineMonsters[62] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1561_일룩스오크_reidx");
+            ExineMonsters[63] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1562_슬라임_reidx");
+            ExineMonsters[64] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1563_라돈_reidx");
+            ExineMonsters[65] = new MLibrary(Settings.ExineMonsterPath + "ZM_06_1564_라돈_reidx");
+            ExineMonsters[66] = new MLibrary(Settings.ExineMonsterPath + "ZM_07_1792_아이스 우드_reidx");
+            ExineMonsters[67] = new MLibrary(Settings.ExineMonsterPath + "ZM_07_1793_블라디터마_reidx");
+            ExineMonsters[68] = new MLibrary(Settings.ExineMonsterPath + "ZM_08_2048_파이러스_reidx");
+            ExineMonsters[69] = new MLibrary(Settings.ExineMonsterPath + "ZM_09_2304_벽_reidx");
+            ExineMonsters[70] = new MLibrary(Settings.ExineMonsterPath + "ZM_09_2305_용의심장_reidx");
+            ExineMonsters[71] = new MLibrary(Settings.ExineMonsterPath + "ZM_09_2306_용의심장_reidx");
+            ExineMonsters[72] = new MLibrary(Settings.ExineMonsterPath + "ZM_09_2307_용의심장_reidx");
+     */
 }
 
 public enum ExAction : byte

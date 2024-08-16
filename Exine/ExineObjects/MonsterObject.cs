@@ -72,6 +72,9 @@ namespace Exine.ExineObjects
             Name = info.Name;
             NameColour = info.NameColour;
             BaseImage = info.Image;
+            //k333123 maybe add for mob color
+
+
 
             OldNameColor = NameColour;
 
@@ -147,6 +150,8 @@ namespace Exine.ExineObjects
                     Frames = FrameSet.ExineStaticObjectNPC;
                     Effects.Add(new BuffEffect(Libraries.ExEffect02, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
                     break;
+
+
             }
 
 
