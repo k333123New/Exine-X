@@ -722,8 +722,11 @@ public enum Monster : ushort
     Foxey = 10013,
     MedicalRat = 10014,
 
+
+
     //Exine
     ExFountain=20000,
+    호아친=20001,
 
 }
 

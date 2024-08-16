@@ -10009,16 +10009,15 @@ namespace Exine.ExineScenes
         }
 
         protected override void CreateTexture()
-        {
+        { 
             if (User == null) return;
-
+             
             if (!FloorValid)
-                DrawFloor();
-
-
+                DrawFloor(); 
+             
             if (Size != TextureSize)
                 DisposeTexture();
-
+             
             if (ControlTexture == null || ControlTexture.Disposed)
             {
                 DXManager.ControlList.Add(this);
@@ -10030,15 +10029,15 @@ namespace Exine.ExineScenes
             Surface surface = ControlTexture.GetSurfaceLevel(0);
             DXManager.SetSurface(surface);
             DXManager.Device.Clear(ClearFlags.Target, BackColour, 0, 0);
-
+             
             DrawBackground();
-
+             
             if (FloorValid)
             {
                 DXManager.Draw(DXManager.FloorTexture, new Rectangle(0, 0, Settings.ScreenWidth, Settings.ScreenHeight), Vector3.Zero, Color.White);
             }
-
-            DrawObjects();
+             
+            DrawObjects(); 
 
             //Render Death, 
 
@@ -10119,7 +10118,7 @@ namespace Exine.ExineScenes
         }
 
         private void DrawFloor()
-        {
+        { 
             if (DXManager.FloorTexture == null || DXManager.FloorTexture.Disposed)
             {
                 DXManager.FloorTexture = new Texture(DXManager.Device, Settings.ScreenWidth, Settings.ScreenHeight, 1, Usage.RenderTarget, Format.A8R8G8B8, Pool.Default);
@@ -10134,16 +10133,18 @@ namespace Exine.ExineScenes
 
             int index;
             int drawY, drawX;
-
+             
             for (int y = User.Movement.Y - ViewRangeY; y <= User.Movement.Y + ViewRangeY; y++)
             {
-                //if (y <= 0 || y % 2 == 1) continue; //k333123 
+                //if (y <= 0 || y % 2 == 1) continue; //k333123  
+                if (y <= 0) continue; //k333123 240816! this is solution for graphic freeze
                 if (y >= Height) break;
                 drawY = (y - User.Movement.Y + OffSetY) * CellHeight + User.OffSetMove.Y; //Moving OffSet
 
                 for (int x = User.Movement.X - ViewRangeX; x <= User.Movement.X + ViewRangeX; x++)
                 {
                     //if (x <= 0 || x % 2 == 1) continue; //k333123
+                    if (x <= 0) continue; //k333123 240816! this is solution for graphic freeze
                     if (x >= Width) break;
                     drawX = (x - User.Movement.X + OffSetX) * CellWidth - OffSetX + User.OffSetMove.X; //Moving OffSet
                     if ((M2CellInfo[x, y].BackImage == 0) || (M2CellInfo[x, y].BackIndex == -1)) continue;
@@ -10176,6 +10177,7 @@ namespace Exine.ExineScenes
                     Libraries.MapLibs[M2CellInfo[x, y].MiddleIndex].Draw(index, drawX, drawY);
                 }
             }
+
             for (int y = User.Movement.Y - ViewRangeY; y <= User.Movement.Y + ViewRangeY + 5; y++)
             {
                 if (y <= 0) continue;
@@ -10244,7 +10246,7 @@ namespace Exine.ExineScenes
         }
 
         private void DrawObjects()
-        {
+        { 
             if (Settings.Effect)
             {
                 for (int i = Effects.Count - 1; i >= 0; i--)
@@ -10417,7 +10419,7 @@ namespace Exine.ExineScenes
             DXManager.SetOpacity(0.4F);
 
             //MapObject.User.DrawMount();
-
+             
             MapObject.User.DrawBody();
 
             if ((MapObject.User.Direction == ExineDirection.Up) ||

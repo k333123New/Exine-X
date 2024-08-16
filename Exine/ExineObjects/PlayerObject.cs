@@ -944,6 +944,8 @@ namespace Exine.ExineObjects
             }
         }
 
+        int prevLocationX = 0;
+        int prevLocationY = 0;
         public override void Process()
         {
             bool update = CMain.Time >= NextMotion || ExineMainScene.CanMove;
@@ -1068,6 +1070,15 @@ namespace Exine.ExineObjects
                 DisplayRectangle = new Rectangle(DrawLocation, BodyLibrary.GetTrueSize(DrawFrame));
             }
 
+            //k333123 print final position(user)
+            /*
+            if ((prevLocationX != FinalDrawLocation.X) && (prevLocationY != FinalDrawLocation.Y))
+            {
+                Console.WriteLine("X:{0}, Y:{1}", FinalDrawLocation.X, FinalDrawLocation.Y);
+            }
+            prevLocationX = FinalDrawLocation.X;
+            prevLocationY = FinalDrawLocation.Y;
+            */
             for (int i = 0; i < Effects.Count; i++)
                 Effects[i].Process();
 
@@ -1256,7 +1267,7 @@ namespace Exine.ExineObjects
                 }
 
                 temp = new Point(action.Location.X, temp.Y > CurrentLocation.Y ? temp.Y : CurrentLocation.Y);
-
+                //240625 limit check?
                 if (MapLocation != temp)
                 {
                     ExineMainScene.Scene.MapControl.RemoveObject(this);
@@ -6147,6 +6158,7 @@ namespace Exine.ExineObjects
             if (BodyLibrary != null) BodyLibrary.ExineDrawTinted(DrawFrame + ArmourOffSet, DrawLocation, drawColour,tintColor, true);
 
             DXManager.SetGrayscale(oldGrayScale);
+
 
         }
         public void DrawHead()

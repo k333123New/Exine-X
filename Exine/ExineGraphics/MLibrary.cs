@@ -1428,6 +1428,7 @@ ZM_02_519_요정01_reidx.lib
             DXManager.Draw(mi.Image, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), colour);
 
             mi.CleanTime = CMain.Time + Settings.CleanDelay;
+
         }
 
         public void Draw(int index, Point point, Color colour, bool offSet, float opacity)
