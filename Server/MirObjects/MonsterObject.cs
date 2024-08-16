@@ -2640,6 +2640,7 @@ namespace Server.ExineObjects
                 ObjectID = ObjectID,
                 Name = Name,
                 NameColour = NameColour,
+                TintColor = Color.FromArgb(Info.ColorR, Info.ColorG, Info.ColorB),  //k333123 240816 add for color mob
                 Location = CurrentLocation,
                 Image = Info.Image,
                 Direction = Direction,

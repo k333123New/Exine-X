@@ -60,12 +60,16 @@ namespace Exine.ExineObjects
 
         public uint ObjectID;
         public string Name = string.Empty;
+
+
         public Point CurrentLocation, MapLocation;
         public ExineDirection Direction;
         public bool Dead, Hidden, SitDown, Sneaking;
         public PoisonType Poison;
         public long DeadTime;
         public byte AI;
+        public Color TintColor;
+
         public bool InTrapRock;
         public int JumpDistance;
 

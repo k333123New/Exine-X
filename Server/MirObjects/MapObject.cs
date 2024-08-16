@@ -63,7 +63,7 @@ namespace Server.ExineObjects
         }
 
         public long CellTime, PKPointTime, LastHitTime, EXPOwnerTime;
-        public Color NameColour = Color.White;
+        public Color NameColour = Color.White; 
 
         public bool Dead, Undead, Harvested, AutoRev;
 

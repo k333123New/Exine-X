@@ -2283,6 +2283,8 @@ namespace ServerPackets
         public uint ObjectID;
         public string Name = string.Empty;
         public Color NameColour;
+        public Color TintColor;//k333123 240816 add
+
         public Point Location;
         public Monster Image;
         public ExineDirection Direction;
@@ -2303,6 +2305,9 @@ namespace ServerPackets
             NameColour = Color.FromArgb(reader.ReadInt32());
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             Image = (Monster)reader.ReadUInt16();
+
+            TintColor = Color.FromArgb(reader.ReadInt32());//k333123 240816 add
+
             Direction = (ExineDirection)reader.ReadByte();
             Effect = reader.ReadByte();
             AI = reader.ReadByte();
@@ -2331,6 +2336,9 @@ namespace ServerPackets
             writer.Write(Location.X);
             writer.Write(Location.Y);
             writer.Write((ushort)Image);
+
+            writer.Write(TintColor.ToArgb());//k333123 240816 add
+
             writer.Write((byte)Direction);
             writer.Write(Effect);
             writer.Write(AI);

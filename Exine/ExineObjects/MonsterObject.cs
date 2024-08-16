@@ -72,9 +72,9 @@ namespace Exine.ExineObjects
             Name = info.Name;
             NameColour = info.NameColour;
             BaseImage = info.Image;
+
             //k333123 maybe add for mob color
-
-
+            TintColor = info.TintColor;// k333123 240816 add
 
             OldNameColor = NameColour;
 
@@ -137,8 +137,8 @@ namespace Exine.ExineObjects
 
             Stage = info.ExtraByte;
 
-            //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            //Console.WriteLine("Monster Name:" + Name + " BaseImage:" + BaseImage + " (short)BaseImage:" + (short)BaseImage);
+            Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+            Console.WriteLine("Monster Name:" + Name + " BaseImage:" + BaseImage + " (short)BaseImage:" + (short)BaseImage + "ColorR:"+TintColor.R+" ColorG:"+ TintColor.G+" ColorB:"+ TintColor.B);
 
             //ExineMonsterLib
             //k333123 240320 add
@@ -151,7 +151,11 @@ namespace Exine.ExineObjects
                     Effects.Add(new BuffEffect(Libraries.ExEffect02, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
                     break;
 
-
+                case Monster.ExFlaty:
+                    Console.WriteLine("ExFlaty! (ushort)BaseImage - 20000:" + ((ushort)BaseImage - 20000).ToString()); 
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.DefaultMonster;
+                    break;
             }
 
 
@@ -214,8 +218,15 @@ namespace Exine.ExineObjects
                     BodyLibrary = Libraries.Monsters[(ushort)Monster.CaveStatue];
                     break;
                 default: 
-                    BodyLibrary = Libraries.Monsters[(ushort)BaseImage];
-                    ///Console.WriteLine("######################################################");
+                    if((ushort)BaseImage >=20000) //k333123 240817 for Exine Monster
+                    {
+                        BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage-20000];
+                        Console.WriteLine("######################################################");
+                    }
+                    else
+                    {
+                        BodyLibrary = Libraries.Monsters[(ushort)BaseImage];
+                    }
                     break;
             }
 
@@ -311,7 +322,7 @@ namespace Exine.ExineObjects
                     }
                     break;
             }
-
+            Console.WriteLine("@@@@@@@@@@@@@@ Before SetAction!!!");
             SetAction();
             SetCurrentEffects();
 
@@ -507,6 +518,7 @@ namespace Exine.ExineObjects
 
         public bool SetAction()
         {
+            //Console.WriteLine("@@@SetAction");
             if (NextAction != null && !ExineMainScene.CanMove)
             {
                 switch (NextAction.Action)
@@ -542,22 +554,22 @@ namespace Exine.ExineObjects
 
             if (ActionFeed.Count == 0)
             {
-                Console.WriteLine("%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                //Console.WriteLine("%%%%%%%%%%%%%%%%%%%%%%%%%%");
                 CurrentAction = Stoned ? ExAction.Stoned : ExAction.Standing;
 
 
                 if (CurrentAction == ExAction.Standing) CurrentAction = SitDown ? ExAction.SitDown : ExAction.Standing;
 
-                Console.WriteLine("^^^^^^^^^^^CurrentAction: " + CurrentAction);
+                //Console.WriteLine("^^^^^^^^^^^CurrentAction: " + CurrentAction);
 
                 Frames.TryGetValue(CurrentAction, out Frame);
                 if (Frames != null)
                 {
-                    Console.WriteLine("&&&&&&&&&&&&&Frames is not null! Frames.Count: " + Frames.Count);
+                    //Console.WriteLine("&&&&&&&&&&&&&Frames is not null! Frames.Count: " + Frames.Count);
                 }
                 if (Frame != null)
                 {
-                    Console.WriteLine("*************Frame is not null! Frame.Count: " + Frame.Count);
+                    //Console.WriteLine("*************Frame is not null! Frame.Count: " + Frame.Count);
                 }
 
                 if (MapLocation != CurrentLocation)
@@ -575,6 +587,7 @@ namespace Exine.ExineObjects
             }
             else
             {
+                //Console.WriteLine("@@@SetAction @1");
                 QueuedAction action = ActionFeed[0];
                 ActionFeed.RemoveAt(0);
 
@@ -610,7 +623,7 @@ namespace Exine.ExineObjects
                     ExineMainScene.Scene.MapControl.AddObject(this);
                 }
 
-
+                //Console.WriteLine("@@@SetAction @2 CurrentAction:"+ CurrentAction);
                 switch (CurrentAction)
                 {
                     case ExAction.Pushed:
@@ -4372,21 +4385,25 @@ namespace Exine.ExineObjects
                 //here!
                 //Console.WriteLine("Draw Monster!!!!!!0 Frame==null");
             }
-
+            
+            //if (BodyLibrary == null) Console.WriteLine("Monster Draw BodyLibrary == null!!!!!!!!!!!!!!!!!!!!!");
+            //if (Frame == null) Console.WriteLine("Monster Draw Frame == null!!!!!!!!!!!!!!!!!!!!!");  this is problem
             if (BodyLibrary == null || Frame == null) return;
-           // Console.WriteLine("Draw Monster!!!!!!000");
+            //Console.WriteLine("Draw Monster!!!!!!000");
             bool oldGrayScale = DXManager.GrayScale;
             Color drawColour = ApplyDrawColour();
 
             if (!DXManager.Blending && Frame.Blend)
             {
-                BodyLibrary.DrawBlend(DrawFrame, DrawLocation, drawColour, true);
-               // Console.WriteLine("Draw Monster!!!!!!1");
+               // BodyLibrary.DrawBlend(DrawFrame, DrawLocation, drawColour, true);
+                BodyLibrary.ExineDrawTinted(DrawFrame, DrawLocation, drawColour,TintColor, true, true); //k333123 240816 add
+                 //Console.WriteLine("Draw Monster!!!!!!1 TintColor.R:"+ TintColor.R);
             }
             else
             {
-                BodyLibrary.Draw(DrawFrame, DrawLocation, drawColour, true);
-                //Console.WriteLine("Draw Monster!!!!!!2");
+                //BodyLibrary.Draw(DrawFrame, DrawLocation, drawColour, true);
+                BodyLibrary.ExineDrawTinted(DrawFrame, DrawLocation, drawColour, TintColor, true);//k333123 240816 add
+                //Console.WriteLine("Draw Monster!!!!!!2 TintColor.R:" + TintColor.R);
             }
 
             //effect??? add k333123 240319
