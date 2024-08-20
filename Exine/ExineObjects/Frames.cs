@@ -2,7 +2,8 @@
 {
     public class FrameSet : Dictionary<ExAction, Frame>
     {
-        public static FrameSet ExPlayer;
+        public static FrameSet ExPlayer, ExDefaultMonster, ExDefaultMonster2, ExDefaultMonster3, ExDefaultMonster4;
+        public static FrameSet ExDefaultMonster5, ExDefaultMonster6, ExDefaultMonster7;
         public static FrameSet ExineDefaultNPC, ExineGuardNPC, ExineStaticObjectNPC, DefaultMonster;
         public static List<FrameSet> DragonStatue, GreatFoxSpirit, HellBomb, CaveStatue;
 
@@ -44,6 +45,7 @@
                 { ExAction.Harvest, new Frame(0, 1, 0, 200) }
             };
 
+            //Foreach ExineMonseter???
 
 
             //Default Monster
@@ -57,6 +59,82 @@
                 { ExAction.Dead, new Frame(153, 1, 9, 1000) },
                 { ExAction.Revive, new Frame(144, 10, 0, 100) { Reverse = true } }
             };
+
+            //platy, clickat, scol, ant,gusworm, 
+            ExDefaultMonster = new FrameSet
+            {
+                { ExAction.Standing, new Frame(0, 4, 0, 500) },
+                { ExAction.Walking, new Frame(128, 3, 0, 100) },
+                { ExAction.Attack1, new Frame(288, 6, 0, 100) },
+                { ExAction.Struck, new Frame(216, 1, 0, 200) },
+                { ExAction.Die, new Frame(240, 6, 0, 100) },
+                { ExAction.Dead, new Frame(245, 1, 5, 1000) },
+                { ExAction.Revive, new Frame(240, 6, 0, 100) { Reverse = true } }
+            };
+
+            //armadyl
+            ExDefaultMonster2 = new FrameSet
+            {
+                { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                { ExAction.Attack1, new Frame(265, 5, 0, 100) },
+                { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                { ExAction.Die, new Frame(232, 4, 0, 100) },
+                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+            };
+
+            //tenaga
+            //Todo Change Index!
+            ExDefaultMonster3 = new FrameSet
+            {
+                { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                { ExAction.Attack1, new Frame(272, 8, 0, 100) },
+                { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                { ExAction.Die, new Frame(232, 4, 0, 100) },
+                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+            };
+
+            //Dingo
+            //Todo Change Index!
+            ExDefaultMonster4 = new FrameSet
+            {
+                { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                { ExAction.Attack1, new Frame(304, 9, 0, 100) },
+                { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                { ExAction.Die, new Frame(232, 4, 0, 100) },
+                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+            };
+
+            //shock
+            ExDefaultMonster5 = new FrameSet
+            {
+                { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                { ExAction.Attack1, new Frame(272, 5, 0, 100) },
+                { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                { ExAction.Die, new Frame(232, 4, 0, 100) },
+                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+            };
+
+            //Crotle
+            //Todo Change Index!
+            ExDefaultMonster6 = new FrameSet
+            {
+                { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                { ExAction.Attack1, new Frame(304, 6, 0, 100) },
+                { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                { ExAction.Die, new Frame(232, 4, 0, 100) },
+                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+            };
+
 
             #region DragonStatue
             //DragonStatue 1

@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{F75359D0-CBBC-49F2-9BB7-3AAC3B4D775F}"
 	ProjectSection(SolutionItems) = preProject
 		log.txt = log.txt
+		moninfo.txt = moninfo.txt
 		PotalMappingInfo.txt = PotalMappingInfo.txt
 		SoundRules.txt = SoundRules.txt
 	EndProjectSection
@@ -38,7 +39,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakeMapObjectToLibForCut", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExineEffectConvert", "ExineEffectConvert\ExineEffectConvert\ExineEffectConvert.csproj", "{E3A89E38-4344-4467-852A-49899FD60C31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortalInfoMapping", "PortalInfoMapping\PortalInfoMapping.csproj", "{139CAFF5-C5CB-4710-B54C-8BCB1DC7BAC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalInfoMapping", "PortalInfoMapping\PortalInfoMapping.csproj", "{139CAFF5-C5CB-4710-B54C-8BCB1DC7BAC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

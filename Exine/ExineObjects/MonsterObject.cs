@@ -137,8 +137,8 @@ namespace Exine.ExineObjects
 
             Stage = info.ExtraByte;
 
-            Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-            Console.WriteLine("Monster Name:" + Name + " BaseImage:" + BaseImage + " (short)BaseImage:" + (short)BaseImage + "ColorR:"+TintColor.R+" ColorG:"+ TintColor.G+" ColorB:"+ TintColor.B);
+           //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+           //Console.WriteLine("Monster Name:" + Name + " BaseImage:" + BaseImage + " (short)BaseImage:" + (short)BaseImage + "ColorR:"+TintColor.R+" ColorG:"+ TintColor.G+" ColorB:"+ TintColor.B);
 
             //ExineMonsterLib
             //k333123 240320 add
@@ -150,11 +150,92 @@ namespace Exine.ExineObjects
                     Frames = FrameSet.ExineStaticObjectNPC;
                     Effects.Add(new BuffEffect(Libraries.ExEffect02, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
                     break;
-
-                case Monster.ExFlaty:
-                    Console.WriteLine("ExFlaty! (ushort)BaseImage - 20000:" + ((ushort)BaseImage - 20000).ToString()); 
+                     
+                case Monster.ExAnt:
+                case Monster.ExAnt2:
+                case Monster.ExArmadyl:
+                case Monster.ExBatrakos:
+                case Monster.ExBigFrogger:
+                case Monster.ExBigHorn:
+                case Monster.ExBigHorn111:
+                case Monster.ExBigHorn222:
+                case Monster.ExBloodyTerma:
+                case Monster.ExCerberusRich:
+                case Monster.ExCerberusRich111:
+                case Monster.ExCerberusRich222:
+                case Monster.ExCerberusRich333:
+                case Monster.ExCerberusRich444:
+                case Monster.ExCerberusRich555:
+                case Monster.ExCerberusRich666:
+                case Monster.ExChaku:
+                case Monster.ExChaku111:
+                case Monster.ExCricket:
+                case Monster.ExCrottle:
+                case Monster.ExCrudelOrc:
+                case Monster.ExDelphine:
+                case Monster.ExDingo:
+                case Monster.ExDitor:
+                case Monster.ExDitor111:
+                case Monster.ExDitor222:
+                case Monster.ExDitor333:
+                case Monster.ExDitor444:
+                case Monster.ExDitor555:
+                case Monster.ExDitor666:
+                case Monster.ExDitor777:
+                case Monster.ExGarconOrc:
+                case Monster.ExGranTraco:
+                case Monster.ExGuthworm:
+                case Monster.ExHarpy:
+                case Monster.ExHarpy111:
+                case Monster.ExHarpy222:
+                case Monster.ExHarpy333:
+                case Monster.ExHarpy444:
+                case Monster.ExHarpy555:
+                case Monster.ExHoatzin:
+                case Monster.ExIceWood:
+                case Monster.ExIluxOrc:
+                case Monster.ExJrachok:
+                case Monster.ExKael:
+                case Monster.ExKelpie:
+                case Monster.ExKugelOrc:
+                case Monster.ExLitraco:
+                case Monster.ExPlaty:
+                case Monster.ExPyrus:
+                case Monster.ExRoots:
+                case Monster.ExSamael:
+                case Monster.ExSeiren:
+                case Monster.ExShock:
+                case Monster.ExSlime:
+                case Monster.ExSmallFrogger:
+                case Monster.ExSnowGiant:
+                case Monster.ExSpinel:
+                case Monster.ExSquall:
+                case Monster.ExStoma:
+                case Monster.ExTenaga: 
+                    //Console.WriteLine("ExFlaty! (ushort)BaseImage - 20000:" + ((ushort)BaseImage - 20000).ToString()); 
                     BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
-                    Frames = FrameSet.DefaultMonster;
+                    Frames = FrameSet.ExDefaultMonster;
+                    break;
+
+                case Monster.ExKarun:
+                case Monster.ExBant:
+                case Monster.ExNint:
+                case Monster.ExRobiatal:
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    break;
+
+                case Monster.ExRadonLeft:
+                case Monster.ExRadonCenter:
+                case Monster.ExRadonRight:
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    break;
+
+
+                case Monster.ExDragonsHeartLeft:
+                case Monster.ExDragonsHeartCenter:
+                case Monster.ExDragonsHeartRight:
+                case Monster.ExWall:
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
                     break;
             }
 
@@ -221,7 +302,7 @@ namespace Exine.ExineObjects
                     if((ushort)BaseImage >=20000) //k333123 240817 for Exine Monster
                     {
                         BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage-20000];
-                        Console.WriteLine("######################################################");
+                        //Console.WriteLine("######################################################");
                     }
                     else
                     {
@@ -322,7 +403,7 @@ namespace Exine.ExineObjects
                     }
                     break;
             }
-            Console.WriteLine("@@@@@@@@@@@@@@ Before SetAction!!!");
+            //Console.WriteLine("@@@@@@@@@@@@@@ Before SetAction!!!");
             SetAction();
             SetCurrentEffects();
 

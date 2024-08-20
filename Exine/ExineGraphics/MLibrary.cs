@@ -633,8 +633,8 @@ ZM_02_519_요정01_reidx.lib
             #region ExMonsters
              
             ExineMonsters[0] = new MLibrary(Settings.ExineMonsterPath + "empty");
-            ExineMonsters[1] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_768_flaty");
-            //ExineMonsters[1] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_768_플래티_reidx");
+            //ExineMonsters[1] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_768_flaty");
+            ExineMonsters[1] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_768_플래티_reidx");
             ExineMonsters[2] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_769_아르마딜_reidx");
             ExineMonsters[3] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_770_크릭켓_reidx");
             ExineMonsters[4] = new MLibrary(Settings.ExineMonsterPath + "ZM_03_771_스콜_reidx");

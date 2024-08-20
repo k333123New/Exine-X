@@ -298,8 +298,10 @@ namespace Exine.ExineObjects
 
 
         int leftRightToggleFlag = 0;
+        bool prevPieceMode = false;
         public virtual void SetLibraries()
         {
+
             //add k333123 240305
             //Console.WriteLine("@777 SetLibraries CurrentAction: "+(int)CurrentAction+ " TransformType:"+ TransformType);
             switch (CurrentAction)
@@ -332,27 +334,31 @@ namespace Exine.ExineObjects
                     if (leftRightToggleFlag % 2 == 0)
                     {
                         leftRightToggleFlag = 0;
-                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame)");
+                        //Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame)");
                         if (MapObject.User.ExinePeaceMode)
                         {
                             Frames.TryGetValue(ExAction.PEACEMODE_RUN_LEFT, out Frame); //k333123 add
+                            prevPieceMode = true;
                         }
                         else
                         {
                             Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                            prevPieceMode = false;
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame)");
+                        //Console.WriteLine("Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame)");
                         if (MapObject.User.ExinePeaceMode)
                         {
                             Frames.TryGetValue(ExAction.PEACEMODE_RUN_RIGHT, out Frame);
-                             
+                            prevPieceMode = true;
+
                         }
                         else
                         {
                             Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                            prevPieceMode = false;
                         }
                     }
                     break;
@@ -378,14 +384,17 @@ namespace Exine.ExineObjects
                             SetAction();
                             */
                         }
+                        prevPieceMode = false;
                     }
                     else
                     {
-                        Console.WriteLine("MapObject.User.ExineBattleMode Standing!");
+                        if(prevPieceMode) Console.WriteLine("MapObject.User.ExineBattleMode Standing!");
                         Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
                         //ActionFeed.Clear();
                         //ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
                         //SetAction();
+
+                        prevPieceMode = false;
                     }
                     break; 
             }
