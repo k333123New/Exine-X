@@ -797,6 +797,8 @@ namespace Server.ExineObjects
                 Hero.GainExp((uint)expPoint);
             }
         }
+
+        //240827 exp 1 to 0!
         public override void GainExp(uint amount)
         {
             if (!CanGainExp) return;
@@ -838,7 +840,9 @@ namespace Server.ExineObjects
             if (Info.Mentor != 0 && !Info.IsMentor)
             {
                 MenteeEXP += (amount * Settings.MenteeExpBank) / 100;
-            }    
+            }
+
+            if (amount == 1) return; //240827 k333123 add
 
             Experience += amount;
 
