@@ -150,16 +150,144 @@ namespace Exine.ExineObjects
                     Frames = FrameSet.ExineStaticObjectNPC;
                     Effects.Add(new BuffEffect(Libraries.ExEffect02, 58, 10, 1400, this, true, BuffType.ClearRing) { Repeat = true });//test
                     break;
+
+                case Monster.ExPlaty:
+                    //ZM_03_768_플래티
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[0];
+                    break;
+
+                case Monster.ExArmadyl:
+                    //ZM_03_769_아르마딜
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[1];
+                    break;
+
+                case Monster.ExCricket:
+                case Monster.ExSnowGiant:
+                case Monster.ExDitor:
+                case Monster.ExDitor111:
+                case Monster.ExDitor222: 
+                case Monster.ExDitor333:
+                case Monster.ExDitor444:
+                case Monster.ExDitor555:
+                case Monster.ExDitor666:
+                case Monster.ExDitor777:
+                    //ZM_03_770_크릭켓 ZM_06_1545_스노우자이언트 ZM_06_1548_ ZM_06_1550_
+                    //ZM_06_1551_ ZM_06_1555_ ZM_06_1556_ ZM_06_1557_ ZM_06_1558_ ZM_06_1559_
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[2];
+                    break;
                      
+                case Monster.ExSquall:
+                case Monster.ExGuthworm:
+                    //ZM_03_771_스콜 ZM_04_1024_거스웜 
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[3];
+                    break;
+
                 case Monster.ExAnt:
                 case Monster.ExAnt2:
-                case Monster.ExArmadyl:
-                case Monster.ExBatrakos:
+                    //ZM_03_772_개미 ZM_03_774_
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[4];
+                    break;
+
+                case Monster.ExTenaga:
+                    //ZM_03_773_테나가
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[5];
+                    break;
+
+                case Monster.ExDingo:
+                    //ZM_04_1025_딩고
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[6];
+                    break;
+
+
+                case Monster.ExShock:
+                case Monster.ExSamael:
+                case Monster.ExHarpy:
+                case Monster.ExHarpy111:
+                case Monster.ExHarpy222:
+                case Monster.ExHarpy333:
+                case Monster.ExHarpy444:
+                case Monster.ExHarpy555:
+                case Monster.ExSpinel:
+                    //ZM_04_1026_쇼크 ZM_05_1281_사마엘 ZM_05_1282_하피 ZM_05_1283_
+                    //ZM_05_1284_ ZM_05_1286_ ZM_05_1287_ ZM_05_1290_ ZM_06_1543_물고기
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[7];
+                    break;
+
+
+                case Monster.ExCrottle:
+                    //ZM_04_1027_크로틀
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[8];
+                    break;
+
+                case Monster.ExStoma:
+                    //ZM_04_1028_스토마
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[9];
+                    break;
+
+
                 case Monster.ExBigFrogger:
-                case Monster.ExBigHorn:
-                case Monster.ExBigHorn111:
-                case Monster.ExBigHorn222:
-                case Monster.ExBloodyTerma:
+                case Monster.ExSmallFrogger:
+                    //ZM_04_1029_빅프로거 ZM_04_1030_스몰 프로거
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[10];
+                    break;
+
+                case Monster.ExHoatzin:
+                    //ZM_04_1031_호아친
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[11];
+                    break;
+
+
+                case Monster.ExKelpie:
+                case Monster.ExPyrus:
+                case Monster.ExSeiren:
+                    //ZM_04_1032_켈피 ZM_05_1291_세이렌 ZM_08_2048_파이러스
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[12];
+                    break;
+
+
+                case Monster.ExDelphine:
+                case Monster.ExCrudelOrc:
+                case Monster.ExKugelOrc:
+                    //ZM_05_1280_델피네 ZM_06_1553_크루델오크 ZM_06_1554_쿠겔오크
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[13];
+                    break;
+
+                case Monster.ExRobiatal:
+                    //ZM_05_1285_로비아탈
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[14];
+                    break;
+
+
+                case Monster.ExBant:
+                    //ZM_05_1288_반트
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[15];
+                    break;
+
+                case Monster.ExKarun:
+                case Monster.ExNint:
+                    //ZM_05_1289_카룬 ZM_06_1539_닌트
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[16];
+                    break;
+
+
+                case Monster.ExJrachok:
                 case Monster.ExCerberusRich:
                 case Monster.ExCerberusRich111:
                 case Monster.ExCerberusRich222:
@@ -167,75 +295,119 @@ namespace Exine.ExineObjects
                 case Monster.ExCerberusRich444:
                 case Monster.ExCerberusRich555:
                 case Monster.ExCerberusRich666:
-                case Monster.ExChaku:
-                case Monster.ExChaku111:
-                case Monster.ExCricket:
-                case Monster.ExCrottle:
-                case Monster.ExCrudelOrc:
-                case Monster.ExDelphine:
-                case Monster.ExDingo:
-                case Monster.ExDitor:
-                case Monster.ExDitor111:
-                case Monster.ExDitor222:
-                case Monster.ExDitor333:
-                case Monster.ExDitor444:
-                case Monster.ExDitor555:
-                case Monster.ExDitor666:
-                case Monster.ExDitor777:
-                case Monster.ExGarconOrc:
-                case Monster.ExGranTraco:
-                case Monster.ExGuthworm:
-                case Monster.ExHarpy:
-                case Monster.ExHarpy111:
-                case Monster.ExHarpy222:
-                case Monster.ExHarpy333:
-                case Monster.ExHarpy444:
-                case Monster.ExHarpy555:
-                case Monster.ExHoatzin:
-                case Monster.ExIceWood:
-                case Monster.ExIluxOrc:
-                case Monster.ExJrachok:
-                case Monster.ExKael:
-                case Monster.ExKelpie:
-                case Monster.ExKugelOrc:
-                case Monster.ExLitraco:
-                case Monster.ExPlaty:
-                case Monster.ExPyrus:
-                case Monster.ExRoots:
-                case Monster.ExSamael:
-                case Monster.ExSeiren:
-                case Monster.ExShock:
-                case Monster.ExSlime:
-                case Monster.ExSmallFrogger:
-                case Monster.ExSnowGiant:
-                case Monster.ExSpinel:
-                case Monster.ExSquall:
-                case Monster.ExStoma:
-                case Monster.ExTenaga: 
-                    //Console.WriteLine("ExFlaty! (ushort)BaseImage - 20000:" + ((ushort)BaseImage - 20000).ToString()); 
+                    //ZM_05_1292_즈라촉 ZM_05_1293_켈베로스리치 ZM_05_1294_ ZM_05_1295_
+                    //ZM_05_1296_ ZM_05_1297_ ZM_05_1298_ ZM_05_1299_
                     BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
-                    Frames = FrameSet.ExDefaultMonster;
+                    Frames = FrameSet.ExMonsterFrameSet[17];
                     break;
 
-                case Monster.ExKarun:
-                case Monster.ExBant:
-                case Monster.ExNint:
-                case Monster.ExRobiatal:
+
+
+                case Monster.ExBigHorn:
+                case Monster.ExBigHorn111:
+                case Monster.ExBigHorn222:
+                    //ZM_06_1536_ ZM_06_1537_ ZM_06_1540_빅혼
                     BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[18];
                     break;
+
 
                 case Monster.ExRadonLeft:
-                case Monster.ExRadonCenter:
                 case Monster.ExRadonRight:
+                    //ZM_06_1538_라돈 ZM_06_1564_라돈
                     BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[19];
                     break;
 
+
+                case Monster.ExChaku:
+                case Monster.ExChaku111:
+                    //ZM_06_1541_차쿠 ZM_06_1542_
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[20];
+                    break;
+
+                case Monster.ExBatrakos:
+                    //ZM_06_1544_바트라코스
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[21];
+                    break;
+
+                case Monster.ExRoots:
+                    //ZM_06_1546_루츠
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[22];
+                    break;
+
+                case Monster.ExKael:
+                    //ZM_06_1547_카엘
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[23];
+                    break;
+
+
+                case Monster.ExLitraco:
+                    //ZM_06_1549_리트라코
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[24];
+                    break;
+
+
+                case Monster.ExGarconOrc:
+                    //ZM_06_1552_가르콘오크
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[25];
+                    break;
+
+
+                case Monster.ExGranTraco:
+                    //ZM_06_1560_그란트라코
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[26];
+                    break;
+
+                case Monster.ExIluxOrc:
+                    //ZM_06_1561_일룩스오크
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[27];
+                    break;
+
+                case Monster.ExSlime:
+                    //ZM_06_1562_슬라임
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[28];
+                    break;
+
+                case Monster.ExRadonCenter:
+                    //ZM_06_1563_라돈
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[29];
+                    break;
+
+                case Monster.ExIceWood:
+                    //ZM_07_1792_아이스 우드
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[30];
+                    break;
+
+                case Monster.ExBloodyTerma:
+                    //ZM_07_1793_블라디터마
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[31];
+                    break;
+
+                case Monster.ExWall:
+                    //ZM_09_2304_벽
+                    BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[32];
+                    break;
 
                 case Monster.ExDragonsHeartLeft:
                 case Monster.ExDragonsHeartCenter:
                 case Monster.ExDragonsHeartRight:
-                case Monster.ExWall:
+                    //ZM_09_2305_용의심장 ZM_09_2306_용의심장 ZM_09_2307_용의심장
                     BodyLibrary = Libraries.ExineMonsters[(ushort)BaseImage - 20000];
+                    Frames = FrameSet.ExMonsterFrameSet[33];
                     break;
             }
 

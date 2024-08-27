@@ -2,8 +2,10 @@
 {
     public class FrameSet : Dictionary<ExAction, Frame>
     {
-        public static FrameSet ExPlayer, ExDefaultMonster, ExDefaultMonster2, ExDefaultMonster3, ExDefaultMonster4;
-        public static FrameSet ExDefaultMonster5, ExDefaultMonster6, ExDefaultMonster7;
+        // public static FrameSet ExPlayer, ExDefaultMonster, ExDefaultMonster2, ExDefaultMonster3, ExDefaultMonster4;
+        // public static FrameSet ExDefaultMonster5, ExDefaultMonster6, ExDefaultMonster7;
+        public static FrameSet ExPlayer;
+        public static FrameSet[] ExMonsterFrameSet= new FrameSet[34];//For Exine Mob
         public static FrameSet ExineDefaultNPC, ExineGuardNPC, ExineStaticObjectNPC, DefaultMonster;
         public static List<FrameSet> DragonStatue, GreatFoxSpirit, HellBomb, CaveStatue;
 
@@ -43,11 +45,7 @@
             { 
                 { ExAction.Standing, new Frame(0, 1, 0, 200) },
                 { ExAction.Harvest, new Frame(0, 1, 0, 200) }
-            };
-
-            //Foreach ExineMonseter???
-
-
+            }; 
             //Default Monster
             DefaultMonster = new FrameSet
             {
@@ -60,81 +58,490 @@
                 { ExAction.Revive, new Frame(144, 10, 0, 100) { Reverse = true } }
             };
 
-            //platy, clickat, scol, ant,gusworm, 
-            ExDefaultMonster = new FrameSet
-            {
-                { ExAction.Standing, new Frame(0, 4, 0, 500) },
-                { ExAction.Walking, new Frame(128, 3, 0, 100) },
-                { ExAction.Attack1, new Frame(288, 6, 0, 100) },
-                { ExAction.Struck, new Frame(216, 1, 0, 200) },
-                { ExAction.Die, new Frame(240, 6, 0, 100) },
-                { ExAction.Dead, new Frame(245, 1, 5, 1000) },
-                { ExAction.Revive, new Frame(240, 6, 0, 100) { Reverse = true } }
-            };
 
-            //armadyl
-            ExDefaultMonster2 = new FrameSet
-            {
-                { ExAction.Standing, new Frame(0, 3, 0, 500) },
-                { ExAction.Walking, new Frame(120, 3, 0, 100) },
-                { ExAction.Attack1, new Frame(265, 5, 0, 100) },
-                { ExAction.Struck, new Frame(208, 1, 0, 200) },
-                { ExAction.Die, new Frame(232, 4, 0, 100) },
-                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
-                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
-            };
+            //ZM_03_768_플래티
+            ExMonsterFrameSet[0] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(288, 6, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(245, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(240, 6, 0, 100) { Reverse = true }}
+                };
 
-            //tenaga
-            //Todo Change Index!
-            ExDefaultMonster3 = new FrameSet
-            {
-                { ExAction.Standing, new Frame(0, 3, 0, 500) },
-                { ExAction.Walking, new Frame(120, 3, 0, 100) },
-                { ExAction.Attack1, new Frame(272, 8, 0, 100) },
-                { ExAction.Struck, new Frame(208, 1, 0, 200) },
-                { ExAction.Die, new Frame(232, 4, 0, 100) },
-                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
-                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
-            };
+            //ZM_03_769_아르마딜
+            ExMonsterFrameSet[1] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 3, 0, 500)},
+                                { ExAction.Walking, new Frame(120, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(264, 5, 0, 100)},
+                                { ExAction.Struck, new Frame(208, 1, 0, 200)},
+                                { ExAction.Die, new Frame(232, 4, 0, 100)},
+                                { ExAction.Dead, new Frame(235, 1, 3, 1000)},
+                                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true }}
+                };
 
-            //Dingo
-            //Todo Change Index!
-            ExDefaultMonster4 = new FrameSet
-            {
-                { ExAction.Standing, new Frame(0, 3, 0, 500) },
-                { ExAction.Walking, new Frame(120, 3, 0, 100) },
-                { ExAction.Attack1, new Frame(304, 9, 0, 100) },
-                { ExAction.Struck, new Frame(208, 1, 0, 200) },
-                { ExAction.Die, new Frame(232, 4, 0, 100) },
-                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
-                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
-            };
+            //ZM_03_770_크릭켓 ZM_06_1545_스노우자이언트 ZM_06_1548_ ZM_06_1550_ ZM_06_1551_ ZM_06_1555_ ZM_06_1556_ ZM_06_1557_ ZM_06_1558_ ZM_06_1559_
+            ExMonsterFrameSet[2] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(272, 6, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 4, 0, 100)},
+                                { ExAction.Dead, new Frame(243, 1, 3, 1000)},
+                                { ExAction.Revive, new Frame(240, 4, 0, 100) { Reverse = true }}
+                };
 
-            //shock
-            ExDefaultMonster5 = new FrameSet
-            {
-                { ExAction.Standing, new Frame(0, 3, 0, 500) },
-                { ExAction.Walking, new Frame(120, 3, 0, 100) },
-                { ExAction.Attack1, new Frame(272, 5, 0, 100) },
-                { ExAction.Struck, new Frame(208, 1, 0, 200) },
-                { ExAction.Die, new Frame(232, 4, 0, 100) },
-                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
-                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
-            };
+            //ZM_03_771_스콜 ZM_04_1024_거스웜
+            ExMonsterFrameSet[3] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(288, 5, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(245, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(240, 6, 0, 100) { Reverse = true }}
+                };
 
-            //Crotle
-            //Todo Change Index!
-            ExDefaultMonster6 = new FrameSet
-            {
-                { ExAction.Standing, new Frame(0, 3, 0, 500) },
-                { ExAction.Walking, new Frame(120, 3, 0, 100) },
-                { ExAction.Attack1, new Frame(304, 6, 0, 100) },
-                { ExAction.Struck, new Frame(208, 1, 0, 200) },
-                { ExAction.Die, new Frame(232, 4, 0, 100) },
-                { ExAction.Dead, new Frame(235, 1, 3, 1000) },
-                { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
-            };
+            //ZM_03_772_개미 ZM_03_774_
+            ExMonsterFrameSet[4] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 5, 0, 500)},
+                                { ExAction.Walking, new Frame(136, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(288, 5, 0, 100)},
+                                { ExAction.Struck, new Frame(224, 1, 0, 200)},
+                                { ExAction.Die, new Frame(248, 5, 0, 100)},
+                                { ExAction.Dead, new Frame(252, 1, 4, 1000)},
+                                { ExAction.Revive, new Frame(248, 5, 0, 100) { Reverse = true }}
+                };
 
+            //ZM_03_773_테나가
+            ExMonsterFrameSet[5] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(272, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 4, 0, 100)},
+                                { ExAction.Dead, new Frame(243, 1, 3, 1000)},
+                                { ExAction.Revive, new Frame(240, 4, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_04_1025_딩고
+            ExMonsterFrameSet[6] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 6, 0, 100)},
+                                { ExAction.Attack1, new Frame(304, 9, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 5, 0, 100)},
+                                { ExAction.Dead, new Frame(268, 1, 4, 1000)},
+                                { ExAction.Revive, new Frame(264, 5, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_04_1026_쇼크 ZM_05_1281_사마엘 ZM_05_1282_하피 ZM_05_1283_ ZM_05_1284_ ZM_05_1286_ ZM_05_1287_ ZM_05_1290_ ZM_06_1543_물고기
+            ExMonsterFrameSet[7] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(272, 5, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 4, 0, 100)},
+                                { ExAction.Dead, new Frame(243, 1, 3, 1000)},
+                                { ExAction.Revive, new Frame(240, 4, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_04_1027_크로틀
+            ExMonsterFrameSet[8] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(304, 6, 0, 100)},
+                                { ExAction.Struck, new Frame(232, 1, 0, 200)},
+                                { ExAction.Die, new Frame(256, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(261, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(256, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_04_1028_스토마
+            ExMonsterFrameSet[9] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 8, 0, 500)},
+                                { ExAction.Walking, new Frame(160, 2, 0, 100)},
+                                { ExAction.Attack1, new Frame(320, 5, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 7, 0, 100)},
+                                { ExAction.Dead, new Frame(270, 1, 6, 1000)},
+                                { ExAction.Revive, new Frame(264, 7, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_04_1029_빅프로거 ZM_04_1030_스몰 프로거
+            ExMonsterFrameSet[10] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(256, 4, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 2, 0, 100)},
+                                { ExAction.Dead, new Frame(241, 1, 1, 1000)},
+                                { ExAction.Revive, new Frame(240, 2, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_04_1031_호아친
+            ExMonsterFrameSet[11] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(296, 7, 0, 100)},
+                                { ExAction.Struck, new Frame(232, 1, 0, 200)},
+                                { ExAction.Die, new Frame(256, 5, 0, 100)},
+                                { ExAction.Dead, new Frame(260, 1, 4, 1000)},
+                                { ExAction.Revive, new Frame(256, 5, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_04_1032_켈피 ZM_05_1291_세이렌 ZM_08_2048_파이러스
+            ExMonsterFrameSet[12] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(280, 5, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 5, 0, 100)},
+                                { ExAction.Dead, new Frame(244, 1, 4, 1000)},
+                                { ExAction.Revive, new Frame(240, 5, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_05_1280_델피네 ZM_06_1553_크루델오크 ZM_06_1554_쿠겔오크
+            ExMonsterFrameSet[13] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(312, 7, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(269, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(264, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_05_1285_로비아탈
+            ExMonsterFrameSet[14] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(304, 6, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 5, 0, 100)},
+                                { ExAction.Dead, new Frame(268, 1, 4, 1000)},
+                                { ExAction.Revive, new Frame(264, 5, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_05_1288_반트
+            ExMonsterFrameSet[15] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 8, 0, 500)},
+                                { ExAction.Walking, new Frame(160, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(336, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(256, 1, 0, 200)},
+                                { ExAction.Die, new Frame(280, 7, 0, 100)},
+                                { ExAction.Dead, new Frame(286, 1, 6, 1000)},
+                                { ExAction.Revive, new Frame(280, 7, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_05_1289_카룬 ZM_06_1539_닌트
+            ExMonsterFrameSet[16] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(304, 7, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 5, 0, 100)},
+                                { ExAction.Dead, new Frame(268, 1, 4, 1000)},
+                                { ExAction.Revive, new Frame(264, 5, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_05_1292_즈라촉 ZM_05_1293_켈베로스리치 ZM_05_1294_ ZM_05_1295_ ZM_05_1296_ ZM_05_1297_ ZM_05_1298_ ZM_05_1299_
+            ExMonsterFrameSet[17] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(264, 6, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 3, 0, 100)},
+                                { ExAction.Dead, new Frame(242, 1, 2, 1000)},
+                                { ExAction.Revive, new Frame(240, 3, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1536_ ZM_06_1537_ ZM_06_1540_빅혼
+            ExMonsterFrameSet[18] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(280, 4, 0, 100)},
+                                { ExAction.Struck, new Frame(216, 1, 0, 200)},
+                                { ExAction.Die, new Frame(240, 5, 0, 100)},
+                                { ExAction.Dead, new Frame(244, 1, 4, 1000)},
+                                { ExAction.Revive, new Frame(240, 5, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1538_라돈 ZM_06_1564_라돈
+            ExMonsterFrameSet[19] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 8, 0, 500)},
+                                { ExAction.Walking, new Frame(0, 0, 0, 0)},
+                                { ExAction.Attack1, new Frame(288, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(0, 0, 0, 0)},
+                                { ExAction.Die, new Frame(240, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(245, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(240, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1541_차쿠 ZM_06_1542_
+            ExMonsterFrameSet[20] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(312, 5, 0, 100)},
+                                { ExAction.Struck, new Frame(232, 1, 0, 200)},
+                                { ExAction.Die, new Frame(256, 7, 0, 100)},
+                                { ExAction.Dead, new Frame(262, 1, 6, 1000)},
+                                { ExAction.Revive, new Frame(256, 7, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1544_바트라코스
+            ExMonsterFrameSet[21] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 6, 0, 100)},
+                                { ExAction.Attack1, new Frame(312, 4, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(269, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(264, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1546_루츠
+            ExMonsterFrameSet[22] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(312, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(269, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(264, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1547_카엘
+            ExMonsterFrameSet[23] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(304, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(232, 1, 0, 200)},
+                                { ExAction.Die, new Frame(256, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(261, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(256, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1549_리트라코
+            ExMonsterFrameSet[24] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(312, 6, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(269, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(264, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1552_가르콘오크
+            ExMonsterFrameSet[25] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(320, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 7, 0, 100)},
+                                { ExAction.Dead, new Frame(270, 1, 6, 1000)},
+                                { ExAction.Revive, new Frame(264, 7, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1560_그란트라코
+            ExMonsterFrameSet[26] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(336, 9, 0, 100)},
+                                { ExAction.Struck, new Frame(240, 1, 0, 200)},
+                                { ExAction.Die, new Frame(264, 9, 0, 100)},
+                                { ExAction.Dead, new Frame(272, 1, 8, 1000)},
+                                { ExAction.Revive, new Frame(264, 9, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1561_일룩스오크
+            ExMonsterFrameSet[27] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 8, 0, 500)},
+                                { ExAction.Walking, new Frame(160, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(328, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(256, 1, 0, 200)},
+                                { ExAction.Die, new Frame(280, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(285, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(280, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1562_슬라임
+            ExMonsterFrameSet[28] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 6, 0, 500)},
+                                { ExAction.Walking, new Frame(144, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(288, 6, 0, 100)},
+                                { ExAction.Struck, new Frame(232, 1, 0, 200)},
+                                { ExAction.Die, new Frame(256, 4, 0, 100)},
+                                { ExAction.Dead, new Frame(259, 1, 3, 1000)},
+                                { ExAction.Revive, new Frame(256, 4, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_06_1563_라돈
+            ExMonsterFrameSet[29] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 8, 0, 500)},
+                                { ExAction.Walking, new Frame(0, 0, 0, 0)},
+                                { ExAction.Attack1, new Frame(288, 12, 0, 100)},
+                                { ExAction.Struck, new Frame(0, 0, 0, 0)},
+                                { ExAction.Die, new Frame(240, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(245, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(240, 6, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_07_1792_아이스 우드
+            ExMonsterFrameSet[30] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 2, 0, 500)},
+                                { ExAction.Walking, new Frame(112, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(248, 4, 0, 100)},
+                                { ExAction.Struck, new Frame(200, 1, 0, 200)},
+                                { ExAction.Die, new Frame(224, 3, 0, 100)},
+                                { ExAction.Dead, new Frame(226, 1, 2, 1000)},
+                                { ExAction.Revive, new Frame(224, 3, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_07_1793_블라디터마
+            ExMonsterFrameSet[31] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 8, 0, 500)},
+                                { ExAction.Walking, new Frame(0, 0, 0, 0)},
+                                { ExAction.Attack1, new Frame(272, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(0, 0, 0, 0)},
+                                { ExAction.Die, new Frame(240, 4, 0, 100)},
+                                { ExAction.Dead, new Frame(243, 1, 3, 1000)},
+                                { ExAction.Revive, new Frame(240, 4, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_09_2304_벽
+            ExMonsterFrameSet[32] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(0, 4, 0, 500)},
+                                { ExAction.Walking, new Frame(128, 3, 0, 100)},
+                                { ExAction.Attack1, new Frame(0, 0, 0, 0)},
+                                { ExAction.Struck, new Frame(216, 2, 0, 200)},
+                                { ExAction.Die, new Frame(248, 3, 0, 100)},
+                                { ExAction.Dead, new Frame(250, 1, 2, 1000)},
+                                { ExAction.Revive, new Frame(248, 3, 0, 100) { Reverse = true }}
+                };
+
+            //ZM_09_2305_용의심장 ZM_09_2306_용의심장 ZM_09_2307_용의심장
+            ExMonsterFrameSet[33] = new FrameSet
+                {
+                                { ExAction.Standing, new Frame(9, 15, 0, 500)},
+                                { ExAction.Walking, new Frame(216, 4, 0, 100)},
+                                { ExAction.Attack1, new Frame(448, 8, 0, 100)},
+                                { ExAction.Struck, new Frame(312, 1, 0, 200)},
+                                { ExAction.Die, new Frame(336, 6, 0, 100)},
+                                { ExAction.Dead, new Frame(341, 1, 5, 1000)},
+                                { ExAction.Revive, new Frame(336, 6, 0, 100) { Reverse = true }}
+                };
+
+            /* //platy, clickat, scol, ant,gusworm, 
+             ExDefaultMonster = new FrameSet
+             {
+                 { ExAction.Standing, new Frame(0, 4, 0, 500) },
+                 { ExAction.Walking, new Frame(128, 3, 0, 100) },
+                 { ExAction.Attack1, new Frame(288, 6, 0, 100) },
+                 { ExAction.Struck, new Frame(216, 1, 0, 200) },
+                 { ExAction.Die, new Frame(240, 6, 0, 100) },
+                 { ExAction.Dead, new Frame(245, 1, 5, 1000) },
+                 { ExAction.Revive, new Frame(240, 6, 0, 100) { Reverse = true } }
+             };
+
+             //armadyl
+             ExDefaultMonster2 = new FrameSet
+             {
+                 { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                 { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                 { ExAction.Attack1, new Frame(265, 5, 0, 100) },
+                 { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                 { ExAction.Die, new Frame(232, 4, 0, 100) },
+                 { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                 { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+             };
+
+             //tenaga
+             //Todo Change Index!
+             ExDefaultMonster3 = new FrameSet
+             {
+                 { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                 { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                 { ExAction.Attack1, new Frame(272, 8, 0, 100) },
+                 { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                 { ExAction.Die, new Frame(232, 4, 0, 100) },
+                 { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                 { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+             };
+
+             //Dingo
+             //Todo Change Index!
+             ExDefaultMonster4 = new FrameSet
+             {
+                 { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                 { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                 { ExAction.Attack1, new Frame(304, 9, 0, 100) },
+                 { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                 { ExAction.Die, new Frame(232, 4, 0, 100) },
+                 { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                 { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+             };
+
+             //shock
+             ExDefaultMonster5 = new FrameSet
+             {
+                 { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                 { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                 { ExAction.Attack1, new Frame(272, 5, 0, 100) },
+                 { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                 { ExAction.Die, new Frame(232, 4, 0, 100) },
+                 { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                 { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+             };
+
+             //Crotle
+             //Todo Change Index!
+             ExDefaultMonster6 = new FrameSet
+             {
+                 { ExAction.Standing, new Frame(0, 3, 0, 500) },
+                 { ExAction.Walking, new Frame(120, 3, 0, 100) },
+                 { ExAction.Attack1, new Frame(304, 6, 0, 100) },
+                 { ExAction.Struck, new Frame(208, 1, 0, 200) },
+                 { ExAction.Die, new Frame(232, 4, 0, 100) },
+                 { ExAction.Dead, new Frame(235, 1, 3, 1000) },
+                 { ExAction.Revive, new Frame(232, 4, 0, 100) { Reverse = true } }
+             };
+            */
 
             #region DragonStatue
             //DragonStatue 1

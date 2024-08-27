@@ -38,7 +38,7 @@ namespace MyApp // Note: actual namespace depends on the project name.
                     Console.Write(mobName + " ");
                 }
                 Console.WriteLine();
-                Console.WriteLine("ExMonsterFrameSet"+i+" = new FrameSet");
+                Console.WriteLine("ExMonsterFrameSet["+i+"] = new FrameSet");
                 Console.WriteLine(exFrameSetStringWithNames[i].exFrameSetString);
             }
         }
@@ -136,16 +136,16 @@ namespace MyApp // Note: actual namespace depends on the project name.
                 }
                 # endregion ExAction.Die
             } 
-            //stringBuilder.AppendLine("ExMonsterFrameSet = new FrameSet");
-            stringBuilder.AppendLine("{");
-            stringBuilder.AppendLine("\t{ ExAction.Standing, " + exStandingFrameSet.ToString() + "},");
-            stringBuilder.AppendLine("\t{ ExAction.Walking, " + exWalkingFrameSet.ToString() + "},");
-            stringBuilder.AppendLine("\t{ ExAction.Attack1, " + exAttack1FrameSet.ToString() + "},");
-            stringBuilder.AppendLine("\t{ ExAction.Struck, " + exStruckFrameSet.ToString() + "},");
-            stringBuilder.AppendLine("\t{ ExAction.Die, " + exDieFrameSet.ToString() + "},");
-            stringBuilder.AppendLine("\t{ ExAction.Dead, " + exDeadFrameSet.ToString() + "},");
-            stringBuilder.AppendLine("\t{ ExAction.Revive, " + exReviveFrameSet.ToString() + "}");
-            stringBuilder.AppendLine("};");
+
+            stringBuilder.AppendLine("\t\t{");
+            stringBuilder.AppendLine("\t\t\t\t{ ExAction.Standing, " + exStandingFrameSet.ToString() + "},");
+            stringBuilder.AppendLine("\t\t\t\t{ ExAction.Walking, " + exWalkingFrameSet.ToString() + "},");
+            stringBuilder.AppendLine("\t\t\t\t{ ExAction.Attack1, " + exAttack1FrameSet.ToString() + "},");
+            stringBuilder.AppendLine("\t\t\t\t{ ExAction.Struck, " + exStruckFrameSet.ToString() + "},");
+            stringBuilder.AppendLine("\t\t\t\t{ ExAction.Die, " + exDieFrameSet.ToString() + "},");
+            stringBuilder.AppendLine("\t\t\t\t{ ExAction.Dead, " + exDeadFrameSet.ToString() + "},");
+            stringBuilder.AppendLine("\t\t\t\t{ ExAction.Revive, " + exReviveFrameSet.ToString() + "}");
+            stringBuilder.AppendLine("\t\t};");
 
 
             return stringBuilder.ToString();
