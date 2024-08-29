@@ -305,7 +305,8 @@ namespace Server.MirForms
                         {
                             ExineDatabase.SafeZoneInfo newSafeZone = new ExineDatabase.SafeZoneInfo
                             {
-                                Info = EditEnvir.MapInfoList[j],
+                                //Info = EditEnvir.MapInfoList[j],
+                                InfoIndex = EditEnvir.MapInfoList[j].Index,//k333123 240828 for jsonDB
                                 StartPoint = head[0].Equals("STARTZONE"),
                                 Location = new Point(Convert.ToInt16(line[2]), Convert.ToInt16(line[3])),
                                 Size = Convert.ToUInt16(line[1])

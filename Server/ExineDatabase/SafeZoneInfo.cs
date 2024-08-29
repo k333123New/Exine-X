@@ -6,7 +6,8 @@
         public ushort Size;
         public bool StartPoint;
 
-        public MapInfo Info;
+        //public MapInfo Info;
+        public int InfoIndex;
 
         public SafeZoneInfo() { }
 
@@ -30,4 +31,5 @@
             return string.Format("Map: {0}- {1}", Functions.PointToString(Location), StartPoint);
         }
     }
+
 }

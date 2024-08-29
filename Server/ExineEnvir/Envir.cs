@@ -548,6 +548,8 @@ namespace Server.ExineEnvir
         {
             if (StartPoints.Count == 0) return "Cannot start server without atleast 1 Map and StartPoint.";
 
+            //k333123 remove mob check 240828
+            /*
             if (Settings.EnforceDBChecks)
             {
                 if (GetMonsterInfo(Settings.SkeletonName, true) == null) return "Cannot start server without mob: " + Settings.SkeletonName;
@@ -603,6 +605,7 @@ namespace Server.ExineEnvir
 
                 if (GetItemInfo(Settings.RefineOreName) == null) return "Cannot start server without item: " + Settings.RefineOreName;
             }
+            */
 
             WorldMapIcon wmi = ValidateWorldMap();
             if (wmi != null)
@@ -1046,11 +1049,7 @@ namespace Server.ExineEnvir
             for (var i = 0; i < Players.Count; i++) Players[i].HasUpdatedBaseStats = false;
         }
 
-
-        class ExineMapInfo
-        {
-
-        }
+         
         class ExineDB
         {
             public int version = 0;
@@ -1076,12 +1075,38 @@ namespace Server.ExineEnvir
             public RespawnTimer exineRespawnTimer = new RespawnTimer();
         }
 
-        //err! k333123
-        public void SaveDBToJson()
+        class ExineAccount
         {
-            /*
-            string filename = DatabasePath+".json";
+            public int Version;
+            public int CustomVersion;
+            public int NextAccountID;
+            public int NextCharacterID;
+            public ulong NextUserItemID;
+            public int NextHeroID;
+            public List<GuildInfo> GuildList = new List<GuildInfo>();
+            public int NextGuildID;
+            public List<HeroInfo> HeroList = new List<HeroInfo>();
+            public List<AccountInfo> AccountList = new List<AccountInfo>();
+            public ulong NextAuctionID;
+            public LinkedList<AuctionInfo> Auctions = new LinkedList<AuctionInfo>();
+            public ulong NextMailID;
+            public Dictionary<int, int> GameshopLog = new Dictionary<int, int>();
+            public List<MapRespawn> SavedSpawns = new List<MapRespawn>();
+            public List<RespawnSave> RespawnSaves = new List<RespawnSave>();
+            public ulong NextRecipeID;
+        }
+
+
+        //k333123 240828
+        public void SaveDB()
+        {
+            //SaveDBToJson(); 
+            string filename = DatabasePath + ".json";
+            var stream = File.Create(filename);
+            stream.Close();
+
             ExineDB exineDB = new ExineDB();
+
             exineDB.version = Version;
             exineDB.customVersion = CustomVersion;
             exineDB.mapIndex = MapIndex;
@@ -1092,6 +1117,7 @@ namespace Server.ExineEnvir
             exineDB.gameshopIndex = GameshopIndex;
             exineDB.conquestIndex = ConquestIndex;
             exineDB.respawnIndex = RespawnIndex;
+
             exineDB.exineMapInfoList = MapInfoList.ToList();
             exineDB.exineItemInfoList = ItemInfoList.ToList();
             exineDB.exineMonsterInfoList = MonsterInfoList.ToList();
@@ -1100,66 +1126,12 @@ namespace Server.ExineEnvir
             exineDB.exineDragonInfo = DragonInfo;
             exineDB.exineMagicInfoList = MagicInfoList.ToList();
             exineDB.exineGameShopList = GameShopList.ToList();
-            exineDB.exineConquestInfoList = ConquestInfoList.ToList(); 
-            exineDB.exineRespawnTimer = RespawnTick; 
-            var json = JsonConvert.SerializeObject(exineDB); 
+            exineDB.exineConquestInfoList = ConquestInfoList.ToList();
+            exineDB.exineRespawnTimer = RespawnTick;
+
+            var json = JsonConvert.SerializeObject(exineDB, Formatting.Indented);
             File.WriteAllText(filename, json);
-            */
-        }
-
-        public void SaveDB()
-        {
-            using (var stream = File.Create(DatabasePath))
-            using (var writer = new BinaryWriter(stream))
-            {
-                writer.Write(Version);
-                writer.Write(CustomVersion);
-                writer.Write(MapIndex);
-                writer.Write(ItemIndex);
-                writer.Write(MonsterIndex);
-                writer.Write(NPCIndex);
-                writer.Write(QuestIndex);
-                writer.Write(GameshopIndex);
-                writer.Write(ConquestIndex);
-                writer.Write(RespawnIndex);
-
-                writer.Write(MapInfoList.Count);
-                for (var i = 0; i < MapInfoList.Count; i++)
-                    MapInfoList[i].Save(writer);
-
-                writer.Write(ItemInfoList.Count);
-                for (var i = 0; i < ItemInfoList.Count; i++)
-                    ItemInfoList[i].Save(writer);
-
-                writer.Write(MonsterInfoList.Count);
-                for (var i = 0; i < MonsterInfoList.Count; i++)
-                    MonsterInfoList[i].Save(writer);
-
-                writer.Write(NPCInfoList.Count);
-                for (var i = 0; i < NPCInfoList.Count; i++)
-                    NPCInfoList[i].Save(writer);
-
-                writer.Write(QuestInfoList.Count);
-                for (var i = 0; i < QuestInfoList.Count; i++)
-                    QuestInfoList[i].Save(writer);
-
-                DragonInfo.Save(writer);
-                writer.Write(MagicInfoList.Count);
-                for (var i = 0; i < MagicInfoList.Count; i++)
-                    MagicInfoList[i].Save(writer);
-
-                writer.Write(GameShopList.Count);
-                for (var i = 0; i < GameShopList.Count; i++)
-                    GameShopList[i].Save(writer);
-
-                writer.Write(ConquestInfoList.Count);
-                for (var i = 0; i < ConquestInfoList.Count; i++)
-                    ConquestInfoList[i].Save(writer);
-
-                RespawnTick.Save(writer);
-
-                SaveDBToJson();
-            }
+             
         }
 
 
@@ -1217,6 +1189,8 @@ namespace Server.ExineEnvir
                 File.Move(AccountPath + "n", AccountPath);
                 if (File.Exists(AccountPath + "o"))
                     File.Delete(AccountPath + "o");
+
+
             }
             catch (Exception ex)
             {
@@ -1224,8 +1198,13 @@ namespace Server.ExineEnvir
             }
         }
 
-         
+
         //k333123 make save to json!
+        private void SaveAccountsToJson(Stream stream)
+        {
+          
+        }
+
         private void SaveAccounts(Stream stream)
         {
             using (var writer = new BinaryWriter(stream))
@@ -1265,8 +1244,63 @@ namespace Server.ExineEnvir
                 {
                     var Save = new RespawnSave { RespawnIndex = Spawn.Info.RespawnIndex, NextSpawnTick = Spawn.NextSpawnTick, Spawned = Spawn.Count >= Spawn.Info.Count * SpawnMultiplier };
                     Save.Save(writer);
-                }
+                } 
             }
+            /*
+           //add save to json
+           string filename = AccountPath + ".json";
+           var stream1 = File.Create(filename);
+           stream1.Close();
+
+           ExineAccount exineAccount = new ExineAccount();
+           exineAccount.Version = Version;
+           exineAccount.CustomVersion = CustomVersion;
+           exineAccount.NextAccountID = NextAccountID;
+           exineAccount.NextCharacterID = NextCharacterID;
+           exineAccount.NextUserItemID = NextUserItemID;
+           exineAccount.NextHeroID = NextHeroID;
+
+           exineAccount.GuildList = GuildList.ToList(); 
+
+           exineAccount.NextGuildID = NextGuildID;
+
+           exineAccount.HeroList = HeroList.ToList();
+
+           Console.WriteLine(AccountList[0].AccountID);
+           Console.WriteLine(AccountList[0].UserName); 
+           exineAccount.AccountList = AccountList.ToList();//순환참조 발생함. 하나만 사용하는 것이 아니라 여러개 사용함..
+                                                           //(Self referencing loop detected for property 'AccountInfo' with type 'Server.ExineDatabase.AccountInfo'. Path 'AccountList[0].Characters[0]'.)
+
+
+           exineAccount.AccountList= AccountList.ToList(); //!!!
+
+           exineAccount.NextAuctionID = NextAuctionID;
+
+           foreach(var item in Auctions)
+           {
+               exineAccount.Auctions.AddLast(item);
+           } 
+           exineAccount.NextMailID = NextMailID;
+           exineAccount.GameshopLog = GameshopLog;
+           exineAccount.SavedSpawns = SavedSpawns.ToList();
+           foreach (var Spawn in SavedSpawns)
+           {
+               var respawnSave = new RespawnSave();
+               respawnSave.RespawnIndex = Spawn.Info.RespawnIndex;
+               respawnSave.NextSpawnTick = Spawn.NextSpawnTick;
+               respawnSave.Spawned = Spawn.Count >= Spawn.Info.Count * SpawnMultiplier;
+               exineAccount.RespawnSaves.Add(respawnSave);
+           }
+            try
+            {
+                var json = JsonConvert.SerializeObject(exineAccount, Formatting.Indented);
+                File.WriteAllText(filename, json);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            } 
+            */
         }
 
         private void SaveGuilds(bool forced = false)
@@ -1432,7 +1466,8 @@ namespace Server.ExineEnvir
                 {
                     if (!Directory.Exists(BackUpPath)) Directory.CreateDirectory(BackUpPath);
                     var fileName =
-                        $"Accounts {Now.Year:0000}-{Now.Month:00}-{Now.Day:00} {Now.Hour:00}-{Now.Minute:00}-{Now.Second:00}.bak";
+                        //$"Accounts {Now.Year:0000}-{Now.Month:00}-{Now.Day:00} {Now.Hour:00}-{Now.Minute:00}-{Now.Second:00}.bak";
+                        $"Accounts {Now.Year:0000}-{Now.Month:00}-{Now.Day:00}.bak";//k333123 240829 backup account period set 1day.
                     if (File.Exists(Path.Combine(BackUpPath, fileName))) File.Delete(Path.Combine(BackUpPath, fileName));
                     File.Move(AccountPath, Path.Combine(BackUpPath, fileName));
                 }
@@ -1470,136 +1505,120 @@ namespace Server.ExineEnvir
             Saving = false;
         }
 
-        //k333123
-        public bool LoadDBFromJson() 
+       
+        
+        public bool LoadAccountsFromJson()
         {
-
             return true;
         }
 
+
+        //k333123
         public bool LoadDB()
         {
+           
             lock (LoadLock)
             {
-                if (!File.Exists(DatabasePath))
+                if (!File.Exists(DatabasePath + ".json"))
                 {
                     SaveDB();
                 }
 
-                using (var stream = File.OpenRead(DatabasePath))
-                using (var reader = new BinaryReader(stream))
+                //load from json
+                var jsonText = File.ReadAllText(DatabasePath + ".json");
+                var exineDb = JsonConvert.DeserializeObject<ExineDB>(jsonText);
+                LoadVersion = exineDb.version;
+                LoadCustomVersion = exineDb.customVersion;
+
+                if (LoadVersion < MinVersion)
                 {
-                    LoadVersion = reader.ReadInt32();
-                    LoadCustomVersion = reader.ReadInt32();
+                    MessageQueue.Enqueue($"Cannot load a database version {LoadVersion}. Mininum supported is {MinVersion}.");
+                    return false;
+                }
+                else if (LoadVersion > Version)
+                {
+                    MessageQueue.Enqueue($"Cannot load a database version {LoadVersion}. Maximum supported is {Version}.");
+                    return false; 
+                }
+                MapIndex = exineDb.mapIndex;
 
-                    if (LoadVersion < MinVersion)
-                    {
-                        MessageQueue.Enqueue($"Cannot load a database version {LoadVersion}. Mininum supported is {MinVersion}.");
-                        return false;
-                    }
-                    else if (LoadVersion > Version)
-                    {
-                        MessageQueue.Enqueue($"Cannot load a database version {LoadVersion}. Maximum supported is {Version}.");
-                        return false;
+                ItemIndex = exineDb.itemIndex;
+                MonsterIndex = exineDb.monsterIndex;
 
-                    }
+                NPCIndex = exineDb.nPCIndex;
+                QuestIndex = exineDb.questIndex;
 
-                    MapIndex = reader.ReadInt32();
-                    ItemIndex = reader.ReadInt32();
-                    MonsterIndex = reader.ReadInt32();
-
-                    NPCIndex = reader.ReadInt32();
-                    QuestIndex = reader.ReadInt32();
-
-                    if (LoadVersion >= 63)
-                    {
-                        GameshopIndex = reader.ReadInt32();
-                    }
-
-                    if (LoadVersion >= 66)
-                    {
-                        ConquestIndex = reader.ReadInt32();
-                    }
-
-                    if (LoadVersion >= 68)
-                        RespawnIndex = reader.ReadInt32();
-
-
-                    var count = reader.ReadInt32();
-                    MapInfoList.Clear();
-                    for (var i = 0; i < count; i++)
-                        MapInfoList.Add(new MapInfo(reader));
-
-                    count = reader.ReadInt32();
-                    ItemInfoList.Clear();
-                    for (var i = 0; i < count; i++)
-                    {
-                        ItemInfoList.Add(new ItemInfo(reader, LoadVersion, LoadCustomVersion));
-                        if (ItemInfoList[i] != null && ItemInfoList[i].RandomStatsId < Settings.RandomItemStatsList.Count)
-                        {
-                            ItemInfoList[i].RandomStats = Settings.RandomItemStatsList[ItemInfoList[i].RandomStatsId];
-                        }
-                    }
-                    count = reader.ReadInt32();
-                    MonsterInfoList.Clear();
-                    for (var i = 0; i < count; i++)
-                        MonsterInfoList.Add(new MonsterInfo(reader));
-
-                    count = reader.ReadInt32();
-                    NPCInfoList.Clear();
-                    for (var i = 0; i < count; i++)
-                        NPCInfoList.Add(new NPCInfo(reader));
-
-                    count = reader.ReadInt32();
-                    QuestInfoList.Clear();
-                    for (var i = 0; i < count; i++)
-                        QuestInfoList.Add(new QuestInfo(reader));
-
-                    DragonInfo = new DragonInfo(reader);
-                    count = reader.ReadInt32();
-                    for (var i = 0; i < count; i++)
-                    {
-                        var m = new MagicInfo(reader, LoadVersion, LoadCustomVersion);
-                        if (!MagicExists(m.Spell))
-                            MagicInfoList.Add(m);
-                    }
-
-                    FillMagicInfoList();
-                    if (LoadVersion <= 70)
-                        UpdateMagicInfo();
-
-                    if (LoadVersion >= 63)
-                    {
-                        count = reader.ReadInt32();
-                        GameShopList.Clear();
-                        for (var i = 0; i < count; i++)
-                        {
-                            var item = new GameShopItem(reader, LoadVersion, LoadCustomVersion);
-                            if (Main.BindGameShop(item))
-                            {
-                                GameShopList.Add(item);
-                            }
-                        }
-                    }
-
-                    if (LoadVersion >= 66)
-                    {
-                        ConquestInfoList.Clear();
-                        count = reader.ReadInt32();
-                        for (var i = 0; i < count; i++)
-                        {
-                            ConquestInfoList.Add(new ConquestInfo(reader));
-                        }
-                    }
-
-                    if (LoadVersion > 67)
-                        RespawnTick = new RespawnTimer(reader);
-
+                if (LoadVersion >= 63)
+                {
+                    GameshopIndex = exineDb.gameshopIndex;
                 }
 
+                if (LoadVersion >= 66)
+                {
+                    ConquestIndex = exineDb.conquestIndex;
+                }
+
+                if (LoadVersion >= 68)
+                    RespawnIndex = exineDb.respawnIndex;
+
+                MapInfoList.Clear();
+                MapInfoList = exineDb.exineMapInfoList.ToList();
+
+                ItemInfoList.Clear();
+                ItemInfoList = exineDb.exineItemInfoList.ToList(); 
+                for (int i = 0; i < ItemInfoList.Count; i++)
+                {
+                    if (ItemInfoList[i] != null && ItemInfoList[i].RandomStatsId < Settings.RandomItemStatsList.Count)
+                    {
+                        ItemInfoList[i].RandomStats = Settings.RandomItemStatsList[ItemInfoList[i].RandomStatsId];
+                    }
+                }
+
+                MonsterInfoList.Clear();
+                MonsterInfoList = exineDb.exineMonsterInfoList.ToList();
+
+                NPCInfoList.Clear();
+                NPCInfoList = exineDb.exineNPCInfoList.ToList();
+
+                QuestInfoList.Clear();
+                QuestInfoList = exineDb.exineQuestInfoList.ToList();
+
+                DragonInfo = exineDb.exineDragonInfo;
+
+                MagicInfoList.Clear();
+                foreach(var item in exineDb.exineMagicInfoList)
+                {
+                    if (!MagicExists(item.Spell))
+                        MagicInfoList.Add(item);
+                }
+
+                FillMagicInfoList();
+                if (LoadVersion <= 70)
+                    UpdateMagicInfo();
+
+                if (LoadVersion >= 63)
+                {
+                    GameShopList.Clear();
+                    foreach (var item in exineDb.exineGameShopList)
+                    {
+                        if (Main.BindGameShop(item))
+                        {
+                            GameShopList.Add(item);
+                        }
+                    } 
+                }
+                 
+                if (LoadVersion >= 66)
+                {
+                    ConquestInfoList.Clear();
+                    ConquestInfoList = exineDb.exineConquestInfoList.ToList();
+                }
+
+                if (LoadVersion > 67)
+                    RespawnTick = exineDb.exineRespawnTimer; 
                 Settings.LinkGuildCreationItems(ItemInfoList);
             }
-
+            
             return true;
         }
 

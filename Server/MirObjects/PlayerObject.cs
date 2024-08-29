@@ -1019,7 +1019,8 @@ namespace Server.ExineObjects
         {
             SafeZoneInfo szi = Envir.StartPoints[Envir.Random.Next(Envir.StartPoints.Count)];
 
-            BindMapIndex = szi.Info.Index;
+            //BindMapIndex = szi.Info.Index;
+            BindMapIndex = szi.InfoIndex;//k333123 240828 for jsonDB
             BindLocation = szi.Location;
         }
         protected override void SetBindSafeZone(SafeZoneInfo szi)

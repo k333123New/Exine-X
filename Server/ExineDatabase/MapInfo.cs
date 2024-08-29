@@ -1,7 +1,8 @@
 using Server.ExineEnvir;
 
 namespace Server.ExineDatabase
-{
+{ 
+
     public class MapInfo
     {
         protected static Envir Envir
@@ -51,7 +52,8 @@ namespace Server.ExineDatabase
 
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
-                SafeZones.Add(new SafeZoneInfo(reader) { Info = this });
+                SafeZones.Add(new SafeZoneInfo(reader) { InfoIndex = this.Index });//k333123 240828 for jsonDB
+            //SafeZones.Add(new SafeZoneInfo(reader) { Info = this });
 
             count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
@@ -173,7 +175,8 @@ namespace Server.ExineDatabase
 
         public void CreateSafeZone()
         {
-            SafeZones.Add(new SafeZoneInfo { Info = this });
+            //SafeZones.Add(new SafeZoneInfo { Info = this });
+            SafeZones.Add(new SafeZoneInfo { InfoIndex = this.Index });//k333123 240828 for jsonDB
         }
 
         public void CreateRespawnInfo()
@@ -220,7 +223,8 @@ namespace Server.ExineDatabase
 
             for (int i = 0; i < sziCount; i++)
             {
-                SafeZoneInfo temp = new SafeZoneInfo { Info = info };
+                //SafeZoneInfo temp = new SafeZoneInfo { Info = info };
+                SafeZoneInfo temp = new SafeZoneInfo { InfoIndex = info.Index }; //k333123 240828 for jsonDB
                 int x, y;
 
                 if (!int.TryParse(data[start + (i * 4)], out x)) return;

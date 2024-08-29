@@ -1500,6 +1500,7 @@ public enum Spell : byte
     ExSkillHealing = 156, //k333123
 
 
+
     //Map Events
     DigOutZombie = 200,
     Rubble = 201,

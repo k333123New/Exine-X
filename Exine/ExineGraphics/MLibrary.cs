@@ -1578,6 +1578,7 @@ ZM_02_519_요정01_reidx.lib
 
             if (mi.HasMask)
             {
+                //add alpha?
                 DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Tint);
             }
 
