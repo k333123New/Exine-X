@@ -1012,7 +1012,7 @@ ZM_02_519_요정01_reidx.lib
                 Flags[i].Initialize();
                 Progress++;
             }
-
+            
             for (int i = 0; i < Siege.Length; i++)
             {
                 Siege[i].Initialize();
@@ -1551,7 +1551,8 @@ ZM_02_519_요정01_reidx.lib
 
             if (mi.HasMask)
             {
-                DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Tint);
+                //DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Tint);
+                DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Color.FromArgb(200,Tint.R,Tint.G,Tint.B));
             }
 
             mi.CleanTime = CMain.Time + Settings.CleanDelay;
@@ -1579,7 +1580,12 @@ ZM_02_519_요정01_reidx.lib
             if (mi.HasMask)
             {
                 //add alpha?
-                DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Tint);
+                //DXManager.SetBlend(true, rate, BlendMode.LIGHTINV);//NONE
+                DXManager.SetBlend(true, rate, BlendMode.NONE);//NONE
+                 
+                //DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Tint);
+                DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Color.FromArgb(255, Tint.R, Tint.G, Tint.B));
+                DXManager.SetBlend(oldBlend);
             }
 
             mi.CleanTime = CMain.Time + Settings.CleanDelay;

@@ -366,11 +366,12 @@ namespace Exine.ExineGraphics
             {
                 Sprite.Begin(SpriteFlags.DoNotSaveState);
                 Device.SetRenderState(RenderState.AlphaBlendEnable, true);
+                
 
                 switch (BlendingMode)
                 {
-                    //
                     case BlendMode.INVLIGHT:
+                        //Device.SetRenderState(RenderState.BlendOperation, BlendOperation.Add);
                         Device.SetRenderState(RenderState.BlendOperation, BlendOperation.Add);
                         Device.SetRenderState(RenderState.SourceBlend, Blend.BlendFactor);
                         Device.SetRenderState(RenderState.DestinationBlend, Blend.InverseSourceColor);
@@ -378,12 +379,20 @@ namespace Exine.ExineGraphics
 
                     //k333123
                     case BlendMode.NONE:
+                        Device.SetRenderState(RenderState.BlendOperation, BlendOperation.Add);
                         Device.SetRenderState(RenderState.SourceBlend, Blend.SourceAlpha);
-                        Device.SetRenderState(RenderState.DestinationBlend, Blend.SourceAlpha);
-                        //Blend.SourceColor nb
-                        //InverseSourceColor ...
 
+                        //Device.SetRenderState(RenderState.DestinationBlend, Blend.DestinationColor); //good color but black rect
 
+                        //Device.SetRenderState(RenderState.DestinationBlend, Blend.BothInverseSourceAlpha); // no transf!
+                        //Device.SetRenderState(RenderState.DestinationBlend, Blend.InverseSourceAlpha); // no transf!
+
+                        Device.SetRenderState(RenderState.DestinationBlend, Blend.BlendFactor); //too bright!
+                        //Device.SetRenderState(RenderState.DestinationBlend, Blend.DestinationAlpha); //too bright!
+                        //Device.SetRenderState(RenderState.DestinationBlend, Blend.InverseSourceColor2); //too bright!
+                        //Device.SetRenderState(RenderState.DestinationBlend, Blend.One); //too bright!
+                        
+                       
                         break;
 
                     //ADD
@@ -393,8 +402,21 @@ namespace Exine.ExineGraphics
                         break;
                 }
 
-                Device.SetRenderState(RenderState.BlendFactor, Color.FromArgb((byte)(255 * BlendingRate), (byte)(255 * BlendingRate),
-                                                                (byte)(255 * BlendingRate), (byte)(255 * BlendingRate)).ToArgb());
+                Device.SetRenderState(
+                    RenderState.BlendFactor,
+                    /*
+                    Color.FromArgb(
+                        (byte)(255 * BlendingRate),
+                        (byte)(255 * BlendingRate),    
+                        (byte)(255 * BlendingRate), 
+                        (byte)(255 * BlendingRate)).ToArgb()
+                    );*/
+                    Color.FromArgb(
+                        (byte)(255 * BlendingRate),
+                        (byte)(127 * BlendingRate),
+                        (byte)(127 * BlendingRate),
+                        (byte)(127 * BlendingRate)).ToArgb()
+                    );
             }
             else
                 Sprite.Begin(SpriteFlags.AlphaBlend);
