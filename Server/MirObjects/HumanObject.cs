@@ -1804,6 +1804,7 @@ namespace Server.ExineObjects
         {
             short OldLooks_Weapon = Looks_Weapon;
             short OldLooks_WeaponEffect = Looks_WeaponEffect;
+            short OldLooks_Shield = Looks_Shield;
             short OldLooks_Armour = Looks_Armour;
             short Old_MountType = Mount.MountType;
             byte OldLooks_Wings = Looks_Wings;
@@ -1812,6 +1813,7 @@ namespace Server.ExineObjects
             Looks_Armour = 0;
             Looks_Weapon = -1;
             Looks_WeaponEffect = 0;
+            Looks_Shield = -1;
             Looks_Wings = 0;
             Light = 0;
             CurrentWearWeight = 0;
@@ -1854,6 +1856,14 @@ namespace Server.ExineObjects
                     Looks_Weapon = realItem.Shape;
                     Looks_WeaponEffect = realItem.Effect;
                 }
+
+                //add k333123 240903
+                if (realItem.Type == ItemType.Belt)
+                {
+                    Console.WriteLine("@@@BELT !!! Looks_Shield:" + realItem.Shape);
+                    Looks_Shield = realItem.Shape; 
+                }
+
 
                 if (realItem.Type == ItemType.Mount)
                 {
@@ -1932,7 +1942,7 @@ namespace Server.ExineObjects
                 Stats[Stat.HandWeight] = Stats[Stat.HandWeight] * 2;
             }
 
-            if ((OldLooks_Armour != Looks_Armour) || (OldLooks_Weapon != Looks_Weapon) || (OldLooks_WeaponEffect != Looks_WeaponEffect) || (OldLooks_Wings != Looks_Wings) || (OldLight != Light))
+            if ((OldLooks_Armour != Looks_Armour) || (OldLooks_Weapon != Looks_Weapon) || (OldLooks_WeaponEffect != Looks_WeaponEffect) || (OldLooks_Wings != Looks_Wings) || (OldLight != Light) | (OldLooks_Shield != Looks_Shield))
             {
                 UpdateLooks(OldLooks_Weapon);                
             }
@@ -6919,11 +6929,13 @@ namespace Server.ExineObjects
         }
         protected Packet GetUpdateInfo()
         {
+            Console.WriteLine("GetUpdateInfo _ Shield:"+Looks_Shield);
             return new S.PlayerUpdate
             {
                 ObjectID = ObjectID,
                 Weapon = Looks_Weapon,
                 WeaponEffect = Looks_WeaponEffect,
+                Shield = Looks_Shield, //add
                 Armour = Looks_Armour,
                 Light = Light,
                 WingEffect = Looks_Wings

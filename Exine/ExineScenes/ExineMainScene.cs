@@ -10959,7 +10959,24 @@ namespace Exine.ExineScenes
                     {
                         if (CMain.Time > ExineMainScene.AttackTime && CanRideAttack() && !User.Poison.HasFlag(PoisonType.Dazed))
                         {
-                            User.QueuedAction = new QueuedAction { Action = ExAction.Attack1, Direction = Functions.DirectionFromPoint(User.CurrentLocation, MapObject.TargetObject.CurrentLocation), Location = User.CurrentLocation };
+                            int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(User.Weapon, User.Gender != ExineGender.Male).weaponType;
+                            switch (weaponType)
+                            {
+                                case 1:
+                                    User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_ATTACK1, Direction = Functions.DirectionFromPoint(User.CurrentLocation, MapObject.TargetObject.CurrentLocation), Location = User.CurrentLocation };
+                                    break;
+                                case 2:
+                                    User.QueuedAction = new QueuedAction { Action = ExAction.TWOHAND_ATTACK1, Direction = Functions.DirectionFromPoint(User.CurrentLocation, MapObject.TargetObject.CurrentLocation), Location = User.CurrentLocation };
+                                    break;
+                                case 3:
+                                    User.QueuedAction = new QueuedAction { Action = ExAction.TWOHAND_ATTACK1, Direction = Functions.DirectionFromPoint(User.CurrentLocation, MapObject.TargetObject.CurrentLocation), Location = User.CurrentLocation };
+                                    break;
+                                default:
+                                    User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_ATTACK1, Direction = Functions.DirectionFromPoint(User.CurrentLocation, MapObject.TargetObject.CurrentLocation), Location = User.CurrentLocation };
+                                    break;
+
+                            }
+                            //User.QueuedAction = new QueuedAction { Action = ExAction.Attack1, Direction = Functions.DirectionFromPoint(User.CurrentLocation, MapObject.TargetObject.CurrentLocation), Location = User.CurrentLocation };
                             return;
                         }
                     }
@@ -11057,7 +11074,22 @@ namespace Exine.ExineScenes
                                 if (ExineMainScene.User.DoubleSlash && (!User.HasClassWeapon && User.Weapon > -1)) return;
                                 if (User.Poison.HasFlag(PoisonType.Dazed)) return;
 
-                                User.QueuedAction = new QueuedAction { Action = ExAction.Attack1, Direction = direction, Location = User.CurrentLocation };
+                                int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(User.Weapon, User.Gender != ExineGender.Male).weaponType;
+                                switch(weaponType)
+                                {
+                                    case 1:
+                                        User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_ATTACK1, Direction = direction, Location = User.CurrentLocation };
+                                        break;
+                                    case 2:
+                                        User.QueuedAction = new QueuedAction { Action = ExAction.TWOHAND_ATTACK1, Direction = direction, Location = User.CurrentLocation };
+                                        break;
+                                    case 3:
+                                        User.QueuedAction = new QueuedAction { Action = ExAction.BOWHAND_ATTACK1, Direction = direction, Location = User.CurrentLocation };
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                //User.QueuedAction = new QueuedAction { Action = ExAction.Attack1, Direction = direction, Location = User.CurrentLocation };
                             }
                             return;
                         }

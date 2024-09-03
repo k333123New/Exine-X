@@ -9,6 +9,9 @@ using Exine.ExineScenes.Dialogs;
 using System.Reflection;
 using System.Drawing;
 using System.Diagnostics.Eventing.Reader;
+using static Exine.ExineGraphics.WeaponMapperMgr;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Xml.Schema;
 
 namespace Exine.ExineObjects
 {
@@ -173,6 +176,7 @@ namespace Exine.ExineObjects
 			WeaponEffect = info.WeaponEffect;
 
             Shield = info.Shield;//k333123
+            Console.WriteLine("@@@info.Shield:" + info.Shield);
 
             Armour = info.Armour;
             Light = info.Light;
@@ -250,7 +254,29 @@ namespace Exine.ExineObjects
             MountType = info.MountType;
             RidingMount = info.RidingMount;
 
-            QueuedAction action = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation };
+            int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
+            QueuedAction action = null;
+            switch (weaponType)
+            {
+                case 1:
+                    action = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation };
+                    break;
+
+                case 2:
+                    action = new QueuedAction { Action = ExAction.TWOHAND_STAND, Direction = Direction, Location = CurrentLocation };
+                    break;
+
+                case 3:
+                    action = new QueuedAction { Action = ExAction.BOWHAND_STAND, Direction = Direction, Location = CurrentLocation };
+                    break;
+
+                default: 
+                    action = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation };
+                    break; 
+            } 
+            //QueuedAction action = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation };
+
+
             ActionFeed.Insert(0, action);
 
             MountTime = CMain.Time;
@@ -307,6 +333,9 @@ namespace Exine.ExineObjects
             switch (CurrentAction)
             {
                 case ExAction.ONEHAND_WALK_LEFT:
+                case ExAction.TWOHAND_WALK_LEFT:
+                case ExAction.BOWHAND_WALK_LEFT:
+
                     leftRightToggleFlag++;
                     if (leftRightToggleFlag % 2 == 0)
                     {
@@ -316,7 +345,8 @@ namespace Exine.ExineObjects
                         { 
                             Frames.TryGetValue(ExAction.PEACEMODE_WALK_LEFT, out Frame);
                         }
-                        else Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                        //else Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                        else Frames.TryGetValue(CurrentAction, out Frame);
                     }
                     else
                     {
@@ -325,11 +355,19 @@ namespace Exine.ExineObjects
                         {
                             Frames.TryGetValue(ExAction.PEACEMODE_WALK_RIGHT, out Frame);
                         }
-                        else Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
+                        //else Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame); 
+                        else
+                        {
+                            if (CurrentAction == ExAction.ONEHAND_WALK_LEFT) Frames.TryGetValue(ExAction.ONEHAND_WALK_RIGHT, out Frame);
+                            else if (CurrentAction == ExAction.TWOHAND_WALK_LEFT) Frames.TryGetValue(ExAction.TWOHAND_WALK_RIGHT, out Frame);
+                            else if (CurrentAction == ExAction.BOWHAND_WALK_LEFT) Frames.TryGetValue(ExAction.BOWHAND_WALK_RIGHT, out Frame);
+                        }
                     }
                     break;
 
                 case ExAction.ONEHAND_RUN_LEFT:
+                case ExAction.TWOHAND_RUN_LEFT:  //k333123 add 240903
+                case ExAction.BOWHAND_RUN_LEFT:  //k333123 add 240903
                     leftRightToggleFlag++;
                     if (leftRightToggleFlag % 2 == 0)
                     {
@@ -342,7 +380,8 @@ namespace Exine.ExineObjects
                         }
                         else
                         {
-                            Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                            //Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                            Frames.TryGetValue(CurrentAction, out Frame);
                             prevPieceMode = false;
                         }
                     }
@@ -357,14 +396,19 @@ namespace Exine.ExineObjects
                         }
                         else
                         {
-                            Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                            //Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                            if (CurrentAction== ExAction.ONEHAND_RUN_LEFT) Frames.TryGetValue(ExAction.ONEHAND_RUN_RIGHT, out Frame);
+                            else if (CurrentAction == ExAction.TWOHAND_RUN_LEFT) Frames.TryGetValue(ExAction.TWOHAND_RUN_RIGHT, out Frame);
+                            else if (CurrentAction == ExAction.BOWHAND_RUN_LEFT) Frames.TryGetValue(ExAction.BOWHAND_RUN_RIGHT, out Frame);
                             prevPieceMode = false;
                         }
                     }
                     break;
 
-                    
+                
                 case ExAction.ONEHAND_STAND:  //k333123 add 240311
+                case ExAction.TWOHAND_STAND:  //k333123 add 240903
+                case ExAction.BOWHAND_STAND:  //k333123 add 240903
                     if (MapObject.User.ExinePeaceMode)
                     {
                         Console.WriteLine("MapObject.User.ExinePeaceMode Standing!");
@@ -389,7 +433,9 @@ namespace Exine.ExineObjects
                     else
                     {
                         if(prevPieceMode) Console.WriteLine("MapObject.User.ExineBattleMode Standing!");
-                        Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
+                        //Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
+                        Frames.TryGetValue(CurrentAction, out Frame);
+                        
                         //ActionFeed.Clear();
                         //ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
                         //SetAction();
@@ -799,11 +845,7 @@ namespace Exine.ExineObjects
                             //libIdex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon - 1, Gender != ExineGender.Male);
 
                             WeaponLibrary1 = GetLibFromShapeIdx(Weapon, Gender);
-                            if(WeaponLibrary1==null)
-                            {
-                                Console.WriteLine("!!!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-                                Console.ReadLine();
-                            }
+                            
                             //WeaponLibrary1= GetLibFromShapeIdx(Weapon - 1, Gender);
                             //WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon - 1] : null;
                             WeaponEffectLibrary1 = null;
@@ -822,10 +864,10 @@ namespace Exine.ExineObjects
                         #region Sheild
                         //if (Weapon >= 0)
                         //k333123 add sheild 240903
-                        if (Shield >= 1)
-                        {
-                            Console.WriteLine("@555 Shield:" + Shield + "Libraries.ExineManOneWeapon.Length:"+ Libraries.ExineManOneWeapon.Length); 
-                            ShieldLibrary = GetLibFromShapeIdx(Shield - 1, Gender);
+                        Console.WriteLine("@@@@@@@@@555 Shield:" + Shield);
+                        if (Shield >= 0)
+                        { 
+                            ShieldLibrary = GetLibFromShapeIdx(Shield , Gender);
                         }
                         else
                         {
@@ -1266,7 +1308,20 @@ namespace Exine.ExineObjects
 
             if (ActionFeed.Count == 0)
             {
-                CurrentAction = ExAction.ONEHAND_STAND; 
+                int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
+                switch(weaponType)
+                {
+                    case 1:
+                        CurrentAction = ExAction.ONEHAND_STAND;
+                        break;
+                    case 2:
+                        CurrentAction = ExAction.TWOHAND_STAND;
+                        break;
+                    case 3:
+                        CurrentAction = ExAction.BOWHAND_STAND;
+                        break;
+                }
+                //CurrentAction = ExAction.ONEHAND_STAND; 
 
                 CurrentAction = CMain.Time > BlizzardStopTime ? CurrentAction : ExAction.Stance2;
                 //CurrentAction = CMain.Time > SlashingBurstTime ? CurrentAction : MirAction.Lunge;
@@ -1276,20 +1331,33 @@ namespace Exine.ExineObjects
                     switch (CurrentAction)
                     {
                         case ExAction.ONEHAND_STAND:
+                        case ExAction.TWOHAND_STAND:
+                        case ExAction.BOWHAND_STAND:
                             CurrentAction = ExAction.MountStanding;
                             break;
                         case ExAction.ONEHAND_WALK_LEFT:
                         case ExAction.ONEHAND_WALK_RIGHT:
+                        case ExAction.TWOHAND_WALK_LEFT:
+                        case ExAction.TWOHAND_WALK_RIGHT:
+                        case ExAction.BOWHAND_WALK_LEFT:
+                        case ExAction.BOWHAND_WALK_RIGHT:
                             CurrentAction = ExAction.MountWalking;
                             break;
                         case ExAction.ONEHAND_RUN_LEFT:
                         case ExAction.ONEHAND_RUN_RIGHT:
+                        case ExAction.TWOHAND_RUN_LEFT:
+                        case ExAction.TWOHAND_RUN_RIGHT:
+                        case ExAction.BOWHAND_RUN_LEFT:
+                        case ExAction.BOWHAND_RUN_RIGHT:
                             CurrentAction = ExAction.MountRunning;
                             break;
                         case ExAction.Struck:
                             CurrentAction = ExAction.MountStruck;
                             break;
-                        case ExAction.Attack1:
+                        //case ExAction.Attack1:
+                        case ExAction.ONEHAND_ATTACK1:
+                        case ExAction.TWOHAND_ATTACK1:
+                        case ExAction.BOWHAND_ATTACK1:
                             CurrentAction = ExAction.MountAttack;
                             break;
                     }
@@ -1302,7 +1370,26 @@ namespace Exine.ExineObjects
                     else
                         CurrentAction = CMain.Time > StanceTime ? ExAction.ONEHAND_STAND : ExAction.Stance;
                 }
-                 
+
+                //add
+                else if (CurrentAction == ExAction.TWOHAND_STAND)
+                {
+                    if (Class == ExineClass.Archer && HasClassWeapon)
+                        CurrentAction = ExAction.TWOHAND_STAND;
+                    else
+                        CurrentAction = CMain.Time > StanceTime ? ExAction.TWOHAND_STAND : ExAction.Stance;
+                }
+                else if (CurrentAction == ExAction.BOWHAND_STAND)
+                {
+                    if (Class == ExineClass.Archer && HasClassWeapon)
+                        CurrentAction = ExAction.BOWHAND_STAND;
+                    else
+                        CurrentAction = CMain.Time > StanceTime ? ExAction.BOWHAND_STAND : ExAction.Stance;
+                }
+                //add
+
+
+
 
                 if (Fishing) CurrentAction = ExAction.FishingReel;
 
@@ -1337,20 +1424,33 @@ namespace Exine.ExineObjects
                     switch (CurrentAction)
                     {
                         case ExAction.ONEHAND_STAND:
+                        case ExAction.TWOHAND_STAND:
+                        case ExAction.BOWHAND_STAND:
                             CurrentAction = ExAction.MountStanding;
                             break;
                         case ExAction.ONEHAND_WALK_LEFT:
                         case ExAction.ONEHAND_WALK_RIGHT:
+                        case ExAction.TWOHAND_WALK_LEFT:
+                        case ExAction.TWOHAND_WALK_RIGHT:
+                        case ExAction.BOWHAND_WALK_LEFT:
+                        case ExAction.BOWHAND_WALK_RIGHT:
                             CurrentAction = ExAction.MountWalking;
                             break;
                         case ExAction.ONEHAND_RUN_LEFT:
                         case ExAction.ONEHAND_RUN_RIGHT:
+                        case ExAction.TWOHAND_RUN_LEFT:
+                        case ExAction.TWOHAND_RUN_RIGHT:
+                        case ExAction.BOWHAND_RUN_LEFT:
+                        case ExAction.BOWHAND_RUN_RIGHT:
                             CurrentAction = ExAction.MountRunning;
                             break;
                         case ExAction.Struck:
                             CurrentAction = ExAction.MountStruck;
                             break;
-                        case ExAction.Attack1:
+                        //case ExAction.Attack1:
+                        case ExAction.ONEHAND_ATTACK1:
+                        case ExAction.TWOHAND_ATTACK1:
+                        case ExAction.BOWHAND_ATTACK1:
                             CurrentAction = ExAction.MountAttack;
                             break;
                     }
@@ -1403,6 +1503,9 @@ namespace Exine.ExineObjects
 
                 bool ArcherLayTrap = false;
 
+                //add k333123 240903
+                int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
+
                 switch (CurrentAction)
                 {
                     case ExAction.Pushed:
@@ -1418,16 +1521,39 @@ namespace Exine.ExineObjects
                         Frames.TryGetValue(ExAction.DashAttack, out Frame);
                         break;
                     case ExAction.DashFail:
-                        Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.ONEHAND_STAND, out Frame);
+                        
+                        switch(weaponType)
+                        {
+                            case 1:
+                                Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.ONEHAND_STAND, out Frame);
+                                break;
+
+                            case 2:
+                                Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.TWOHAND_STAND, out Frame);
+                                break;
+
+                            case 3:
+                                Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.BOWHAND_STAND, out Frame);
+                                break;
+
+                            default:
+                                Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.ONEHAND_STAND, out Frame);
+                                break;
+                        }
+                        //Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.ONEHAND_STAND, out Frame);
                         //Frames.TryGetValue(MirAction.Standing, out Frame);
                         //CanSetAction = false;
                         break;
                     case ExAction.Jump:
                         Frames.TryGetValue(ExAction.Jump, out Frame);
                         break;
-                    case ExAction.Attack1:
+                    //case ExAction.Attack1:
+                    case ExAction.ONEHAND_ATTACK1:
+                    case ExAction.TWOHAND_ATTACK1:
+                    case ExAction.BOWHAND_ATTACK1:
                         switch (Class)
                         {
+                            /*
                             case ExineClass.Archer:
                                 Frames.TryGetValue(CurrentAction, out Frame);
                                 break;
@@ -1439,17 +1565,48 @@ namespace Exine.ExineObjects
                                 else
                                     Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? ExAction.Attack1 : ExAction.Attack4, out Frame);
                                 break;
+                            */
                             default:
                                 if (CMain.Shift && TargetObject == null)
-                                    Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.Attack1 : ExAction.Attack3, out Frame);
+                                    //Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.Attack1 : ExAction.Attack3, out Frame);
+                                    switch(weaponType)
+                                    {
+                                        case 1:
+                                            Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.ONEHAND_ATTACK1 : ExAction.ONEHAND_ATTACK3, out Frame);
+                                            break;
+                                        case 2:
+                                            Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.TWOHAND_ATTACK1 : ExAction.ONEHAND_ATTACK3, out Frame);
+                                            break;
+                                        case 3:
+                                            Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.BOWHAND_ATTACK1 : ExAction.BOWHAND_ATTACK1, out Frame);
+                                            break;
+                                        default:
+                                            Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.ONEHAND_ATTACK1 : ExAction.ONEHAND_ATTACK3, out Frame);
+                                            break;
+                                    }
+                                   // Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.Attack1 : ExAction.Attack3, out Frame);
                                 else
                                     Frames.TryGetValue(CurrentAction, out Frame);
                                 break;
                         }
                         break;
-                    case ExAction.Attack4:
+                    //case ExAction.Attack4:
+                    case ExAction.ONEHAND_ATTACK3:
+                    case ExAction.TWOHAND_ATTACK3:
                         Spell = (Spell)action.Params[0];
-                        Frames.TryGetValue(Spell == Spell.TwinDrakeBlade || Spell == Spell.FlamingSword ? ExAction.Attack1 : CurrentAction, out Frame);
+                        switch(weaponType)
+                        {
+                            case 1:
+                                Frames.TryGetValue(Spell == Spell.TwinDrakeBlade || Spell == Spell.FlamingSword ? ExAction.ONEHAND_ATTACK1 : CurrentAction, out Frame);
+                                break;
+                            case 2:
+                                Frames.TryGetValue(Spell == Spell.TwinDrakeBlade || Spell == Spell.FlamingSword ? ExAction.TWOHAND_ATTACK1 : CurrentAction, out Frame);
+                                break; 
+                            default:
+                                Frames.TryGetValue(Spell == Spell.TwinDrakeBlade || Spell == Spell.FlamingSword ? ExAction.ONEHAND_ATTACK1 : CurrentAction, out Frame);
+                                break;
+                        }
+                        //Frames.TryGetValue(Spell == Spell.TwinDrakeBlade || Spell == Spell.FlamingSword ? ExAction.Attack1 : CurrentAction, out Frame);
                         break;
 
                     /*
@@ -1503,7 +1660,22 @@ namespace Exine.ExineObjects
                         switch (Spell)
                         {
                             case Spell.ShoulderDash:
-                                Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                                switch(weaponType)
+                                {
+                                    case 1:
+                                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                                        break;
+
+                                    case 2:
+                                        Frames.TryGetValue(ExAction.TWOHAND_RUN_LEFT, out Frame);
+                                        break;
+
+                                    dafault:
+                                        Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
+                                        break;
+
+                                }
+                               // Frames.TryGetValue(ExAction.ONEHAND_RUN_LEFT, out Frame);
                                 CurrentAction = ExAction.DashL;
                                 Direction = olddirection;
                                 CurrentLocation = Functions.PointMove(CurrentLocation, Direction, 1);
@@ -1516,7 +1688,22 @@ namespace Exine.ExineObjects
                                 }
                                 break;
                             case Spell.BladeAvalanche:
-                                Frames.TryGetValue(ExAction.Attack3, out Frame);
+                                //Frames.TryGetValue(ExAction.Attack3, out Frame);
+                                switch (weaponType)
+                                {
+                                    case 1:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK3, out Frame);
+                                        break;
+
+                                    case 2:
+                                        Frames.TryGetValue(ExAction.TWOHAND_ATTACK3, out Frame);
+                                        break;
+
+                                    default:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK3, out Frame);
+                                        break;
+
+                                }
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 2500;
@@ -1525,7 +1712,21 @@ namespace Exine.ExineObjects
                                 }
                                 break;
                             case Spell.SlashingBurst:
-                                 Frames.TryGetValue(ExAction.Attack1, out Frame);
+                                //Frames.TryGetValue(ExAction.Attack1, out Frame);
+                                switch (weaponType)
+                                {
+                                    case 1:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK1, out Frame);
+                                        break;
+
+                                    case 2:
+                                        Frames.TryGetValue(ExAction.TWOHAND_ATTACK1, out Frame);
+                                        break;
+
+                                    default:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK1, out Frame);
+                                        break; 
+                                }
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 2000; // 80%
@@ -1533,7 +1734,22 @@ namespace Exine.ExineObjects
                                 }
                                 break;
                             case Spell.CounterAttack:
-                                Frames.TryGetValue(ExAction.Attack1, out Frame);
+                                //Frames.TryGetValue(ExAction.Attack1, out Frame);
+                                switch (weaponType)
+                                {
+                                    case 1:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK1, out Frame);
+                                        break;
+
+                                    case 2:
+                                        Frames.TryGetValue(ExAction.TWOHAND_ATTACK1, out Frame);
+                                        break;
+
+
+                                    default:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK1, out Frame);
+                                        break;
+                                }
                                 if (this == User)
                                 {
                                     ExineMainScene.AttackTime = CMain.Time + User.AttackSpeed;
@@ -1542,7 +1758,22 @@ namespace Exine.ExineObjects
                                 }
                                 break;
                             case Spell.PoisonSword:
-                                Frames.TryGetValue(ExAction.Attack1, out Frame);
+                                //Frames.TryGetValue(ExAction.Attack1, out Frame);
+                                switch (weaponType)
+                                {
+                                    case 1:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK1, out Frame);
+                                        break;
+
+                                    case 2:
+                                        Frames.TryGetValue(ExAction.TWOHAND_ATTACK1, out Frame);
+                                        break;
+
+
+                                    default:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK1, out Frame);
+                                        break;
+                                }
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 2000; // 80%
@@ -1550,7 +1781,21 @@ namespace Exine.ExineObjects
                                 }
                                 break;
                             case Spell.HeavenlySword:
-                                Frames.TryGetValue(ExAction.Attack2, out Frame);
+                                //Frames.TryGetValue(ExAction.Attack2, out Frame);
+                                switch (weaponType)
+                                {
+                                    case 1:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK2, out Frame);
+                                        break;
+
+                                    case 2:
+                                        Frames.TryGetValue(ExAction.TWOHAND_ATTACK2, out Frame);
+                                        break;
+
+                                    default:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK1, out Frame);
+                                        break;
+                                }
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 1200;
@@ -1558,7 +1803,22 @@ namespace Exine.ExineObjects
                                 }
                                 break;
                             case Spell.CrescentSlash:
-                                Frames.TryGetValue(ExAction.Attack3, out Frame);
+                                //Frames.TryGetValue(ExAction.Attack3, out Frame);
+                                switch (weaponType)
+                                {
+                                    case 1:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK3, out Frame);
+                                        break;
+
+                                    case 2:
+                                        Frames.TryGetValue(ExAction.TWOHAND_ATTACK3, out Frame);
+                                        break;
+
+                                    default:
+                                        Frames.TryGetValue(ExAction.ONEHAND_ATTACK3, out Frame);
+                                        break;
+
+                                }
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 2500;
@@ -1579,7 +1839,19 @@ namespace Exine.ExineObjects
                                     }
                                     else
                                     {
-                                        Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? ExAction.Attack1 : ExAction.Attack4, out Frame);
+                                        switch (weaponType)
+                                        {
+                                            case 1:
+                                                Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? ExAction.ONEHAND_ATTACK1 : ExAction.ONEHAND_ATTACK3, out Frame);
+                                                break;
+                                            case 2:
+                                                Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? ExAction.TWOHAND_ATTACK1 : ExAction.TWOHAND_ATTACK3, out Frame);
+                                                break; 
+                                            default:
+                                                Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? ExAction.ONEHAND_ATTACK1 : ExAction.ONEHAND_ATTACK3, out Frame);
+                                                break;
+                                        }
+                                        //Frames.TryGetValue(CMain.Random.Next(100) >= 40 ? ExAction.Attack1 : ExAction.Attack4, out Frame);
                                     }
 
                                     if (this == User)
@@ -1591,23 +1863,30 @@ namespace Exine.ExineObjects
                                 }
                                 break;
                             case Spell.StraightShot:
-                                Frames.TryGetValue(ExAction.AttackRange2, out Frame);
-                                CurrentAction = ExAction.AttackRange2;
+
+                                Frames.TryGetValue(ExAction.BOWHAND_ATTACK1, out Frame);
+                                //Frames.TryGetValue(ExAction.AttackRange2, out Frame);
+                                //CurrentAction = ExAction.AttackRange2; 
+                                CurrentAction = ExAction.BOWHAND_ATTACK1;
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 1000;
                                     ExineMainScene.SpellTime = CMain.Time + 1500; //Spell Delay
                                 }
                                 break;
-                            case Spell.DoubleShot:                          
-                                Frames.TryGetValue(ExAction.AttackRange2, out Frame);
-                                CurrentAction = ExAction.AttackRange2;
+
+                            case Spell.DoubleShot: 
+                                Frames.TryGetValue(ExAction.BOWHAND_ATTACK1, out Frame);
+                                //Frames.TryGetValue(ExAction.AttackRange2, out Frame);
+                                //CurrentAction = ExAction.AttackRange2; 
+                                CurrentAction = ExAction.BOWHAND_ATTACK1;
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 1000;
                                     ExineMainScene.SpellTime = CMain.Time + 500; //Spell Delay
                                 }
                                 break;
+
                             case Spell.ExplosiveTrap:
                                 Frames.TryGetValue(ExAction.Harvest, out Frame);
                                 CurrentAction = ExAction.Harvest;
@@ -1622,8 +1901,10 @@ namespace Exine.ExineObjects
                                 }
                                 break;
                             case Spell.DelayedExplosion:
-                                Frames.TryGetValue(ExAction.AttackRange2, out Frame);
-                                CurrentAction = ExAction.AttackRange2;
+                                //Frames.TryGetValue(ExAction.AttackRange2, out Frame); 
+                                Frames.TryGetValue(ExAction.BOWHAND_ATTACK1, out Frame);
+                                //CurrentAction = ExAction.AttackRange2;
+                                CurrentAction = ExAction.BOWHAND_ATTACK1;
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 1000;
@@ -1648,8 +1929,10 @@ namespace Exine.ExineObjects
                             case Spell.ElementalShot:
                                 if (HasElements && !ElementCasted)
                                 {
-                                    Frames.TryGetValue(ExAction.AttackRange2, out Frame);
-                                    CurrentAction = ExAction.AttackRange2;
+                                    //Frames.TryGetValue(ExAction.AttackRange2, out Frame);
+                                    Frames.TryGetValue(ExAction.BOWHAND_ATTACK1, out Frame);
+                                    CurrentAction = ExAction.BOWHAND_ATTACK1;
+                                    //CurrentAction = ExAction.AttackRange2;
                                     if (this == User)
                                     {
                                         MapControl.NextAction = CMain.Time + 1000;
@@ -1668,8 +1951,10 @@ namespace Exine.ExineObjects
                             case Spell.SummonToad:
                             case Spell.SummonSnakes:
                             case Spell.Stonetrap:
-                                Frames.TryGetValue(ExAction.AttackRange2, out Frame);
-                                CurrentAction = ExAction.AttackRange2;
+                                //Frames.TryGetValue(ExAction.AttackRange2, out Frame);
+                                //CurrentAction = ExAction.AttackRange2;
+                                Frames.TryGetValue(ExAction.BOWHAND_ATTACK1, out Frame);
+                                CurrentAction = ExAction.BOWHAND_ATTACK1;
                                 if (this == User)
                                 {
                                     MapControl.NextAction = CMain.Time + 1000;
@@ -1733,6 +2018,8 @@ namespace Exine.ExineObjects
                             //CanSetAction = false;
                             break;
                         case ExAction.ONEHAND_STAND:
+                        case ExAction.TWOHAND_STAND:
+                        case ExAction.BOWHAND_STAND:
                         case ExAction.MountStanding:
                             Network.Enqueue(new C.Turn { Direction = Direction });
                             MapControl.NextAction = CMain.Time + 2500;
@@ -1740,6 +2027,10 @@ namespace Exine.ExineObjects
                             break;
                         case ExAction.ONEHAND_WALK_LEFT:
                         case ExAction.ONEHAND_WALK_RIGHT:
+                        case ExAction.TWOHAND_WALK_LEFT:
+                        case ExAction.TWOHAND_WALK_RIGHT:
+                        case ExAction.BOWHAND_WALK_LEFT:
+                        case ExAction.BOWHAND_WALK_RIGHT:
                         case ExAction.MountWalking:
                         case ExAction.Sneek:
                             ExineMainScene.LastRunTime = CMain.Time;
@@ -1750,6 +2041,10 @@ namespace Exine.ExineObjects
                             break;
                         case ExAction.ONEHAND_RUN_LEFT:
                         case ExAction.ONEHAND_RUN_RIGHT:
+                        case ExAction.TWOHAND_RUN_LEFT:
+                        case ExAction.TWOHAND_RUN_RIGHT:
+                        case ExAction.BOWHAND_RUN_LEFT:
+                        case ExAction.BOWHAND_RUN_RIGHT:
                         case ExAction.MountRunning:
                             ExineMainScene.LastRunTime = CMain.Time;
                             Network.Enqueue(new C.Run { Direction = Direction });
@@ -1777,7 +2072,11 @@ namespace Exine.ExineObjects
                             ExineMainScene.AttackTime = CMain.Time + (1400 - Math.Min(370, (User.Level * 14)));
                             MapControl.NextAction = CMain.Time + 2500;
                             break;
-                        case ExAction.Attack1:
+
+                        //case ExAction.Attack1:
+                        case ExAction.ONEHAND_ATTACK1:
+                        case ExAction.TWOHAND_ATTACK1:
+                        case ExAction.BOWHAND_ATTACK1:
                         case ExAction.MountAttack:
 
                             if (!RidingMount)
@@ -1934,6 +2233,17 @@ namespace Exine.ExineObjects
                     case ExAction.ONEHAND_WALK_RIGHT:
                     case ExAction.ONEHAND_RUN_LEFT:
                     case ExAction.ONEHAND_RUN_RIGHT:
+
+                    case ExAction.TWOHAND_WALK_LEFT:
+                    case ExAction.TWOHAND_WALK_RIGHT:
+                    case ExAction.TWOHAND_RUN_LEFT:
+                    case ExAction.TWOHAND_RUN_RIGHT:
+
+                    case ExAction.BOWHAND_WALK_LEFT:
+                    case ExAction.BOWHAND_WALK_RIGHT:
+                    case ExAction.BOWHAND_RUN_LEFT:
+                    case ExAction.BOWHAND_RUN_RIGHT:
+
                     case ExAction.MountWalking:
                     case ExAction.MountRunning:
                     case ExAction.Sneek:
@@ -1951,7 +2261,10 @@ namespace Exine.ExineObjects
                             ActionFeed.Insert(0, action);
                         }
                         break;
-                    case ExAction.Attack1:
+                    //case ExAction.Attack1:
+                    case ExAction.ONEHAND_ATTACK1:
+                    case ExAction.TWOHAND_ATTACK1:
+                    case ExAction.BOWHAND_ATTACK1:
                         if (this != User)
                         {
                             Spell = (Spell)action.Params[0];
@@ -2000,7 +2313,9 @@ namespace Exine.ExineObjects
                             
                         }
                         break;
-                    case ExAction.Attack4:
+                    //case ExAction.Attack4:
+                    case ExAction.ONEHAND_ATTACK3:
+                    case ExAction.TWOHAND_ATTACK3:
                         Spell = (Spell)action.Params[0];
                         switch (Spell)
                         {
@@ -2745,6 +3060,7 @@ namespace Exine.ExineObjects
         {
             if (Frame == null) return;
 
+            int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
             switch (CurrentAction)
             {
                 case ExAction.ONEHAND_WALK_LEFT:
@@ -2880,6 +3196,8 @@ namespace Exine.ExineObjects
                     break;
 
                 case ExAction.ONEHAND_STAND:
+                case ExAction.TWOHAND_STAND:
+                case ExAction.BOWHAND_STAND:
                 case ExAction.MountStanding:
                 case ExAction.DashFail:
                 case ExAction.Harvest:
@@ -2984,7 +3302,26 @@ namespace Exine.ExineObjects
                             //FrameIndex = 0;
                             ActionFeed.Clear();
                             //ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
-                            ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                            switch(weaponType)
+                            {
+                                case 1:
+                                    ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                                    break;
+
+                                case 2:
+                                    ActionFeed.Add(new QueuedAction { Action = ExAction.TWOHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                                    break;
+
+                                case 3:
+                                    ActionFeed.Add(new QueuedAction { Action = ExAction.BOWHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                                    break;
+
+                                default:
+                                    ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                                    break;
+
+                            }
+                            //ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
                             SetAction();
                         }
                         else
@@ -3060,12 +3397,20 @@ namespace Exine.ExineObjects
                         else
                             NextMotion2 += EffectFrameInterval;
                     }
-                    break;     
+                    break;
 
-                case ExAction.Attack1:
+                /*case ExAction.Attack1:
                 case ExAction.Attack2:
                 case ExAction.Attack3:
                 case ExAction.Attack4:
+                */
+                case ExAction.ONEHAND_ATTACK1:
+                case ExAction.ONEHAND_ATTACK2:
+                case ExAction.ONEHAND_ATTACK3: 
+                case ExAction.TWOHAND_ATTACK1:
+                case ExAction.TWOHAND_ATTACK2:
+                case ExAction.TWOHAND_ATTACK3: 
+                case ExAction.BOWHAND_ATTACK1:   
                 case ExAction.MountAttack:
                 case ExAction.Mine:
                     if (CMain.Time >= NextMotion)
@@ -4677,7 +5022,23 @@ namespace Exine.ExineObjects
                         {
                             FrameIndex = Frame.Count - 1;
                             ActionFeed.Clear();
-                            ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                            switch(weaponType)
+                            {
+                                case 1:
+                                    ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                                    break;
+                                case 2:
+                                    ActionFeed.Add(new QueuedAction { Action = ExAction.TWOHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                                    break;
+                                case 3:
+                                    ActionFeed.Add(new QueuedAction { Action = ExAction.BOWHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                                    break;
+
+                                default:
+                                    ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
+                                    break;
+                            }
+                            //ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation });
                             SetAction();
                         }
                         else
@@ -4691,7 +5052,9 @@ namespace Exine.ExineObjects
 
             if (this == User) return;
 
-            if ((CurrentAction == ExAction.ONEHAND_STAND || CurrentAction == ExAction.MountStanding || CurrentAction == ExAction.Stance || CurrentAction == ExAction.Stance2 || CurrentAction == ExAction.DashFail) && NextAction != null)
+            if ((CurrentAction == ExAction.ONEHAND_STAND || CurrentAction == ExAction.TWOHAND_STAND || CurrentAction == ExAction.BOWHAND_STAND || 
+                CurrentAction == ExAction.MountStanding || CurrentAction == ExAction.Stance || CurrentAction == ExAction.Stance2 || CurrentAction == ExAction.DashFail)
+                && NextAction != null)
                 SetAction();
             //if Revive and dead set action
 
@@ -6070,214 +6433,259 @@ namespace Exine.ExineObjects
 
             DrawMount();
 
-            //그리는 순서 문제임.
-            if (!RidingMount)
+            //add
+            switch(Direction)
             {
-                if (Direction == ExineDirection.Left || Direction == ExineDirection.Up || Direction == ExineDirection.UpLeft || Direction == ExineDirection.DownLeft)
-                {
-                    DrawWeapon();
+                case ExineDirection.Left:
+                case ExineDirection.DownLeft:
+                case ExineDirection.UpLeft:
                     DrawShield();
-                }
-
-                else
-                    DrawWeapon2();
-            } 
-            DrawBody();
-
-
-            if (Direction == ExineDirection.Up || Direction == ExineDirection.UpLeft || Direction == ExineDirection.UpRight || Direction == ExineDirection.Right || Direction == ExineDirection.Left)
-            {
-                DrawHead();
-                if (this != User)
-                {
-                    DrawWings();
-                }
-            }
-            else
-            {
-                if (this != User)
-                {
-                    DrawWings();
-                }
-                DrawHead();
-            }
-            
-
-            if (!RidingMount)
-            {
-                if (Direction == ExineDirection.UpRight || Direction == ExineDirection.Right || Direction == ExineDirection.DownRight || Direction == ExineDirection.Down)
+                    DrawHead();
+                    DrawBody();
                     DrawWeapon();
-                else
-                    DrawWeapon2();
-
-                if (Class == ExineClass.Archer && HasClassWeapon)
-                    DrawWeapon2();
-            }
-
-            DXManager.SetOpacity(oldOpacity);
-        }
-
-        public override void DrawBehindEffects(bool effectsEnabled)
-        {
-            for (int i = 0; i < Effects.Count; i++)
-            {
-                if (!Effects[i].DrawBehind) continue;
-                if (!Settings.LevelEffect && (Effects[i] is SpecialEffect) && ((SpecialEffect)Effects[i]).EffectType == 1) continue;
-                if ((!effectsEnabled) && (!IsVitalEffect(Effects[i]))) continue;
-                Effects[i].Draw();
-            }
-        }
-
-        public override void DrawEffects(bool effectsEnabled)
-        {
-            for (int i = 0; i < Effects.Count; i++)
-            {
-                if (Effects[i].DrawBehind) continue;
-                if (!Settings.LevelEffect && (Effects[i] is SpecialEffect) && ((SpecialEffect)Effects[i]).EffectType == 1) continue;
-                if ((!effectsEnabled) && (!IsVitalEffect(Effects[i]))) continue;
-                Effects[i].Draw();
-            }
-
-            if (!effectsEnabled) return;
-
-            switch (CurrentAction)
-            {
-                case ExAction.Attack1:
-                    switch (Spell)
-                    {
-                        case Spell.Slaying:
-                            Libraries.Magic.DrawBlend(1820 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                        case Spell.DoubleSlash:
-                            Libraries.Magic2.DrawBlend(1960 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                        case Spell.Thrusting:
-                            Libraries.Magic.DrawBlend(2190 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                        case Spell.HalfMoon:
-                            Libraries.Magic.DrawBlend(2560 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                        case Spell.TwinDrakeBlade:
-                            Libraries.Magic2.DrawBlend(220 + ((int)Direction * 20) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                        case Spell.CrossHalfMoon:
-                            Libraries.Magic2.DrawBlend(40 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                        case Spell.FlamingSword:
-                            Libraries.Magic.DrawBlend(3480 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                    }
                     break;
-                case ExAction.Attack4:
 
-                    switch (Spell)
-                    {
-                        case Spell.DoubleSlash:
-                            Libraries.Magic2.DrawBlend(2050 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                        case Spell.TwinDrakeBlade:
-                            Libraries.Magic2.DrawBlend(226 + ((int)Direction * 20) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                        case Spell.FlamingSword:
-                            Libraries.Magic.DrawBlend(3480 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
-                            break;
-                    }
+                case ExineDirection.Up:
+                    DrawShield();
+                    DrawWeapon();
+                    DrawHead();
+                    DrawBody();
                     break;
-            }
+
+                case ExineDirection.Right:
+                case ExineDirection.DownRight:
+                case ExineDirection.UpRight:
+                    DrawWeapon();
+                    DrawHead();
+                    DrawBody();
+                    DrawShield();
+                    break;
+
+                case ExineDirection.Down:
+                    DrawWeapon();
+                    DrawHead();
+                    DrawBody();
+                    DrawShield();
+                    break;
+
+            }  
+                //그리는 순서 문제임.
+                /*
+                if (!RidingMount)
+                {
+                    if (Direction == ExineDirection.Left || Direction == ExineDirection.Up || Direction == ExineDirection.UpLeft || Direction == ExineDirection.DownLeft)
+                    {
+                        DrawWeapon();
+                        DrawShield();
+                    }
+
+                    else
+                        DrawWeapon2();
+                } 
+                DrawBody();
 
 
-        }
-
-        public void DrawCurrentEffects()
-        {
-            if (CurrentEffect == SpellEffect.MagicShieldUp && !MagicShield)
-            {
-                MagicShield = true;
-                Effects.Add(ShieldEffect = new Effect(Libraries.Magic, 3890, 3, 600, this) { Repeat = true });
-                CurrentEffect = SpellEffect.None;
-            }
-
-            if (CurrentEffect == SpellEffect.ElementalBarrierUp && !ElementalBarrier)
-            {
-                ElementalBarrier = true;
-                Effects.Add(ElementalBarrierEffect = new Effect(Libraries.Magic3, 1890, 16, 3200, this) { Repeat = true });
-                CurrentEffect = SpellEffect.None;
-            }
-
-            if (ElementEffect > 0 && !HasElements)
-            {
-                HasElements = true;
-                if (ElementEffect == 4)
-                    Effects.Add(new ElementsEffect(Libraries.Magic3, 1660, 10, 10 * 100, this, true, 4, ElementOrbMax));
+                if (Direction == ExineDirection.Up || Direction == ExineDirection.UpLeft || Direction == ExineDirection.UpRight || Direction == ExineDirection.Right || Direction == ExineDirection.Left)
+                {
+                    DrawHead();
+                    if (this != User)
+                    {
+                        DrawWings();
+                    }
+                }
                 else
                 {
-                    if (ElementEffect >= 1)
-                        Effects.Add(new ElementsEffect(Libraries.Magic3, 1630, 10, 10 * 100, this, true, 1, ElementOrbMax));
-                    if (ElementEffect >= 2)
-                        Effects.Add(new ElementsEffect(Libraries.Magic3, 1640, 10, 10 * 100, this, true, 2, ElementOrbMax));
-                    if (ElementEffect == 3)
-                        Effects.Add(new ElementsEffect(Libraries.Magic3, 1650, 10, 10 * 100, this, true, 3, ElementOrbMax));
+                    if (this != User)
+                    {
+                        DrawWings();
+                    }
+                    DrawHead();
                 }
-                ElementEffect = 0;
+
+
+                if (!RidingMount)
+                {
+                    if (Direction == ExineDirection.UpRight || Direction == ExineDirection.Right || Direction == ExineDirection.DownRight || Direction == ExineDirection.Down)
+                    {
+                        DrawWeapon();
+                        DrawShield();
+                    }
+                    else
+                        DrawWeapon2();
+
+                    if (Class == ExineClass.Archer && HasClassWeapon)
+                        DrawWeapon2();
+                }
+                */
+                DXManager.SetOpacity(oldOpacity);
             }
-        }
 
-        public override void DrawBlend()
-        {
-            DXManager.SetBlend(true, 0.3F);
-            Draw();
-            DXManager.SetBlend(false);
-        }
+            public override void DrawBehindEffects(bool effectsEnabled)
+            {
+                for (int i = 0; i < Effects.Count; i++)
+                {
+                    if (!Effects[i].DrawBehind) continue;
+                    if (!Settings.LevelEffect && (Effects[i] is SpecialEffect) && ((SpecialEffect)Effects[i]).EffectType == 1) continue;
+                    if ((!effectsEnabled) && (!IsVitalEffect(Effects[i]))) continue;
+                    Effects[i].Draw();
+                }
+            }
 
-        public Color GetColorFromExColor(ExineColor exineColor)
-        {
-            Color[] tintColors = new Color[28];
-            tintColors[0] = Color.FromArgb(150, Color.Black);
-            tintColors[1] = Color.FromArgb(150, Color.Blue);
-            tintColors[2] = Color.FromArgb(150, Color.Brown);
-            tintColors[3] = Color.FromArgb(150, Color.Coral);
-            tintColors[4] = Color.FromArgb(150, Color.Crimson);
-            tintColors[5] = Color.FromArgb(150, Color.Cyan);
-            tintColors[6] = Color.FromArgb(150, Color.Fuchsia);
-            tintColors[7] = Color.FromArgb(150, Color.Gold);
-            tintColors[8] = Color.FromArgb(150, Color.Gray);
-            tintColors[9] = Color.FromArgb(150, Color.Green);
-            tintColors[10] = Color.FromArgb(150, Color.Indigo);
-            tintColors[11] = Color.FromArgb(150, Color.Khaki);
-            tintColors[12] = Color.FromArgb(150, Color.Lavender);
-            tintColors[13] = Color.FromArgb(150, Color.LawnGreen);
-            tintColors[14] = Color.FromArgb(150, Color.Lime);
-            tintColors[15] = Color.FromArgb(150, Color.Linen);
-            tintColors[16] = Color.FromArgb(150, Color.Magenta);
-            tintColors[17] = Color.FromArgb(150, Color.Maroon);
-            tintColors[18] = Color.FromArgb(150, Color.Navy);
-            tintColors[19] = Color.FromArgb(150, Color.Olive);
-            tintColors[20] = Color.FromArgb(150, Color.Orange);
-            tintColors[21] = Color.FromArgb(150, Color.Pink);
-            tintColors[22] = Color.FromArgb(150, Color.Purple);
-            tintColors[23] = Color.FromArgb(150, Color.Red);
-            tintColors[24] = Color.FromArgb(150, Color.Silver);
-            tintColors[25] = Color.FromArgb(150, Color.Violet);
-            tintColors[26] = Color.FromArgb(150, Color.White);
-            tintColors[27] = Color.FromArgb(150, Color.Yellow);
-            return tintColors[(int)exineColor];
-        }
-        public void DrawBody()
-        {
-            //Gender == ExineGender.Male
-            /*
-            bool oldGrayScale = DXManager.GrayScale;
-            Color drawColour = ApplyDrawColour();                     
+            public override void DrawEffects(bool effectsEnabled)
+            {
+                for (int i = 0; i < Effects.Count; i++)
+                {
+                    if (Effects[i].DrawBehind) continue;
+                    if (!Settings.LevelEffect && (Effects[i] is SpecialEffect) && ((SpecialEffect)Effects[i]).EffectType == 1) continue;
+                    if ((!effectsEnabled) && (!IsVitalEffect(Effects[i]))) continue;
+                    Effects[i].Draw();
+                }
 
-            if (BodyLibrary != null)
-                BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
+                if (!effectsEnabled) return;
 
-            DXManager.SetGrayscale(oldGrayScale);
-            //BodyLibrary.DrawTinted(DrawFrame + ArmourOffSet, DrawLocation, DrawColour, Color.DarkSeaGreen);
-            */
-          
+                switch (CurrentAction)
+                {
+                    //case ExAction.Attack1:
+                    case ExAction.ONEHAND_ATTACK1:
+                    case ExAction.TWOHAND_ATTACK1:
+                    case ExAction.BOWHAND_ATTACK1:
+                        switch (Spell)
+                        {
+                            case Spell.Slaying:
+                                Libraries.Magic.DrawBlend(1820 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                            case Spell.DoubleSlash:
+                                Libraries.Magic2.DrawBlend(1960 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                            case Spell.Thrusting:
+                                Libraries.Magic.DrawBlend(2190 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                            case Spell.HalfMoon:
+                                Libraries.Magic.DrawBlend(2560 + ((int)Direction * 10) + SpellLevel * 90 + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                            case Spell.TwinDrakeBlade:
+                                Libraries.Magic2.DrawBlend(220 + ((int)Direction * 20) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                            case Spell.CrossHalfMoon:
+                                Libraries.Magic2.DrawBlend(40 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                            case Spell.FlamingSword:
+                                Libraries.Magic.DrawBlend(3480 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                        }
+                        break;
+                    //case ExAction.Attack4:
+                    case ExAction.ONEHAND_ATTACK3:
+                    case ExAction.TWOHAND_ATTACK3:
 
-            bool oldGrayScale = DXManager.GrayScale;
+                        switch (Spell)
+                        {
+                            case Spell.DoubleSlash:
+                                Libraries.Magic2.DrawBlend(2050 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                            case Spell.TwinDrakeBlade:
+                                Libraries.Magic2.DrawBlend(226 + ((int)Direction * 20) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                            case Spell.FlamingSword:
+                                Libraries.Magic.DrawBlend(3480 + ((int)Direction * 10) + FrameIndex, DrawLocation, Color.White, true, 0.7F);
+                                break;
+                        }
+                        break;
+                }
+
+
+            }
+
+            public void DrawCurrentEffects()
+            {
+                if (CurrentEffect == SpellEffect.MagicShieldUp && !MagicShield)
+                {
+                    MagicShield = true;
+                    Effects.Add(ShieldEffect = new Effect(Libraries.Magic, 3890, 3, 600, this) { Repeat = true });
+                    CurrentEffect = SpellEffect.None;
+                }
+
+                if (CurrentEffect == SpellEffect.ElementalBarrierUp && !ElementalBarrier)
+                {
+                    ElementalBarrier = true;
+                    Effects.Add(ElementalBarrierEffect = new Effect(Libraries.Magic3, 1890, 16, 3200, this) { Repeat = true });
+                    CurrentEffect = SpellEffect.None;
+                }
+
+                if (ElementEffect > 0 && !HasElements)
+                {
+                    HasElements = true;
+                    if (ElementEffect == 4)
+                        Effects.Add(new ElementsEffect(Libraries.Magic3, 1660, 10, 10 * 100, this, true, 4, ElementOrbMax));
+                    else
+                    {
+                        if (ElementEffect >= 1)
+                            Effects.Add(new ElementsEffect(Libraries.Magic3, 1630, 10, 10 * 100, this, true, 1, ElementOrbMax));
+                        if (ElementEffect >= 2)
+                            Effects.Add(new ElementsEffect(Libraries.Magic3, 1640, 10, 10 * 100, this, true, 2, ElementOrbMax));
+                        if (ElementEffect == 3)
+                            Effects.Add(new ElementsEffect(Libraries.Magic3, 1650, 10, 10 * 100, this, true, 3, ElementOrbMax));
+                    }
+                    ElementEffect = 0;
+                }
+            }
+
+            public override void DrawBlend()
+            {
+                DXManager.SetBlend(true, 0.3F);
+                Draw();
+                DXManager.SetBlend(false);
+            }
+
+            public Color GetColorFromExColor(ExineColor exineColor)
+            {
+                Color[] tintColors = new Color[28];
+                tintColors[0] = Color.FromArgb(150, Color.Black);
+                tintColors[1] = Color.FromArgb(150, Color.Blue);
+                tintColors[2] = Color.FromArgb(150, Color.Brown);
+                tintColors[3] = Color.FromArgb(150, Color.Coral);
+                tintColors[4] = Color.FromArgb(150, Color.Crimson);
+                tintColors[5] = Color.FromArgb(150, Color.Cyan);
+                tintColors[6] = Color.FromArgb(150, Color.Fuchsia);
+                tintColors[7] = Color.FromArgb(150, Color.Gold);
+                tintColors[8] = Color.FromArgb(150, Color.Gray);
+                tintColors[9] = Color.FromArgb(150, Color.Green);
+                tintColors[10] = Color.FromArgb(150, Color.Indigo);
+                tintColors[11] = Color.FromArgb(150, Color.Khaki);
+                tintColors[12] = Color.FromArgb(150, Color.Lavender);
+                tintColors[13] = Color.FromArgb(150, Color.LawnGreen);
+                tintColors[14] = Color.FromArgb(150, Color.Lime);
+                tintColors[15] = Color.FromArgb(150, Color.Linen);
+                tintColors[16] = Color.FromArgb(150, Color.Magenta);
+                tintColors[17] = Color.FromArgb(150, Color.Maroon);
+                tintColors[18] = Color.FromArgb(150, Color.Navy);
+                tintColors[19] = Color.FromArgb(150, Color.Olive);
+                tintColors[20] = Color.FromArgb(150, Color.Orange);
+                tintColors[21] = Color.FromArgb(150, Color.Pink);
+                tintColors[22] = Color.FromArgb(150, Color.Purple);
+                tintColors[23] = Color.FromArgb(150, Color.Red);
+                tintColors[24] = Color.FromArgb(150, Color.Silver);
+                tintColors[25] = Color.FromArgb(150, Color.Violet);
+                tintColors[26] = Color.FromArgb(150, Color.White);
+                tintColors[27] = Color.FromArgb(150, Color.Yellow);
+                return tintColors[(int)exineColor];
+            }
+            public void DrawBody()
+            {
+                //Gender == ExineGender.Male
+                /*
+                bool oldGrayScale = DXManager.GrayScale;
+                Color drawColour = ApplyDrawColour();                     
+
+                if (BodyLibrary != null)
+                    BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
+
+                DXManager.SetGrayscale(oldGrayScale);
+                //BodyLibrary.DrawTinted(DrawFrame + ArmourOffSet, DrawLocation, DrawColour, Color.DarkSeaGreen);
+                */
+
+
+                bool oldGrayScale = DXManager.GrayScale;
             Color drawColour = ApplyDrawColour();
             Color tintColor = GetColorFromExColor(ExColor);
 
@@ -6313,11 +6721,8 @@ namespace Exine.ExineObjects
 
 			if (WeaponLibrary1 != null)
 			{
-                Console.WriteLine("@777 Weapon:" + (DrawFrame + WeaponOffSet)+ " DrawFrame:"+ DrawFrame+ "WeaponOffSet"+ WeaponOffSet);
                 WeaponLibrary1.Draw((DrawFrame + WeaponOffSet), DrawLocation, DrawColour, true); //original
-                
-
-
+                 
                 if (WeaponEffectLibrary1 != null)
 					WeaponEffectLibrary1.DrawBlend((DrawFrame + WeaponOffSet), DrawLocation, DrawColour, true, 0.4F);
 			}

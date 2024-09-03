@@ -956,7 +956,9 @@ namespace ServerPackets
             writer.Write(Light);
             writer.Write(Weapon);
 			writer.Write(WeaponEffect);
-            writer.Write(Shield); //add k333123
+            writer.Write(Shield); //add k333123 
+            Console.WriteLine("@@@Shield:" + Shield);
+
             writer.Write(Armour);
             writer.Write((ushort)Poison);
             writer.Write(Dead);

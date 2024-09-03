@@ -241,6 +241,11 @@ namespace Exine.ExineObjects
                     WeaponEffect = realItem.Effect;
                 }
 
+                if (realItem.Type == ItemType.Belt) //add k333123 240903
+                {
+                    Shield = realItem.Shape; //add k333123 240903
+                }
+
                 if (realItem.Type == ItemType.Mount)
                 {
                     MountType = realItem.Shape;

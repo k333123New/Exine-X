@@ -295,6 +295,7 @@ namespace Server.ExineObjects.Monsters
         {
             PlayerObject master = null;
             short weapon = -1;
+            short shield = -1;
             short armour = 0;
             byte wing = 0;
 
@@ -302,6 +303,7 @@ namespace Server.ExineObjects.Monsters
             if (master != null)
             {
                 weapon = master.Looks_Weapon;
+                shield = master.Looks_Shield;
                 armour = master.Looks_Armour;
                 wing = master.Looks_Wings;
             }

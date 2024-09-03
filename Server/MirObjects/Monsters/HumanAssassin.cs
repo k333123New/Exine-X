@@ -340,6 +340,7 @@ namespace Server.ExineObjects.Monsters
             if (master != null)
             {
                 weapon = master.Looks_Weapon;
+                shield = master.Looks_Shield;
                 armour = master.Looks_Armour;
                 wing = master.Looks_Wings;
             }
