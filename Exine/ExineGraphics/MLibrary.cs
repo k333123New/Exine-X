@@ -6,35 +6,535 @@ using Exine.ExineObjects;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.IO;
+using static Exine.ExineGraphics.WeaponMapperMgr;
+//using static System.Net.WebRequestMethods;
 
 namespace Exine.ExineGraphics
 {
+   
+
+    public class WeaponMapperMgr
+    {
+        public class ShapeToLibIndex
+        {
+            public int shapeIdx;
+            public int libIndex;
+            public int weaponType;  //1(onthand) 2(twohand) 3(bow) 4(sheild) 5(armor)
+            public bool isFemale;
+
+            public ShapeToLibIndex(int shapeIdx, int libIndex, int weaponType, bool isFemale)
+            {
+                this.shapeIdx = shapeIdx;
+                this.libIndex = libIndex;
+                this.weaponType = weaponType;
+                this.isFemale = isFemale;
+            }
+            override
+            public string ToString()
+            {
+                return "ShapeIdx:" + shapeIdx + " libIndex:" + libIndex + " weaponType:" + weaponType + " isFemale:" + isFemale.ToString().ToLower();
+            }
+        }
+
+        public List<ShapeToLibIndex> shapeToLibIndexs = new List<ShapeToLibIndex>();
+
+        public WeaponMapperMgr(){
+            shapeToLibIndexs.Clear();
+            shapeToLibIndexs.Add(new ShapeToLibIndex(1, 0, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(2, 1, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(3, 2, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(4, 3, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(5, 4, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(6, 5, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(7, 6, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(8, 7, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(9, 8, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(10, 9, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(11, 10, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(18, 11, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(19, 12, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(20, 13, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(21, 14, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(22, 15, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(23, 16, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(24, 17, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(25, 18, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(26, 19, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(28, 20, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(29, 21, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(30, 22, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(50, 23, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(51, 24, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(53, 25, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(55, 26, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(57, 27, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(62, 28, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(63, 29, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(411, 30, 1, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(1, 0, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(2, 1, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(3, 2, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(4, 3, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(5, 4, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(6, 5, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(7, 6, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(8, 7, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(9, 8, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(10, 9, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(11, 10, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(18, 11, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(19, 12, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(20, 13, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(21, 14, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(22, 15, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(23, 16, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(24, 17, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(25, 18, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(26, 19, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(28, 20, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(29, 21, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(30, 22, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(50, 23, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(51, 24, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(53, 25, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(55, 26, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(57, 27, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(62, 28, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(63, 29, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(411, 30, 1, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(12, 0, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(13, 1, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(14, 2, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(15, 3, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(16, 4, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(33, 5, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(34, 6, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(35, 7, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(36, 8, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(37, 9, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(38, 10, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(39, 11, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(40, 12, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(41, 13, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(42, 14, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(43, 15, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(44, 16, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(48, 17, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(49, 18, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(52, 19, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(54, 20, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(56, 21, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(58, 22, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(59, 23, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(60, 24, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(61, 25, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(64, 26, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(65, 27, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(66, 28, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(68, 29, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(69, 30, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(70, 31, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(71, 32, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(385, 33, 2, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(12, 0, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(13, 1, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(14, 2, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(15, 3, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(16, 4, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(33, 5, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(34, 6, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(35, 7, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(36, 8, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(37, 9, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(38, 10, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(39, 11, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(40, 12, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(41, 13, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(42, 14, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(43, 15, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(44, 16, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(48, 17, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(49, 18, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(52, 19, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(54, 20, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(56, 21, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(58, 22, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(59, 23, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(60, 24, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(61, 25, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(64, 26, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(65, 27, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(66, 28, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(68, 29, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(69, 30, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(70, 31, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(71, 32, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(385, 33, 2, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(72, 0, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(73, 1, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(74, 2, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(75, 3, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(76, 4, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(77, 5, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(78, 6, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(79, 7, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(80, 8, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(81, 9, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(82, 10, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(83, 11, 3, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(72, 0, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(73, 1, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(74, 2, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(75, 3, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(76, 4, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(77, 5, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(78, 6, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(79, 7, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(80, 8, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(81, 9, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(82, 10, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(83, 11, 3, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(86, 0, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(87, 1, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(88, 2, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(89, 3, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(90, 4, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(91, 5, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(92, 6, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(93, 7, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(94, 8, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(95, 9, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(96, 10, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(420, 11, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(421, 12, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(422, 13, 4, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(86, 0, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(87, 1, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(88, 2, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(89, 3, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(90, 4, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(91, 5, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(92, 6, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(93, 7, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(94, 8, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(95, 9, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(96, 10, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(420, 11, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(421, 12, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(422, 13, 4, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(97, 1, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(98, 2, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(99, 3, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(100, 4, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(101, 5, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(102, 6, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(103, 7, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(104, 8, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(105, 9, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(106, 10, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(107, 11, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(108, 12, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(109, 13, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(110, 14, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(112, 15, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(113, 16, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(114, 17, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(115, 18, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(116, 19, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(117, 20, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(118, 21, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(427, 22, 5, false));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(97, 1, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(98, 2, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(99, 3, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(100, 4, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(101, 5, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(102, 6, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(103, 7, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(104, 8, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(105, 9, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(106, 10, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(107, 11, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(108, 12, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(109, 13, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(110, 14, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(112, 15, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(113, 16, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(114, 17, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(115, 18, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(116, 19, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(117, 20, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(118, 21, 5, true));
+
+            shapeToLibIndexs.Add(new ShapeToLibIndex(427, 22, 5, true));
+        }
+        
+        public ShapeToLibIndex GetShapeToLibIndexFromShapeIdx(int shapeIdx, bool isFemale)
+        {
+            foreach(var item in shapeToLibIndexs)
+            {
+                if(item.shapeIdx==shapeIdx && item.isFemale==isFemale)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+     
+    }
+
     public static class Libraries
     {
+        public static WeaponMapperMgr weaponMapperMgr = new WeaponMapperMgr();
         public static bool Loaded;
         public static int Count, Progress;
          
         public static MLibrary[] ExineManHair = new MLibrary[4];
-        public static MLibrary[] ExineWomanHair = new MLibrary[4];
+        public static MLibrary[] ExineWomenHair = new MLibrary[4];
 
         public static MLibrary[] ExineManArmor = new MLibrary[23];
-        public static MLibrary[] ExineWomanArmor = new MLibrary[23];
+        public static MLibrary[] ExineWomenArmor = new MLibrary[23];
 
         public static MLibrary[] ExineManSheild = new MLibrary[14];
-        public static MLibrary[] ExineWomanSheild = new MLibrary[14];
+        public static MLibrary[] ExineWomenSheild = new MLibrary[14];
+        
 
         public static MLibrary[] ExineManOneWeapon = new MLibrary[31];
-        public static MLibrary[] ExineWomanOneWeapon = new MLibrary[31];
+        public static MLibrary[] ExineWomenOneWeapon = new MLibrary[31];
 
         public static MLibrary[] ExineManTwoWeapon = new MLibrary[34];
-        public static MLibrary[] ExineWomanTwoWeapon = new MLibrary[34];
+        public static MLibrary[] ExineWomenTwoWeapon = new MLibrary[34];
 
         public static MLibrary[] ExineManBowWeapon = new MLibrary[12];
-        public static MLibrary[] ExineWomanBowWeapon = new MLibrary[12];
+        public static MLibrary[] ExineWomenBowWeapon = new MLibrary[12];
+
 
         public static MLibrary[] ExineNPCs = new MLibrary[36];
         public static MLibrary[] ExineMonsters = new MLibrary[73];
-
 
         public static readonly MLibrary
 
@@ -262,10 +762,10 @@ namespace Exine.ExineGraphics
             ExineManHair[2] = new MLibrary(Settings.ExHairPath + "HHM_0002_바람머리_reidx");
             ExineManHair[3] = new MLibrary(Settings.ExHairPath + "HHM_1000_대머리_reidx");
 
-            ExineWomanHair[0] = new MLibrary(Settings.ExHairPath + "HHW_0001_세일러문머리_reidx");
-            ExineWomanHair[1] = new MLibrary(Settings.ExHairPath + "HHW_0002_단발머리_reidx");
-            ExineWomanHair[2] = new MLibrary(Settings.ExHairPath + "HHW_0002_올림묶음머리_reidx");
-            ExineWomanHair[3] = new MLibrary(Settings.ExHairPath + "HHW_1000_대머리_reidx");
+            ExineWomenHair[0] = new MLibrary(Settings.ExHairPath + "HHW_0001_세일러문머리_reidx");
+            ExineWomenHair[1] = new MLibrary(Settings.ExHairPath + "HHW_0002_단발머리_reidx");
+            ExineWomenHair[2] = new MLibrary(Settings.ExHairPath + "HHW_0002_올림묶음머리_reidx");
+            ExineWomenHair[3] = new MLibrary(Settings.ExHairPath + "HHW_1000_대머리_reidx");
 
             ExineManArmor[0] = new MLibrary(Settings.ExArmorPath + "AHM_0000_평상복_reidx");
             ExineManArmor[1] = new MLibrary(Settings.ExArmorPath + "AHM_0001_퀼트아머_reidx");
@@ -291,29 +791,29 @@ namespace Exine.ExineGraphics
             ExineManArmor[21] = new MLibrary(Settings.ExArmorPath + "AHM_0022_팔리움_reidx");
             ExineManArmor[22] = new MLibrary(Settings.ExArmorPath + "AHM_1001_이벤트복01_reidx");
 
-            ExineWomanArmor[0] = new MLibrary(Settings.ExArmorPath + "AHW_0000_평상복_reidx");
-            ExineWomanArmor[1] = new MLibrary(Settings.ExArmorPath + "AHW_0001_퀼트아머_reidx");
-            ExineWomanArmor[2] = new MLibrary(Settings.ExArmorPath + "AHW_0002_레더아머_reidx");
-            ExineWomanArmor[3] = new MLibrary(Settings.ExArmorPath + "AHW_0003_스케일아머_reidx");
-            ExineWomanArmor[4] = new MLibrary(Settings.ExArmorPath + "AHW_0004_브리간딘_reidx");
-            ExineWomanArmor[5] = new MLibrary(Settings.ExArmorPath + "AHW_0005_브레스트플레이트_reidx");
-            ExineWomanArmor[6] = new MLibrary(Settings.ExArmorPath + "AHW_0006_하프플레이트_reidx");
-            ExineWomanArmor[7] = new MLibrary(Settings.ExArmorPath + "AHW_0007_체인메일_reidx");
-            ExineWomanArmor[8] = new MLibrary(Settings.ExArmorPath + "AHW_0008_오베르_reidx");
-            ExineWomanArmor[9] = new MLibrary(Settings.ExArmorPath + "AHW_0009_본아머_reidx");
-            ExineWomanArmor[10] = new MLibrary(Settings.ExArmorPath + "AHW_0010_플레이트메일_reidx");
-            ExineWomanArmor[11] = new MLibrary(Settings.ExArmorPath + "AHW_0011_컴포지트아머_reidx");
-            ExineWomanArmor[12] = new MLibrary(Settings.ExArmorPath + "AHW_0012_플레이트아머_reidx");
-            ExineWomanArmor[13] = new MLibrary(Settings.ExArmorPath + "AHW_0013_풀플레이트메일_reidx");
-            ExineWomanArmor[14] = new MLibrary(Settings.ExArmorPath + "AHW_0014_플루티드아머_reidx");
-            ExineWomanArmor[15] = new MLibrary(Settings.ExArmorPath + "AHW_0016_로브_reidx");
-            ExineWomanArmor[16] = new MLibrary(Settings.ExArmorPath + "AHW_0017_수탄_reidx");
-            ExineWomanArmor[17] = new MLibrary(Settings.ExArmorPath + "AHW_0018_실크로브_reidx");
-            ExineWomanArmor[18] = new MLibrary(Settings.ExArmorPath + "AHW_0019_가운_reidx");
-            ExineWomanArmor[19] = new MLibrary(Settings.ExArmorPath + "AHW_0020_브로케이드_reidx");
-            ExineWomanArmor[20] = new MLibrary(Settings.ExArmorPath + "AHW_0021_달마티카_reidx");
-            ExineWomanArmor[21] = new MLibrary(Settings.ExArmorPath + "AHW_0022_팔리움_reidx");
-            ExineWomanArmor[22] = new MLibrary(Settings.ExArmorPath + "AHW_1001_이벤트복01_reidx");
+            ExineWomenArmor[0] = new MLibrary(Settings.ExArmorPath + "AHW_0000_평상복_reidx");
+            ExineWomenArmor[1] = new MLibrary(Settings.ExArmorPath + "AHW_0001_퀼트아머_reidx");
+            ExineWomenArmor[2] = new MLibrary(Settings.ExArmorPath + "AHW_0002_레더아머_reidx");
+            ExineWomenArmor[3] = new MLibrary(Settings.ExArmorPath + "AHW_0003_스케일아머_reidx");
+            ExineWomenArmor[4] = new MLibrary(Settings.ExArmorPath + "AHW_0004_브리간딘_reidx");
+            ExineWomenArmor[5] = new MLibrary(Settings.ExArmorPath + "AHW_0005_브레스트플레이트_reidx");
+            ExineWomenArmor[6] = new MLibrary(Settings.ExArmorPath + "AHW_0006_하프플레이트_reidx");
+            ExineWomenArmor[7] = new MLibrary(Settings.ExArmorPath + "AHW_0007_체인메일_reidx");
+            ExineWomenArmor[8] = new MLibrary(Settings.ExArmorPath + "AHW_0008_오베르_reidx");
+            ExineWomenArmor[9] = new MLibrary(Settings.ExArmorPath + "AHW_0009_본아머_reidx");
+            ExineWomenArmor[10] = new MLibrary(Settings.ExArmorPath + "AHW_0010_플레이트메일_reidx");
+            ExineWomenArmor[11] = new MLibrary(Settings.ExArmorPath + "AHW_0011_컴포지트아머_reidx");
+            ExineWomenArmor[12] = new MLibrary(Settings.ExArmorPath + "AHW_0012_플레이트아머_reidx");
+            ExineWomenArmor[13] = new MLibrary(Settings.ExArmorPath + "AHW_0013_풀플레이트메일_reidx");
+            ExineWomenArmor[14] = new MLibrary(Settings.ExArmorPath + "AHW_0014_플루티드아머_reidx");
+            ExineWomenArmor[15] = new MLibrary(Settings.ExArmorPath + "AHW_0016_로브_reidx");
+            ExineWomenArmor[16] = new MLibrary(Settings.ExArmorPath + "AHW_0017_수탄_reidx");
+            ExineWomenArmor[17] = new MLibrary(Settings.ExArmorPath + "AHW_0018_실크로브_reidx");
+            ExineWomenArmor[18] = new MLibrary(Settings.ExArmorPath + "AHW_0019_가운_reidx");
+            ExineWomenArmor[19] = new MLibrary(Settings.ExArmorPath + "AHW_0020_브로케이드_reidx");
+            ExineWomenArmor[20] = new MLibrary(Settings.ExArmorPath + "AHW_0021_달마티카_reidx");
+            ExineWomenArmor[21] = new MLibrary(Settings.ExArmorPath + "AHW_0022_팔리움_reidx");
+            ExineWomenArmor[22] = new MLibrary(Settings.ExArmorPath + "AHW_1001_이벤트복01_reidx");
              
             ExineManSheild[0] = new MLibrary(Settings.ExSheildPath + "SHM_0001_(방)_나무방패_reidx");
             ExineManSheild[1] = new MLibrary(Settings.ExSheildPath + "SHM_0002_(방)_버클러_reidx");
@@ -330,20 +830,20 @@ namespace Exine.ExineGraphics
             ExineManSheild[12] = new MLibrary(Settings.ExSheildPath + "SHM_0013_(방)_별풍선_reidx");
             ExineManSheild[13] = new MLibrary(Settings.ExSheildPath + "SHM_0014_(방)_하트풍선_reidx");
 
-            ExineWomanSheild[0] = new MLibrary(Settings.ExSheildPath + "SHW_0001_(방)_나무방패_reidx");
-            ExineWomanSheild[1] = new MLibrary(Settings.ExSheildPath + "SHW_0002_(방)_버클러_reidx");
-            ExineWomanSheild[2] = new MLibrary(Settings.ExSheildPath + "SHW_0003_(방)_아스피스_reidx");
-            ExineWomanSheild[3] = new MLibrary(Settings.ExSheildPath + "SHW_0004_(방)_호플론_reidx");
-            ExineWomanSheild[4] = new MLibrary(Settings.ExSheildPath + "SHW_0005_(방)_본쉴드_reidx");
-            ExineWomanSheild[5] = new MLibrary(Settings.ExSheildPath + "SHW_0006_(방)_청동카이트_reidx");
-            ExineWomanSheild[6] = new MLibrary(Settings.ExSheildPath + "SHW_0007_(방)_카이트쉴드_reidx");
-            ExineWomanSheild[7] = new MLibrary(Settings.ExSheildPath + "SHW_0008_(방)_브론즈파비스_reidx");
-            ExineWomanSheild[8] = new MLibrary(Settings.ExSheildPath + "SHW_0009_(방)_파비스_reidx");
-            ExineWomanSheild[9] = new MLibrary(Settings.ExSheildPath + "SHW_0010_(방)_엘다라크_reidx");
-            ExineWomanSheild[10] = new MLibrary(Settings.ExSheildPath + "SHW_0011_(방)_스큐톰_reidx");
-            ExineWomanSheild[11] = new MLibrary(Settings.ExSheildPath + "SHW_0012_(방)_둥근풍선_reidx");
-            ExineWomanSheild[12] = new MLibrary(Settings.ExSheildPath + "SHW_0013_(방)_별풍선_reidx");
-            ExineWomanSheild[13] = new MLibrary(Settings.ExSheildPath + "SHW_0014_(방)_하트풍선_reidx");
+            ExineWomenSheild[0] = new MLibrary(Settings.ExSheildPath + "SHW_0001_(방)_나무방패_reidx");
+            ExineWomenSheild[1] = new MLibrary(Settings.ExSheildPath + "SHW_0002_(방)_버클러_reidx");
+            ExineWomenSheild[2] = new MLibrary(Settings.ExSheildPath + "SHW_0003_(방)_아스피스_reidx");
+            ExineWomenSheild[3] = new MLibrary(Settings.ExSheildPath + "SHW_0004_(방)_호플론_reidx");
+            ExineWomenSheild[4] = new MLibrary(Settings.ExSheildPath + "SHW_0005_(방)_본쉴드_reidx");
+            ExineWomenSheild[5] = new MLibrary(Settings.ExSheildPath + "SHW_0006_(방)_청동카이트_reidx");
+            ExineWomenSheild[6] = new MLibrary(Settings.ExSheildPath + "SHW_0007_(방)_카이트쉴드_reidx");
+            ExineWomenSheild[7] = new MLibrary(Settings.ExSheildPath + "SHW_0008_(방)_브론즈파비스_reidx");
+            ExineWomenSheild[8] = new MLibrary(Settings.ExSheildPath + "SHW_0009_(방)_파비스_reidx");
+            ExineWomenSheild[9] = new MLibrary(Settings.ExSheildPath + "SHW_0010_(방)_엘다라크_reidx");
+            ExineWomenSheild[10] = new MLibrary(Settings.ExSheildPath + "SHW_0011_(방)_스큐톰_reidx");
+            ExineWomenSheild[11] = new MLibrary(Settings.ExSheildPath + "SHW_0012_(방)_둥근풍선_reidx");
+            ExineWomenSheild[12] = new MLibrary(Settings.ExSheildPath + "SHW_0013_(방)_별풍선_reidx");
+            ExineWomenSheild[13] = new MLibrary(Settings.ExSheildPath + "SHW_0014_(방)_하트풍선_reidx");
 
 
             ExineManOneWeapon[0] = new MLibrary(Settings.ExOneHandPath + "WHM_1001_(원)_숏소드_reidx");
@@ -379,37 +879,37 @@ namespace Exine.ExineGraphics
             ExineManOneWeapon[30] = new MLibrary(Settings.ExOneHandPath + "WHM_1034_(원)_태극기_reidx");
 
 
-            ExineWomanOneWeapon[0] = new MLibrary(Settings.ExOneHandPath + "WHW_1001_(원)_숏소드_reidx");
-            ExineWomanOneWeapon[1] = new MLibrary(Settings.ExOneHandPath + "WHW_1002_(원)_스몰소드_reidx");
-            ExineWomanOneWeapon[2] = new MLibrary(Settings.ExOneHandPath + "WHW_1003_(원)_글래스소드_reidx");
-            ExineWomanOneWeapon[3] = new MLibrary(Settings.ExOneHandPath + "WHW_1004_(원)_롱소드_reidx");
-            ExineWomanOneWeapon[4] = new MLibrary(Settings.ExOneHandPath + "WHW_1005_(원)_샴쉬르_reidx");
-            ExineWomanOneWeapon[5] = new MLibrary(Settings.ExOneHandPath + "WHW_1006_(원)_세이버_reidx");
-            ExineWomanOneWeapon[6] = new MLibrary(Settings.ExOneHandPath + "WHW_1007_(원)_바스타드소드_reidx");
-            ExineWomanOneWeapon[7] = new MLibrary(Settings.ExOneHandPath + "WHW_1008_(원)_레이피어_reidx");
-            ExineWomanOneWeapon[8] = new MLibrary(Settings.ExOneHandPath + "WHW_1009_(원)_글라디우스_reidx");
-            ExineWomanOneWeapon[9] = new MLibrary(Settings.ExOneHandPath + "WHW_1010_(원)_다마스커스_reidx");
-            ExineWomanOneWeapon[10] = new MLibrary(Settings.ExOneHandPath + "WHW_1011_(원)_파타_reidx");
-            ExineWomanOneWeapon[11] = new MLibrary(Settings.ExOneHandPath + "WHW_1012_(원)_대거_reidx");
-            ExineWomanOneWeapon[12] = new MLibrary(Settings.ExOneHandPath + "WHW_1013_(원)_발럭나이프_reidx");
-            ExineWomanOneWeapon[13] = new MLibrary(Settings.ExOneHandPath + "WHW_1014_(원)_배즐러드_reidx");
-            ExineWomanOneWeapon[14] = new MLibrary(Settings.ExOneHandPath + "WHW_1015_(원)_더크_reidx");
-            ExineWomanOneWeapon[15] = new MLibrary(Settings.ExOneHandPath + "WHW_1016_(원)_헌팅나이프_reidx");
-            ExineWomanOneWeapon[16] = new MLibrary(Settings.ExOneHandPath + "WHW_1017_(원)_크리스_reidx");
-            ExineWomanOneWeapon[17] = new MLibrary(Settings.ExOneHandPath + "WHW_1018_(원)_쿠크리_reidx");
-            ExineWomanOneWeapon[18] = new MLibrary(Settings.ExOneHandPath + "WHW_1019_(원)_맹고슈_reidx");
-            ExineWomanOneWeapon[19] = new MLibrary(Settings.ExOneHandPath + "WHW_1020_(원)_스틸레토_reidx");
-            ExineWomanOneWeapon[20] = new MLibrary(Settings.ExOneHandPath + "WHW_1022_(원)_다트_reidx");
-            ExineWomanOneWeapon[21] = new MLibrary(Settings.ExOneHandPath + "WHW_1023_(원)_아자가이_reidx");
-            ExineWomanOneWeapon[22] = new MLibrary(Settings.ExOneHandPath + "WHW_1024_(원)_챠크람_reidx");
-            ExineWomanOneWeapon[23] = new MLibrary(Settings.ExOneHandPath + "WHW_1027_(원)_완드_reidx");
-            ExineWomanOneWeapon[24] = new MLibrary(Settings.ExOneHandPath + "WHW_1028_(원)_바통_reidx");
-            ExineWomanOneWeapon[25] = new MLibrary(Settings.ExOneHandPath + "WHW_1029_(원)_숏스태프_reidx");
-            ExineWomanOneWeapon[26] = new MLibrary(Settings.ExOneHandPath + "WHW_1030_(원)_본스태프_reidx");
-            ExineWomanOneWeapon[27] = new MLibrary(Settings.ExOneHandPath + "WHW_1031_(원)_클럽_reidx");
-            ExineWomanOneWeapon[28] = new MLibrary(Settings.ExOneHandPath + "WHW_1032_(원)_핸드액스_reidx");
-            ExineWomanOneWeapon[29] = new MLibrary(Settings.ExOneHandPath + "WHW_1033_(원)_액스_reidx");
-            ExineWomanOneWeapon[30] = new MLibrary(Settings.ExOneHandPath + "WHW_1034_(원)_태극기_reidx");
+            ExineWomenOneWeapon[0] = new MLibrary(Settings.ExOneHandPath + "WHW_1001_(원)_숏소드_reidx");
+            ExineWomenOneWeapon[1] = new MLibrary(Settings.ExOneHandPath + "WHW_1002_(원)_스몰소드_reidx");
+            ExineWomenOneWeapon[2] = new MLibrary(Settings.ExOneHandPath + "WHW_1003_(원)_글래스소드_reidx");
+            ExineWomenOneWeapon[3] = new MLibrary(Settings.ExOneHandPath + "WHW_1004_(원)_롱소드_reidx");
+            ExineWomenOneWeapon[4] = new MLibrary(Settings.ExOneHandPath + "WHW_1005_(원)_샴쉬르_reidx");
+            ExineWomenOneWeapon[5] = new MLibrary(Settings.ExOneHandPath + "WHW_1006_(원)_세이버_reidx");
+            ExineWomenOneWeapon[6] = new MLibrary(Settings.ExOneHandPath + "WHW_1007_(원)_바스타드소드_reidx");
+            ExineWomenOneWeapon[7] = new MLibrary(Settings.ExOneHandPath + "WHW_1008_(원)_레이피어_reidx");
+            ExineWomenOneWeapon[8] = new MLibrary(Settings.ExOneHandPath + "WHW_1009_(원)_글라디우스_reidx");
+            ExineWomenOneWeapon[9] = new MLibrary(Settings.ExOneHandPath + "WHW_1010_(원)_다마스커스_reidx");
+            ExineWomenOneWeapon[10] = new MLibrary(Settings.ExOneHandPath + "WHW_1011_(원)_파타_reidx");
+            ExineWomenOneWeapon[11] = new MLibrary(Settings.ExOneHandPath + "WHW_1012_(원)_대거_reidx");
+            ExineWomenOneWeapon[12] = new MLibrary(Settings.ExOneHandPath + "WHW_1013_(원)_발럭나이프_reidx");
+            ExineWomenOneWeapon[13] = new MLibrary(Settings.ExOneHandPath + "WHW_1014_(원)_배즐러드_reidx");
+            ExineWomenOneWeapon[14] = new MLibrary(Settings.ExOneHandPath + "WHW_1015_(원)_더크_reidx");
+            ExineWomenOneWeapon[15] = new MLibrary(Settings.ExOneHandPath + "WHW_1016_(원)_헌팅나이프_reidx");
+            ExineWomenOneWeapon[16] = new MLibrary(Settings.ExOneHandPath + "WHW_1017_(원)_크리스_reidx");
+            ExineWomenOneWeapon[17] = new MLibrary(Settings.ExOneHandPath + "WHW_1018_(원)_쿠크리_reidx");
+            ExineWomenOneWeapon[18] = new MLibrary(Settings.ExOneHandPath + "WHW_1019_(원)_맹고슈_reidx");
+            ExineWomenOneWeapon[19] = new MLibrary(Settings.ExOneHandPath + "WHW_1020_(원)_스틸레토_reidx");
+            ExineWomenOneWeapon[20] = new MLibrary(Settings.ExOneHandPath + "WHW_1022_(원)_다트_reidx");
+            ExineWomenOneWeapon[21] = new MLibrary(Settings.ExOneHandPath + "WHW_1023_(원)_아자가이_reidx");
+            ExineWomenOneWeapon[22] = new MLibrary(Settings.ExOneHandPath + "WHW_1024_(원)_챠크람_reidx");
+            ExineWomenOneWeapon[23] = new MLibrary(Settings.ExOneHandPath + "WHW_1027_(원)_완드_reidx");
+            ExineWomenOneWeapon[24] = new MLibrary(Settings.ExOneHandPath + "WHW_1028_(원)_바통_reidx");
+            ExineWomenOneWeapon[25] = new MLibrary(Settings.ExOneHandPath + "WHW_1029_(원)_숏스태프_reidx");
+            ExineWomenOneWeapon[26] = new MLibrary(Settings.ExOneHandPath + "WHW_1030_(원)_본스태프_reidx");
+            ExineWomenOneWeapon[27] = new MLibrary(Settings.ExOneHandPath + "WHW_1031_(원)_클럽_reidx");
+            ExineWomenOneWeapon[28] = new MLibrary(Settings.ExOneHandPath + "WHW_1032_(원)_핸드액스_reidx");
+            ExineWomenOneWeapon[29] = new MLibrary(Settings.ExOneHandPath + "WHW_1033_(원)_액스_reidx");
+            ExineWomenOneWeapon[30] = new MLibrary(Settings.ExOneHandPath + "WHW_1034_(원)_태극기_reidx");
 
             ExineManTwoWeapon[0] = new MLibrary(Settings.ExTwoHandPath + "WHM_2001_(투)_투핸드소드_reidx");
             ExineManTwoWeapon[1] = new MLibrary(Settings.ExTwoHandPath + "WHM_2002_(투)_크루세이더_reidx");
@@ -446,40 +946,40 @@ namespace Exine.ExineGraphics
             ExineManTwoWeapon[32] = new MLibrary(Settings.ExTwoHandPath + "WHM_2038_(투)_말렛_reidx");
             ExineManTwoWeapon[33] = new MLibrary(Settings.ExTwoHandPath + "WHM_2039_(투)_장미_reidx");
 
-            ExineWomanTwoWeapon[0] = new MLibrary(Settings.ExTwoHandPath + "WHW_2001_(투)_투핸드소드_reidx");
-            ExineWomanTwoWeapon[1] = new MLibrary(Settings.ExTwoHandPath + "WHW_2002_(투)_크루세이더_reidx");
-            ExineWomanTwoWeapon[2] = new MLibrary(Settings.ExTwoHandPath + "WHW_2003_(투)_클레이모어_reidx");
-            ExineWomanTwoWeapon[3] = new MLibrary(Settings.ExTwoHandPath + "WHW_2004_(투)_플람베르그_reidx");
-            ExineWomanTwoWeapon[4] = new MLibrary(Settings.ExTwoHandPath + "WHW_2005_(투)_터크_reidx");
-            ExineWomanTwoWeapon[5] = new MLibrary(Settings.ExTwoHandPath + "WHW_2007_(투)_숏스피어_reidx");
-            ExineWomanTwoWeapon[6] = new MLibrary(Settings.ExTwoHandPath + "WHW_2008_(투)_롱스피어_reidx");
-            ExineWomanTwoWeapon[7] = new MLibrary(Settings.ExTwoHandPath + "WHW_2009_(투)_트라이던트_reidx");
-            ExineWomanTwoWeapon[8] = new MLibrary(Settings.ExTwoHandPath + "WHW_2010_(투)_아스타_reidx");
-            ExineWomanTwoWeapon[9] = new MLibrary(Settings.ExTwoHandPath + "WHW_2011_(투)_파이크_reidx");
-            ExineWomanTwoWeapon[10] = new MLibrary(Settings.ExTwoHandPath + "WHW_2012_(투)_올파이크_reidx");
-            ExineWomanTwoWeapon[11] = new MLibrary(Settings.ExTwoHandPath + "WHW_2013_(투)_할베르트_reidx");
-            ExineWomanTwoWeapon[12] = new MLibrary(Settings.ExTwoHandPath + "WHW_2014_(투)_부주_reidx");
-            ExineWomanTwoWeapon[13] = new MLibrary(Settings.ExTwoHandPath + "WHW_2015_(투)_글레이브_reidx");
-            ExineWomanTwoWeapon[14] = new MLibrary(Settings.ExTwoHandPath + "WHW_2016_(투)_사이드_reidx");
-            ExineWomanTwoWeapon[15] = new MLibrary(Settings.ExTwoHandPath + "WHW_2017_(투)_귀자르므_reidx");
-            ExineWomanTwoWeapon[16] = new MLibrary(Settings.ExTwoHandPath + "WHW_2018_(투)_버디슈_reidx");
-            ExineWomanTwoWeapon[17] = new MLibrary(Settings.ExTwoHandPath + "WHW_2022_(투)_지팡이_reidx");
-            ExineWomanTwoWeapon[18] = new MLibrary(Settings.ExTwoHandPath + "WHW_2023_(투)_클로저_reidx");
-            ExineWomanTwoWeapon[19] = new MLibrary(Settings.ExTwoHandPath + "WHW_2024_(투)_스톤완드_reidx");
-            ExineWomanTwoWeapon[20] = new MLibrary(Settings.ExTwoHandPath + "WHW_2025_(투)_롱스태프_reidx");
-            ExineWomanTwoWeapon[21] = new MLibrary(Settings.ExTwoHandPath + "WHW_2026_(투)_오브_reidx");
-            ExineWomanTwoWeapon[22] = new MLibrary(Settings.ExTwoHandPath + "WHW_2027_(투)_스파이크클럽_reidx");
-            ExineWomanTwoWeapon[23] = new MLibrary(Settings.ExTwoHandPath + "WHW_2028_(투)_구르즈_reidx");
-            ExineWomanTwoWeapon[24] = new MLibrary(Settings.ExTwoHandPath + "WHW_2029_(투)_메이스_reidx");
-            ExineWomanTwoWeapon[25] = new MLibrary(Settings.ExTwoHandPath + "WHW_2030_(투)_모닝스타_reidx");
-            ExineWomanTwoWeapon[26] = new MLibrary(Settings.ExTwoHandPath + "WHW_2031_(투)_브로드액스_reidx");
-            ExineWomanTwoWeapon[27] = new MLibrary(Settings.ExTwoHandPath + "WHW_2032_(투)_더블액스_reidx");
-            ExineWomanTwoWeapon[28] = new MLibrary(Settings.ExTwoHandPath + "WHW_2033_(투)_자이언트액스_reidx");
-            ExineWomanTwoWeapon[29] = new MLibrary(Settings.ExTwoHandPath + "WHW_2035_(투)_해머_reidx");
-            ExineWomanTwoWeapon[30] = new MLibrary(Settings.ExTwoHandPath + "WHW_2036_(투)_워해머_reidx");
-            ExineWomanTwoWeapon[31] = new MLibrary(Settings.ExTwoHandPath + "WHW_2037_(투)_워피크_reidx");
-            ExineWomanTwoWeapon[32] = new MLibrary(Settings.ExTwoHandPath + "WHW_2038_(투)_말렛_reidx");
-            ExineWomanTwoWeapon[33] = new MLibrary(Settings.ExTwoHandPath + "WHW_2039_(투)_장미_reidx");
+            ExineWomenTwoWeapon[0] = new MLibrary(Settings.ExTwoHandPath + "WHW_2001_(투)_투핸드소드_reidx");
+            ExineWomenTwoWeapon[1] = new MLibrary(Settings.ExTwoHandPath + "WHW_2002_(투)_크루세이더_reidx");
+            ExineWomenTwoWeapon[2] = new MLibrary(Settings.ExTwoHandPath + "WHW_2003_(투)_클레이모어_reidx");
+            ExineWomenTwoWeapon[3] = new MLibrary(Settings.ExTwoHandPath + "WHW_2004_(투)_플람베르그_reidx");
+            ExineWomenTwoWeapon[4] = new MLibrary(Settings.ExTwoHandPath + "WHW_2005_(투)_터크_reidx");
+            ExineWomenTwoWeapon[5] = new MLibrary(Settings.ExTwoHandPath + "WHW_2007_(투)_숏스피어_reidx");
+            ExineWomenTwoWeapon[6] = new MLibrary(Settings.ExTwoHandPath + "WHW_2008_(투)_롱스피어_reidx");
+            ExineWomenTwoWeapon[7] = new MLibrary(Settings.ExTwoHandPath + "WHW_2009_(투)_트라이던트_reidx");
+            ExineWomenTwoWeapon[8] = new MLibrary(Settings.ExTwoHandPath + "WHW_2010_(투)_아스타_reidx");
+            ExineWomenTwoWeapon[9] = new MLibrary(Settings.ExTwoHandPath + "WHW_2011_(투)_파이크_reidx");
+            ExineWomenTwoWeapon[10] = new MLibrary(Settings.ExTwoHandPath + "WHW_2012_(투)_올파이크_reidx");
+            ExineWomenTwoWeapon[11] = new MLibrary(Settings.ExTwoHandPath + "WHW_2013_(투)_할베르트_reidx");
+            ExineWomenTwoWeapon[12] = new MLibrary(Settings.ExTwoHandPath + "WHW_2014_(투)_부주_reidx");
+            ExineWomenTwoWeapon[13] = new MLibrary(Settings.ExTwoHandPath + "WHW_2015_(투)_글레이브_reidx");
+            ExineWomenTwoWeapon[14] = new MLibrary(Settings.ExTwoHandPath + "WHW_2016_(투)_사이드_reidx");
+            ExineWomenTwoWeapon[15] = new MLibrary(Settings.ExTwoHandPath + "WHW_2017_(투)_귀자르므_reidx");
+            ExineWomenTwoWeapon[16] = new MLibrary(Settings.ExTwoHandPath + "WHW_2018_(투)_버디슈_reidx");
+            ExineWomenTwoWeapon[17] = new MLibrary(Settings.ExTwoHandPath + "WHW_2022_(투)_지팡이_reidx");
+            ExineWomenTwoWeapon[18] = new MLibrary(Settings.ExTwoHandPath + "WHW_2023_(투)_클로저_reidx");
+            ExineWomenTwoWeapon[19] = new MLibrary(Settings.ExTwoHandPath + "WHW_2024_(투)_스톤완드_reidx");
+            ExineWomenTwoWeapon[20] = new MLibrary(Settings.ExTwoHandPath + "WHW_2025_(투)_롱스태프_reidx");
+            ExineWomenTwoWeapon[21] = new MLibrary(Settings.ExTwoHandPath + "WHW_2026_(투)_오브_reidx");
+            ExineWomenTwoWeapon[22] = new MLibrary(Settings.ExTwoHandPath + "WHW_2027_(투)_스파이크클럽_reidx");
+            ExineWomenTwoWeapon[23] = new MLibrary(Settings.ExTwoHandPath + "WHW_2028_(투)_구르즈_reidx");
+            ExineWomenTwoWeapon[24] = new MLibrary(Settings.ExTwoHandPath + "WHW_2029_(투)_메이스_reidx");
+            ExineWomenTwoWeapon[25] = new MLibrary(Settings.ExTwoHandPath + "WHW_2030_(투)_모닝스타_reidx");
+            ExineWomenTwoWeapon[26] = new MLibrary(Settings.ExTwoHandPath + "WHW_2031_(투)_브로드액스_reidx");
+            ExineWomenTwoWeapon[27] = new MLibrary(Settings.ExTwoHandPath + "WHW_2032_(투)_더블액스_reidx");
+            ExineWomenTwoWeapon[28] = new MLibrary(Settings.ExTwoHandPath + "WHW_2033_(투)_자이언트액스_reidx");
+            ExineWomenTwoWeapon[29] = new MLibrary(Settings.ExTwoHandPath + "WHW_2035_(투)_해머_reidx");
+            ExineWomenTwoWeapon[30] = new MLibrary(Settings.ExTwoHandPath + "WHW_2036_(투)_워해머_reidx");
+            ExineWomenTwoWeapon[31] = new MLibrary(Settings.ExTwoHandPath + "WHW_2037_(투)_워피크_reidx");
+            ExineWomenTwoWeapon[32] = new MLibrary(Settings.ExTwoHandPath + "WHW_2038_(투)_말렛_reidx");
+            ExineWomenTwoWeapon[33] = new MLibrary(Settings.ExTwoHandPath + "WHW_2039_(투)_장미_reidx");
 
             ExineManBowWeapon[0] = new MLibrary(Settings.ExBowPath + "WHM_3001_(활)_숏보우_reidx");
             ExineManBowWeapon[1] = new MLibrary(Settings.ExBowPath + "WHM_3002_(활)_보우_reidx");
@@ -494,18 +994,18 @@ namespace Exine.ExineGraphics
             ExineManBowWeapon[10] = new MLibrary(Settings.ExBowPath + "WHM_3011_(활)_배틀보우_reidx");
             ExineManBowWeapon[11] = new MLibrary(Settings.ExBowPath + "WHM_3012_(활)_나이트보우_reidx");
 
-            ExineWomanBowWeapon[0] = new MLibrary(Settings.ExBowPath + "WHW_3001_(활)_숏보우_reidx");
-            ExineWomanBowWeapon[1] = new MLibrary(Settings.ExBowPath + "WHW_3002_(활)_보우_reidx");
-            ExineWomanBowWeapon[2] = new MLibrary(Settings.ExBowPath + "WHW_3003_(활)_가스트라페테_reidx");
-            ExineWomanBowWeapon[3] = new MLibrary(Settings.ExBowPath + "WHW_3004_(활)_롱보우_reidx");
-            ExineWomanBowWeapon[4] = new MLibrary(Settings.ExBowPath + "WHW_3005_(활)_헌터보우_reidx");
-            ExineWomanBowWeapon[5] = new MLibrary(Settings.ExBowPath + "WHW_3006_(활)_헤비헌터보우_reidx");
-            ExineWomanBowWeapon[6] = new MLibrary(Settings.ExBowPath + "WHW_3007_(활)_크로스보우_reidx");
-            ExineWomanBowWeapon[7] = new MLibrary(Settings.ExBowPath + "WHW_3008_(활)_더블보우_reidx");
-            ExineWomanBowWeapon[8] = new MLibrary(Settings.ExBowPath + "WHW_3009_(활)_컴포지트보우_reidx");
-            ExineWomanBowWeapon[9] = new MLibrary(Settings.ExBowPath + "WHW_3010_(활)_아발리스트_reidx");
-            ExineWomanBowWeapon[10] = new MLibrary(Settings.ExBowPath + "WHW_3011_(활)_배틀보우_reidx");
-            ExineWomanBowWeapon[11] = new MLibrary(Settings.ExBowPath + "WHW_3012_(활)_나이트보우_reidx");
+            ExineWomenBowWeapon[0] = new MLibrary(Settings.ExBowPath + "WHW_3001_(활)_숏보우_reidx");
+            ExineWomenBowWeapon[1] = new MLibrary(Settings.ExBowPath + "WHW_3002_(활)_보우_reidx");
+            ExineWomenBowWeapon[2] = new MLibrary(Settings.ExBowPath + "WHW_3003_(활)_가스트라페테_reidx");
+            ExineWomenBowWeapon[3] = new MLibrary(Settings.ExBowPath + "WHW_3004_(활)_롱보우_reidx");
+            ExineWomenBowWeapon[4] = new MLibrary(Settings.ExBowPath + "WHW_3005_(활)_헌터보우_reidx");
+            ExineWomenBowWeapon[5] = new MLibrary(Settings.ExBowPath + "WHW_3006_(활)_헤비헌터보우_reidx");
+            ExineWomenBowWeapon[6] = new MLibrary(Settings.ExBowPath + "WHW_3007_(활)_크로스보우_reidx");
+            ExineWomenBowWeapon[7] = new MLibrary(Settings.ExBowPath + "WHW_3008_(활)_더블보우_reidx");
+            ExineWomenBowWeapon[8] = new MLibrary(Settings.ExBowPath + "WHW_3009_(활)_컴포지트보우_reidx");
+            ExineWomenBowWeapon[9] = new MLibrary(Settings.ExBowPath + "WHW_3010_(활)_아발리스트_reidx");
+            ExineWomenBowWeapon[10] = new MLibrary(Settings.ExBowPath + "WHW_3011_(활)_배틀보우_reidx");
+            ExineWomenBowWeapon[11] = new MLibrary(Settings.ExBowPath + "WHW_3012_(활)_나이트보우_reidx");
 
             #endregion  Exine Human
              
@@ -1035,9 +1535,9 @@ ZM_02_519_요정01_reidx.lib
                 ExineManHair[i].Initialize();
                 Progress++;
             }
-            for (int i = 0; i < ExineWomanHair.Length; i++)
+            for (int i = 0; i < ExineWomenHair.Length; i++)
             {
-                ExineWomanHair[i].Initialize();
+                ExineWomenHair[i].Initialize();
                 Progress++;
             }
             for (int i = 0; i < ExineManArmor.Length; i++)
@@ -1045,9 +1545,9 @@ ZM_02_519_요정01_reidx.lib
                 ExineManArmor[i].Initialize();
                 Progress++;
             }
-            for (int i = 0; i < ExineWomanArmor.Length; i++)
+            for (int i = 0; i < ExineWomenArmor.Length; i++)
             {
-                ExineWomanArmor[i].Initialize();
+                ExineWomenArmor[i].Initialize();
                 Progress++;
             }
             for (int i = 0; i < ExineManSheild.Length; i++)
@@ -1055,9 +1555,9 @@ ZM_02_519_요정01_reidx.lib
                 ExineManSheild[i].Initialize();
                 Progress++;
             }
-            for (int i = 0; i < ExineWomanSheild.Length; i++)
+            for (int i = 0; i < ExineWomenSheild.Length; i++)
             {
-                ExineWomanSheild[i].Initialize();
+                ExineWomenSheild[i].Initialize();
                 Progress++;
             }
             for (int i = 0; i < ExineManOneWeapon.Length; i++)
@@ -1065,9 +1565,9 @@ ZM_02_519_요정01_reidx.lib
                 ExineManOneWeapon[i].Initialize();
                 Progress++;
             }
-            for (int i = 0; i < ExineWomanOneWeapon.Length; i++)
+            for (int i = 0; i < ExineWomenOneWeapon.Length; i++)
             {
-                ExineWomanOneWeapon[i].Initialize();
+                ExineWomenOneWeapon[i].Initialize();
                 Progress++;
             }
             for (int i = 0; i < ExineManTwoWeapon.Length; i++)
@@ -1075,9 +1575,9 @@ ZM_02_519_요정01_reidx.lib
                 ExineManTwoWeapon[i].Initialize();
                 Progress++;
             }
-            for (int i = 0; i < ExineWomanTwoWeapon.Length; i++)
+            for (int i = 0; i < ExineWomenTwoWeapon.Length; i++)
             {
-                ExineWomanTwoWeapon[i].Initialize();
+                ExineWomenTwoWeapon[i].Initialize();
                 Progress++;
             }
             for (int i = 0; i < ExineManBowWeapon.Length; i++)
@@ -1085,9 +1585,9 @@ ZM_02_519_요정01_reidx.lib
                 ExineManBowWeapon[i].Initialize();
                 Progress++;
             }
-            for (int i = 0; i < ExineWomanBowWeapon.Length; i++)
+            for (int i = 0; i < ExineWomenBowWeapon.Length; i++)
             {
-                ExineWomanBowWeapon[i].Initialize();
+                ExineWomenBowWeapon[i].Initialize();
                 Progress++;
             }
             ///////////////////////////////////////
@@ -1582,7 +2082,8 @@ ZM_02_519_요정01_reidx.lib
                 //add alpha?
                 //DXManager.SetBlend(true, rate, BlendMode.LIGHTINV);//NONE
                 DXManager.SetBlend(true, rate, BlendMode.NONE);//NONE
-                 
+
+                
                 //DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Tint);
                 DXManager.Draw(mi.MaskImage, new Rectangle(0, 0, mi.Width, mi.Height), new Vector3((float)point.X, (float)point.Y, 0.0F), Color.FromArgb(255, Tint.R, Tint.G, Tint.B));
                 DXManager.SetBlend(oldBlend);

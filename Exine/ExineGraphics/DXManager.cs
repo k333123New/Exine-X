@@ -379,6 +379,19 @@ namespace Exine.ExineGraphics
 
                     //k333123
                     case BlendMode.NONE:
+
+                        
+                        Device.SetRenderState(RenderState.BlendOperation, BlendOperation.Add);
+                        Device.SetRenderState(RenderState.SourceBlend, Blend.SourceAlpha);
+                        Device.SetRenderState(RenderState.DestinationBlend, Blend.One);
+                        
+                        
+                        //Device.SetRenderState(RenderState.DestinationBlend, Blend.SourceColor);
+                        //Device.SetRenderState(RenderState.SourceBlend, Blend.Zero);
+                        
+
+
+                        /*
                         Device.SetRenderState(RenderState.BlendOperation, BlendOperation.Add);
                         Device.SetRenderState(RenderState.SourceBlend, Blend.SourceAlpha);
 
@@ -391,8 +404,8 @@ namespace Exine.ExineGraphics
                         //Device.SetRenderState(RenderState.DestinationBlend, Blend.DestinationAlpha); //too bright!
                         //Device.SetRenderState(RenderState.DestinationBlend, Blend.InverseSourceColor2); //too bright!
                         //Device.SetRenderState(RenderState.DestinationBlend, Blend.One); //too bright!
-                        
-                       
+                        */
+
                         break;
 
                     //ADD

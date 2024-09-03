@@ -924,7 +924,8 @@ namespace NewYPF
                         {
                             for (int k = 0; k < newMaskImg.Width; k++)
                             {
-                                newMaskImg.SetPixel(k, j, Color.Transparent);
+                                newMaskImg.SetPixel(k, j, Color.Transparent); 
+                                //newMaskImg.SetPixel(k, j, Color.FromArgb(0,Color.Black));//mod k333123 240831
                             }
                         }
 
@@ -944,7 +945,25 @@ namespace NewYPF
                                   
                                 Color maskPixel = maskImg.GetPixel(loopX, loopY);
                                 int brightness = (int)(0.299 * maskPixel.R + 0.587 * maskPixel.G + 0.114 * maskPixel.B);
-                                Color maskGrayPixel = Color.FromArgb(maskPixel.A, brightness, brightness, brightness);
+                                 
+                                Color maskGrayPixel;
+                                /*
+                                if (maskPixel.A !=0)
+                                {
+                                    //maskGrayPixel = Color.FromArgb(200, brightness, brightness, brightness);
+                                    //maskGrayPixel = Color.FromArgb(200, 127, 127, 127);
+                                    maskGrayPixel = Color.FromArgb(255, brightness, brightness, brightness);
+                                }
+                                else
+                                {
+                                    //maskGrayPixel = Color.FromArgb(0, brightness, brightness, brightness);
+                                    maskGrayPixel = Color.FromArgb(0, brightness, brightness, brightness);
+                                }
+                                //Color maskGrayPixel = Color.FromArgb(maskPixel.A, brightness, brightness, brightness);
+                                */
+                                maskGrayPixel = Color.FromArgb(maskPixel.A, brightness, brightness, brightness);
+
+
                                 try
                                 {
                                     newMaskImg.SetPixel(newMaskX, newMaskY, maskGrayPixel); //color to gray?

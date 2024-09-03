@@ -756,13 +756,23 @@ namespace Exine.ExineObjects
                         #region Armours
                         //BodyLibrary = Armour < Libraries.CArmours.Length ? Libraries.CArmours[Armour] : Libraries.CArmours[0]; 
                         //HairLibrary = Hair < Libraries.CHair.Length ? Libraries.CHair[Hair] : null;
-                        BodyLibrary = Armour < Libraries.ExineManArmor.Length ? Libraries.ExineManArmor[Armour] : Libraries.ExineManArmor[0];
 
-                        if (User.ExinePeaceMode) //add k333123 240311
+                        //이 부분 나중에 함수로 빼기
+                        BodyLibrary = GetLibFromShapeIdx(Armour,Gender);
+                        
+                        
+                        //////////////////////////////////
+
+                        //BodyLibrary = Armour < Libraries.ExineManArmor.Length ? Libraries.ExineManArmor[Armour] : Libraries.ExineManArmor[0];
+
+                        if (BodyLibrary == null || User.ExinePeaceMode) //add k333123 240311
                         {
-                            BodyLibrary = Libraries.ExineManArmor[0];
+                            if(Gender==ExineGender.Male) BodyLibrary = Libraries.ExineManArmor[0];
+                            else BodyLibrary = Libraries.ExineWomenArmor[0];
                         }
-                        HairLibrary = Hair < Libraries.ExineManHair.Length ? Libraries.ExineManHair[Hair] : null;
+
+                        if (Gender == ExineGender.Male) HairLibrary = Hair < Libraries.ExineManHair.Length ? Libraries.ExineManHair[Hair] : null;
+                        else HairLibrary = Hair < Libraries.ExineWomenHair.Length ? Libraries.ExineWomenHair[Hair] : null;
                         #endregion
 
                         #region Weapons
@@ -770,33 +780,62 @@ namespace Exine.ExineObjects
                         //if (Weapon >= 0)
                         if (Weapon >= 1)
                         {
-                            //Console.WriteLine("@555 Weapon:" + Weapon+ "Libraries.ExineManOneWeapon.Length:"+ Libraries.ExineManOneWeapon.Length);
+                            Console.WriteLine("@555 Weapon:" + Weapon+ "Libraries.ExineManOneWeapon.Length:"+ Libraries.ExineManOneWeapon.Length);
 
                             //WeaponLibrary1 = Weapon < Libraries.CWeapons.Length ? Libraries.CWeapons[Weapon] : null;
-                            WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon-1] : null;
-                           // ShieldLibrary = Shield <  Libraries.ExineManSheild.Length ? Libraries.ExineManSheild[Shield] : null;
+
+                            //WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon-1] : null;
+
+                            // ShieldLibrary = Shield <  Libraries.ExineManSheild.Length ? Libraries.ExineManSheild[Shield] : null;
                             /*
 							if (WeaponEffect > 0)
 								WeaponEffectLibrary1 = WeaponEffect < Libraries.CWeaponEffect.Length ? Libraries.CWeaponEffect[WeaponEffect] : null;
 							else
 								WeaponEffectLibrary1 = null;
                             */
+
+                            /*
+                             */
+                            //libIdex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon - 1, Gender != ExineGender.Male);
+
+                            WeaponLibrary1 = GetLibFromShapeIdx(Weapon, Gender);
+                            if(WeaponLibrary1==null)
+                            {
+                                Console.WriteLine("!!!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                                Console.ReadLine();
+                            }
+                            //WeaponLibrary1= GetLibFromShapeIdx(Weapon - 1, Gender);
+                            //WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon - 1] : null;
                             WeaponEffectLibrary1 = null;
+
                         }
-						else
-						{
-							WeaponLibrary1 = null;
+                        else
+                        {
+                            WeaponLibrary1 = null;
                             //ShieldLibrary = null;
-							WeaponEffectLibrary1 = null;
-							WeaponLibrary2 = null;
-						}
+                            WeaponEffectLibrary1 = null;
+                            WeaponLibrary2 = null;
+                        }
 
-						#endregion
+                        #endregion
 
+                        #region Sheild
+                        //if (Weapon >= 0)
+                        //k333123 add sheild 240903
+                        if (Shield >= 1)
+                        {
+                            Console.WriteLine("@555 Shield:" + Shield + "Libraries.ExineManOneWeapon.Length:"+ Libraries.ExineManOneWeapon.Length); 
+                            ShieldLibrary = GetLibFromShapeIdx(Shield - 1, Gender);
+                        }
+                        else
+                        {
+                            ShieldLibrary = null;
+                        }
 
+                        #endregion
 
-						#region WingEffects
-						if (WingEffect > 0 && WingEffect < 100)
+                        #region WingEffects
+                        if (WingEffect > 0 && WingEffect < 100)
                         {
                             WingLibrary = (WingEffect - 1) < Libraries.CHumEffect.Length ? Libraries.CHumEffect[WingEffect - 1] : null;
                         }
@@ -811,7 +850,7 @@ namespace Exine.ExineObjects
                         #endregion
 
                         break;
-                    #endregion
+                        #endregion
                 }
             }
 
@@ -846,6 +885,83 @@ namespace Exine.ExineObjects
             DieSound = Gender == ExineGender.Male ? SoundList.MaleDie : SoundList.FemaleDie;
             FlinchSound = Gender == ExineGender.Male ? SoundList.MaleFlinch : SoundList.FemaleFlinch;
             #endregion
+        }
+
+        private MLibrary GetLibFromShapeIdx(int shapeIdx, ExineGender gender)
+        {
+            //112
+            Console.WriteLine("Input Shape Index:"+shapeIdx.ToString());
+            var shapeToLibIndex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(shapeIdx, gender != ExineGender.Male);
+
+            if (shapeToLibIndex != null)
+            {
+                Console.WriteLine(shapeToLibIndex.ToString());
+                if (shapeToLibIndex.isFemale)
+                {
+                    switch (shapeToLibIndex.weaponType)
+                    {
+
+                        case 1:
+                            return shapeToLibIndex.libIndex < Libraries.ExineWomenOneWeapon.Length ?
+                                Libraries.ExineWomenOneWeapon[shapeToLibIndex.libIndex]
+                                : null;
+
+                        case 2:
+                            return shapeToLibIndex.libIndex < Libraries.ExineWomenTwoWeapon.Length ? 
+                                Libraries.ExineWomenTwoWeapon[shapeToLibIndex.libIndex] 
+                                : null;
+
+                        case 3:
+                            return shapeToLibIndex.libIndex < Libraries.ExineWomenBowWeapon.Length ? 
+                                Libraries.ExineWomenBowWeapon[shapeToLibIndex.libIndex] 
+                                : null;
+
+                        case 4:
+                            return shapeToLibIndex.libIndex < Libraries.ExineWomenSheild.Length ?
+                                Libraries.ExineWomenSheild[shapeToLibIndex.libIndex]
+                                : null;
+
+                        case 5:
+                            //BodyLibrary = Armour < Libraries.ExineWomenArmor.Length ? Libraries.ExineWomenArmor[shapeToLibIndex.libIndex] : Libraries.ExineWomenArmor[0];
+                            return shapeToLibIndex.libIndex < Libraries.ExineWomenArmor.Length ?
+                                Libraries.ExineWomenArmor[shapeToLibIndex.libIndex+1] //cause 평상복
+                                : Libraries.ExineWomenArmor[0];
+                            
+                    }
+                }
+                else
+                {
+                    switch (shapeToLibIndex.weaponType)
+                    {
+                        case 1:
+                            return shapeToLibIndex.libIndex < Libraries.ExineManOneWeapon.Length ?
+                                Libraries.ExineManOneWeapon[shapeToLibIndex.libIndex]
+                                : null;
+
+                        case 2:
+                            return shapeToLibIndex.libIndex < Libraries.ExineManTwoWeapon.Length ?
+                                Libraries.ExineManTwoWeapon[shapeToLibIndex.libIndex]
+                                : null;
+
+                        case 3:
+                            return shapeToLibIndex.libIndex < Libraries.ExineManBowWeapon.Length ?
+                                Libraries.ExineManBowWeapon[shapeToLibIndex.libIndex]
+                                : null;
+
+                        case 4:
+                            return shapeToLibIndex.libIndex < Libraries.ExineManSheild.Length ?
+                                Libraries.ExineManSheild[shapeToLibIndex.libIndex]
+                                : null;
+
+                        case 5:
+                            //BodyLibrary = Armour < Libraries.ExineManArmor.Length ? Libraries.ExineManArmor[shapeToLibIndex.libIndex] : Libraries.ExineManArmor[0];
+                            return shapeToLibIndex.libIndex < Libraries.ExineManArmor.Length ?
+                                Libraries.ExineManArmor[shapeToLibIndex.libIndex] 
+                                : Libraries.ExineManArmor[0];
+                    }
+                }
+            }
+            return null;
         }
 
         public virtual void SetEffects()
@@ -5958,13 +6074,15 @@ namespace Exine.ExineObjects
             if (!RidingMount)
             {
                 if (Direction == ExineDirection.Left || Direction == ExineDirection.Up || Direction == ExineDirection.UpLeft || Direction == ExineDirection.DownLeft)
+                {
                     DrawWeapon();
+                    DrawShield();
+                }
+
                 else
                     DrawWeapon2();
-            }
-
+            } 
             DrawBody();
-
 
 
             if (Direction == ExineDirection.Up || Direction == ExineDirection.UpLeft || Direction == ExineDirection.UpRight || Direction == ExineDirection.Right || Direction == ExineDirection.Left)
@@ -6164,6 +6282,7 @@ namespace Exine.ExineObjects
             Color tintColor = GetColorFromExColor(ExColor);
 
             //if (BodyLibrary != null) BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
+            //if (BodyLibrary != null) Console.WriteLine("@@@@@@10 DrawBody DrawFrame + ArmourOffSet:" + (DrawFrame + ArmourOffSet).ToString());
             if (BodyLibrary != null) BodyLibrary.ExineDrawTinted(DrawFrame + ArmourOffSet, DrawLocation, drawColour,tintColor, true);
 
             DXManager.SetGrayscale(oldGrayScale);
@@ -6177,16 +6296,27 @@ namespace Exine.ExineObjects
             //if (HairLibrary != null) HairLibrary.Draw(DrawFrame + HairOffSet, DrawLocation, DrawColour, true);
             if (HairLibrary != null) HairLibrary.ExineDrawTinted(DrawFrame + HairOffSet, DrawLocation, DrawColour, tintColor, true);
         }
-		public void DrawWeapon()
+
+        public void DrawShield()
+        {
+            //Apply To Sheild 
+            if (Shield == -1) return;
+
+            if (ShieldLibrary != null)
+                ShieldLibrary.Draw(DrawFrame, DrawLocation, DrawColour, true);
+        }
+
+        public void DrawWeapon()
 		{
             //Gender == ExineGender.Male
             if (Weapon < 0) return;
 
 			if (WeaponLibrary1 != null)
 			{
-                //Console.WriteLine("@777 Weapon:" + (DrawFrame + WeaponOffSet)+ " DrawFrame:"+ DrawFrame+ "WeaponOffSet"+ WeaponOffSet);
+                Console.WriteLine("@777 Weapon:" + (DrawFrame + WeaponOffSet)+ " DrawFrame:"+ DrawFrame+ "WeaponOffSet"+ WeaponOffSet);
                 WeaponLibrary1.Draw((DrawFrame + WeaponOffSet), DrawLocation, DrawColour, true); //original
                 
+
 
                 if (WeaponEffectLibrary1 != null)
 					WeaponEffectLibrary1.DrawBlend((DrawFrame + WeaponOffSet), DrawLocation, DrawColour, true, 0.4F);
@@ -6205,6 +6335,9 @@ namespace Exine.ExineObjects
             if (WeaponLibrary2 != null)
                 WeaponLibrary2.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true);
         }
+
+       
+        
 
         public void DrawWings()
         {
