@@ -421,13 +421,7 @@ namespace Exine.ExineObjects
                     break;
                 case Monster.EvilMirBody:
                     break;
-                case Monster.Catapult:
-                case Monster.ChariotBallista:
-                case Monster.Ballista:
-                case Monster.Trebuchet:
-                case Monster.CanonTrebuchet:
-                    BodyLibrary = Libraries.Siege[((ushort)BaseImage) - 940];
-                    break;
+                
                 case Monster.SabukGate:
                 case Monster.PalaceWallLeft:
                 case Monster.PalaceWall1:
@@ -445,23 +439,7 @@ namespace Exine.ExineObjects
                 case Monster.FrozenDoor:
                     BodyLibrary = Libraries.Gates[((ushort)BaseImage) - 950];
                     break;
-                case Monster.BabyPig:
-                case Monster.Chick:
-                case Monster.Kitten:
-                case Monster.BabySkeleton:
-                case Monster.Baekdon:
-                case Monster.Wimaen:
-                case Monster.BlackKitten:
-                case Monster.BabyDragon:
-                case Monster.OlympicFlame:
-                case Monster.BabySnowMan:
-                case Monster.Frog:
-                case Monster.BabyMonkey:
-                case Monster.AngryBird:
-                case Monster.Foxey:
-                case Monster.MedicalRat:
-                    BodyLibrary = Libraries.Pets[((ushort)BaseImage) - 10000];
-                    break;
+               
                 case Monster.HellBomb1:
                 case Monster.HellBomb2:
                 case Monster.HellBomb3:
@@ -784,28 +762,7 @@ namespace Exine.ExineObjects
                 }
             }
 
-            //IntelligentCreature
-            switch (BaseImage)
-            {
-                case Monster.BabyPig:
-                case Monster.Chick:
-                case Monster.Kitten:
-                case Monster.BabySkeleton:
-                case Monster.Baekdon:
-                case Monster.Wimaen:
-                case Monster.BlackKitten:
-                case Monster.BabyDragon:
-                case Monster.OlympicFlame:
-                case Monster.BabySnowMan:
-                case Monster.Frog:
-                case Monster.BabyMonkey:
-                case Monster.AngryBird:
-                case Monster.Foxey:
-                case Monster.MedicalRat:
-                    BodyLibrary = Libraries.Pets[((ushort)BaseImage) - 10000];
-                    break;
-            }
-
+            
             if (ActionFeed.Count == 0)
             {
                 //Console.WriteLine("%%%%%%%%%%%%%%%%%%%%%%%%%%");
@@ -2181,13 +2138,7 @@ namespace Exine.ExineObjects
                                     {                                        
                                         switch (BaseImage)
                                         {
-                                            case Monster.BabySnowMan:
-                                                if (FrameIndex == 1)
-                                                {
-                                                    if (TrackableEffect.GetOwnerEffectID(this.ObjectID, "SnowmanSnow") < 0)
-                                                        Effects.Add(new TrackableEffect(new Effect(Libraries.Pets[((ushort)BaseImage) - 10000], 208, 11, 1500, this), "SnowmanSnow"));
-                                                }
-                                                break;
+                                             
                                             case Monster.CannibalTentacles:
                                                 Effects.Add(new Effect(Libraries.Monsters[(ushort)Monster.CannibalTentacles], 400 + (int)Direction * 9, 9, 9 * Frame.Interval, this));
                                                 break;
@@ -2466,10 +2417,7 @@ namespace Exine.ExineObjects
                                 case 1:
                                     switch (BaseImage)
                                     {
-                                        case Monster.OlympicFlame:
-                                            if (TrackableEffect.GetOwnerEffectID(this.ObjectID, "CreatureFlame") < 0)
-                                                Effects.Add(new TrackableEffect(new Effect(Libraries.Pets[((ushort)BaseImage) - 10000], 280, 4, 800, this), "CreatureFlame"));
-                                            break;
+                                         
                                         case Monster.GasToad:
                                             Effects.Add(new Effect(Libraries.Monsters[(ushort)Monster.GasToad], 440, 9, 9 * Frame.Interval, this));
                                             break;
@@ -2535,10 +2483,7 @@ namespace Exine.ExineObjects
                                 case 4:
                                     switch (BaseImage)
                                     {
-                                        case Monster.OlympicFlame:
-                                            if (TrackableEffect.GetOwnerEffectID(this.ObjectID, "CreatureSmoke") < 0)
-                                                Effects.Add(new TrackableEffect(new Effect(Libraries.Pets[((ushort)BaseImage) - 10000], 256, 3, 1000, this), "CreatureSmoke"));
-                                            break;
+                                        
                                         case Monster.Kirin:
                                             Effects.Add(new Effect(Libraries.Monsters[(ushort)Monster.Kirin], 824 + (int)Direction * 7, 7, 700, this));
                                             break;
@@ -3486,20 +3431,7 @@ namespace Exine.ExineObjects
                                                     };
                                                 }
                                                 break;
-                                            case Monster.Catapult:
-                                                missile = CreateProjectile(256, Libraries.Siege[(ushort)Monster.Catapult - 940], false, 4, 40, 0);
-                                                if (missile.Target != null)
-                                                {
-                                                    missile.Complete += (o, e) =>
-                                                    {
-                                                        if (missile.Target.CurrentAction == ExAction.Dead) return;
-                                                        missile.Target.Effects.Add(new Effect(Libraries.Siege[(ushort)Monster.Catapult - 940], 288, 10, 1000, missile.Target) { Blend = true });
-                                                    };
-                                                }
-                                                break;
-                                            case Monster.ChariotBallista:
-                                                missile = CreateProjectile(38, Libraries.Siege[(ushort)Monster.ChariotBallista - 940], false, 3, 30, 6);
-                                                break;
+                                           
                                         }
                                         break;
                                     }//end of case 4

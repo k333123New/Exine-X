@@ -827,30 +827,11 @@ namespace Exine.ExineObjects
             #region Common
             //Harvest
             if (CurrentAction == ExAction.Harvest && TransformType < 0)
-            {
+            { 
                 WeaponLibrary1 = 1 < Libraries.CWeapons.Length ? Libraries.CWeapons[1] : null;
             }
 
-            //Mounts
-            if (MountType > -1 && RidingMount && showMount)
-            {
-                MountLibrary = MountType < Libraries.Mounts.Length ? Libraries.Mounts[MountType] : null;
-            }
-            else
-            {
-                MountLibrary = null;
-            }
-
-            //Fishing
-            if (HasFishingRod && showFishing)
-            {
-                if (CurrentAction == ExAction.FishingCast || CurrentAction == ExAction.FishingReel || CurrentAction == ExAction.FishingWait)
-                {
-                    WeaponLibrary1 = 0 < Libraries.Fishing.Length ? Libraries.Fishing[Weapon - 49] : null;
-                    WeaponLibrary2 = null;
-                    WeaponOffSet = -632;
-                }
-            }
+             
 
             DieSound = Gender == ExineGender.Male ? SoundList.MaleDie : SoundList.FemaleDie;
             FlinchSound = Gender == ExineGender.Male ? SoundList.MaleFlinch : SoundList.FemaleFlinch;

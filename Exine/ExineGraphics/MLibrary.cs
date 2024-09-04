@@ -7,6 +7,9 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.IO;
 using static Exine.ExineGraphics.WeaponMapperMgr;
+using System;
+using System.Drawing;
+using System.Reflection;
 //using static System.Net.WebRequestMethods;
 
 namespace Exine.ExineGraphics
@@ -648,8 +651,7 @@ namespace Exine.ExineGraphics
             Prguse2 = new MLibrary(Settings.DataPath + "Prguse2"),
             Prguse3 = new MLibrary(Settings.DataPath + "Prguse3"),
             BuffIcon = new MLibrary(Settings.DataPath + "BuffIcon"),
-            Help = new MLibrary(Settings.DataPath + "Help"),
-            //ExineMiniMap = new MLibrary(Settings.DataPath + "MMap"),
+            Help = new MLibrary(Settings.DataPath + "Help"), 
             MapLinkIcon = new MLibrary(Settings.DataPath + "MapLinkIcon"),
             Title = new MLibrary(Settings.DataPath + "Title"),
             MagIcon = new MLibrary(Settings.DataPath + "MagIcon"),
@@ -687,72 +689,20 @@ namespace Exine.ExineGraphics
 
 
 
-        public static MLibrary[] CArmours,
-                                          CWeapons,
-										  CWeaponEffect,
-										  CHair,
-                                          CHumEffect,
-                                          AArmours,
-                                          AWeaponsL,
-                                          AWeaponsR,
-                                          AHair,
-                                          AHumEffect,
-                                          ARArmours,
-                                          ARWeapons,
-                                          ARWeaponsS,
-                                          ARHair,
-                                          ARHumEffect,
-                                          Monsters,
-                                          Gates,
-                                          Flags,
-                                          Siege,
-                                          Mounts,
-                                          //NPCs,
-                                          Fishing,
-                                          Pets,
-                                          Transform,
-                                          TransformMounts,
-                                          TransformEffect,
-                                          TransformWeaponEffect;
+        public static MLibrary[]  CWeapons, CHumEffect, Monsters, Gates, Flags;
         #endregion Old
 
         static Libraries()
         {
             #region Old
-            //Wiz/War/Tao
-            InitLibrary(ref CArmours, Settings.CArmourPath, "00");
-            InitLibrary(ref CHair, Settings.CHairPath, "00");
-            InitLibrary(ref CWeapons, Settings.CWeaponPath, "00");
-            InitLibrary(ref CWeaponEffect, Settings.CWeaponEffectPath, "00");
+            //Wiz/War/Tao 
+            InitLibrary(ref CWeapons, Settings.CWeaponPath, "00"); 
             InitLibrary(ref CHumEffect, Settings.CHumEffectPath, "00");
-
-            //Assassin
-            InitLibrary(ref AArmours, Settings.AArmourPath, "00");
-            InitLibrary(ref AHair, Settings.AHairPath, "00");
-            InitLibrary(ref AWeaponsL, Settings.AWeaponPath, "00", " L");
-            InitLibrary(ref AWeaponsR, Settings.AWeaponPath, "00", " R");
-            InitLibrary(ref AHumEffect, Settings.AHumEffectPath, "00");
-
-            //Archer
-            InitLibrary(ref ARArmours, Settings.ARArmourPath, "00");
-            InitLibrary(ref ARHair, Settings.ARHairPath, "00");
-            InitLibrary(ref ARWeapons, Settings.ARWeaponPath, "00");
-            InitLibrary(ref ARWeaponsS, Settings.ARWeaponPath, "00", " S");
-            InitLibrary(ref ARHumEffect, Settings.ARHumEffectPath, "00");
-
+              
             //Other
             InitLibrary(ref Monsters, Settings.MonsterPath, "000");
             InitLibrary(ref Gates, Settings.GatePath, "00");
-            InitLibrary(ref Flags, Settings.FlagPath, "00");
-            InitLibrary(ref Siege, Settings.SiegePath, "00");
-            //InitLibrary(ref NPCs, Settings.NPCPath, "00");
-            InitLibrary(ref Mounts, Settings.MountPath, "00");
-            InitLibrary(ref Fishing, Settings.FishingPath, "00");
-            InitLibrary(ref Pets, Settings.PetsPath, "00");
-            InitLibrary(ref Transform, Settings.TransformPath, "00");
-            InitLibrary(ref TransformMounts, Settings.TransformMountsPath, "00");
-            InitLibrary(ref TransformEffect, Settings.TransformEffectPath, "00");
-            InitLibrary(ref TransformWeaponEffect, Settings.TransformWeaponEffectPath, "00");
+            InitLibrary(ref Flags, Settings.FlagPath, "00");  
             #endregion Old
             
             #region Exine Human
@@ -1433,11 +1383,8 @@ ZM_02_519_요정01_reidx.lib
 
         private static void LoadGameLibraries()
         {
-            Count = MapLibs.Length + Monsters.Length + Gates.Length + Flags.Length + Siege.Length + CArmours.Length +
-                CHair.Length + CWeapons.Length + CWeaponEffect.Length + AArmours.Length + AHair.Length + AWeaponsL.Length + AWeaponsR.Length +
-                ARArmours.Length + ARHair.Length + ARWeapons.Length + ARWeaponsS.Length +
-                CHumEffect.Length + AHumEffect.Length + ARHumEffect.Length + Mounts.Length + Fishing.Length + Pets.Length +
-                Transform.Length + TransformMounts.Length + TransformEffect.Length + TransformWeaponEffect.Length + 18;
+            Count = MapLibs.Length + Monsters.Length + Gates.Length + Flags.Length +  CWeapons.Length +
+                CHumEffect.Length + 18 ;
 
             Dragon.Initialize();
             Progress++;
@@ -1513,11 +1460,7 @@ ZM_02_519_요정01_reidx.lib
                 Progress++;
             }
             
-            for (int i = 0; i < Siege.Length; i++)
-            {
-                Siege[i].Initialize();
-                Progress++;
-            }
+             
             /*
             for (int i = 0; i < NPCs.Length; i++)
             {
@@ -1592,141 +1535,18 @@ ZM_02_519_요정01_reidx.lib
             }
             ///////////////////////////////////////
 
-
-
-            for (int i = 0; i < CArmours.Length; i++)
-            {
-                CArmours[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < CHair.Length; i++)
-            {
-                CHair[i].Initialize();
-                Progress++;
-            }
-
+             
             for (int i = 0; i < CWeapons.Length; i++)
             {
                 CWeapons[i].Initialize();
                 Progress++;
             }
-
-			for (int i = 0; i < CWeaponEffect.Length; i++)
-			{
-				CWeaponEffect[i].Initialize();
-				Progress++;
-			}
-
-			for (int i = 0; i < AArmours.Length; i++)
-            {
-                AArmours[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < AHair.Length; i++)
-            {
-                AHair[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < AWeaponsL.Length; i++)
-            {
-                AWeaponsL[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < AWeaponsR.Length; i++)
-            {
-                AWeaponsR[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < ARArmours.Length; i++)
-            {
-                ARArmours[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < ARHair.Length; i++)
-            {
-                ARHair[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < ARWeapons.Length; i++)
-            {
-                ARWeapons[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < ARWeaponsS.Length; i++)
-            {
-                ARWeaponsS[i].Initialize();
-                Progress++;
-            }
-
+             
             for (int i = 0; i < CHumEffect.Length; i++)
             {
                 CHumEffect[i].Initialize();
                 Progress++;
-            }
-
-            for (int i = 0; i < AHumEffect.Length; i++)
-            {
-                AHumEffect[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < ARHumEffect.Length; i++)
-            {
-                ARHumEffect[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < Mounts.Length; i++)
-            {
-                Mounts[i].Initialize();
-                Progress++;
-            }
-
-
-            for (int i = 0; i < Fishing.Length; i++)
-            {
-                Fishing[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < Pets.Length; i++)
-            {
-                Pets[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < Transform.Length; i++)
-            {
-                Transform[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < TransformEffect.Length; i++)
-            {
-                TransformEffect[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < TransformWeaponEffect.Length; i++)
-            {
-                TransformWeaponEffect[i].Initialize();
-                Progress++;
-            }
-
-            for (int i = 0; i < TransformMounts.Length; i++)
-            {
-                TransformMounts[i].Initialize();
-                Progress++;
-            }
-            
+            } 
             Loaded = true;
         }
 
