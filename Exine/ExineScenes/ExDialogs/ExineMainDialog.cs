@@ -20,7 +20,7 @@ namespace Exine.ExineScenes.ExDialogs
         }
 
         public ExineImageControl ExperienceBar, WeightBar, LeftCap, RightCap;
-        public MirButton GameShopButton, MenuButton, InventoryButton, CharacterButton, SkillButton, QuestButton, OptionButton;
+        public MirButton  MenuButton, InventoryButton, CharacterButton, SkillButton, QuestButton, OptionButton;
         public ExineControl HealthOrb;
         public ExineLabel HealthLabel, ManaLabel, TopLabel, BottomLabel, ExperienceLabel, GoldLabel, WeightLabel, SpaceLabel, AModeLabel, PModeLabel, SModeLabel;
         
@@ -348,23 +348,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.MenuDialog.Hide();
             };
 
-            GameShopButton = new MirButton
-            {
-                HoverIndex = 827,
-                Index = 826,
-                Library = Libraries.Prguse,
-                Location = new Point(this.Size.Width - 105, 35),
-                Parent = this,
-                PressedIndex = 828,
-                Sound = SoundList.ButtonC,
-                Visible = false,//add k333123
-                Hint = string.Format(GameLanguage.GameShop, CMain.InputKeys.GetKey(KeybindOptions.GameShop))
-            };
-            GameShopButton.Click += (o, e) =>
-            {
-                if (!ExineMainScene.Scene.GameShopDialog.Visible) ExineMainScene.Scene.GameShopDialog.Show();
-                else ExineMainScene.Scene.GameShopDialog.Hide();
-            };
+             
 
             HealthOrb = new ExineControl
             {
@@ -3363,9 +3347,7 @@ namespace Exine.ExineScenes.ExDialogs
                          HelpButton,
                          KeyboardLayoutButton,
                          RankingButton,
-                         CraftingButton,
-                         IntelligentCreatureButton,
-                         RideButton,
+                         CraftingButton,  
                          FishingButton,
                          FriendButton,
                          MentorButton,
@@ -3476,56 +3458,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             };
 
-            IntelligentCreatureButton = new MirButton
-            {
-                Index = 431,
-                HoverIndex = 432,
-                PressedIndex = 433,
-                Parent = this,
-                Library = Libraries.Prguse2,
-                Location = new Point(3, 126),
-                Hint = string.Format(GameLanguage.Creatures, CMain.InputKeys.GetKey(KeybindOptions.Creature))
-            };
-            IntelligentCreatureButton.Click += (o, e) =>
-            {
-                if (ExineMainScene.Scene.IntelligentCreatureDialog.Visible)
-                    ExineMainScene.Scene.IntelligentCreatureDialog.Hide();
-                else ExineMainScene.Scene.IntelligentCreatureDialog.Show();
-            };
-            RideButton = new MirButton
-            {
-                Index = 1976,
-                HoverIndex = 1977,
-                PressedIndex = 1978,
-                Parent = this,
-                Library = Libraries.Prguse,
-                Location = new Point(3, 145),
-                Hint = string.Format(GameLanguage.Mount, CMain.InputKeys.GetKey(KeybindOptions.MountWindow))
-            };
-            RideButton.Click += (o, e) =>
-            {
-                if (ExineMainScene.Scene.MountDialog.Visible)
-                    ExineMainScene.Scene.MountDialog.Hide();
-                else ExineMainScene.Scene.MountDialog.Show();
-            };
-            /*
-            FishingButton = new MirButton
-            {
-                Index = 1979,
-                HoverIndex = 1980,
-                PressedIndex = 1981,
-                Parent = this,
-                Library = Libraries.Prguse,
-                Location = new Point(3, 164),
-                Hint = string.Format(GameLanguage.Fishing, CMain.InputKeys.GetKey(KeybindOptions.Fishing))
-            };
-            FishingButton.Click += (o, e) =>
-            {
-                if (ExineMainScene.Scene.FishingDialog.Visible)
-                    ExineMainScene.Scene.FishingDialog.Hide();
-                else ExineMainScene.Scene.FishingDialog.Show();
-            };
-            */
+             
             FriendButton = new MirButton
             {
                 Index = 1982,

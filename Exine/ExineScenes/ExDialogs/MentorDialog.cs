@@ -130,7 +130,7 @@ namespace Exine.ExineScenes.ExDialogs
                     return;
                 }
 
-                MirMessageBox messageBox = new MirMessageBox(string.Format("Cancelling a Mentorship early will cause a cooldown. Are you sure?"), MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox(string.Format("Cancelling a Mentorship early will cause a cooldown. Are you sure?"), MirMessageBoxButtons.YesNo);
 
                 messageBox.YesButton.Click += (oo, ee) => Network.Enqueue(new C.CancelMentor { });
                 messageBox.NoButton.Click += (oo, ee) => { messageBox.Dispose(); };

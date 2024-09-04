@@ -4,14 +4,14 @@ namespace Exine.ExineControls
 {
     public enum MirMessageBoxButtons { OK, OKCancel, YesNo, YesNoCancel, Cancel }
 
-    public sealed class MirMessageBox : ExineImageControl
+    public sealed class ExineMessageBox : ExineImageControl
     {
         public ExineLabel Label;
         public MirButton OKButton, CancelButton, NoButton, YesButton;
         public MirMessageBoxButtons Buttons;
         public bool AllowKeyPress = true;
 
-        public MirMessageBox(string message, MirMessageBoxButtons b = MirMessageBoxButtons.OK, bool allowKeys = true)
+        public ExineMessageBox(string message, MirMessageBoxButtons b = MirMessageBoxButtons.OK, bool allowKeys = true)
         {
             DrawImage = true;
             ForeColour = Color.White;
@@ -220,7 +220,7 @@ namespace Exine.ExineControls
 
         public static void Show(string message, bool close = false)
         {
-            MirMessageBox box = new MirMessageBox(message);
+            ExineMessageBox box = new ExineMessageBox(message);
 
             if (close) box.OKButton.Click += (o, e) => Program.Form.Close();
 

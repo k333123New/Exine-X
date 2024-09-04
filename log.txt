@@ -1,3 +1,7 @@
+1)keymap remove!
+2)old resource remove!
+
+
 FrameSet Change
 ->PlayerObject.cs
 ->ExineMainScene.cs -> Player!!!

@@ -249,22 +249,22 @@ namespace Exine.ExineControls
             switch (p.Reason)
             {
                 case 0:
-                    MirMessageBox.Show(GameLanguage.ShuttingDown, true);
+                    ExineMessageBox.Show(GameLanguage.ShuttingDown, true);
                     break;
                 case 1:
-                    MirMessageBox.Show("연결 끊김: 다른 사용자가 귀하의 계정에 로그인했습니다.", true);
+                    ExineMessageBox.Show("연결 끊김: 다른 사용자가 귀하의 계정에 로그인했습니다.", true);
                     break;
                 case 2:
-                    MirMessageBox.Show("연결 끊김: 패킷 오류.", true);
+                    ExineMessageBox.Show("연결 끊김: 패킷 오류.", true);
                     break;
                 case 3:
-                    MirMessageBox.Show("연결 끊김: 서버가 충돌했습니다.", true);
+                    ExineMessageBox.Show("연결 끊김: 서버가 충돌했습니다.", true);
                     break;
                 case 4:
-                    MirMessageBox.Show("연결 끊김: 관리자에 의해 추방되었습니다.", true);
+                    ExineMessageBox.Show("연결 끊김: 관리자에 의해 추방되었습니다.", true);
                     break;
                 case 5:
-                    MirMessageBox.Show("연결 끊김: 최대 연결에 도달했습니다.", true);
+                    ExineMessageBox.Show("연결 끊김: 최대 연결에 도달했습니다.", true);
                     break;
             }
 

@@ -174,7 +174,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (SelectedFriend == null) return;
 
-                MirMessageBox messageBox = new MirMessageBox(string.Format("Are you sure you wish to remove '{0}'?", SelectedFriend.Name), MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox(string.Format("Are you sure you wish to remove '{0}'?", SelectedFriend.Name), MirMessageBoxButtons.YesNo);
 
                 messageBox.YesButton.Click += (o1, e1) =>
                 {

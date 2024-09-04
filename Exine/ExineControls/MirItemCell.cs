@@ -21,12 +21,7 @@ namespace Exine.ExineControls
                 if (GridType == MirGridType.TrustMerchant)
                     return TrustMerchantDialog.SellItemSlot;
 
-                if (GridType == MirGridType.Renting)
-                    return ItemRentingDialog.RentalItem;
-
-                if (GridType == MirGridType.GuestRenting)
-                    return GuestItemRentingDialog.GuestLoanItem;
-
+                
                 if (ItemArray != null && _itemSlot >= 0 && _itemSlot < ItemArray.Length)
                     return ItemArray[_itemSlot];
                 return null;
@@ -35,12 +30,10 @@ namespace Exine.ExineControls
             {
                 if (GridType == MirGridType.DropPanel)
                     NPCDropDialog.TargetItem = value;
-                else if (GridType == MirGridType.Renting)
-                    ItemRentingDialog.RentalItem = value;
+               
                 else if (GridType == MirGridType.TrustMerchant)
                     TrustMerchantDialog.SellItemSlot = value;
-                else if (GridType == MirGridType.GuestRenting)
-                    GuestItemRentingDialog.GuestLoanItem = value;
+                
                 else if (ItemArray != null && _itemSlot >= 0 && _itemSlot < ItemArray.Length)
                     ItemArray[_itemSlot] = value;
 
@@ -497,7 +490,7 @@ namespace Exine.ExineControls
                         if (CMain.Time < ExineMainScene.UseItemTime) return;
                         if (Item.Info.Type == ItemType.Potion && Item.Info.Shape == 4)
                         {
-                            MirMessageBox messageBox = new MirMessageBox("Are you use you want to use this Potion?", MirMessageBoxButtons.YesNo);
+                            ExineMessageBox messageBox = new ExineMessageBox("Are you use you want to use this Potion?", MirMessageBoxButtons.YesNo);
                             messageBox.YesButton.Click += (o, e) =>
                             {
                                 Network.Enqueue(new C.UseItem { UniqueID = Item.UniqueID, Grid = GridType });
@@ -565,9 +558,7 @@ namespace Exine.ExineControls
             PlayItemSound();
         }
         public void UseSlotItem()
-        {
-            MountDialog mountDialog;
-            FishingDialog fishingDialog;
+        { 
 
             if (!CanUseItem()) return;
 
@@ -605,120 +596,8 @@ namespace Exine.ExineControls
                         }
                     }
                     break;
-                case ItemType.Reins:
-                    mountDialog = ExineMainScene.Scene.MountDialog;
-                    if (mountDialog.Grid[(int)MountSlot.Reins].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Mount];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)MountSlot.Reins, GridTo = MirGridType.Mount, ToUniqueID = toItem.UniqueID });
-                        mountDialog.Grid[(int)MountSlot.Reins].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Bells:
-                    mountDialog = ExineMainScene.Scene.MountDialog;
-                    if (mountDialog.Grid[(int)MountSlot.Bells].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Mount];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)MountSlot.Bells, GridTo = MirGridType.Mount, ToUniqueID = toItem.UniqueID });
-                        mountDialog.Grid[(int)MountSlot.Bells].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Ribbon:
-                    mountDialog = ExineMainScene.Scene.MountDialog;
-                    if (mountDialog.Grid[(int)MountSlot.Ribbon].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Mount];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)MountSlot.Ribbon, GridTo = MirGridType.Mount, ToUniqueID = toItem.UniqueID });
-                        mountDialog.Grid[(int)MountSlot.Ribbon].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Saddle:
-                    mountDialog = ExineMainScene.Scene.MountDialog;
-                    if (mountDialog.Grid[(int)MountSlot.Saddle].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Mount];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)MountSlot.Saddle, GridTo = MirGridType.Mount, ToUniqueID = toItem.UniqueID });
-                        mountDialog.Grid[(int)MountSlot.Saddle].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Mask:
-                    mountDialog = ExineMainScene.Scene.MountDialog;
-                    if (mountDialog.Grid[(int)MountSlot.Mask].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Mount];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)MountSlot.Mask, GridTo = MirGridType.Mount, ToUniqueID = toItem.UniqueID });
-                        mountDialog.Grid[(int)MountSlot.Mask].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Hook:
-                    fishingDialog = ExineMainScene.Scene.FishingDialog;
-                    if (fishingDialog.Grid[(int)FishingSlot.Hook].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Weapon];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)FishingSlot.Hook, GridTo = MirGridType.Fishing, ToUniqueID = toItem.UniqueID });
-                        fishingDialog.Grid[(int)FishingSlot.Hook].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Float:
-                    fishingDialog = ExineMainScene.Scene.FishingDialog;
-                    if (fishingDialog.Grid[(int)FishingSlot.Float].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Weapon];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)FishingSlot.Float, GridTo = MirGridType.Fishing, ToUniqueID = toItem.UniqueID });
-                        fishingDialog.Grid[(int)FishingSlot.Float].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Bait:
-                    fishingDialog = ExineMainScene.Scene.FishingDialog;
-
-                    if (fishingDialog.Grid[(int)FishingSlot.Bait].Item != null && Item.Info.Type == ItemType.Bait)
-                    {
-                        if (fishingDialog.Grid[(int)FishingSlot.Bait].Item.Info == Item.Info && fishingDialog.Grid[(int)FishingSlot.Bait].Item.Count < fishingDialog.Grid[(int)FishingSlot.Bait].Item.Info.StackSize)
-                        {
-                            Network.Enqueue(new C.MergeItem { GridFrom = GridType, GridTo = MirGridType.Fishing, IDFrom = Item.UniqueID, IDTo = fishingDialog.Grid[(int)FishingSlot.Bait].Item.UniqueID });
-
-                            Locked = true;
-                            ExineMainScene.SelectedCell.Locked = true;
-                            ExineMainScene.SelectedCell = null;
-                            return;
-                        }
-                    }
-
-                    if (fishingDialog.Grid[(int)FishingSlot.Bait].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Weapon];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)FishingSlot.Bait, GridTo = MirGridType.Fishing, ToUniqueID = toItem.UniqueID });
-                        fishingDialog.Grid[(int)FishingSlot.Bait].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Finder:
-                    fishingDialog = ExineMainScene.Scene.FishingDialog;
-                    if (fishingDialog.Grid[(int)FishingSlot.Finder].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Weapon];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)FishingSlot.Finder, GridTo = MirGridType.Fishing, ToUniqueID = toItem.UniqueID });
-                        fishingDialog.Grid[(int)FishingSlot.Finder].Locked = true;
-                        Locked = true;
-                    }
-                    break;
-                case ItemType.Reel:
-                    fishingDialog = ExineMainScene.Scene.FishingDialog;
-                    if (fishingDialog.Grid[(int)FishingSlot.Reel].CanWearItem(ExineMainScene.User, Item))
-                    {
-                        var toItem = MapObject.User.Equipment[(byte)EquipmentSlot.Weapon];
-                        Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)FishingSlot.Reel, GridTo = MirGridType.Fishing, ToUniqueID = toItem.UniqueID });
-                        fishingDialog.Grid[(int)FishingSlot.Reel].Locked = true;
-                        Locked = true;
-                    }
-                    break;
+                
+                 
             }
         }
 
@@ -837,7 +716,7 @@ namespace Exine.ExineControls
                                 {
                                     if (CMain.Ctrl)
                                     {
-                                        MirMessageBox messageBox = new MirMessageBox("Do you want to try and combine these items?", MirMessageBoxButtons.YesNo);
+                                        ExineMessageBox messageBox = new ExineMessageBox("Do you want to try and combine these items?", MirMessageBoxButtons.YesNo);
                                         messageBox.YesButton.Click += (o, e) =>
                                         {
                                             //Combine

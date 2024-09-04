@@ -30,7 +30,7 @@ namespace Exine.ExineScenes
         //private NewAccountDialog _account;
         //private ChangePasswordDialog _password;
 
-        private MirMessageBox _connectBox;
+        private ExineMessageBox _connectBox;
 
         //private InputKeyDialog _ViewKey;
 
@@ -663,7 +663,7 @@ namespace Exine.ExineScenes
             switch (p.Result)
             {
                 case 0:
-                    MirMessageBox.Show("버전이 잘못되었습니다.Exine을 업데이트하세요.\nExine이 종료됩니다.", true); 
+                    ExineMessageBox.Show("버전이 잘못되었습니다.Exine을 업데이트하세요.\nExine이 종료됩니다.", true); 
                     Network.Disconnect();
                     break;
                 case 1:
@@ -683,31 +683,31 @@ namespace Exine.ExineScenes
             switch (p.Result)
             {
                 case 0:
-                    MirMessageBox.Show("Account creation is currently disabled."); 
+                    ExineMessageBox.Show("Account creation is currently disabled."); 
                     break;
                 case 1:
-                    MirMessageBox.Show("Your AccountID is not acceptable."); 
+                    ExineMessageBox.Show("Your AccountID is not acceptable."); 
                     break;
                 case 2:
-                    MirMessageBox.Show("Your Password is not acceptable."); 
+                    ExineMessageBox.Show("Your Password is not acceptable."); 
                     break;
                 case 3:
-                    MirMessageBox.Show("Your E-Mail Address is not acceptable."); 
+                    ExineMessageBox.Show("Your E-Mail Address is not acceptable."); 
                     break;
                 case 4:
-                    MirMessageBox.Show("Your User Name is not acceptable."); 
+                    ExineMessageBox.Show("Your User Name is not acceptable."); 
                     break;
                 case 5:
-                    MirMessageBox.Show("Your Secret Question is not acceptable."); 
+                    ExineMessageBox.Show("Your Secret Question is not acceptable."); 
                     break;
                 case 6:
-                    MirMessageBox.Show("Your Secret Answer is not acceptable."); 
+                    ExineMessageBox.Show("Your Secret Answer is not acceptable."); 
                     break;
                 case 7:
-                    MirMessageBox.Show("An Account with this ID already exists."); 
+                    ExineMessageBox.Show("An Account with this ID already exists."); 
                     break;
                 case 8:
-                    MirMessageBox.Show("Your account was created successfully."); 
+                    ExineMessageBox.Show("Your account was created successfully."); 
                     break;
             }
 
@@ -767,22 +767,22 @@ namespace Exine.ExineScenes
             switch (p.Result)
             {
                 case 0:
-                    MirMessageBox.Show("Logging in is currently disabled.");
+                    ExineMessageBox.Show("Logging in is currently disabled.");
                     break;
                 case 1:
-                    MirMessageBox.Show("Your AccountID is not acceptable.");
+                    ExineMessageBox.Show("Your AccountID is not acceptable.");
                     break;
                 case 2:
-                    MirMessageBox.Show("Your Password is not acceptable.");
+                    ExineMessageBox.Show("Your Password is not acceptable.");
                     break;
                 case 3:
-                    MirMessageBox.Show(GameLanguage.NoAccountID);
+                    ExineMessageBox.Show(GameLanguage.NoAccountID);
                     break;
                 case 4:
-                    MirMessageBox.Show(GameLanguage.IncorrectPasswordAccountID);
+                    ExineMessageBox.Show(GameLanguage.IncorrectPasswordAccountID);
                     break;
                 case 5:
-                    MirMessageBox.Show("The account's password must be changed before logging in.");
+                    ExineMessageBox.Show("The account's password must be changed before logging in.");
                     break;
             }
         }
@@ -793,7 +793,7 @@ namespace Exine.ExineScenes
             //_login.OKButton.Enabled = true;
 
             TimeSpan d = p.ExpiryDate - CMain.Now;
-            MirMessageBox.Show(string.Format("This account is banned.\n\nReason: {0}\nExpiryDate: {1}\nDuration: {2:#,##0} Hours, {3} Minutes, {4} Seconds", p.Reason,
+            ExineMessageBox.Show(string.Format("This account is banned.\n\nReason: {0}\nExpiryDate: {1}\nDuration: {2:#,##0} Hours, {3} Minutes, {4} Seconds", p.Reason,
                                              p.ExpiryDate, Math.Floor(d.TotalHours), d.Minutes, d.Seconds));
         }
         private void Login(S.LoginSuccess p)
@@ -822,16 +822,16 @@ namespace Exine.ExineScenes
             switch (p.Result)
             {
                 case 0:
-                    MirMessageBox.Show("Starting the game is currently disabled.");
+                    ExineMessageBox.Show("Starting the game is currently disabled.");
                     break;
                 case 1:
-                    MirMessageBox.Show("You are not logged in.");
+                    ExineMessageBox.Show("You are not logged in.");
                     break;
                 case 2:
-                    MirMessageBox.Show("Your character could not be found.");
+                    ExineMessageBox.Show("Your character could not be found.");
                     break;
                 case 3:
-                    MirMessageBox.Show("No active map and/or start point found.");
+                    ExineMessageBox.Show("No active map and/or start point found.");
                     break;
                 case 4:
                     /*

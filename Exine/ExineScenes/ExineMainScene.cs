@@ -79,10 +79,7 @@ namespace Exine.ExineScenes
         public OptionDialog OptionDialog;
         public MenuDialog MenuDialog;
        
-        public HelpDialog HelpDialog;
-        public MountDialog MountDialog;
-        public FishingDialog FishingDialog;
-        public FishingStatusDialog FishingStatusDialog;
+        public HelpDialog HelpDialog;  
         public RefineDialog RefineDialog;
 
         public GroupDialog GroupDialog;
@@ -118,24 +115,15 @@ namespace Exine.ExineScenes
         public MailReadLetterDialog MailReadLetterDialog;
         public MailReadParcelDialog MailReadParcelDialog;
 
-        public IntelligentCreatureDialog IntelligentCreatureDialog;
-        public IntelligentCreatureOptionsDialog IntelligentCreatureOptionsDialog;
-        public IntelligentCreatureOptionsGradeDialog IntelligentCreatureOptionsGradeDialog;
+        
 
         public FriendDialog FriendDialog;
         public MemoDialog MemoDialog;
         public RelationshipDialog RelationshipDialog;
-        public MentorDialog MentorDialog;
-        public GameShopDialog GameShopDialog;
+        public MentorDialog MentorDialog; 
 
         public ReportDialog ReportDialog;
-
-        public ItemRentingDialog ItemRentingDialog;
-        public ItemRentDialog ItemRentDialog;
-        public GuestItemRentingDialog GuestItemRentingDialog;
-        public GuestItemRentDialog GuestItemRentDialog;
-        public ItemRentalDialog ItemRentalDialog;
-
+          
         public BuffDialog BuffsDialog;
         public BuffDialog HeroBuffsDialog;
 
@@ -143,8 +131,7 @@ namespace Exine.ExineScenes
         public NoticeDialog NoticeDialog;
 
         public TimerDialog TimerControl;
-        public CompassDialog CompassControl;
-        public RollDialog RollControl;
+        public CompassDialog CompassControl; 
 
 
         public static List<ItemInfo> ItemInfoList = new List<ItemInfo>();
@@ -240,10 +227,8 @@ namespace Exine.ExineScenes
             HelpDialog = new HelpDialog { Parent = this, Visible = false };
             KeyboardLayoutDialog = new KeyboardLayoutDialog { Parent = this, Visible = false };
             NoticeDialog = new NoticeDialog { Parent = this, Visible = false };
-
-            MountDialog = new MountDialog { Parent = this, Visible = false };
-            FishingDialog = new FishingDialog { Parent = this, Visible = false };
-            FishingStatusDialog = new FishingStatusDialog { Parent = this, Visible = false };
+             
+            
 
             GroupDialog = new GroupDialog { Parent = this, Visible = false };
             GuildDialog = new GuildDialog { Parent = this, Visible = false };
@@ -278,23 +263,12 @@ namespace Exine.ExineScenes
             MailReadLetterDialog = new MailReadLetterDialog { Parent = this, Visible = false };
             MailReadParcelDialog = new MailReadParcelDialog { Parent = this, Visible = false };
 
-            IntelligentCreatureDialog = new IntelligentCreatureDialog { Parent = this, Visible = false };
-            IntelligentCreatureOptionsDialog = new IntelligentCreatureOptionsDialog { Parent = this, Visible = false };
-            IntelligentCreatureOptionsGradeDialog = new IntelligentCreatureOptionsGradeDialog { Parent = this, Visible = false };
-
             RefineDialog = new RefineDialog { Parent = this, Visible = false };
             RelationshipDialog = new RelationshipDialog { Parent = this, Visible = false };
             FriendDialog = new FriendDialog { Parent = this, Visible = false };
             MemoDialog = new MemoDialog { Parent = this, Visible = false };
-            MentorDialog = new MentorDialog { Parent = this, Visible = false };
-            GameShopDialog = new GameShopDialog { Parent = this, Visible = false };
-            ReportDialog = new ReportDialog { Parent = this, Visible = false };
-
-            ItemRentingDialog = new ItemRentingDialog { Parent = this, Visible = false };
-            ItemRentDialog = new ItemRentDialog { Parent = this, Visible = false };
-            GuestItemRentingDialog = new GuestItemRentingDialog { Parent = this, Visible = false };
-            GuestItemRentDialog = new GuestItemRentDialog { Parent = this, Visible = false };
-            ItemRentalDialog = new ItemRentalDialog { Parent = this, Visible = false };
+            MentorDialog = new MentorDialog { Parent = this, Visible = false }; 
+            ReportDialog = new ReportDialog { Parent = this, Visible = false }; 
 
             BuffsDialog = new BuffDialog
             {
@@ -307,8 +281,7 @@ namespace Exine.ExineScenes
             KeyboardLayoutDialog = new KeyboardLayoutDialog { Parent = this, Visible = false };
 
             TimerControl = new TimerDialog { Parent = this, Visible = false };
-            CompassControl = new CompassDialog { Parent = this, Visible = false };
-            RollControl = new RollDialog { Parent = this, Visible = false };
+            CompassControl = new CompassDialog { Parent = this, Visible = false }; 
 
             for (int i = 0; i < OutputLines.Length; i++)
                 OutputLines[i] = new ExineLabel
@@ -573,24 +546,8 @@ namespace Exine.ExineScenes
                         }
                         else ExCharacterDialog.Hide();
                         break;
+                     
                    
-                    case KeybindOptions.Creature:
-                        if (!IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Show();
-                        else IntelligentCreatureDialog.Hide();
-                        break;
-                    case KeybindOptions.MountWindow:
-                        if (!MountDialog.Visible) MountDialog.Show();
-                        else MountDialog.Hide();
-                        break;
-
-                    case KeybindOptions.GameShop:
-                        if (!GameShopDialog.Visible) GameShopDialog.Show();
-                        else GameShopDialog.Hide();
-                        break;
-                    case KeybindOptions.Fishing:
-                        if (!FishingDialog.Visible) FishingDialog.Show();
-                        else FishingDialog.Hide();
-                        break;
                     case KeybindOptions.Skillbar:
                         if (!Settings.SkillBar)
                             foreach (SkillBarDialog Bar in SkillBarDialogs)
@@ -599,10 +556,7 @@ namespace Exine.ExineScenes
                             foreach (SkillBarDialog Bar in SkillBarDialogs)
                                 Bar.Hide();
                         break;
-                    case KeybindOptions.Mount:
-                        if (ExineMainScene.Scene.MountDialog.CanRide())
-                            ExineMainScene.Scene.MountDialog.Ride();
-                        break;
+                     
                     case KeybindOptions.Mentor:
                         if (!MentorDialog.Visible) MentorDialog.Show();
                         else MentorDialog.Hide();
@@ -643,16 +597,10 @@ namespace Exine.ExineScenes
                         if (ExNPCDialog.Visible) ExNPCDialog.Hide();
                         HelpDialog.Hide();
                         KeyboardLayoutDialog.Hide();
-                        RankingDialog.Hide();
-                        IntelligentCreatureDialog.Hide();
-                        IntelligentCreatureOptionsDialog.Hide();
-                        IntelligentCreatureOptionsGradeDialog.Hide();
-                        MountDialog.Hide();
-                        FishingDialog.Hide();
+                        RankingDialog.Hide();   
                         FriendDialog.Hide();
                         RelationshipDialog.Hide();
-                        MentorDialog.Hide();
-                        GameShopDialog.Hide();
+                        MentorDialog.Hide(); 
                         GroupDialog.Hide();
                         GuildDialog.Hide();
                         InspectDialog.Hide();
@@ -664,14 +612,12 @@ namespace Exine.ExineScenes
                         QuestLogDialog.Hide();
                         NPCAwakeDialog.Hide();
                         RefineDialog.Hide();
-                        BigMapDialog.Hide();
-                        if (FishingStatusDialog.bEscExit) FishingStatusDialog.Cancel();
+                        BigMapDialog.Hide(); 
                         MailComposeLetterDialog.Hide();
                         MailComposeParcelDialog.Hide();
                         MailListDialog.Hide();
                         MailReadLetterDialog.Hide();
                         MailReadParcelDialog.Hide();
-                        ItemRentalDialog.Hide();
                         NoticeDialog.Hide();
 
 
@@ -743,7 +689,6 @@ namespace Exine.ExineScenes
                         Network.Enqueue(new C.TradeRequest());
                         break;
                     case KeybindOptions.Rental:
-                        ItemRentalDialog.Toggle();
                         break;
                     case KeybindOptions.ChangePetmode:
                         ChangePetMode();
@@ -1061,7 +1006,7 @@ namespace Exine.ExineScenes
             if (CMain.Time >= LogTime)
             {
                 //If Last Combat < 10 CANCEL
-                MirMessageBox messageBox = new MirMessageBox(GameLanguage.ExitTip, MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox(GameLanguage.ExitTip, MirMessageBoxButtons.YesNo);
                 messageBox.YesButton.Click += (o, e) => Program.Form.Close();
                 messageBox.Show();
             }
@@ -1075,7 +1020,7 @@ namespace Exine.ExineScenes
             if (CMain.Time >= LogTime)
             {
                 //If Last Combat < 10 CANCEL
-                MirMessageBox messageBox = new MirMessageBox(GameLanguage.LogOutTip, MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox(GameLanguage.LogOutTip, MirMessageBoxButtons.YesNo);
                 messageBox.YesButton.Click += (o, e) =>
                 {
                     Network.Enqueue(new C.LogOut());
@@ -1205,7 +1150,7 @@ namespace Exine.ExineScenes
             if (ShowReviveMessage && CMain.Time > User.DeadTime && User.CurrentAction == ExAction.Dead)
             {
                 ShowReviveMessage = false;
-                MirMessageBox messageBox = new MirMessageBox(GameLanguage.DiedTip, MirMessageBoxButtons.YesNo, false);
+                ExineMessageBox messageBox = new ExineMessageBox(GameLanguage.DiedTip, MirMessageBoxButtons.YesNo, false);
 
                 messageBox.YesButton.Click += (o, e) =>
                 {
@@ -1227,8 +1172,7 @@ namespace Exine.ExineScenes
             ExMainDialog.Process();
             ExChatDialog.Process(); //k333123
             ExCharacterDialog.Process();  //k333123
-            ExInventoryDialog.Process();
-            GameShopDialog.Process();
+            ExInventoryDialog.Process(); 
             MiniMapDialog.Process();
 
             foreach (SkillBarDialog Bar in Scene.SkillBarDialogs)
@@ -1768,7 +1712,7 @@ namespace Exine.ExineScenes
                     TradeCancel((S.TradeCancel)p);
                     break;
                 case (short)ServerPacketIds.MountUpdate:
-                    MountUpdate((S.MountUpdate)p);
+                     
                     break;
                 case (short)ServerPacketIds.TransformUpdate:
                     TransformUpdate((S.TransformUpdate)p);
@@ -1776,8 +1720,7 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.EquipSlotItem:
                     EquipSlotItem((S.EquipSlotItem)p);
                     break;
-                case (short)ServerPacketIds.FishingUpdate:
-                    RestingUpdate((S.FishingUpdate)p);
+                case (short)ServerPacketIds.FishingUpdate: 
                     break;
                 case (short)ServerPacketIds.ChangeQuest:
                     ChangeQuest((S.ChangeQuest)p);
@@ -1919,10 +1862,10 @@ namespace Exine.ExineScenes
                     GuildBuffList((S.GuildBuffList)p);
                     break;
                 case (short)ServerPacketIds.GameShopInfo:
-                    GameShopUpdate((S.GameShopInfo)p);
+                     
                     break;
                 case (short)ServerPacketIds.GameShopStock:
-                    GameShopStock((S.GameShopStock)p);
+                     
                     break;
                 case (short)ServerPacketIds.Rankings:
                     Rankings((S.Rankings)p);
@@ -2067,7 +2010,7 @@ namespace Exine.ExineScenes
         {
             if (info.MapIndex == -1 && info.NPCIndex == 0)
             {
-                MirMessageBox messageBox = new MirMessageBox("Nothing Found.", MirMessageBoxButtons.OK);
+                ExineMessageBox messageBox = new ExineMessageBox("Nothing Found.", MirMessageBoxButtons.OK);
                 messageBox.OKButton.Click += (o, a) =>
                 {
                     BigMapDialog.SearchTextBox.SetFocus();
@@ -2361,12 +2304,8 @@ namespace Exine.ExineScenes
                 case MirGridType.Socket:
                     toCell = SocketDialog.Grid[p.To];
                     break;
-                case MirGridType.Mount:
-                    toCell = MountDialog.Grid[p.To];
-                    break;
-                case MirGridType.Fishing:
-                    toCell = FishingDialog.Grid[p.To];
-                    break;
+                
+                 
                 default:
                     return;
             }
@@ -2444,10 +2383,7 @@ namespace Exine.ExineScenes
                     break;
                 case MirGridType.Trade:
                     fromCell = TradeDialog.GetCell(p.IDFrom);
-                    break;
-                case MirGridType.Fishing:
-                    fromCell = FishingDialog.GetCell(p.IDFrom);
-                    break;
+                    break; 
                 default:
                     return;
             }
@@ -2465,10 +2401,7 @@ namespace Exine.ExineScenes
                     break;
                 case MirGridType.Trade:
                     toCell = TradeDialog.GetCell(p.IDTo);
-                    break;
-                case MirGridType.Fishing:
-                    toCell = FishingDialog.GetCell(p.IDTo);
-                    break;
+                    break; 
                 
                 default:
                     return;
@@ -2546,12 +2479,7 @@ namespace Exine.ExineScenes
                 case MirGridType.Socket:
                     fromCell = SocketDialog.GetCell(p.UniqueID);
                     break;
-                case MirGridType.Mount:
-                    fromCell = MountDialog.GetCell(p.UniqueID);
-                    break;
-                case MirGridType.Fishing:
-                    fromCell = FishingDialog.GetCell(p.UniqueID);
-                    break;
+                 
                 default:
                     return;
             }
@@ -2820,31 +2748,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
 
         }
-
-        private void MountUpdate(S.MountUpdate p)
-        {
-            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
-            {
-                if (MapControl.Objects[i].ObjectID != p.ObjectID) continue;
-
-                PlayerObject player = MapControl.Objects[i] as PlayerObject;
-                if (player != null)
-                {
-                    player.MountUpdate(p);
-                }
-                break;
-            }
-
-            if (p.ObjectID != User.ObjectID) return;
-
-            CanRun = false;
-
-            User.RefreshStats();
-
-            ExineMainScene.Scene.MountDialog.RefreshDialog();
-            ExineMainScene.Scene.Redraw();
-        }
-
+ 
         private void TransformUpdate(S.TransformUpdate p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
@@ -2858,36 +2762,7 @@ namespace Exine.ExineScenes
                 break;
             }
         }
-
-        private void RestingUpdate(S.FishingUpdate p)
-        {
-            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
-            {
-                if (MapControl.Objects[i].ObjectID != p.ObjectID) continue;
-
-                PlayerObject player = MapControl.Objects[i] as PlayerObject;
-                if (player != null)
-                {
-                    player.FishingUpdate(p);
-
-                }
-                break;
-            }
-
-            if (p.ObjectID != User.ObjectID) return;
-
-            ExineMainScene.Scene.FishingStatusDialog.ProgressPercent = p.ProgressPercent;
-            ExineMainScene.Scene.FishingStatusDialog.ChancePercent = p.ChancePercent;
-
-            ExineMainScene.Scene.FishingStatusDialog.ChanceLabel.Text = string.Format("{0}%", ExineMainScene.Scene.FishingStatusDialog.ChancePercent);
-
-            if (p.Fishing)
-                ExineMainScene.Scene.FishingStatusDialog.Show();
-            else
-                ExineMainScene.Scene.FishingStatusDialog.Hide();
-
-            Redraw();
-        }
+ 
 
         private void CompleteQuest(S.CompleteQuest p)
         {
@@ -2900,7 +2775,7 @@ namespace Exine.ExineScenes
 
             if (quest == null) return;
 
-            MirMessageBox messageBox = new MirMessageBox(string.Format("{0} would like to share a quest with you. Do you accept?", p.SharerName), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} would like to share a quest with you. Do you accept?", p.SharerName), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.AcceptQuest { NPCIndex = 0, QuestIndex = quest.Index });
 
@@ -3023,7 +2898,7 @@ namespace Exine.ExineScenes
 
             ActiveScene = new ExineLoginScene();
             Dispose();
-            MirMessageBox.Show("The person you was observing has logged off.");
+            ExineMessageBox.Show("The person you was observing has logged off.");
         }
 
         private void TimeOfDay(S.TimeOfDay p)
@@ -4689,7 +4564,7 @@ namespace Exine.ExineScenes
 
         private void GroupInvite(S.GroupInvite p)
         {
-            MirMessageBox messageBox = new MirMessageBox(string.Format("Do you want to group with {0}?", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Do you want to group with {0}?", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) =>
             {
@@ -5374,37 +5249,37 @@ namespace Exine.ExineScenes
             switch (p.Reason)
             {
                 case 0:
-                    MirMessageBox.Show("You cannot use the TrustMerchant when dead.");
+                    ExineMessageBox.Show("You cannot use the TrustMerchant when dead.");
                     break;
                 case 1:
-                    MirMessageBox.Show("You cannot buy from the TrustMerchant without using.");
+                    ExineMessageBox.Show("You cannot buy from the TrustMerchant without using.");
                     break;
                 case 2:
-                    MirMessageBox.Show("This item has already been sold.");
+                    ExineMessageBox.Show("This item has already been sold.");
                     break;
                 case 3:
-                    MirMessageBox.Show("This item has Expired and cannot be brought.");
+                    ExineMessageBox.Show("This item has Expired and cannot be brought.");
                     break;
                 case 4:
-                    MirMessageBox.Show(GameLanguage.LowGold);
+                    ExineMessageBox.Show(GameLanguage.LowGold);
                     break;
                 case 5:
-                    MirMessageBox.Show("You do not have enough weight or space spare to buy this item.");
+                    ExineMessageBox.Show("You do not have enough weight or space spare to buy this item.");
                     break;
                 case 6:
-                    MirMessageBox.Show("You cannot buy your own items.");
+                    ExineMessageBox.Show("You cannot buy your own items.");
                     break;
                 case 7:
-                    MirMessageBox.Show("You are too far away from the Trust Merchant.");
+                    ExineMessageBox.Show("You are too far away from the Trust Merchant.");
                     break;
                 case 8:
-                    MirMessageBox.Show("You cannot hold enough gold to get your sale.");
+                    ExineMessageBox.Show("You cannot hold enough gold to get your sale.");
                     break;
                 case 9:
-                    MirMessageBox.Show("This item has not met the minimum bid yet.");
+                    ExineMessageBox.Show("This item has not met the minimum bid yet.");
                     break;
                 case 10:
-                    MirMessageBox.Show("Auction has already ended for this item.");
+                    ExineMessageBox.Show("Auction has already ended for this item.");
                     break;
             }
 
@@ -5412,7 +5287,7 @@ namespace Exine.ExineScenes
         private void MarketSuccess(S.MarketSuccess p)
         {
             TrustMerchantDialog.MarketTime = 0;
-            MirMessageBox.Show(p.Message);
+            ExineMessageBox.Show(p.Message);
         }
         private void ObjectSitDown(S.ObjectSitDown p)
         {
@@ -5459,7 +5334,7 @@ namespace Exine.ExineScenes
 
         private void GuildInvite(S.GuildInvite p)
         {
-            MirMessageBox messageBox = new MirMessageBox(string.Format("Do you want to join the {0} guild?", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Do you want to join the {0} guild?", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.GuildInvite { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => Network.Enqueue(new C.GuildInvite { AcceptInvite = false });
@@ -5744,7 +5619,7 @@ namespace Exine.ExineScenes
 
         private void MarriageRequest(S.MarriageRequest p)
         {
-            MirMessageBox messageBox = new MirMessageBox(string.Format("{0} has asked for your hand in marriage.", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} has asked for your hand in marriage.", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.MarriageReply { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.MarriageReply { AcceptInvite = false }); messageBox.Dispose(); };
@@ -5754,7 +5629,7 @@ namespace Exine.ExineScenes
 
         private void DivorceRequest(S.DivorceRequest p)
         {
-            MirMessageBox messageBox = new MirMessageBox(string.Format("{0} has requested a divorce", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} has requested a divorce", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.DivorceReply { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.DivorceReply { AcceptInvite = false }); messageBox.Dispose(); };
@@ -5764,7 +5639,7 @@ namespace Exine.ExineScenes
 
         private void MentorRequest(S.MentorRequest p)
         {
-            MirMessageBox messageBox = new MirMessageBox(string.Format("{0} (Level {1}) has requested you teach him the ways of the {2}.", p.Name, p.Level, ExineMainScene.User.Class.ToString()), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} (Level {1}) has requested you teach him the ways of the {2}.", p.Name, p.Level, ExineMainScene.User.Class.ToString()), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.MentorReply { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.MentorReply { AcceptInvite = false }); messageBox.Dispose(); };
@@ -5844,7 +5719,7 @@ namespace Exine.ExineScenes
 
         private void TradeRequest(S.TradeRequest p)
         {
-            MirMessageBox messageBox = new MirMessageBox(string.Format("Player {0} has requested to trade with you.", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Player {0} has requested to trade with you.", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.TradeReply { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.TradeReply { AcceptInvite = false }); messageBox.Dispose(); };
@@ -5882,7 +5757,7 @@ namespace Exine.ExineScenes
             {
                 TradeDialog.TradeReset();
 
-                MirMessageBox messageBox = new MirMessageBox("Deal cancelled.\r\nTo deal correctly you must face the other party.", MirMessageBoxButtons.OK);
+                ExineMessageBox messageBox = new ExineMessageBox("Deal cancelled.\r\nTo deal correctly you must face the other party.", MirMessageBoxButtons.OK);
                 messageBox.Show();
             }
         }
@@ -5951,24 +5826,24 @@ namespace Exine.ExineScenes
                 NPCAwakeDialog.ItemsIdx[i] = 0;
             }
 
-            MirMessageBox messageBox = null;
+            ExineMessageBox messageBox = null;
 
             switch (p.result)
             {
                 case -4:
-                    messageBox = new MirMessageBox("You have not supplied enough materials.", MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox("You have not supplied enough materials.", MirMessageBoxButtons.OK);
                     MapControl.AwakeningAction = false;
                     break;
                 case -3:
-                    messageBox = new MirMessageBox(GameLanguage.LowGold, MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox(GameLanguage.LowGold, MirMessageBoxButtons.OK);
                     MapControl.AwakeningAction = false;
                     break;
                 case -2:
-                    messageBox = new MirMessageBox("Awakening already at maximum level.", MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox("Awakening already at maximum level.", MirMessageBoxButtons.OK);
                     MapControl.AwakeningAction = false;
                     break;
                 case -1:
-                    messageBox = new MirMessageBox("Cannot awaken this item.", MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox("Cannot awaken this item.", MirMessageBoxButtons.OK);
                     MapControl.AwakeningAction = false;
                     break;
                 case 0:
@@ -6057,11 +5932,11 @@ namespace Exine.ExineScenes
             switch (p.Result)
             {
                 case -1:
-                    MirMessageBox messageBox = new MirMessageBox(string.Format("No parcels to collect."), MirMessageBoxButtons.OK);
+                    ExineMessageBox messageBox = new ExineMessageBox(string.Format("No parcels to collect."), MirMessageBoxButtons.OK);
                     messageBox.Show();
                     break;
                 case 0:
-                    messageBox = new MirMessageBox(string.Format("All parcels have been collected."), MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox(string.Format("All parcels have been collected."), MirMessageBoxButtons.OK);
                     messageBox.Show();
                     break;
                 case 1:
@@ -6129,7 +6004,7 @@ namespace Exine.ExineScenes
         {
             if (CMain.Time > User.DeadTime && User.CurrentAction == ExAction.Dead)
             {
-                MirMessageBox messageBox = new MirMessageBox("Would you like to be revived?", MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox("Would you like to be revived?", MirMessageBoxButtons.YesNo);
 
                 messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.AcceptReincarnation());
 
@@ -6139,6 +6014,7 @@ namespace Exine.ExineScenes
 
         private void NewIntelligentCreature(S.NewIntelligentCreature p)
         {
+            /*
             User.IntelligentCreatures.Add(p.Creature);
 
             MirInputBox inputBox = new MirInputBox("Please give your creature a name.");
@@ -6151,10 +6027,12 @@ namespace Exine.ExineScenes
                 inputBox.Dispose();
             };
             inputBox.Show();
+            */
         }
 
         private void UpdateIntelligentCreatureList(S.UpdateIntelligentCreatureList p)
         {
+            /*
             User.CreatureSummoned = p.CreatureSummoned;
             User.SummonedCreatureType = p.SummonedCreatureType;
             User.PearlCount = p.PearlCount;
@@ -6175,12 +6053,15 @@ namespace Exine.ExineScenes
                     User.IntelligentCreatures[i] = p.CreatureList[i];
                 if (IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Update();
             }
+            */
         }
 
         private void IntelligentCreatureEnableRename(S.IntelligentCreatureEnableRename p)
         {
+            /*
             IntelligentCreatureDialog.CreatureRenameButton.Visible = true;
             if (IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Update();
+            */
         }
 
         private void IntelligentCreaturePickup(S.IntelligentCreaturePickup p)
@@ -6225,26 +6106,7 @@ namespace Exine.ExineScenes
             ExineMainScene.Scene.MentorDialog.UpdateInterface();
         }
 
-        private void GameShopUpdate(S.GameShopInfo p)
-        {
-            p.Item.Stock = p.StockLevel;
-            GameShopInfoList.Add(p.Item);
-            if (p.Item.Date > CMain.Now.AddDays(-7)) GameShopDialog.New.Visible = true;
-        }
-
-        private void GameShopStock(S.GameShopStock p)
-        {
-            for (int i = 0; i < GameShopInfoList.Count; i++)
-            {
-                if (GameShopInfoList[i].GIndex == p.GIndex)
-                {
-                    if (p.StockLevel == 0) GameShopInfoList.Remove(GameShopInfoList[i]);
-                    else GameShopInfoList[i].Stock = p.StockLevel;
-
-                    if (GameShopDialog.Visible) GameShopDialog.UpdateShop();
-                }
-            }
-        }
+        
         public void AddItem(UserItem item)
         {
             Redraw();
@@ -9487,131 +9349,60 @@ namespace Exine.ExineScenes
 
         private void RentedItems(S.GetRentedItems p)
         {
-            ItemRentalDialog.ReceiveRentedItems(p.RentedItems);
         }
 
         private void ItemRentalRequest(S.ItemRentalRequest p)
-        {
-            if (!p.Renting)
-            {
-                GuestItemRentDialog.SetGuestName(p.Name);
-                ItemRentingDialog.OpenItemRentalDialog();
-            }
-            else
-            {
-                GuestItemRentingDialog.SetGuestName(p.Name);
-                ItemRentDialog.OpenItemRentDialog();
-            }
+        { 
 
-            ItemRentalDialog.Visible = false;
         }
 
         private void ItemRentalFee(S.ItemRentalFee p)
-        {
-            GuestItemRentDialog.SetGuestFee(p.Amount);
-            ItemRentDialog.RefreshInterface();
+        { 
         }
 
         private void ItemRentalPeriod(S.ItemRentalPeriod p)
         {
-            GuestItemRentingDialog.GuestRentalPeriod = p.Days;
-            ItemRentingDialog.RefreshInterface();
+            
         }
 
         private void DepositRentalItem(S.DepositRentalItem p)
         {
-            var fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
-            var toCell = ItemRentingDialog.ItemCell;
-
-            if (toCell == null || fromCell == null)
-                return;
-
-            toCell.Locked = false;
-            fromCell.Locked = false;
-
-            if (!p.Success)
-                return;
-
-            toCell.Item = fromCell.Item;
-            fromCell.Item = null;
-            User.RefreshStats();
-
-            if (ItemRentingDialog.RentalPeriod == 0)
-                ItemRentingDialog.InputRentalPeroid();
+            
         }
 
         private void RetrieveRentalItem(S.RetrieveRentalItem p)
         {
-            var fromCell = ItemRentingDialog.ItemCell;
-            var toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
-
-            if (toCell == null || fromCell == null)
-                return;
-
-            toCell.Locked = false;
-            fromCell.Locked = false;
-
-            if (!p.Success)
-                return;
-
-            toCell.Item = fromCell.Item;
-            fromCell.Item = null;
-            User.RefreshStats();
+           
         }
 
         private void UpdateRentalItem(S.UpdateRentalItem p)
         {
-            GuestItemRentingDialog.GuestLoanItem = p.LoanItem;
-            ItemRentDialog.RefreshInterface();
+            
         }
 
         private void CancelItemRental(S.CancelItemRental p)
         {
-            User.RentalGoldLocked = false;
-            User.RentalItemLocked = false;
-
-            ItemRentingDialog.Reset();
-            ItemRentDialog.Reset();
-
-            var messageBox = new MirMessageBox("Item rental cancelled.\r\n" +
-                                               "To complete item rental please face the other party throughout the transaction.");
-            messageBox.Show();
+            
         }
 
         private void ItemRentalLock(S.ItemRentalLock p)
         {
-            if (!p.Success)
-                return;
-
-            User.RentalGoldLocked = p.GoldLocked;
-            User.RentalItemLocked = p.ItemLocked;
-
-            if (User.RentalGoldLocked)
-                ItemRentDialog.Lock();
-            else if (User.RentalItemLocked)
-                ItemRentingDialog.Lock();
+             
         }
 
         private void ItemRentalPartnerLock(S.ItemRentalPartnerLock p)
         {
-            if (p.GoldLocked)
-                GuestItemRentDialog.Lock();
-            else if (p.ItemLocked)
-                GuestItemRentingDialog.Lock();
+           
         }
 
         private void CanConfirmItemRental(S.CanConfirmItemRental p)
         {
-            ItemRentingDialog.EnableConfirmButton();
+           
         }
 
         private void ConfirmItemRental(S.ConfirmItemRental p)
         {
-            User.RentalGoldLocked = false;
-            User.RentalItemLocked = false;
-
-            ItemRentingDialog.Reset();
-            ItemRentDialog.Reset();
+            
         }
 
         private void OpenBrowser(S.OpenBrowser p)
@@ -9640,7 +9431,7 @@ namespace Exine.ExineScenes
 
         private void Roll(S.Roll p)
         {
-            ExineMainScene.Scene.RollControl.Setup(p.Type, p.Page, p.Result, p.AutoRoll);
+            //ExineMainScene.Scene.RollControl.Setup(p.Type, p.Page, p.Result, p.AutoRoll);
         }
 
         public void ShowNotice(S.UpdateNotice p)
@@ -9680,8 +9471,7 @@ namespace Exine.ExineScenes
                 QuestDetailDialog = null;
                 QuestListDialog = null;
                 QuestLogDialog = null;
-                QuestTrackingDialog = null;
-                GameShopDialog = null;
+                QuestTrackingDialog = null; 
                 MentorDialog = null;
 
                 //NewHeroDialog = null; //add k333123
@@ -10831,14 +10621,14 @@ namespace Exine.ExineScenes
                 MirItemCell cell = ExineMainScene.SelectedCell;
                 if (cell.Item.Info.Bind.HasFlag(BindMode.DontDrop))
                 {
-                    MirMessageBox messageBox = new MirMessageBox(string.Format("You cannot drop {0}", cell.Item.FriendlyName), MirMessageBoxButtons.OK);
+                    ExineMessageBox messageBox = new ExineMessageBox(string.Format("You cannot drop {0}", cell.Item.FriendlyName), MirMessageBoxButtons.OK);
                     messageBox.Show();
                     ExineMainScene.SelectedCell = null;
                     return;
                 }
                 if (cell.Item.Count == 1)
                 {
-                    MirMessageBox messageBox = new MirMessageBox(string.Format(GameLanguage.DropTip, cell.Item.FriendlyName), MirMessageBoxButtons.YesNo);
+                    ExineMessageBox messageBox = new ExineMessageBox(string.Format(GameLanguage.DropTip, cell.Item.FriendlyName), MirMessageBoxButtons.YesNo);
 
                     messageBox.YesButton.Click += (o, a) =>
                     {

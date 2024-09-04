@@ -524,7 +524,7 @@ namespace Exine.ExineScenes.ExDialogs
             ExineMainScene.Scene.TrustMerchantDialog.Hide();
             ExineMainScene.Scene.QuestListDialog.Hide();
             ExineMainScene.Scene.ExInventoryDialog.Location = new Point(0, 0);
-            ExineMainScene.Scene.RollControl.Hide();
+            //ExineMainScene.Scene.RollControl.Hide();
             BigButtonDialog.Hide();
         }
 
@@ -2333,12 +2333,12 @@ namespace Exine.ExineScenes.ExDialogs
             };
             RentButton.Click += (o, e) =>
             {
-                MirMessageBox messageBox;
+                ExineMessageBox messageBox;
 
                 if (ExineMainScene.User.HasExpandedStorage)
-                    messageBox = new MirMessageBox(GameLanguage.ExtendYourRentalPeriod, MirMessageBoxButtons.OKCancel);
+                    messageBox = new ExineMessageBox(GameLanguage.ExtendYourRentalPeriod, MirMessageBoxButtons.OKCancel);
                 else
-                    messageBox = new MirMessageBox(GameLanguage.ExtraStorage, MirMessageBoxButtons.OKCancel);
+                    messageBox = new ExineMessageBox(GameLanguage.ExtraStorage, MirMessageBoxButtons.OKCancel);
 
                 messageBox.OKButton.Click += (o1, a) =>
                 {

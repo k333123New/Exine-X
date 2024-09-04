@@ -5,7 +5,8 @@ using Exine.ExineSounds;
 using Exine.ExineControls;
 using S = ServerPackets;
 using C = ClientPackets;
-using Exine.ExineScenes.Dialogs;
+//using Exine.ExineScenes.Dialogs;
+using Exine.ExineScenes.ExDialogs;
 using System.Reflection;
 using System.Drawing;
 using System.Diagnostics.Eventing.Reader;
@@ -248,79 +249,8 @@ namespace Exine.ExineObjects
                 AddBuffEffect(Buffs[i]);
             }
         }
-
-        public void MountUpdate(S.MountUpdate info)
-        {
-            MountType = info.MountType;
-            RidingMount = info.RidingMount;
-
-            int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
-            QueuedAction action = null;
-            switch (weaponType)
-            {
-                case 1:
-                    action = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation };
-                    break;
-
-                case 2:
-                    action = new QueuedAction { Action = ExAction.TWOHAND_STAND, Direction = Direction, Location = CurrentLocation };
-                    break;
-
-                case 3:
-                    action = new QueuedAction { Action = ExAction.BOWHAND_STAND, Direction = Direction, Location = CurrentLocation };
-                    break;
-
-                default: 
-                    action = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation };
-                    break; 
-            } 
-            //QueuedAction action = new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = Direction, Location = CurrentLocation };
-
-
-            ActionFeed.Insert(0, action);
-
-            MountTime = CMain.Time;
-
-            if (MountType < 0)
-                ExineMainScene.Scene.MountDialog.Hide();
-
-            SetLibraries();
-            SetEffects();
-
-            PlayMountSound();
-        }
-
-
-
-        public void FishingUpdate(S.FishingUpdate p)
-        {
-            if (Fishing != p.Fishing)
-            {
-                ExineDirection dir = Functions.DirectionFromPoint(CurrentLocation, p.FishingPoint);
-
-                if (p.Fishing)
-                {        
-                    QueuedAction action = new QueuedAction { Action = ExAction.FishingCast, Direction = dir, Location = CurrentLocation };
-                    ActionFeed.Add(action);
-                }
-                else
-                {
-                    QueuedAction action = new QueuedAction { Action = ExAction.FishingWait, Direction = dir, Location = CurrentLocation };
-                    ActionFeed.Add(action);
-                }
-
-                Fishing = p.Fishing;
-                SetLibraries();
-            }
-
-            if (!HasFishingRod)
-            {
-                ExineMainScene.Scene.FishingDialog.Hide();
-            }          
-
-            FishingPoint = p.FishingPoint;
-            FoundFish = p.FoundFish;
-        }
+         
+ 
 
 
         int leftRightToggleFlag = 0;
@@ -840,8 +770,6 @@ namespace Exine.ExineObjects
 								WeaponEffectLibrary1 = null;
                             */
 
-                            /*
-                             */
                             //libIdex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon - 1, Gender != ExineGender.Male);
 
                             WeaponLibrary1 = GetLibFromShapeIdx(Weapon, Gender);
@@ -3330,74 +3258,7 @@ namespace Exine.ExineObjects
                         }
                     }
                     break;
-
-                case ExAction.FishingCast:             
-                case ExAction.FishingWait:
-                case ExAction.FishingReel:
-                    if (CMain.Time >= NextMotion)
-                    {
-                        ExineMainScene.Scene.MapControl.TextureValid = false;
-
-                        if (SkipFrames) UpdateFrame();
-
-                        if (UpdateFrame() >= Frame.Count)
-                        {
-                            FrameIndex = Frame.Count - 1;
-                            SetAction();
-                        }
-                        else
-                        {
-                            switch (FrameIndex)
-                            {
-                                case 1:
-                                    switch (CurrentAction)
-                                    {
-                                        case ExAction.FishingCast:
-                                            SoundManager.PlaySound(SoundList.FishingThrow);
-                                            ((ExineAnimatedButton)ExineMainScene.Scene.FishingStatusDialog.FishButton).Visible = false;
-                                            break;
-                                        case ExAction.FishingWait:
-                                            SoundManager.PlaySound(SoundList.FishingPull);
-                                            break;
-                                        case ExAction.FishingReel:
-                                            if (FoundFish)
-                                            {
-                                                MapControl.Effects.Add(new Effect(Libraries.Effect, 671, 6, 720, FishingPoint) { Light = 0 });
-                                                MapControl.Effects.Add(new Effect(Libraries.Effect, 665, 6, 720, FishingPoint) { Light = 0 });
-
-                                                SoundManager.PlaySound(SoundList.Fishing);
-                                                Effects.Add(new Effect(Libraries.Prguse, 1350, 2, 720, this) { Light = 0, Blend = false });
-
-                                                ((ExineAnimatedButton)ExineMainScene.Scene.FishingStatusDialog.FishButton).Visible = true;
-                                            }
-                                            else
-                                            {
-                                                MapControl.Effects.Add(new Effect(Libraries.Effect, 650, 6, 720, FishingPoint) { Light = 0 });
-                                                MapControl.Effects.Add(new Effect(Libraries.Effect, 640, 6, 720, FishingPoint) { Light = 0 });
-                                                ((ExineAnimatedButton)ExineMainScene.Scene.FishingStatusDialog.FishButton).Visible = false;
-                                            }
-
-                                            ((ExineAnimatedButton)ExineMainScene.Scene.FishingStatusDialog.FishButton).AnimationCount = FoundFish ? 10 : 1;
-                                            break;
-                                    }
-                                    break;
-                            }
-                            NextMotion += FrameInterval;
-                        }
-                    }
-
-                    if (WingEffect > 0 && CMain.Time >= NextMotion2)
-                    {
-                        ExineMainScene.Scene.MapControl.TextureValid = false;
-
-                        if (SkipFrames) UpdateFrame2();
-
-                        if (UpdateFrame2() >= Frame.EffectCount)
-                            EffectFrameIndex = Frame.EffectCount - 1;
-                        else
-                            NextMotion2 += EffectFrameInterval;
-                    }
-                    break;
+ 
 
                 /*case ExAction.Attack1:
                 case ExAction.Attack2:
@@ -6439,10 +6300,10 @@ namespace Exine.ExineObjects
                 case ExineDirection.Left:
                 case ExineDirection.DownLeft:
                 case ExineDirection.UpLeft:
-                    DrawShield();
+                    DrawWeapon();
                     DrawHead();
                     DrawBody();
-                    DrawWeapon();
+                    DrawShield();
                     break;
 
                 case ExineDirection.Up:
@@ -6455,16 +6316,16 @@ namespace Exine.ExineObjects
                 case ExineDirection.Right:
                 case ExineDirection.DownRight:
                 case ExineDirection.UpRight:
-                    DrawWeapon();
+                    DrawShield();
                     DrawHead();
                     DrawBody();
-                    DrawShield();
+                    DrawWeapon();
                     break;
 
                 case ExineDirection.Down:
-                    DrawWeapon();
                     DrawHead();
                     DrawBody();
+                    DrawWeapon();
                     DrawShield();
                     break;
 
@@ -6592,8 +6453,6 @@ namespace Exine.ExineObjects
                         }
                         break;
                 }
-
-
             }
 
             public void DrawCurrentEffects()
@@ -6741,9 +6600,6 @@ namespace Exine.ExineObjects
                 WeaponLibrary2.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true);
         }
 
-       
-        
-
         public void DrawWings()
         {
             //Apply to BodyEffect
@@ -6753,7 +6609,6 @@ namespace Exine.ExineObjects
             if (WingLibrary != null)
                 WingLibrary.DrawBlend(DrawWingFrame + WingOffset, DrawLocation, DrawColour, true);
         }
-
 
         public void DrawMount()
         {/*
@@ -6955,7 +6810,6 @@ namespace Exine.ExineObjects
 
     }
 
-
     public class QueuedAction
     {
         public ExAction Action;
@@ -6963,5 +6817,4 @@ namespace Exine.ExineObjects
         public ExineDirection Direction;
         public List<object> Params;
     }
-
 }

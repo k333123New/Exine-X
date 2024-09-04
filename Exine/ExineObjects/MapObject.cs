@@ -2,7 +2,8 @@
 using Exine.ExineGraphics;
 using Exine.ExineScenes;
 using Exine.ExineSounds;
-using Exine.ExineScenes.Dialogs;
+//using Exine.ExineScenes.Dialogs;
+using Exine.ExineScenes.ExDialogs;
 using SlimDX;
 using NAudio.Gui;
 using System.Xml;

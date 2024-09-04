@@ -1,0 +1,275 @@
+key bind
+
+---------------------------------------
+old
+---------------------------------------
+Inventory Open/Close 
+->Keys.F9
+
+Inventory Open/Close Alt
+Keys.I
+
+"Equipment Open/Close"
+ Keys.F10 
+
+ Equipment Open/Close Alt
+ Keys.C
+
+ Skills Open/Close
+ Keys.F11
+
+ Skills Open/Close Alt
+ Keys.S 
+
+
+ Hero Inventory Open/Close
+ Keys.I 
+
+ Hero Equipment Open/Close
+ Keys.C
+
+ Hero Skills Open/Close
+ Keys.S
+
+ Creatures Open/Close
+ Keys.E
+
+ Mount Open/Close
+ Keys.J 
+
+ Fishing Open/Close
+ Keys.N
+
+ Skillbar Open/Close"
+ Keys.R 
+
+ Mentor Open/Close
+ Keys.None
+
+ Relationship Open/Close
+ Keys.L
+
+ Friends Open/Close
+ Keys.F 
+
+ Guild Open/Close
+ Keys.G
+
+ Gameshop Open/Close
+ Keys.Y 
+
+ Quest Diary Open/Close
+ Keys.Q
+
+ Options Open/Close
+ Keys.F12
+
+ Options Open/Close Alt
+ Keys.O
+
+ Group Open/Close
+ Keys.P
+
+ Belt Open/Close
+ Keys.Z 
+
+ Minimap Open/Close
+ Keys.V
+
+ Bigmap Open/Close
+ Keys.B
+
+ Ranking Open/Close
+ Keys.K
+
+ Help Open/Close
+ Keys.H
+
+ Keybinds Open/Close
+  Keys.U
+
+  Close All Windows
+  Keys.Escape
+
+  Skillbar Slot 1
+  Keys.F1
+
+  Skillbar Slot 2
+  Keys.F2 
+
+  Skillbar Slot 3
+  Keys.F3
+
+  Skillbar Slot 4
+  Keys.F4
+
+  Skillbar Slot 5
+  Keys.F5
+
+  Skillbar Slot 6
+  Keys.F6
+
+  Skillbar Slot 7
+  Keys.F7
+    
+  Skillbar Slot 8
+  Keys.F8
+
+  Skillbar Alt Slot 1
+  Keys.F1
+
+  Skillbar Alt Slot 2
+  Keys.F2 
+
+  Skillbar Alt Slot 3
+  Keys.F3
+
+  Skillbar Alt Slot 4
+  Keys.F4
+
+  Skillbar Alt Slot 5
+  Keys.F5
+
+  Skillbar Alt Slot 6
+  Keys.F6
+
+  Skillbar Alt Slot 7
+  Keys.F7
+    
+  Skillbar Alt Slot 8
+  Keys.F8
+
+  Hero Skillbar Slot 1
+  Keys.F1
+  
+  Hero Skillbar Slot 2
+  Keys.F2
+  
+  Hero Skillbar Slot 3
+  Keys.F3
+  
+  Hero Skillbar Slot 4
+  Keys.F4
+  
+  Hero Skillbar Slot 5
+  Keys.F5
+  
+  Hero Skillbar Slot 6
+  Keys.F6
+  
+  Hero Skillbar Slot 7
+  Keys.F7
+
+  Hero Skillbar Slot 8
+  Keys.F8
+
+  Rotate Belt
+  Keys.Z
+
+  Belt Slot 1
+  Keys.D1
+
+  Belt Slot 1 Alt
+  Keys.NumPad1
+
+  Belt Slot 2
+  Keys.D2
+  
+  Belt Slot 2 Alt
+  Keys.NumPad2
+
+  Belt Slot 3
+  Keys.D3
+  
+  Belt Slot 3 Alt
+  Keys.NumPad3
+  
+  Belt Slot 4
+  Keys.D4
+  
+  Belt Slot 4 Alt
+  Keys.NumPad4
+  
+  Belt Slot 5
+  Keys.D5
+  
+  Belt Slot 5 Alt
+  Keys.NumPad5
+  
+  Belt Slot 6
+  Keys.D6
+  
+  Belt Slot 6 Alt
+  Keys.NumPad6
+  
+  Belt Slot 7
+  Keys.D7
+  
+  Belt Slot 7 Alt
+  Keys.NumPad7
+  
+  Belt Slot 8
+  Keys.D8
+  
+  Belt Slot 8 Alt
+  Keys.NumPad8
+
+  Toggle Attack Mode
+  Keys.H
+   - Set Attack Mode : Peace
+   - Set Attack Mode : Group
+   - Set Attack Mode : Guild
+   - Set Attack Mode : Enemy Guild
+   - Set Attack Mode : Red/Brown
+   - Set Attack Mode : All
+
+  Toggle Pet Mode
+  Keys.A 
+   - Set Pet Mode : Both
+   Set Pet Mode : Move Only
+   Set Pet Mode : Attack Only
+   Set Pet Mode : None
+   Set Pet Mode : Focus Master Target
+
+  Toggle Autorun
+  Keys.D
+
+  Toggle Camera Mode
+  Keys.Insert 
+
+  Take Screenshot
+  Keys.PrintScreen 
+
+  Toggle Dropview
+  >
+  Hold to enable target spell lock-on
+  ?
+
+  Toggle Attack Mode
+   Keys.Tab
+
+=======================================
+
+
+---------------------------------------
+exine
+---------------------------------------
+f1~f4 : quick slot 1~4
+f5~f8 : quick slot 5~8
+f10 : guide image
+tab : peace mode change
+ ->peace mode right click : sitdown / standup
+
+enter : chat input
+
+
+i : inventory
+ -> inventory item right click : 
+
+f12 : screenshot
+u : userinfo
+m : map
+=======================================
+
+
+

@@ -133,7 +133,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 if (Reward.SelectedItemIndex < 0 && SelectedQuest.QuestInfo.RewardsSelectItem.Count > 0)
                 {
-                    MirMessageBox messageBox = new MirMessageBox("You must select a reward item.");
+                    ExineMessageBox messageBox = new ExineMessageBox("You must select a reward item.");
                     messageBox.Show();
                     return;
                 }
@@ -585,7 +585,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             _cancelButton.Click += (o, e) =>
             {
-                MirMessageBox messageBox = new MirMessageBox("Are you sure you want to cancel this quest?", MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox("Are you sure you want to cancel this quest?", MirMessageBoxButtons.YesNo);
 
                 messageBox.YesButton.Click += (o1, a) =>
                 {

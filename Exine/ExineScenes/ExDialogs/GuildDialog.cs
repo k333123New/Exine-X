@@ -972,7 +972,7 @@ namespace Exine.ExineScenes.ExDialogs
                     Error = "Guild rank does not allow buff activation.";
                 if (Error != "")
                 {
-                    MirMessageBox messageBox = new MirMessageBox(Error);
+                    ExineMessageBox messageBox = new ExineMessageBox(Error);
                     messageBox.Show();
                     return;
                 }
@@ -991,7 +991,7 @@ namespace Exine.ExineScenes.ExDialogs
                     Error = "Guild rank does not allow buff activation.";
                 if (Error != "")
                 {
-                    MirMessageBox messageBox = new MirMessageBox(Error);
+                    ExineMessageBox messageBox = new ExineMessageBox(Error);
                     messageBox.Show();
                     return;
                 }
@@ -1496,7 +1496,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (SelectedIndex >= Ranks.Count) return;
             if (LastGuildMsg > CMain.Time) return;
-            MirMessageBox messageBox = new MirMessageBox(string.Format("Are you sure you want to change the rank of {0} to {1}?", MembersName[Index].Text, Ranks[SelectedIndex].Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Are you sure you want to change the rank of {0} to {1}?", MembersName[Index].Text, Ranks[SelectedIndex].Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, a) =>
             {
@@ -1519,7 +1519,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (MembersName[Index].Text == MapControl.User.Name) return;
             if (LastGuildMsg > CMain.Time) return;
-            MirMessageBox messageBox = new MirMessageBox(string.Format("Are you sure you want to kick {0}?", MembersName[Index].Text), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Are you sure you want to kick {0}?", MembersName[Index].Text), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, a) =>
             {
@@ -1866,7 +1866,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (Ranks.Count == 255) return;
                 if (LastGuildMsg > CMain.Time) return;
-                MirMessageBox messageBox = new MirMessageBox("Are you sure you want to create a new rank?", MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox("Are you sure you want to create a new rank?", MirMessageBoxButtons.YesNo);
                 messageBox.YesButton.Click += (o, a) =>
                 {
                     Network.Enqueue(new C.EditGuildMember { ChangeType = 4, RankName = String.Format("Rank-{0}", Ranks.Count - 1) });
@@ -2147,7 +2147,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             if (MapControl.User.GuildName == "")
             {
-                MirMessageBox messageBox = new MirMessageBox(GameLanguage.NotInGuild, MirMessageBoxButtons.OK);
+                ExineMessageBox messageBox = new ExineMessageBox(GameLanguage.NotInGuild, MirMessageBoxButtons.OK);
                 messageBox.Show();
                 return;
             }

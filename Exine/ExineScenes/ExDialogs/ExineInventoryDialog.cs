@@ -90,7 +90,7 @@ namespace Exine.ExineScenes.ExDialogs
          {
              int openLevel = (ExineMainScene.User.Inventory.Length - 46) / 4;
              int openGold = (1000000 + openLevel * 1000000);
-             MirMessageBox messageBox = new MirMessageBox(string.Format(GameLanguage.ExtraSlots4, openGold), MirMessageBoxButtons.OKCancel);
+             ExineMessageBox messageBox = new ExineMessageBox(string.Format(GameLanguage.ExtraSlots4, openGold), MirMessageBoxButtons.OKCancel);
 
              messageBox.OKButton.Click += (o, a) =>
              {
@@ -196,7 +196,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (ExineMainScene.User.Inventory.Length == 46 && sender == ItemButton2)
             {
-                MirMessageBox messageBox = new MirMessageBox(GameLanguage.ExtraSlots8, MirMessageBoxButtons.OKCancel);
+                ExineMessageBox messageBox = new ExineMessageBox(GameLanguage.ExtraSlots8, MirMessageBoxButtons.OKCancel);
 
                 messageBox.OKButton.Click += (o, a) =>
                 {

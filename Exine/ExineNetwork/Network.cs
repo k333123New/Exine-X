@@ -35,7 +35,7 @@ namespace Exine.ExineNetwork
 
                 ErrorShown = true;
 
-                MirMessageBox errorBox = new("서버에 연결하는 중 오류가 발생했습니다.", MirMessageBoxButtons.Cancel);
+                ExineMessageBox errorBox = new("서버에 연결하는 중 오류가 발생했습니다.", MirMessageBoxButtons.Cancel);
                 errorBox.CancelButton.Click += (o, e) => Program.Form.Close();
                 errorBox.Label.Text = $"최대 연결 시도 횟수에 도달했습니다.: {MaxAttempts}" +
                                       $"{Environment.NewLine}나중에 다시 시도하거나 연결 설정을 확인하세요..";
@@ -202,7 +202,7 @@ namespace Exine.ExineNetwork
                         return;
                     }
 
-                    MirMessageBox.Show("Lost connection with the server.", true);
+                    ExineMessageBox.Show("Lost connection with the server.", true);
                     Disconnect();
                     return;
                 }

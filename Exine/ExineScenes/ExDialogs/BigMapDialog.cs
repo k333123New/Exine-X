@@ -400,12 +400,12 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (SelectedNPC == null || !SelectedNPC.Info.CanTeleportTo) return;
 
-            MirMessageBox messageBox = new MirMessageBox($"Teleport to this NPC for {ExineMainScene.TeleportToNPCCost} Gold?", MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox($"Teleport to this NPC for {ExineMainScene.TeleportToNPCCost} Gold?", MirMessageBoxButtons.YesNo);
             messageBox.YesButton.Click += (o, e) =>
             {
                 if (ExineMainScene.Gold < ExineMainScene.TeleportToNPCCost)
                 {
-                    MirMessageBox messageBox2 = new MirMessageBox("Not enough Gold.", MirMessageBoxButtons.OK);
+                    ExineMessageBox messageBox2 = new ExineMessageBox("Not enough Gold.", MirMessageBoxButtons.OK);
                     messageBox2.Show();
                     return;
                 }

@@ -160,7 +160,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 UpdateText();
 
-                MirMessageBox messageBox = new MirMessageBox("Keyboard settings have been reset back to default.", MirMessageBoxButtons.OK);
+                ExineMessageBox messageBox = new ExineMessageBox("Keyboard settings have been reset back to default.", MirMessageBoxButtons.OK);
                 messageBox.Show();
             };
 
