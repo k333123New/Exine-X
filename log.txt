@@ -1,5 +1,8 @@
+0)cursor!
 1)keymap remove!
 2)old resource remove!
+3)remove hero
+4)remove pet
 
 
 FrameSet Change

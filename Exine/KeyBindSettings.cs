@@ -1,6 +1,7 @@
 ﻿namespace Exine
 {
 
+    
     public enum KeybindOptions : int
     {
         Bar1Skill1 = 0,
@@ -182,6 +183,7 @@
         public void New(List<KeyBind> list)
         {
             KeyBind InputKey;
+            /*
             InputKey = new KeyBind { Group = "Dialogs", Description = "Inventory Open/Close", function = KeybindOptions.Inventory, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F9 };
             list.Add(InputKey);
             InputKey = new KeyBind { Group = "Dialogs", Description = "Inventory Open/Close Alt", function = KeybindOptions.Inventory2, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 0, Key = Keys.I };
@@ -382,9 +384,80 @@
             list.Add(InputKey);
             InputKey = new KeyBind { Group = "Combat", Description = "Hold to enable target spell lock-on", function = KeybindOptions.TargetSpellLockOn, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.None };
             list.Add(InputKey);
+            */
 
             //k333123 add
             InputKey = new KeyBind { Group = "Toggle", Description = "Toggle Attack Mode", function = KeybindOptions.ExinePeaceModeChange, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Tab };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Equipment Open/Close Alt", function = KeybindOptions.Equipment2, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 0, Key = Keys.C };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Inventory Open/Close Alt", function = KeybindOptions.Inventory2, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 0, Key = Keys.I };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "General", Description = "Logout", function = KeybindOptions.Logout, RequireAlt = 1, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.X };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "General", Description = "Exit", function = KeybindOptions.Exit, RequireAlt = 1, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Q };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Toggle", Description = "Take Screenshot", function = KeybindOptions.Screenshot, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.PrintScreen };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "General", Description = "Request Trade", function = KeybindOptions.Trade, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.T };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "General", Description = "Recruit Group Member", function = KeybindOptions.AddGroupMember, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 1, Key = Keys.G };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "General", Description = "Pickup Floor Item", function = KeybindOptions.Pickup, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Z };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Skillbar", Description = "Skillbar Slot 1", function = KeybindOptions.Bar1Skill1, RequireAlt = 2, RequireShift = 0, RequireTilde = 0, RequireCtrl = 0, Key = Keys.F5 };
+            list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Skillbar", Description = "Skillbar Slot 2", function = KeybindOptions.Bar1Skill2, RequireAlt = 2, RequireShift = 0, RequireTilde = 0, RequireCtrl = 0, Key = Keys.F6 };
+            list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Skillbar", Description = "Skillbar Slot 3", function = KeybindOptions.Bar1Skill3, RequireAlt = 2, RequireShift = 0, RequireTilde = 0, RequireCtrl = 0, Key = Keys.F7 };
+            list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Skillbar", Description = "Skillbar Slot 4", function = KeybindOptions.Bar1Skill4, RequireAlt = 2, RequireShift = 0, RequireTilde = 0, RequireCtrl = 0, Key = Keys.F8 };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Belt", Description = "Belt Slot 1", function = KeybindOptions.Belt1, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F1 };
+            list.Add(InputKey); 
+            InputKey = new KeyBind { Group = "Belt", Description = "Belt Slot 2", function = KeybindOptions.Belt2, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F2 };
+            list.Add(InputKey); 
+            InputKey = new KeyBind { Group = "Belt", Description = "Belt Slot 3", function = KeybindOptions.Belt3, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F3 };
+            list.Add(InputKey); 
+            InputKey = new KeyBind { Group = "Belt", Description = "Belt Slot 4", function = KeybindOptions.Belt4, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F4 };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Close All Windows", function = KeybindOptions.Closeall, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.Escape };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Ranking Open/Close", function = KeybindOptions.Ranking, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.K };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Help Open/Close", function = KeybindOptions.Help, RequireAlt = 2, RequireShift = 0, RequireTilde = 2, RequireCtrl = 0, Key = Keys.H };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Options Open/Close", function = KeybindOptions.Options, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F12 };
+            list.Add(InputKey); 
+
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Group Open/Close", function = KeybindOptions.Group, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.P };
+            list.Add(InputKey);
+
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Skillbar Open/Close", function = KeybindOptions.Skillbar, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.R };
+            list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Mentor Open/Close", function = KeybindOptions.Mentor, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.None };
+            list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Relationship Open/Close", function = KeybindOptions.Relationship, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.L };
+            list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Friends Open/Close", function = KeybindOptions.Friends, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F };
+            list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Guild Open/Close", function = KeybindOptions.Guilds, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 0, Key = Keys.G };
+            list.Add(InputKey);
+            InputKey = new KeyBind { Group = "Dialogs", Description = "Skills Open/Close", function = KeybindOptions.Skills, RequireAlt = 2, RequireShift = 2, RequireTilde = 2, RequireCtrl = 2, Key = Keys.F11 };
             list.Add(InputKey);
         }
 

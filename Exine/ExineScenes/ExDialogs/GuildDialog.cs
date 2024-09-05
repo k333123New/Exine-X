@@ -2184,8 +2184,8 @@ namespace Exine.ExineScenes.ExDialogs
             Size = new Size(188, 33);
             Icon = new ExineImageControl
             {
-                Index = 0,
-                Library = Libraries.GuildSkill,
+                Index = 0, 
+                Library = Libraries.RingSkillIcon,
                 Parent = this,
                 //Location = new Point(1, 0),
                 Location = new Point(1, 0),

@@ -638,20 +638,16 @@ namespace Exine.ExineGraphics
             ManufactureSkillIcon = new MLibrary(Settings.ExineUIPath + "5-ManufactureSkill"),
             RingSkillIcon = new MLibrary(Settings.ExineUIPath + "6-RingSkill"),
             DivineSkillIcon = new MLibrary(Settings.ExineUIPath + "7-DivineSkill");
-            
-            
-            
-
 
 
         #region Old
         public static readonly MLibrary
-            
+
             Prguse = new MLibrary(Settings.DataPath + "Prguse"),
             Prguse2 = new MLibrary(Settings.DataPath + "Prguse2"),
             Prguse3 = new MLibrary(Settings.DataPath + "Prguse3"),
             BuffIcon = new MLibrary(Settings.DataPath + "BuffIcon"),
-            Help = new MLibrary(Settings.DataPath + "Help"), 
+            Help = new MLibrary(Settings.DataPath + "Help"),
             MapLinkIcon = new MLibrary(Settings.DataPath + "MapLinkIcon"),
             Title = new MLibrary(Settings.DataPath + "Title"),
             MagIcon = new MLibrary(Settings.DataPath + "MagIcon"),
@@ -660,11 +656,9 @@ namespace Exine.ExineGraphics
             Magic2 = new MLibrary(Settings.DataPath + "Magic2"),
             Magic3 = new MLibrary(Settings.DataPath + "Magic3"),
             Effect = new MLibrary(Settings.DataPath + "Effect"),
-            MagicC = new MLibrary(Settings.DataPath + "MagicC"),
-            GuildSkill = new MLibrary(Settings.DataPath + "GuildSkill");
+            MagicC = new MLibrary(Settings.DataPath + "MagicC");
 
-        public static readonly MLibrary
-            Background = new MLibrary(Settings.DataPath + "Background");
+         
 
 
         public static readonly MLibrary
@@ -1416,13 +1410,8 @@ ZM_02_519_요정01_reidx.lib
 
             Effect.Initialize();
             Progress++;
-
-            GuildSkill.Initialize();
-            Progress++;
-
-            Background.Initialize();
-            Progress++;
-
+              
+            
             Deco.Initialize();
             Progress++;
 

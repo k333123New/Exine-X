@@ -166,53 +166,12 @@ Keys.I
   Rotate Belt
   Keys.Z
 
-  Belt Slot 1
-  Keys.D1
+  Belt Slot 1 ~ 8
+  Keys.D1 ~ Keys.D8
 
-  Belt Slot 1 Alt
-  Keys.NumPad1
-
-  Belt Slot 2
-  Keys.D2
-  
-  Belt Slot 2 Alt
-  Keys.NumPad2
-
-  Belt Slot 3
-  Keys.D3
-  
-  Belt Slot 3 Alt
-  Keys.NumPad3
-  
-  Belt Slot 4
-  Keys.D4
-  
-  Belt Slot 4 Alt
-  Keys.NumPad4
-  
-  Belt Slot 5
-  Keys.D5
-  
-  Belt Slot 5 Alt
-  Keys.NumPad5
-  
-  Belt Slot 6
-  Keys.D6
-  
-  Belt Slot 6 Alt
-  Keys.NumPad6
-  
-  Belt Slot 7
-  Keys.D7
-  
-  Belt Slot 7 Alt
-  Keys.NumPad7
-  
-  Belt Slot 8
-  Keys.D8
-  
-  Belt Slot 8 Alt
-  Keys.NumPad8
+  Belt Slot 1 Alt ~ Belt Slot 8 Alt
+  Keys.NumPad1 ~  Keys.NumPad8
+    
 
   Toggle Attack Mode
   Keys.H
@@ -260,16 +219,93 @@ f10 : guide image
 tab : peace mode change
  ->peace mode right click : sitdown / standup
 
-enter : chat input
+enter : chat input 
 
+e : equipment
 
-i : inventory
- -> inventory item right click : 
+i : information
+
 
 f12 : screenshot
+
+
 u : userinfo
 m : map
 =======================================
 
+r
+
+o
 
 
+
+f1
+
+f2
+
+f3
+
+f4
+
+f5
+
+f6
+
+f7
+
+f8
+
+
+
+g
+->guild
+
+f
+->friend
+
+p
+->group
+
+t
+->trade
+
+space 
+->input chat
+
+h
+->key guide
+
+k
+->rank
+
+l
+->lover
+
+alt+q
+->quit
+
+alt+x
+->logout (not use!)
+
+
+esc
+->all close
+
+tab
+->peacemode change
+
+c 
+->equipment & intenvory
+
+i
+->infomation
+
+
+f11
+->skilll tree
+
+PrintScreen
+->screenshot
+
+f12
+->option

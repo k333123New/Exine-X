@@ -735,26 +735,43 @@ namespace Exine.ExineObjects
 
                         //이 부분 나중에 함수로 빼기
                         BodyLibrary = GetLibFromShapeIdx(Armour,Gender);
-                        
-                        
+                        if (BodyLibrary == null) Console.WriteLine("^^^^^^^^^^^^^^BodyLib Null!");
+
                         //////////////////////////////////
 
                         //BodyLibrary = Armour < Libraries.ExineManArmor.Length ? Libraries.ExineManArmor[Armour] : Libraries.ExineManArmor[0];
 
+
+                        if (BodyLibrary == null ) //add k333123 240311
+                        {
+                            if (Gender == ExineGender.Male) BodyLibrary = Libraries.ExineManArmor[0];
+                            else BodyLibrary = Libraries.ExineWomenArmor[0];
+                        }
+
+                        if ( User.ExinePeaceMode) //add k333123 240311
+                        {
+                            if (Gender == ExineGender.Male) BodyLibrary = Libraries.ExineManArmor[0];
+                            else BodyLibrary = Libraries.ExineWomenArmor[0];
+                        }
+
+                        /*
                         if (BodyLibrary == null || User.ExinePeaceMode) //add k333123 240311
                         {
                             if(Gender==ExineGender.Male) BodyLibrary = Libraries.ExineManArmor[0];
                             else BodyLibrary = Libraries.ExineWomenArmor[0];
                         }
+                        */
 
                         if (Gender == ExineGender.Male) HairLibrary = Hair < Libraries.ExineManHair.Length ? Libraries.ExineManHair[Hair] : null;
                         else HairLibrary = Hair < Libraries.ExineWomenHair.Length ? Libraries.ExineWomenHair[Hair] : null;
+
+                        if (HairLibrary == null) Console.WriteLine("^^^^^^^^^^^^^^HairLibrary Null!");
                         #endregion
 
                         #region Weapons
 
-                        //if (Weapon >= 0)
-                        if (Weapon >= 1)
+                        //if (Weapon >= 1)
+                        if (Weapon >= 0)
                         {
                             Console.WriteLine("@555 Weapon:" + Weapon+ "Libraries.ExineManOneWeapon.Length:"+ Libraries.ExineManOneWeapon.Length);
 
@@ -773,7 +790,8 @@ namespace Exine.ExineObjects
                             //libIdex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon - 1, Gender != ExineGender.Male);
 
                             WeaponLibrary1 = GetLibFromShapeIdx(Weapon, Gender);
-                            
+
+
                             //WeaponLibrary1= GetLibFromShapeIdx(Weapon - 1, Gender);
                             //WeaponLibrary1 = Weapon < Libraries.ExineManOneWeapon.Length ? Libraries.ExineManOneWeapon[Weapon - 1] : null;
                             WeaponEffectLibrary1 = null;
@@ -782,6 +800,8 @@ namespace Exine.ExineObjects
                         else
                         {
                             WeaponLibrary1 = null;
+
+                             Console.WriteLine("^^^^^^^^^^^^^^Set WeaponLibrary1 Null! Weapon:"+ Weapon);
                             //ShieldLibrary = null;
                             WeaponEffectLibrary1 = null;
                             WeaponLibrary2 = null;
@@ -842,6 +862,8 @@ namespace Exine.ExineObjects
         {
             //112
             Console.WriteLine("Input Shape Index:"+shapeIdx.ToString());
+            //shapeIdx (weapon) is 0 -> not draw!!!
+            
             var shapeToLibIndex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(shapeIdx, gender != ExineGender.Male);
 
             if (shapeToLibIndex != null)
@@ -850,8 +872,7 @@ namespace Exine.ExineObjects
                 if (shapeToLibIndex.isFemale)
                 {
                     switch (shapeToLibIndex.weaponType)
-                    {
-
+                    { 
                         case 1:
                             return shapeToLibIndex.libIndex < Libraries.ExineWomenOneWeapon.Length ?
                                 Libraries.ExineWomenOneWeapon[shapeToLibIndex.libIndex]
@@ -1217,8 +1238,14 @@ namespace Exine.ExineObjects
 
             if (ActionFeed.Count == 0)
             {
-                int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
-                switch(weaponType)
+                int weaponType = -1;
+                var shapeToLibIndex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male);
+                if (shapeToLibIndex != null)
+                {
+                    weaponType = shapeToLibIndex.weaponType;
+                }
+
+                switch (weaponType)
                 {
                     case 1:
                         CurrentAction = ExAction.ONEHAND_STAND;
@@ -1229,7 +1256,12 @@ namespace Exine.ExineObjects
                     case 3:
                         CurrentAction = ExAction.BOWHAND_STAND;
                         break;
+
+                    default:
+                        CurrentAction = ExAction.ONEHAND_STAND;
+                        break;
                 }
+
                 //CurrentAction = ExAction.ONEHAND_STAND; 
 
                 CurrentAction = CMain.Time > BlizzardStopTime ? CurrentAction : ExAction.Stance2;
@@ -1413,7 +1445,13 @@ namespace Exine.ExineObjects
                 bool ArcherLayTrap = false;
 
                 //add k333123 240903
-                int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
+                //int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
+                int weaponType = -1;
+                var shapeToLibIndex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male);
+                if(shapeToLibIndex != null)
+                {
+                    weaponType = shapeToLibIndex.weaponType;
+                }
 
                 switch (CurrentAction)
                 {
@@ -2969,7 +3007,11 @@ namespace Exine.ExineObjects
         {
             if (Frame == null) return;
 
-            int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
+            //int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male).weaponType;
+            int weaponType = -1;
+            var shapeToLibIndex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(Weapon, Gender != ExineGender.Male);
+            if (shapeToLibIndex != null) weaponType = shapeToLibIndex.weaponType;
+
             switch (CurrentAction)
             {
                 case ExAction.ONEHAND_WALK_LEFT:
@@ -6557,7 +6599,7 @@ namespace Exine.ExineObjects
         public void DrawWeapon()
 		{
             //Gender == ExineGender.Male
-            if (Weapon < 0) return;
+            //if (Weapon < 0) return;
 
 			if (WeaponLibrary1 != null)
 			{

@@ -10014,25 +10014,7 @@ namespace Exine.ExineScenes
         }
 
         private void DrawBackground()
-        {
-            string cleanFilename = FileName.Replace(Settings.MapPath, "");
-
-            if (cleanFilename.StartsWith("ID1") || cleanFilename.StartsWith("ID2"))
-            {
-                Libraries.Background.Draw(10, 0, 0); //mountains
-            }
-            else if (cleanFilename.StartsWith("ID3_013"))
-            {
-                Libraries.Background.Draw(22, 0, 0); //desert
-            }
-            else if (cleanFilename.StartsWith("ID3_015"))
-            {
-                Libraries.Background.Draw(23, 0, 0); //greatwall
-            }
-            else if (cleanFilename.StartsWith("ID3_023") || cleanFilename.StartsWith("ID3_025"))
-            {
-                Libraries.Background.Draw(21, 0, 0); //village entrance
-            }
+        { 
         }
 
         private void DrawObjects()
@@ -10749,7 +10731,11 @@ namespace Exine.ExineScenes
                     {
                         if (CMain.Time > ExineMainScene.AttackTime && CanRideAttack() && !User.Poison.HasFlag(PoisonType.Dazed))
                         {
-                            int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(User.Weapon, User.Gender != ExineGender.Male).weaponType;
+                            //int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(User.Weapon, User.Gender != ExineGender.Male).weaponType;
+                            int weaponType = -1;
+                            var shapeToLibIndex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(User.Weapon, User.Gender != ExineGender.Male);
+                            if(shapeToLibIndex!=null) weaponType = shapeToLibIndex.weaponType; 
+
                             switch (weaponType)
                             {
                                 case 1:
@@ -10864,8 +10850,11 @@ namespace Exine.ExineScenes
                                 if (ExineMainScene.User.DoubleSlash && (!User.HasClassWeapon && User.Weapon > -1)) return;
                                 if (User.Poison.HasFlag(PoisonType.Dazed)) return;
 
-                                int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(User.Weapon, User.Gender != ExineGender.Male).weaponType;
-                                switch(weaponType)
+                                //int weaponType = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(User.Weapon, User.Gender != ExineGender.Male).weaponType;
+                                int weaponType = -1;
+                                var shapeToLibIndex = Libraries.weaponMapperMgr.GetShapeToLibIndexFromShapeIdx(User.Weapon, User.Gender != ExineGender.Male);
+                                if (shapeToLibIndex != null) weaponType = shapeToLibIndex.weaponType;
+                                switch (weaponType)
                                 {
                                     case 1:
                                         User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_ATTACK1, Direction = direction, Location = User.CurrentLocation };
@@ -10877,6 +10866,7 @@ namespace Exine.ExineScenes
                                         User.QueuedAction = new QueuedAction { Action = ExAction.BOWHAND_ATTACK1, Direction = direction, Location = User.CurrentLocation };
                                         break;
                                     default:
+                                        User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_ATTACK1, Direction = direction, Location = User.CurrentLocation };
                                         break;
                                 }
                                 //User.QueuedAction = new QueuedAction { Action = ExAction.Attack1, Direction = direction, Location = User.CurrentLocation };

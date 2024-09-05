@@ -1246,6 +1246,7 @@ namespace Server.ExineEnvir
                     Save.Save(writer);
                 } 
             }
+
             /*
            //add save to json
            string filename = AccountPath + ".json";
@@ -3505,7 +3506,8 @@ namespace Server.ExineEnvir
         {
             if (ObjectID == id) return;
 
-            PlayerObject player = Players.SingleOrDefault(x => x.ObjectID == id || x.Pets.Count(y => y.ObjectID == id && y is HumanWizard) > 0);
+            //PlayerObject player = Players.SingleOrDefault(x => x.ObjectID == id || x.Pets.Count(y => y.ObjectID == id && y is HumanWizard) > 0);
+            PlayerObject player = Players.SingleOrDefault(x => x.ObjectID == id);
 
             if (player == null) return;
             Inspect(con, player.Info.Index);

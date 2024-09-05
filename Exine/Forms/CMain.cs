@@ -106,11 +106,18 @@ namespace Exine
                 while (AppStillIdle)
                 {
                     UpdateTime();
-                    UpdateFrameTime();
+                    //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@################UpdateTime()");
+                    UpdateFrameTime(); 
+                    //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@################UpdateFrameTime()");
                     UpdateEnviroment();
+                    //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@################UpdateEnviroment()");
 
                     if (IsDrawTime())
+                    {
+                        //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@################IsDrawTime()");
                         RenderEnvironment();
+                        //Console.WriteLine("@@@@@@@@@@@@@@@@@@@@################RenderEnvironment()");
+                    }
                 }
 
             }
@@ -381,6 +388,7 @@ namespace Exine
 
         private static void RenderEnvironment()
         {
+            
             try
             {
                 if (DXManager.DeviceLost)
@@ -743,34 +751,65 @@ namespace Exine
         private static void LoadMouseCursors()
         {
             Cursors = new Cursor[8];
+            /*
+           Cursors[(int)MouseCursor.None] = Program.Form.Cursor;
+             
+           string path = $"{Settings.MouseCursorPath}Cursor_Default.CUR";
+           if (File.Exists(path))
+               Cursors[(int)MouseCursor.Default] = LoadCustomCursor(path);
+
+           path = $"{Settings.MouseCursorPath}Cursor_Normal_Atk.CUR";
+           if (File.Exists(path))
+               Cursors[(int)MouseCursor.Attack] = LoadCustomCursor(path);
+
+           path = $"{Settings.MouseCursorPath}Cursor_Compulsion_Atk.CUR";
+           if (File.Exists(path))
+               Cursors[(int)MouseCursor.AttackRed] = LoadCustomCursor(path);
+
+           path = $"{Settings.MouseCursorPath}Cursor_Npc.CUR";
+           if (File.Exists(path))
+               Cursors[(int)MouseCursor.NPCTalk] = LoadCustomCursor(path);
+
+           path = $"{Settings.MouseCursorPath}Cursor_TextPrompt.CUR";
+           if (File.Exists(path))
+               Cursors[(int)MouseCursor.TextPrompt] = LoadCustomCursor(path);
+
+           path = $"{Settings.MouseCursorPath}Cursor_Trash.CUR";
+           if (File.Exists(path))
+               Cursors[(int)MouseCursor.Trash] = LoadCustomCursor(path);
+
+           path = $"{Settings.MouseCursorPath}Cursor_Upgrade.CUR";
+           if (File.Exists(path))
+               Cursors[(int)MouseCursor.Upgrade] = LoadCustomCursor(path);
+           */
 
             Cursors[(int)MouseCursor.None] = Program.Form.Cursor;
 
-            string path = $"{Settings.MouseCursorPath}Cursor_Default.CUR";
+            string path = $"{Settings.ExMouseCursorPath}0.CUR";
             if (File.Exists(path))
                 Cursors[(int)MouseCursor.Default] = LoadCustomCursor(path);
 
-            path = $"{Settings.MouseCursorPath}Cursor_Normal_Atk.CUR";
+            path = $"{Settings.ExMouseCursorPath}8.CUR";
             if (File.Exists(path))
                 Cursors[(int)MouseCursor.Attack] = LoadCustomCursor(path);
 
-            path = $"{Settings.MouseCursorPath}Cursor_Compulsion_Atk.CUR";
+            path = $"{Settings.ExMouseCursorPath}9.CUR";
             if (File.Exists(path))
                 Cursors[(int)MouseCursor.AttackRed] = LoadCustomCursor(path);
 
-            path = $"{Settings.MouseCursorPath}Cursor_Npc.CUR";
+            path = $"{Settings.ExMouseCursorPath}17.CUR";
             if (File.Exists(path))
                 Cursors[(int)MouseCursor.NPCTalk] = LoadCustomCursor(path);
 
-            path = $"{Settings.MouseCursorPath}Cursor_TextPrompt.CUR";
+            path = $"{Settings.ExMouseCursorPath}Cursor_TextPrompt.CUR";
             if (File.Exists(path))
                 Cursors[(int)MouseCursor.TextPrompt] = LoadCustomCursor(path);
 
-            path = $"{Settings.MouseCursorPath}Cursor_Trash.CUR";
+            path = $"{Settings.ExMouseCursorPath}5.CUR";
             if (File.Exists(path))
                 Cursors[(int)MouseCursor.Trash] = LoadCustomCursor(path);
 
-            path = $"{Settings.MouseCursorPath}Cursor_Upgrade.CUR";
+            path = $"{Settings.ExMouseCursorPath}15.CUR";
             if (File.Exists(path))
                 Cursors[(int)MouseCursor.Upgrade] = LoadCustomCursor(path);
         }

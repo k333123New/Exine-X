@@ -459,6 +459,7 @@ namespace Exine.ExineScenes
                         Console.WriteLine(" > Send [Login]");
 
                         //load Photo data from file 
+                        /*
                         int photoDataLen = 0;
                         byte[] photoData = new byte[8000];
                         if (File.Exists(_newIdTextBox.Text + ".jpg"))
@@ -470,7 +471,7 @@ namespace Exine.ExineScenes
                                 photoDataLen = filedata.Length;
                             }
                         }
-
+                        */
                         Network.Enqueue(
                             new C.Login
                             {
@@ -492,7 +493,18 @@ namespace Exine.ExineScenes
 
                     //have to Make CharacterPortraitUpdate Packet.
 
-                    //byte[] exPortraitBytes = GetBytesFromJpg("test.jpg");
+                    ////byte[] exPortraitBytes = GetBytesFromJpg("test.jpg");
+                    int photoDataLen = 0;
+                    byte[] photoData = new byte[8000];
+                    if (File.Exists(_newIdTextBox.Text + ".jpg"))
+                    {
+                        byte[] filedata = GetBytesFromJpg(_newIdTextBox.Text + ".jpg");
+                        if (filedata.Length <= 8000)
+                        {
+                            Buffer.BlockCopy(filedata, 0, photoData, 0, filedata.Length);
+                            photoDataLen = filedata.Length;
+                        }
+                    }
 
                     //Select Scene
                     Network.Enqueue(
@@ -503,8 +515,10 @@ namespace Exine.ExineScenes
                              Gender = (ExineGender)ganderType, //0:male, 1:female
                              ExStyle = (ExineStyle)styleIdx,//ExineStyle.Style0,
                              ExColor = (ExineColor)colorIdx, //ExineColor.Color3, 
-                             ExPortraitBytes =new byte[8000],
-                             ExPortraitLen = 8000,
+                             ExPortraitBytes = photoData,
+                             ExPortraitLen = photoDataLen,
+                             //ExPortraitBytes =new byte[8000],
+                             //ExPortraitLen = 8000,
                              //Portrait = new byte[50] { },
                              //231107
                          }

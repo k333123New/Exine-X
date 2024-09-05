@@ -947,6 +947,7 @@ namespace ServerPackets
             writer.Write(ExPortraitLen);//add k333123
             writer.Write(ExPortraitBytes);//add k333123
             Console.WriteLine("Name : {0} ExStyle B :{1}",Name,ExStyle);
+            Console.WriteLine("ExPortraitLen : {0}", ExPortraitLen);
 
             writer.Write(Level);
             writer.Write(Location.X);
