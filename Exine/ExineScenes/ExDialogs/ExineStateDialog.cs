@@ -18,6 +18,12 @@ namespace Exine.ExineScenes.ExDialogs
         public ExineLabel CritRLabel, CritDLabel, LuckLabel, AttkSpdLabel, AccLabel, AgilLabel;
         public ExineLabel ExpPLabel, BagWLabel, WearWLabel, HandWLabel, MagicRLabel, PoisonRecLabel, HealthRLabel, ManaRLabel, PoisonResLabel, HolyTLabel, FreezeLabel, PoisonAtkLabel;
         public ExineLabel HeadingLabel, StatLabel;
+
+        //family label
+        //Father/Mother mean lover
+        public ExineLabel GrandFatherLabel, GrandMotherLabel, FatherLabel, MotherLabel, Daughter1stLabel, Daughter2ndLabel, Daughter3rdLabel, Son1stLabel, Son2ndLabel, Son3rdLabel;
+
+
         public MirButton NextButton, BackButton;
 
         public MirItemCell[] Grid;
@@ -253,8 +259,6 @@ namespace Exine.ExineScenes.ExDialogs
                 Text = "0-0"
             };
 
-           
-
             //명중률
             AccLabel = new ExineLabel
             {
@@ -290,8 +294,7 @@ namespace Exine.ExineScenes.ExDialogs
                 NotControl = true,
                 Text = "0-0",
             };
-
-           
+   
             MagicRLabel = new ExineLabel
             {
                 AutoSize = true,

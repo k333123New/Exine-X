@@ -358,6 +358,9 @@ namespace Server.ExineDatabase
 
             Married = reader.ReadInt32();
             MarriedDate = DateTime.FromBinary(reader.ReadInt64());
+            
+            //k333123 add family char index info
+
             Mentor = reader.ReadInt32();
             MentorDate = DateTime.FromBinary(reader.ReadInt64());
             IsMentor = reader.ReadBoolean();

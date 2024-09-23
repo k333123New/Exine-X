@@ -12227,25 +12227,31 @@ namespace Server.ExineObjects
         public void MarriageRequest()
         {
 
+            #region  Marriage kor msg
             if (Info.Married != 0)
             {
-                ReceiveChat(string.Format("You're already married."), ChatType.System);
+                //ReceiveChat(string.Format("You're already married."), ChatType.System);
+                ReceiveChat(string.Format("이미 결혼하셨군요."), ChatType.System);
                 return;
             }
 
             if (Info.MarriedDate.AddDays(Settings.MarriageCooldown) > Envir.Now)
             {
-                ReceiveChat(string.Format("You can't get married again yet, there is a {0} day cooldown after a divorce.", Settings.MarriageCooldown), ChatType.System);
+                //ReceiveChat(string.Format("You can't get married again yet, there is a {0} day cooldown after a divorce.", Settings.MarriageCooldown), ChatType.System); 
+                ReceiveChat(string.Format("아직 다시 결혼할 수는 없습니다. 이혼 후 {0}일의 쿨다운이 있습니다.", Settings.MarriageCooldown), ChatType.System); 
                 return;
             }
 
             if (Info.Level < Settings.MarriageLevelRequired)
             {
-                ReceiveChat(string.Format("You need to be at least level {0} to get married.", Settings.MarriageLevelRequired), ChatType.System);
+                //ReceiveChat(string.Format("You need to be at least level {0} to get married.", Settings.MarriageLevelRequired), ChatType.System);
+                ReceiveChat(string.Format("결혼하려면 레벨 {0} 이상이어야 합니다.", Settings.MarriageLevelRequired), ChatType.System);
+                //결혼하려면 레벨 {0} 이상이어야 합니다.
                 return;
             }
+            #endregion 
 
-            Point target = Functions.PointMove(CurrentLocation, Direction, 1);
+            Point target = Functions.PointMove(CurrentLocation, Direction, 1); //바로 앞 1칸을 의미함
             Cell cell = CurrentMap.GetCell(target);
             PlayerObject player = null;
 
@@ -12259,63 +12265,70 @@ namespace Server.ExineObjects
                 player = Envir.GetPlayer(ob.Name);
             }
 
-
-
             if (player != null)
             {
 
-
+                #region  Marriage kor msg
                 if (!Functions.FacingEachOther(Direction, CurrentLocation, player.Direction, player.CurrentLocation))
                 {
-                    ReceiveChat(string.Format("You need to be facing each other to perform a marriage."), ChatType.System);
+                    //ReceiveChat(string.Format("You need to be facing each other to perform a marriage."), ChatType.System);
+                    ReceiveChat(string.Format("결혼을 하려면 서로 마주보고 있어야 합니다."), ChatType.System);
                     return;
                 }
 
                 if (player.Level < Settings.MarriageLevelRequired)
                 {
-                    ReceiveChat(string.Format("Your lover needs to be at least level {0} to get married.", Settings.MarriageLevelRequired), ChatType.System);
+                    //ReceiveChat(string.Format("Your lover needs to be at least level {0} to get married.", Settings.MarriageLevelRequired), ChatType.System);
+                    ReceiveChat(string.Format("결혼하려면 연인이 {0}레벨 이상이어야 합니다.", Settings.MarriageLevelRequired), ChatType.System);
                     return;
                 }
 
                 if (player.Info.MarriedDate.AddDays(Settings.MarriageCooldown) > Envir.Now)
                 {
-                    ReceiveChat(string.Format("{0} can't get married again yet, there is a {1} day cooldown after divorce", player.Name, Settings.MarriageCooldown), ChatType.System);
+                    //ReceiveChat(string.Format("{0} can't get married again yet, there is a {1} day cooldown after divorce", player.Name, Settings.MarriageCooldown), ChatType.System);
+                    ReceiveChat(string.Format("{0}은 아직 다시 결혼할 수 없습니다. 이혼 후 {1}일의 쿨다운이 있습니다e", player.Name, Settings.MarriageCooldown), ChatType.System);
                     return;
                 }
 
                 if (!player.AllowMarriage)
                 {
-                    ReceiveChat("The person you're trying to propose to isn't allowing marriage requests.", ChatType.System);
+                    //ReceiveChat("The person you're trying to propose to isn't allowing marriage requests.", ChatType.System);
+                    ReceiveChat("청혼하려는 사람이 결혼 요청을 허용하지 않습니다.", ChatType.System);
                     return;
                 }
 
                 if (player == this)
                 {
-                    ReceiveChat("You cant marry yourself.", ChatType.System);
+                    //ReceiveChat("You cant marry yourself.", ChatType.System);
+                    ReceiveChat("자신과 결혼할 수 없습니다.", ChatType.System);
                     return;
                 }
 
                 if (player.Dead || Dead)
                 {
-                    ReceiveChat("You can't perform a marriage with a dead player.", ChatType.System);
+                    // ReceiveChat("You can't perform a marriage with a dead player.", ChatType.System);
+                    ReceiveChat("사망한 플레이어와는 결혼을 할 수 없습니다.", ChatType.System);
                     return;
                 }
 
                 if (player.MarriageProposal != null)
                 {
-                    ReceiveChat(string.Format("{0} already has a marriage invitation.", player.Info.Name), ChatType.System);
+                    //ReceiveChat(string.Format("{0} already has a marriage invitation.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0}는 이미 청혼을 요청을 받있습니다.", player.Info.Name), ChatType.System);
                     return;
                 }
 
                 if (!Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) || player.CurrentMap != CurrentMap)
                 {
-                    ReceiveChat(string.Format("{0} is not within marriage range.", player.Info.Name), ChatType.System);
+                    //ReceiveChat(string.Format("{0} is not within marriage range.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0}은 결혼을 할수있는 거리에 있지 않습니다.", player.Info.Name), ChatType.System);
                     return;
                 }
 
                 if (player.Info.Married != 0)
                 {
-                    ReceiveChat(string.Format("{0} is already married.", player.Info.Name), ChatType.System);
+                    //ReceiveChat(string.Format("{0} is already married.", player.Info.Name), ChatType.System);
+                    ReceiveChat(string.Format("{0}는 이미 결혼했습니다.", player.Info.Name), ChatType.System);
                     return;
                 }
 
@@ -12324,9 +12337,11 @@ namespace Server.ExineObjects
             }
             else
             {
-                ReceiveChat(string.Format("You need to be facing a player to request a marriage."), ChatType.System);
+                //ReceiveChat(string.Format("You need to be facing a player to request a marriage."), ChatType.System);
+                ReceiveChat(string.Format("결혼을 신청하려면 플레이어와 대면해야 합니다."), ChatType.System);
                 return;
             }
+            #endregion  Marriage kor msg
         }
 
         public void MarriageReply(bool accept)

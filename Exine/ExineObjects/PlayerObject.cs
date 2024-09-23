@@ -1522,7 +1522,7 @@ namespace Exine.ExineObjects
                                             Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.ONEHAND_ATTACK1 : ExAction.ONEHAND_ATTACK3, out Frame);
                                             break;
                                         case 2:
-                                            Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.TWOHAND_ATTACK1 : ExAction.ONEHAND_ATTACK3, out Frame);
+                                            Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.TWOHAND_ATTACK1 : ExAction.TWOHAND_ATTACK3, out Frame);
                                             break;
                                         case 3:
                                             Frames.TryGetValue(CMain.Random.Next(100) >= 20 ? ExAction.BOWHAND_ATTACK1 : ExAction.BOWHAND_ATTACK1, out Frame);

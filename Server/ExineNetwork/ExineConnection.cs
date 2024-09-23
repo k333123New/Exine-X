@@ -10,6 +10,9 @@ using Server.Utils;
 
 namespace Server.ExineNetwork
 {
+    /// <summary>
+    /// 사용자 입력에 관련된 패킷을 주로 처리한다.
+    /// </summary>
     public enum GameStage { None, Login, Select, Game, Observer, Disconnected }
 
     public class ExineConnection

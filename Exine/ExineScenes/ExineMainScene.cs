@@ -210,6 +210,9 @@ namespace Exine.ExineScenes
 
 
 
+
+
+
             StorageDialog = new StorageDialog { Parent = this, Visible = false };
             CraftDialog = new CraftDialog { Parent = this, Visible = false };
             

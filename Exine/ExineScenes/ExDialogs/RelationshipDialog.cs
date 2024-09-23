@@ -6,6 +6,7 @@ using C = ClientPackets;
 
 namespace Exine.ExineScenes.ExDialogs
 {
+    //modify to family dialog
     public sealed class RelationshipDialog : ExineImageControl
     {
         public ExineImageControl TitleLabel;
@@ -21,11 +22,17 @@ namespace Exine.ExineScenes.ExDialogs
 
         public RelationshipDialog()
         {
+            /*
             Index = 583;
             Library = Libraries.Prguse;
             Movable = true;
             Sort = true;
             Location = Center;
+            */
+            Index = 0;
+            Library = Libraries.PANEL0505;
+            Location = new Point(0 + 113, 0 + 85);
+            //Visible = false;
 
             TitleLabel = new ExineImageControl
             {
@@ -179,6 +186,8 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this,
                 NotControl = true,
                 Font = new Font(Settings.FontName, 10F),
+                
+                Visible=false, //240923 mod k333123
             };
 
             LoverLengthLabel = new ExineLabel
@@ -203,6 +212,8 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this,
                 NotControl = true,
                 Font = new Font(Settings.FontName, 10F),
+
+                Visible = false, //240923 mod k333123
             };
         }
 

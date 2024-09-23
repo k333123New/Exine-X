@@ -1,3 +1,15 @@
+L key => relation dialog
+
+family packet
+=>  CharacterInfo.cs 
+=>  Load
+=>  Married = reader.ReadInt32();
+    MarriedDate = DateTime.FromBinary(reader.ReadInt64());
+    //k333123 add family char index info
+
+
+
+
 0)cursor!
 1)keymap remove!
 2)old resource remove!
