@@ -122,14 +122,7 @@ namespace Exine.ExineObjects
         public PlayerObject() { }
         public PlayerObject(uint objectID) : base(objectID)
         {
-            if (Gender == ExineGender.Male)
-            {
-                Frames = FrameSet.ExPlayer;
-            }
-            else
-            {
-                Frames = FrameSet.ExPlayerWoman;
-            }
+            //Frames = FrameSet.ExPlayer; Set After Load Gender Info
         }
 
         public static byte[] GetBytesFromJpg(string path)
@@ -157,6 +150,20 @@ namespace Exine.ExineObjects
             GuildRankName = info.GuildRankName;
             Class = info.Class;
             Gender = info.Gender;
+
+            //add k333123 240925
+            if (Gender == ExineGender.Female)
+            {
+                Frames = FrameSet.ExPlayerWoman;
+                Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Frames = FrameSet.ExPlayerWoman");
+                // Console.ReadLine();
+            }
+            else
+            {
+                Frames = FrameSet.ExPlayer;
+            }
+
+
             ExStyle = info.ExStyle;//add k333123
             ExColor = info.ExColor;//add k333123
             ExPortraitLen = info.ExPortraitLen;//add k333123
@@ -6587,7 +6594,7 @@ namespace Exine.ExineObjects
             Color tintColor = GetColorFromExColor(ExColor);
 
             //if (BodyLibrary != null) BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
-            if (BodyLibrary != null) Console.WriteLine("@@@@@@10 DrawBody DrawFrame + ArmourOffSet:" + (DrawFrame + ArmourOffSet).ToString());
+            //if (BodyLibrary != null) Console.WriteLine("@@@@@@10 DrawBody DrawFrame + ArmourOffSet:" + (DrawFrame + ArmourOffSet).ToString());
             if (BodyLibrary != null) BodyLibrary.ExineDrawTinted(DrawFrame + ArmourOffSet, DrawLocation, drawColour, tintColor, true);
 
             DXManager.SetGrayscale(oldGrayScale);

@@ -2046,6 +2046,7 @@ namespace Exine.ExineScenes
         {
             User = new UserObject(p.ObjectID); 
             User.Load(p);
+             
 
             Console.WriteLine("***111222 File.Exists Check " + User.Name + ".jpg");
 
@@ -2127,8 +2128,11 @@ namespace Exine.ExineScenes
         { 
             PlayerObject player = new PlayerObject(p.ObjectID);
             player.Load(p);
+            
+            
+
         }
-  
+
         private void ObjectRemove(S.ObjectRemove p)
         {
             if (p.ObjectID == User.ObjectID) return;

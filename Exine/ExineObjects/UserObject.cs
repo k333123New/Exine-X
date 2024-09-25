@@ -76,6 +76,19 @@ namespace Exine.ExineObjects
             GuildRankName = info.GuildRank;
             Class = info.Class;
             Gender = info.Gender;
+
+            //add k333123 240925
+            if (Gender == ExineGender.Female)
+            {
+                Frames = FrameSet.ExPlayerWoman;
+                Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Frames = FrameSet.ExPlayerWoman");
+                // Console.ReadLine();
+            }
+            else
+            {
+                Frames = FrameSet.ExPlayer;
+            }
+
             Level = info.Level;
 
             CurrentLocation = info.Location;
