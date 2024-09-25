@@ -4,7 +4,7 @@
     {
         // public static FrameSet ExPlayer, ExDefaultMonster, ExDefaultMonster2, ExDefaultMonster3, ExDefaultMonster4;
         // public static FrameSet ExDefaultMonster5, ExDefaultMonster6, ExDefaultMonster7;
-        public static FrameSet ExPlayer;
+        public static FrameSet ExPlayer, ExPlayerWoman;
         public static FrameSet[] ExMonsterFrameSet= new FrameSet[34];//For Exine Mob
         public static FrameSet ExineDefaultNPC, ExineGuardNPC, ExineStaticObjectNPC, DefaultMonster;
         public static List<FrameSet> DragonStatue, GreatFoxSpirit, HellBomb, CaveStatue;
@@ -14,7 +14,7 @@
             FrameSet frame;
 
             ExPlayer = new FrameSet();
-
+            ExPlayerWoman = new FrameSet();
 
             /*
              * NPC Frame Set
@@ -594,46 +594,55 @@
             #region Player
 
             //k333123 231205
+            //k333123 check woman frame (man / women frame index is deferent!)
             ExPlayer.Add(ExAction.PEACEMODE_STAND, new Frame(0, 20, 0, 100));//split!0~6 : PEACEMODE_STAND_WAIT
             ExPlayer.Add(ExAction.PEACEMODE_STAND_WAIT, new Frame(0, 6, 14, 100));//split!0~6 : PEACEMODE_STAND_WAIT
 
 
-            ExPlayer.Add(ExAction.ONEHAND_STAND, new Frame(161-1, 6, 0, 100, 0, 8, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_STAND, new Frame(209-1, 6, 0, 100, 0, 8, 0, 100));
-            ExPlayer.Add(ExAction.BOWHAND_STAND, new Frame(257-1, 6, 0, 100, 0, 8, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_WALK_LEFT, new Frame(305-1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_WALK_LEFT, new Frame(337 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_WALK_LEFT, new Frame(369 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.BOWHAND_WALK_LEFT, new Frame(401 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_RUN_LEFT, new Frame(305 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_RUN_LEFT, new Frame(337 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_RUN_LEFT, new Frame(369 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.BOWHAND_RUN_LEFT, new Frame(401 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN, new Frame(433-1, 5, 0, 100)); 
-            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN_WAIT, new Frame(435, 1, 4, 100));//433,5,0,100
+            ExPlayer.Add(ExAction.ONEHAND_STAND, new Frame(160, 6, 0, 100, 0, 8, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_STAND, new Frame(208, 6, 0, 100, 0, 8, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_STAND, new Frame(256, 6, 0, 100, 0, 8, 0, 100));
 
-            ExPlayer.Add(ExAction.ONEHAND_STUCK, new Frame(473, 1, 0, 100, 392, 3, 0, 100));
-            ExPlayer.Add(ExAction.DIE, new Frame(497, 8, 0, 1000));// { Reverse = true });
-            ExPlayer.Add(ExAction.ONEHAND_ATTACK1, new Frame(561, 8, 0, 100, 168, 6, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_ATTACK2, new Frame(625, 8, 0, 100, 216, 6, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_ATTACK3, new Frame(689, 8, 0, 100, 448, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_ATTACK1, new Frame(753, 8, 0, 100, 168, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_ATTACK2, new Frame(817, 8, 0, 100, 216, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_ATTACK3, new Frame(881, 8, 0, 100, 448, 6, 0, 100));
-            ExPlayer.Add(ExAction.BOWHAND_ATTACK1, new Frame(945, 8, 0, 100, 96, 8, 0, 100));
-            ExPlayer.Add(ExAction.MAGIC_CAST, new Frame(1009, 1, 0, 1000, 160, 1, 0, 1000));
-            ExPlayer.Add(ExAction.MAGIC_ATTACK, new Frame(1017-1, 1, 0, 1000, 332, 1, 5, 1000));
-            ExPlayer.Add(ExAction.PEACEMODE_WALK_RIGHT, new Frame(1025 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_WALK_RIGHT, new Frame(1057 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_WALK_RIGHT, new Frame(1089 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.BOWHAND_WALK_RIGHT, new Frame(1121 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_RUN_RIGHT, new Frame(1025 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.ONEHAND_RUN_RIGHT, new Frame(1057 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.TWOHAND_RUN_RIGHT, new Frame(1089 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.BOWHAND_RUN_RIGHT, new Frame(1121 - 1, 4, 0, 100, 112, 6, 0, 100));
-            ExPlayer.Add(ExAction.PEACEMODE_STANDUP, new Frame(1153, 5, 1, 100));
-             
-            
+            ExPlayer.Add(ExAction.PEACEMODE_WALK_LEFT, new Frame(304, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_WALK_LEFT, new Frame(336, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_WALK_LEFT, new Frame(368, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_WALK_LEFT, new Frame(400, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_RUN_LEFT, new Frame(304, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_RUN_LEFT, new Frame(336, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_RUN_LEFT, new Frame(368, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_RUN_LEFT, new Frame(400, 4, 0, 100, 112, 6, 0, 100));
+
+            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN, new Frame(432, 5, 0, 100));  //###
+            ExPlayer.Add(ExAction.PEACEMODE_SITDOWN_WAIT, new Frame(432+3, 1, 4, 100));//433,5,0,100//###
+
+            //ExPlayer.Add(ExAction.ONEHAND_STUCK, new Frame(473, 1, 0, 100, 392, 3, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_STUCK, new Frame(472, 1, 0, 100, 392, 3, 0, 100));
+            //ExPlayer.Add(ExAction.DIE, new Frame(497, 8, 0, 1000));// { Reverse = true });
+            ExPlayer.Add(ExAction.DIE, new Frame(496, 8, 0, 1000));// { Reverse = true });
+
+            ExPlayer.Add(ExAction.ONEHAND_ATTACK1, new Frame(560, 8, 0, 100, 168, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_ATTACK2, new Frame(624, 8, 0, 100, 216, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_ATTACK3, new Frame(688, 8, 0, 100, 448, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_ATTACK1, new Frame(752, 8, 0, 100, 168, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_ATTACK2, new Frame(816, 8, 0, 100, 216, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_ATTACK3, new Frame(880, 8, 0, 100, 448, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_ATTACK1, new Frame(944, 8, 0, 100, 96, 8, 0, 100));
+            ExPlayer.Add(ExAction.MAGIC_CAST, new Frame(1008, 1, 0, 1000, 160, 1, 0, 1000));
+            ExPlayer.Add(ExAction.MAGIC_ATTACK, new Frame(1016, 1, 0, 1000, 332, 1, 5, 1000));
+
+
+            ExPlayer.Add(ExAction.PEACEMODE_WALK_RIGHT, new Frame(1024, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_WALK_RIGHT, new Frame(1056, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_WALK_RIGHT, new Frame(1088, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_WALK_RIGHT, new Frame(1120, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_RUN_RIGHT, new Frame(1024, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.ONEHAND_RUN_RIGHT, new Frame(1056, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.TWOHAND_RUN_RIGHT, new Frame(1088, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayer.Add(ExAction.BOWHAND_RUN_RIGHT, new Frame(1120, 4, 0, 100, 112, 6, 0, 100));
+            //ExPlayer.Add(ExAction.PEACEMODE_STANDUP, new Frame(1153, 5, 1, 100));
+            ExPlayer.Add(ExAction.PEACEMODE_STANDUP, new Frame(1158, 5, 1, 100));
+
+
             //Common
             ExPlayer.Add(ExAction.Standing, new Frame(0, 4, 0, 500, 0, 8, 0, 250));
             ExPlayer.Add(ExAction.Walking, new Frame(32, 6, 0, 100, 64, 6, 0, 100));
@@ -679,8 +688,139 @@
             //ExPlayer.Add(ExAction.PEACEMODE_STANDUP_1, new Frame(744, 8, 0, 100));
             ExPlayer.Add(ExAction.FishingCast, new Frame(433 - 1, 4, 0, 100));
             ExPlayer.Add(ExAction.FishingReel, new Frame(435, 1, 4, 100));
-            ExPlayer.Add(ExAction.FishingWait, new Frame(1153, 8, 0, 100)); 
+            ExPlayer.Add(ExAction.FishingWait, new Frame(1153, 8, 0, 100));
             #endregion
+
+            #region Player_woman
+            
+            //k333123 check woman frame (man / women frame index is deferent!)
+            ExPlayerWoman.Add(ExAction.PEACEMODE_STAND, new Frame(0, 23, 0, 100));//split!0~6 : PEACEMODE_STAND_WAIT
+            ExPlayerWoman.Add(ExAction.PEACEMODE_STAND_WAIT, new Frame(0, 6, 14+3, 100));//split!0~6 : PEACEMODE_STAND_WAIT
+
+
+            ExPlayerWoman.Add(ExAction.ONEHAND_STAND, new Frame(184, 4, 0, 100, 0, 8, 0, 100));
+            ExPlayerWoman.Add(ExAction.TWOHAND_STAND, new Frame(216, 4, 0, 100, 0, 8, 0, 100));//216-192=
+            ExPlayerWoman.Add(ExAction.BOWHAND_STAND, new Frame(248, 4, 0, 100, 0, 8, 0, 100));
+
+            ExPlayerWoman.Add(ExAction.PEACEMODE_WALK_LEFT, new Frame(280, 4, 0, 100, 112, 6, 0, 100));//###
+            ExPlayerWoman.Add(ExAction.ONEHAND_WALK_LEFT, new Frame(312, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.TWOHAND_WALK_LEFT, new Frame(344, 4 , 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.BOWHAND_WALK_LEFT, new Frame(376, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.PEACEMODE_RUN_LEFT, new Frame(280, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.ONEHAND_RUN_LEFT, new Frame(312, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.TWOHAND_RUN_LEFT, new Frame(344, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.BOWHAND_RUN_LEFT, new Frame(376, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.PEACEMODE_SITDOWN, new Frame(408, 5, 0, 100));
+            ExPlayerWoman.Add(ExAction.PEACEMODE_SITDOWN_WAIT, new Frame(408 + 3, 1, 4, 100)); 
+
+            ExPlayerWoman.Add(ExAction.ONEHAND_STUCK, new Frame(448, 1, 0, 100, 392, 3, 0, 100));
+            ExPlayerWoman.Add(ExAction.DIE, new Frame(472, 7, 0, 1000));// { Reverse = true });
+            ExPlayerWoman.Add(ExAction.ONEHAND_ATTACK1, new Frame(528, 8, 0, 100, 168, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.ONEHAND_ATTACK2, new Frame(592, 8, 0, 100, 216, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.ONEHAND_ATTACK3, new Frame(656, 8, 0, 100, 448, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.TWOHAND_ATTACK1, new Frame(720, 8, 0, 100, 168, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.TWOHAND_ATTACK2, new Frame(784, 8, 0, 100, 216, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.TWOHAND_ATTACK3, new Frame(848, 8, 0, 100, 448, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.BOWHAND_ATTACK1, new Frame(912, 8, 0, 100, 96, 8, 0, 100));
+            ExPlayerWoman.Add(ExAction.MAGIC_CAST, new Frame(976, 1, 0, 1000, 160, 1, 0, 1000));
+            ExPlayerWoman.Add(ExAction.MAGIC_ATTACK, new Frame(980, 1, 0, 1000, 332, 1, 5, 1000));
+            ExPlayerWoman.Add(ExAction.PEACEMODE_WALK_RIGHT, new Frame(988, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.ONEHAND_WALK_RIGHT, new Frame(1020, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.TWOHAND_WALK_RIGHT, new Frame(1052, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.BOWHAND_WALK_RIGHT, new Frame(1084, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.PEACEMODE_RUN_RIGHT, new Frame(988, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.ONEHAND_RUN_RIGHT, new Frame(1020, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.TWOHAND_RUN_RIGHT, new Frame(1052, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.BOWHAND_RUN_RIGHT, new Frame(1084, 4, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.PEACEMODE_STANDUP, new Frame(1122, 5, 1, 100));
+            /*
+             * { ExAction.PEACEMODE_STAND, new Frame(0, 23, 0, 500)},
+                                { ExAction.PEACEMODE_STAND_WAIT, new Frame(0, 0, 0, 0)},
+                                { ExAction.ONEHAND_STAND, new Frame(184, 4, 0, 500)},
+                                { ExAction.TWOHAND_STAND, new Frame(216, 4, 0, 500)},
+                                { ExAction.BOWHAND_STAND, new Frame(248, 4, 0, 500)},
+                                { ExAction.PEACEMODE_WALK_LEFT, new Frame(0, 0, 0, 0)},
+                                { ExAction.ONEHAND_WALK_LEFT, new Frame(0, 0, 0, 0)},
+                                { ExAction.TWOHAND_WALK_LEFT, new Frame(0, 0, 0, 0)},
+                                { ExAction.BOWHAND_WALK_LEFT, new Frame(0, 0, 0, 0)},
+                                { ExAction.PEACEMODE_RUN_LEFT, new Frame(280, 4, 0, 100)},
+                                { ExAction.ONEHAND_RUN_LEFT, new Frame(312, 4, 0, 100)},
+                                { ExAction.TWOHAND_RUN_LEFT, new Frame(344, 4, 0, 100)},
+                                { ExAction.BOWHAND_RUN_LEFT, new Frame(376, 4, 0, 100)},
+                                { ExAction.PEACEMODE_SITDOWN, new Frame(408, 5, 0, 500)},
+                                { ExAction.PEACEMODE_SITDOWN_WAIT, new Frame(0, 0, 0, 0)},
+                                { ExAction.ONEHAND_STUCK, new Frame(448, 1, 0, 200)},
+                                { ExAction.DIE, new Frame(472, 7, 0, 100)},
+                                { ExAction.ONEHAND_ATTACK1, new Frame(528, 8, 0, 100)},
+                                { ExAction.ONEHAND_ATTACK2, new Frame(592, 8, 0, 100)},
+                                { ExAction.ONEHAND_ATTACK3, new Frame(656, 8, 0, 100)},
+                                { ExAction.TWOHAND_ATTACK1, new Frame(720, 8, 0, 100)},
+                                { ExAction.TWOHAND_ATTACK2, new Frame(784, 8, 0, 100)},
+                                { ExAction.TWOHAND_ATTACK3, new Frame(848, 8, 0, 100)},
+                                { ExAction.BOWHAND_ATTACK1, new Frame(912, 8, 0, 100)},
+                                { ExAction.MAGIC_CAST, new Frame(976, 0, 0, 200)},
+                                { ExAction.MAGIC_ATTACK, new Frame(980, 1, 0, 200)},
+                                { ExAction.PEACEMODE_WALK_RIGHT, new Frame(0, 0, 0, 0)},
+                                { ExAction.ONEHAND_WALK_RIGHT, new Frame(0, 0, 0, 0)},
+                                { ExAction.TWOHAND_WALK_RIGHT, new Frame(0, 0, 0, 0)},
+                                { ExAction.BOWHAND_WALK_RIGHT, new Frame(0, 0, 0, 0)},
+                                { ExAction.PEACEMODE_RUN_RIGHT, new Frame(988, 4, 0, 100)},
+                                { ExAction.ONEHAND_RUN_RIGHT, new Frame(1020, 4, 0, 100)},
+                                { ExAction.TWOHAND_RUN_RIGHT, new Frame(1052, 4, 0, 100)},
+                                { ExAction.BOWHAND_RUN_RIGHT, new Frame(1084, 4, 0, 100)},
+                                { ExAction.PEACEMODE_STANDUP, new Frame(1122, 6, 0, 500)},
+             */
+
+
+            //Common
+            ExPlayerWoman.Add(ExAction.Standing, new Frame(0, 4, 0, 500, 0, 8, 0, 250));
+            ExPlayerWoman.Add(ExAction.Walking, new Frame(32, 6, 0, 100, 64, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.Running, new Frame(80, 6, 0, 100, 112, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.Stance, new Frame(128, 1, 0, 1000, 160, 1, 0, 1000));
+            ExPlayerWoman.Add(ExAction.Stance2, new Frame(300, 1, 5, 1000, 332, 1, 5, 1000));
+            ExPlayerWoman.Add(ExAction.Attack1, new Frame(136, 6, 0, 100, 168, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.Attack2, new Frame(184, 6, 0, 100, 216, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.Attack3, new Frame(232, 8, 0, 100, 264, 8, 0, 100));
+            ExPlayerWoman.Add(ExAction.Attack4, new Frame(416, 6, 0, 100, 448, 6, 0, 100));
+            //ExPlayerWoman.Add(ExAction.Spell, new Frame(296, 6, 0, 100, 328, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.Spell, new Frame(1016, 1, 0, 1000, 332, 1, 5, 1000));
+            ExPlayerWoman.Add(ExAction.Harvest, new Frame(344, 2, 0, 300, 376, 2, 0, 300));
+            ExPlayerWoman.Add(ExAction.Struck, new Frame(360, 3, 0, 100, 392, 3, 0, 100));
+            ExPlayerWoman.Add(ExAction.Die, new Frame(384, 4, 0, 100, 416, 4, 0, 100));
+            ExPlayerWoman.Add(ExAction.Dead, new Frame(387, 1, 3, 1000, 419, 1, 3, 1000));
+            ExPlayerWoman.Add(ExAction.Revive, new Frame(384, 4, 0, 100, 416, 4, 0, 100) { Reverse = true });
+            ExPlayerWoman.Add(ExAction.Mine, new Frame(184, 6, 0, 100, 216, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.Lunge, new Frame(139, 1, 5, 1000, 300, 1, 5, 1000));
+
+            //Assassin
+            ExPlayerWoman.Add(ExAction.Sneek, new Frame(464, 6, 0, 100, 496, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.DashAttack, new Frame(80, 3, 3, 100, 112, 3, 3, 100));
+
+            //Archer
+            ExPlayerWoman.Add(ExAction.WalkingBow, new Frame(0, 6, 0, 100, 0, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.RunningBow, new Frame(48, 6, 0, 100, 48, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.AttackRange1, new Frame(96, 8, 0, 100, 96, 8, 0, 100));
+            ExPlayerWoman.Add(ExAction.AttackRange2, new Frame(160, 8, 0, 100, 160, 8, 0, 100));
+            ExPlayerWoman.Add(ExAction.AttackRange3, new Frame(224, 8, 0, 100, 224, 8, 0, 100));
+            ExPlayerWoman.Add(ExAction.Jump, new Frame(288, 8, 0, 100, 288, 8, 0, 100));
+
+            //Mounts
+            ExPlayerWoman.Add(ExAction.MountStanding, new Frame(416, 4, 0, 500, 448, 4, 0, 500));
+            ExPlayerWoman.Add(ExAction.MountWalking, new Frame(448, 8, 0, 100, 480, 8, 0, 500));
+            ExPlayerWoman.Add(ExAction.MountRunning, new Frame(512, 6, 0, 100, 544, 6, 0, 100));
+            ExPlayerWoman.Add(ExAction.MountStruck, new Frame(560, 3, 0, 100, 592, 3, 0, 100));
+            ExPlayerWoman.Add(ExAction.MountAttack, new Frame(584, 6, 0, 100, 616, 6, 0, 100));
+
+            //Fishing
+            //ExPlayerWoman.Add(ExAction.PEACEMODE_SITDOWN_1, new Frame(632, 8, 0, 100));
+            //ExPlayerWoman.Add(ExAction.PEACEMODE_SITDOWN_WAIT_1, new Frame(696, 6, 0, 120));
+            //ExPlayerWoman.Add(ExAction.PEACEMODE_STANDUP_1, new Frame(744, 8, 0, 100));
+            ExPlayerWoman.Add(ExAction.FishingCast, new Frame(433 - 1, 4, 0, 100));
+            ExPlayerWoman.Add(ExAction.FishingReel, new Frame(435, 1, 4, 100));
+            ExPlayerWoman.Add(ExAction.FishingWait, new Frame(1153, 8, 0, 100));
+            #endregion
+
+
         }
     }
 

@@ -122,7 +122,14 @@ namespace Exine.ExineObjects
         public PlayerObject() { }
         public PlayerObject(uint objectID) : base(objectID)
         {
-            Frames = FrameSet.ExPlayer;
+            if (Gender == ExineGender.Male)
+            {
+                Frames = FrameSet.ExPlayer;
+            }
+            else
+            {
+                Frames = FrameSet.ExPlayerWoman;
+            }
         }
 
         public static byte[] GetBytesFromJpg(string path)
@@ -832,11 +839,19 @@ namespace Exine.ExineObjects
                         #endregion
 
                         #region Offsets
+                        /*
                         ArmourOffSet = Gender == ExineGender.Male ? 0 : 808;
                         HairOffSet = Gender == ExineGender.Male ? 0 : 808;
                         WeaponOffSet = Gender == ExineGender.Male ? 0 : 416;
                         WingOffset = Gender == ExineGender.Male ? 0 : 840;
                         MountOffset = 0;
+                        */
+
+                        //240924 mod k333123
+                        ArmourOffSet = 0;
+                        HairOffSet = 0;
+                        WeaponOffSet = 0;
+                        WingOffset = 0;
                         #endregion
 
                         break;
@@ -896,7 +911,7 @@ namespace Exine.ExineObjects
                         case 5:
                             //BodyLibrary = Armour < Libraries.ExineWomenArmor.Length ? Libraries.ExineWomenArmor[shapeToLibIndex.libIndex] : Libraries.ExineWomenArmor[0];
                             return shapeToLibIndex.libIndex < Libraries.ExineWomenArmor.Length ?
-                                Libraries.ExineWomenArmor[shapeToLibIndex.libIndex+1] //cause 평상복
+                                Libraries.ExineWomenArmor[shapeToLibIndex.libIndex] //cause 평상복
                                 : Libraries.ExineWomenArmor[0];
                             
                     }
@@ -6552,28 +6567,28 @@ namespace Exine.ExineObjects
                 tintColors[27] = Color.FromArgb(150, Color.Yellow);
                 return tintColors[(int)exineColor];
             }
-            public void DrawBody()
-            {
-                //Gender == ExineGender.Male
-                /*
-                bool oldGrayScale = DXManager.GrayScale;
-                Color drawColour = ApplyDrawColour();                     
+        public void DrawBody()
+        {
+            //Gender == ExineGender.Male
+            /*
+            bool oldGrayScale = DXManager.GrayScale;
+            Color drawColour = ApplyDrawColour();                     
 
-                if (BodyLibrary != null)
-                    BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
+            if (BodyLibrary != null)
+                BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
 
-                DXManager.SetGrayscale(oldGrayScale);
-                //BodyLibrary.DrawTinted(DrawFrame + ArmourOffSet, DrawLocation, DrawColour, Color.DarkSeaGreen);
-                */
+            DXManager.SetGrayscale(oldGrayScale);
+            //BodyLibrary.DrawTinted(DrawFrame + ArmourOffSet, DrawLocation, DrawColour, Color.DarkSeaGreen);
+            */
 
 
-                bool oldGrayScale = DXManager.GrayScale;
+            bool oldGrayScale = DXManager.GrayScale;
             Color drawColour = ApplyDrawColour();
             Color tintColor = GetColorFromExColor(ExColor);
 
             //if (BodyLibrary != null) BodyLibrary.Draw(DrawFrame + ArmourOffSet, DrawLocation, drawColour, true);
-            //if (BodyLibrary != null) Console.WriteLine("@@@@@@10 DrawBody DrawFrame + ArmourOffSet:" + (DrawFrame + ArmourOffSet).ToString());
-            if (BodyLibrary != null) BodyLibrary.ExineDrawTinted(DrawFrame + ArmourOffSet, DrawLocation, drawColour,tintColor, true);
+            if (BodyLibrary != null) Console.WriteLine("@@@@@@10 DrawBody DrawFrame + ArmourOffSet:" + (DrawFrame + ArmourOffSet).ToString());
+            if (BodyLibrary != null) BodyLibrary.ExineDrawTinted(DrawFrame + ArmourOffSet, DrawLocation, drawColour, tintColor, true);
 
             DXManager.SetGrayscale(oldGrayScale);
 
@@ -6584,6 +6599,7 @@ namespace Exine.ExineObjects
             //Gender == ExineGender.Male
             Color tintColor = GetColorFromExColor(ExColor);
             //if (HairLibrary != null) HairLibrary.Draw(DrawFrame + HairOffSet, DrawLocation, DrawColour, true);
+
             if (HairLibrary != null) HairLibrary.ExineDrawTinted(DrawFrame + HairOffSet, DrawLocation, DrawColour, tintColor, true);
         }
 

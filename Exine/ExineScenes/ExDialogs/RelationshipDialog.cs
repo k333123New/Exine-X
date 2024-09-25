@@ -82,7 +82,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (LoverName != "")
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("You're already married.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("이미 결혼하셨군요.", ChatType.System);
                     return;
                 }
 
@@ -104,7 +104,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (LoverName == "")
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("You're not married.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("당신은 결혼하지 않았습니다.", ChatType.System);
                     return;
                 }
 
@@ -126,7 +126,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (LoverName == "")
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("You're not married.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("당신은 결혼하지 않았습니다.", ChatType.System);
                     return;
                 }
 
@@ -148,13 +148,13 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (LoverName == "")
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("You're not married.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("당신은 결혼하지 않았습니다.", ChatType.System);
                     return;
                 }
 
                 if (MapName == "")
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("Lover is not online", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("연인이 온라인 상태가 아닙니다.", ChatType.System);
                     return;
                 }
                 ExineMainScene.Scene.ExChatDialog.ChatTextBox.SetFocus();

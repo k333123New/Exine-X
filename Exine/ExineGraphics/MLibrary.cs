@@ -1868,7 +1868,7 @@ ZM_02_519_요정01_reidx.lib
         }
 
         public void ExineDrawTinted(int index, Point point, Color colour, Color Tint, bool offSet = false, bool isBlending = false, float rate = 1)
-        {
+        { 
             if (!CheckImage(index))
                 return;
 

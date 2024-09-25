@@ -211,36 +211,39 @@ namespace NewYPF
                     tempMap2.Clear();
 
                     string[] types = new string[28];
-                    types[0]=  "PEACEMODE_STAND";
-                    types[1] = "ONEHAND_STAND";
-                    types[2] = "TWOHAND_STAND";
-                    types[3] = "BOWHAND_STAND";
-                    types[4] = "PEACEMODE_RUN_LEFT";
-                    types[5] = "ONEHAND_RUN_LEFT";
-                    types[6] = "TWOHAND_RUN_LEFT";
-                    types[7] = "BOWHAND_RUN_LEFT";
-                    types[8] = "PEACEMODE_SITDOWN";
-                    types[9] = "ONEHAND_STUCK";
-                    types[10] = "TWOHAND_STUCK";
-                    types[11] = "BOWHAND_STUCK";
-                    types[12] = "DIE";
-                    types[13] = "ONEHAND_ATTACK1";
-                    types[14] = "ONEHAND_ATTACK2";
-                    types[15] = "ONEHAND_ATTACK3";
-                    types[16] = "TWOHAND_ATTACK1";
-                    types[17] = "TWOHAND_ATTACK2";
-                    types[18] = "TWOHAND_ATTACK3";
-                    types[19] = "BOWHAND_ATTACK1";
-                    types[20] = "MAGIC_CAST";
-                    types[21] = "MAGIC_ATTACK";
-                    types[22] = "PEACEMODE_RUN_RIGHT";
-                    types[23] = "ONEHAND_RUN_RIGHT";
-                    types[24] = "TWOHAND_RUN_RIGHT";
-                    types[25] = "BOWHAND_RUN_RIGHT";
-                    types[26] = "UNKNOWN";
-                    types[27] = "PEACEMODE_STANDUP";
+                    types[0] = "PEACEMODE_STAND";   //direction 8
+                    types[1] = "ONEHAND_STAND"; //direction 8
+                    types[2] = "TWOHAND_STAND"; //direction 8
+                    types[3] = "BOWHAND_STAND"; //direction 8
+                    types[4] = "PEACEMODE_RUN_LEFT";    //direction 8
+                    types[5] = "ONEHAND_RUN_LEFT";  //direction 8
+                    types[6] = "TWOHAND_RUN_LEFT";  //direction 8
+                    types[7] = "BOWHAND_RUN_LEFT";  //direction 8
+                    types[8] = "PEACEMODE_SITDOWN"; //direction 8
+                    types[9] = "ONEHAND_STUCK"; //direction 8
+                    types[10] = "TWOHAND_STUCK";    //direction 8
+                    types[11] = "BOWHAND_STUCK";    //direction 8
+                    types[12] = "DIE";          //direction 8
+                    types[13] = "ONEHAND_ATTACK1";  //direction 8
+                    types[14] = "ONEHAND_ATTACK2";  //direction 8
+                    types[15] = "ONEHAND_ATTACK3";  //direction 8
+                    types[16] = "TWOHAND_ATTACK1";  //direction 8
+                    types[17] = "TWOHAND_ATTACK2";  //direction 8
+                    types[18] = "TWOHAND_ATTACK3";  //direction 8
+                    types[19] = "BOWHAND_ATTACK1";  //direction 8
+                    types[20] = "MAGIC_CAST";       //direction 1
+                    types[21] = "MAGIC_ATTACK"; //direction 8
+                    types[22] = "PEACEMODE_RUN_RIGHT";//direction 8
+                    types[23] = "ONEHAND_RUN_RIGHT";    //direction 8
+                    types[24] = "TWOHAND_RUN_RIGHT";    //direction 8
+                    types[25] = "BOWHAND_RUN_RIGHT";    //direction 8
+                    types[26] = "UNKNOWN";      //direction 1
+                    types[27] = "PEACEMODE_STANDUP"; //direction 8
+
+                    //this count is man frame only!
 
                     int pcStandStateLen = 20; //19 frames, 8 direction
+
                     int pcRunLeftStateLen = 4;
                     int pcSitdownStateLen = 5;
                     int pcDieStateLen = 8;
@@ -280,6 +283,46 @@ namespace NewYPF
 
                     int unknownStateLen = 1;
                     bool isUnknownFrame = false;
+
+                    //for woman
+                    if(filename.IndexOf("HW_")!=-1)
+                    {
+                         pcStandStateLen = 23; //19 frames, 8 direction 
+                         pcRunLeftStateLen = 4; 
+                         pcSitdownStateLen = 5;
+                         pcDieStateLen = 7; 
+                         pcRunRightStateLen = 4;
+                         pcStandUpStateLen = 5; 
+
+                         oneHandStandStateLen = 4;
+                         oneHandRunLeftStateLen = 4;
+                         oneHandStuckStateLen = 1; 
+                         oneHandAtk1StateLen = 8;
+                         oneHandAtk2StateLen = 8;
+                         oneHandAtk3StateLen = 8; 
+                         oneHandRunRightStateLen = 4; 
+
+                         twoHandStandStateLen = 4;
+                         twoHandRunLeftStateLen = 4;
+                         twoHandStuckStateLen = 1;
+                         twoHandAtk1StateLen = 8;
+                         twoHandAtk2StateLen = 8;
+                         twoHandAtk3StateLen = 8;
+                         twoHandRunRightStateLen = 4; 
+
+                         bowHandStandStateLen = 4;
+                         bowHandRunLeftStateLen = 4;
+                         bowHandStuckStateLen = 1;
+                         bowHandAtk1StateLen = 8;
+                         bowHandRunRightStateLen = 4;
+
+                         //magicCastStateLen = 8;
+                         magicCastStateLen = 4;
+                         magicAtk1StateLen = 1; 
+
+                         unknownStateLen = 1; 
+                    }
+
 
                     for (int j = 0; j < actionIndexMaps.Count; j++)
                     {
@@ -482,6 +525,7 @@ namespace NewYPF
                             for (int j = 0; j < pcStandStateLen; j++)
                             {
                                 //use only frameidx;
+                                //types[0]=  "PEACEMODE_STAND"; 0*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(0+ directionIdx, j, 0));
                             }
                         }
@@ -490,6 +534,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < pcRunLeftStateLen; j++)
                             {
+                                //types[4] = "PEACEMODE_RUN_LEFT"; 4*8(8 mean direction)=32
                                 actionIndexMaps.Add(new ExActionIndexMap(32 + directionIdx, j, 0));
                             }
                         }
@@ -497,21 +542,24 @@ namespace NewYPF
                         for (int directionIdx = 0; directionIdx < 8; directionIdx++)
                         {
                             for (int j = 0; j < pcSitdownStateLen; j++)
-                            {
+                            {    //types[8] = "PEACEMODE_SITDOWN"; 8*8(8 mean direction)=64
                                 actionIndexMaps.Add(new ExActionIndexMap(64 + directionIdx, j, 0));
                             }
                         }
                         for (int directionIdx = 0; directionIdx < 8; directionIdx++)
                         {
+                                
                             for (int j = 0; j < pcDieStateLen; j++)
                             {
+                                //types[12] = "DIE";  12*8(8 mean direction)=96
                                 actionIndexMaps.Add(new ExActionIndexMap(96 + directionIdx, j, 0));
                             }
                         }
                         for (int directionIdx = 0; directionIdx < 8; directionIdx++)
                         {
                             for (int j = 0; j < pcRunRightStateLen; j++)
-                            {
+                            {   //types[22] = "PEACEMODE_RUN_RIGHT"; 22*8(8 mean direction)
+                                //-7(-7 mean types[20] = "MAGIC_CAST" direction1) =169
                                 actionIndexMaps.Add(new ExActionIndexMap(169 + directionIdx, j, 0));
                             }
                         }
@@ -519,6 +567,9 @@ namespace NewYPF
                         {
                             for (int j = 0; j < pcStandUpStateLen; j++)
                             {
+                                //types[27] = "PEACEMODE_STANDUP"; 27*8(8 mean direction)
+                                //-7(-7 mean types[20] = "MAGIC_CAST" direction1)
+                                //-7(-7 mean types[26] = "UNKNOWN" direction1)=202
                                 actionIndexMaps.Add(new ExActionIndexMap(202 + directionIdx, j, 0));
                             }
                         }
@@ -537,6 +588,7 @@ namespace NewYPF
                             for (int j = 0; j < oneHandStandStateLen; j++)
                             {
                                 //use only frameidx;
+                                //types[1] = "ONEHAND_STAND"; 1*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(8 + directionIdx, j, 0));
                             }
                         }
@@ -544,7 +596,8 @@ namespace NewYPF
                         for (int directionIdx = 0; directionIdx < 8; directionIdx++)
                         {
                             for (int j = 0; j < oneHandRunLeftStateLen; j++)
-                            {
+                            { 
+                                //types[5] = "ONEHAND_RUN_LEFT"; 5*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(40 + directionIdx, j, 0));
                             }
                         }
@@ -553,6 +606,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < oneHandStuckStateLen; j++)
                             {
+                                //types[9] = "ONEHAND_STUCK"; 9*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(72 + directionIdx, j, 0));
                             }
                         }
@@ -561,6 +615,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < oneHandAtk1StateLen; j++)
                             {
+                                //types[13] = "ONEHAND_ATTACK1"; 13*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(104 + directionIdx, j, 0));
                             }
                         }
@@ -568,6 +623,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < oneHandAtk2StateLen; j++)
                             {
+                                //types[14] = "ONEHAND_ATTACK2"; 14*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(112 + directionIdx, j, 0));
                             }
                         }
@@ -575,6 +631,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < oneHandAtk3StateLen; j++)
                             {
+                                //types[15] = "ONEHAND_ATTACK3"; 15*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(120 + directionIdx, j, 0));
                             }
                         }
@@ -582,7 +639,8 @@ namespace NewYPF
                         for (int directionIdx = 0; directionIdx < 8; directionIdx++)
                         {
                             for (int j = 0; j < oneHandRunRightStateLen; j++)
-                            {
+                            {   //types[23] = "ONEHAND_RUN_RIGHT"; 23*8(8 mean direction)
+                                //-7(-7 mean types[20] = "MAGIC_CAST" direction1) =177
                                 actionIndexMaps.Add(new ExActionIndexMap(177 + directionIdx, j, 0));
                             }
                         }  
@@ -598,6 +656,7 @@ namespace NewYPF
                             for (int j = 0; j < twoHandStandStateLen; j++)
                             {
                                 //use only frameidx;
+                                //types[2] = "TWOHAND_STAND";  2*8(8 mean direction)=16
                                 actionIndexMaps.Add(new ExActionIndexMap(16 + directionIdx, j, 0));
                             }
                         }
@@ -606,6 +665,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < twoHandRunLeftStateLen; j++)
                             {
+                                //types[6] = "TWOHAND_RUN_LEFT";  6*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(48 + directionIdx, j, 0));
                             }
                         }
@@ -614,6 +674,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < twoHandStuckStateLen; j++)
                             {
+                                //types[10] = "TWOHAND_STUCK";  10*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(80 + directionIdx, j, 0));
                             }
                         }
@@ -622,6 +683,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < twoHandAtk1StateLen; j++)
                             {
+                                //types[16] = "TWOHAND_ATTACK1";  16*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(128 + directionIdx, j, 0));
                             }
                         }
@@ -629,6 +691,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < twoHandAtk2StateLen; j++)
                             {
+                                //types[17] = "TWOHAND_ATTACK2";  17*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(136 + directionIdx, j, 0));
                             }
                         }
@@ -636,6 +699,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < twoHandAtk3StateLen; j++)
                             {
+                                //types[18] = "TWOHAND_ATTACK3";  18*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(144 + directionIdx, j, 0));
                             }
                         }
@@ -644,6 +708,8 @@ namespace NewYPF
                         {
                             for (int j = 0; j < twoHandRunRightStateLen; j++)
                             {
+                                //types[24] = "TWOHAND_RUN_RIGHT"; 24*8(8 mean direction)
+                                //-7(-7 mean types[20] = "MAGIC_CAST" direction1) =185
                                 actionIndexMaps.Add(new ExActionIndexMap(185 + directionIdx, j, 0));
                             }
                         }
@@ -659,6 +725,7 @@ namespace NewYPF
                             for (int j = 0; j < bowHandStandStateLen; j++)
                             {
                                 //use only frameidx;
+                                //types[3] = "BOWHAND_STAND";  3*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(24 + directionIdx, j, 0));
                             }
                         }
@@ -667,6 +734,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < bowHandRunLeftStateLen; j++)
                             {
+                                //types[7] = "BOWHAND_RUN_LEFT";  7*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(56 + directionIdx, j, 0));
                             }
                         }
@@ -675,6 +743,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < bowHandStuckStateLen; j++)
                             {
+                                //types[11] = "BOWHAND_STUCK";  11*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(88 + directionIdx, j, 0));
                             }
                         }
@@ -683,6 +752,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < bowHandAtk1StateLen; j++)
                             {
+                                //types[19] = "BOWHAND_ATTACK1";  19*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(152 + directionIdx, j, 0));
                             }
                         }
@@ -691,6 +761,8 @@ namespace NewYPF
                         {
                             for (int j = 0; j < bowHandRunRightStateLen; j++)
                             {
+                                //types[25] = "BOWHAND_RUN_RIGHT"; 25*8(8 mean direction)
+                                //-7(-7 mean types[20] = "MAGIC_CAST" direction1) =193
                                 actionIndexMaps.Add(new ExActionIndexMap(193 + directionIdx, j, 0));
                             }
                         }
@@ -705,6 +777,7 @@ namespace NewYPF
                         {
                             for (int j = 0; j < magicCastStateLen; j++)
                             {
+                                //types[20] = "MAGIC_CAST";  20*8(8 mean direction)
                                 actionIndexMaps.Add(new ExActionIndexMap(160 + directionIdx, j, 0));
                             }
                         }
@@ -713,6 +786,8 @@ namespace NewYPF
                         {
                             for (int j = 0; j < magicAtk1StateLen; j++)
                             {
+                                //types[21] = "MAGIC_ATTACK"; 21*8(8 mean direction)
+                                //-7(-7 mean types[20] = "MAGIC_CAST" direction1) =161
                                 actionIndexMaps.Add(new ExActionIndexMap(161 + directionIdx, j, 0));
                             }
                         }
@@ -728,13 +803,14 @@ namespace NewYPF
                         {
                             for (int j = 0; j <unknownStateLen; j++)
                             {
+                                //types[26] = "UNKNOWN"; 26*8(8 mean direction)
+                                //-7(-7 mean types[20] = "MAGIC_CAST" direction1) =201
+
                                 actionIndexMaps.Add(new ExActionIndexMap(201 + directionIdx, j, 0));
                             }
                         } 
                     }
                     #endregion
-
-
 
                     #region ReIdx
                     for (int typesIdx = 0; typesIdx < types.Length; typesIdx++)
@@ -814,8 +890,6 @@ namespace NewYPF
                     }
                     #endregion ReIdx
 
-
-                   
 
                     /*
                     List<string> actionIndexMapTextList = new List<string>();
