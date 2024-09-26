@@ -3088,8 +3088,10 @@ namespace Exine.ExineScenes
                 if (ob.ObjectID != p.ObjectID) continue;
                 if (ob.Race == ObjectType.Player)
                 {
-                    action = new QueuedAction { Action = ExAction.Attack1, Direction = p.Direction, Location = p.Location, Params = new List<object>() };
+                    //action = new QueuedAction { Action = ExAction.Attack1, Direction = p.Direction, Location = p.Location, Params = new List<object>() };
+                    action = new QueuedAction { Action = ExAction.ONEHAND_ATTACK1, Direction = p.Direction, Location = p.Location, Params = new List<object>() }; //mod 240926 k333123
                 }
+                
                 else
                 {
                     switch (p.Type)

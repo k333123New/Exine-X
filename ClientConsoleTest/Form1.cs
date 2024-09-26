@@ -341,7 +341,8 @@ namespace ClientConsoleTest
                           {
                               //Direction = (ExineDirection)tempDirection,
                               Direction = (ExineDirection)tempDirection,
-                          }
+                              Spell= Spell.None,
+                    }
                        );
                     }
 
