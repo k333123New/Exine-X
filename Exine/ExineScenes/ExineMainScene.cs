@@ -48,8 +48,6 @@ namespace Exine.ExineScenes
 
         public ExineAnimatedControl _bazel_up, _bazel_down, _bazel_left, _bazel_right;//add k333123
         
-        
-
         public MapControl MapControl;
         //public MainDialog MainDialog;
 
@@ -95,7 +93,6 @@ namespace Exine.ExineScenes
         public TradeDialog TradeDialog;
         public GuestTradeDialog GuestTradeDialog;
 
-      
         public SocketDialog SocketDialog;
 
         public List<SkillBarDialog> SkillBarDialogs = new List<SkillBarDialog>();
@@ -115,8 +112,6 @@ namespace Exine.ExineScenes
         public MailReadLetterDialog MailReadLetterDialog;
         public MailReadParcelDialog MailReadParcelDialog;
 
-        
-
         public FriendDialog FriendDialog;
         public MemoDialog MemoDialog;
         public RelationshipDialog RelationshipDialog;
@@ -132,7 +127,6 @@ namespace Exine.ExineScenes
 
         public TimerDialog TimerControl;
         public CompassDialog CompassControl; 
-
 
         public static List<ItemInfo> ItemInfoList = new List<ItemInfo>();
         public static List<UserId> UserIdList = new List<UserId>();
@@ -160,10 +154,8 @@ namespace Exine.ExineScenes
         public static long InspectTime;
         public bool ShowReviveMessage;
 
-
         public bool NewMail;
         public int NewMailCounter = 0;
-
 
         public AttackMode AMode;
         public PetMode PMode;
@@ -997,6 +989,7 @@ namespace Exine.ExineScenes
                     break;
             }
         }
+       
         private void SendSpellToggle(UserObject Actor, Spell Spell, bool CanUse)
         {
             if (Actor == User)
@@ -1004,6 +997,7 @@ namespace Exine.ExineScenes
             else
                 Network.Enqueue(new C.SpellToggle { Spell = Spell });
         }
+       
         public void QuitGame()
         {
             if (CMain.Time >= LogTime)
@@ -1018,6 +1012,7 @@ namespace Exine.ExineScenes
                 ExChatDialog.ReceiveChat(string.Format(GameLanguage.CannotLeaveGame, (LogTime - CMain.Time) / 1000), ChatType.System);
             }
         }
+      
         public void LogOut()
         {
             if (CMain.Time >= LogTime)
@@ -1062,6 +1057,7 @@ namespace Exine.ExineScenes
             for (int i = 0; i < OutputLines.Length; i++)
                 OutputLines[i].Draw();
         }
+       
         public override void Process()
         {
             if (MapControl == null || User == null)
@@ -1944,6 +1940,7 @@ namespace Exine.ExineScenes
             if (p.Time == 0) return;
             CMain.PingTime = (CMain.Time - p.Time);
         }
+       
         private void MapInformation(S.MapInformation p)
         {
             if (MapControl != null && !MapControl.IsDisposed)
@@ -2084,6 +2081,7 @@ namespace Exine.ExineScenes
             AllowObserve = p.AllowObserve;
             Observing = p.Observer;
         }
+        
         private void UserSlotsRefresh(S.UserSlotsRefresh p)
         {
             User.SetSlots(p);
@@ -2120,10 +2118,12 @@ namespace Exine.ExineScenes
 
             User.SetAction();
         }
+       
         private void ReceiveChat(S.Chat p)
         {
             ExChatDialog.ReceiveChat(p.Message, p.Type);
         }
+        
         private void ObjectPlayer(S.ObjectPlayer p)
         { 
             PlayerObject player = new PlayerObject(p.ObjectID);
@@ -2142,7 +2142,6 @@ namespace Exine.ExineScenes
                 ob.Remove();
             }
         }
-
 
         private void ObjectTurn(S.ObjectTurn p)
         {
@@ -2167,6 +2166,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
+       
         private void ObjectWalk(S.ObjectWalk p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
@@ -2187,6 +2187,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
+        
         private void ObjectRun(S.ObjectRun p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
@@ -2206,6 +2207,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
+        
         private void ObjectChat(S.ObjectChat p)
         {
             ExChatDialog.ReceiveChat(p.Text, p.Type);
@@ -2237,8 +2239,7 @@ namespace Exine.ExineScenes
             }
 
         }
-        
-        
+       
         private void MoveItem(S.MoveItem p)
         {
             MirItemCell toCell, fromCell;
@@ -2296,6 +2297,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
             CharacterDuraPanel.GetCharacterDura();
         }
+        
         private void EquipItem(S.EquipItem p)
         {
             MirItemCell fromCell, toCell;
@@ -2333,6 +2335,7 @@ namespace Exine.ExineScenes
             CharacterDuraPanel.UpdateCharacterDura(i);
             User.RefreshStats();
         }
+       
         private void EquipSlotItem(S.EquipSlotItem p)
         {
             MirItemCell fromCell;
@@ -2468,6 +2471,7 @@ namespace Exine.ExineScenes
 
             User.RefreshStats();
         }
+       
         private void RemoveItem(S.RemoveItem p)
         {
             MirItemCell toCell;
@@ -2508,6 +2512,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
 
         }
+       
         private void RemoveSlotItem(S.RemoveSlotItem p)
         {
             MirItemCell fromCell;
@@ -2546,6 +2551,7 @@ namespace Exine.ExineScenes
             CharacterDuraPanel.GetCharacterDura();
             User.RefreshStats();
         }
+       
         private void TakeBackItem(S.TakeBackItem p)
         {
             MirItemCell fromCell = StorageDialog.Grid[p.From];
@@ -2563,6 +2569,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
             CharacterDuraPanel.GetCharacterDura();
         }
+      
         private void StoreItem(S.StoreItem p)
         {
             MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
@@ -2630,6 +2637,7 @@ namespace Exine.ExineScenes
             }
             ExNPCDialog.Hide();
         }
+        
         private void DepositTradeItem(S.DepositTradeItem p)
         {
             MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
@@ -2647,6 +2655,7 @@ namespace Exine.ExineScenes
             fromCell.Item = null;
             User.RefreshStats();
         }
+       
         private void RetrieveTradeItem(S.RetrieveTradeItem p)
         {
             MirItemCell fromCell = TradeDialog.Grid[p.From];
@@ -2663,6 +2672,7 @@ namespace Exine.ExineScenes
             fromCell.Item = null;
             User.RefreshStats();
         }
+       
         private void SplitItem(S.SplitItem p)
         {
             Bind(p.Item);
@@ -2745,6 +2755,7 @@ namespace Exine.ExineScenes
             cell.Item.Count -= p.Count;
             User.RefreshStats();
         }
+        
         private void UseItem(S.UseItem p)
         {
             MirItemCell cell = null;
@@ -2767,6 +2778,7 @@ namespace Exine.ExineScenes
 
             User.RefreshStats();
         }
+       
         private void DropItem(S.DropItem p)
         {
             MirItemCell cell;
@@ -2802,7 +2814,6 @@ namespace Exine.ExineScenes
             }
         }
  
-
         private void CompleteQuest(S.CompleteQuest p)
         {
             User.CompletedQuests = p.CompletedQuests;
@@ -3197,6 +3208,7 @@ namespace Exine.ExineScenes
 
                 if (ob.Race == ObjectType.Player)
                     ((PlayerObject)ob).BlizzardStopTime = 0;
+
                 QueuedAction action = new QueuedAction { Action = ExAction.Struck, Direction = p.Direction, Location = p.Location, Params = new List<object>() };
                 action.Params.Add(p.AttackerID);
                 ob.ActionFeed.Add(action);
@@ -3447,7 +3459,14 @@ namespace Exine.ExineScenes
                 switch (p.Type)
                 {
                     default:
-                        ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Die, Direction = p.Direction, Location = p.Location });
+                        if (ob is PlayerObject) //add k333123 240926
+                        {
+                            ob.ActionFeed.Add(new QueuedAction { Action = ExAction.DIE, Direction = p.Direction, Location = p.Location });
+                        }
+                        else
+                        {
+                            ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Die, Direction = p.Direction, Location = p.Location });
+                        }
                         ob.Dead = true;
                         break;
                     case 1:
