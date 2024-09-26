@@ -66,6 +66,7 @@ namespace Exine.ExineObjects
             Stats = new Stats();
         }
 
+        ///maybe it is My player! 
         public virtual void Load(S.UserInformation info)
         {
             Id = info.RealId;
@@ -81,7 +82,7 @@ namespace Exine.ExineObjects
             if (Gender == ExineGender.Female)
             {
                 Frames = FrameSet.ExPlayerWoman;
-                Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Frames = FrameSet.ExPlayerWoman");
+                Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Frames = FrameSet.ExPlayerWoman  !!!My Char");
                 // Console.ReadLine();
             }
             else
@@ -337,7 +338,7 @@ namespace Exine.ExineObjects
                 return;
             }
 
-            if (equipItem.Info.Type == ItemType.Mount && !RidingMount)
+            if (equipItem.Info.Type == ItemType.Mount )
             {
                 return;
             }

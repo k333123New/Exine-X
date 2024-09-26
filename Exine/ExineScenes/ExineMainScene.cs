@@ -867,7 +867,7 @@ namespace Exine.ExineScenes
         {
             UserObject actor = User;
             
-            if (actor.Dead || actor.RidingMount || actor.Fishing) return;
+            if (actor.Dead ||  actor.Fishing) return;
 
             if (!actor.HasClassWeapon && actor.Weapon >= 0)
             {
@@ -2127,10 +2127,7 @@ namespace Exine.ExineScenes
         private void ObjectPlayer(S.ObjectPlayer p)
         { 
             PlayerObject player = new PlayerObject(p.ObjectID);
-            player.Load(p);
-            
-            
-
+            player.Load(p); 
         }
 
         private void ObjectRemove(S.ObjectRemove p)
@@ -2145,15 +2142,28 @@ namespace Exine.ExineScenes
                 ob.Remove();
             }
         }
+
+
         private void ObjectTurn(S.ObjectTurn p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
 
+            
+            //!!!!!!! //standing!!! human ->  ExAction.ONEHAND_STAND or ExAction.TWOHAND_STAND or ExAction.BOWHAND_STAND, Mob -> ExAction.standing 
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
                 MapObject ob = MapControl.Objects[i];
                 if (ob.ObjectID != p.ObjectID) continue;
-                ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Standing, Direction = p.Direction, Location = p.Location });
+
+                if (ob is PlayerObject) //add 240926 k333123
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = p.Direction, Location = p.Location });
+                }
+                else
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Standing, Direction = p.Direction, Location = p.Location });
+                }
+
                 return;
             }
         }
@@ -2165,7 +2175,15 @@ namespace Exine.ExineScenes
             {
                 MapObject ob = MapControl.Objects[i];
                 if (ob.ObjectID != p.ObjectID) continue;
-                ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Walking, Direction = p.Direction, Location = p.Location });
+
+                if (ob is PlayerObject) //add 240926 k333123
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_WALK_LEFT, Direction = p.Direction, Location = p.Location });
+                }
+                else
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Walking, Direction = p.Direction, Location = p.Location });
+                }
                 return;
             }
         }
@@ -2177,7 +2195,14 @@ namespace Exine.ExineScenes
             {
                 MapObject ob = MapControl.Objects[i];
                 if (ob.ObjectID != p.ObjectID) continue;
-                ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Running, Direction = p.Direction, Location = p.Location });
+                if (ob is PlayerObject) //add 240926 k333123
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_RUN_LEFT, Direction = p.Direction, Location = p.Location });
+                }
+                else
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Running, Direction = p.Direction, Location = p.Location });
+                }
                 return;
             }
         }
@@ -2191,22 +2216,29 @@ namespace Exine.ExineScenes
                 if (ob.ObjectID != p.ObjectID) continue;
 
                 //add k333123 
-                if (ob is UserObject)
+                if (ob is UserObject)//Me
                 {
-                    ob.Chat(RegexFunctions.CleanChatString(p.Text));
+                    ob.Chat(RegexFunctions.CleanChatString(p.Text),0, ob);
                 }
+                else if (ob is PlayerObject)//Other Player
+                {
+                    ob.Chat(RegexFunctions.CleanChatString(p.Text),3, ob); 
+                }
+
                 else if (ob is NPCObject)
                 {
-                    ob.Chat(RegexFunctions.CleanChatString(p.Text),2);
+                    ob.Chat(RegexFunctions.CleanChatString(p.Text),2, ob);
                 }
                 else
                 {
-                    ob.Chat(RegexFunctions.CleanChatString(p.Text),1);
+                    ob.Chat(RegexFunctions.CleanChatString(p.Text),1, ob);
                 }
                 return;
             }
 
         }
+        
+        
         private void MoveItem(S.MoveItem p)
         {
             MirItemCell toCell, fromCell;
@@ -10695,7 +10727,7 @@ namespace Exine.ExineScenes
 
             if (CMain.Time < InputDelay || User.Poison.HasFlag(PoisonType.Paralysis) || User.Poison.HasFlag(PoisonType.LRParalysis) || User.Poison.HasFlag(PoisonType.Frozen) || User.Fishing) return;
 
-            if (User.NextMagic != null && !User.RidingMount)
+            if (User.NextMagic != null )
             {
                 UseMagic(User.NextMagic, User);
                 return;
@@ -10710,7 +10742,7 @@ namespace Exine.ExineScenes
                 {
                     ExineMainScene.LogTime = CMain.Time + Globals.LogDelay;
 
-                    if (User.Class == ExineClass.Archer && User.HasClassWeapon && !User.RidingMount && !User.Fishing)//ArcherTest - non aggressive targets (player / pets)
+                    if (User.Class == ExineClass.Archer && User.HasClassWeapon  && !User.Fishing)//ArcherTest - non aggressive targets (player / pets)
                     {
                         if (Functions.InRange(MapObject.TargetObject.CurrentLocation, User.CurrentLocation, Globals.MaxAttackRange))
                         {
@@ -10765,7 +10797,7 @@ namespace Exine.ExineScenes
                     }
                 }
             }
-            if (AutoHit && !User.RidingMount)
+            if (AutoHit )
             {
                 if (CMain.Time > ExineMainScene.AttackTime)
                 {
@@ -10786,7 +10818,7 @@ namespace Exine.ExineScenes
                 {
                     if (ExineMainScene.CanRun && CanRun(direction) && CMain.Time > ExineMainScene.NextRunTime && User.HP >= 10 && (!User.Sneaking || (User.Sneaking && User.Sprint))) //slow remove
                     {
-                        int distance = User.RidingMount || User.Sprint && !User.Sneaking ? 3 : 2;
+                        int distance =User.Sprint && !User.Sneaking ? 3 : 2;
                         bool fail = false;
                         for (int i = 1; i <= distance; i++)
                         {
@@ -10819,7 +10851,7 @@ namespace Exine.ExineScenes
                         if (MapObject.MouseObject is NPCObject || (MapObject.MouseObject is PlayerObject && MapObject.MouseObject != User)) break;
                         if (MapObject.MouseObject is MonsterObject && MapObject.MouseObject.AI == 70) break;
 
-                        if (CMain.Alt && !User.RidingMount)
+                        if (CMain.Alt)
                         {
                             User.QueuedAction = new QueuedAction { Action = ExAction.Harvest, Direction = direction, Location = User.CurrentLocation };
                             return;
@@ -10832,7 +10864,7 @@ namespace Exine.ExineScenes
                                 MapObject target = null;
                                 if (MapObject.MouseObject is MonsterObject || MapObject.MouseObject is PlayerObject) target = MapObject.MouseObject;
 
-                                if (User.Class == ExineClass.Archer && User.HasClassWeapon && !User.RidingMount && !User.Poison.HasFlag(PoisonType.Dazed))
+                                if (User.Class == ExineClass.Archer && User.HasClassWeapon  && !User.Poison.HasFlag(PoisonType.Dazed))
                                 {
                                     if (target != null)
                                     {
@@ -10881,7 +10913,7 @@ namespace Exine.ExineScenes
                             return;
                         }
 
-                        if (MapObject.MouseObject is MonsterObject && User.Class == ExineClass.Archer && MapObject.TargetObject != null && !MapObject.TargetObject.Dead && User.HasClassWeapon && !User.RidingMount) //ArcherTest - range attack
+                        if (MapObject.MouseObject is MonsterObject && User.Class == ExineClass.Archer && MapObject.TargetObject != null && !MapObject.TargetObject.Dead && User.HasClassWeapon ) //ArcherTest - range attack
                         {
                             if (Functions.InRange(MapObject.MouseObject.CurrentLocation, User.CurrentLocation, Globals.MaxAttackRange))
                             {
@@ -10991,7 +11023,7 @@ namespace Exine.ExineScenes
 
                         if (ExineMainScene.CanRun && CanRun(direction) && CMain.Time > ExineMainScene.NextRunTime && User.HP >= 10 && (!User.Sneaking || (User.Sneaking && User.Sprint))) //slow removed
                         {
-                            int distance = User.RidingMount || User.Sprint && !User.Sneaking ? 3 : 2;
+                            int distance = User.Sprint && !User.Sneaking ? 3 : 2;
                             bool fail = false;
                             for (int i = 0; i <= distance; i++)
                             {
@@ -11000,7 +11032,7 @@ namespace Exine.ExineScenes
                             }
                             if (!fail)
                             {
-                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_RUN_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction, User.RidingMount || (User.Sprint && !User.Sneaking) ? 3 : 2) };
+                                User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_RUN_LEFT, Direction = direction, Location = Functions.PointMove(User.CurrentLocation, direction,  (User.Sprint && !User.Sneaking) ? 3 : 2) };
                                 return;
                             }
                         }
@@ -11068,9 +11100,9 @@ namespace Exine.ExineScenes
                 {
                     ExineDirection dir = Functions.DirectionFromPoint(User.CurrentLocation, CurrentPath.First().Location);
 
-                    if (ExineMainScene.CanRun && CanRun(dir) && CMain.Time > ExineMainScene.NextRunTime && User.HP >= 10 && CurrentPath.Count > (User.RidingMount ? 2 : 1))
+                    if (ExineMainScene.CanRun && CanRun(dir) && CMain.Time > ExineMainScene.NextRunTime && User.HP >= 10 && CurrentPath.Count > 1)
                     {
-                        User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_RUN_LEFT, Direction = dir, Location = Functions.PointMove(User.CurrentLocation, dir, User.RidingMount ? 3 : 2) };
+                        User.QueuedAction = new QueuedAction { Action = ExAction.ONEHAND_RUN_LEFT, Direction = dir, Location = Functions.PointMove(User.CurrentLocation, dir,  2 )};
                         return;
                     }
                     if (CanWalk(dir))
@@ -11475,7 +11507,7 @@ namespace Exine.ExineScenes
             if (User.CurrentWearWeight > User.Stats[Stat.BagWeight]) return false;
             if (CanWalk(dir) && EmptyCell(Functions.PointMove(User.CurrentLocation, dir, 2)))
             {
-                if (User.RidingMount || User.Sprint && !User.Sneaking)
+                if ( User.Sprint && !User.Sneaking)
                 {
                     return EmptyCell(Functions.PointMove(User.CurrentLocation, dir, 3));
                 }
@@ -11488,12 +11520,7 @@ namespace Exine.ExineScenes
 
         private bool CanRideAttack()
         {
-            if (ExineMainScene.User.RidingMount)
-            {
-                UserItem item = ExineMainScene.User.Equipment[(int)EquipmentSlot.Mount];
-                if (item == null || item.Slots.Length < 4 || item.Slots[(int)MountSlot.Bells] == null) return false;
-            }
-
+           
             return true;
         }
 

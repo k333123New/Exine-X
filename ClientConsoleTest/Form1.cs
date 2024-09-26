@@ -83,6 +83,7 @@ namespace ClientConsoleTest
         public Form1()
         {
             InitializeComponent();
+            /*
             Console.WriteLine("test");
             string path = @".\Data\Exine\AHW\";
             string toStringValue = "00";
@@ -116,6 +117,7 @@ namespace ClientConsoleTest
             }
 
             //Console.ReadLine();
+            */
             /*
             var count = int.Parse(Regex.Match(lastFile, @"\d+").Value) + 1;
             Console.WriteLine("count:"+count);
@@ -131,7 +133,7 @@ namespace ClientConsoleTest
             */
 
 
-            /*
+            
             TestJpg();
             testAccount = GetTestAccount();
             Console.WriteLine("testAccount.Style:" + testAccount.style + " testAccount.color:" + testAccount.color);
@@ -148,7 +150,7 @@ namespace ClientConsoleTest
             Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
             Graphics.TextContrast = 0;
-            */
+            
         }
 
        
@@ -304,6 +306,7 @@ namespace ClientConsoleTest
                     }); 
                     break;
 
+                    //Keep Alive를 주기로 동작 실행
                 case (short)ServerPacketIds.KeepAlive: 
                     
                     Network.Enqueue(
@@ -312,7 +315,37 @@ namespace ClientConsoleTest
                             Direction = (ExineDirection)tempDirection,
                         }
                     );
-                    
+
+                    Network.Enqueue(
+                       new C.Chat
+                       {
+                           //Direction = (ExineDirection)tempDirection,
+                           Message = "Test 테스트 " + tempDirection
+                       }
+                   );
+
+                    if (tempDirection == 0 || tempDirection == 4)
+                    {
+                        Network.Enqueue(
+                           new C.Walk
+                           {
+                               //Direction = (ExineDirection)tempDirection,
+                               Direction = (ExineDirection)tempDirection,
+                           }
+                        );
+                    }
+                    else
+                    {
+                        Network.Enqueue(
+                          new C.Attack
+                          {
+                              //Direction = (ExineDirection)tempDirection,
+                              Direction = (ExineDirection)tempDirection,
+                          }
+                       );
+                    }
+
+
                     tempDirection++;
                     tempDirection = tempDirection % 7;
                     break;

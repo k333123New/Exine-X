@@ -9,6 +9,19 @@ family packet
 
 
 
+other char dont move => because human using ExAction.ONEHAND_STAND and other using ExAction.Standing and action queue applied ExAction.Standing...(even other player..)
+//private void ObjectTurn(S.ObjectTurn p)
+                if (ob is PlayerObject) //add 240926 k333123
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = p.Direction, Location = p.Location });
+                }
+                else
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.Standing, Direction = p.Direction, Location = p.Location });
+                }
+
+
+
 
 0)cursor!
 1)keymap remove!

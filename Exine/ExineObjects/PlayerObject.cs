@@ -122,7 +122,7 @@ namespace Exine.ExineObjects
         public PlayerObject() { }
         public PlayerObject(uint objectID) : base(objectID)
         {
-            //Frames = FrameSet.ExPlayer; Set After Load Gender Info
+            Frames = FrameSet.ExPlayer; //성별 정보 로드 후 추가로 할당함.
         }
 
         public static byte[] GetBytesFromJpg(string path)
@@ -141,7 +141,7 @@ namespace Exine.ExineObjects
             return imageBytes;
         }
 
-        ///maybe it is other player!
+        ///maybe it is Other player! (General Player!)
         public void Load(S.ObjectPlayer info)
         {
             Name = info.Name;
@@ -155,7 +155,7 @@ namespace Exine.ExineObjects
             if (Gender == ExineGender.Female)
             {
                 Frames = FrameSet.ExPlayerWoman;
-                Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Frames = FrameSet.ExPlayerWoman");
+                Console.WriteLine("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Frames = FrameSet.ExPlayerWoman!!!");
                 // Console.ReadLine();
             }
             else
@@ -163,11 +163,45 @@ namespace Exine.ExineObjects
                 Frames = FrameSet.ExPlayer;
             }
 
-
             ExStyle = info.ExStyle;//add k333123
             ExColor = info.ExColor;//add k333123
             ExPortraitLen = info.ExPortraitLen;//add k333123
             ExPortraitBytes = info.ExPortraitBytes;//add k333123
+
+
+            #region Save Portrait To Lib!
+            if (ExPortraitLen != 0)
+            {
+                byte[] photoDatas = new byte[ExPortraitLen];
+                Buffer.BlockCopy(ExPortraitBytes, 0, photoDatas, 0, photoDatas.Length);
+
+                Image recvImage = Image.FromStream(new MemoryStream(photoDatas));
+                Bitmap objectPortrait = new Bitmap(recvImage);
+
+                // 사이즈가 변경된 이미지(1/2로 축소)
+                int width = objectPortrait.Width / 2;
+                int height = objectPortrait.Height / 2;
+                Size resize = new Size(width, height);
+                Bitmap objectPortraitSmall = new Bitmap(objectPortrait, resize);
+
+                File.Delete(Name + ".lib");
+                NewYPF.MLibraryForSave temp = new NewYPF.MLibraryForSave(Name + ".lib");
+                if (temp.Images.Count != 0)
+                {
+                    for (int i = 0; i < temp.Images.Count; i++)
+                    {
+                        temp.RemoveImage(0);
+                    }
+                }
+                temp.AddImage(objectPortrait, 0, 0);
+                temp.AddImage(objectPortraitSmall, 0, 0);
+                temp.Save();
+                temp.Close();
+            }
+            #endregion
+
+
+
             ExinePeaceMode = info.ExinePeaceMode;//add k333123 240311
             ExineRestMode = info.ExineRestMode;//add k333123 240311
 
@@ -965,7 +999,6 @@ namespace Exine.ExineObjects
                 if (Effects[i] is SpecialEffect) Effects[i].Remove();
             }
 
-            if (RidingMount) return;
 
             if (CurrentEffect == SpellEffect.MagicShieldUp)
             {
@@ -1289,43 +1322,6 @@ namespace Exine.ExineObjects
                 CurrentAction = CMain.Time > BlizzardStopTime ? CurrentAction : ExAction.Stance2;
                 //CurrentAction = CMain.Time > SlashingBurstTime ? CurrentAction : MirAction.Lunge;
 
-                if (RidingMount)
-                {
-                    switch (CurrentAction)
-                    {
-                        case ExAction.ONEHAND_STAND:
-                        case ExAction.TWOHAND_STAND:
-                        case ExAction.BOWHAND_STAND:
-                            CurrentAction = ExAction.MountStanding;
-                            break;
-                        case ExAction.ONEHAND_WALK_LEFT:
-                        case ExAction.ONEHAND_WALK_RIGHT:
-                        case ExAction.TWOHAND_WALK_LEFT:
-                        case ExAction.TWOHAND_WALK_RIGHT:
-                        case ExAction.BOWHAND_WALK_LEFT:
-                        case ExAction.BOWHAND_WALK_RIGHT:
-                            CurrentAction = ExAction.MountWalking;
-                            break;
-                        case ExAction.ONEHAND_RUN_LEFT:
-                        case ExAction.ONEHAND_RUN_RIGHT:
-                        case ExAction.TWOHAND_RUN_LEFT:
-                        case ExAction.TWOHAND_RUN_RIGHT:
-                        case ExAction.BOWHAND_RUN_LEFT:
-                        case ExAction.BOWHAND_RUN_RIGHT:
-                            CurrentAction = ExAction.MountRunning;
-                            break;
-                        case ExAction.Struck:
-                            CurrentAction = ExAction.MountStruck;
-                            break;
-                        //case ExAction.Attack1:
-                        case ExAction.ONEHAND_ATTACK1:
-                        case ExAction.TWOHAND_ATTACK1:
-                        case ExAction.BOWHAND_ATTACK1:
-                            CurrentAction = ExAction.MountAttack;
-                            break;
-                    }
-                }
-
                 if (CurrentAction == ExAction.ONEHAND_STAND)
                 {
                     if (Class == ExineClass.Archer && HasClassWeapon)
@@ -1381,43 +1377,6 @@ namespace Exine.ExineObjects
 
 
                 CurrentAction = action.Action;
-
-                if (RidingMount)
-                {
-                    switch (CurrentAction)
-                    {
-                        case ExAction.ONEHAND_STAND:
-                        case ExAction.TWOHAND_STAND:
-                        case ExAction.BOWHAND_STAND:
-                            CurrentAction = ExAction.MountStanding;
-                            break;
-                        case ExAction.ONEHAND_WALK_LEFT:
-                        case ExAction.ONEHAND_WALK_RIGHT:
-                        case ExAction.TWOHAND_WALK_LEFT:
-                        case ExAction.TWOHAND_WALK_RIGHT:
-                        case ExAction.BOWHAND_WALK_LEFT:
-                        case ExAction.BOWHAND_WALK_RIGHT:
-                            CurrentAction = ExAction.MountWalking;
-                            break;
-                        case ExAction.ONEHAND_RUN_LEFT:
-                        case ExAction.ONEHAND_RUN_RIGHT:
-                        case ExAction.TWOHAND_RUN_LEFT:
-                        case ExAction.TWOHAND_RUN_RIGHT:
-                        case ExAction.BOWHAND_RUN_LEFT:
-                        case ExAction.BOWHAND_RUN_RIGHT:
-                            CurrentAction = ExAction.MountRunning;
-                            break;
-                        case ExAction.Struck:
-                            CurrentAction = ExAction.MountStruck;
-                            break;
-                        //case ExAction.Attack1:
-                        case ExAction.ONEHAND_ATTACK1:
-                        case ExAction.TWOHAND_ATTACK1:
-                        case ExAction.BOWHAND_ATTACK1:
-                            CurrentAction = ExAction.MountAttack;
-                            break;
-                    }
-                }
 
                 CurrentLocation = action.Location;
                 ExineDirection olddirection = Direction;
@@ -1494,19 +1453,19 @@ namespace Exine.ExineObjects
                         switch(weaponType)
                         {
                             case 1:
-                                Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.ONEHAND_STAND, out Frame);
+                                Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
                                 break;
 
                             case 2:
-                                Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.TWOHAND_STAND, out Frame);
+                                Frames.TryGetValue( ExAction.TWOHAND_STAND, out Frame);
                                 break;
 
                             case 3:
-                                Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.BOWHAND_STAND, out Frame);
+                                Frames.TryGetValue(ExAction.BOWHAND_STAND, out Frame);
                                 break;
 
                             default:
-                                Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.ONEHAND_STAND, out Frame);
+                                Frames.TryGetValue(ExAction.ONEHAND_STAND, out Frame);
                                 break;
                         }
                         //Frames.TryGetValue(RidingMount ? ExAction.MountStanding : ExAction.ONEHAND_STAND, out Frame);
@@ -2047,63 +2006,6 @@ namespace Exine.ExineObjects
                         case ExAction.TWOHAND_ATTACK1:
                         case ExAction.BOWHAND_ATTACK1:
                         case ExAction.MountAttack:
-
-                            if (!RidingMount)
-                            {
-                                if (ExineMainScene.User.Slaying && TargetObject != null)
-                                    Spell = Spell.Slaying;
-
-                                if (ExineMainScene.User.Thrusting && ExineMainScene.Scene.MapControl.HasTarget(Functions.PointMove(CurrentLocation, Direction, 2)))
-                                    Spell = Spell.Thrusting;
-
-                                if (ExineMainScene.User.HalfMoon)
-                                {
-                                    if (TargetObject != null || ExineMainScene.Scene.MapControl.CanHalfMoon(CurrentLocation, Direction))
-                                    {
-                                        magic = User.GetMagic(Spell.HalfMoon);
-                                        if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
-                                            Spell = Spell.HalfMoon;
-                                    }
-                                }
-
-                                if (ExineMainScene.User.CrossHalfMoon)
-                                {
-                                    if (TargetObject != null || ExineMainScene.Scene.MapControl.CanCrossHalfMoon(CurrentLocation))
-                                    {
-                                        magic = User.GetMagic(Spell.CrossHalfMoon);
-                                        if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
-                                            Spell = Spell.CrossHalfMoon;
-                                    }
-                                }
-
-                                if (ExineMainScene.User.DoubleSlash)
-                                {
-                                    magic = User.GetMagic(Spell.DoubleSlash);
-                                    if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
-                                        Spell = Spell.DoubleSlash;
-                                }
-
-
-                                if (ExineMainScene.User.TwinDrakeBlade && TargetObject != null)
-                                {
-                                    magic = User.GetMagic(Spell.TwinDrakeBlade);
-                                    if (magic != null && magic.BaseCost + magic.LevelCost * magic.Level <= User.MP)
-                                        Spell = Spell.TwinDrakeBlade;
-                                }
-
-                                if (ExineMainScene.User.FlamingSword)
-                                {
-                                    if (TargetObject != null)
-                                    {
-                                        magic = User.GetMagic(Spell.FlamingSword);
-                                        if (magic != null)
-                                        {
-                                            Spell = Spell.FlamingSword;
-                                            magic.CastTime = CMain.Time;
-                                        }
-                                    }
-                                }
-                            }
 
                             Network.Enqueue(new C.Attack { Direction = Direction, Spell = Spell });
 
@@ -5046,7 +4948,6 @@ namespace Exine.ExineObjects
                 PlayWemadeStepSound(x, y, out moveSound);
             }
 
-            if (RidingMount) moveSound = SoundList.MountWalkL;
 
             if (CurrentAction == ExAction.ONEHAND_RUN_LEFT) moveSound += 2;
             if (CurrentAction == ExAction.ONEHAND_RUN_RIGHT) moveSound += 2;
@@ -6132,15 +6033,7 @@ namespace Exine.ExineObjects
 
         public void PlayStruckSound()
         {
-            if (RidingMount)
-            {
-                if (MountType < 7)
-                    SoundManager.PlaySound(CMain.Random.Next(10179, 10181));
-                else if (MountType < 12)
-                    SoundManager.PlaySound(CMain.Random.Next(10193, 10194));
-
-                return;
-            }
+           
 
             int add = 0;
             if (Class != ExineClass.Assassin) //Archer to add?
@@ -6220,16 +6113,6 @@ namespace Exine.ExineObjects
         }
         public void PlayAttackSound()
         {
-            if (RidingMount)
-            {
-                if (MountType < 7)
-                    SoundManager.PlaySound(CMain.Random.Next(10181, 10184));
-                else if (MountType < 12)
-                    SoundManager.PlaySound(CMain.Random.Next(10190, 10193));
-
-                return;
-            }
-
             if (Weapon >= 0 && Class == ExineClass.Assassin)
             {
                 SoundManager.PlaySound(SoundList.SwingShort);
@@ -6313,20 +6196,12 @@ namespace Exine.ExineObjects
 
         public void PlayMountSound()
         {
-            if (RidingMount)
-            {
-                if(MountType < 7)
-                    SoundManager.PlaySound(10218);
-                else if (MountType < 12)
-                    SoundManager.PlaySound(10188);
-            }
-            else
-            {
+           
                 if (MountType < 7)
                     SoundManager.PlaySound(10219);
                 else if (MountType < 12)
                     SoundManager.PlaySound(10189);
-            }
+            
         }
 
 

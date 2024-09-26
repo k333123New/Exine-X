@@ -337,7 +337,7 @@ namespace Exine.ExineControls
             if (Locked || GridType == MirGridType.Inspect || GridType == MirGridType.TrustMerchant || GridType == MirGridType.GuildStorage || GridType == MirGridType.Craft) return;
 
            
-            if (MapObject.User.RidingMount && Item.Info.Type != ItemType.Scroll && Item.Info.Type != ItemType.Potion && Item.Info.Type != ItemType.Torch) return;
+            if ( Item.Info.Type != ItemType.Scroll && Item.Info.Type != ItemType.Potion && Item.Info.Type != ItemType.Torch) return;
 
             if (GridType == MirGridType.BuyBack)
             {
@@ -612,7 +612,7 @@ namespace Exine.ExineControls
                 if (itemCell.Item == null) count++;
             }
 
-            if (Item == null || count < 1 || (MapObject.User.RidingMount && Item.Info.Type != ItemType.Torch)) return;
+            if (Item == null || count < 1 || ( Item.Info.Type != ItemType.Torch)) return;
 
             if (Item.Info.StackSize > 1)
             {
@@ -1571,7 +1571,7 @@ namespace Exine.ExineControls
 
         private bool CanRemoveItem(UserItem i)
         {
-            if(MapObject.User.RidingMount && i.Info.Type != ItemType.Torch)
+            if( i.Info.Type != ItemType.Torch)
             {
                 return false;
             }
