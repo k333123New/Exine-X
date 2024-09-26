@@ -18,4 +18,13 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="test1234.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="testAccount.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

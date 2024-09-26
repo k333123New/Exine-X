@@ -138,8 +138,9 @@ namespace ClientConsoleTest
             testAccount = GetTestAccount();
             Console.WriteLine("testAccount.Style:" + testAccount.style + " testAccount.color:" + testAccount.color);
 
+            
             //exPortraitBytes = GetBytesFromJpg("test.jpg");
-            byte[] tempBytes = GetBytesFromJpg("test.jpg");
+            byte[] tempBytes = GetBytesFromJpg(testAccount.id+".jpg");
             Buffer.BlockCopy(tempBytes, 0, exPortraitBytes, 0, tempBytes.Length);
             //Read jpg to 
             Application.Idle += Application_Idle;
