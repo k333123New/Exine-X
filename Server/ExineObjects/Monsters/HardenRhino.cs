@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HardenRhino : MonsterObject
+    public class HardenRhino : MonsterObjectSrv
     {
         protected internal HardenRhino(MonsterInfo info)
             : base(info)
@@ -70,7 +70,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
 
             if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
 
@@ -80,7 +80,7 @@ namespace Server.ExineObjects.Monsters
             ActionTime = Envir.Time + 300;
         }
 
-        private void Dash(MapObject target)
+        private void Dash(MapObjectSrv target)
         {
             var dist = Functions.MaxDistance(CurrentLocation, target.CurrentLocation);
 

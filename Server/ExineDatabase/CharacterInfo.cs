@@ -100,7 +100,7 @@ namespace Server.ExineDatabase
         public bool[] Flags = new bool[Globals.FlagIndexCount];
 
         public AccountInfo AccountInfo;
-        public PlayerObject Player;
+        public PlayerObjectSrv Player;
         public MountInfo Mount;
 
         public Dictionary<int, int> GSpurchases = new Dictionary<int, int>();
@@ -603,7 +603,7 @@ namespace Server.ExineDatabase
 
         public long TameTime;
 
-        public PetInfo(MonsterObject ob)
+        public PetInfo(MonsterObjectSrv ob)
         {
             MonsterIndex = ob.Info.Index;
             HP = ob.HP;
@@ -643,7 +643,7 @@ namespace Server.ExineDatabase
 
     public class MountInfo
     {
-        public HumanObject Player;
+        public HumanObjectSrv Player;
         public short MountType = -1;
 
         public bool CanRide
@@ -684,7 +684,7 @@ namespace Server.ExineDatabase
         }
 
 
-        public MountInfo(HumanObject ob)
+        public MountInfo(HumanObjectSrv ob)
         {
             Player = ob;
         }

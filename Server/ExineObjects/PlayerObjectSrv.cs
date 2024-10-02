@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace Server.ExineObjects
 {
-    public class PlayerObject : HumanObject
+    public class PlayerObjectSrv : HumanObjectSrv
     {
         private long NextTradeTime;
         private long NextGroupInviteTime;
@@ -111,7 +111,7 @@ namespace Server.ExineObjects
 
         public bool CanCreateGuild = false;        
         
-        public GuildObject PendingGuildInvite = null;
+        public GuildObjectSrv PendingGuildInvite = null;
         public bool GuildNoticeChanged = true; //set to false first time client requests notice list, set to true each time someone in guild edits notice
         public bool GuildMembersChanged = true;//same as above but for members
         public bool GuildCanRequestItems = true;
@@ -135,18 +135,18 @@ namespace Server.ExineObjects
             set { Info.AllowObserve = value; }
         }
 
-        public PlayerObject MarriageProposal;
-        public PlayerObject DivorceProposal;
-        public PlayerObject MentorRequest;
+        public PlayerObjectSrv MarriageProposal;
+        public PlayerObjectSrv DivorceProposal;
+        public PlayerObjectSrv MentorRequest;
 
-        public PlayerObject GroupInvitation;
-        public PlayerObject TradeInvitation;
+        public PlayerObjectSrv GroupInvitation;
+        public PlayerObjectSrv TradeInvitation;
 
-        public PlayerObject TradePartner = null;
+        public PlayerObjectSrv TradePartner = null;
         public bool TradeLocked = false;
         public uint TradeGoldAmount = 0;
 
-        public PlayerObject ItemRentalPartner = null;
+        public PlayerObjectSrv ItemRentalPartner = null;
         public UserItem ItemRentalDepositedItem = null;
         public uint ItemRentalFeeAmount = 0;
         public uint ItemRentalPeriodLength = 0;
@@ -165,9 +165,9 @@ namespace Server.ExineObjects
             get { return Info.CompletedQuests; }
         }
 
-        public PlayerObject() { }
+        public PlayerObjectSrv() { }
 
-        public PlayerObject(CharacterInfo info, ExineConnection connection) : base(info, connection) { }
+        public PlayerObjectSrv(CharacterInfo info, ExineConnection connection) : base(info, connection) { }
         protected override void Load(CharacterInfo info, ExineConnection connection)
         {
             if (info.Player != null)
@@ -233,12 +233,12 @@ namespace Server.ExineObjects
 
             for (int i = Pets.Count - 1; i >= 0; i--)
             {
-                MonsterObject pet = Pets[i];
+                MonsterObjectSrv pet = Pets[i];
 
                 if (pet.Race == ObjectType.Creature)
                 {
                     //dont save Creatures they will miss alot of AI-Info when they get spawned on login
-                    UnSummonIntelligentCreature(((IntelligentCreatureObject)pet).PetType, false);
+                    UnSummonIntelligentCreature(((IntelligentCreatureObjectSrv)pet).PetType, false);
 
                     Pets.RemoveAt(i);
                     continue;
@@ -528,7 +528,7 @@ namespace Server.ExineObjects
 
             if (LastHitter != null && LastHitter.Race == ObjectType.Player)
             {
-                PlayerObject hitter = (PlayerObject)LastHitter;
+                PlayerObjectSrv hitter = (PlayerObjectSrv)LastHitter;
 
                 if (AtWar(hitter) || WarZone)
                 {
@@ -592,7 +592,7 @@ namespace Server.ExineObjects
 
             Report.Died(CurrentMap.Info.FileName);
         }
-        private void RedDeathDrop(MapObject killer)
+        private void RedDeathDrop(MapObjectSrv killer)
         {
             if (killer == null || killer.Race != ObjectType.Player)
             {
@@ -735,7 +735,7 @@ namespace Server.ExineObjects
                 int nearCount = 0;
                 for (int i = 0; i < GroupMembers.Count; i++)
                 {
-                    PlayerObject player = GroupMembers[i];
+                    PlayerObjectSrv player = GroupMembers[i];
 
                     if (Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
@@ -748,7 +748,7 @@ namespace Server.ExineObjects
 
                 for (int i = 0; i < GroupMembers.Count; i++)
                 {
-                    PlayerObject player = GroupMembers[i];
+                    PlayerObjectSrv player = GroupMembers[i];
                     if (player.CurrentMap == CurrentMap &&
                         Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) && !player.Dead)
                     {
@@ -774,7 +774,7 @@ namespace Server.ExineObjects
                 if (HasBuff(BuffType.Lover, out Buff buff))
                 {
                     CharacterInfo lover = Envir.GetCharacterInfo(Info.Married);
-                    PlayerObject loverPlayer = Envir.GetPlayer(lover.Name);
+                    PlayerObjectSrv loverPlayer = Envir.GetPlayer(lover.Name);
                     if (loverPlayer != null && loverPlayer.CurrentMap == CurrentMap && Functions.InRange(loverPlayer.CurrentLocation, CurrentLocation, Globals.DataRange) && !loverPlayer.Dead)
                     {
                         amount += (uint)Math.Max(0, (amount * Stats[Stat.LoverExpRatePercent]) / 100);
@@ -787,7 +787,7 @@ namespace Server.ExineObjects
                 if (HasBuff(BuffType.Mentee, out _))
                 {
                     CharacterInfo mentor = Envir.GetCharacterInfo(Info.Mentor);
-                    PlayerObject mentorPlayer = Envir.GetPlayer(mentor.Name);
+                    PlayerObjectSrv mentorPlayer = Envir.GetPlayer(mentor.Name);
                     if (mentorPlayer != null && mentorPlayer.CurrentMap == CurrentMap && Functions.InRange(mentorPlayer.CurrentLocation, CurrentLocation, Globals.DataRange) && !mentorPlayer.Dead)
                     {
                         if (GroupMembers != null && GroupMembers.Contains(mentorPlayer))
@@ -814,7 +814,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < Pets.Count; i++)
             {
-                MonsterObject monster = Pets[i];
+                MonsterObjectSrv monster = Pets[i];
                 if (monster.CurrentMap == CurrentMap && Functions.InRange(monster.CurrentLocation, CurrentLocation, Globals.DataRange) && !monster.Dead)
                     monster.PetExp(amount);
             }
@@ -964,7 +964,7 @@ namespace Server.ExineObjects
                 info.Movements.Add(cmInfo);
             }
 
-            foreach (NPCObject npc in Envir.NPCs.Where(x => x.CurrentMap == map && x.Info.ShowOnBigMap).OrderBy(x => x.Info.BigMapIcon))
+            foreach (NPCObjectSrv npc in Envir.NPCs.Where(x => x.CurrentMap == map && x.Info.ShowOnBigMap).OrderBy(x => x.Info.BigMapIcon))
             {
                 info.NPCs.Add(new ClientNPCInfo()
                 {
@@ -1142,14 +1142,14 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < Info.Pets.Count; i++)
             {
-                MonsterObject monster;
+                MonsterObjectSrv monster;
 
                 PetInfo info = Info.Pets[i];
 
                 var monsterInfo = Envir.GetMonsterInfo(info.MonsterIndex);
                 if (monsterInfo == null) continue;
 
-                monster = MonsterObject.GetMonster(monsterInfo);
+                monster = MonsterObjectSrv.GetMonster(monsterInfo);
                 if (monster == null) continue;
 
                 monster.PetLevel = info.Level;
@@ -1383,7 +1383,7 @@ namespace Server.ExineObjects
                 if (Info.Married != 0)
                 {
                     CharacterInfo Lover = Envir.GetCharacterInfo(Info.Married);
-                    PlayerObject player = Envir.GetPlayer(Lover.Name);
+                    PlayerObjectSrv player = Envir.GetPlayer(Lover.Name);
 
                     if (player != null) player.GetRelationship(false);
                 }
@@ -1573,7 +1573,7 @@ namespace Server.ExineObjects
 
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject ob = cell.Objects[i];
+                        MapObjectSrv ob = cell.Objects[i];
 
                         //if (ob.Race == ObjectType.Player && ob.Observer) continue;
 
@@ -1601,24 +1601,24 @@ namespace Server.ExineObjects
 
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject ob = cell.Objects[i];
+                        MapObjectSrv ob = cell.Objects[i];
                         if (ob == this) continue;
 
                         if (ob.Race == ObjectType.Player)
                         {
-                            PlayerObject Player = (PlayerObject)ob;
+                            PlayerObjectSrv Player = (PlayerObjectSrv)ob;
                             Enqueue(Player.GetInfoEx(this), c);
                         }
                         else if (ob.Race == ObjectType.Spell)
                         {
-                            SpellObject obSpell = (SpellObject)ob;
+                            SpellObjectSrv obSpell = (SpellObjectSrv)ob;
 
                             if ((obSpell.Spell != Spell.ExplosiveTrap) || (obSpell.Caster != null && IsFriendlyTarget(obSpell.Caster)))
                                 Enqueue(ob.GetInfo(), c);
                         }
                         else if (ob.Race == ObjectType.Merchant)
                         {
-                            NPCObject NPC = (NPCObject)ob;
+                            NPCObjectSrv NPC = (NPCObjectSrv)ob;
 
                             NPC.CheckVisible(this);
 
@@ -1662,11 +1662,11 @@ namespace Server.ExineObjects
             BroadcastColourChange();
         }
 
-        public override Color GetNameColour(HumanObject human)
+        public override Color GetNameColour(HumanObjectSrv human)
         {
             if (human == null) return NameColour;
 
-            if (human is PlayerObject player)
+            if (human is PlayerObjectSrv player)
             {
                 if (player.PKPoints >= 200)
                     return Color.Red;
@@ -1774,11 +1774,11 @@ namespace Server.ExineObjects
 
                 if (parts.Length == 0) return;
 
-                PlayerObject player = Envir.GetPlayer(parts[0]);
+                PlayerObjectSrv player = Envir.GetPlayer(parts[0]);
 
                 if (player == null)
                 {
-                    IntelligentCreatureObject creature = GetCreatureByName(parts[0]);
+                    IntelligentCreatureObjectSrv creature = GetCreatureByName(parts[0]);
                     if (creature != null)
                     {
                         creature.ReceiveChat(message.Remove(0, parts[0].Length), ChatType.WhisperIn);
@@ -1800,7 +1800,7 @@ namespace Server.ExineObjects
                     return;
                 }
 
-                message = ProcessChatItems(message, new List<PlayerObject> { player }, linkedItems);
+                message = ProcessChatItems(message, new List<PlayerObjectSrv> { player }, linkedItems);
 
                 ReceiveChat(string.Format("/{0}", message), ChatType.WhisperOut);
                 player.ReceiveChat(string.Format("{0}=>{1}", Name, message.Remove(0, parts[0].Length)), ChatType.WhisperIn);
@@ -1841,7 +1841,7 @@ namespace Server.ExineObjects
                 if (Info.Mentor == 0) return;
 
                 CharacterInfo Mentor = Envir.GetCharacterInfo(Info.Mentor);
-                PlayerObject player = Envir.GetPlayer(Mentor.Name);
+                PlayerObjectSrv player = Envir.GetPlayer(Mentor.Name);
 
                 if (player == null)
                 {
@@ -1849,7 +1849,7 @@ namespace Server.ExineObjects
                     return;
                 }
 
-                message = ProcessChatItems(message, new List<PlayerObject> { player }, linkedItems);
+                message = ProcessChatItems(message, new List<PlayerObjectSrv> { player }, linkedItems);
 
                 ReceiveChat(string.Format("{0}: {1}", Name, message), ChatType.Mentor);
                 player.ReceiveChat(string.Format("{0}: {1}", Name, message), ChatType.Mentor);
@@ -1899,7 +1899,7 @@ namespace Server.ExineObjects
                 }
                 else
                 {
-                    List<PlayerObject> playersInRange = new List<PlayerObject>();
+                    List<PlayerObjectSrv> playersInRange = new List<PlayerObjectSrv>();
 
                     for (int i = 0; i < CurrentMap.Players.Count; i++)
                     {
@@ -1931,7 +1931,7 @@ namespace Server.ExineObjects
                 if (Info.Married == 0) return;
 
                 CharacterInfo Lover = Envir.GetCharacterInfo(Info.Married);
-                PlayerObject player = Envir.GetPlayer(Lover.Name);
+                PlayerObjectSrv player = Envir.GetPlayer(Lover.Name);
             
                 if (player == null)
                 {
@@ -1939,7 +1939,7 @@ namespace Server.ExineObjects
                     return;
                 }
 
-                message = ProcessChatItems(message, new List<PlayerObject> { player }, linkedItems);
+                message = ProcessChatItems(message, new List<PlayerObjectSrv> { player }, linkedItems);
 
                 ReceiveChat(string.Format("{0}: {1}", Name, message), ChatType.Relationship);
                 player.ReceiveChat(string.Format("{0}: {1}", Name, message), ChatType.Relationship);
@@ -1965,7 +1965,7 @@ namespace Server.ExineObjects
 
                 if (parts.Length == 0) return;
 
-                PlayerObject player;
+                PlayerObjectSrv player;
                 CharacterInfo data;
                 String hintstring;
                 UserItem item;
@@ -2010,7 +2010,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
 
                                 switch (ob.Race)
                                 {
@@ -2018,7 +2018,7 @@ namespace Server.ExineObjects
                                     case ObjectType.Monster:
                                         if (ob.Dead) continue;
                                         ob.EXPOwner = this;
-                                        ob.ExpireTime = Envir.Time + MonsterObject.EXPOwnerDelay;
+                                        ob.ExpireTime = Envir.Time + MonsterObjectSrv.EXPOwnerDelay;
                                         ob.Die();
                                         break;
                                     default:
@@ -2417,7 +2417,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < GroupMembers.Count; i++)
                         {
-                            PlayerObject playerSend = GroupMembers[i];
+                            PlayerObjectSrv playerSend = GroupMembers[i];
                             playerSend.ReceiveChat(string.Format("{0} has rolled a {1}", Name, diceNum), ChatType.Group);
                         }
                         break;
@@ -2705,13 +2705,13 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < count; i++)
                         {
-                            MonsterObject monster = MonsterObject.GetMonster(mInfo);
+                            MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(mInfo);
                             if (monster == null)
                             {
                                 return;
                             }
 
-                            if (monster is IntelligentCreatureObject)
+                            if (monster is IntelligentCreatureObjectSrv)
                             {
                                 ReceiveChat("Cannot spawn an IntelligentCreatureObject.", ChatType.System);
                                 return;
@@ -2758,7 +2758,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < count; i++)
                         {
-                            MonsterObject monster = MonsterObject.GetMonster(mInfo2);
+                            MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(mInfo2);
 
                             if (monster == null) return;
 
@@ -2767,7 +2767,7 @@ namespace Server.ExineObjects
                                 ReceiveChat($"Cannot spawn conquest item: {monster.Name}", ChatType.System);
                                 return;
                             }
-                            else if (monster is IntelligentCreatureObject)
+                            else if (monster is IntelligentCreatureObjectSrv)
                             {
                                 ReceiveChat($"Cannot spawn an IntelligentCreatureObject.", ChatType.System);
                                 return;
@@ -3003,7 +3003,7 @@ namespace Server.ExineObjects
                             return;
                         }
 
-                        GuildObject guild = Envir.GetGuild(gName);
+                        GuildObjectSrv guild = Envir.GetGuild(gName);
                         if (guild != null)
                         {
                             ReceiveChat(string.Format("Guild {0} already exists.", gName), ChatType.System);
@@ -3133,7 +3133,7 @@ namespace Server.ExineObjects
 
                             for (int m = 0; m < obCount; m++)
                             {
-                                MapObject ob = cell.Objects[m];
+                                MapObjectSrv ob = cell.Objects[m];
 
                                 if (ob.Race != ObjectType.Monster) continue;
                                 if (ob.Dead) continue;
@@ -3189,7 +3189,7 @@ namespace Server.ExineObjects
 
                         int.TryParse(parts[1], out tempInt);
 
-                        DecoObject decoOb = new DecoObject
+                        DecoObjectSrv decoOb = new DecoObjectSrv
                         {
                             Image = tempInt,
                             CurrentMap = CurrentMap,
@@ -3310,7 +3310,7 @@ namespace Server.ExineObjects
                         if (!IsGM) return;
                         if (parts.Length < 2) return;
 
-                        GuildObject enemyGuild = Envir.GetGuild(parts[1]);
+                        GuildObjectSrv enemyGuild = Envir.GetGuild(parts[1]);
 
                         if (MyGuild == null)
                         {
@@ -3409,7 +3409,7 @@ namespace Server.ExineObjects
                         {
                             if (!IsGM && !Settings.TestServer) return;
 
-                            MapObject ob = null;
+                            MapObjectSrv ob = null;
 
                             if (parts.Length < 2)
                             {
@@ -3430,19 +3430,19 @@ namespace Server.ExineObjects
                             switch (ob.Race)
                             {
                                 case ObjectType.Player:
-                                    PlayerObject plOb = (PlayerObject)ob;
+                                    PlayerObjectSrv plOb = (PlayerObjectSrv)ob;
                                     ReceiveChat("--Player Info--", ChatType.System2);
                                     ReceiveChat(string.Format("Name : {0}, Level : {1}, X : {2}, Y : {3}", plOb.Name, plOb.Level, plOb.CurrentLocation.X, plOb.CurrentLocation.Y), ChatType.System2);
                                     break;
                                 case ObjectType.Monster:
-                                    MonsterObject monOb = (MonsterObject)ob;
+                                    MonsterObjectSrv monOb = (MonsterObjectSrv)ob;
                                     ReceiveChat("--Monster Info--", ChatType.System2);
                                     ReceiveChat(string.Format("ID : {0}, Name : {1}", monOb.Info.Index, monOb.Name), ChatType.System2);
                                     ReceiveChat(string.Format("Level : {0}, X : {1}, Y : {2}, Dir: {3}", monOb.Level, monOb.CurrentLocation.X, monOb.CurrentLocation.Y, monOb.Direction), ChatType.System2);
                                     ReceiveChat(string.Format("HP : {0}, MinDC : {1}, MaxDC : {2}", monOb.Info.Stats[Stat.HP], monOb.Stats[Stat.MinDC], monOb.Stats[Stat.MaxDC]), ChatType.System2);
                                     break;
                                 case ObjectType.Merchant:
-                                    NPCObject npcOb = (NPCObject)ob;
+                                    NPCObjectSrv npcOb = (NPCObjectSrv)ob;
                                     ReceiveChat("--NPC Info--", ChatType.System2);
                                     ReceiveChat(string.Format("ID : {0}, Name : {1}", npcOb.Info.Index, npcOb.Name), ChatType.System2);
                                     ReceiveChat(string.Format("X : {0}, Y : {1}", ob.CurrentLocation.X, ob.CurrentLocation.Y), ChatType.System2);
@@ -3553,7 +3553,7 @@ namespace Server.ExineObjects
 
                             else if (!int.TryParse(parts[1], out conquestID)) return;
 
-                            ConquestObject tempConq = Envir.Conquests.FirstOrDefault(t => t.Info.Index == conquestID);
+                            ConquestObjectSrv tempConq = Envir.Conquests.FirstOrDefault(t => t.Info.Index == conquestID);
 
                             if (tempConq != null)
                             {
@@ -3599,7 +3599,7 @@ namespace Server.ExineObjects
 
                             else if (!int.TryParse(parts[1], out conquestID)) return;
 
-                            ConquestObject resetConq = Envir.Conquests.FirstOrDefault(t => t.Info.Index == conquestID);
+                            ConquestObjectSrv resetConq = Envir.Conquests.FirstOrDefault(t => t.Info.Index == conquestID);
 
                             if (resetConq != null && !resetConq.WarIsOn)
                             {
@@ -3846,7 +3846,7 @@ namespace Server.ExineObjects
                 Broadcast(p);
             }
         }
-        private string ProcessChatItems(string text, List<PlayerObject> recipients, List<ChatItem> chatItems)
+        private string ProcessChatItems(string text, List<PlayerObjectSrv> recipients, List<ChatItem> chatItems)
         {
             if (chatItems == null)
             {
@@ -3889,7 +3889,7 @@ namespace Server.ExineObjects
                     {
                         for (int i = CurrentMap.Players.Count - 1; i >= 0; i--)
                         {
-                            PlayerObject player = CurrentMap.Players[i];
+                            PlayerObjectSrv player = CurrentMap.Players[i];
                             if (player == this) continue;
 
                             if (player == null || player.Info == null || player.Node == null) continue;
@@ -3910,7 +3910,7 @@ namespace Server.ExineObjects
                     {
                         for (int i = 0; i < recipients.Count; i++)
                         {
-                            PlayerObject player = recipients[i];
+                            PlayerObjectSrv player = recipients[i];
                             if (player == this) continue;
 
                             if (player == null || player.Info == null || player.Node == null) continue;
@@ -3964,7 +3964,7 @@ namespace Server.ExineObjects
                 for (int i = 0; i < cell.Objects.Count; i++)
                 {
                     if (cell.Objects[i].Race != ObjectType.Spell) continue;
-                    SpellObject ob = (SpellObject)cell.Objects[i];
+                    SpellObjectSrv ob = (SpellObjectSrv)cell.Objects[i];
 
                     ob.ProcessSpell(this);
                     //break;
@@ -4026,7 +4026,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             if (ob.Race != ObjectType.Monster || !ob.Dead || ob.Harvested) continue;
 
                             if (ob.EXPOwner != null && ob.EXPOwner != this && !IsMember(ob))
@@ -4167,7 +4167,7 @@ namespace Server.ExineObjects
                     Cell cell = CurrentMap.GetCell(location);
 
                     if (cell.Objects == null ||
-                        cell.Objects.Where(ob => ob.Race == ObjectType.Spell).All(ob => ((SpellObject)ob).Spell != Spell.DigOutZombie && ((SpellObject)ob).Spell != Spell.DigOutArmadillo))
+                        cell.Objects.Where(ob => ob.Race == ObjectType.Spell).All(ob => ((SpellObjectSrv)ob).Spell != Spell.DigOutZombie && ((SpellObjectSrv)ob).Spell != Spell.DigOutArmadillo))
                         continue;
                 }
 
@@ -4255,7 +4255,7 @@ namespace Server.ExineObjects
             if (Info.Married != 0)
             {
                 CharacterInfo Lover = Envir.GetCharacterInfo(Info.Married);
-                PlayerObject player = Envir.GetPlayer(Lover.Name);
+                PlayerObjectSrv player = Envir.GetPlayer(Lover.Name);
 
                 if (player != null) player.GetRelationship(false);
             }
@@ -4293,7 +4293,7 @@ namespace Server.ExineObjects
             return false;
         }
 
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {            
             if (attacker == null || attacker.Node == null) return false; 
             if (Dead || InSafeZone || attacker.InSafeZone || attacker == this || GMGameMaster) return false;
@@ -4317,7 +4317,7 @@ namespace Server.ExineObjects
 
             return true;
         }
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             if (attacker == null || attacker.Node == null) return false;
             if (Dead || attacker.Master == this || GMGameMaster) return false;
@@ -4359,7 +4359,7 @@ namespace Server.ExineObjects
 
             return true;
         }
-        public override bool IsFriendlyTarget(HumanObject ally)
+        public override bool IsFriendlyTarget(HumanObjectSrv ally)
         {
             if (ally == this) return true; 
 
@@ -4376,7 +4376,7 @@ namespace Server.ExineObjects
             }
             return true;
         }
-        public override bool IsFriendlyTarget(MonsterObject ally)
+        public override bool IsFriendlyTarget(MonsterObjectSrv ally)
         {
             if (ally.Race != ObjectType.Monster) return false;
             if (ally.Master == null) return false;
@@ -4534,7 +4534,7 @@ namespace Server.ExineObjects
                         Enqueue(p);
                         return;
                     }
-                    NPCObject ob = null;
+                    NPCObjectSrv ob = null;
                     for (int i = 0; i < CurrentMap.NPCs.Count; i++)
                     {
                         if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -4664,7 +4664,7 @@ namespace Server.ExineObjects
                         Enqueue(p);
                         return;
                     }
-                    NPCObject ob = null;
+                    NPCObjectSrv ob = null;
                     for (int i = 0; i < CurrentMap.NPCs.Count; i++)
                     {
                         if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -4762,7 +4762,7 @@ namespace Server.ExineObjects
                         Enqueue(p);
                         return;
                     }
-                    NPCObject ob = null;
+                    NPCObjectSrv ob = null;
                     for (int i = 0; i < CurrentMap.NPCs.Count; i++)
                     {
                         if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -4893,7 +4893,7 @@ namespace Server.ExineObjects
                         Enqueue(p);
                         return;
                     }
-                    NPCObject ob = null;
+                    NPCObjectSrv ob = null;
                     for (int i = 0; i < CurrentMap.NPCs.Count; i++)
                     {
                         if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -4956,7 +4956,7 @@ namespace Server.ExineObjects
                 Enqueue(p);
                 return;
             }
-            NPCObject ob = null;
+            NPCObjectSrv ob = null;
             for (int i = 0; i < CurrentMap.NPCs.Count; i++)
             {
                 if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -5026,7 +5026,7 @@ namespace Server.ExineObjects
                 Enqueue(p);
                 return;
             }
-            NPCObject ob = null;
+            NPCObjectSrv ob = null;
             for (int i = 0; i < CurrentMap.NPCs.Count; i++)
             {
                 if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -5088,7 +5088,7 @@ namespace Server.ExineObjects
 
             UserItem[] toArray = null;
             MirGridType toGrid = MirGridType.Equipment;
-            HumanObject actor = this;
+            HumanObjectSrv actor = this;
             switch (grid)
             {
                 case MirGridType.Inventory:
@@ -5116,7 +5116,7 @@ namespace Server.ExineObjects
                         Enqueue(p);
                         return;
                     }
-                    NPCObject ob = null;
+                    NPCObjectSrv ob = null;
                     for (int i = 0; i < CurrentMap.NPCs.Count; i++)
                     {
                         if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -5536,7 +5536,7 @@ namespace Server.ExineObjects
                                         {
                                             if (Pets[i].Race != ObjectType.Creature) continue;
 
-                                            var pet = (IntelligentCreatureObject)Pets[i];
+                                            var pet = (IntelligentCreatureObjectSrv)Pets[i];
                                             if (pet.PetType != SummonedCreatureType) continue;
                                             pet.MaintainfoodTime = item.Info.Effect * Settings.Hour / 1000;
                                             break;
@@ -5552,7 +5552,7 @@ namespace Server.ExineObjects
                                         {
                                             if (Pets[i].Race != ObjectType.Creature) continue;
 
-                                            var pet = (IntelligentCreatureObject)Pets[i];
+                                            var pet = (IntelligentCreatureObjectSrv)Pets[i];
                                             if (pet.PetType != SummonedCreatureType) continue;
                                             if (pet.Fullness < 10000)
                                             {
@@ -5571,7 +5571,7 @@ namespace Server.ExineObjects
                                         {
                                             if (Pets[i].Race != ObjectType.Creature) continue;
 
-                                            var pet = (IntelligentCreatureObject)Pets[i];
+                                            var pet = (IntelligentCreatureObjectSrv)Pets[i];
                                             if (pet.PetType != SummonedCreatureType) continue;
                                             if (pet.Fullness == 0)
                                             {
@@ -5647,7 +5647,7 @@ namespace Server.ExineObjects
                     break;
                 case ItemType.Deco:
 
-                    DecoObject decoOb = new DecoObject
+                    DecoObjectSrv decoOb = new DecoObjectSrv
                     {
                         Image = item.Info.Shape,
                         CurrentMap = CurrentMap,
@@ -5669,7 +5669,7 @@ namespace Server.ExineObjects
                     var monsterInfo = Envir.GetMonsterInfo(monsterID);
                     if (monsterInfo == null) break;
 
-                    MonsterObject monster = MonsterObject.GetMonster(monsterInfo);
+                    MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(monsterInfo);
                     if (monster == null) break;
 
                     if (spawnAsPet)
@@ -5737,7 +5737,7 @@ namespace Server.ExineObjects
                         Enqueue(p);
                         return;
                     }
-                    NPCObject ob = null;
+                    NPCObjectSrv ob = null;
                     for (int i = 0; i < CurrentMap.NPCs.Count; i++)
                     {
                         if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -5843,7 +5843,7 @@ namespace Server.ExineObjects
                         Enqueue(p);
                         return;
                     }
-                    NPCObject ob = null;
+                    NPCObjectSrv ob = null;
                     for (int i = 0; i < CurrentMap.NPCs.Count; i++)
                     {
                         if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -5887,7 +5887,7 @@ namespace Server.ExineObjects
                         Enqueue(p);
                         return;
                     }
-                    NPCObject ob = null;
+                    NPCObjectSrv ob = null;
                     for (int i = 0; i < CurrentMap.NPCs.Count; i++)
                     {
                         if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -6687,7 +6687,7 @@ namespace Server.ExineObjects
         {
             if (Account.Gold < gold) return;
 
-            ItemObject ob = new ItemObject(this, gold);
+            ItemObjectSrv ob = new ItemObjectSrv(this, gold);
 
             if (!ob.Drop(5)) return;
             Account.Gold -= gold;
@@ -6707,7 +6707,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < cell.Objects.Count; i++)
             {
-                MapObject ob = cell.Objects[i];
+                MapObjectSrv ob = cell.Objects[i];
 
                 if (ob.Race != ObjectType.Item) continue;
 
@@ -6716,7 +6716,7 @@ namespace Server.ExineObjects
                     sendFail = true;
                     continue;
                 }
-                ItemObject item = (ItemObject)ob;
+                ItemObjectSrv item = (ItemObjectSrv)ob;
 
                 if (item.Item != null)
                 {
@@ -6758,7 +6758,7 @@ namespace Server.ExineObjects
         {
             for (int i = 0; i < CurrentMap.NPCs.Count; i++)
             {
-                NPCObject ob = CurrentMap.NPCs[i];
+                NPCObjectSrv ob = CurrentMap.NPCs[i];
                 if (ob.ObjectID != objectID) continue;
 
                 if (!ob.Info.CanTeleportTo) return;
@@ -6801,7 +6801,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            NPCObject npc = Envir.GetWorldMapNPC(text);
+            NPCObjectSrv npc = Envir.GetWorldMapNPC(text);
             if (npc != null)
             {
                 CheckMapInfo(npc.CurrentMap.Info);
@@ -6814,7 +6814,7 @@ namespace Server.ExineObjects
             Enqueue(p);
             return;
         }
-        private bool IsGroupMember(MapObject player)
+        private bool IsGroupMember(MapObjectSrv player)
         {
             if (player.Race != ObjectType.Player) return false;
             return GroupMembers != null && GroupMembers.Contains(player);
@@ -6835,7 +6835,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < GroupMembers.Count; i++)
             {
-                PlayerObject player = GroupMembers[i];
+                PlayerObjectSrv player = GroupMembers[i];
                 if (player.CurrentMap == CurrentMap && Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) && !player.Dead)
                     count++;
             }
@@ -6849,7 +6849,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < GroupMembers.Count; i++)
             {
-                PlayerObject player = GroupMembers[i];
+                PlayerObjectSrv player = GroupMembers[i];
                 if (player.CurrentMap == CurrentMap && Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) && !player.Dead)
                     player.GainGold(gold);
             }
@@ -7095,7 +7095,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < CurrentMap.NPCs.Count; i++)
             {
-                NPCObject ob = CurrentMap.NPCs[i];
+                NPCObjectSrv ob = CurrentMap.NPCs[i];
                 if (ob.ObjectID != objectID) continue;
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
@@ -7146,7 +7146,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < CurrentMap.NPCs.Count; i++)
             {
-                NPCObject ob = CurrentMap.NPCs[i];
+                NPCObjectSrv ob = CurrentMap.NPCs[i];
                 if (ob.ObjectID != NPCObjectID) continue;
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
@@ -7165,7 +7165,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < CurrentMap.NPCs.Count; i++)
             {
-                NPCObject ob = CurrentMap.NPCs[i];
+                NPCObjectSrv ob = CurrentMap.NPCs[i];
                 if (ob.ObjectID != NPCObjectID) continue;
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
@@ -7193,7 +7193,7 @@ namespace Server.ExineObjects
 
             for (int n = 0; n < CurrentMap.NPCs.Count; n++)
             {
-                NPCObject ob = CurrentMap.NPCs[n];
+                NPCObjectSrv ob = CurrentMap.NPCs[n];
                 if (ob.ObjectID != NPCObjectID) continue;
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
@@ -7255,7 +7255,7 @@ namespace Server.ExineObjects
 
                 if (Settings.GoodsOn)
                 {
-                    var callingNPC = NPCObject.Get(NPCObjectID);
+                    var callingNPC = NPCObjectSrv.Get(NPCObjectID);
 
                     if (callingNPC != null)
                     {
@@ -7289,7 +7289,7 @@ namespace Server.ExineObjects
 
             for (int n = 0; n < CurrentMap.NPCs.Count; n++)
             {
-                NPCObject ob = CurrentMap.NPCs[n];
+                NPCObjectSrv ob = CurrentMap.NPCs[n];
                 if (ob.ObjectID != NPCObjectID) continue;
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
@@ -7416,7 +7416,7 @@ namespace Server.ExineObjects
 
             for (int n = 0; n < CurrentMap.NPCs.Count; n++)
             {
-                NPCObject ob = CurrentMap.NPCs[n];
+                NPCObjectSrv ob = CurrentMap.NPCs[n];
                 if (ob.ObjectID != NPCObjectID) continue;
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
@@ -7490,7 +7490,7 @@ namespace Server.ExineObjects
 
                 for (int n = 0; n < CurrentMap.NPCs.Count; n++)
                 {
-                    NPCObject ob = CurrentMap.NPCs[n];
+                    NPCObjectSrv ob = CurrentMap.NPCs[n];
                     if (ob.ObjectID != NPCObjectID) continue;
                     if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
                     failed = false;
@@ -7589,7 +7589,7 @@ namespace Server.ExineObjects
 
                 for (int n = 0; n < CurrentMap.NPCs.Count; n++)
                 {
-                    NPCObject ob = CurrentMap.NPCs[n];
+                    NPCObjectSrv ob = CurrentMap.NPCs[n];
                     if (ob.ObjectID != NPCObjectID) continue;
 
                     if (!Functions.InRange(CurrentLocation, ob.CurrentLocation, Globals.DataRange)) return;
@@ -7646,7 +7646,7 @@ namespace Server.ExineObjects
 
                 for (int n = 0; n < CurrentMap.NPCs.Count; n++)
                 {
-                    NPCObject ob = CurrentMap.NPCs[n];
+                    NPCObjectSrv ob = CurrentMap.NPCs[n];
                     if (ob.ObjectID != NPCObjectID) continue;
 
                     if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
@@ -7756,7 +7756,7 @@ namespace Server.ExineObjects
 
             for (int n = 0; n < CurrentMap.NPCs.Count; n++)
             {
-                NPCObject ob = CurrentMap.NPCs[n];
+                NPCObjectSrv ob = CurrentMap.NPCs[n];
                 if (ob.ObjectID != NPCObjectID) continue;
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
@@ -7833,7 +7833,7 @@ namespace Server.ExineObjects
 
             for (int n = 0; n < CurrentMap.NPCs.Count; n++)
             {
-                NPCObject ob = CurrentMap.NPCs[n];
+                NPCObjectSrv ob = CurrentMap.NPCs[n];
                 if (ob.ObjectID != NPCObjectID) continue;
                 if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
 
@@ -8356,7 +8356,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            PlayerObject player = Envir.GetPlayer(name);
+            PlayerObjectSrv player = Envir.GetPlayer(name);
 
             if (player == null)
             {
@@ -8405,7 +8405,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            PlayerObject player = null;
+            PlayerObjectSrv player = null;
 
             for (int i = 0; i < GroupMembers.Count; i++)
             {
@@ -8474,7 +8474,7 @@ namespace Server.ExineObjects
 
             if (GroupInvitation.GroupMembers == null)
             {
-                GroupInvitation.GroupMembers = new List<PlayerObject> { GroupInvitation };
+                GroupInvitation.GroupMembers = new List<PlayerObjectSrv> { GroupInvitation };
                 GroupInvitation.Enqueue(new S.AddMember { Name = GroupInvitation.Name });
                 GroupInvitation.Enqueue(new S.GroupMembersMap { PlayerName = GroupInvitation.Name, PlayerMap = GroupInvitation.CurrentMap.Info.Title });
                 GroupInvitation.Enqueue(new S.SendMemberLocation { MemberName = GroupInvitation.Name, MemberLocation = GroupInvitation.CurrentLocation });
@@ -8486,7 +8486,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < GroupMembers.Count; i++)
             {
-                PlayerObject member = GroupMembers[i];
+                PlayerObjectSrv member = GroupMembers[i];
 
                 member.Enqueue(p);
                 Enqueue(new S.AddMember { Name = member.Name });
@@ -8500,7 +8500,7 @@ namespace Server.ExineObjects
 
                 for (int j = 0; j < member.Pets.Count; j++)
                 {
-                    MonsterObject pet = member.Pets[j];
+                    MonsterObjectSrv pet = member.Pets[j];
 
                     Enqueue(new S.ObjectHealth { ObjectID = pet.ObjectID, Percent = pet.PercentHealth, Expire = time });
                 }
@@ -8523,7 +8523,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < GroupMembers.Count; i++)
             {
-                PlayerObject member = GroupMembers[i];
+                PlayerObjectSrv member = GroupMembers[i];
                 member.Enqueue(new S.GroupMembersMap { PlayerName = Name, PlayerMap = CurrentMap.Info.Title });
                 Enqueue(new S.GroupMembersMap { PlayerName = member.Name, PlayerMap = member.CurrentMap.Info.Title });
             }
@@ -8652,7 +8652,7 @@ namespace Server.ExineObjects
             var guildInfo = new GuildInfo(this, guildName) { GuildIndex = ++Envir.NextGuildID };
             Envir.GuildList.Add(guildInfo);
 
-            GuildObject guild = new GuildObject(guildInfo);
+            GuildObjectSrv guild = new GuildObjectSrv(guildInfo);
             Info.GuildIndex = guildInfo.GuildIndex;
 
             MyGuild = guild;
@@ -8686,7 +8686,7 @@ namespace Server.ExineObjects
 
                     if (Name == "") return;
 
-                    PlayerObject player = Envir.GetPlayer(Name);
+                    PlayerObjectSrv player = Envir.GetPlayer(Name);
                     if (player == null)
                     {
                         ReceiveChat(String.Format("{0} is not online!", Name), ChatType.System);
@@ -8874,7 +8874,7 @@ namespace Server.ExineObjects
                 CanCreateGuild = false;
                 return;
             }
-            GuildObject guild = Envir.GetGuild(Name);
+            GuildObjectSrv guild = Envir.GetGuild(Name);
             if (guild != null)
             {
                 ReceiveChat(string.Format("Guild {0} already exists.", Name), ChatType.System);
@@ -9111,7 +9111,7 @@ namespace Server.ExineObjects
         {
             if (MyGuild == null || MyGuildRank != MyGuild.Ranks[0]) return;
 
-            GuildObject enemyGuild = Envir.GetGuild(Name);
+            GuildObjectSrv enemyGuild = Envir.GetGuild(Name);
 
             if (enemyGuild == null)
             {
@@ -9147,13 +9147,13 @@ namespace Server.ExineObjects
             }
         }
 
-        public override bool AtWar(HumanObject attacker)
+        public override bool AtWar(HumanObjectSrv attacker)
         {
             if (CurrentMap.Info.Fight) return true;
 
             if (MyGuild == null) return false;
 
-            if (attacker is PlayerObject playerAttacker)
+            if (attacker is PlayerObjectSrv playerAttacker)
             {
                 if (attacker == null || playerAttacker.MyGuild == null) return false;
 
@@ -9327,7 +9327,7 @@ namespace Server.ExineObjects
 
             Point target = Functions.PointMove(CurrentLocation, Direction, 1);
             Cell cell = CurrentMap.GetCell(target);
-            PlayerObject player = null;
+            PlayerObjectSrv player = null;
 
             if (cell.Objects == null || cell.Objects.Count == 0) 
             {
@@ -9337,7 +9337,7 @@ namespace Server.ExineObjects
 
             for (int i = 0; i < cell.Objects.Count; i++)
             {
-                MapObject ob = cell.Objects[i];
+                MapObjectSrv ob = cell.Objects[i];
                 if (ob.Race != ObjectType.Player) continue;
 
                 player = Envir.GetPlayer(ob.Name);
@@ -9508,7 +9508,7 @@ namespace Server.ExineObjects
 
             if (!TradeLocked || !TradePartner.TradeLocked) return;
 
-            PlayerObject[] TradePair = new PlayerObject[2] { TradePartner, this };
+            PlayerObjectSrv[] TradePair = new PlayerObjectSrv[2] { TradePartner, this };
 
             bool CanTrade = true;
             UserItem u;
@@ -9587,7 +9587,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            PlayerObject[] TradePair = new PlayerObject[2] { TradePartner, this };
+            PlayerObjectSrv[] TradePair = new PlayerObjectSrv[2] { TradePartner, this };
 
             for (int p = 0; p < 2; p++)
             {
@@ -9832,7 +9832,7 @@ namespace Server.ExineObjects
 
                         if (Envir.Random.Next(100 - Settings.FishingMobSpawnChance) == 0)
                         {
-                            MonsterObject mob = MonsterObject.GetMonster(Envir.GetMonsterInfo(Settings.FishingMonster));
+                            MonsterObjectSrv mob = MonsterObjectSrv.GetMonster(Envir.GetMonsterInfo(Settings.FishingMonster));
 
                             if (mob == null) return;
 
@@ -9943,7 +9943,7 @@ namespace Server.ExineObjects
 
             QuestInfo info = Envir.QuestInfoList.FirstOrDefault(d => d.Index == index);
 
-            NPCObject npc = null;
+            NPCObjectSrv npc = null;
 
             for (int i = CurrentMap.NPCs.Count - 1; i >= 0; i--)
             {
@@ -10040,7 +10040,7 @@ namespace Server.ExineObjects
 
             if (quest == null || !quest.Completed) return;
 
-            NPCObject npc = null;
+            NPCObjectSrv npc = null;
 
             for (int i = CurrentMap.NPCs.Count - 1; i >= 0; i--)
             {
@@ -10162,7 +10162,7 @@ namespace Server.ExineObjects
 
             if (GroupMembers != null)
             {
-                foreach (PlayerObject player in GroupMembers.
+                foreach (PlayerObjectSrv player in GroupMembers.
                     Where(player => player.CurrentMap == CurrentMap &&
                         Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) &&
                         !player.Dead && player != this))
@@ -10182,7 +10182,7 @@ namespace Server.ExineObjects
         {
             if (GroupMembers != null)
             {
-                foreach (PlayerObject player in GroupMembers.
+                foreach (PlayerObjectSrv player in GroupMembers.
                     Where(player => player.CurrentMap == CurrentMap &&
                         Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) &&
                         !player.Dead))
@@ -10199,7 +10199,7 @@ namespace Server.ExineObjects
 
             if (GroupMembers != null)
             {
-                foreach (PlayerObject player in GroupMembers.
+                foreach (PlayerObjectSrv player in GroupMembers.
                     Where(player => player != null && player.Node != null && player.CurrentMap == CurrentMap &&
                         Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) &&
                         !player.Dead))
@@ -10664,7 +10664,7 @@ namespace Server.ExineObjects
                 MonsterInfo mInfo = Envir.GetMonsterInfo(64, (byte)pType);
                 if (mInfo == null) return;
 
-                MonsterObject monster = MonsterObject.GetMonster(mInfo);
+                MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(mInfo);
 
                 if (monster == null) return;
                 monster.PetLevel = 0;
@@ -10673,7 +10673,7 @@ namespace Server.ExineObjects
                 monster.Direction = Direction;
                 monster.ActionTime = Envir.Time + 1000;
 
-                var pet = (IntelligentCreatureObject)monster;
+                var pet = (IntelligentCreatureObjectSrv)monster;
 
                 pet.CreatureInfo = Info.IntelligentCreatures[i];
                 pet.CreatureRules = new IntelligentCreatureRules
@@ -10711,7 +10711,7 @@ namespace Server.ExineObjects
             {
                 if (Pets[i].Race != ObjectType.Creature) continue;
 
-                var pet = (IntelligentCreatureObject)Pets[i];
+                var pet = (IntelligentCreatureObjectSrv)Pets[i];
                 if (pet.PetType != pType) continue;
                 if (doUpdate) ReceiveChat(string.Format("Creature {0} has been dismissed.", pet.CustomName), ChatType.System);
 
@@ -10767,7 +10767,7 @@ namespace Server.ExineObjects
             {
                 if (Pets[i].Race != ObjectType.Creature) continue;
 
-                var pet = (IntelligentCreatureObject)Pets[i];
+                var pet = (IntelligentCreatureObjectSrv)Pets[i];
                 if (pet.PetType != pType) continue;
 
                 pet.CustomName = creatureInfo.CustomName;
@@ -10833,7 +10833,7 @@ namespace Server.ExineObjects
             {
                 if (Pets[i].Race != ObjectType.Creature) continue;
 
-                var pet = (IntelligentCreatureObject)Pets[i];
+                var pet = (IntelligentCreatureObjectSrv)Pets[i];
                 if (pet.PetType != SummonedCreatureType) continue;
                 petFound = true;
                 break;
@@ -10855,7 +10855,7 @@ namespace Server.ExineObjects
             {
                 if (Pets[i].Race != ObjectType.Creature) continue;
 
-                var pet = (IntelligentCreatureObject)Pets[i];
+                var pet = (IntelligentCreatureObjectSrv)Pets[i];
                 if (pet.PetType != SummonedCreatureType) continue;
 
                 pet.ManualPickup(mousemode, atlocation);
@@ -10914,7 +10914,7 @@ namespace Server.ExineObjects
             {
                 if (Pets[i].Race != ObjectType.Creature) continue;
 
-                var pet = (IntelligentCreatureObject)Pets[i];
+                var pet = (IntelligentCreatureObjectSrv)Pets[i];
                 if (pet.PetType != pType) continue;
 
                 Enqueue(new S.ObjectChat { ObjectID = Pets[i].ObjectID, Text = message, Type = ChatType.Normal });
@@ -11028,7 +11028,7 @@ namespace Server.ExineObjects
             return dropitem;
         }
 
-        private IntelligentCreatureObject GetCreatureByName(string creatureName)
+        private IntelligentCreatureObjectSrv GetCreatureByName(string creatureName)
         {
             if (!CreatureSummoned || creatureName == "") return null;
             if (SummonedCreatureType == IntelligentCreatureType.None) return null;
@@ -11037,7 +11037,7 @@ namespace Server.ExineObjects
             {
                 if (Pets[i].Race != ObjectType.Creature) continue;
 
-                var pet = (IntelligentCreatureObject)Pets[i];
+                var pet = (IntelligentCreatureObjectSrv)Pets[i];
                 if (pet.PetType != SummonedCreatureType) continue;
 
                 return (pet);
@@ -11154,7 +11154,7 @@ namespace Server.ExineObjects
                 Enqueue(p);
                 return;
             }
-            NPCObject ob = null;
+            NPCObjectSrv ob = null;
             for (int i = 0; i < CurrentMap.NPCs.Count; i++)
             {
                 if (CurrentMap.NPCs[i].ObjectID != NPCObjectID) continue;
@@ -11627,7 +11627,7 @@ namespace Server.ExineObjects
             }
 
             CharacterInfo lover = Envir.GetCharacterInfo(Info.Married);
-            PlayerObject player = Envir.GetPlayer(lover.Name);
+            PlayerObjectSrv player = Envir.GetPlayer(lover.Name);
 
             Info.Married = 0;
             Info.MarriedDate = Envir.Now;
@@ -11800,13 +11800,13 @@ namespace Server.ExineObjects
 
             Point target = Functions.PointMove(CurrentLocation, Direction, 1); //바로 앞 1칸을 의미함
             Cell cell = CurrentMap.GetCell(target);
-            PlayerObject player = null;
+            PlayerObjectSrv player = null;
 
             if (cell.Objects == null || cell.Objects.Count < 1) return;
 
             for (int i = 0; i < cell.Objects.Count; i++)
             {
-                MapObject ob = cell.Objects[i];
+                MapObjectSrv ob = cell.Objects[i];
                 if (ob.Race != ObjectType.Player) continue;
 
                 player = Envir.GetPlayer(ob.Name);
@@ -11948,13 +11948,13 @@ namespace Server.ExineObjects
 
             Point target = Functions.PointMove(CurrentLocation, Direction, 1);
             Cell cell = CurrentMap.GetCell(target);
-            PlayerObject player = null;
+            PlayerObjectSrv player = null;
 
             if (cell.Objects == null || cell.Objects.Count < 1) return;
 
             for (int i = 0; i < cell.Objects.Count; i++)
             {
-                MapObject ob = cell.Objects[i];
+                MapObjectSrv ob = cell.Objects[i];
                 if (ob.Race != ObjectType.Player) continue;
 
                 player = Envir.GetPlayer(ob.Name);
@@ -12064,7 +12064,7 @@ namespace Server.ExineObjects
             {
                 CharacterInfo Lover = Envir.GetCharacterInfo(Info.Married);
 
-                PlayerObject player = Envir.GetPlayer(Lover.Name);
+                PlayerObjectSrv player = Envir.GetPlayer(Lover.Name);
 
                 if (player == null)
                     Enqueue(new S.LoverUpdate { Name = Lover.Name, Date = Info.MarriedDate, MapName = "", MarriedDays = (short)(Envir.Now - Info.MarriedDate).TotalDays });
@@ -12090,7 +12090,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            PlayerObject player = Envir.GetPlayer(lover.Name);
+            PlayerObjectSrv player = Envir.GetPlayer(lover.Name);
             if (player != null)
             {
                 player.Enqueue(new S.LoverUpdate { Name = Info.Name, Date = player.Info.MarriedDate, MapName = "", MarriedDays = (short)(Envir.Now - Info.MarriedDate).TotalDays });
@@ -12111,7 +12111,7 @@ namespace Server.ExineObjects
             }
 
             CharacterInfo partner = Envir.GetCharacterInfo(Info.Mentor);
-            PlayerObject partnerP = Envir.GetPlayer(partner.Name);
+            PlayerObjectSrv partnerP = Envir.GetPlayer(partner.Name);
 
             if (force)
             {
@@ -12196,7 +12196,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            PlayerObject mentor = Envir.GetPlayer(Name);
+            PlayerObjectSrv mentor = Envir.GetPlayer(Name);
 
             if (mentor == null)
             {
@@ -12263,7 +12263,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            PlayerObject student = Envir.GetPlayer(MentorRequest.Info.Name);
+            PlayerObjectSrv student = Envir.GetPlayer(MentorRequest.Info.Name);
             MentorRequest = null;
 
             if (student == null)
@@ -12313,7 +12313,7 @@ namespace Server.ExineObjects
             {
                 CharacterInfo mentor = Envir.GetCharacterInfo(Info.Mentor);
 
-                PlayerObject player = Envir.GetPlayer(mentor.Name);
+                PlayerObjectSrv player = Envir.GetPlayer(mentor.Name);
 
                 Enqueue(new S.MentorUpdate { Name = mentor.Name, Level = mentor.Level, Online = player != null, MenteeEXP = Info.MentorExp });
 
@@ -12337,7 +12337,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            PlayerObject player = Envir.GetPlayer(mentor.Name);
+            PlayerObjectSrv player = Envir.GetPlayer(mentor.Name);
 
             if (!Info.IsMentor)
             {
@@ -12599,7 +12599,7 @@ namespace Server.ExineObjects
         {
             if (CurrentMap.tempConquest == null && CurrentMap.Conquest != null)
             {
-                ConquestObject swi = CurrentMap.GetConquest(CurrentLocation);
+                ConquestObjectSrv swi = CurrentMap.GetConquest(CurrentLocation);
                 if (swi != null)
                     EnterSabuk();
                 else
@@ -12651,7 +12651,7 @@ namespace Server.ExineObjects
 
             var targetPosition = Functions.PointMove(CurrentLocation, Direction, 1);
             var targetCell = CurrentMap.GetCell(targetPosition);
-            PlayerObject targetPlayer = null;
+            PlayerObjectSrv targetPlayer = null;
 
             if (targetCell.Objects == null || targetCell.Objects.Count < 1)
                 return;

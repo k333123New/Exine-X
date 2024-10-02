@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class RedFoxman : MonsterObject
+    public class RedFoxman : MonsterObjectSrv
     {
         public long FearTime, TeleportTime;
         public byte AttackRange = 6;

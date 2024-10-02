@@ -2,7 +2,7 @@
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Football : MonsterObject
+    public class Football : MonsterObjectSrv
     {
         protected override bool CanAttack { get { return false; }}
 
@@ -18,9 +18,9 @@ namespace Server.ExineObjects.Monsters
 
         protected override void ProcessTarget() { }
 
-        public override bool IsAttackTarget(MonsterObject attacker) { return false; }
+        public override bool IsAttackTarget(MonsterObjectSrv attacker) { return false; }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int currentMoveDistance = 0;
 
@@ -49,7 +49,7 @@ namespace Server.ExineObjects.Monsters
 
             return 0;
         }
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility) { throw new NotSupportedException(); }
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility) { throw new NotSupportedException(); }
 
         public override int Struck(int damage, DefenceType type = DefenceType.ACAgility)
         {

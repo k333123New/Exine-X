@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class OmaSlasher : MonsterObject
+    public class OmaSlasher : MonsterObjectSrv
     {
         protected internal OmaSlasher(MonsterInfo info)
             : base(info)

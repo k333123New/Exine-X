@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Shinsu : MonsterObject
+    public class Shinsu : MonsterObjectSrv
     {
         public bool Mode = false;
         public bool Summoned;

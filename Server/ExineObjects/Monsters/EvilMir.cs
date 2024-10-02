@@ -3,12 +3,12 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class EvilMir : MonsterObject
+    public class EvilMir : MonsterObjectSrv
     {
         public bool Sleeping;
         private bool MassAttack;
         public long WakeUpTime;
-        public override MapObject Target
+        public override MapObjectSrv Target
         {
             get { return _target; }
             set
@@ -53,11 +53,11 @@ namespace Server.ExineObjects.Monsters
 
         public override bool Walk(ExineDirection dir) { return false; }
 
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return !Sleeping && base.IsAttackTarget(attacker);
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return !Sleeping && base.IsAttackTarget(attacker);
         }
@@ -92,7 +92,7 @@ namespace Server.ExineObjects.Monsters
 
             if (!Target.IsAttackTarget(this) || Target.CurrentMap != CurrentMap || Target.Node == null) return;
 
-            List<MapObject> targets = MassAttack ? FindAllTargets(17/*huge range so it even hits ppl with bigger resolutions*/, CurrentLocation, false) : FindAllTargets(2, Target.CurrentLocation, false);
+            List<MapObjectSrv> targets = MassAttack ? FindAllTargets(17/*huge range so it even hits ppl with bigger resolutions*/, CurrentLocation, false) : FindAllTargets(2, Target.CurrentLocation, false);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)
@@ -149,12 +149,12 @@ namespace Server.ExineObjects.Monsters
             PoisonTarget(Target, 5, 5, PoisonType.Paralysis, 1000);
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             return Sleeping ? 0 : base.Attacked(attacker, damage, type);
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             return Sleeping ? 0 : base.Attacked(attacker, damage, type, damageWeapon);
         }

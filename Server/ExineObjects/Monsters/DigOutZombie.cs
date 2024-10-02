@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DigOutZombie : MonsterObject
+    public class DigOutZombie : MonsterObjectSrv
     {
         public bool Visible, DoneDigOut;
         public long VisibleTime, DigOutTime;
@@ -68,7 +68,7 @@ namespace Server.ExineObjects.Monsters
         {
             if (Visible && Envir.Time > DigOutTime + 1000 && !DoneDigOut)
             {
-                SpellObject ob = new SpellObject
+                SpellObjectSrv ob = new SpellObjectSrv
                 {
                     Spell = Spell.DigOutZombie,
                     Value = 1,
@@ -90,11 +90,11 @@ namespace Server.ExineObjects.Monsters
             return Visible && base.Walk(dir);
         }
 
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return Visible && base.IsAttackTarget(attacker);
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return Visible && base.IsAttackTarget(attacker);
         }

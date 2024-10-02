@@ -981,29 +981,6 @@ namespace ServerPackets
         }
     }
 
-    public sealed class ObjectHero : ObjectPlayer
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.ObjectHero; }
-        }
-
-        public string OwnerName;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            base.ReadPacket(reader);
-
-            OwnerName = reader.ReadString();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            base.WritePacket(writer);
-
-            writer.Write(OwnerName);
-        }
-    }
     public sealed class ObjectRemove : Packet
     {
         public override short Index
@@ -1198,28 +1175,6 @@ namespace ServerPackets
         protected override void WritePacket(BinaryWriter writer)
         {
             Info.Save(writer);
-        }
-    }
-    public sealed class NewHeroInfo : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.NewHeroInfo; }
-        }
-
-        public ClientHeroInformation Info;
-        public int StorageIndex = -1;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Info = new ClientHeroInformation(reader);
-            StorageIndex = reader.ReadInt32();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            Info.Save(writer);
-            writer.Write(StorageIndex);
         }
     }
     public sealed class NewChatItem : Packet
@@ -1677,55 +1632,6 @@ namespace ServerPackets
         }
     }
 
-    public sealed class TakeBackHeroItem : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.TakeBackHeroItem; }
-        }
-
-        public int From, To;
-        public bool Success;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            From = reader.ReadInt32();
-            To = reader.ReadInt32();
-            Success = reader.ReadBoolean();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(From);
-            writer.Write(To);
-            writer.Write(Success);
-        }
-    }
-
-    public sealed class TransferHeroItem : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.TransferHeroItem; }
-        }
-
-        public int From, To;
-        public bool Success;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            From = reader.ReadInt32();
-            To = reader.ReadInt32();
-            Success = reader.ReadBoolean();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(From);
-            writer.Write(To);
-            writer.Write(Success);
-        }
-    }
     public sealed class PlayerUpdate : Packet
     {
         public override short Index
@@ -2511,27 +2417,6 @@ namespace ServerPackets
         }
     }
 
-    public sealed class HeroHealthChanged : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.HeroHealthChanged; }
-        }
-
-        public int HP, MP;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            HP = reader.ReadInt32();
-            MP = reader.ReadInt32();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(HP);
-            writer.Write(MP);
-        }
-    }
     public sealed class DeleteItem : Packet
     {
         public override short Index
@@ -2689,25 +2574,6 @@ namespace ServerPackets
         }
     }
 
-    public sealed class GainHeroExperience : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.GainHeroExperience; }
-        }
-
-        public uint Amount;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Amount = reader.ReadUInt32();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(Amount);
-        }
-    }
     public sealed class LevelChanged : Packet
     {
         public override short Index
@@ -2733,30 +2599,6 @@ namespace ServerPackets
         }
     }
 
-    public sealed class HeroLevelChanged : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.HeroLevelChanged; }
-        }
-
-        public ushort Level;
-        public long Experience, MaxExperience;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Level = reader.ReadUInt16();
-            Experience = reader.ReadInt64();
-            MaxExperience = reader.ReadInt64();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(Level);
-            writer.Write(Experience);
-            writer.Write(MaxExperience);
-        }
-    }
     public sealed class ObjectLeveled : Packet
     {
         public override short Index
@@ -4359,26 +4201,6 @@ namespace ServerPackets
         public override short Index
         {
             get { return (short)ServerPacketIds.BaseStatsInfo; }
-        }
-
-        public BaseStats Stats;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Stats = new BaseStats(reader);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            Stats.Save(writer);
-        }
-    }
-
-    public sealed class HeroBaseStatsInfo : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.HeroBaseStatsInfo; }
         }
 
         public BaseStats Stats;

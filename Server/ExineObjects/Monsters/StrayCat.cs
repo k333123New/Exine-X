@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class StrayCat : MonsterObject
+    public class StrayCat : MonsterObjectSrv
     {
         protected internal StrayCat(MonsterInfo info)
             : base(info)
@@ -102,7 +102,7 @@ namespace Server.ExineObjects.Monsters
 
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
-                    MapObject ob = cell.Objects[o];
+                    MapObjectSrv ob = cell.Objects[o];
                     if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                     {
                         if (!ob.IsAttackTarget(this)) continue;

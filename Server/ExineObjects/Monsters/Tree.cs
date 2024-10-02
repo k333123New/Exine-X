@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Tree : MonsterObject
+    public class Tree : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
         protected override bool CanAttack { get { return false; } }
@@ -32,7 +32,7 @@ namespace Server.ExineObjects.Monsters
         protected override void ProcessSearch() { }
         protected override void ProcessRoam() { }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             int armour = 0;
 
@@ -88,7 +88,7 @@ namespace Server.ExineObjects.Monsters
             return 0;
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int armour = 0;
 
@@ -137,6 +137,6 @@ namespace Server.ExineObjects.Monsters
             return 1;
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true) { }
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true) { }
     }
 }

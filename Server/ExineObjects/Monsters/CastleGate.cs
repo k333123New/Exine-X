@@ -3,9 +3,9 @@ using Server.ExineEnvir;
 
 namespace Server.ExineObjects.Monsters
 {
-    public abstract class CastleGate : MonsterObject
+    public abstract class CastleGate : MonsterObjectSrv
     {
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
         public int GateIndex;
 
         public bool Closed;
@@ -92,7 +92,7 @@ namespace Server.ExineObjects.Monsters
                 for (int i = 0; i < nearby.Count; i++)
                 {
                     if (nearby[i].Race != ObjectType.Player) continue;
-                    PlayerObject player = (PlayerObject)nearby[i];
+                    PlayerObjectSrv player = (PlayerObjectSrv)nearby[i];
 
                     if (player.MyGuild == null || player.MyGuild.Conquest == null || player.MyGuild.Conquest != Conquest || player.WarZone) continue;
 
@@ -108,18 +108,18 @@ namespace Server.ExineObjects.Monsters
 
         public override bool Walk(ExineDirection dir) { return false; }
 
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             if (attacker.Master != null && attacker.Master.Race == ObjectType.Player)
             {
-                PlayerObject owner = (PlayerObject)attacker.Master;
+                PlayerObjectSrv owner = (PlayerObjectSrv)attacker.Master;
 
                 if (owner.MyGuild != null && owner.MyGuild.Conquest != null && owner.MyGuild.Conquest == Conquest) return false;
             }
 
             return Closed && base.IsAttackTarget(attacker);
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             if (attacker.MyGuild != null && attacker.MyGuild.Conquest != null && attacker.MyGuild.Conquest == Conquest) return false;
 
@@ -139,7 +139,7 @@ namespace Server.ExineObjects.Monsters
             base.Die();
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             return base.Attacked(attacker, damage, type, damageWeapon);
         }

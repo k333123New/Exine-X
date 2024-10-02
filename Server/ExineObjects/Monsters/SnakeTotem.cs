@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class SnakeTotem : MonsterObject
+    public class SnakeTotem : MonsterObjectSrv
     {
         public bool Summoned;
         public long AliveTime;
@@ -109,13 +109,13 @@ namespace Server.ExineObjects.Monsters
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Monster:
                                     if (!ob.IsAttackTarget(this)) continue;
                                     if (ob.Hidden && (!CoolEye || Level < ob.Level)) continue;
-                                    if (((MonsterObject)ob).Info.CoolEye == 100) continue;
+                                    if (((MonsterObjectSrv)ob).Info.CoolEye == 100) continue;
                                     ob.Target = this;//Agro the mobs in range - Very simple agro system overwriting mobs target
                                     continue;
                                 default:
@@ -134,8 +134,8 @@ namespace Server.ExineObjects.Monsters
             MonsterInfo info = Envir.GetMonsterInfo(Settings.SnakesName);
             if (info == null) return false;
 
-            MonsterObject monster;
-            monster = MonsterObject.GetMonster(info);
+            MonsterObjectSrv monster;
+            monster = MonsterObjectSrv.GetMonster(info);
             monster.PetLevel = PetLevel;
             monster.Master = this;
             monster.MaxPetLevel = (byte)(1 + PetLevel * 2);

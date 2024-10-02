@@ -24,7 +24,7 @@ namespace Server.ExineObjects.Monsters
 
             if (SlaveList.Count >= 20) return;
 
-            MonsterObject spawn = GetMonster(Envir.GetMonsterInfo(Settings.BombSpiderName));
+            MonsterObjectSrv spawn = GetMonster(Envir.GetMonsterInfo(Settings.BombSpiderName));
 
             if (spawn == null) return;
 

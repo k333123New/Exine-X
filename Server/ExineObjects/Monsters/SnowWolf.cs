@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class SnowWolf : MonsterObject
+    public class SnowWolf : MonsterObjectSrv
     {
         protected internal SnowWolf(MonsterInfo info)
             : base(info)
@@ -48,14 +48,14 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool magicAttack = (bool)data[3];
 
             if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
 
-            List<MapObject> targets = FindAllTargets(2, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(2, CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

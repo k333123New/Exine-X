@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FurbolgArcher : MonsterObject
+    public class FurbolgArcher : MonsterObjectSrv
     {
         public long FearTime;
 

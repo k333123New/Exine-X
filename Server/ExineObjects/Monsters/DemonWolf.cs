@@ -4,11 +4,11 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DemonWolf : MonsterObject
+    public class DemonWolf : MonsterObjectSrv
     {
         private readonly int _MaxPackSize = 5;
 
-        public List<MonsterObject> Pack = new List<MonsterObject>();
+        public List<MonsterObjectSrv> Pack = new List<MonsterObjectSrv>();
 
         protected internal DemonWolf(MonsterInfo info)
             : base(info)
@@ -93,7 +93,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -107,9 +107,9 @@ namespace Server.ExineObjects.Monsters
             }
         }
 
-        public List<MonsterObject> FindPackNearby(int distance)
+        public List<MonsterObjectSrv> FindPackNearby(int distance)
         {
-            List<MonsterObject> pack = new List<MonsterObject>();
+            List<MonsterObjectSrv> pack = new List<MonsterObjectSrv>();
 
             for (int d = 0; d <= distance; d++)
             {
@@ -128,14 +128,14 @@ namespace Server.ExineObjects.Monsters
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Monster:
                                     if (ob == this || ob.Dead) continue;
                                     if (ob.IsAttackTarget(this)) continue;
-                                    if (((MonsterObject)ob).Info.AI != Info.AI) continue;
-                                    pack.Add((MonsterObject)ob);
+                                    if (((MonsterObjectSrv)ob).Info.AI != Info.AI) continue;
+                                    pack.Add((MonsterObjectSrv)ob);
                                     continue;
                             }
                         }

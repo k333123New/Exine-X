@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class WitchDoctor : MonsterObject
+    public class WitchDoctor : MonsterObjectSrv
     {
         public long FearTime;
         public byte AttackRange = 6;

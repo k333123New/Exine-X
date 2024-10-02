@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FrozenMagician : MonsterObject
+    public class FrozenMagician : MonsterObjectSrv
     {
         private const byte AttackRange = 9;
 

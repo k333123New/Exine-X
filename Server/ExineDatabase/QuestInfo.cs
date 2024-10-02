@@ -34,7 +34,7 @@ namespace Server.ExineDatabase
             set { _finishNpcIndex = value; }
         }
 
-        public NPCObject FinishNPC
+        public NPCObjectSrv FinishNPC
         {
             get
             {
@@ -347,7 +347,7 @@ namespace Server.ExineDatabase
             return new QuestFlagTask { Number = number, Message = message };
         }
 
-        public bool CanAccept(PlayerObject player)
+        public bool CanAccept(PlayerObjectSrv player)
         {
             if (RequiredMinLevel > player.Level || RequiredMaxLevel < player.Level)
                 return false;

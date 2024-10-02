@@ -3,7 +3,7 @@ using Server.ExineEnvir;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BoulderSpirit : MonsterObject
+    public class BoulderSpirit : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
         protected override bool CanAttack { get { return false; } }

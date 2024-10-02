@@ -5,7 +5,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TucsonWarrior : MonsterObject
+    public class TucsonWarrior : MonsterObjectSrv
     {
         protected internal TucsonWarrior(MonsterInfo info)
             : base(info)

@@ -16,7 +16,7 @@ namespace Server
         {
             InitializeComponent();
 
-            PlayerObject player = SMain.Envir.GetPlayer(playerId);
+            PlayerObjectSrv player = SMain.Envir.GetPlayer(playerId);
 
             if (player == null)
             {

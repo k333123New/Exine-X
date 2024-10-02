@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BlackHammerCat : MonsterObject
+    public class BlackHammerCat : MonsterObjectSrv
     {
         protected internal BlackHammerCat(MonsterInfo info)
             : base(info)

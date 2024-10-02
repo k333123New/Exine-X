@@ -29,14 +29,14 @@ namespace Server.ExineEnvir
         public long LightningTime, FireTime;
         public int MonsterCount;
 
-        public List<NPCObject> NPCs = new List<NPCObject>();
-        public List<SpellObject> Spells = new List<SpellObject>();
-        public List<PlayerObject> Players = new List<PlayerObject>();
+        public List<NPCObjectSrv> NPCs = new List<NPCObjectSrv>();
+        public List<SpellObjectSrv> Spells = new List<SpellObjectSrv>();
+        public List<PlayerObjectSrv> Players = new List<PlayerObjectSrv>();
         public List<MapRespawn> Respawns = new List<MapRespawn>();
         public List<DelayedAction> ActionList = new List<DelayedAction>(); 
 
-        public List<ConquestObject> Conquest = new List<ConquestObject>();
-        public ConquestObject tempConquest;
+        public List<ConquestObjectSrv> Conquest = new List<ConquestObjectSrv>();
+        public ConquestObjectSrv tempConquest;
 
         public Map(MapInfo info)
         {
@@ -489,7 +489,7 @@ namespace Server.ExineEnvir
                         NPCInfo info = Info.NPCs[i];
                         if (!ValidPoint(info.Location)) continue;
 
-                        AddObject(new NPCObject(info) { CurrentMap = this });
+                        AddObject(new NPCObjectSrv(info) { CurrentMap = this });
                     }
 
                     for (int i = 0; i < Info.SafeZones.Count; i++)
@@ -536,7 +536,7 @@ namespace Server.ExineEnvir
                         if (x >= Width) break;
                         if (!Cells[x, y].Valid) continue;
 
-                        SpellObject spell = new SpellObject
+                        SpellObjectSrv spell = new SpellObjectSrv
                         {
                             ExpireTime = long.MaxValue,
                             Spell = Spell.TrapHexagon,
@@ -565,7 +565,7 @@ namespace Server.ExineEnvir
                         if (x >= Width) break;
                         if (!Cells[x, y].Valid) continue;
 
-                        SpellObject spell = new SpellObject
+                        SpellObjectSrv spell = new SpellObjectSrv
                             {
                                 ExpireTime = long.MaxValue,
                                 Value = 25,
@@ -665,7 +665,7 @@ namespace Server.ExineEnvir
                 LightningTime = Envir.Time + Envir.Random.Next(3000, 15000);
                 for (int i = Players.Count - 1; i >= 0; i--)
                 {
-                    PlayerObject player = Players[i];
+                    PlayerObjectSrv player = Players[i];
                     Point location;
                     if (Envir.Random.Next(4) == 0)
                     {
@@ -676,7 +676,7 @@ namespace Server.ExineEnvir
 
                     if (!ValidPoint(location)) continue;
 
-                    SpellObject lightning = new SpellObject
+                    SpellObjectSrv lightning = new SpellObjectSrv
                     {
                         Spell = Spell.MapLightning,
                         Value = Envir.Random.Next(Info.LightningDamage),
@@ -697,7 +697,7 @@ namespace Server.ExineEnvir
                 FireTime = Envir.Time + Envir.Random.Next(3000, 15000);
                 for (int i = Players.Count - 1; i >= 0; i--)
                 {
-                    PlayerObject player = Players[i];
+                    PlayerObjectSrv player = Players[i];
                     Point location;
                     if (Envir.Random.Next(4) == 0)
                     {
@@ -709,7 +709,7 @@ namespace Server.ExineEnvir
 
                     if (!ValidPoint(location)) continue;
 
-                    SpellObject lightning = new SpellObject
+                    SpellObjectSrv lightning = new SpellObjectSrv
                     {
                         Spell = Spell.MapLava,
                         Value = Envir.Random.Next(Info.FireDamage),
@@ -792,20 +792,20 @@ namespace Server.ExineEnvir
                     CompleteMagic(action.Params);
                     break;
                 case DelayedType.Spawn:
-                    MapObject obj = (MapObject)action.Params[0];
+                    MapObjectSrv obj = (MapObjectSrv)action.Params[0];
 
                     switch(obj.Race)
                     {
                         case ObjectType.Monster:
                             {
-                                MonsterObject mob = (MonsterObject)action.Params[0];
+                                MonsterObjectSrv mob = (MonsterObjectSrv)action.Params[0];
                                 mob.Spawn(this, (Point)action.Params[1]);
-                                if (action.Params.Length > 2) ((MonsterObject)action.Params[2]).SlaveList.Add(mob);
+                                if (action.Params.Length > 2) ((MonsterObjectSrv)action.Params[2]).SlaveList.Add(mob);
                             }
                             break;
                         case ObjectType.Spell:
                             {
-                                SpellObject spell = (SpellObject)action.Params[0];
+                                SpellObjectSrv spell = (SpellObjectSrv)action.Params[0];
                                 AddObject(spell);
                                 spell.Spawned();
                             }
@@ -851,7 +851,7 @@ namespace Server.ExineEnvir
         private void CompleteMagic(IList<object> data)
         {
             bool train = false;
-            HumanObject player = (HumanObject)data[0];
+            HumanObjectSrv player = (HumanObjectSrv)data[0];
             UserMagic magic = (UserMagic)data[1];
 
             if (player == null || player.Info == null || player.Node == null) return;
@@ -860,7 +860,7 @@ namespace Server.ExineEnvir
             Point location;
             Cell cell;
             ExineDirection dir;
-            MonsterObject monster;
+            MonsterObjectSrv monster;
             Point front;
             switch (magic.Spell)
             {
@@ -887,7 +887,7 @@ namespace Server.ExineEnvir
 
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject target = cell.Objects[i];
+                        MapObjectSrv target = cell.Objects[i];
                         switch (target.Race)
                         {
                             case ObjectType.Monster:
@@ -914,7 +914,7 @@ namespace Server.ExineEnvir
                 case Spell.SummonVampire:
                 case Spell.SummonToad:
                 case Spell.SummonSnakes:
-                    monster = (MonsterObject)data[2];
+                    monster = (MonsterObjectSrv)data[2];
                     front = (Point)data[3];
 
                     if (monster.Master.Dead) return;
@@ -927,7 +927,7 @@ namespace Server.ExineEnvir
                     monster.Master.Pets.Add(monster);
                     break;
                 case Spell.Stonetrap:
-                    monster = (MonsterObject)data[2];
+                    monster = (MonsterObjectSrv)data[2];
                     front = (Point)data[3];
 
                     if (monster.Master.Dead) return;
@@ -964,7 +964,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
                                 switch (target.Race)
                                 {
                                     case ObjectType.Monster:
@@ -1009,7 +1009,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
 
                                 if (target.Node == null) continue;
 
@@ -1060,7 +1060,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
 
                                 if (target.Node == null) continue;
 
@@ -1108,8 +1108,8 @@ namespace Server.ExineEnvir
                         if (cell.Objects != null)
                             for (int o = 0; o < cell.Objects.Count; o++)
                             {
-                                MapObject target = cell.Objects[o];
-                                if (target.Race != ObjectType.Spell || ((SpellObject)target).Spell != Spell.FireWall) continue;
+                                MapObjectSrv target = cell.Objects[o];
+                                if (target.Race != ObjectType.Spell || ((SpellObjectSrv)target).Spell != Spell.FireWall) continue;
 
                                 cast = false;
                                 break;
@@ -1117,7 +1117,7 @@ namespace Server.ExineEnvir
 
                         if (cast)
                         {
-                            SpellObject ob = new SpellObject
+                            SpellObjectSrv ob = new SpellObjectSrv
                                 {
                                     Spell = Spell.FireWall,
                                     Value = value,
@@ -1146,8 +1146,8 @@ namespace Server.ExineEnvir
                         if (cell.Objects != null)
                             for (int o = 0; o < cell.Objects.Count; o++)
                             {
-                                MapObject target = cell.Objects[o];
-                                if (target.Race != ObjectType.Spell || ((SpellObject)target).Spell != Spell.FireWall) continue;
+                                MapObjectSrv target = cell.Objects[o];
+                                if (target.Race != ObjectType.Spell || ((SpellObjectSrv)target).Spell != Spell.FireWall) continue;
 
                                 cast = false;
                                 break;
@@ -1155,7 +1155,7 @@ namespace Server.ExineEnvir
 
                         if (!cast) continue;
 
-                        SpellObject ob = new SpellObject
+                        SpellObjectSrv ob = new SpellObjectSrv
                         {
                             Spell = Spell.FireWall,
                             Value = value,
@@ -1192,7 +1192,7 @@ namespace Server.ExineEnvir
 
                         for (int o = 0; o < cell.Objects.Count; o++)
                         {
-                            MapObject target = cell.Objects[o];
+                            MapObjectSrv target = cell.Objects[o];
                             if (target.Race != ObjectType.Player && target.Race != ObjectType.Monster) continue;
 
                             if (!target.IsAttackTarget(player)) continue;
@@ -1225,7 +1225,7 @@ namespace Server.ExineEnvir
 
                         for (int o = 0; o < cell.Objects.Count; o++)
                         {
-                            MapObject target = cell.Objects[o];
+                            MapObjectSrv target = cell.Objects[o];
                             if (target.Race != ObjectType.Player && target.Race != ObjectType.Monster) continue;
 
                             if (!target.IsAttackTarget(player)) continue;
@@ -1261,7 +1261,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
                                 switch (target.Race)
                                 {
                                     case ObjectType.Monster:
@@ -1310,7 +1310,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
                                 switch (target.Race)
                                 {
                                     case ObjectType.Monster:
@@ -1352,7 +1352,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
                                 switch (target.Race)
                                 {
                                     case ObjectType.Monster:
@@ -1402,7 +1402,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
                                 if (target.Race != ObjectType.Monster) continue;
                                 //Only targets
                                 if (!target.IsAttackTarget(player) || player.Level + 3 < target.Level) continue;
@@ -1446,8 +1446,8 @@ namespace Server.ExineEnvir
                             if (cell.Objects != null)
                                 for (int o = 0; o < cell.Objects.Count; o++)
                                 {
-                                    MapObject target = cell.Objects[o];
-                                    if (target.Race != ObjectType.Spell || ((SpellObject)target).Spell != Spell.PoisonCloud) continue;
+                                    MapObjectSrv target = cell.Objects[o];
+                                    if (target.Race != ObjectType.Spell || ((SpellObjectSrv)target).Spell != Spell.PoisonCloud) continue;
 
                                     cast = false;
                                     break;
@@ -1455,7 +1455,7 @@ namespace Server.ExineEnvir
 
                             if (!cast) continue;
 
-                            SpellObject ob = new SpellObject
+                            SpellObjectSrv ob = new SpellObjectSrv
                                 {
                                     Spell = Spell.PoisonCloud,
                                     Value = value,
@@ -1513,7 +1513,7 @@ namespace Server.ExineEnvir
 
                                 for (int k = 0; k < cell.Objects.Count; k++)
                                 {
-                                    MapObject target = cell.Objects[k];
+                                    MapObjectSrv target = cell.Objects[k];
                                     switch (target.Race)
                                     {
                                         case ObjectType.Monster:
@@ -1581,7 +1581,7 @@ namespace Server.ExineEnvir
 
                         for (int o = 0; o < cell.Objects.Count; o++)
                         {
-                            MapObject target = cell.Objects[o];
+                            MapObjectSrv target = cell.Objects[o];
                             if (target.Race != ObjectType.Player && target.Race != ObjectType.Monster) continue;
 
                             if (!target.IsAttackTarget(player)) continue;
@@ -1597,7 +1597,7 @@ namespace Server.ExineEnvir
                 #region Mirroring
 
                 case Spell.Mirroring:
-                    monster = (MonsterObject)data[2];
+                    monster = (MonsterObjectSrv)data[2];
                     front = (Point)data[3];
                     bool finish = (bool)data[4];
 
@@ -1642,8 +1642,8 @@ namespace Server.ExineEnvir
                             if (cell.Objects != null)
                                 for (int o = 0; o < cell.Objects.Count; o++)
                                 {
-                                    MapObject target = cell.Objects[o];
-                                    if (target.Race != ObjectType.Spell || ((SpellObject) target).Spell != Spell.Blizzard) continue;
+                                    MapObjectSrv target = cell.Objects[o];
+                                    if (target.Race != ObjectType.Spell || ((SpellObjectSrv) target).Spell != Spell.Blizzard) continue;
 
                                     cast = false;
                                     break;
@@ -1651,7 +1651,7 @@ namespace Server.ExineEnvir
 
                             if (!cast) continue;
 
-                            SpellObject ob = new SpellObject
+                            SpellObjectSrv ob = new SpellObjectSrv
                                 {
                                     Spell = Spell.Blizzard,
                                     Value = value,
@@ -1703,8 +1703,8 @@ namespace Server.ExineEnvir
                             if (cell.Objects != null)
                                 for (int o = 0; o < cell.Objects.Count; o++)
                                 {
-                                    MapObject target = cell.Objects[o];
-                                    if (target.Race != ObjectType.Spell || ((SpellObject)target).Spell != Spell.MeteorStrike) continue;
+                                    MapObjectSrv target = cell.Objects[o];
+                                    if (target.Race != ObjectType.Spell || ((SpellObjectSrv)target).Spell != Spell.MeteorStrike) continue;
 
                                     cast = false;
                                     break;
@@ -1712,7 +1712,7 @@ namespace Server.ExineEnvir
 
                             if (!cast) continue;
 
-                            SpellObject ob = new SpellObject
+                            SpellObjectSrv ob = new SpellObjectSrv
                             {
                                 Spell = Spell.MeteorStrike,
                                 Value = value,
@@ -1743,7 +1743,7 @@ namespace Server.ExineEnvir
                     value = (int)data[2];
                     location = (Point)data[3];
 
-                    MonsterObject centerTarget = null;
+                    MonsterObjectSrv centerTarget = null;
 
                     for (int y = location.Y - 1; y <= location.Y + 1; y++)
                     {
@@ -1761,11 +1761,11 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
 
                                 if (y == location.Y && x == location.X && target.Race == ObjectType.Monster)
                                 {
-                                    centerTarget = (MonsterObject)target;
+                                    centerTarget = (MonsterObjectSrv)target;
                                 }
                                 
                                 switch (target.Race)
@@ -1773,7 +1773,7 @@ namespace Server.ExineEnvir
                                     case ObjectType.Monster:
                                         if (target == null || !target.IsAttackTarget(player) || target.Node == null || target.Level > player.Level + 2) continue;
 
-                                        MonsterObject mobTarget = (MonsterObject)target;
+                                        MonsterObjectSrv mobTarget = (MonsterObjectSrv)target;
 
                                         if (centerTarget == null) centerTarget = mobTarget;
 
@@ -1797,7 +1797,7 @@ namespace Server.ExineEnvir
                             Point spawnpoint = Functions.PointMove(startpoint, spawndirection + j, 1);
                             if (spawnpoint.X <= 0 || spawnpoint.X > centerTarget.CurrentMap.Width) continue;
                             if (spawnpoint.Y <= 0 || spawnpoint.Y > centerTarget.CurrentMap.Height) continue;
-                            SpellObject ob = new SpellObject
+                            SpellObjectSrv ob = new SpellObjectSrv
                             {
                                 Spell = Spell.TrapHexagon,
                                 ExpireTime = Envir.Time + value,
@@ -1843,7 +1843,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
 
                                 if (target.Node == null) continue;
 
@@ -1898,8 +1898,8 @@ namespace Server.ExineEnvir
                         if (cell.Objects != null)
                             for (int o = 0; o < cell.Objects.Count; o++)
                             {
-                                MapObject target = cell.Objects[o];
-                                if (target.Race != ObjectType.Spell || (((SpellObject)target).Spell != Spell.FireWall && ((SpellObject)target).Spell != Spell.ExplosiveTrap)) continue;
+                                MapObjectSrv target = cell.Objects[o];
+                                if (target.Race != ObjectType.Spell || (((SpellObjectSrv)target).Spell != Spell.FireWall && ((SpellObjectSrv)target).Spell != Spell.ExplosiveTrap)) continue;
 
                                 cast = false;
                                 break;
@@ -1916,7 +1916,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i <= 2; i++)
                             {
-                                SpellObject ob = new SpellObject
+                                SpellObjectSrv ob = new SpellObjectSrv
                                 {
                                     Spell = Spell.ExplosiveTrap,
                                     Value = value,
@@ -1958,7 +1958,7 @@ namespace Server.ExineEnvir
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject target = cell.Objects[i];
+                            MapObjectSrv target = cell.Objects[i];
                             switch (target.Race)
                             {
                                 case ObjectType.Monster:
@@ -1997,7 +1997,7 @@ namespace Server.ExineEnvir
 
                                         if (target.Race == ObjectType.Player)
                                         {
-                                            PlayerObject tempOb = (PlayerObject)target;
+                                            PlayerObjectSrv tempOb = (PlayerObjectSrv)target;
 
                                             tempOb.ChangeMP(-tempValue);
                                         }
@@ -2019,9 +2019,9 @@ namespace Server.ExineEnvir
                 case Spell.Trap:
                     value = (int)data[2];
                     //location = (Point)data[3];
-                    MapObject originalTarget = (MapObject)data[3];
+                    MapObjectSrv originalTarget = (MapObjectSrv)data[3];
                     location = originalTarget.CurrentLocation;
-                    MonsterObject selectTarget = null;
+                    MonsterObjectSrv selectTarget = null;
 
                     if (!ValidPoint(location)) break;
 
@@ -2031,10 +2031,10 @@ namespace Server.ExineEnvir
 
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject target = cell.Objects[i];
+                        MapObjectSrv target = cell.Objects[i];
                         if (target.Race == ObjectType.Monster)
                         {
-                            selectTarget = (MonsterObject)target;
+                            selectTarget = (MonsterObjectSrv)target;
 
                             if (selectTarget == null || !selectTarget.IsAttackTarget(player) || selectTarget.Node == null || selectTarget.Level >= player.Level + 2) continue;
                             selectTarget.ShockTime = Envir.Time + value;
@@ -2047,7 +2047,7 @@ namespace Server.ExineEnvir
 
                     if (location.X <= 0 || location.X > selectTarget.CurrentMap.Width) break;
                     if (location.Y <= 0 || location.Y > selectTarget.CurrentMap.Height) break;
-                    SpellObject spellOb = new SpellObject
+                    SpellObjectSrv spellOb = new SpellObjectSrv
                     {
                         Spell = Spell.Trap,
                         ExpireTime = Envir.Time + value,
@@ -2092,7 +2092,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
                                 switch (target.Race)
                                 {
                                     case ObjectType.Monster:
@@ -2154,7 +2154,7 @@ namespace Server.ExineEnvir
                     location = (Point)data[3];
                     value2 = (int)data[4];
 
-                    spellOb = new SpellObject
+                    spellOb = new SpellObjectSrv
                     {
                         Spell = Spell.Portal,
                         Value = value2,
@@ -2194,7 +2194,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
                                 switch (target.Race)
                                 {
                                     case ObjectType.Monster:
@@ -2238,7 +2238,7 @@ namespace Server.ExineEnvir
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject target = cell.Objects[i];
+                                MapObjectSrv target = cell.Objects[i];
                                 if (target.Race != ObjectType.Monster) continue;
 
                                 if (magic.Level == 0)
@@ -2258,7 +2258,7 @@ namespace Server.ExineEnvir
                                     if (Envir.Random.Next(15) >= 1) continue;
                                 }
 
-                                if (((MonsterObject)target).Info.CoolEye == 100) continue;
+                                if (((MonsterObjectSrv)target).Info.CoolEye == 100) continue;
                                 target.Target = player;
                                 target.OperateTime = 0;
                                 train = true;
@@ -2295,8 +2295,8 @@ namespace Server.ExineEnvir
                             if (cell.Objects != null)
                                 for (int o = 0; o < cell.Objects.Count; o++)
                                 {
-                                    MapObject target = cell.Objects[o];
-                                    if (target.Race != ObjectType.Spell || ((SpellObject)target).Spell != Spell.HealingCircle) continue;
+                                    MapObjectSrv target = cell.Objects[o];
+                                    if (target.Race != ObjectType.Spell || ((SpellObjectSrv)target).Spell != Spell.HealingCircle) continue;
 
                                     cast = false;
                                     break;
@@ -2304,7 +2304,7 @@ namespace Server.ExineEnvir
 
                             if (!cast) continue;
 
-                            SpellObject ob = new SpellObject
+                            SpellObjectSrv ob = new SpellObjectSrv
                             {
                                 Spell = Spell.HealingCircle,
                                 Value = value,
@@ -2334,24 +2334,24 @@ namespace Server.ExineEnvir
 
         }
 
-        public void AddObject(MapObject ob)
+        public void AddObject(MapObjectSrv ob)
         {
             if (ob.Race == ObjectType.Player)
             {
-                Players.Add((PlayerObject)ob);
+                Players.Add((PlayerObjectSrv)ob);
             }
 
-            if (ob.Race == ObjectType.Merchant) NPCs.Add((NPCObject)ob);
-            if (ob.Race == ObjectType.Spell) Spells.Add((SpellObject)ob); 
+            if (ob.Race == ObjectType.Merchant) NPCs.Add((NPCObjectSrv)ob);
+            if (ob.Race == ObjectType.Spell) Spells.Add((SpellObjectSrv)ob); 
 
             GetCell(ob.CurrentLocation).Add(ob);
         }
 
-        public void RemoveObject(MapObject ob)
+        public void RemoveObject(MapObjectSrv ob)
         {
-            if (ob.Race == ObjectType.Player) Players.Remove((PlayerObject)ob);
-            if (ob.Race == ObjectType.Merchant) NPCs.Remove((NPCObject)ob);
-            if (ob.Race == ObjectType.Spell) Spells.Remove((SpellObject)ob); 
+            if (ob.Race == ObjectType.Player) Players.Remove((PlayerObjectSrv)ob);
+            if (ob.Race == ObjectType.Merchant) NPCs.Remove((NPCObjectSrv)ob);
+            if (ob.Race == ObjectType.Spell) Spells.Remove((SpellObjectSrv)ob); 
 
             GetCell(ob.CurrentLocation).Remove(ob);
         }
@@ -2368,9 +2368,9 @@ namespace Server.ExineEnvir
             return null;
         }
 
-        public List<SpellObject> GetSpellObjects(Spell spell ,MapObject caster)
+        public List<SpellObjectSrv> GetSpellObjects(Spell spell ,MapObjectSrv caster)
         {
-            List<SpellObject> spellObjects = new List<SpellObject>();
+            List<SpellObjectSrv> spellObjects = new List<SpellObjectSrv>();
 
             for (int i = 0; i < Spells.Count; i++)
             {
@@ -2383,11 +2383,11 @@ namespace Server.ExineEnvir
             return spellObjects;
         }
 
-        public ConquestObject GetConquest(Point location)
+        public ConquestObjectSrv GetConquest(Point location)
         {
             for (int i = 0; i < Conquest.Count; i++)
             {
-                ConquestObject swi = Conquest[i];
+                ConquestObjectSrv swi = Conquest[i];
 
                 if ((swi.Info.FullMap || Functions.InRange(swi.Info.Location, location, swi.Info.Size)) && swi.WarIsOn)
                     return swi;
@@ -2414,7 +2414,7 @@ namespace Server.ExineEnvir
 
             for (int i = Players.Count - 1; i >= 0; i--)
             {
-                PlayerObject player = Players[i];
+                PlayerObjectSrv player = Players[i];
 
                 if (Functions.InRange(location, player.CurrentLocation, Globals.DataRange))
                     player.Enqueue(p);                   
@@ -2427,7 +2427,7 @@ namespace Server.ExineEnvir
 
             for (int i = Players.Count - 1; i >= 0; i--)
             {
-                PlayerObject player = Players[i];
+                PlayerObjectSrv player = Players[i];
 
                 if (Functions.InRange(location, player.CurrentLocation, Globals.DataRange))
                     player.Enqueue(p);
@@ -2436,7 +2436,7 @@ namespace Server.ExineEnvir
         }
 
 
-        public void Broadcast(Packet p, Point location, PlayerObject Player)
+        public void Broadcast(Packet p, Point location, PlayerObjectSrv Player)
         {
             if (p == null) return;
 
@@ -2456,17 +2456,17 @@ namespace Server.ExineEnvir
             get { return Attribute == CellAttribute.Walk; }
         }
 
-        public List<MapObject> Objects;
+        public List<MapObjectSrv> Objects;
         public CellAttribute Attribute;
         public sbyte FishingAttribute = -1;
 
-        public void Add(MapObject mapObject)
+        public void Add(MapObjectSrv mapObject)
         {
-            if (Objects == null) Objects = new List<MapObject>();
+            if (Objects == null) Objects = new List<MapObjectSrv>();
 
             Objects.Add(mapObject);
         }
-        public void Remove(MapObject mapObject)
+        public void Remove(MapObjectSrv mapObject)
         {
             Objects.Remove(mapObject);
             if (Objects.Count == 0) Objects = null;
@@ -2499,7 +2499,7 @@ namespace Server.ExineEnvir
         }
         public bool Spawn()
         {
-            MonsterObject ob = MonsterObject.GetMonster(Monster);
+            MonsterObjectSrv ob = MonsterObjectSrv.GetMonster(Monster);
             if (ob == null) return true;
             return ob.Spawn(this);
         }

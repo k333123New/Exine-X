@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BoneLord : MonsterObject
+    public class BoneLord : MonsterObjectSrv
     {
         public byte AttackRange = 7;
         public byte _stage = 3;
@@ -92,7 +92,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < count; i++)
             {
-                MonsterObject mob = null;
+                MonsterObjectSrv mob = null;
                 switch (Envir.Random.Next(4))
                 {
                     case 0:

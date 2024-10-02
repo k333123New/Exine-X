@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class OmaKing : MonsterObject
+    public class OmaKing : MonsterObjectSrv
     {
         public byte AttackRange = 7;
 
@@ -37,7 +37,7 @@ namespace Server.ExineObjects.Monsters
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
-            List<MapObject> targets = FindAllTargets(AttackRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(AttackRange, CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)
@@ -70,7 +70,7 @@ namespace Server.ExineObjects.Monsters
             {
                 Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
-                List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
                 if (targets.Count == 0) return;
 
                 int levelgap;

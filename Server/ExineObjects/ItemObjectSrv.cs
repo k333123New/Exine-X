@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects
 {
-    public sealed class ItemObject : MapObject
+    public sealed class ItemObjectSrv : MapObjectSrv
     {
         public override ObjectType Race
         {
@@ -49,7 +49,7 @@ namespace Server.ExineObjects
             get { throw new NotSupportedException(); }
         }
 
-        public ItemObject(MapObject dropper, UserItem item, bool deathDrop = false)
+        public ItemObjectSrv(MapObjectSrv dropper, UserItem item, bool deathDrop = false)
         {
             if (deathDrop)//player dropped it when he died: allow for time to run back and pickup his drops
                 ExpireTime = Envir.Time + Settings.PlayerDiedItemTimeOut * Settings.Minute;
@@ -79,7 +79,7 @@ namespace Server.ExineObjects
 			CurrentMap = dropper.CurrentMap;
             CurrentLocation = dropper.CurrentLocation;
         }
-        public ItemObject(MapObject dropper, UserItem item, Point manualpoint)
+        public ItemObjectSrv(MapObjectSrv dropper, UserItem item, Point manualpoint)
         {
             ExpireTime = Envir.Time + Settings.ItemTimeOut * Settings.Minute;
 
@@ -106,7 +106,7 @@ namespace Server.ExineObjects
             CurrentMap = dropper.CurrentMap;
             CurrentLocation = manualpoint;
         }
-        public ItemObject(MapObject dropper, uint gold)
+        public ItemObjectSrv(MapObjectSrv dropper, uint gold)
         {
             ExpireTime = Envir.Time + Settings.ItemTimeOut * Settings.Minute;
 
@@ -115,7 +115,7 @@ namespace Server.ExineObjects
             CurrentMap = dropper.CurrentMap;
             CurrentLocation = dropper.CurrentLocation;
         }
-        public ItemObject(MapObject dropper, uint gold, Point manualLocation)
+        public ItemObjectSrv(MapObjectSrv dropper, uint gold, Point manualLocation)
         {
             ExpireTime = Envir.Time + Settings.ItemTimeOut * Settings.Minute;
 
@@ -233,7 +233,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             if (ob.Blocking)
                             {
                                 blocking = true;
@@ -320,7 +320,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             if (ob.Blocking)
                             {
                                 blocking = true;
@@ -387,19 +387,19 @@ namespace Server.ExineObjects
         {
             throw new NotSupportedException();
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             throw new NotSupportedException();
         }
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             throw new NotSupportedException();
         }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             throw new NotSupportedException();
         }
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             throw new NotSupportedException();
         }
@@ -408,22 +408,22 @@ namespace Server.ExineObjects
             throw new NotSupportedException();
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
             throw new NotSupportedException();
         }
 
-        public override Buff AddBuff(BuffType type, MapObject owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
+        public override Buff AddBuff(BuffType type, MapObjectSrv owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
         {
             throw new NotSupportedException();
         }
 
-        public override bool IsFriendlyTarget(HumanObject ally)
+        public override bool IsFriendlyTarget(HumanObjectSrv ally)
         {
             throw new NotSupportedException();
         }
 
-        public override bool IsFriendlyTarget(MonsterObject ally)
+        public override bool IsFriendlyTarget(MonsterObjectSrv ally)
         {
             throw new NotSupportedException();
         }
@@ -433,12 +433,12 @@ namespace Server.ExineObjects
             throw new NotSupportedException();
         }
 
-        public override void SendHealth(HumanObject player)
+        public override void SendHealth(HumanObjectSrv player)
         {
             throw new NotSupportedException();
         }
 
-        public override int Pushed(MapObject pusher, ExineDirection dir, int distance)
+        public override int Pushed(MapObjectSrv pusher, ExineDirection dir, int distance)
         {
             throw new NotSupportedException();
         }

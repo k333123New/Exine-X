@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class AncientBringer : MonsterObject
+    public class AncientBringer : MonsterObjectSrv
     {
         protected virtual byte AttackRange
         {
@@ -90,7 +90,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             byte range = (byte)data[3];
@@ -107,7 +107,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool poison = (bool)data[3];
@@ -138,7 +138,7 @@ namespace Server.ExineObjects.Monsters
 
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
-                    MapObject ob = cell.Objects[o];
+                    MapObjectSrv ob = cell.Objects[o];
                     if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                     {
                         if (!ob.IsAttackTarget(this)) continue;
@@ -160,7 +160,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < count; i++)
             {
-                MonsterObject mob = GetMonster(Envir.GetMonsterInfo(Settings.AncientBatName));                
+                MonsterObjectSrv mob = GetMonster(Envir.GetMonsterInfo(Settings.AncientBatName));                
                 if (mob == null) continue;
 
                 if (!mob.Spawn(CurrentMap, Target.CurrentLocation))

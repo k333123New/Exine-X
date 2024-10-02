@@ -1109,8 +1109,7 @@ public enum ItemType : byte
     Deco = 38,
     Socket = 39,
     MonsterSpawn = 40,
-    SiegeAmmo = 41, //TODO
-    SealedHero = 42
+    SiegeAmmo = 41 //TODO 
 }
 
 public enum MirGridType : byte
@@ -1844,7 +1843,6 @@ public enum ServerPacketIds : short
     UserSlotsRefresh,
     UserLocation,
     ObjectPlayer,
-    ObjectHero,
     ObjectRemove,
     ObjectTurn,
     ObjectWalk,
@@ -1852,7 +1850,6 @@ public enum ServerPacketIds : short
     Chat,
     ObjectChat,
     NewItemInfo,
-    NewHeroInfo,
     NewChatItem,
     MoveItem,
     EquipItem,
@@ -1871,8 +1868,6 @@ public enum ServerPacketIds : short
     RetrieveTradeItem,
     UseItem,
     DropItem,
-    TakeBackHeroItem,
-    TransferHeroItem,
     PlayerUpdate,
     PlayerInspect,
     LogOutSuccess,
@@ -1895,7 +1890,6 @@ public enum ServerPacketIds : short
     DamageIndicator,
     DuraChanged,
     HealthChanged,
-    HeroHealthChanged,
     DeleteItem,
     Death,
     ObjectDied,
@@ -1903,9 +1897,7 @@ public enum ServerPacketIds : short
     ObjectColourChanged,
     ObjectGuildNameChanged,
     GainExperience,
-    GainHeroExperience,
     LevelChanged,
-    HeroLevelChanged,
     ObjectLeveled,
     ObjectHarvest,
     ObjectHarvested,
@@ -1980,7 +1972,6 @@ public enum ServerPacketIds : short
     ObjectSitDown,
     InTrapRock,
     BaseStatsInfo,
-    HeroBaseStatsInfo,
     UserName,
     ChatItemStats,
     GuildNoticeChange,

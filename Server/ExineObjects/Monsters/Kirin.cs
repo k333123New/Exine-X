@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    class Kirin : MonsterObject
+    class Kirin : MonsterObjectSrv
     {
 
         private byte AttackRange = 3;
@@ -156,7 +156,7 @@ namespace Server.ExineObjects.Monsters
 
                     for (int k = 0; k < cell.Objects.Count; k++)
                     {
-                        MapObject target = cell.Objects[k];
+                        MapObjectSrv target = cell.Objects[k];
                         switch (target.Race)
                         {
                             case ObjectType.Monster:

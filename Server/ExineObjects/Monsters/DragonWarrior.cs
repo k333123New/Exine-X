@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DragonWarrior : MonsterObject
+    public class DragonWarrior : MonsterObjectSrv
     {
         protected internal DragonWarrior(MonsterInfo info)
             : base(info)

@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TreeQueen : MonsterObject
+    public class TreeQueen : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
         protected override bool CanRegen { get { return false; } }
@@ -35,17 +35,17 @@ namespace Server.ExineObjects.Monsters
 
         public override bool Walk(ExineDirection dir) { return false; }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             return base.Attacked(attacker, damage, type);
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             return base.Attacked(attacker, damage, type, damageWeapon);
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
 
         }
@@ -100,7 +100,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool fireBombardment = (bool)data[3];
@@ -110,7 +110,7 @@ namespace Server.ExineObjects.Monsters
 
             if (fireBombardment)
             {
-                List<MapObject> targets = FindAllTargets(3, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(3, CurrentLocation);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)
@@ -121,7 +121,7 @@ namespace Server.ExineObjects.Monsters
 
             if (pushAttack)
             {
-                List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)
@@ -159,7 +159,7 @@ namespace Server.ExineObjects.Monsters
 
                     var start = Envir.Random.Next(2000);
 
-                    SpellObject spellObj = new SpellObject
+                    SpellObjectSrv spellObj = new SpellObjectSrv
                     {
                         Spell = Spell.TreeQueenRoot,
                         Value = Envir.Random.Next(Envir.Random.Next(Stats[Stat.MinMC], Stats[Stat.MaxMC])),
@@ -216,7 +216,7 @@ namespace Server.ExineObjects.Monsters
 
                     var start = 500;
 
-                    SpellObject ob = new SpellObject
+                    SpellObjectSrv ob = new SpellObjectSrv
                     {
                         Spell = Spell.TreeQueenMassRoots,
                         Value = damage,
@@ -264,7 +264,7 @@ namespace Server.ExineObjects.Monsters
 
                         var start = Envir.Random.Next(4000);
 
-                        SpellObject ob = new SpellObject
+                        SpellObjectSrv ob = new SpellObjectSrv
                         {
                             Spell = Spell.TreeQueenGroundRoots,
                             Value = damage,

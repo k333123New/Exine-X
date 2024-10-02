@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class VampireSpider : MonsterObject
+    public class VampireSpider : MonsterObjectSrv
     {
         public bool Summoned;
         public long AliveTime;
@@ -48,12 +48,12 @@ namespace Server.ExineObjects.Monsters
                     CompleteRangeAttack(action.Params);
                     break;
                 case DelayedType.Recall:
-                    PetRecall((MapObject)action.Params[0]);
+                    PetRecall((MapObjectSrv)action.Params[0]);
                     break;
             }
         }
 
-        public void PetRecall(MapObject target)
+        public void PetRecall(MapObjectSrv target)
         {
             if (target == null) return;
             if (Master == null) return;
@@ -90,7 +90,7 @@ namespace Server.ExineObjects.Monsters
 
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject target = cell.Objects[i];
+                        MapObjectSrv target = cell.Objects[i];
                         switch (target.Race)
                         {
                             case ObjectType.Monster:
@@ -160,7 +160,7 @@ namespace Server.ExineObjects.Monsters
 
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
-                    MapObject ob = cell.Objects[o];
+                    MapObjectSrv ob = cell.Objects[o];
                     if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                     {
                         if (!ob.IsAttackTarget(this)) continue;
@@ -175,10 +175,10 @@ namespace Server.ExineObjects.Monsters
             }
         }
 
-        private void MasterVampire(int value, MapObject ob)
+        private void MasterVampire(int value, MapObjectSrv ob)
         {
             if (Master == null) return;
-            if (Master.VampAmount == 0) ((PlayerObject)Master).VampTime = Envir.Time + 1000;
+            if (Master.VampAmount == 0) ((PlayerObjectSrv)Master).VampTime = Envir.Time + 1000;
             Master.VampAmount += (ushort)(value * (PetLevel + 1) * 0.25F);
             ob.Broadcast(new S.ObjectEffect { ObjectID = ob.ObjectID, Effect = SpellEffect.Bleeding, EffectType = 0 });
         }

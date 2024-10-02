@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class GlacierSnail : MonsterObject
+    public class GlacierSnail : MonsterObjectSrv
     {
         protected internal GlacierSnail(MonsterInfo info)
             : base(info)

@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class CrystalSpider : MonsterObject
+    public class CrystalSpider : MonsterObjectSrv
     {
         protected internal CrystalSpider(MonsterInfo info)
             : base(info)
@@ -53,7 +53,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool attack = data.Count < 4 || (bool)data[3];
@@ -78,7 +78,7 @@ namespace Server.ExineObjects.Monsters
 
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
-                    MapObject ob = cell.Objects[o];
+                    MapObjectSrv ob = cell.Objects[o];
                     if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                     {
                         if (!ob.IsAttackTarget(this)) continue;

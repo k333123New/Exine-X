@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class IcePhantom : MonsterObject
+    public class IcePhantom : MonsterObjectSrv
     {
         protected virtual byte AttackRange
         {

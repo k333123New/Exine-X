@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class IcePillar : MonsterObject
+    public class IcePillar : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
         protected override bool CanRegen { get { return false; } }
@@ -28,7 +28,7 @@ namespace Server.ExineObjects.Monsters
         protected override void ProcessSearch() { }
         protected override void ProcessRoam() { }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             int armour = 0;
 
@@ -83,7 +83,7 @@ namespace Server.ExineObjects.Monsters
         
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int armour = 0;
 
@@ -142,13 +142,13 @@ namespace Server.ExineObjects.Monsters
             return 0;
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true) { }
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true) { }
 
         private void CloseAttack(int damage)
         {
             Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
 
             if (targets.Count == 0) return;
             
@@ -168,7 +168,7 @@ namespace Server.ExineObjects.Monsters
 
             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
 
-            List<MapObject> targets = FindAllTargets(7, CurrentLocation, false);
+            List<MapObjectSrv> targets = FindAllTargets(7, CurrentLocation, false);
 
             for (int i = 0; i < targets.Count; i++)
             {
@@ -183,7 +183,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteDeath(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 

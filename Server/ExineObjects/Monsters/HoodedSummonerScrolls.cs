@@ -84,14 +84,14 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool poisonAttack = (bool)data[3];
 
             if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
 
-            List<MapObject> targets = FindAllTargets(1, target.CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(1, target.CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)
@@ -172,7 +172,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteDeath(IList<object> data)
         {
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation, false);
+            List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation, false);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

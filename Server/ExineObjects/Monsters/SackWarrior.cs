@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class SackWarrior : MonsterObject
+    public class SackWarrior : MonsterObjectSrv
     {
         protected internal SackWarrior(MonsterInfo info)
             : base(info)
@@ -49,7 +49,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 

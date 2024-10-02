@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Tornado : MonsterObject
+    public class Tornado : MonsterObjectSrv
     {
         private const byte AttackRange = 5;
 
@@ -36,7 +36,7 @@ namespace Server.ExineObjects.Monsters
             {
                 Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
-                List<MapObject> targets = FindAllTargets(AttackRange, CurrentLocation, false);
+                List<MapObjectSrv> targets = FindAllTargets(AttackRange, CurrentLocation, false);
 
                 if (targets.Count == 0) return;
 

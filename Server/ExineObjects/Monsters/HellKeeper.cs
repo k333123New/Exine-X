@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    class HellKeeper : MonsterObject
+    class HellKeeper : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
         protected override bool CanRegen { get { return false; } }
@@ -28,7 +28,7 @@ namespace Server.ExineObjects.Monsters
         public override bool Walk(ExineDirection dir) { return false; }
 
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             int armour = 0;
 
@@ -85,7 +85,7 @@ namespace Server.ExineObjects.Monsters
             ChangeHP(armour - damage);
             return 1;
         }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int armour = 0;
 
@@ -142,7 +142,7 @@ namespace Server.ExineObjects.Monsters
             return 1;
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
 
         }
@@ -173,7 +173,7 @@ namespace Server.ExineObjects.Monsters
         {
             byte attackType = (byte)data[0];
 
-            List<MapObject> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

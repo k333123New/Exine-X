@@ -3,7 +3,7 @@ using Server.ExineEnvir;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BombSpider : MonsterObject
+    public class BombSpider : MonsterObjectSrv
     {
         public long ExplosionTime;
 
@@ -36,7 +36,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteDeath(IList<object> data)
         {
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation, false);
+            List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation, false);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

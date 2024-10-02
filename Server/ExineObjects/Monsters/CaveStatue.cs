@@ -2,7 +2,7 @@
 
 namespace Server.ExineObjects.Monsters
 {
-    public class CaveStatue : MonsterObject
+    public class CaveStatue : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
         protected override bool CanAttack { get { return false; } }

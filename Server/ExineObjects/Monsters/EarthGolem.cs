@@ -97,7 +97,7 @@ namespace Server.ExineObjects.Monsters
 
                         var start = 500;
 
-                        SpellObject ob = new SpellObject
+                        SpellObjectSrv ob = new SpellObjectSrv
                         {
                             Spell = Spell.EarthGolemPile,
                             Value = damage,

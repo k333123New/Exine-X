@@ -2,7 +2,7 @@
 
 namespace Server.ExineObjects.Monsters
 {
-    public class CargoBox : MonsterObject
+    public class CargoBox : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
         protected internal CargoBox(MonsterInfo info)

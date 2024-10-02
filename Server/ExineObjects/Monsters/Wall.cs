@@ -3,9 +3,9 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Wall : MonsterObject
+    public class Wall : MonsterObjectSrv
     {
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
         public int WallIndex;
 
         protected internal Wall(MonsterInfo info) : base(info)
@@ -29,7 +29,7 @@ namespace Server.ExineObjects.Monsters
 
         public override bool Walk(ExineDirection dir) { return false; }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             CheckDirection();
 
@@ -38,7 +38,7 @@ namespace Server.ExineObjects.Monsters
             return base.Attacked(attacker, damage, type, damageWeapon);
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             CheckDirection();
 

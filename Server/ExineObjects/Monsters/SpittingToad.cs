@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class SpittingToad : MonsterObject
+    public class SpittingToad : MonsterObjectSrv
     {
         public bool Summoned;
         public long AliveTime;
@@ -46,12 +46,12 @@ namespace Server.ExineObjects.Monsters
                     CompleteRangeAttack(action.Params);
                     break;
                 case DelayedType.Recall:
-                    PetRecall((MapObject)action.Params[0]);
+                    PetRecall((MapObjectSrv)action.Params[0]);
                     break;
             }
         }
 
-        public void PetRecall(MapObject target)
+        public void PetRecall(MapObjectSrv target)
         {
             if (target == null) return;
             if (Master == null) return;

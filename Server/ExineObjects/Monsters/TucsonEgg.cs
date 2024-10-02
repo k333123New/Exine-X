@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TucsonEgg : MonsterObject
+    public class TucsonEgg : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
 
@@ -19,11 +19,11 @@ namespace Server.ExineObjects.Monsters
 
         public override bool Walk(ExineDirection dir) { return false; }
 
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return base.IsAttackTarget(attacker);
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return base.IsAttackTarget(attacker);
         }
@@ -40,7 +40,7 @@ namespace Server.ExineObjects.Monsters
             return base.GetInfo();
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             int armour = 0;
 
@@ -97,7 +97,7 @@ namespace Server.ExineObjects.Monsters
             ChangeHP(-1);
             return 1;
         }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int armour = 0;
 
@@ -169,7 +169,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

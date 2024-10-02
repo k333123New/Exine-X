@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class PlagueCrab : MonsterObject
+    public class PlagueCrab : MonsterObjectSrv
     {
         protected internal PlagueCrab(MonsterInfo info)
             : base(info)

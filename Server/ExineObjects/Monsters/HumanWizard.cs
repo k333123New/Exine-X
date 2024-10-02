@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HumanWizard : MonsterObject
+    public class HumanWizard : MonsterObjectSrv
     {
         public long FearTime, DecreaseMPTime;
         public byte AttackRange = 6;
@@ -48,12 +48,12 @@ namespace Server.ExineObjects.Monsters
         {
             base.ProcessAI();
 
-            if (Master != null && Master is PlayerObject && Envir.Time > DecreaseMPTime)
+            if (Master != null && Master is PlayerObjectSrv && Envir.Time > DecreaseMPTime)
             {
                 DecreaseMPTime = Envir.Time + 1000;
-                if (!Master.Dead) ((PlayerObject)Master).ChangeMP(-10);
+                if (!Master.Dead) ((PlayerObjectSrv)Master).ChangeMP(-10);
 
-                if (((PlayerObject)Master).MP <= 0) Die();
+                if (((PlayerObjectSrv)Master).MP <= 0) Die();
             }
         }
 
@@ -118,9 +118,9 @@ namespace Server.ExineObjects.Monsters
 
         public override void ChangeHP(int amount)
         {
-            if (Master != null && Master is PlayerObject)
+            if (Master != null && Master is PlayerObjectSrv)
             {
-                ((PlayerObject)Master).ChangeMP(amount);
+                ((PlayerObjectSrv)Master).ChangeMP(amount);
                 return;
             }
             base.ChangeHP(amount);
@@ -157,14 +157,14 @@ namespace Server.ExineObjects.Monsters
 
         public override Packet GetInfo()
         {
-            PlayerObject master = null;
+            PlayerObjectSrv master = null;
             short weapon = -1;
             short shield = -1;
             short armour = 0;
             byte wing = 0;
 
-            if (Master != null && Master is PlayerObject) 
-                master = (PlayerObject)Master;
+            if (Master != null && Master is PlayerObjectSrv) 
+                master = (PlayerObjectSrv)Master;
 
             if (master != null)
             {

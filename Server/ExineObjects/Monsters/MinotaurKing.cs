@@ -19,13 +19,13 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
             if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
 
-            List<MapObject> targets = FindAllTargets(3, target.CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(3, target.CurrentLocation);
 
             for (int i = 0; i < targets.Count; i++)
             {

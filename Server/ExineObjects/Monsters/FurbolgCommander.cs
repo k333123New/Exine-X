@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FurbolgCommander : MonsterObject
+    public class FurbolgCommander : MonsterObjectSrv
     {
         protected virtual byte AttackRange
         {

@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class CrazyManworm : MonsterObject
+    public class CrazyManworm : MonsterObjectSrv
     {
         protected internal CrazyManworm(MonsterInfo info)
             : base(info)

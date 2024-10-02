@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FlamingMutant : MonsterObject
+    public class FlamingMutant : MonsterObjectSrv
     {
         protected internal FlamingMutant(MonsterInfo info)
             : base(info)
@@ -57,7 +57,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -65,7 +65,7 @@ namespace Server.ExineObjects.Monsters
 
             target.Attacked(this, damage, defence);
 
-            List<MapObject> targets = FindAllTargets(3, CurrentLocation, false);
+            List<MapObjectSrv> targets = FindAllTargets(3, CurrentLocation, false);
 
             if (targets.Count == 0) return;
 
@@ -80,7 +80,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 

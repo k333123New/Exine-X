@@ -3,7 +3,7 @@ using Server.ExineDatabase;
 
 namespace Server.ExineObjects
 {
-    public sealed class GuildObject
+    public sealed class GuildObjectSrv
     {
         private static Envir Envir
         {
@@ -55,14 +55,14 @@ namespace Server.ExineObjects
         }
 
         public long NextExpUpdate = 0;
-        public List<GuildObject> WarringGuilds = new List<GuildObject>();
+        public List<GuildObjectSrv> WarringGuilds = new List<GuildObjectSrv>();
 
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
 
-        public List<GuildObject> AllyGuilds = new List<GuildObject>();
+        public List<GuildObjectSrv> AllyGuilds = new List<GuildObjectSrv>();
         public int AllyCount;
 
-        public GuildObject(GuildInfo info)
+        public GuildObjectSrv(GuildInfo info)
         {
             Info = info;
 
@@ -75,7 +75,7 @@ namespace Server.ExineObjects
             {
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                 {
-                    PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                    PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         player.ReceiveChat(message, Type);
@@ -90,7 +90,7 @@ namespace Server.ExineObjects
             {
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                 {
-                    PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                    PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         player.ReceiveOutputMessage(message, Type);
@@ -99,15 +99,15 @@ namespace Server.ExineObjects
             }
         }
 
-        public List<PlayerObject> GetOnlinePlayers()
+        public List<PlayerObjectSrv> GetOnlinePlayers()
         {
-            List<PlayerObject> players = new List<PlayerObject>();
+            List<PlayerObjectSrv> players = new List<PlayerObjectSrv>();
 
             for (int i = 0; i < Ranks.Count; i++)
             {
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                 {
-                    PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                    PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         players.Add(player);
@@ -118,7 +118,7 @@ namespace Server.ExineObjects
             return players;
         }
 
-        public void PlayerLogged(PlayerObject member, bool online, bool New = false)
+        public void PlayerLogged(PlayerObjectSrv member, bool online, bool New = false)
         {
             for (int i = 0; i < Ranks.Count; i++)
             {
@@ -150,7 +150,7 @@ namespace Server.ExineObjects
             }
         }
 
-        public void SendGuildStatus(PlayerObject member)
+        public void SendGuildStatus(PlayerObjectSrv member)
         {
             string gName = Name;
 
@@ -178,7 +178,7 @@ namespace Server.ExineObjects
                 });
         }
 
-        public void NewMember(PlayerObject newMember)
+        public void NewMember(PlayerObjectSrv newMember)
         {
             if (Ranks.Count < 2)
             {
@@ -194,7 +194,7 @@ namespace Server.ExineObjects
             NeedSave = true;
         }
 
-        public bool ChangeRank(PlayerObject self, string memberName, byte rankIndex, string rankName = "Members")
+        public bool ChangeRank(PlayerObjectSrv self, string memberName, byte rankIndex, string rankName = "Members")
         {
             if ((self.MyGuild != this) || (self.MyGuildRank == null)) return false;
             if (rankIndex >= Ranks.Count) return false;
@@ -248,7 +248,7 @@ namespace Server.ExineObjects
                 Ranks[rankIndex]
             };
             NeedSave = true;
-            PlayerObject player = (PlayerObject)Member.Player;
+            PlayerObjectSrv player = (PlayerObjectSrv)Member.Player;
             if (player != null)
             {
                 player.MyGuildRank = Ranks[rankIndex];
@@ -260,14 +260,14 @@ namespace Server.ExineObjects
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                     if ((Ranks[i].Members[j].Player != null) && (Ranks[i].Members[j].Player != Member.Player))
                     {
-                        player = (PlayerObject)Ranks[i].Members[j].Player;
+                        player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                         player.Enqueue(new ServerPackets.GuildMemberChange() { Name = Member.Name, Status = (byte)5, RankIndex = (byte)MemberRank.Index });
                         player.GuildMembersChanged = true;
                     }
             return true;
         }
 
-        public bool NewRank(PlayerObject Self)
+        public bool NewRank(PlayerObjectSrv Self)
         {
             if (Ranks.Count >= byte.MaxValue)
             {
@@ -287,7 +287,7 @@ namespace Server.ExineObjects
             return true;
         }
 
-        public bool ChangeRankOption(PlayerObject Self, byte RankIndex, int Option, string Enabled)
+        public bool ChangeRankOption(PlayerObjectSrv Self, byte RankIndex, int Option, string Enabled)
         {
             if ((RankIndex >= Ranks.Count) || (Option > 7))
             {
@@ -313,7 +313,7 @@ namespace Server.ExineObjects
             NeedSave = true;
             return true;
         }
-        public bool ChangeRankName(PlayerObject Self, string RankName, byte RankIndex)
+        public bool ChangeRankName(PlayerObjectSrv Self, string RankName, byte RankIndex)
         {
             int SelfRankIndex = -1;
             for (int i = 0; i < Ranks.Count; i++)
@@ -349,7 +349,7 @@ namespace Server.ExineObjects
             {
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                 {
-                    PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                    PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         player.Enqueue(new ServerPackets.GuildMemberChange() { Name = Self.Info.Name, Status = (byte)7, Ranks = NewRankList });
@@ -366,7 +366,7 @@ namespace Server.ExineObjects
             return true;
         }
 
-        public bool DeleteMember(PlayerObject Kicker, string membername)
+        public bool DeleteMember(PlayerObjectSrv Kicker, string membername)
         {
             //careful this can lead to guild with no ranks or members(or no leader)
 
@@ -412,11 +412,11 @@ namespace Server.ExineObjects
             }
 
         AllOk:
-            MemberDeleted(membername, (PlayerObject)Member.Player, Member.Name == Kicker.Info.Name);
+            MemberDeleted(membername, (PlayerObjectSrv)Member.Player, Member.Name == Kicker.Info.Name);
 
             if (Member.Player != null)
             {
-                PlayerObject LeavingMember = (PlayerObject)Member.Player;
+                PlayerObjectSrv LeavingMember = (PlayerObjectSrv)Member.Player;
                 LeavingMember.RefreshStats();
             }
 
@@ -428,11 +428,11 @@ namespace Server.ExineObjects
             return true;
 
         LeaderOk:
-            MemberDeleted(membername, (PlayerObject)Member.Player, Member.Name == Kicker.Info.Name);
+            MemberDeleted(membername, (PlayerObjectSrv)Member.Player, Member.Name == Kicker.Info.Name);
 
             if (Member.Player != null)
             {
-                PlayerObject LeavingMember = (PlayerObject)Member.Player;
+                PlayerObjectSrv LeavingMember = (PlayerObjectSrv)Member.Player;
                 LeavingMember.RefreshStats();
             }
 
@@ -444,7 +444,7 @@ namespace Server.ExineObjects
             return true;
         }
 
-        public void MemberDeleted(string name, PlayerObject formerMember, bool kickSelf)
+        public void MemberDeleted(string name, PlayerObjectSrv formerMember, bool kickSelf)
         {
             for (int i = 0; i < Ranks.Count; i++)
             {
@@ -452,7 +452,7 @@ namespace Server.ExineObjects
                 {
                     if ((Ranks[i].Members[j].Player != null) && (Ranks[i].Members[j].Player != formerMember))
                     {
-                        PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                        PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                         player.Enqueue(new ServerPackets.GuildMemberChange() { Name = name, Status = (byte)(kickSelf ? 4 : 3) });
                         player.GuildMembersChanged = true;
                     }
@@ -498,7 +498,7 @@ namespace Server.ExineObjects
                 {
                     if (Ranks[i].Members[j].Player != null)
                     {
-                        PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                        PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                         player.GuildNoticeChanged = true;
                     }
                 }
@@ -513,7 +513,7 @@ namespace Server.ExineObjects
             {
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                 {
-                    PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                    PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         player.Enqueue(p);
@@ -528,7 +528,7 @@ namespace Server.ExineObjects
             {
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                 {
-                    PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                    PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         player.CheckItem(Item);
@@ -596,7 +596,7 @@ namespace Server.ExineObjects
                     {
                         if (Ranks[i].Members[j].Player != null)
                         {
-                            SendGuildStatus((PlayerObject)Ranks[i].Members[j].Player);
+                            SendGuildStatus((PlayerObjectSrv)Ranks[i].Members[j].Player);
                         }
                     }
                 }
@@ -614,7 +614,7 @@ namespace Server.ExineObjects
 
         #region Guild Wars
 
-        public bool GoToWar(GuildObject enemyGuild)
+        public bool GoToWar(GuildObjectSrv enemyGuild)
         {
             if (enemyGuild == null)
             {
@@ -639,7 +639,7 @@ namespace Server.ExineObjects
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                 {
                     //in a way this is a horrible spam situation, it should only broadcast to your  own guild or enemy or allies guild but not sure i wanna code yet another broadcast for that
-                    PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                    PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         //player.Enqueue(player.GetInfoEx(player));
@@ -668,7 +668,7 @@ namespace Server.ExineObjects
             }
         }
 
-        public bool IsEnemy(GuildObject enemyGuild)
+        public bool IsEnemy(GuildObjectSrv enemyGuild)
         {
             if (enemyGuild == null) return false;
             if (enemyGuild.IsAtWar() != true) return false;
@@ -691,7 +691,7 @@ namespace Server.ExineObjects
             {
                 for (int j = 0; j < Ranks[i].Members.Count; j++)
                 {
-                    PlayerObject player = (PlayerObject)Ranks[i].Members[j].Player;
+                    PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         player.RefreshStats();
@@ -783,7 +783,7 @@ namespace Server.ExineObjects
                 {
                     if (Ranks[i].Members[j].Player != null)
                     {
-                        SendGuildStatus((PlayerObject)Ranks[i].Members[j].Player);
+                        SendGuildStatus((PlayerObjectSrv)Ranks[i].Members[j].Player);
                     }
                 }
             }
@@ -840,11 +840,11 @@ namespace Server.ExineObjects
 
     public class GuildAtWar
     {
-        public GuildObject GuildA;
-        public GuildObject GuildB;
+        public GuildObjectSrv GuildA;
+        public GuildObjectSrv GuildB;
         public long TimeRemaining;
 
-        public GuildAtWar(GuildObject a, GuildObject b)
+        public GuildAtWar(GuildObjectSrv a, GuildObjectSrv b)
         {
             GuildA = a;
             GuildB = b;

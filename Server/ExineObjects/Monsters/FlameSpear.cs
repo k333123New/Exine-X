@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FlameSpear : MonsterObject
+    public class FlameSpear : MonsterObjectSrv
     {
         public long FearTime;
         public byte AttackRange = 4;

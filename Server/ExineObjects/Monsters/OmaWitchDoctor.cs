@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class OmaWitchDoctor : MonsterObject
+    public class OmaWitchDoctor : MonsterObjectSrv
     {
         protected internal OmaWitchDoctor(MonsterInfo info)
             : base(info)

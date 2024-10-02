@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HornedWarrior : MonsterObject
+    public class HornedWarrior : MonsterObjectSrv
     {
         private long _ShieldTime;
         protected byte AttackRange = 4;

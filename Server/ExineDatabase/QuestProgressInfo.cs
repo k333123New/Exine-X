@@ -10,7 +10,7 @@ namespace Server.ExineDatabase
             get { return Envir.Main; }
         }
 
-        public PlayerObject Owner;
+        public PlayerObjectSrv Owner;
 
         public int Index;
 
@@ -228,7 +228,7 @@ namespace Server.ExineDatabase
             }
         }
 
-        public void Init(PlayerObject player)
+        public void Init(PlayerObjectSrv player)
         {
             Owner = player;
 

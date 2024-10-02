@@ -3,7 +3,7 @@ using Server.ExineEnvir;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Jar1 : MonsterObject
+    public class Jar1 : MonsterObjectSrv
     {
         protected virtual byte AttackRange
         {

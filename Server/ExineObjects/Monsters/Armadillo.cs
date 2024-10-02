@@ -17,7 +17,7 @@ namespace Server.ExineObjects.Monsters
         {
             if (Visible && Envir.Time > DigOutTime + 500 && !DoneDigOut)
             {
-                SpellObject ob = new SpellObject
+                SpellObjectSrv ob = new SpellObjectSrv
                 {
                     Spell = Spell.DigOutArmadillo,
                     Value = 1,
@@ -34,7 +34,7 @@ namespace Server.ExineObjects.Monsters
             }
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             if (_runAway && Envir.Random.Next(4) == 0)
             {
@@ -44,7 +44,7 @@ namespace Server.ExineObjects.Monsters
             return base.Attacked(attacker, damage, type, damageWeapon);
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             if (_runAway && Envir.Random.Next(4) == 0)
             {
@@ -145,7 +145,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 

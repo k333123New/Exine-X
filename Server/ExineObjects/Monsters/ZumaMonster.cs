@@ -5,7 +5,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class ZumaMonster : MonsterObject
+    public class ZumaMonster : MonsterObjectSrv
     {
         public bool Stoned = true;
         public bool AvoidFireWall = true;
@@ -30,25 +30,25 @@ namespace Server.ExineObjects.Monsters
         {
         }
 
-        public override int Pushed(MapObject pusher, ExineDirection dir, int distance)
+        public override int Pushed(MapObjectSrv pusher, ExineDirection dir, int distance)
         {
             return Stoned ? 0 : base.Pushed(pusher, dir, distance);
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
             if (Stoned) return;
 
             base.ApplyPoison(p, Caster, NoResist, ignoreDefence);
         }
-        public override Buff AddBuff(BuffType type, MapObject owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
+        public override Buff AddBuff(BuffType type, MapObjectSrv owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
         {
             if (Stoned) return null;
 
             return base.AddBuff(type, owner, duration, stats, refreshStats, updateOnly, values);
         }
 
-        public override bool IsFriendlyTarget(HumanObject ally)
+        public override bool IsFriendlyTarget(HumanObjectSrv ally)
         {
             if (Stoned) return false;
 
@@ -107,11 +107,11 @@ namespace Server.ExineObjects.Monsters
             }
 
         }
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return !Stoned && base.IsAttackTarget(attacker);
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return !Stoned && base.IsAttackTarget(attacker);
         }
@@ -129,9 +129,9 @@ namespace Server.ExineObjects.Monsters
             if (cell.Objects != null)
                 for (int i = 0; i < cell.Objects.Count; i++)
                 {
-                    MapObject ob = cell.Objects[i];
+                    MapObjectSrv ob = cell.Objects[i];
                     if (AvoidFireWall && ob.Race == ObjectType.Spell)
-                        if (((SpellObject)ob).Spell == Spell.FireWall) return false;
+                        if (((SpellObjectSrv)ob).Spell == Spell.FireWall) return false;
 
                     if (!ob.Blocking) continue;
 
@@ -167,7 +167,7 @@ namespace Server.ExineObjects.Monsters
             for (int i = 0; i < cell.Objects.Count; i++)
             {
                 if (cell.Objects[i].Race != ObjectType.Spell) continue;
-                SpellObject ob = (SpellObject)cell.Objects[i];
+                SpellObjectSrv ob = (SpellObjectSrv)cell.Objects[i];
 
                 ob.ProcessSpell(this);
                 //break;

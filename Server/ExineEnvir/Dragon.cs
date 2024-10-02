@@ -54,7 +54,7 @@ namespace Server.ExineEnvir
 
 
         public DragonInfo Info;
-        public MonsterObject LinkedMonster;
+        public MonsterObjectSrv LinkedMonster;
 
         public Dragon(DragonInfo info)
         {
@@ -70,7 +70,7 @@ namespace Server.ExineEnvir
                     MessageQueue.Enqueue("Failed to load Dragon (bad monster name): " + Info.MonsterName);
                     return false;
                 }
-                LinkedMonster = MonsterObject.GetMonster(info);
+                LinkedMonster = MonsterObjectSrv.GetMonster(info);
 
                 Map map = Envir.GetMapByNameAndInstance(Info.MapFileName);
                 if (map == null)
@@ -97,11 +97,11 @@ namespace Server.ExineEnvir
                     MonsterInfo bodyinfo = Envir.GetMonsterInfo(Info.BodyName);
                     if (bodyinfo != null)
                     {
-                        MonsterObject bodymob;
+                        MonsterObjectSrv bodymob;
                         Point spawnlocation = Point.Empty;
                         for (int i = 0; i <= BodyLocations.Length - 1; i++)
                         {
-                            bodymob = MonsterObject.GetMonster(bodyinfo);
+                            bodymob = MonsterObjectSrv.GetMonster(bodyinfo);
                             spawnlocation = new Point(LinkedMonster.CurrentLocation.X + BodyLocations[i].X, LinkedMonster.CurrentLocation.Y + BodyLocations[i].Y);
                             if (bodymob != null) bodymob.Spawn(LinkedMonster.CurrentMap, spawnlocation);
                         }
@@ -180,7 +180,7 @@ namespace Server.ExineEnvir
         protected bool DropItem(UserItem item)
         {
             Point droplocation = new Point(DropArea.Left + (DropArea.Width / 2), DropArea.Top);
-            ItemObject ob = new ItemObject(this.LinkedMonster, item, droplocation)
+            ItemObjectSrv ob = new ItemObjectSrv(this.LinkedMonster, item, droplocation)
             {
                 Owner = this.LinkedMonster.EXPOwner,
                 OwnerTime = Envir.Time + Settings.Minute,
@@ -198,7 +198,7 @@ namespace Server.ExineEnvir
             }
 
             Point droplocation = new Point(DropArea.Left + (DropArea.Width / 2), DropArea.Top);
-            ItemObject ob = new ItemObject(this.LinkedMonster, gold, droplocation)
+            ItemObjectSrv ob = new ItemObjectSrv(this.LinkedMonster, gold, droplocation)
             {
                 Owner = this.LinkedMonster.EXPOwner,
                 OwnerTime = Envir.Time + Settings.Minute,

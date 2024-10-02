@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HarvestMonster : MonsterObject
+    public class HarvestMonster : MonsterObjectSrv
     {
         protected short Quality;
         protected int RemainingSkinCount;
@@ -18,7 +18,7 @@ namespace Server.ExineObjects.Monsters
         }
 
         protected override void Drop() { }
-        public override bool Harvest(PlayerObject player)
+        public override bool Harvest(PlayerObjectSrv player)
         {
             if (RemainingSkinCount == 0)
             {

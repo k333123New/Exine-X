@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HellBomb : MonsterObject
+    public class HellBomb : MonsterObjectSrv
     {
         public long ExplosionTime;
 
@@ -33,7 +33,7 @@ namespace Server.ExineObjects.Monsters
         protected override void ProcessSearch() { }
         protected override void ProcessRoam() { }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true) { }
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true) { }
         
 
         public override int Struck(int damage, DefenceType type = DefenceType.ACAgility)
@@ -59,7 +59,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteDeath(IList<object> data)
         {
-            List<MapObject> targets = FindAllTargets(4, CurrentLocation, false);
+            List<MapObjectSrv> targets = FindAllTargets(4, CurrentLocation, false);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

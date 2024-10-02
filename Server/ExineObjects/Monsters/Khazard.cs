@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Khazard : MonsterObject
+    public class Khazard : MonsterObjectSrv
     {
         public long PullTime;
         public bool Range;

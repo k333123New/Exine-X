@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class YinDevilNode : MonsterObject
+    public class YinDevilNode : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
 
@@ -22,7 +22,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            List<MapObject> targets = FindAllTargets(7, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(7, CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BoneFamiliar : MonsterObject
+    public class BoneFamiliar : MonsterObjectSrv
     {
         public bool Summoned;
 

@@ -4,11 +4,11 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Siege : MonsterObject
+    public class Siege : MonsterObjectSrv
     {
         public long FearTime;
 
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
         public int WallIndex;
 
         private bool _stationary;
@@ -28,7 +28,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override bool CanMove => base.CanMove && !_stationary;
 
-        public override bool IsAttackTarget(MonsterObject attacker) { return false; }
+        public override bool IsAttackTarget(MonsterObjectSrv attacker) { return false; }
 
         protected override bool InAttackRange()
         {
@@ -109,12 +109,12 @@ namespace Server.ExineObjects.Monsters
         {
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             return base.Attacked(attacker, damage, type, damageWeapon);
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             return base.Attacked(attacker, damage, type);
         }

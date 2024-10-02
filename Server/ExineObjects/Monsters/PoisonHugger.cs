@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class PoisonHugger : MonsterObject
+    public class PoisonHugger : MonsterObjectSrv
     {
         public byte AttackRange = 5;
         public long ExplosionTime;
@@ -75,7 +75,7 @@ namespace Server.ExineObjects.Monsters
 
         public override void Die()
         {
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
 
             for (int i = 0; i < targets.Count; i++)
             {
@@ -87,7 +87,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteDeath(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             

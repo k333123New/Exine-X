@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HolyDeva : MonsterObject
+    public class HolyDeva : MonsterObjectSrv
     {
         public long FearTime;
         public byte AttackRange = 6;

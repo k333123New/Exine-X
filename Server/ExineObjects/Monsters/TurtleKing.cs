@@ -4,7 +4,7 @@ using Server.ExineEnvir;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TurtleKing : MonsterObject
+    public class TurtleKing : MonsterObjectSrv
     {
         public byte AttackRange = 7;
         public byte CloseRange = 2;
@@ -123,7 +123,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -136,12 +136,12 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
 
             if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
 
-            List<MapObject> targets = FindAllTargets(AttackRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(AttackRange, CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)
@@ -160,7 +160,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < count; i++)
             {
-                MonsterObject mob = null;
+                MonsterObjectSrv mob = null;
                 switch (Envir.Random.Next(7))
                 {
                     case 0:

@@ -104,7 +104,7 @@ namespace Server.ExineObjects
             LoadGoods();
         }
 
-        public float PriceRate(PlayerObject player, bool baseRate = false)
+        public float PriceRate(PlayerObjectSrv player, bool baseRate = false)
         {
             var callingNPC = Envir.NPCs.SingleOrDefault(x => x.ObjectID == player.NPCObjectID);
 
@@ -175,7 +175,7 @@ namespace Server.ExineObjects
         }
         public void LoadGoods()
         {
-            var loadedNPC = NPCObject.Get(LoadedObjectID);
+            var loadedNPC = NPCObjectSrv.Get(LoadedObjectID);
 
             if (loadedNPC != null)
             {
@@ -684,7 +684,7 @@ namespace Server.ExineObjects
             {
                 if (!lines[i].ToUpper().StartsWith(QuestKey)) continue;
 
-                var loadedNPC = NPCObject.Get(LoadedObjectID);
+                var loadedNPC = NPCObjectSrv.Get(LoadedObjectID);
 
                 if (loadedNPC == null)
                 {
@@ -719,7 +719,7 @@ namespace Server.ExineObjects
 
         private void ParseSpeech(IList<string> lines)
         {
-            var loadedNPC = NPCObject.Get(LoadedObjectID);
+            var loadedNPC = NPCObjectSrv.Get(LoadedObjectID);
 
             if (loadedNPC == null)
             {
@@ -778,7 +778,7 @@ namespace Server.ExineObjects
             }
         }
 
-        public void Call(MonsterObject monster, string key)
+        public void Call(MonsterObjectSrv monster, string key)
         {
             key = key.ToUpper();
 
@@ -820,7 +820,7 @@ namespace Server.ExineObjects
                 }
             }
         }
-        public void Call(PlayerObject player, uint objectID, string key)
+        public void Call(PlayerObjectSrv player, uint objectID, string key)
         {
             key = key.ToUpper();
 
@@ -886,14 +886,14 @@ namespace Server.ExineObjects
             player.NPCData.Remove("NPCInputStr");
         }
 
-        private void Response(PlayerObject player, NPCPage page)
+        private void Response(PlayerObjectSrv player, NPCPage page)
         {
             player.Enqueue(new S.NPCResponse { Page = player.NPCSpeech });
 
             ProcessSpecial(player, page);
         }
 
-        private void ProcessSegment(PlayerObject player, NPCPage page, NPCSegment segment, uint objectID)
+        private void ProcessSegment(PlayerObjectSrv player, NPCPage page, NPCSegment segment, uint objectID)
         {
             player.NPCObjectID = objectID;
             player.NPCScriptID = ScriptID;
@@ -901,7 +901,7 @@ namespace Server.ExineObjects
             player.NPCPage = page;
         }
 
-        private void ProcessSegment(MonsterObject monster, NPCPage page, NPCSegment segment)
+        private void ProcessSegment(MonsterObjectSrv monster, NPCPage page, NPCSegment segment)
         {
             segment.Check(monster);
         }
@@ -910,7 +910,7 @@ namespace Server.ExineObjects
             segment.Check();
         }
 
-        private void ProcessSpecial(PlayerObject player, NPCPage page)
+        private void ProcessSpecial(PlayerObjectSrv player, NPCPage page)
         {
             List<UserItem> allGoods = new List<UserItem>();
 
@@ -927,7 +927,7 @@ namespace Server.ExineObjects
 
                     if (Settings.GoodsOn)
                     {
-                        var callingNPC = NPCObject.Get(player.NPCObjectID);
+                        var callingNPC = NPCObjectSrv.Get(player.NPCObjectID);
 
                         if (callingNPC != null)
                         {
@@ -1001,7 +1001,7 @@ namespace Server.ExineObjects
                     {
                         if (Settings.GoodsOn)
                         {
-                            var callingNPC = NPCObject.Get(player.NPCObjectID);
+                            var callingNPC = NPCObjectSrv.Get(player.NPCObjectID);
 
                             if (callingNPC != null)
                             {
@@ -1021,7 +1021,7 @@ namespace Server.ExineObjects
                     {
                         if (Settings.GoodsOn)
                         {
-                            var callingNPC = NPCObject.Get(player.NPCObjectID);
+                            var callingNPC = NPCObjectSrv.Get(player.NPCObjectID);
 
                             if (callingNPC != null)
                             {
@@ -1111,7 +1111,7 @@ namespace Server.ExineObjects
             }
         }
 
-        public void Buy(PlayerObject player, ulong index, ushort count)
+        public void Buy(PlayerObjectSrv player, ulong index, ushort count)
         {
             UserItem goods = null;
 
@@ -1125,7 +1125,7 @@ namespace Server.ExineObjects
             bool isUsed = false;
             bool isBuyBack = false;
 
-            var callingNPC = NPCObject.Get(player.NPCObjectID);
+            var callingNPC = NPCObjectSrv.Get(player.NPCObjectID);
 
             if (callingNPC != null)
             {
@@ -1217,11 +1217,11 @@ namespace Server.ExineObjects
                 player.Enqueue(new S.NPCGoods { List = callingNPC.BuyBack[player.Name], Rate = PriceRate(player), HideAddedStats = false });
             }
         }
-        public void Sell(PlayerObject player, UserItem item)
+        public void Sell(PlayerObjectSrv player, UserItem item)
         {
             /* Handle Item Sale */
         }
-        public void Craft(PlayerObject player, ulong index, ushort count, int[] slots)
+        public void Craft(PlayerObjectSrv player, ulong index, ushort count, int[] slots)
         {
             S.CraftItem p = new S.CraftItem();
 

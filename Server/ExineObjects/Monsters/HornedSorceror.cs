@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HornedSorceror : MonsterObject
+    public class HornedSorceror : MonsterObjectSrv
     {
         private long _TornadoTime;
         private long _ChargedStompTime;
@@ -28,12 +28,12 @@ namespace Server.ExineObjects.Monsters
             return CurrentMap == Target.CurrentMap && Functions.InRange(CurrentLocation, Target.CurrentLocation, AttackRange);
         }
 
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return !_Immune && base.IsAttackTarget(attacker);
         }
 
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return !_Immune && base.IsAttackTarget(attacker);
         }
@@ -175,7 +175,7 @@ namespace Server.ExineObjects.Monsters
                     var start = 1000;
                     var time = Settings.Second * 15;
 
-                    SpellObject ob = new SpellObject
+                    SpellObjectSrv ob = new SpellObjectSrv
                     {
                         Spell = Spell.HornedSorcererDustTornado,
                         Value = damage,
@@ -196,7 +196,7 @@ namespace Server.ExineObjects.Monsters
             }
         }
 
-        private void Thrust(MapObject target)
+        private void Thrust(MapObjectSrv target)
         {
             ExineDirection jumpDir = Functions.DirectionFromPoint(CurrentLocation, target.CurrentLocation);
 
@@ -242,7 +242,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int o = 0; o < cell.Objects.Count; o++)
             {
-                MapObject ob = cell.Objects[o];
+                MapObjectSrv ob = cell.Objects[o];
                 if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                 if (!ob.IsAttackTarget(this)) continue;
 
@@ -253,7 +253,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool aoe = data.Count >= 4 && (bool)data[3];

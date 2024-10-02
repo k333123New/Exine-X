@@ -96,7 +96,7 @@ namespace Server.ExineDatabase
         private Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
 
         public BuffInfo Info;
-        public MapObject Caster;
+        public MapObjectSrv Caster;
         public uint ObjectID;
         public long ExpireTime;
 

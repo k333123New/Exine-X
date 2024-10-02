@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class WereTiger : MonsterObject
+    public class WereTiger : MonsterObjectSrv
     {
         protected internal WereTiger(MonsterInfo info)
             : base(info)

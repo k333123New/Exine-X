@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    class FrozenMiner : MonsterObject
+    class FrozenMiner : MonsterObjectSrv
     {
 
         protected internal FrozenMiner(MonsterInfo info)
@@ -25,7 +25,7 @@ namespace Server.ExineObjects.Monsters
             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
             if (damage == 0) return;
 
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
 
             if ((targets.Count > 1 && Envir.Random.Next(2) == 0) || Envir.Random.Next(8) == 0)
             {

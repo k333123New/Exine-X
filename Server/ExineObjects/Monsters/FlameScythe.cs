@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FlameScythe : MonsterObject
+    public class FlameScythe : MonsterObjectSrv
     {
         public long FearTime;
         public byte AttackRange = 2;
@@ -40,7 +40,7 @@ namespace Server.ExineObjects.Monsters
                 Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID });
 
                 //TODO - Fix this
-                List<MapObject> targets = FindAllTargets(2, Target.CurrentLocation, false);
+                List<MapObjectSrv> targets = FindAllTargets(2, Target.CurrentLocation, false);
 
                 int damage = GetAttackPower(Stats[Stat.MinMC], Stats[Stat.MaxMC]);
 

@@ -4,11 +4,11 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class CharmedSnake : MonsterObject
+    public class CharmedSnake : MonsterObjectSrv
     {
         public bool Summoned;
         public long AliveTime;
-        public MapObject MasterTotem;
+        public MapObjectSrv MasterTotem;
 
         protected internal CharmedSnake(MonsterInfo info) : base(info)
         {
@@ -75,7 +75,7 @@ namespace Server.ExineObjects.Monsters
             if (cell.Objects != null)
                 for (int i = 0; i < cell.Objects.Count; i++)
                 {
-                    MapObject ob = cell.Objects[i];
+                    MapObjectSrv ob = cell.Objects[i];
                     if (ob == this || !ob.Blocking) continue;
                     stacking = true;
                     break;
@@ -188,7 +188,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -220,7 +220,7 @@ namespace Server.ExineObjects.Monsters
 
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject target = cell.Objects[i];
+                        MapObjectSrv target = cell.Objects[i];
                         switch (target.Race)
                         {
                             case ObjectType.Monster:

@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Behemoth : MonsterObject
+    public class Behemoth : MonsterObjectSrv
     {
         public byte AttackRange = 10;
 
@@ -100,13 +100,13 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
             if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
 
-            List<MapObject> targets = FindAllTargets(AttackRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(AttackRange, CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)
@@ -121,7 +121,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool fireCircle = data.Count >= 4 ? (bool)data[3] : false;
@@ -130,7 +130,7 @@ namespace Server.ExineObjects.Monsters
 
             if (fireCircle) //Firecircle
             {
-                List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
 
                 if (targets.Count == 0) return;
 
@@ -149,7 +149,7 @@ namespace Server.ExineObjects.Monsters
                 {
                     for (int o = 0; o < cell.Objects.Count; o++)
                     {
-                        MapObject t = cell.Objects[o];
+                        MapObjectSrv t = cell.Objects[o];
                         if (t == null || t.Race != ObjectType.Player) continue;
 
                         if (t.IsAttackTarget(this))
@@ -166,7 +166,7 @@ namespace Server.ExineObjects.Monsters
 
         private void SpawnSlaves()
         {
-            List<MapObject> targets = FindAllTargets(10, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(10, CurrentLocation);
 
             int count = Math.Min(8, (targets.Count * 5) - SlaveList.Count);
             
@@ -175,7 +175,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < count; i++)
             {
-                MonsterObject mob = null;
+                MonsterObjectSrv mob = null;
                 switch (Envir.Random.Next(4))
                 {
                     case 0:

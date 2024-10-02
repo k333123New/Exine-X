@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TrollKing : MonsterObject
+    public class TrollKing : MonsterObjectSrv
     {
         public long FearTime;
         public byte AttackRange = 7;
@@ -39,7 +39,7 @@ namespace Server.ExineObjects.Monsters
                     int damage = GetAttackPower(Stats[Stat.MinMC], Stats[Stat.MaxMC]);
                     if (damage == 0) return;
 
-                    List<MapObject> targets = FindAllTargets(3, CurrentLocation, false);
+                    List<MapObjectSrv> targets = FindAllTargets(3, CurrentLocation, false);
 
                     if (targets.Count == 0) return;
 
@@ -58,7 +58,7 @@ namespace Server.ExineObjects.Monsters
             {
                 Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 1 });
 
-                List<MapObject> targets = FindAllTargets(3, Target.CurrentLocation, false);
+                List<MapObjectSrv> targets = FindAllTargets(3, Target.CurrentLocation, false);
 
                 if (targets.Count == 0) return;
 
@@ -80,7 +80,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -91,7 +91,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 

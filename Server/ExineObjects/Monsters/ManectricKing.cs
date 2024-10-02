@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class ManectricKing : MonsterObject
+    public class ManectricKing : MonsterObjectSrv
     {
         public long FearTime;
         public byte AttackRange = 3;
@@ -50,7 +50,7 @@ namespace Server.ExineObjects.Monsters
 
                 Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
-                List<MapObject> targets = FindAllTargets(7, CurrentLocation, false);
+                List<MapObjectSrv> targets = FindAllTargets(7, CurrentLocation, false);
 
                 if (targets.Count == 0) return;
 

@@ -4,22 +4,22 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects
 {
-    public sealed class NPCObject : MapObject
+    public sealed class NPCObjectSrv : MapObjectSrv
     {
         public override ObjectType Race
         {
             get { return ObjectType.Merchant; }
         }
 
-        public static NPCObject Get(uint objectID)
+        public static NPCObjectSrv Get(uint objectID)
         {
             if (objectID == 0) return null;
 
             var obj = Envir.NPCs.SingleOrDefault(x => x.ObjectID == objectID);
 
-            if (obj != null && obj is NPCObject)
+            if (obj != null && obj is NPCObjectSrv)
             {
-                return obj as NPCObject;
+                return obj as NPCObjectSrv;
             }
 
             return null;
@@ -34,7 +34,7 @@ namespace Server.ExineObjects
 
         public Dictionary<int, bool> VisibleLog = new Dictionary<int, bool>();
 
-        public ConquestObject Conq;
+        public ConquestObjectSrv Conq;
         public List<QuestInfo> Quests = new List<QuestInfo>();
         public List<NPCSpeech> Speech = new List<NPCSpeech>();
 
@@ -43,7 +43,7 @@ namespace Server.ExineObjects
 
         public bool NeedSave;
 
-        public NPCObject(NPCInfo info)
+        public NPCObjectSrv(NPCInfo info)
         {
             Info = info;
             NameColour = Color.Lime;
@@ -125,34 +125,34 @@ namespace Server.ExineObjects
             throw new NotSupportedException();
         }
 
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return false;
         }
-        public override bool IsFriendlyTarget(HumanObject ally)
+        public override bool IsFriendlyTarget(HumanObjectSrv ally)
         {
             throw new NotSupportedException();
         }
-        public override bool IsFriendlyTarget(MonsterObject ally)
+        public override bool IsFriendlyTarget(MonsterObjectSrv ally)
         {
             throw new NotSupportedException();
         }
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return false;
         }
 
-        public override Buff AddBuff(BuffType type, MapObject owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
+        public override Buff AddBuff(BuffType type, MapObjectSrv owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
         {
             throw new NotSupportedException();
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             throw new NotSupportedException();
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             throw new NotSupportedException();
         }
@@ -162,7 +162,7 @@ namespace Server.ExineObjects
             throw new NotSupportedException();
         }
 
-        public override void SendHealth(HumanObject player)
+        public override void SendHealth(HumanObjectSrv player)
         {
             throw new NotSupportedException();
         }
@@ -172,7 +172,7 @@ namespace Server.ExineObjects
             throw new NotSupportedException();
         }
 
-        public override int Pushed(MapObject pusher, ExineDirection dir, int distance)
+        public override int Pushed(MapObjectSrv pusher, ExineDirection dir, int distance)
         {
             throw new NotSupportedException();
         }
@@ -314,7 +314,7 @@ namespace Server.ExineObjects
             Visible = true;
             for (int i = CurrentMap.Players.Count - 1; i >= 0; i--)
             {
-                PlayerObject player = CurrentMap.Players[i];
+                PlayerObjectSrv player = CurrentMap.Players[i];
 
                 if (Functions.InRange(CurrentLocation, player.CurrentLocation, Globals.DataRange))
                 {
@@ -347,7 +347,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Player:
@@ -392,7 +392,7 @@ namespace Server.ExineObjects
             };
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
             throw new NotSupportedException();
         }
@@ -409,7 +409,7 @@ namespace Server.ExineObjects
         }
 
 
-        public void CheckVisible(PlayerObject Player, bool Force = false)
+        public void CheckVisible(PlayerObjectSrv Player, bool Force = false)
         {
             VisibleLog.TryGetValue(Player.Info.Index, out bool canSee);
 

@@ -484,7 +484,6 @@ namespace Exine.ExineControls
                 case ItemType.Transform:
                 case ItemType.Deco:
                 case ItemType.MonsterSpawn:
-                case ItemType.SealedHero:
                     if (CanUseItem() && (GridType == MirGridType.Inventory))
                     {
                         if (CMain.Time < ExineMainScene.UseItemTime) return;

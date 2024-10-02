@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FrozenZombie : MonsterObject
+    public class FrozenZombie : MonsterObjectSrv
     {
         protected internal FrozenZombie(MonsterInfo info)
             : base(info)

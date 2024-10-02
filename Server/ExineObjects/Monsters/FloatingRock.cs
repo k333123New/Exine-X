@@ -5,7 +5,7 @@ using Shared.Extensions;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FloatingRock : MonsterObject
+    public class FloatingRock : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
 
@@ -39,7 +39,7 @@ namespace Server.ExineObjects.Monsters
             {
                 if (targets[i].Race != ObjectType.Monster) continue;
 
-                var target = (MonsterObject)targets[i];
+                var target = (MonsterObjectSrv)targets[i];
 
                 if (target.Info.AI == Info.AI) continue;
 
@@ -90,7 +90,7 @@ namespace Server.ExineObjects.Monsters
 
             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
 
-            List<MapObject> targets = FindAllTargets(3, CurrentLocation, false);
+            List<MapObjectSrv> targets = FindAllTargets(3, CurrentLocation, false);
 
             for (int i = 0; i < targets.Count; i++)
             {
@@ -103,7 +103,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteDeath(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 

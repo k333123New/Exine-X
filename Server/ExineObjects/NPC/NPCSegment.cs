@@ -64,7 +64,7 @@ namespace Server.ExineObjects
             return words;
         }
 
-        public void AddVariable(MapObject player, string key, string value)
+        public void AddVariable(MapObjectSrv player, string key, string value)
         {
             Regex regex = new Regex(@"[A-Za-z][0-9]");
 
@@ -80,7 +80,7 @@ namespace Server.ExineObjects
             player.NPCVar.Add(new KeyValuePair<string, string>(key, value));
         }
 
-        public string FindVariable(MapObject player, string key)
+        public string FindVariable(MapObjectSrv player, string key)
         {
             Regex regex = new Regex(@"\%[A-Za-z][0-9]");
 
@@ -1113,7 +1113,7 @@ namespace Server.ExineObjects
             }
         }
 
-        public List<string> ParseSay(PlayerObject player, List<string> speech)
+        public List<string> ParseSay(PlayerObjectSrv player, List<string> speech)
         {
             for (var i = 0; i < speech.Count; i++)
             {
@@ -1129,13 +1129,13 @@ namespace Server.ExineObjects
             return speech;
         }
 
-        public string ReplaceValue(PlayerObject player, string param)
+        public string ReplaceValue(PlayerObjectSrv player, string param)
         {
             var regex = new Regex(@"\<\$(.*)\>");
             var varRegex = new Regex(@"(.*?)\(([A-Z][0-9])\)");
             var oneValRegex = new Regex(@"(.*?)\(((.*?))\)");
             var twoValRegex = new Regex(@"(.*?)\(((.*?),(.*?))\)");
-            ConquestObject Conquest;
+            ConquestObjectSrv Conquest;
             ConquestGuildArcherInfo Archer;
             ConquestGuildGateInfo Gate;
             ConquestGuildWallInfo Wall;
@@ -1320,7 +1320,7 @@ namespace Server.ExineObjects
                 case "NPCNAME":
                     for (int i = 0; i < player.CurrentMap.NPCs.Count; i++)
                     {
-                        NPCObject ob = player.CurrentMap.NPCs[i];
+                        NPCObjectSrv ob = player.CurrentMap.NPCs[i];
                         if (ob.ObjectID != player.NPCObjectID) continue;
                         newValue = ob.Name.Replace("_", " ");
                     }
@@ -1469,7 +1469,7 @@ namespace Server.ExineObjects
 
             return param.Replace(match.Value, newValue);
         }
-        public string ReplaceValue(MonsterObject Monster, string param)
+        public string ReplaceValue(MonsterObjectSrv Monster, string param)
         {
             var regex = new Regex(@"\<\$(.*)\>");
             var varRegex = new Regex(@"(.*?)\(([A-Z][0-9])\)");
@@ -1688,7 +1688,7 @@ namespace Server.ExineObjects
             return true;
 
         }
-        public bool Check(MonsterObject monster)
+        public bool Check(MonsterObjectSrv monster)
         {
             var failed = false;
 
@@ -1891,7 +1891,7 @@ namespace Server.ExineObjects
             return true;
 
         }
-        public bool Check(PlayerObject player)
+        public bool Check(PlayerObjectSrv player)
         {
             var failed = false;
 
@@ -2250,7 +2250,7 @@ namespace Server.ExineObjects
                         target = new Point(-1, -1);
                         for (int j = 0; j < player.CurrentMap.NPCs.Count; j++)
                         {
-                            NPCObject ob = player.CurrentMap.NPCs[j];
+                            NPCObjectSrv ob = player.CurrentMap.NPCs[j];
                             if (ob.ObjectID != player.NPCObjectID) continue;
                             target = ob.CurrentLocation;
                             break;
@@ -2394,7 +2394,7 @@ namespace Server.ExineObjects
 
                         try
                         {
-                            ConquestObject Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
+                            ConquestObjectSrv Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
                             if (Conquest == null)
                             {
                                 failed = true;
@@ -2417,7 +2417,7 @@ namespace Server.ExineObjects
 
                         try
                         {
-                            ConquestObject Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
+                            ConquestObjectSrv Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
                             if (Conquest == null)
                             {
                                 failed = true;
@@ -2450,7 +2450,7 @@ namespace Server.ExineObjects
 
                         try
                         {
-                            ConquestObject Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
+                            ConquestObjectSrv Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
                             if (Conquest == null)
                             {
                                 failed = true;
@@ -2483,7 +2483,7 @@ namespace Server.ExineObjects
 
                         try
                         {
-                            ConquestObject Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
+                            ConquestObjectSrv Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
                             if (Conquest == null)
                             {
                                 failed = true;
@@ -2516,7 +2516,7 @@ namespace Server.ExineObjects
 
                         try
                         {
-                            ConquestObject Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
+                            ConquestObjectSrv Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
                             if (Conquest == null)
                             {
                                 failed = true;
@@ -2566,7 +2566,7 @@ namespace Server.ExineObjects
 
                         try
                         {
-                            ConquestObject Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
+                            ConquestObjectSrv Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
                             if (Conquest == null)
                             {
                                 failed = true;
@@ -2593,7 +2593,7 @@ namespace Server.ExineObjects
 
                         try
                         {
-                            ConquestObject Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
+                            ConquestObjectSrv Conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
                             if (Conquest == null)
                             {
                                 failed = true;
@@ -2729,7 +2729,7 @@ namespace Server.ExineObjects
 
                         for (int j = 0; j < tempByte; j++)
                         {
-                            MonsterObject monster = MonsterObject.GetMonster(monInfo);
+                            MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(monInfo);
                             if (monster == null) return;
                             monster.Direction = 0;
                             monster.ActionTime = Envir.Time + 1000;
@@ -2749,7 +2749,7 @@ namespace Server.ExineObjects
 
                             for (int j = 0; j < cell.Objects.Count(); j++)
                             {
-                                MapObject ob = cell.Objects[j];
+                                MapObjectSrv ob = cell.Objects[j];
 
                                 if (ob.Race != ObjectType.Monster) continue;
                                 if (ob.Dead) continue;
@@ -2760,7 +2760,7 @@ namespace Server.ExineObjects
                 }
             }
         }
-        private void Act(IList<NPCActions> acts, PlayerObject player)
+        private void Act(IList<NPCActions> acts, PlayerObjectSrv player)
         {
             MailInfo mailInfo = null;
 
@@ -3008,7 +3008,7 @@ namespace Server.ExineObjects
 
                             for (int j = 0; j < petcount; j++)
                             {
-                                MonsterObject monster = MonsterObject.GetMonster(monInfo);
+                                MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(monInfo);
                                 if (monster == null) return;
                                 monster.PetLevel = petlevel;
                                 monster.Master = player;
@@ -3337,7 +3337,7 @@ namespace Server.ExineObjects
 
                             for (int j = 0; j < tempByte; j++)
                             {
-                                MonsterObject monster = MonsterObject.GetMonster(monInfo);
+                                MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(monInfo);
                                 if (monster == null) return;
                                 monster.Direction = 0;
                                 monster.ActionTime = Envir.Time + 1000;
@@ -3409,12 +3409,12 @@ namespace Server.ExineObjects
 
                                 for (int j = 0; j < cell.Objects.Count(); j++)
                                 {
-                                    MapObject ob = cell.Objects[j];
+                                    MapObjectSrv ob = cell.Objects[j];
 
                                     if (ob.Race != ObjectType.Monster) continue;
                                     if (ob.Dead) continue;
 
-                                    if (!string.IsNullOrEmpty(param[2]) && string.Compare(param[2], ((MonsterObject)ob).Info.Name, true) != 0)
+                                    if (!string.IsNullOrEmpty(param[2]) && string.Compare(param[2], ((MonsterObjectSrv)ob).Info.Name, true) != 0)
                                         continue;
 
                                     ob.Die();
@@ -3518,7 +3518,7 @@ namespace Server.ExineObjects
                         {
                             if (player.MyGuild != null) return;
 
-                            GuildObject guild = Envir.GetGuild(param[0]);
+                            GuildObjectSrv guild = Envir.GetGuild(param[0]);
 
                             if (guild == null) return;
 
@@ -4047,7 +4047,7 @@ namespace Server.ExineObjects
 
                                         if (player != null && player.Race == ObjectType.Player)
                                         {
-                                            PlayerObject ob = (PlayerObject)player;
+                                            PlayerObjectSrv ob = (PlayerObjectSrv)player;
 
                                             if (ob.CheckGroupQuestItem(item))
                                             {
@@ -4145,7 +4145,7 @@ namespace Server.ExineObjects
                 }
             }
         }
-        private void Act(IList<NPCActions> acts, MonsterObject monster)
+        private void Act(IList<NPCActions> acts, MonsterObjectSrv monster)
         {
             for (var i = 0; i < acts.Count; i++)
             {
@@ -4231,7 +4231,7 @@ namespace Server.ExineObjects
 
                             for (int j = 0; j < tempByte; j++)
                             {
-                                MonsterObject mob = MonsterObject.GetMonster(monInfo);
+                                MonsterObjectSrv mob = MonsterObjectSrv.GetMonster(monInfo);
                                 if (mob == null) return;
                                 mob.Direction = 0;
                                 mob.ActionTime = Envir.Time + 1000;
@@ -4252,7 +4252,7 @@ namespace Server.ExineObjects
 
                                 for (int j = 0; j < cell.Objects.Count(); j++)
                                 {
-                                    MapObject ob = cell.Objects[j];
+                                    MapObjectSrv ob = cell.Objects[j];
 
                                     if (ob.Race != ObjectType.Monster) continue;
                                     if (ob.Dead) continue;
@@ -4349,7 +4349,7 @@ namespace Server.ExineObjects
             }
         }
 
-        private void Success(PlayerObject player)
+        private void Success(PlayerObjectSrv player)
         {
             Act(ActList, player);
 
@@ -4359,7 +4359,7 @@ namespace Server.ExineObjects
             player.NPCSpeech.AddRange(parseSay);
         }
 
-        private void Failed(PlayerObject player)
+        private void Failed(PlayerObjectSrv player)
         {
             Act(ElseActList, player);
 
@@ -4369,12 +4369,12 @@ namespace Server.ExineObjects
             player.NPCSpeech.AddRange(parseElseSay);
         }
 
-        private void Success(MonsterObject Monster)
+        private void Success(MonsterObjectSrv Monster)
         {
             Act(ActList, Monster);
         }
 
-        private void Failed(MonsterObject Monster)
+        private void Failed(MonsterObjectSrv Monster)
         {
             Act(ElseActList, Monster);
         }

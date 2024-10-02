@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Nadz : MonsterObject
+    public class Nadz : MonsterObjectSrv
     {
         protected internal Nadz(MonsterInfo info)
             : base(info)
@@ -59,7 +59,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool halfmoon = data.Count >= 4 && (bool)data[3];
@@ -68,7 +68,7 @@ namespace Server.ExineObjects.Monsters
 
             if (halfmoon)
             {
-                List<MapObject> targets = FindAllTargets(3, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(3, CurrentLocation);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)

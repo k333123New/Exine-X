@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FrostTiger : MonsterObject
+    public class FrostTiger : MonsterObjectSrv
     {
         protected byte AttackRange = 6;
         public long SitDownTime;

@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class SeedingsGeneral : MonsterObject
+    public class SeedingsGeneral : MonsterObjectSrv
     {
         protected virtual byte AttackRange
         {
@@ -95,7 +95,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool aoe = (bool)data[3];

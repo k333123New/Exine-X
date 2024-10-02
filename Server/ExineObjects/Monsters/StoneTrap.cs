@@ -9,7 +9,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class StoneTrap : MonsterObject
+    public class StoneTrap : MonsterObjectSrv
     {
         public bool Summoned;
         public long DieTime;
@@ -48,7 +48,7 @@ namespace Server.ExineObjects.Monsters
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
 
                             if (ob == this)
                             {
@@ -65,7 +65,7 @@ namespace Server.ExineObjects.Monsters
                                         continue;
                                     }
 
-                                    MonsterObject monster = MonsterObject.GetMonster(mInfo);
+                                    MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(mInfo);
                                     if (!monster.Dead)
                                     {
                                         if (monster.Master == null ||

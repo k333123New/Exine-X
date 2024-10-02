@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BlackFoxman : MonsterObject
+    public class BlackFoxman : MonsterObjectSrv
     {
         protected internal BlackFoxman(MonsterInfo info)
             : base(info)

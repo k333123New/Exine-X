@@ -10,7 +10,7 @@ namespace Server.ExineObjects.Monsters
     /// AttackRange2 - Blizzard (big range)
     /// </summary>
 
-    public class FlyingStatue : MonsterObject
+    public class FlyingStatue : MonsterObjectSrv
     {
         public long _BlizzardCooldown;
 
@@ -71,7 +71,7 @@ namespace Server.ExineObjects.Monsters
         {
             Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
 
-            List<MapObject> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
 
             var count = targets.Count;
 
@@ -101,7 +101,7 @@ namespace Server.ExineObjects.Monsters
 
                     var start = 500;
 
-                    SpellObject ob = new SpellObject
+                    SpellObjectSrv ob = new SpellObjectSrv
                     {
                         Spell = Spell.FlyingStatueIceTornado,
                         Value = damage,

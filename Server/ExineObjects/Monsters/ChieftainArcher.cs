@@ -6,7 +6,7 @@ namespace Server.ExineObjects.Monsters
 {
     //TODO - Has a retreat Animation, can't get motion accurate
 
-    public class ChieftainArcher : MonsterObject
+    public class ChieftainArcher : MonsterObjectSrv
     {
         public long FearTime;
 
@@ -125,7 +125,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             byte level = (byte)data[3];

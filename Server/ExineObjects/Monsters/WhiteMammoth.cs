@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class WhiteMammoth : MonsterObject
+    public class WhiteMammoth : MonsterObjectSrv
     {
         protected internal WhiteMammoth(MonsterInfo info)
             : base(info)
@@ -63,7 +63,7 @@ namespace Server.ExineObjects.Monsters
 
                 if (stomp)
                 {
-                    List<MapObject> targets = FindAllTargets(1, CurrentLocation, false);
+                    List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation, false);
 
                     for (int i = 0; i < targets.Count; i++)
                     {

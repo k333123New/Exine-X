@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class RedMoonEvil : MonsterObject
+    public class RedMoonEvil : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
         protected override bool CanRegen { get { return false; } }     
@@ -29,7 +29,7 @@ namespace Server.ExineObjects.Monsters
         }
         public override bool Walk(ExineDirection dir) { return false; }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             int armour = 0;
 
@@ -85,7 +85,7 @@ namespace Server.ExineObjects.Monsters
             ChangeHP(-1);
             return 1;
         }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int armour = 0;
 
@@ -148,7 +148,7 @@ namespace Server.ExineObjects.Monsters
         {
             if (!CanAttack) return;
 
-            List<MapObject> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
             if (targets.Count == 0) return;
 
             ShockTime = 0;

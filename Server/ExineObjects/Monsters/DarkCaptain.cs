@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DarkCaptain : MonsterObject
+    public class DarkCaptain : MonsterObjectSrv
     {
         protected long _ThunderTime;
         protected long _MassThunderTime;
@@ -119,7 +119,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             int range = (int)data[3];
@@ -136,7 +136,7 @@ namespace Server.ExineObjects.Monsters
 
         private void TeleportBehindWeakerTarget()
         {
-            List<MapObject> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
 
             var newTarget = Target;
 

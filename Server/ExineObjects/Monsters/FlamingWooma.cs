@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FlamingWooma : MonsterObject
+    public class FlamingWooma : MonsterObjectSrv
     {
         protected internal FlamingWooma(MonsterInfo info) : base(info)
         {

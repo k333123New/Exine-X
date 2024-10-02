@@ -3,7 +3,7 @@ using Server.ExineEnvir;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Doe : MonsterObject
+    public class Doe : MonsterObjectSrv
     {
         public long FearTime;
         public long teleportTime = 5000;

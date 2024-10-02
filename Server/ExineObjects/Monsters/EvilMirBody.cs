@@ -2,7 +2,7 @@
 
 namespace Server.ExineObjects.Monsters
 {
-    public class EvilMirBody : MonsterObject
+    public class EvilMirBody : MonsterObjectSrv
     {
         private bool _dragonlink;
         public bool DragonLink
@@ -35,13 +35,13 @@ namespace Server.ExineObjects.Monsters
 
         protected override void ProcessSearch() { }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             if (DragonLink)
             {
                 if (Envir.DragonSystem.LinkedMonster != null)
                 {
-                    MonsterObject ob = Envir.DragonSystem.LinkedMonster;
+                    MonsterObjectSrv ob = Envir.DragonSystem.LinkedMonster;
                     if (attacker.Info.AI == 6)
                         EXPOwner = null;
 
@@ -71,13 +71,13 @@ namespace Server.ExineObjects.Monsters
             return 0;
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             if (DragonLink)
             {
                 if (Envir.DragonSystem.LinkedMonster != null)
                 {
-                    MonsterObject ob = Envir.DragonSystem.LinkedMonster;
+                    MonsterObjectSrv ob = Envir.DragonSystem.LinkedMonster;
                     if (ob.EXPOwner == null || ob.EXPOwner.Dead)
                         ob.EXPOwner = GetAttacker(attacker);
 

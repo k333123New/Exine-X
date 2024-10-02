@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class KingGuard : MonsterObject
+    public class KingGuard : MonsterObjectSrv
     {
         protected virtual byte AttackRange
         {
@@ -91,7 +91,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool aoe = (bool)data[3];
@@ -100,7 +100,7 @@ namespace Server.ExineObjects.Monsters
 
             if (aoe)
             {
-                List<MapObject> targets = FindAllTargets(3, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(3, CurrentLocation);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)
@@ -116,7 +116,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool aoe = (bool)data[3];
@@ -125,7 +125,7 @@ namespace Server.ExineObjects.Monsters
 
             if (aoe)
             {
-                List<MapObject> targets = FindAllTargets(AttackRange, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(AttackRange, CurrentLocation);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)

@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class StoneGolem : MonsterObject
+    public class StoneGolem : MonsterObjectSrv
     {
         protected virtual byte AttackRange
         {
@@ -74,7 +74,7 @@ namespace Server.ExineObjects.Monsters
 
                         var start = 500;
 
-                        SpellObject ob = new SpellObject
+                        SpellObjectSrv ob = new SpellObjectSrv
                         {
                             Spell = Spell.StoneGolemQuake,
                             Value = damage,

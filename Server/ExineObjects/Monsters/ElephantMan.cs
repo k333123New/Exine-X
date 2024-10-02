@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class ElephantMan : MonsterObject
+    public class ElephantMan : MonsterObjectSrv
     {
         protected internal ElephantMan(MonsterInfo info)
             : base(info)
@@ -51,7 +51,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool aoe = (bool)data[3];
@@ -64,7 +64,7 @@ namespace Server.ExineObjects.Monsters
             }
             else
             {
-                List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)

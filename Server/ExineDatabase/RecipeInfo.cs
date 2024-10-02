@@ -190,7 +190,7 @@ namespace Server.ExineDatabase
             return Item != null && Item.ItemIndex == index;
         }
 
-        public bool CanCraft(PlayerObject player)
+        public bool CanCraft(PlayerObjectSrv player)
         {
             if (RequiredLevel != null && RequiredLevel.Value > player.Level)
                 return false;

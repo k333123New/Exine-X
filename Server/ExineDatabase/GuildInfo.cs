@@ -35,7 +35,7 @@ namespace Server.ExineDatabase
             get { return Envir.Main; }
         }
 
-        public GuildInfo(PlayerObject owner, string name)
+        public GuildInfo(PlayerObjectSrv owner, string name)
         {
             Name = name;
 

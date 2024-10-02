@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects
 {
-    public class SpellObject : MapObject
+    public class SpellObjectSrv : MapObjectSrv
     {
         public override ObjectType Race
         {
@@ -25,7 +25,7 @@ namespace Server.ExineObjects
         }
 
         public long TickTime, StartTime;
-        public MapObject Caster;
+        public MapObjectSrv Caster;
         public int Value, TickSpeed, BonusDmg;
         public Spell Spell;
         public Point CastLocation;
@@ -56,20 +56,20 @@ namespace Server.ExineObjects
             {
                 if (Spell == Spell.TrapHexagon && Target != null || Spell == Spell.Trap && Target != null)
                 {
-                    MonsterObject ob = (MonsterObject)Target;
+                    MonsterObjectSrv ob = (MonsterObjectSrv)Target;
 
                     if (Envir.Time < ExpireTime && ob.ShockTime != 0) return;
                 }
 
                 if (Spell == Spell.Reincarnation && Caster != null)
                 {
-                    ((HumanObject)Caster).ReincarnationReady = true;
-                    ((HumanObject)Caster).ReincarnationExpireTime = Envir.Time + 6000;
+                    ((HumanObjectSrv)Caster).ReincarnationReady = true;
+                    ((HumanObjectSrv)Caster).ReincarnationExpireTime = Envir.Time + 6000;
                 }
 
                 if ((Spell == Spell.Blizzard || Spell == Spell.MeteorStrike) &&  Caster != null)
                 {
-                    ((HumanObject)Caster).ActiveBlizzard = false;
+                    ((HumanObjectSrv)Caster).ActiveBlizzard = false;
                 }
 
                 CurrentMap.RemoveObject(this);
@@ -87,7 +87,7 @@ namespace Server.ExineObjects
                 }
             }
 
-            if (Spell == Spell.Reincarnation && !((HumanObject)Caster).ActiveReincarnation)
+            if (Spell == Spell.Reincarnation && !((HumanObjectSrv)Caster).ActiveReincarnation)
             {
                 CurrentMap.RemoveObject(this);
                 Despawn();
@@ -118,7 +118,7 @@ namespace Server.ExineObjects
 
             if ((Spell == Spell.MapLava) || (Spell == Spell.MapLightning)) Value = 0;
         }
-        public void ProcessSpell(MapObject ob)
+        public void ProcessSpell(MapObjectSrv ob)
         {
             if (Envir.Time < StartTime) return;
             switch (Spell)
@@ -129,7 +129,7 @@ namespace Server.ExineObjects
                         if (ob.Dead) return;
 
                         if (!ob.IsAttackTarget(Caster)) return;
-                        ob.Attacked(((HumanObject)Caster), Value, DefenceType.MAC, false);
+                        ob.Attacked(((HumanObjectSrv)Caster), Value, DefenceType.MAC, false);
                     }
                     break;
                 case Spell.Healing: //SafeZone
@@ -147,7 +147,7 @@ namespace Server.ExineObjects
                         if (ob.Dead) return;
 
                         if (!ob.IsAttackTarget(Caster)) return;
-                        ob.Attacked(((HumanObject)Caster), Value, DefenceType.MAC, false);
+                        ob.Attacked(((HumanObjectSrv)Caster), Value, DefenceType.MAC, false);
                         if (!ob.Dead)
                             ob.ApplyPoison(new Poison
                             {
@@ -163,9 +163,9 @@ namespace Server.ExineObjects
                     {
                         if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) return;
                         if (ob.Dead) return;
-                        if (Caster != null && ((HumanObject)Caster).ActiveBlizzard == false) return;
+                        if (Caster != null && ((HumanObjectSrv)Caster).ActiveBlizzard == false) return;
                         if (!ob.IsAttackTarget(Caster)) return;
-                        ob.Attacked(((HumanObject)Caster), Value, DefenceType.MAC, false);
+                        ob.Attacked(((HumanObjectSrv)Caster), Value, DefenceType.MAC, false);
                         if (!ob.Dead && Envir.Random.Next(8) == 0)
                             ob.ApplyPoison(new Poison
                             {
@@ -180,9 +180,9 @@ namespace Server.ExineObjects
                     {
                         if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) return;
                         if (ob.Dead) return;
-                        if (Caster != null && ((HumanObject)Caster).ActiveBlizzard == false) return;
+                        if (Caster != null && ((HumanObjectSrv)Caster).ActiveBlizzard == false) return;
                         if (!ob.IsAttackTarget(Caster)) return;
-                        ob.Attacked(((HumanObject)Caster), Value, DefenceType.MAC, false);
+                        ob.Attacked(((HumanObjectSrv)Caster), Value, DefenceType.MAC, false);
                     }
                     break;
                 case Spell.ExplosiveTrap:
@@ -192,13 +192,13 @@ namespace Server.ExineObjects
                         if (!ob.IsAttackTarget(Caster)) return;
                         if (DetonatedTrap) return;
                         DetonateTrapNow();
-                        ob.Attacked(((HumanObject)Caster), Value, DefenceType.MAC, false);
+                        ob.Attacked(((HumanObjectSrv)Caster), Value, DefenceType.MAC, false);
                     }
                     break;
                 case Spell.MapLava:
                 case Spell.MapLightning:
                     {
-                        if (ob is PlayerObject player)
+                        if (ob is PlayerObjectSrv player)
                         {
                             if (player.Account.AdminAccount && player.Observer) return;
                             player.Struck(Value, DefenceType.MAC);
@@ -298,7 +298,7 @@ namespace Server.ExineObjects
                 case Spell.Portal:
                     {
                         if (ob.Race != ObjectType.Player) return;
-                        if (Caster != ob && (Caster == null || (Caster.GroupMembers == null) || (!Caster.GroupMembers.Contains((HumanObject)ob)))) return;
+                        if (Caster != ob && (Caster == null || (Caster.GroupMembers == null) || (!Caster.GroupMembers.Contains((HumanObjectSrv)ob)))) return;
 
                         var portal = Envir.Spells.SingleOrDefault(ob => ob != this && ob.Node != null
                             && ob.Spell == Spell.Portal
@@ -460,19 +460,19 @@ namespace Server.ExineObjects
         {
             throw new NotSupportedException();
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             throw new NotSupportedException();
         }
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             throw new NotSupportedException();
         }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             throw new NotSupportedException();
         }
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             throw new NotSupportedException();
         }
@@ -481,11 +481,11 @@ namespace Server.ExineObjects
         {
             throw new NotSupportedException();
         }
-        public override bool IsFriendlyTarget(HumanObject ally)
+        public override bool IsFriendlyTarget(HumanObjectSrv ally)
         {
             throw new NotSupportedException();
         }
-        public override bool IsFriendlyTarget(MonsterObject ally)
+        public override bool IsFriendlyTarget(MonsterObjectSrv ally)
         {
             throw new NotSupportedException();
         }
@@ -544,7 +544,7 @@ namespace Server.ExineObjects
 
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
             throw new NotSupportedException();
         }
@@ -552,11 +552,11 @@ namespace Server.ExineObjects
         {
             throw new NotSupportedException();
         }
-        public override int Pushed(MapObject pusher, ExineDirection dir, int distance)
+        public override int Pushed(MapObjectSrv pusher, ExineDirection dir, int distance)
         {
             throw new NotSupportedException();
         }
-        public override void SendHealth(HumanObject player)
+        public override void SendHealth(HumanObjectSrv player)
         {
             throw new NotSupportedException();
         }
@@ -576,8 +576,8 @@ namespace Server.ExineObjects
 
             if (Spell == Spell.Reincarnation && Caster != null && Caster.Node != null)
             {
-                ((HumanObject)Caster).ActiveReincarnation = false;
-                ((HumanObject)Caster).Enqueue(new S.CancelReincarnation { });
+                ((HumanObjectSrv)Caster).ActiveReincarnation = false;
+                ((HumanObjectSrv)Caster).Enqueue(new S.CancelReincarnation { });
             }
 
             if (Spell == Spell.ExplosiveTrap && Caster != null)
@@ -614,7 +614,7 @@ namespace Server.ExineObjects
 
             for (int i = CurrentMap.Players.Count - 1; i >= 0; i--)
             {
-                PlayerObject player = CurrentMap.Players[i];
+                PlayerObjectSrv player = CurrentMap.Players[i];
                 if (Functions.InRange(CurrentLocation, player.CurrentLocation, Globals.DataRange))
                 {
                     if ((Caster == null) || (player == null)) continue;

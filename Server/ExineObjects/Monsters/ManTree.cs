@@ -60,7 +60,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool halfMoonAttack = (bool)data[3];
@@ -84,7 +84,7 @@ namespace Server.ExineObjects.Monsters
 
                     for (int o = 0; o < cell.Objects.Count; o++)
                     {
-                        MapObject ob = cell.Objects[o];
+                        MapObjectSrv ob = cell.Objects[o];
                         if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                         if (!ob.IsAttackTarget(this)) continue;
 
@@ -98,7 +98,7 @@ namespace Server.ExineObjects.Monsters
 
             if (boulderSmashAttack)
             {
-                List<MapObject> targets = FindAllTargets(1, target.CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(1, target.CurrentLocation);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)

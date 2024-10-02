@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class ManectricClaw : MonsterObject
+    public class ManectricClaw : MonsterObjectSrv
     {
         private const byte AttackRange = 3;
         private long _thrustTime;
@@ -93,7 +93,7 @@ namespace Server.ExineObjects.Monsters
 
                     for (int k = 0; k < cell.Objects.Count; k++)
                     {
-                        MapObject target = cell.Objects[k];
+                        MapObjectSrv target = cell.Objects[k];
                         switch (target.Race)
                         {
                             case ObjectType.Monster:

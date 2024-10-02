@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class ShamanZombie : MonsterObject
+    public class ShamanZombie : MonsterObjectSrv
     {
         protected internal ShamanZombie(MonsterInfo info)
             : base(info)

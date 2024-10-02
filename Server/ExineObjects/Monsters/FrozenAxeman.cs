@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class FrozenAxeman : MonsterObject
+    public class FrozenAxeman : MonsterObjectSrv
     {
         public long PullTime;
         protected internal FrozenAxeman(MonsterInfo info)

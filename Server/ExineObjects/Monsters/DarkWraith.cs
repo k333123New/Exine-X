@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DarkWraith : MonsterObject
+    public class DarkWraith : MonsterObjectSrv
     {
         private const byte AttackRange = 4;
         public long LineAttackTime;
@@ -81,7 +81,7 @@ namespace Server.ExineObjects.Monsters
 
             Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
 
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
 
             if (targets.Count > 1 && Envir.Random.Next(2) > 0)
             {
@@ -141,7 +141,7 @@ namespace Server.ExineObjects.Monsters
 
                     for (int o = 0; o < cell.Objects.Count; o++)
                     {
-                        MapObject ob = cell.Objects[o];
+                        MapObjectSrv ob = cell.Objects[o];
                         if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                         {
                             if (!ob.IsAttackTarget(this)) continue;

@@ -3,12 +3,12 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BlockingObject : MonsterObject
+    public class BlockingObject : MonsterObjectSrv
     {
-        public MonsterObject Parent;
+        public MonsterObjectSrv Parent;
         public bool Visible;
 
-        protected internal BlockingObject(MonsterObject parent, MonsterInfo info) : base(info)
+        protected internal BlockingObject(MonsterObjectSrv parent, MonsterInfo info) : base(info)
         {
             Parent = parent;
             Visible = true;
@@ -24,11 +24,11 @@ namespace Server.ExineObjects.Monsters
 
         public override bool Walk(ExineDirection dir) { return false; }
 
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return Parent.IsAttackTarget(attacker);
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return Parent.IsAttackTarget(attacker);
         }
@@ -37,7 +37,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void ProcessSearch() { }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             return Parent.Attacked(attacker, damage, type, damageWeapon);
         }

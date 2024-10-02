@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HoodedSummoner : MonsterObject
+    public class HoodedSummoner : MonsterObjectSrv
     {
         public long SlaveSpawnTime;
         public long FearTime;
@@ -106,7 +106,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < count; i++)
             {
-                MonsterObject mob = null;
+                MonsterObjectSrv mob = null;
 
                 if (slaves1 == true)
                 {

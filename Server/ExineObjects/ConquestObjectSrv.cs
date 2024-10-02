@@ -3,7 +3,7 @@ using Server.ExineDatabase;
 
 namespace Server.ExineObjects
 {
-    public class ConquestObject
+    public class ConquestObjectSrv
     {
         protected static Envir Envir
         {
@@ -48,13 +48,13 @@ namespace Server.ExineObjects
             set { GuildInfo.FlagList = value; }
         }
 
-        public Dictionary<ConquestGuildFlagInfo, Dictionary<GuildObject, int>> ControlPoints
+        public Dictionary<ConquestGuildFlagInfo, Dictionary<GuildObjectSrv, int>> ControlPoints
         {
             get { return GuildInfo.ControlPoints; }
             set { GuildInfo.ControlPoints = value; }
         }
 
-        public GuildObject Guild;
+        public GuildObjectSrv Guild;
 
         public Map ConquestMap;
         public Map PalaceMap;
@@ -73,12 +73,12 @@ namespace Server.ExineObjects
         public const int MAX_KING_POINTS = 18; //3 minutes
         public const int MAX_CONTROL_POINTS = 6; //1 minute
 
-        public Dictionary<GuildObject, int> KingPoints = new Dictionary<GuildObject, int>();
+        public Dictionary<GuildObjectSrv, int> KingPoints = new Dictionary<GuildObjectSrv, int>();
 
-        public List<SpellObject> WarEffects = new List<SpellObject>();
-        public List<NPCObject> ConquestNPCs = new List<NPCObject>();
+        public List<SpellObjectSrv> WarEffects = new List<SpellObjectSrv>();
+        public List<NPCObjectSrv> ConquestNPCs = new List<NPCObjectSrv>();
 
-        public ConquestObject(ConquestGuildInfo guildInfo)
+        public ConquestObjectSrv(ConquestGuildInfo guildInfo)
         {
             GuildInfo = guildInfo;
         }
@@ -196,7 +196,7 @@ namespace Server.ExineObjects
             for (var j = 0; j < Info.ControlPoints.Count; j++)
             {
                 ConquestGuildFlagInfo cp;
-                GuildInfo.ControlPoints.Add(cp = new ConquestGuildFlagInfo { Info = Info.ControlPoints[j], Index = Info.ControlPoints[j].Index, Conquest = this }, new Dictionary<GuildObject, int>());
+                GuildInfo.ControlPoints.Add(cp = new ConquestGuildFlagInfo { Info = Info.ControlPoints[j], Index = Info.ControlPoints[j].Index, Conquest = this }, new Dictionary<GuildObjectSrv, int>());
             }
 
             LoadArchers();
@@ -422,7 +422,7 @@ namespace Server.ExineObjects
 
             //Set NPCs to invisible
             Map npcMap;
-            NPCObject npcTemp;
+            NPCObjectSrv npcTemp;
 
             for (int i = 0; i < ConquestNPCs.Count; i++)
             {
@@ -547,13 +547,13 @@ namespace Server.ExineObjects
             GuildInfo.NeedSave = true;
         }
 
-        public void TakeConquest(PlayerObject player = null, GuildObject winningGuild = null)
+        public void TakeConquest(PlayerObjectSrv player = null, GuildObjectSrv winningGuild = null)
         {
             if (winningGuild == null && (player == null || player.MyGuild == null || player.MyGuild.Conquest != null || player.Dead)) return;
             if (winningGuild != null && winningGuild.Conquest != null) return;
             if (player != null && player.MyGuild != null && player.MyGuild.Conquest != null) return;
 
-            GuildObject tmpPrevious = null;
+            GuildObjectSrv tmpPrevious = null;
 
             switch (GameType)
             {
@@ -604,7 +604,7 @@ namespace Server.ExineObjects
                     foreach (ConquestGuildFlagInfo key in keys)
                     {
                         key.ChangeOwner(Guild);
-                        ControlPoints[key] = new Dictionary<GuildObject, int>();
+                        ControlPoints[key] = new Dictionary<GuildObjectSrv, int>();
                     }
                     
                     break;
@@ -630,15 +630,15 @@ namespace Server.ExineObjects
             }
         }
 
-        public void UpdatePlayers(GuildObject tempGuild)
+        public void UpdatePlayers(GuildObjectSrv tempGuild)
         {
-            PlayerObject player = null;
+            PlayerObjectSrv player = null;
             Packet p;
 
             for (int i = 0; i < tempGuild.Ranks.Count; i++)
                 for (int j = 0; j < tempGuild.Ranks[i].Members.Count; j++)
                 {
-                    player = (PlayerObject)tempGuild.Ranks[i].Members[j].Player;
+                    player = (PlayerObjectSrv)tempGuild.Ranks[i].Members[j].Player;
                     if (player != null)
                     {
                         tempGuild.SendGuildStatus(player);
@@ -648,13 +648,13 @@ namespace Server.ExineObjects
                 }
         }
 
-        public void BroadcastGuildName(PlayerObject player, Packet p)
+        public void BroadcastGuildName(PlayerObjectSrv player, Packet p)
         {
             if (player.CurrentMap == null) return;
 
             for (int i = player.CurrentMap.Players.Count - 1; i >= 0; i--)
             {
-                PlayerObject tempPlayer = player.CurrentMap.Players[i];
+                PlayerObjectSrv tempPlayer = player.CurrentMap.Players[i];
                 if (tempPlayer == player) continue;
 
                 if (Functions.InRange(player.CurrentLocation, tempPlayer.CurrentLocation, Globals.DataRange))
@@ -680,7 +680,7 @@ namespace Server.ExineObjects
                         if (x >= ConquestMap.Width) break;
                         if (!ConquestMap.Cells[x, y].Valid) continue;
 
-                        SpellObject spell = new SpellObject
+                        SpellObjectSrv spell = new SpellObjectSrv
                         {
                             ExpireTime = long.MaxValue,
                             Spell = Spell.TrapHexagon,
@@ -722,12 +722,12 @@ namespace Server.ExineObjects
                     {
                         int points;
 
-                        foreach (KeyValuePair<ConquestGuildFlagInfo, Dictionary<GuildObject, int>> item in ControlPoints)
+                        foreach (KeyValuePair<ConquestGuildFlagInfo, Dictionary<GuildObjectSrv, int>> item in ControlPoints)
                         {
                             pointsChanged = false;
 
                             ConquestGuildFlagInfo controlFlag = null;
-                            Dictionary<GuildObject, int> controlFlagPoints = null;
+                            Dictionary<GuildObjectSrv, int> controlFlagPoints = null;
 
                             for (int i = 0; i < ConquestMap.Players.Count; i++)
                             {
@@ -751,7 +751,7 @@ namespace Server.ExineObjects
                                     ConquestMap.Players[i].MyGuild.SendOutputMessage(string.Format("Gaining control of {1} {0:P0}", ((double)controlFlagPoints[ConquestMap.Players[i].MyGuild] / MAX_CONTROL_POINTS), controlFlag.Info.Name));
                                 }
 
-                                List<GuildObject> guilds = controlFlagPoints.Keys.ToList();
+                                List<GuildObjectSrv> guilds = controlFlagPoints.Keys.ToList();
                                 foreach (var guild in guilds)
                                 {
                                     if (ConquestMap.Players[i].MyGuild == guild) continue;
@@ -767,7 +767,7 @@ namespace Server.ExineObjects
 
                             if (pointsChanged)
                             {
-                                GuildObject tempWinning = Guild;
+                                GuildObjectSrv tempWinning = Guild;
                                 int tempInt;
 
                                 //Check Scores
@@ -822,7 +822,7 @@ namespace Server.ExineObjects
                                     ConquestMap.Players[i].MyGuild.SendOutputMessage(string.Format("Gaining control of {1} {0:P0}", ((double)KingPoints[ConquestMap.Players[i].MyGuild] / MAX_KING_POINTS), Info.Name));
                                 }
 
-                                List<GuildObject> guilds = KingPoints.Keys.ToList();
+                                List<GuildObjectSrv> guilds = KingPoints.Keys.ToList();
                                 foreach (var guild in guilds)
                                 {
                                     if (ConquestMap.Players[i].MyGuild == guild) continue;
@@ -840,7 +840,7 @@ namespace Server.ExineObjects
 
                         if (pointsChanged)
                         {
-                            GuildObject tempWinning = Guild;
+                            GuildObjectSrv tempWinning = Guild;
                             int tempInt;
 
                             //Check Scores
@@ -871,7 +871,7 @@ namespace Server.ExineObjects
                     break;
                 case ConquestGame.Classic:
                     int guildCounter = 0;
-                    GuildObject takingGuild = null;
+                    GuildObjectSrv takingGuild = null;
                     for (int i = 0; i < PalaceMap.Players.Count; i++)
                     {
                         if (PalaceMap.Players[i].Dead) continue;
@@ -918,10 +918,10 @@ namespace Server.ExineObjects
             switch(type)
             {
                 case ConquestGame.ControlPoints:
-                    Dictionary<GuildObject, int> controlledPoints = new Dictionary<GuildObject, int>();
+                    Dictionary<GuildObjectSrv, int> controlledPoints = new Dictionary<GuildObjectSrv, int>();
                     int count = 0;
 
-                    foreach (KeyValuePair<ConquestGuildFlagInfo, Dictionary<GuildObject, int>> item in ControlPoints)
+                    foreach (KeyValuePair<ConquestGuildFlagInfo, Dictionary<GuildObjectSrv, int>> item in ControlPoints)
                     {
                         controlledPoints.TryGetValue(item.Key.Guild, out count);
 
@@ -931,10 +931,10 @@ namespace Server.ExineObjects
                             controlledPoints[item.Key.Guild] += 1;
                     }
 
-                    GuildObject tempWinning = Guild;
+                    GuildObjectSrv tempWinning = Guild;
                     int tempInt;
 
-                    List<GuildObject> guilds = controlledPoints.Keys.ToList();
+                    List<GuildObjectSrv> guilds = controlledPoints.Keys.ToList();
 
                     //Check Scores
                     for (int i = 0; i < guilds.Count; i++)

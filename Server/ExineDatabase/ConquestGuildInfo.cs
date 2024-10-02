@@ -12,7 +12,7 @@ namespace Server.ExineDatabase
         public List<ConquestGuildSiegeInfo> SiegeList = new List<ConquestGuildSiegeInfo>();
         public List<ConquestGuildFlagInfo> FlagList = new List<ConquestGuildFlagInfo>();
 
-        public Dictionary<ConquestGuildFlagInfo, Dictionary<GuildObject, int>> ControlPoints = new Dictionary<ConquestGuildFlagInfo, Dictionary<GuildObject, int>>();
+        public Dictionary<ConquestGuildFlagInfo, Dictionary<GuildObjectSrv, int>> ControlPoints = new Dictionary<ConquestGuildFlagInfo, Dictionary<GuildObjectSrv, int>>();
 
         public int Owner = 0;
         public uint GoldStorage;
@@ -102,7 +102,7 @@ namespace Server.ExineDatabase
         public int Health;
 
         public ConquestSiegeInfo Info;
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
         public Gate Gate;
 
         public ConquestGuildSiegeInfo() { }
@@ -139,7 +139,7 @@ namespace Server.ExineDatabase
 
             if (monsterInfo.AI == 72)
             {
-                Gate = (Gate)MonsterObject.GetMonster(monsterInfo);
+                Gate = (Gate)MonsterObjectSrv.GetMonster(monsterInfo);
             }
             else if (monsterInfo.AI == 73)
             {
@@ -208,10 +208,10 @@ namespace Server.ExineDatabase
 
         public ConquestFlagInfo Info;
 
-        public ConquestObject Conquest;
-        public GuildObject Guild;
+        public ConquestObjectSrv Conquest;
+        public GuildObjectSrv Guild;
 
-        public NPCObject Flag;
+        public NPCObjectSrv Flag;
 
         public ConquestGuildFlagInfo() { }
 
@@ -232,7 +232,7 @@ namespace Server.ExineDatabase
                 npcInfo.Colour = Guild.Info.FlagColour;
             }
 
-            Flag = new NPCObject(npcInfo)
+            Flag = new NPCObjectSrv(npcInfo)
             {
                 CurrentMap = Conquest.ConquestMap
             };
@@ -242,7 +242,7 @@ namespace Server.ExineDatabase
             Flag.Spawned();
         }
 
-        public void ChangeOwner(GuildObject guild)
+        public void ChangeOwner(GuildObjectSrv guild)
         {
             Guild = guild;
 
@@ -283,7 +283,7 @@ namespace Server.ExineDatabase
 
         public ConquestWallInfo Info;
 
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
 
         public Wall Wall;
 
@@ -320,7 +320,7 @@ namespace Server.ExineDatabase
 
             if (monsterInfo.AI != 82) return;
 
-            Wall = (Wall)MonsterObject.GetMonster(monsterInfo);
+            Wall = (Wall)MonsterObjectSrv.GetMonster(monsterInfo);
 
             if (Wall == null) return;
 
@@ -383,7 +383,7 @@ namespace Server.ExineDatabase
         public int Health;
 
         public ConquestGateInfo Info;
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
         public Gate Gate;
 
 
@@ -419,7 +419,7 @@ namespace Server.ExineDatabase
             if (monsterInfo == null) return;
             if (monsterInfo.AI != 81) return;
 
-            Gate = (Gate)MonsterObject.GetMonster(monsterInfo);
+            Gate = (Gate)MonsterObjectSrv.GetMonster(monsterInfo);
 
             if (Gate == null) return;
 
@@ -487,7 +487,7 @@ namespace Server.ExineDatabase
 
         public ConquestArcherInfo Info;
 
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
 
         public ConquestArcher ArcherMonster;
 
@@ -524,7 +524,7 @@ namespace Server.ExineDatabase
             if (monsterInfo == null) return;
             if (monsterInfo.AI != 80) return;
 
-            ArcherMonster = (ConquestArcher)MonsterObject.GetMonster(monsterInfo);
+            ArcherMonster = (ConquestArcher)MonsterObjectSrv.GetMonster(monsterInfo);
 
             if (ArcherMonster == null) return;
 

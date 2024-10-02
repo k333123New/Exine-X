@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects
 {
-    public sealed class DecoObject : MapObject
+    public sealed class DecoObjectSrv : MapObjectSrv
     {
         public override ObjectType Race
         {
@@ -93,19 +93,19 @@ namespace Server.ExineObjects
         {
             throw new NotSupportedException();
         }
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             throw new NotSupportedException();
         }
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             throw new NotSupportedException();
         }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             throw new NotSupportedException();
         }
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             throw new NotSupportedException();
         }
@@ -114,11 +114,11 @@ namespace Server.ExineObjects
         {
             throw new NotSupportedException();
         }
-        public override bool IsFriendlyTarget(HumanObject ally)
+        public override bool IsFriendlyTarget(HumanObjectSrv ally)
         {
             throw new NotSupportedException();
         }
-        public override bool IsFriendlyTarget(MonsterObject ally)
+        public override bool IsFriendlyTarget(MonsterObjectSrv ally)
         {
             throw new NotSupportedException();
         }
@@ -137,7 +137,7 @@ namespace Server.ExineObjects
             };
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
             throw new NotSupportedException();
         }
@@ -145,11 +145,11 @@ namespace Server.ExineObjects
         {
             throw new NotSupportedException();
         }
-        public override int Pushed(MapObject pusher, ExineDirection dir, int distance)
+        public override int Pushed(MapObjectSrv pusher, ExineDirection dir, int distance)
         {
             throw new NotSupportedException();
         }
-        public override void SendHealth(HumanObject player)
+        public override void SendHealth(HumanObjectSrv player)
         {
             throw new NotSupportedException();
         }

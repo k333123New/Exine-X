@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TrapRock : MonsterObject
+    public class TrapRock : MonsterObjectSrv
     {
         public bool Visible, ChildRock, FirstAttack;
         public long VisibleTime;
@@ -35,7 +35,7 @@ namespace Server.ExineObjects.Monsters
             FirstAttack = true;
         }
 
-        public override MapObject Target
+        public override MapObjectSrv Target
         {
             get { return _target; }
             set
@@ -132,7 +132,7 @@ namespace Server.ExineObjects.Monsters
             base.Die();
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             if (ChildRock) ParentRock.FirstAttack = false;
             if (!ChildRock && FirstAttack == true)
@@ -143,7 +143,7 @@ namespace Server.ExineObjects.Monsters
             return base.Attacked(attacker, damage, type);
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             if (ChildRock) ParentRock.FirstAttack = false;
             if (!ChildRock && FirstAttack == true)

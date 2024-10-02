@@ -2,9 +2,9 @@
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Trainer : MonsterObject
+    public class Trainer : MonsterObjectSrv
     {
-        private HumanObject _currentAttacker = null;
+        private HumanObjectSrv _currentAttacker = null;
         private int _hitCount = 0, _totalDamage = 0;
         private long _lastAttackTime = 0, _StartTime = 0;
         private bool Poisoned = false;
@@ -20,8 +20,8 @@ namespace Server.ExineObjects.Monsters
         protected override void ProcessRoam() { }
 
         public override bool Blocking { get { return true; } }
-        public override bool IsAttackTarget(HumanObject attacker) { return true; }
-        public override bool IsAttackTarget(MonsterObject attacker) 
+        public override bool IsAttackTarget(HumanObjectSrv attacker) { return true; }
+        public override bool IsAttackTarget(MonsterObjectSrv attacker) 
         {
             if (attacker.Master == null) return false;
 
@@ -55,7 +55,7 @@ namespace Server.ExineObjects.Monsters
         }
 
         // Player attacking trainer.
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = false)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = false)
         {
             if (attacker == null) return 0;
 
@@ -102,7 +102,7 @@ namespace Server.ExineObjects.Monsters
         }
 
         // Pet attacking trainer.
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             if (attacker == null || attacker.Master == null) return 0;
             
@@ -138,7 +138,7 @@ namespace Server.ExineObjects.Monsters
                 _StartTime = Envir.Time;
 
 
-            MapObject tmpAttacker = attacker.Master;
+            MapObjectSrv tmpAttacker = attacker.Master;
 
             while(true)
             {
@@ -150,7 +150,7 @@ namespace Server.ExineObjects.Monsters
                 break;
             }
 
-            _currentAttacker = (PlayerObject)tmpAttacker;
+            _currentAttacker = (PlayerObjectSrv)tmpAttacker;
 
             _hitCount++;
             _totalDamage += damage;
@@ -165,10 +165,10 @@ namespace Server.ExineObjects.Monsters
             return 0;
         }
 
-        public override void PoisonDamage(int damage, MapObject attacker)
+        public override void PoisonDamage(int damage, MapObjectSrv attacker)
         {
             damage = damage * (-1);
-            if (attacker == null || (attacker is MonsterObject && attacker.Master == null)) return;
+            if (attacker == null || (attacker is MonsterObjectSrv && attacker.Master == null)) return;
 
             if (_currentAttacker != null && (_currentAttacker != attacker || _currentAttacker != attacker.Master))
             {
@@ -177,7 +177,7 @@ namespace Server.ExineObjects.Monsters
             
             if (_currentAttacker == null)
                 _StartTime = Envir.Time;
-            _currentAttacker = attacker is MonsterObject ? (PlayerObject)attacker.Master : (PlayerObject)attacker;
+            _currentAttacker = attacker is MonsterObjectSrv ? (PlayerObjectSrv)attacker.Master : (PlayerObjectSrv)attacker;
             _hitCount++;
             _totalDamage += damage;
             _lastAttackTime = Envir.Time;
@@ -186,7 +186,7 @@ namespace Server.ExineObjects.Monsters
             if (_StartTime == 0)
                 timespend = 1000;
             double Dps = _totalDamage / (timespend * 0.001);
-            _currentAttacker.ReceiveChat(string.Format("{1} inflicted {0} Damage, Dps: {2:#.00}.", damage, attacker is MonsterObject ? "Your pets poison" : "Your poison", Dps), ChatType.Trainer);
+            _currentAttacker.ReceiveChat(string.Format("{1} inflicted {0} Damage, Dps: {2:#.00}.", damage, attacker is MonsterObjectSrv ? "Your pets poison" : "Your poison", Dps), ChatType.Trainer);
             Poisoned = true;
         }
 

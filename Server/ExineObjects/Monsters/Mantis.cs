@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Mantis : MonsterObject
+    public class Mantis : MonsterObjectSrv
     {
         protected internal Mantis(MonsterInfo info)
             : base(info)

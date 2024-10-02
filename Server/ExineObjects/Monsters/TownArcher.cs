@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TownArcher : MonsterObject
+    public class TownArcher : MonsterObjectSrv
     {
         public long FearTime;
         public byte AttackRange = 10;
@@ -16,7 +16,7 @@ namespace Server.ExineObjects.Monsters
 
         protected internal TownArcher(MonsterInfo info) : base(info) { }
 
-        public override bool IsAttackTarget(MonsterObject attacker) { return false; }
+        public override bool IsAttackTarget(MonsterObjectSrv attacker) { return false; }
 
         public override void Spawned()
         {
@@ -95,11 +95,11 @@ namespace Server.ExineObjects.Monsters
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Player:
-                                    PlayerObject playerob = (PlayerObject)ob;
+                                    PlayerObjectSrv playerob = (PlayerObjectSrv)ob;
                                     if (!ob.IsAttackTarget(this)) continue;
                                     if (playerob.PKPoints < 200 || ob.Hidden && (!CoolEye || Level < ob.Level)) continue;
                                     Target = ob;

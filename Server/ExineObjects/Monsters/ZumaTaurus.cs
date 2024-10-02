@@ -58,7 +58,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < count; i++)
             {
-                MonsterObject mob = null;
+                MonsterObjectSrv mob = null;
                 switch (Envir.Random.Next(7))
                 {
                     case 0:

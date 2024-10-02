@@ -5,7 +5,7 @@ namespace Server.ExineObjects.Monsters
 {
     public class ConquestArcher : TownArcher
     {
-        public ConquestObject Conquest;
+        public ConquestObjectSrv Conquest;
         public int ArcherIndex;
 
         protected override bool CanMove
@@ -18,7 +18,7 @@ namespace Server.ExineObjects.Monsters
         { 
         }
 
-        public override bool IsAttackTarget(MonsterObject attacker) { return false; }
+        public override bool IsAttackTarget(MonsterObjectSrv attacker) { return false; }
 
         public override void Die()
         {
@@ -44,11 +44,11 @@ namespace Server.ExineObjects.Monsters
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Player:
-                                    PlayerObject playerob = (PlayerObject)ob;
+                                    PlayerObjectSrv playerob = (PlayerObjectSrv)ob;
                                     if (!ob.IsAttackTarget(this)) continue;
                                     if (playerob.MyGuild != null && playerob.MyGuild.Conquest != null && Conquest.Info.Index == playerob.MyGuild.Conquest.Info.Index || ob.Hidden && (!CoolEye || Level < ob.Level) || !Conquest.WarIsOn) continue;
                                     Target = ob;
@@ -62,13 +62,13 @@ namespace Server.ExineObjects.Monsters
             }
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             if (!Conquest.WarIsOn || attacker.MyGuild != null && Conquest.GuildInfo.Owner == attacker.MyGuild.Guildindex) damage = 0;
 
             return base.Attacked(attacker, damage, type, damageWeapon);
         }
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             if (!Conquest.WarIsOn) damage = 0;
 

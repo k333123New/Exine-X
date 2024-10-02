@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects
 {
-    public class IntelligentCreatureObject : MonsterObject
+    public class IntelligentCreatureObjectSrv : MonsterObjectSrv
     {
         public bool Summoned;
         public string CustomName { get { return CreatureInfo.CustomName; } set { CreatureInfo.CustomName = value; } }
@@ -20,7 +20,7 @@ namespace Server.ExineObjects
 
         public IntelligentCreaturePickupMode CurrentPickupMode { get { return CreatureInfo.petMode; } set { CreatureInfo.petMode = value; } }
 
-        public List<MapObject> TargetList = new List<MapObject>();
+        public List<MapObjectSrv> TargetList = new List<MapObjectSrv>();
         public bool FillingTargetList = false;
         public bool DoTargetList = false;
         public bool TargetListTargetClean = false;
@@ -86,7 +86,7 @@ namespace Server.ExineObjects
         }
 
 
-        public IntelligentCreatureObject(MonsterInfo info) : base(info)
+        public IntelligentCreatureObjectSrv(MonsterInfo info) : base(info)
         {
             ActionTime = Envir.Time + 1000;
             PetType = (IntelligentCreatureType)info.Effect;
@@ -349,15 +349,15 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             if (ob == null) continue;
                             if (ob.Race != ObjectType.Item) continue;
                             if (ob.Owner != null && ob.Owner != this && ob.Owner != Master && !IsMasterGroupMember(ob.Owner)) continue;
 
-                            ItemObject item = (ItemObject)ob;
+                            ItemObjectSrv item = (ItemObjectSrv)ob;
                             if (item.Item != null)
                             {
-                                if (!((PlayerObject)Master).CanGainItem(item.Item)) continue;
+                                if (!((PlayerObjectSrv)Master).CanGainItem(item.Item)) continue;
                                 if (CheckItemAgainstFilter(item.Item.Info.Type))
                                 {
                                     //Master.ReceiveChat("YEAH ITEM I CAN GAIN {" + item.Item.FriendlyName + "} " + item.Item.Info.Type.ToString(), ChatType.System);
@@ -371,7 +371,7 @@ namespace Server.ExineObjects
                             {
                                 if (item.Gold > 0)
                                 {
-                                    if (!((PlayerObject)Master).CanGainGold(item.Gold)) continue;
+                                    if (!((PlayerObjectSrv)Master).CanGainGold(item.Gold)) continue;
                                     if (ItemFilter.PetPickupAll || ItemFilter.PetPickupGold)
                                     {
                                         //Master.ReceiveChat("YEAH GOLD I CAN GAIN {" + item.Gold + "}", ChatType.System);
@@ -410,15 +410,15 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             if (ob == null) continue;
                             if (ob.Race != ObjectType.Item) continue;
                             if (ob.Owner != null && ob.Owner != this && ob.Owner != Master && !IsMasterGroupMember(ob.Owner)) continue;
 
-                            ItemObject item = (ItemObject)ob;
+                            ItemObjectSrv item = (ItemObjectSrv)ob;
                             if (item.Item != null)
                             {
-                                if (!((PlayerObject)Master).CanGainItem(item.Item)) continue;
+                                if (!((PlayerObjectSrv)Master).CanGainItem(item.Item)) continue;
                                 if (CheckItemAgainstFilter(item.Item.Info.Type))
                                 {
                                     if(item.Item.Info.Grade >= ItemFilter.PickupGrade)
@@ -430,7 +430,7 @@ namespace Server.ExineObjects
                             {
                                 if (item.Gold > 0)
                                 {
-                                    if (!((PlayerObject)Master).CanGainGold(item.Gold)) continue;
+                                    if (!((PlayerObjectSrv)Master).CanGainGold(item.Gold)) continue;
                                     if (ItemFilter.PetPickupAll || ItemFilter.PetPickupGold)
                                     {
                                         TargetList.Add(ob);
@@ -501,7 +501,7 @@ namespace Server.ExineObjects
                 if (cell.Objects != null)
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject ob = cell.Objects[i];
+                        MapObjectSrv ob = cell.Objects[i];
                         if (!ob.Blocking) continue;
                         return false;
                     }
@@ -597,16 +597,16 @@ namespace Server.ExineObjects
             if (!cell.Valid || cell.Objects == null) return;
             for (int i = 0; i < cell.Objects.Count; i++)
             {
-                MapObject ob = cell.Objects[i];
+                MapObjectSrv ob = cell.Objects[i];
                 if (ob == null) continue;
                 if (ob.Race != ObjectType.Item) continue;
                 if (ob.Owner != null && ob.Owner != this && ob.Owner != Master && !IsMasterGroupMember(ob.Owner)) continue;
 
-                ItemObject item = (ItemObject)ob;
+                ItemObjectSrv item = (ItemObjectSrv)ob;
                 if (item == null) continue;
                 if (item.Item != null)
                 {
-                    if (!((PlayerObject)Master).CanGainItem(item.Item)) continue;
+                    if (!((PlayerObjectSrv)Master).CanGainItem(item.Item)) continue;
 
                     if (item.Item.Info.ShowGroupPickup && IsMasterGroupMember(Master))
                         for (int j = 0; j < Master.GroupMembers.Count; j++)
@@ -615,10 +615,10 @@ namespace Server.ExineObjects
                     if (item.Item.Info.Grade == ItemGrade.Mythical || item.Item.Info.Grade == ItemGrade.Legendary || item.Item.Info.Grade == ItemGrade.Heroic)
                     {
                         Master.ReceiveChat("Pet Picked up: {" + item.Item.FriendlyName + "}", ChatType.Hint);
-                        ((PlayerObject)Master).Enqueue(new S.IntelligentCreaturePickup { ObjectID = ObjectID });
+                        ((PlayerObjectSrv)Master).Enqueue(new S.IntelligentCreaturePickup { ObjectID = ObjectID });
                     }
 
-                    ((PlayerObject)Master).GainItem(item.Item);
+                    ((PlayerObjectSrv)Master).GainItem(item.Item);
                     CurrentMap.RemoveObject(ob);
                     ob.Despawn();
                     return;
@@ -626,8 +626,8 @@ namespace Server.ExineObjects
                 else
                 {
                     if (ob == null) continue;
-                    if (!((PlayerObject)Master).CanGainGold(item.Gold)) continue;
-                    ((PlayerObject)Master).GainGold(item.Gold);
+                    if (!((PlayerObjectSrv)Master).CanGainGold(item.Gold)) continue;
+                    ((PlayerObjectSrv)Master).GainGold(item.Gold);
                     CurrentMap.RemoveObject(ob);
                     ob.Despawn();
                     return;
@@ -714,7 +714,7 @@ namespace Server.ExineObjects
             {
                 if (Master != null)
                 {
-                    ((PlayerObject)Master).IntelligentCreatureProducePearl();
+                    ((PlayerObjectSrv)Master).IntelligentCreatureProducePearl();
                 }
 
                 PearlTicker = 0;
@@ -731,7 +731,7 @@ namespace Server.ExineObjects
             {
                 if (Master != null)
                 {
-                    ((PlayerObject)Master).IntelligentCreatureProduceBlackStone();
+                    ((PlayerObjectSrv)Master).IntelligentCreatureProduceBlackStone();
                 }
 
                 BlackstoneTime = 0;
@@ -765,7 +765,7 @@ namespace Server.ExineObjects
             if (Master != null)
             {
                 message = String.Format("{0}:{1}", CustomName, message);
-                ((PlayerObject)Master).IntelligentCreatureSay(PetType, message);
+                ((PlayerObjectSrv)Master).IntelligentCreatureSay(PetType, message);
             }
         }
 
@@ -774,27 +774,27 @@ namespace Server.ExineObjects
             if (type == ChatType.WhisperIn) CreatureSay("What?");
         }
 
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return false;
         }
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return false;
         }
-        public override bool IsFriendlyTarget(HumanObject ally)
+        public override bool IsFriendlyTarget(HumanObjectSrv ally)
         {
             return true;
         }
-        public override bool IsFriendlyTarget(MonsterObject ally)
+        public override bool IsFriendlyTarget(MonsterObjectSrv ally)
         {
             return true;
         }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             return 0;
         }
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             return 0;
         }
@@ -804,15 +804,15 @@ namespace Server.ExineObjects
             return 0;
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
             //FindTarget();
         }
 
-        private bool IsMasterGroupMember(MapObject player)
+        private bool IsMasterGroupMember(MapObjectSrv player)
         {
             if (player.Race != ObjectType.Player || Master == null) return false;
-            return ((PlayerObject)Master).GroupMembers != null && ((PlayerObject)Master).GroupMembers.Contains((PlayerObject)player);
+            return ((PlayerObjectSrv)Master).GroupMembers != null && ((PlayerObjectSrv)Master).GroupMembers.Contains((PlayerObjectSrv)player);
         }
 
 

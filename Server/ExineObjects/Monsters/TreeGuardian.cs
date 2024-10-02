@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TreeGuardian : MonsterObject
+    public class TreeGuardian : MonsterObjectSrv
     {
         protected virtual int AttackRange
         {

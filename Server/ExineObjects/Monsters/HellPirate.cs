@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HellPirate : MonsterObject
+    public class HellPirate : MonsterObjectSrv
     {
         protected internal HellPirate(MonsterInfo info)
             : base(info)

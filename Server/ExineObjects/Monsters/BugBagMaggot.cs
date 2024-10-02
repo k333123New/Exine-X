@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BugBagMaggot : MonsterObject
+    public class BugBagMaggot : MonsterObjectSrv
     {
         protected override bool CanMove { get { return false; } }
 
@@ -34,7 +34,7 @@ namespace Server.ExineObjects.Monsters
 
             if (SlaveList.Count >= 20) return;       
             
-            MonsterObject spawn = GetMonster(Envir.GetMonsterInfo(Settings.BugBatName));
+            MonsterObjectSrv spawn = GetMonster(Envir.GetMonsterInfo(Settings.BugBatName));
 
             if (spawn == null) return;
 

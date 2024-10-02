@@ -21,8 +21,8 @@ namespace Server.ExineEnvir
         public long LastRunTime = 0;
         public long StartTime = 0;
         public long EndTime = 0;
-        public LinkedList<MapObject> ObjectsList = new LinkedList<MapObject>();
-        public LinkedListNode<MapObject> _current = null;
+        public LinkedList<MapObjectSrv> ObjectsList = new LinkedList<MapObjectSrv>();
+        public LinkedListNode<MapObjectSrv> _current = null;
         public bool Stop = false;
     }
 
@@ -138,14 +138,14 @@ namespace Server.ExineEnvir
         public List<SafeZoneInfo> StartPoints = new List<SafeZoneInfo>();
         public List<ItemInfo> StartItems = new List<ItemInfo>();
 
-        public List<PlayerObject> Players = new List<PlayerObject>();
-        public List<SpellObject> Spells = new List<SpellObject>();
-        public List<NPCObject> NPCs = new List<NPCObject>();
-        public List<GuildObject> Guilds = new List<GuildObject>();
-        public List<ConquestObject> Conquests = new List<ConquestObject>(); 
+        public List<PlayerObjectSrv> Players = new List<PlayerObjectSrv>();
+        public List<SpellObjectSrv> Spells = new List<SpellObjectSrv>();
+        public List<NPCObjectSrv> NPCs = new List<NPCObjectSrv>();
+        public List<GuildObjectSrv> Guilds = new List<GuildObjectSrv>();
+        public List<ConquestObjectSrv> Conquests = new List<ConquestObjectSrv>(); 
 
         public LightSetting Lights;
-        public LinkedList<MapObject> Objects = new LinkedList<MapObject>();
+        public LinkedList<MapObjectSrv> Objects = new LinkedList<MapObjectSrv>();
         public Dictionary<int, NPCScript> Scripts = new Dictionary<int, NPCScript>();
         public Dictionary<string, Timer> Timers = new Dictionary<string, Timer>();
 
@@ -629,7 +629,7 @@ namespace Server.ExineEnvir
                 var processCount = 0;
                 var processRealCount = 0;
 
-                LinkedListNode<MapObject> current = null;
+                LinkedListNode<MapObjectSrv> current = null;
 
                 if (Settings.Multithreaded)
                 {
@@ -1766,7 +1766,7 @@ namespace Server.ExineEnvir
 
                     GuildList.Add(guildInfo);
 
-                    new GuildObject(guildInfo);
+                    new GuildObjectSrv(guildInfo);
 
                     count++;
                 }
@@ -1784,7 +1784,7 @@ namespace Server.ExineEnvir
 
                 for (var i = 0; i < ConquestInfoList.Count; i++)
                 {
-                    ConquestObject newConquest;
+                    ConquestObjectSrv newConquest;
                     ConquestGuildInfo conquestGuildInfo;
                     var tempMap = GetMap(ConquestInfoList[i].MapIndex);
 
@@ -1798,7 +1798,7 @@ namespace Server.ExineEnvir
                             conquestGuildInfo = new ConquestGuildInfo(reader) { Info = ConquestInfoList[i] };
                         }
 
-                        newConquest = new ConquestObject(conquestGuildInfo)
+                        newConquest = new ConquestObjectSrv(conquestGuildInfo)
                         {
                             ConquestMap = tempMap
                         };
@@ -1813,7 +1813,7 @@ namespace Server.ExineEnvir
                     else
                     {
                         conquestGuildInfo = new ConquestGuildInfo { Info = ConquestInfoList[i], NeedSave = true };
-                        newConquest = new ConquestObject(conquestGuildInfo)
+                        newConquest = new ConquestObjectSrv(conquestGuildInfo)
                         {
                             ConquestMap = tempMap
                         };
@@ -3031,12 +3031,12 @@ namespace Server.ExineEnvir
             return null;
         }
 
-        public NPCObject GetNPC(string name)
+        public NPCObjectSrv GetNPC(string name)
         {
             return MapList.SelectMany(t1 => t1.NPCs.Where(t => t.Info.Name == name)).FirstOrDefault();
         }
 
-        public NPCObject GetWorldMapNPC(string name)
+        public NPCObjectSrv GetWorldMapNPC(string name)
         {
             return MapList.SelectMany(t1 => t1.NPCs.Where(t => t.Info.GameName.StartsWith(name, StringComparison.CurrentCultureIgnoreCase) && t.Info.ShowOnBigMap)).FirstOrDefault();
         }
@@ -3073,7 +3073,7 @@ namespace Server.ExineEnvir
             }
             return null;
         }
-        public PlayerObject GetPlayer(string name)
+        public PlayerObjectSrv GetPlayer(string name)
         {
             for (var i = 0; i < Players.Count; i++)
                 if (string.Compare(Players[i].Name, name, StringComparison.OrdinalIgnoreCase) == 0)
@@ -3081,7 +3081,7 @@ namespace Server.ExineEnvir
 
             return null;
         }
-        public PlayerObject GetPlayer(uint PlayerId)
+        public PlayerObjectSrv GetPlayer(uint PlayerId)
         {
             for (var i = 0; i < Players.Count; i++)
                 if (Players[i].Info.Index == PlayerId)
@@ -3205,7 +3205,7 @@ namespace Server.ExineEnvir
             mail.Send();
         }
 
-        public GuildObject GetGuild(string name)
+        public GuildObjectSrv GetGuild(string name)
         {
             for (var i = 0; i < Guilds.Count; i++)
             {
@@ -3216,7 +3216,7 @@ namespace Server.ExineEnvir
 
             return null;
         }
-        public GuildObject GetGuild(int index)
+        public GuildObjectSrv GetGuild(int index)
         {
             for (var i = 0; i < Guilds.Count; i++)
             {
@@ -3433,7 +3433,7 @@ namespace Server.ExineEnvir
             if (ObjectID == id) return;
 
             //PlayerObject player = Players.SingleOrDefault(x => x.ObjectID == id || x.Pets.Count(y => y.ObjectID == id && y is HumanWizard) > 0);
-            PlayerObject player = Players.SingleOrDefault(x => x.ObjectID == id);
+            PlayerObjectSrv player = Players.SingleOrDefault(x => x.ObjectID == id);
 
             if (player == null) return;
             Inspect(con, player.Info.Index);
@@ -3466,7 +3466,7 @@ namespace Server.ExineEnvir
 
             string guildname = "";
             string guildrank = "";
-            GuildObject guild = null;
+            GuildObjectSrv guild = null;
             GuildRank guildRank = null;
             if (player.GuildIndex != -1)
             {
@@ -3778,7 +3778,7 @@ namespace Server.ExineEnvir
             return null;
         }
 
-        public void DeleteGuild(GuildObject guild)
+        public void DeleteGuild(GuildObjectSrv guild)
         {
             Guilds.Remove(guild);
             GuildList.Remove(guild.Info);

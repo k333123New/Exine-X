@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class ManectricBlest : MonsterObject
+    public class ManectricBlest : MonsterObjectSrv
     {
         private int _attackCount = 0;
 
@@ -29,7 +29,7 @@ namespace Server.ExineObjects.Monsters
 
                 int damage = GetAttackPower(Stats[Stat.MinMC], Stats[Stat.MaxMC]);
 
-                List<MapObject> targets = FindAllTargets(3, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(3, CurrentLocation);
 
                 for (int i = 0; i < targets.Count; i++)
                 {
@@ -81,7 +81,7 @@ namespace Server.ExineObjects.Monsters
 
                             for (int o = 0; o < cell.Objects.Count; o++)
                             {
-                                MapObject ob = cell.Objects[o];
+                                MapObjectSrv ob = cell.Objects[o];
                                 if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                                 if (!ob.IsAttackTarget(this)) continue;
 

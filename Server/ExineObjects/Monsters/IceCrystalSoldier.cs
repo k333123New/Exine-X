@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class IceCrystalSoldier : MonsterObject
+    public class IceCrystalSoldier : MonsterObjectSrv
     {
         private long _areaTime;
         protected internal IceCrystalSoldier(MonsterInfo info)
@@ -55,7 +55,7 @@ namespace Server.ExineObjects.Monsters
             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]) * 2;
             if (damage == 0) return;
 
-            List<MapObject> targets = FindAllTargets(1, Functions.PointMove(CurrentLocation, Direction, 1));
+            List<MapObjectSrv> targets = FindAllTargets(1, Functions.PointMove(CurrentLocation, Direction, 1));
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

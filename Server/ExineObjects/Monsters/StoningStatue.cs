@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class StoningStatue : MonsterObject
+    public class StoningStatue : MonsterObjectSrv
     {
         private long _areaTime = long.MaxValue;
 
@@ -75,7 +75,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool area = data.Count >= 4 && (bool)data[3];
@@ -88,7 +88,7 @@ namespace Server.ExineObjects.Monsters
             }
             else
             {
-                List<MapObject> targets = FindAllTargets(2, CurrentLocation, false);
+                List<MapObjectSrv> targets = FindAllTargets(2, CurrentLocation, false);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)

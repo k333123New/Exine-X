@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HellLord : MonsterObject
+    public class HellLord : MonsterObjectSrv
     {   
         protected override bool CanMove { get { return false; } }
         protected override bool CanRegen { get { return false; } }
@@ -43,7 +43,7 @@ namespace Server.ExineObjects.Monsters
         public override bool Walk(ExineDirection dir) { return false; }
 
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             if (_stage >= 4)
             {
@@ -52,7 +52,7 @@ namespace Server.ExineObjects.Monsters
 
             return 0;
         }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             if (_stage >= 4)
             {
@@ -62,7 +62,7 @@ namespace Server.ExineObjects.Monsters
             return 0;
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
 
         }
@@ -134,7 +134,7 @@ namespace Server.ExineObjects.Monsters
 
                     var start = Envir.Random.Next(5000);
 
-                    var spellObj = new SpellObject
+                    var spellObj = new SpellObjectSrv
                     {
                         Spell = Envir.Random.Next(2) == 0 ? Spell.MapQuake1 : Spell.MapQuake2,
                         Value = Envir.Random.Next(Envir.Random.Next(Stats[Stat.MinDC], Stats[Stat.MaxDC])),
@@ -164,7 +164,7 @@ namespace Server.ExineObjects.Monsters
                 Point location = new Point(playerLocation.X + Envir.Random.Next(-distance, distance + 1),
                                              playerLocation.Y + Envir.Random.Next(-distance, distance + 1));
 
-                MonsterObject mob = null;
+                MonsterObjectSrv mob = null;
                 switch (Envir.Random.Next(3))
                 {
                     case 0:
@@ -186,7 +186,7 @@ namespace Server.ExineObjects.Monsters
 
         private void SpawnKnight()
         {
-            MonsterObject mob = null;
+            MonsterObjectSrv mob = null;
 
             switch (_stage)
             {

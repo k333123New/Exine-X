@@ -5,7 +5,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects
 {
-    public abstract class MapObject
+    public abstract class MapObjectSrv
     {
         protected static MessageQueue MessageQueue
         {
@@ -130,8 +130,8 @@ namespace Server.ExineObjects
         }
         #endregion
 
-        public MapObject _target;
-        public virtual MapObject Target
+        public MapObjectSrv _target;
+        public virtual MapObjectSrv Target
         {
             get { return _target; }
             set
@@ -142,23 +142,23 @@ namespace Server.ExineObjects
 
         }
 
-        protected MapObject master;
-        public virtual MapObject Master
+        protected MapObjectSrv master;
+        public virtual MapObjectSrv Master
         {
             get { return master; }
             set { master = value; }
         }
 
-        public MapObject LastHitter, EXPOwner, Owner;
+        public MapObjectSrv LastHitter, EXPOwner, Owner;
         public long ExpireTime, OwnerTime, OperateTime;
         public int OperateDelay = 100;
 
         public Stats Stats;
 
-        public List<MonsterObject> Pets = new List<MonsterObject>();
+        public List<MonsterObjectSrv> Pets = new List<MonsterObjectSrv>();
         public virtual List<Buff> Buffs { get; set; } = new List<Buff>();
 
-        public List<PlayerObject> GroupMembers;
+        public List<PlayerObjectSrv> GroupMembers;
 
         public virtual AttackMode AMode { get; set; }
         public virtual PetMode PMode { get; set; }
@@ -180,8 +180,8 @@ namespace Server.ExineObjects
         public PoisonType CurrentPoison = PoisonType.None;
         public List<DelayedAction> ActionList = new List<DelayedAction>();
 
-        public LinkedListNode<MapObject> Node;
-        public LinkedListNode<MapObject> NodeThreaded;
+        public LinkedListNode<MapObjectSrv> Node;
+        public LinkedListNode<MapObjectSrv> NodeThreaded;
         public long RevTime;
 
         public virtual bool Blocking
@@ -278,18 +278,18 @@ namespace Server.ExineObjects
             return Envir.Random.Next(min, max + 1);
         }
 
-        public virtual void Remove(HumanObject player)
+        public virtual void Remove(HumanObjectSrv player)
         {
             player.Enqueue(new S.ObjectRemove { ObjectID = ObjectID });
         }
-        public virtual void Add(HumanObject player)
+        public virtual void Add(HumanObjectSrv player)
         {
             if (player.Race != ObjectType.Player) return;
 
             if (Race == ObjectType.Merchant)
             {
-                NPCObject npc = (NPCObject)this;
-                npc.CheckVisible((PlayerObject)player, true);
+                NPCObjectSrv npc = (NPCObjectSrv)this;
+                npc.CheckVisible((PlayerObjectSrv)player, true);
                 return;
             }
 
@@ -305,11 +305,11 @@ namespace Server.ExineObjects
             //    player.Enqueue(GetInfo());
             //}
         }
-        public virtual void Remove(MonsterObject monster)
+        public virtual void Remove(MonsterObjectSrv monster)
         {
 
         }
-        public virtual void Add(MonsterObject monster)
+        public virtual void Add(MonsterObjectSrv monster)
         {
 
         }
@@ -369,7 +369,7 @@ namespace Server.ExineObjects
             Node = null;
         }
 
-        public MapObject FindObject(uint targetID, int dist)
+        public MapObjectSrv FindObject(uint targetID, int dist)
         {
             for (int d = 0; d <= dist; d++)
             {
@@ -388,7 +388,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             if (ob.ObjectID != targetID) continue;
 
                             return ob;
@@ -405,7 +405,7 @@ namespace Server.ExineObjects
 
             for (int i = CurrentMap.Players.Count - 1; i >= 0; i--)
             {
-                PlayerObject player = CurrentMap.Players[i];
+                PlayerObjectSrv player = CurrentMap.Players[i];
                 if (player == this) continue;
 
                 if (Functions.InRange(CurrentLocation, player.CurrentLocation, Globals.DataRange))
@@ -419,7 +419,7 @@ namespace Server.ExineObjects
             return;
         } 
 
-        public bool IsAttackTarget(MapObject attacker)
+        public bool IsAttackTarget(MapObjectSrv attacker)
         {
             if (attacker == null || attacker.Node == null) return false;
             if (Dead || InSafeZone || attacker.InSafeZone || attacker == this) return false;
@@ -427,20 +427,20 @@ namespace Server.ExineObjects
             switch (attacker.Race)
             {
                 case ObjectType.Player:
-                    return IsAttackTarget((PlayerObject)attacker);
+                    return IsAttackTarget((PlayerObjectSrv)attacker);
                 case ObjectType.Monster:
-                    return IsAttackTarget((MonsterObject)attacker);
+                    return IsAttackTarget((MonsterObjectSrv)attacker);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public abstract bool IsAttackTarget(HumanObject attacker);
-        public abstract bool IsAttackTarget(MonsterObject attacker);
-        public abstract int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true);
-        public abstract int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility);
+        public abstract bool IsAttackTarget(HumanObjectSrv attacker);
+        public abstract bool IsAttackTarget(MonsterObjectSrv attacker);
+        public abstract int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true);
+        public abstract int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility);
 
-        public virtual int GetArmour(DefenceType type, MapObject attacker, out bool hit)
+        public virtual int GetArmour(DefenceType type, MapObjectSrv attacker, out bool hit)
         {
             var armour = 0;
             hit = true;
@@ -489,7 +489,7 @@ namespace Server.ExineObjects
             return armour;
         }
 
-        public virtual void ApplyNegativeEffects(HumanObject attacker, DefenceType type, ushort levelOffset)
+        public virtual void ApplyNegativeEffects(HumanObjectSrv attacker, DefenceType type, ushort levelOffset)
         {
             if (attacker.SpecialMode.HasFlag(SpecialItemMode.Paralize) && type != DefenceType.MAC && type != DefenceType.MACAgility && 1 == Envir.Random.Next(1, 15))
             {
@@ -509,21 +509,21 @@ namespace Server.ExineObjects
 
         public abstract int Struck(int damage, DefenceType type = DefenceType.ACAgility);
 
-        public bool IsFriendlyTarget(MapObject ally)
+        public bool IsFriendlyTarget(MapObjectSrv ally)
         {
             switch (ally.Race)
             {
                 case ObjectType.Player:
-                    return IsFriendlyTarget((PlayerObject)ally);
+                    return IsFriendlyTarget((PlayerObjectSrv)ally);
                 case ObjectType.Monster:
-                    return IsFriendlyTarget((MonsterObject)ally);
+                    return IsFriendlyTarget((MonsterObjectSrv)ally);
                 default:
                     throw new NotSupportedException();
             }
         }
 
-        public abstract bool IsFriendlyTarget(HumanObject ally);
-        public abstract bool IsFriendlyTarget(MonsterObject ally);
+        public abstract bool IsFriendlyTarget(HumanObjectSrv ally);
+        public abstract bool IsFriendlyTarget(MonsterObjectSrv ally);
 
         public abstract void ReceiveChat(string text, ChatType type);
 
@@ -544,11 +544,11 @@ namespace Server.ExineObjects
 
         }
 
-        public virtual bool Harvest(PlayerObject player) { return false; }
+        public virtual bool Harvest(PlayerObjectSrv player) { return false; }
 
-        public abstract void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true);
+        public abstract void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true);
 
-        public virtual Buff AddBuff(BuffType type, MapObject owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
+        public virtual Buff AddBuff(BuffType type, MapObjectSrv owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
         {
             if (!HasBuff(type, out Buff buff))
             {
@@ -734,7 +734,7 @@ namespace Server.ExineObjects
 
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject ob = cell.Objects[i];
+                        MapObjectSrv ob = cell.Objects[i];
                         if (ob.Race != ObjectType.Monster) continue;
 
                         if (ob.Target == this && (!ob.CoolEye || ob.Level < Level)) ob.Target = null;
@@ -750,7 +750,7 @@ namespace Server.ExineObjects
             if (cell.Objects != null)
                 for (int i = 0; i < cell.Objects.Count; i++)
                 {
-                    MapObject ob = cell.Objects[i];
+                    MapObjectSrv ob = cell.Objects[i];
                     if (ob == this || !ob.Blocking) continue;
                     return true;
                 }
@@ -840,7 +840,7 @@ namespace Server.ExineObjects
                 {
                     for (int i = 0; i < GroupMembers.Count; i++)
                     {
-                        PlayerObject member = GroupMembers[i];
+                        PlayerObjectSrv member = GroupMembers[i];
 
                         if (this == member) continue;
                         if (member.CurrentMap != CurrentMap || !Functions.InRange(member.CurrentLocation, CurrentLocation, Globals.DataRange)) continue;
@@ -853,7 +853,7 @@ namespace Server.ExineObjects
 
             if (Master != null && Master.Race == ObjectType.Player)
             {
-                PlayerObject player = (PlayerObject)Master;
+                PlayerObjectSrv player = (PlayerObjectSrv)Master;
 
                 player.Enqueue(p);
 
@@ -861,7 +861,7 @@ namespace Server.ExineObjects
                 {
                     for (int i = 0; i < player.GroupMembers.Count; i++)
                     {
-                        PlayerObject member = player.GroupMembers[i];
+                        PlayerObjectSrv member = player.GroupMembers[i];
 
                         if (player == member) continue;
 
@@ -874,7 +874,7 @@ namespace Server.ExineObjects
 
             if (EXPOwner != null && EXPOwner.Race == ObjectType.Player)
             {
-                PlayerObject player = (PlayerObject)EXPOwner;
+                PlayerObjectSrv player = (PlayerObjectSrv)EXPOwner;
 
                 if (player.IsMember(Master)) return;
                 
@@ -884,7 +884,7 @@ namespace Server.ExineObjects
                 {
                     for (int i = 0; i < player.GroupMembers.Count; i++)
                     {
-                        PlayerObject member = player.GroupMembers[i];
+                        PlayerObjectSrv member = player.GroupMembers[i];
 
                         if (player == member) continue;
                         if (member.CurrentMap != CurrentMap || !Functions.InRange(member.CurrentLocation, CurrentLocation, Globals.DataRange)) continue;
@@ -900,7 +900,7 @@ namespace Server.ExineObjects
 
             if (Race == ObjectType.Player)
             {
-                PlayerObject player = (PlayerObject)this;
+                PlayerObjectSrv player = (PlayerObjectSrv)this;
                 player.Enqueue(p);
             }
             Broadcast(p);
@@ -908,9 +908,9 @@ namespace Server.ExineObjects
 
         public abstract void Die();
 
-        public abstract int Pushed(MapObject pusher, ExineDirection dir, int distance);
+        public abstract int Pushed(MapObjectSrv pusher, ExineDirection dir, int distance);
 
-        public bool IsMember(MapObject member)
+        public bool IsMember(MapObjectSrv member)
         {
             if (member == this) return true;
             if (GroupMembers == null || member == null) return false;
@@ -921,15 +921,15 @@ namespace Server.ExineObjects
             return false;
         }
 
-        public abstract void SendHealth(HumanObject player);
+        public abstract void SendHealth(HumanObjectSrv player);
 
         public bool InTrapRock
         {
             set
             {
-                if (this is PlayerObject)
+                if (this is PlayerObjectSrv)
                 {
-                    var player = (PlayerObject)this;
+                    var player = (PlayerObjectSrv)this;
                     player.Enqueue(new S.InTrapRock { Trapped = value });
                 }
             }
@@ -951,7 +951,7 @@ namespace Server.ExineObjects
 
                     for (int j = 0; j < cell.Objects.Count; j++)
                     {
-                        MapObject ob = cell.Objects[j];
+                        MapObjectSrv ob = cell.Objects[j];
                         switch (ob.Race)
                         {
                             case ObjectType.Monster:
@@ -978,8 +978,8 @@ namespace Server.ExineObjects
 
     public class Poison
     {
-        private MapObject owner;
-        public MapObject Owner
+        private MapObjectSrv owner;
+        public MapObjectSrv Owner
         {
             get 
             { 

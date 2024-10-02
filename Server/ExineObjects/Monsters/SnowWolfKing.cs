@@ -5,7 +5,7 @@ using S = ServerPackets;
 namespace Server.ExineObjects.Monsters
 {
     //TODO - Teleport
-    public class SnowWolfKing : MonsterObject
+    public class SnowWolfKing : MonsterObjectSrv
     {
         private bool _SpawnedSlaves;
 
@@ -14,7 +14,7 @@ namespace Server.ExineObjects.Monsters
         {
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int attackerDamage = base.Attacked(attacker, damage, type, damageWeapon);
 
@@ -28,7 +28,7 @@ namespace Server.ExineObjects.Monsters
             return attackerDamage;
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             int attackerDamage = base.Attacked(attacker, damage, type);
 
@@ -44,7 +44,7 @@ namespace Server.ExineObjects.Monsters
 
         private void FindWeakerTarget()
         {
-            List<MapObject> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
 
             if (targets.Count < 2) return;
 
@@ -64,7 +64,7 @@ namespace Server.ExineObjects.Monsters
             }
         }
 
-        private bool TeleportToTarget(MapObject target)
+        private bool TeleportToTarget(MapObjectSrv target)
         {
             Direction = Functions.DirectionFromPoint(CurrentLocation, target.CurrentLocation);
 
@@ -143,7 +143,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -209,7 +209,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < 3; i++)
             {
-                MonsterObject mob = GetMonster(Envir.GetMonsterInfo(Settings.SnowWolfKingMob));
+                MonsterObjectSrv mob = GetMonster(Envir.GetMonsterInfo(Settings.SnowWolfKingMob));
                 if (mob == null) continue;
 
                 if (!mob.Spawn(CurrentMap, Target.Back))

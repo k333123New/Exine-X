@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DarkOmaKing : MonsterObject
+    public class DarkOmaKing : MonsterObjectSrv
     {
         private long _OrbTime;
         private long _MassThunderTime;
@@ -112,7 +112,7 @@ namespace Server.ExineObjects.Monsters
 
                     var start = 3000;
 
-                    SpellObject ob = new SpellObject
+                    SpellObjectSrv ob = new SpellObjectSrv
                     {
                         Spell = Spell.DarkOmaKingNuke,
                         Value = Stats[Stat.MaxDC],
@@ -152,7 +152,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool aoe = data.Count >= 4 && (bool)data[3];

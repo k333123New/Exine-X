@@ -87,7 +87,7 @@ namespace Server.MirForms.Systems
             {
                 if (item.Race != ObjectType.Monster) continue;
 
-                MonsterObject mob = (MonsterObject)item;
+                MonsterObjectSrv mob = (MonsterObjectSrv)item;
 
                 mob.RefreshAll();
             }

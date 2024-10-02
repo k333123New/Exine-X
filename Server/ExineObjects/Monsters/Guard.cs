@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Guard : MonsterObject
+    public class Guard : MonsterObjectSrv
     {
         public override bool Blocking
         {
@@ -50,10 +50,10 @@ namespace Server.ExineObjects.Monsters
                 base.ProcessRoam();
         }
 
-        public override bool IsAttackTarget(HumanObject attacker) { return false; }
-        public override bool IsAttackTarget(MonsterObject attacker) { return false; }
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true) { throw new NotSupportedException(); }
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility) { throw new NotSupportedException(); }
+        public override bool IsAttackTarget(HumanObjectSrv attacker) { return false; }
+        public override bool IsAttackTarget(MonsterObjectSrv attacker) { return false; }
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true) { throw new NotSupportedException(); }
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility) { throw new NotSupportedException(); }
         public override int Struck(int damage, DefenceType type = DefenceType.ACAgility)
         {
             return 0;

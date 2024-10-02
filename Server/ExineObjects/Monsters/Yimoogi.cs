@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class Yimoogi : MonsterObject
+    public class Yimoogi : MonsterObjectSrv
     {
         protected byte AttackRange = 7;
         protected byte PoisonAttackRange = 4;
@@ -12,7 +12,7 @@ namespace Server.ExineObjects.Monsters
         protected Yimoogi SisterMob;
         public long SpawnTime;
         public int WhiteSnakeCount = 2;
-        public override MapObject Target
+        public override MapObjectSrv Target
         {
             get { return _target; }
             set
@@ -122,7 +122,7 @@ namespace Server.ExineObjects.Monsters
                 {
                     FinalTeleport = true;
          
-                    MonsterObject mob = null;
+                    MonsterObjectSrv mob = null;
                     for (int i = 0; i < WhiteSnakeCount; i++)
                     {
                         mob = GetMonster(Envir.GetMonsterInfo(Settings.WhiteSnake));
@@ -182,7 +182,7 @@ namespace Server.ExineObjects.Monsters
             ActionTime = Envir.Time + 300;
             AttackTime = Envir.Time + AttackSpeed;
 
-            MonsterObject mob = GetMonster(Envir.GetMonsterInfo(Info.Name));
+            MonsterObjectSrv mob = GetMonster(Envir.GetMonsterInfo(Info.Name));
 
             if (mob == null)
             {

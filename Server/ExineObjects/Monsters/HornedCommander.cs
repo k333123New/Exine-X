@@ -16,7 +16,7 @@ namespace Server.ExineObjects.Monsters
     /// Summons Rock Slaves
     /// </summary>
 
-    public class HornedCommander : MonsterObject
+    public class HornedCommander : MonsterObjectSrv
     {
         private bool _StartAdvanced;
         private bool _Immune;
@@ -41,7 +41,7 @@ namespace Server.ExineObjects.Monsters
         private bool _CalledRockSpikes;
         private long _RockSpikeTime;
         private readonly Point[,] _RockSpikeArea = new Point[7, 7];
-        private readonly List<SpellObject> _RockSpikeEffects = new List<SpellObject>();
+        private readonly List<SpellObjectSrv> _RockSpikeEffects = new List<SpellObjectSrv>();
 
         //Phase 2
         private readonly byte _ShieldHealthPercent = 10;
@@ -53,12 +53,12 @@ namespace Server.ExineObjects.Monsters
         {
         }
 
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             return !_Immune && base.IsAttackTarget(attacker);
         }
 
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             return !_Immune && base.IsAttackTarget(attacker);
         }
@@ -283,7 +283,7 @@ namespace Server.ExineObjects.Monsters
 
             if (data.Count > 0)
             {
-                MapObject target = (MapObject)data[0];
+                MapObjectSrv target = (MapObjectSrv)data[0];
                 int damage = (int)data[1];
                 DefenceType defence = (DefenceType)data[2];
                 bool aoe = (bool)data[3];
@@ -312,7 +312,7 @@ namespace Server.ExineObjects.Monsters
 
             if (data.Count > 0)
             {
-                MapObject target = (MapObject)data[0];
+                MapObjectSrv target = (MapObjectSrv)data[0];
                 int damage = (int)data[1];
                 DefenceType defence = (DefenceType)data[2];
                 int aoeSize = (int)data[3];
@@ -391,7 +391,7 @@ namespace Server.ExineObjects.Monsters
 
                     var start = 500 + offset;
 
-                    SpellObject ob = new SpellObject
+                    SpellObjectSrv ob = new SpellObjectSrv
                     {
                         Spell = Spell.HornedCommanderRockFall,
                         Value = damage,
@@ -498,7 +498,7 @@ namespace Server.ExineObjects.Monsters
 
                     var start = 500;
 
-                    SpellObject ob = new SpellObject
+                    SpellObjectSrv ob = new SpellObjectSrv
                     {
                         Spell = Spell.HornedCommanderRockSpike,
                         Value = damage,

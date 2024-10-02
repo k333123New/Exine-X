@@ -2,7 +2,7 @@
 
 namespace Server.ExineObjects.Monsters
 {
-    public class RevivingZombie : MonsterObject
+    public class RevivingZombie : MonsterObjectSrv
     {
         public byte RevivalCount;
         public int LifeCount;

@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DarkDevil : MonsterObject
+    public class DarkDevil : MonsterObjectSrv
     {
         private long _areaTime;
 
@@ -50,7 +50,7 @@ namespace Server.ExineObjects.Monsters
             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]) * 3;
             if (damage == 0) return;
 
-            List<MapObject> targets = FindAllTargets(1, Functions.PointMove(CurrentLocation, Direction, 2));
+            List<MapObjectSrv> targets = FindAllTargets(1, Functions.PointMove(CurrentLocation, Direction, 2));
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class WingedTigerLord : MonsterObject
+    public class WingedTigerLord : MonsterObjectSrv
     {
         enum AttackType
         {
@@ -54,7 +54,7 @@ namespace Server.ExineObjects.Monsters
 
                     damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
 
-                    List<MapObject> targets = FindAllTargets(1, Target.CurrentLocation);
+                    List<MapObjectSrv> targets = FindAllTargets(1, Target.CurrentLocation);
 
                     for (int i = 0; i < targets.Count; i++)
                     {
@@ -95,7 +95,7 @@ namespace Server.ExineObjects.Monsters
 
                         for (int o = 0; o < cell.Objects.Count; o++)
                         {
-                            MapObject ob = cell.Objects[o];
+                            MapObjectSrv ob = cell.Objects[o];
                             if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                             if (!ob.IsAttackTarget(this)) continue;
 
@@ -146,7 +146,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -161,7 +161,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             AttackType type = (AttackType)data[3];

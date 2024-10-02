@@ -56,7 +56,7 @@ namespace Server.ExineNetwork
         byte[] _rawBytes = new byte[8 * 1024];
 
         public AccountInfo Account;
-        public PlayerObject Player;
+        public PlayerObjectSrv Player;
 
         public List<ExineConnection> Observers = new List<ExineConnection>();
         public ExineConnection Observing;
@@ -959,7 +959,7 @@ namespace Server.ExineNetwork
             //    return;
             //}
 
-            Player = new PlayerObject(info, this);
+            Player = new PlayerObjectSrv(info, this);
             Player.StartGame();
         }
 
@@ -1316,7 +1316,7 @@ namespace Server.ExineNetwork
         {
             if (Stage != GameStage.Game) return;
 
-            HumanObject actor = Player;
+            HumanObjectSrv actor = Player;
             if (p.Key > 16 || p.OldKey > 16)
             {
                 return;
@@ -1339,7 +1339,7 @@ namespace Server.ExineNetwork
         {
             if (Stage != GameStage.Game) return;
 
-            HumanObject actor = Player;
+            HumanObjectSrv actor = Player;
              
 
             if (actor.Dead) return;

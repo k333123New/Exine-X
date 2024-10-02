@@ -6371,8 +6371,7 @@ namespace Exine.ExineScenes
                         break;
                     case ItemType.Gem:
                     case ItemType.Potion:
-                    case ItemType.Transform:
-                    case ItemType.SealedHero:
+                    case ItemType.Transform: 
                         break;
                     case ItemType.Pets:
                         if (HoverItem.Info.Shape == 26 || HoverItem.Info.Shape == 28)//WonderDrug, Knapsack
@@ -6506,9 +6505,6 @@ namespace Exine.ExineScenes
                     break;
                 case ItemType.MonsterSpawn:
                     baseText = GameLanguage.ItemTypeMonsterSpawn;
-                    break;
-                case ItemType.SealedHero:
-                    baseText = GameLanguage.ItemTypeSealedHero;
                     break;
             }
 

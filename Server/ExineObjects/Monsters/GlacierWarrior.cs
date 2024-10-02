@@ -3,7 +3,7 @@ using Server.ExineEnvir;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class GlacierWarrior : MonsterObject
+    public class GlacierWarrior : MonsterObjectSrv
     {
         public virtual byte TeleportEffect { get { return 4; } }
 
@@ -12,7 +12,7 @@ namespace Server.ExineObjects.Monsters
         {
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int attackerDamage = base.Attacked(attacker, damage, type, damageWeapon);
 
@@ -26,7 +26,7 @@ namespace Server.ExineObjects.Monsters
             return attackerDamage;
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             int attackerDamage = base.Attacked(attacker, damage, type);
 
@@ -42,7 +42,7 @@ namespace Server.ExineObjects.Monsters
 
         private void FindWeakerTarget()
         {
-            List<MapObject> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
 
             if (targets.Count < 2) return;
 
@@ -62,7 +62,7 @@ namespace Server.ExineObjects.Monsters
             }
         }
 
-        private bool TeleportToTarget(MapObject target)
+        private bool TeleportToTarget(MapObjectSrv target)
         {
             Direction = Functions.DirectionFromPoint(CurrentLocation, target.CurrentLocation);
 

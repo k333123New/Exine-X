@@ -5,7 +5,7 @@ using S = ServerPackets;
 namespace Server.ExineObjects.Monsters
 {
     //Use Effect 1 if bleeding on secondary attack
-    public class DarkBeast : MonsterObject
+    public class DarkBeast : MonsterObjectSrv
     {
         protected internal DarkBeast(MonsterInfo info)
             : base(info)
@@ -51,7 +51,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool poison = (bool)data[3];

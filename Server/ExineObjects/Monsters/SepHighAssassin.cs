@@ -5,7 +5,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class SepHighAssassin : MonsterObject
+    public class SepHighAssassin : MonsterObjectSrv
     {
         public long FearTime, DecreaseMPTime;
         public byte AttackRange = 3;
@@ -73,7 +73,7 @@ namespace Server.ExineObjects.Monsters
             if (cell.Objects != null)
                 for (int i = 0; i < cell.Objects.Count; i++)
                 {
-                    MapObject ob = cell.Objects[i];
+                    MapObjectSrv ob = cell.Objects[i];
                     if (!ob.Blocking) continue;
                     return false;
                 }
@@ -93,7 +93,7 @@ namespace Server.ExineObjects.Monsters
             if (cell.Objects != null)
                 for (int i = 0; i < cell.Objects.Count; i++)
                 {
-                    MapObject ob = cell.Objects[i];
+                    MapObjectSrv ob = cell.Objects[i];
                     if (!ob.Blocking) continue;
                     isBreak = true;
                     break;
@@ -110,7 +110,7 @@ namespace Server.ExineObjects.Monsters
                 if (cell.Objects != null)
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject ob = cell.Objects[i];
+                        MapObjectSrv ob = cell.Objects[i];
                         if (!ob.Blocking) continue;
                         return false;
                     }
@@ -157,7 +157,7 @@ namespace Server.ExineObjects.Monsters
             for (int i = 0; i < cell.Objects.Count; i++)
             {
                 if (cell.Objects[i].Race != ObjectType.Spell) continue;
-                SpellObject ob = (SpellObject)cell.Objects[i];
+                SpellObjectSrv ob = (SpellObjectSrv)cell.Objects[i];
 
                 ob.ProcessSpell(this);
                 //break;
@@ -211,7 +211,7 @@ namespace Server.ExineObjects.Monsters
 
                             for (int j = 0; j < cell.Objects.Count; j++)
                             {
-                                MapObject target = cell.Objects[j];
+                                MapObjectSrv target = cell.Objects[j];
                                 switch (target.Race)
                                 {
                                     case ObjectType.Monster:
@@ -287,13 +287,13 @@ namespace Server.ExineObjects.Monsters
 
         public override Packet GetInfo()
         {
-            PlayerObject master = null;
+            PlayerObjectSrv master = null;
             short weapon = -1;
             short shield = -1;
             short armour = 0;
             byte wing = 0;
 
-            if (Master != null && Master is PlayerObject) master = (PlayerObject)Master;
+            if (Master != null && Master is PlayerObjectSrv) master = (PlayerObjectSrv)Master;
             if (master != null)
             {
                 weapon = master.Looks_Weapon;

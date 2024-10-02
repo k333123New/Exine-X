@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DragonStatue : MonsterObject
+    public class DragonStatue : MonsterObjectSrv
     {
         private bool Sleeping;
         private long WakeUpTime;
@@ -60,7 +60,7 @@ namespace Server.ExineObjects.Monsters
             if (Target == null || !Target.IsAttackTarget(this) || Target.CurrentMap != CurrentMap || Target.Node == null) return;
 
             Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID });
-            List<MapObject> targets = FindAllTargets(2, Target.CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(2, Target.CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)
@@ -89,12 +89,12 @@ namespace Server.ExineObjects.Monsters
             }
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             return Sleeping ? 0 : base.Attacked(attacker, damage, type);
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             return Sleeping ? 0 : base.Attacked(attacker, damage, type, damageWeapon);
         }

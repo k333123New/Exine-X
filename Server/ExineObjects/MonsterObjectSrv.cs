@@ -6,9 +6,9 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects
 {
-    public class MonsterObject : MapObject
+    public class MonsterObjectSrv : MapObjectSrv
     {
-        public static MonsterObject GetMonster(MonsterInfo info)
+        public static MonsterObjectSrv GetMonster(MonsterInfo info)
         {
             if (info == null) return null;
 
@@ -148,7 +148,7 @@ namespace Server.ExineObjects
                 case 63:
                     return new CharmedSnake(info);
                 case 64:
-                    return new IntelligentCreatureObject(info);
+                    return new IntelligentCreatureObjectSrv(info);
                 case 65:
                     //Common AI: 2 Close attacks with WeakerTeleport
                     return new MutatedManworm(info);
@@ -486,7 +486,7 @@ namespace Server.ExineObjects
                     return new StoneTrap(info);
 
                 default:
-                    return new MonsterObject(info);
+                    return new MonsterObjectSrv(info);
             }
         }
 
@@ -596,7 +596,7 @@ namespace Server.ExineObjects
         public int RoutePoint;
         public bool Waiting;
         
-        public List<MonsterObject> SlaveList = new List<MonsterObject>();
+        public List<MonsterObjectSrv> SlaveList = new List<MonsterObjectSrv>();
         public List<RouteInfo> Route = new List<RouteInfo>();
 
         public override bool Blocking
@@ -642,7 +642,7 @@ namespace Server.ExineObjects
                     (!CurrentPoison.HasFlag(PoisonType.Stun) || (Info.Light == 10 || Info.Light == 5));
             }
         }
-        protected internal MonsterObject(MonsterInfo info)
+        protected internal MonsterObjectSrv(MonsterInfo info)
         {
             Info = info;
 
@@ -841,7 +841,7 @@ namespace Server.ExineObjects
         }
 
         //use this so you can have mobs take no/reduced poison damage
-        public virtual void PoisonDamage(int amount, MapObject Attacker)
+        public virtual void PoisonDamage(int amount, MapObjectSrv Attacker)
         {
             ChangeHP(amount);
         }
@@ -895,7 +895,7 @@ namespace Server.ExineObjects
             {
                 EXPOwner.WinExp(Experience, Level);
 
-                PlayerObject playerObj = (PlayerObject)EXPOwner;
+                PlayerObjectSrv playerObj = (PlayerObjectSrv)EXPOwner;
                 playerObj.CheckGroupQuestKill(Info);
             }
 
@@ -913,7 +913,7 @@ namespace Server.ExineObjects
             CurrentMap.MonsterCount--;
         }
 
-        public MapObject GetAttacker(MapObject attacker)
+        public MapObjectSrv GetAttacker(MapObjectSrv attacker)
         {
             return attacker switch
             {
@@ -939,7 +939,7 @@ namespace Server.ExineObjects
             CurrentMap.MonsterCount++;
         }
 
-        public override int Pushed(MapObject pusher, ExineDirection dir, int distance)
+        public override int Pushed(MapObjectSrv pusher, ExineDirection dir, int distance)
         {
             if (!Info.CanPush) return 0;
             //if (!CanMove) return 0; //stops mobs that can't move (like cannibalplants) from being pushed
@@ -958,7 +958,7 @@ namespace Server.ExineObjects
                 if (cell.Objects != null)
                     for (int c = 0; c < cell.Objects.Count; c++)
                     {
-                        MapObject ob = cell.Objects[c];
+                        MapObjectSrv ob = cell.Objects[c];
                         if (!ob.Blocking) continue;
                         stop = true;
                     }
@@ -987,7 +987,7 @@ namespace Server.ExineObjects
                 for (int i = 0; i < cell.Objects.Count; i++)
                 {
                     if (cell.Objects[i].Race != ObjectType.Spell) continue;
-                    SpellObject ob = (SpellObject)cell.Objects[i];
+                    SpellObjectSrv ob = (SpellObjectSrv)cell.Objects[i];
 
                     ob.ProcessSpell(this);
                     //break;
@@ -1023,7 +1023,7 @@ namespace Server.ExineObjects
 
                         if (EXPOwner != null && EXPOwner.Race == ObjectType.Player)
                         {
-                            PlayerObject ob = (PlayerObject)EXPOwner;
+                            PlayerObjectSrv ob = (PlayerObjectSrv)EXPOwner;
 
                             if (ob.CheckGroupQuestItem(item))
                             {
@@ -1043,7 +1043,7 @@ namespace Server.ExineObjects
             if (CurrentMap.Info.NoDropMonster)
                 return false;
 
-            ItemObject ob = new ItemObject(this, item)
+            ItemObjectSrv ob = new ItemObjectSrv(this, item)
             {
                 Owner = EXPOwner,
                 OwnerTime = Envir.Time + Settings.Minute,
@@ -1071,7 +1071,7 @@ namespace Server.ExineObjects
             uint count = gold / Settings.MaxDropGold == 0 ? 1 : gold / Settings.MaxDropGold + 1;
             for (int i = 0; i < count; i++)
             {
-                ItemObject ob = new ItemObject(this, i != count - 1 ? Settings.MaxDropGold : gold % Settings.MaxDropGold)
+                ItemObjectSrv ob = new ItemObjectSrv(this, i != count - 1 ? Settings.MaxDropGold : gold % Settings.MaxDropGold)
                 {
                     Owner = EXPOwner,
                     OwnerTime = Envir.Time + Settings.Minute,
@@ -1233,7 +1233,7 @@ namespace Server.ExineObjects
         }
         protected virtual void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -1244,7 +1244,7 @@ namespace Server.ExineObjects
 
         protected virtual void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
@@ -1260,7 +1260,7 @@ namespace Server.ExineObjects
 
         protected virtual void CompleteSpellEffect(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             SpellEffect effect = (SpellEffect)data[1];
 
             if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
@@ -1450,13 +1450,13 @@ namespace Server.ExineObjects
                     switch (poison.Owner.Race)
                     {
                         case ObjectType.Player:
-                            PlayerObject caster = (PlayerObject)poison.Owner;
+                            PlayerObjectSrv caster = (PlayerObjectSrv)poison.Owner;
                             DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time, poison.Owner, caster.GetMagic(Spell.DelayedExplosion), poison.Value, this.CurrentLocation);
                             CurrentMap.ActionList.Add(action);
                             //Attacked((PlayerObject)poison.Owner, poison.Value, DefenceType.MAC, false);
                             break;
                         case ObjectType.Monster://this is in place so it could be used by mobs if one day someone chooses to
-                            Attacked((MonsterObject)poison.Owner, poison.Value, DefenceType.MAC);
+                            Attacked((MonsterObjectSrv)poison.Owner, poison.Value, DefenceType.MAC);
                             break;
                     }
                     LastHitter = poison.Owner;
@@ -1712,7 +1712,7 @@ namespace Server.ExineObjects
                         if (cell.Objects == null || !cell.Valid) continue;
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Monster:
@@ -1746,7 +1746,7 @@ namespace Server.ExineObjects
                                         continue;
                                     }
 
-                                    PlayerObject playerob = (PlayerObject)ob;
+                                    PlayerObjectSrv playerob = (PlayerObjectSrv)ob;
                                     if (!ob.IsAttackTarget(this)) continue;
                                     if (playerob.GMGameMaster || ob.Hidden && (!CoolEye || Level < ob.Level) || Envir.Time < HallucinationTime) continue;
 
@@ -1756,7 +1756,7 @@ namespace Server.ExineObjects
                                     {
                                         for (int j = 0; j < playerob.Pets.Count; j++)
                                         {
-                                            MonsterObject pet = playerob.Pets[j];
+                                            MonsterObjectSrv pet = playerob.Pets[j];
 
                                             if (!pet.IsAttackTarget(this)) continue;
                                             Target = pet;
@@ -1814,7 +1814,7 @@ namespace Server.ExineObjects
                 if (cell.Objects != null)
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject ob = cell.Objects[i];
+                        MapObjectSrv ob = cell.Objects[i];
                         if (!ob.Blocking) continue;
                         return;
                     }
@@ -1860,7 +1860,7 @@ namespace Server.ExineObjects
             for (int i = 0; i < cell.Objects.Count; i++)
             {
                 if (cell.Objects[i].Race != ObjectType.Spell) continue;
-                SpellObject ob = (SpellObject)cell.Objects[i];
+                SpellObjectSrv ob = (SpellObjectSrv)cell.Objects[i];
 
                 ob.ProcessSpell(this);
                 //break;
@@ -1882,7 +1882,7 @@ namespace Server.ExineObjects
             if (cell.Objects != null)
                 for (int i = 0; i < cell.Objects.Count; i++)
                 {
-                    MapObject ob = cell.Objects[i];
+                    MapObjectSrv ob = cell.Objects[i];
                     if (!ob.Blocking || Race == ObjectType.Creature) continue;
 
                     return false;
@@ -1916,7 +1916,7 @@ namespace Server.ExineObjects
             for (int i = 0; i < cell.Objects.Count; i++)
             {
                 if (cell.Objects[i].Race != ObjectType.Spell) continue;
-                SpellObject ob = (SpellObject)cell.Objects[i];
+                SpellObjectSrv ob = (SpellObjectSrv)cell.Objects[i];
 
                 ob.ProcessSpell(this);
                 //break;
@@ -1974,13 +1974,13 @@ namespace Server.ExineObjects
 
                     for (int i = 0; i < cell.Objects.Count; i++)
                     {
-                        MapObject targetob = cell.Objects[i];
+                        MapObjectSrv targetob = cell.Objects[i];
                         if (targetob == null || targetob.Node == null || targetob.Race != ObjectType.Monster) continue;
-                        if (((MonsterObject)targetob).ShockTime == 0) continue;
+                        if (((MonsterObjectSrv)targetob).ShockTime == 0) continue;
 
                         //each centerTarget has its own effect which needs to be cleared when no longer shocked
-                        if (((MonsterObject)targetob).BindingShotCenter) ((MonsterObject)targetob).ReleaseBindingShot();
-                        else ((MonsterObject)targetob).ShockTime = 0;
+                        if (((MonsterObjectSrv)targetob).BindingShotCenter) ((MonsterObjectSrv)targetob).ReleaseBindingShot();
+                        else ((MonsterObjectSrv)targetob).ShockTime = 0;
 
                         break;
                     }
@@ -2007,7 +2007,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Monster:
@@ -2016,7 +2016,7 @@ namespace Server.ExineObjects
                                     if (ob.Hidden && (!CoolEye || Level < ob.Level)) continue;
                                     if (ob.Race == ObjectType.Player)
                                     {
-                                        PlayerObject player = ((PlayerObject)ob);
+                                        PlayerObjectSrv player = ((PlayerObjectSrv)ob);
                                         if (player.GMGameMaster) continue;
                                     }
                                     return true;
@@ -2049,7 +2049,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Monster:
@@ -2058,7 +2058,7 @@ namespace Server.ExineObjects
                                     if (ob.IsAttackTarget(this)) continue;
                                     if (ob.Race == ObjectType.Player)
                                     {
-                                        PlayerObject player = ((PlayerObject)ob);
+                                        PlayerObjectSrv player = ((PlayerObjectSrv)ob);
                                         if (player.GMGameMaster) continue;
                                     }
                                     return true;
@@ -2073,9 +2073,9 @@ namespace Server.ExineObjects
             return false;
         }
 
-        protected List<MapObject> FindAllFriends(int dist, Point location, bool needSight = true, bool ownAI = true)
+        protected List<MapObjectSrv> FindAllFriends(int dist, Point location, bool needSight = true, bool ownAI = true)
         {
-            List<MapObject> targets = new List<MapObject>();
+            List<MapObjectSrv> targets = new List<MapObjectSrv>();
             for (int d = 0; d <= dist; d++)
             {
                 for (int y = location.Y - d; y <= location.Y + d; y++)
@@ -2093,7 +2093,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
 
                             if (ob == this) continue;
 
@@ -2102,7 +2102,7 @@ namespace Server.ExineObjects
                                 case ObjectType.Monster:
                                 case ObjectType.Player:
                                     if (ob.Dead) continue;
-                                    if (!ownAI && ob.Race == ObjectType.Monster && ((MonsterObject)ob).Info.AI == Info.AI) continue;
+                                    if (!ownAI && ob.Race == ObjectType.Monster && ((MonsterObjectSrv)ob).Info.AI == Info.AI) continue;
                                     if (!ob.IsFriendlyTarget(this)) continue;
                                     if (ob.Master != Master) continue;
                                     if (ob.Hidden && (!CoolEye || Level < ob.Level) && needSight) continue;
@@ -2118,9 +2118,9 @@ namespace Server.ExineObjects
             return targets;
         }
 
-        public List<MapObject> FindAllNearby(int dist, Point location, bool needSight = true)
+        public List<MapObjectSrv> FindAllNearby(int dist, Point location, bool needSight = true)
         {
-            List<MapObject> targets = new List<MapObject>();
+            List<MapObjectSrv> targets = new List<MapObjectSrv>();
             for (int d = 0; d <= dist; d++)
             {
                 for (int y = location.Y - d; y <= location.Y + d; y++)
@@ -2138,7 +2138,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Monster:
@@ -2155,9 +2155,9 @@ namespace Server.ExineObjects
             return targets;
         }
 
-        protected List<MapObject> FindAllTargets(int dist, Point location, bool needSight = true)
+        protected List<MapObjectSrv> FindAllTargets(int dist, Point location, bool needSight = true)
         {
-            List<MapObject> targets = new List<MapObject>();
+            List<MapObjectSrv> targets = new List<MapObjectSrv>();
             for (int d = 0; d <= dist; d++)
             {
                 for (int y = location.Y - d; y <= location.Y + d; y++)
@@ -2175,7 +2175,7 @@ namespace Server.ExineObjects
 
                         for (int i = 0; i < cell.Objects.Count; i++)
                         {
-                            MapObject ob = cell.Objects[i];
+                            MapObjectSrv ob = cell.Objects[i];
                             switch (ob.Race)
                             {
                                 case ObjectType.Monster:
@@ -2184,7 +2184,7 @@ namespace Server.ExineObjects
                                     if (ob.Hidden && (!CoolEye || Level < ob.Level) && needSight) continue;
                                     if (ob.Race == ObjectType.Player)
                                     {
-                                        PlayerObject player = ((PlayerObject)ob);
+                                        PlayerObjectSrv player = ((PlayerObjectSrv)ob);
                                         if (player.GMGameMaster) continue;
                                     }
                                     targets.Add(ob);
@@ -2199,7 +2199,7 @@ namespace Server.ExineObjects
             return targets;
         }
 
-        public override bool IsAttackTarget(HumanObject attacker)
+        public override bool IsAttackTarget(HumanObjectSrv attacker)
         {
             if (attacker == null || attacker.Node == null) return false;
             if (Dead) return false;
@@ -2215,14 +2215,14 @@ namespace Server.ExineObjects
                     return Master.GroupMembers == null || !Master.GroupMembers.Contains(attacker);
                 case AttackMode.Guild:
                     {
-                        if (!(Master is PlayerObject)) return false;
-                        PlayerObject master = (PlayerObject)Master;
+                        if (!(Master is PlayerObjectSrv)) return false;
+                        PlayerObjectSrv master = (PlayerObjectSrv)Master;
                         return master.MyGuild == null || master.MyGuild != attacker.MyGuild;
                     }
                 case AttackMode.EnemyGuild:
                     {
-                        if (!(Master is PlayerObject)) return false;
-                        PlayerObject master = (PlayerObject)Master;
+                        if (!(Master is PlayerObjectSrv)) return false;
+                        PlayerObjectSrv master = (PlayerObjectSrv)Master;
                         return (master.MyGuild != null && attacker.MyGuild != null) && master.MyGuild.IsEnemy(attacker.MyGuild);
                     }
                 case AttackMode.RedBrown:
@@ -2231,7 +2231,7 @@ namespace Server.ExineObjects
                     return true;
             }
         }
-        public override bool IsAttackTarget(MonsterObject attacker)
+        public override bool IsAttackTarget(MonsterObjectSrv attacker)
         {
             if (attacker == null || attacker.Node == null) return false;
             if (Dead || attacker == this) return false;
@@ -2264,7 +2264,7 @@ namespace Server.ExineObjects
                 switch (attacker.Master.AMode)
                 {
                     case AttackMode.Group:
-                        if (Master.GroupMembers != null && Master.GroupMembers.Contains((PlayerObject)attacker.Master)) return false;
+                        if (Master.GroupMembers != null && Master.GroupMembers.Contains((PlayerObjectSrv)attacker.Master)) return false;
                         break;
                     case AttackMode.Guild:
                         break;
@@ -2282,7 +2282,7 @@ namespace Server.ExineObjects
 
                 for (int i = 0; i < attacker.Master.Pets.Count; i++)
                 {
-                    MonsterObject ob = attacker.Master.Pets[i];
+                    MonsterObjectSrv ob = attacker.Master.Pets[i];
                     if (ob == Target || ob.Target == this) return true;
                 }
 
@@ -2295,7 +2295,7 @@ namespace Server.ExineObjects
 
                 for (int i = 0; i < attacker.Master.Pets.Count; i++)
                 {
-                    MonsterObject ob = attacker.Master.Pets[i];
+                    MonsterObjectSrv ob = attacker.Master.Pets[i];
                     if (ob == Target || ob.Target == this) return true;
                 }
 
@@ -2307,7 +2307,7 @@ namespace Server.ExineObjects
 
             return Envir.Time < attacker.RageTime;
         }
-        public override bool IsFriendlyTarget(HumanObject ally)
+        public override bool IsFriendlyTarget(HumanObjectSrv ally)
         {
             if (Master == null) return false;
             if (Master == ally) return true;
@@ -2326,7 +2326,7 @@ namespace Server.ExineObjects
             return true;
         }
 
-        public override bool IsFriendlyTarget(MonsterObject ally)
+        public override bool IsFriendlyTarget(MonsterObjectSrv ally)
         {
             if (Master != null) return false;
             if (ally.Race != ObjectType.Monster) return false;
@@ -2335,7 +2335,7 @@ namespace Server.ExineObjects
             return true;
         }
 
-        public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
+        public override int Attacked(HumanObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             if (Target == null && attacker.IsAttackTarget(this))
             {
@@ -2425,7 +2425,7 @@ namespace Server.ExineObjects
                 if (attacker.HasBuff(BuffType.Mentor, out _))
                 {
                     CharacterInfo mentee = Envir.GetCharacterInfo(attacker.Info.Mentor);
-                    PlayerObject player = Envir.GetPlayer(mentee.Name);
+                    PlayerObjectSrv player = Envir.GetPlayer(mentee.Name);
                     if (player != null && player.CurrentMap == attacker.CurrentMap && Functions.InRange(player.CurrentLocation, attacker.CurrentLocation, Globals.DataRange) && !player.Dead)
                     {
                         if (GroupMembers != null && GroupMembers.Contains(player))
@@ -2434,14 +2434,14 @@ namespace Server.ExineObjects
                 }
             }
 
-            if (Master != null && Master != attacker && Master.Race == ObjectType.Player && Envir.Time > Master.BrownTime && Master.PKPoints < 200 && !((PlayerObject)Master).AtWar(attacker))
+            if (Master != null && Master != attacker && Master.Race == ObjectType.Player && Envir.Time > Master.BrownTime && Master.PKPoints < 200 && !((PlayerObjectSrv)Master).AtWar(attacker))
             {
                 attacker.BrownTime = Envir.Time + Settings.Minute;
             }
 
             for (int i = 0; i < attacker.Pets.Count; i++)
             {
-                MonsterObject ob = attacker.Pets[i];
+                MonsterObjectSrv ob = attacker.Pets[i];
 
                 if (IsAttackTarget(ob) && (ob.Target == null)) ob.Target = this;
             }
@@ -2452,7 +2452,7 @@ namespace Server.ExineObjects
             return damage - armour;
         }
 
-        public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
+        public override int Attacked(MonsterObjectSrv attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
             if (Target == null && attacker.IsAttackTarget(this))
                 Target = attacker;
@@ -2547,7 +2547,7 @@ namespace Server.ExineObjects
             return damage - armour;
         }
 
-        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true)
+        public override void ApplyPoison(Poison p, MapObjectSrv Caster = null, bool NoResist = false, bool ignoreDefence = true)
         {
             if (p.Owner != null && p.Owner.IsAttackTarget(this) && Target == null)
                 Target = p.Owner;
@@ -2603,7 +2603,7 @@ namespace Server.ExineObjects
             PoisonList.Add(p);
         }
 
-        public override Buff AddBuff(BuffType type, MapObject owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
+        public override Buff AddBuff(BuffType type, MapObjectSrv owner, int duration, Stats stats, bool refreshStats = true, bool updateOnly = false, params int[] values)
         {
             Buff b = base.AddBuff(type, owner, duration, stats, refreshStats, updateOnly, values);
 
@@ -2673,7 +2673,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2698,7 +2698,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2722,7 +2722,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2747,7 +2747,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2772,7 +2772,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2796,7 +2796,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2820,7 +2820,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2845,7 +2845,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2869,7 +2869,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2893,7 +2893,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2919,7 +2919,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2943,7 +2943,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Remove(this);
                             }
@@ -2973,7 +2973,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -2998,7 +2998,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3022,7 +3022,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3046,7 +3046,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3071,7 +3071,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3095,7 +3095,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3120,7 +3120,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3145,7 +3145,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3169,7 +3169,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3194,7 +3194,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3219,7 +3219,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3243,7 +3243,7 @@ namespace Server.ExineObjects
 
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
-                                MapObject ob = cell.Objects[i];
+                                MapObjectSrv ob = cell.Objects[i];
                                 if (ob.Race != ObjectType.Player) continue;
                                 ob.Add(this);
                             }
@@ -3253,13 +3253,13 @@ namespace Server.ExineObjects
             }
         }
 
-        public override void Add(HumanObject player)
+        public override void Add(HumanObjectSrv player)
         {
             player.Enqueue(GetInfo());
             SendHealth(player);
         }
 
-        public override void SendHealth(HumanObject player)
+        public override void SendHealth(HumanObjectSrv player)
         {
             if (!player.IsMember(Master) && !(player.IsMember(EXPOwner) && AutoRev) && Envir.Time > RevTime) return;
             byte time = Math.Min(byte.MaxValue, (byte)Math.Max(5, (RevTime - Envir.Time) / 1000));
@@ -3291,7 +3291,7 @@ namespace Server.ExineObjects
 
 
         // MONSTER AI ATTACKS \\\
-        protected virtual void PoisonTarget(MapObject target, int chanceToPoison, long poisonDuration, PoisonType poison, long poisonTickSpeed = 1000, bool noResist = false, bool ignoreDefence = true)
+        protected virtual void PoisonTarget(MapObjectSrv target, int chanceToPoison, long poisonDuration, PoisonType poison, long poisonTickSpeed = 1000, bool noResist = false, bool ignoreDefence = true)
         {
             int value = GetAttackPower(Stats[Stat.MinSC], Stats[Stat.MaxSC]);
 
@@ -3350,7 +3350,7 @@ namespace Server.ExineObjects
 
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
-                    MapObject ob = cell.Objects[o];
+                    MapObjectSrv ob = cell.Objects[o];
                     if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                     {
                         if (!ob.IsAttackTarget(this)) continue;
@@ -3388,7 +3388,7 @@ namespace Server.ExineObjects
 
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
-                    MapObject ob = cell.Objects[o];
+                    MapObjectSrv ob = cell.Objects[o];
                     if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                     {
                         if (!ob.IsAttackTarget(this)) continue;
@@ -3457,7 +3457,7 @@ namespace Server.ExineObjects
 
                     for (int o = 0; o < cell.Objects.Count; o++)
                     {
-                        MapObject ob = cell.Objects[o];
+                        MapObjectSrv ob = cell.Objects[o];
                         if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player )
                         {
                             if (!ob.IsAttackTarget(this)) continue;
@@ -3495,7 +3495,7 @@ namespace Server.ExineObjects
 
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
-                    MapObject ob = cell.Objects[o];
+                    MapObjectSrv ob = cell.Objects[o];
                     if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                     if (!ob.IsAttackTarget(this)) continue;
 
@@ -3523,7 +3523,7 @@ namespace Server.ExineObjects
 
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
-                    MapObject ob = cell.Objects[o];
+                    MapObjectSrv ob = cell.Objects[o];
                     if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                     if (!ob.IsAttackTarget(this)) continue;
 
@@ -3580,7 +3580,7 @@ namespace Server.ExineObjects
 
                     for (int o = 0; o < cell.Objects.Count; o++)
                     {
-                        MapObject ob = cell.Objects[o];
+                        MapObjectSrv ob = cell.Objects[o];
                         if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster ) continue;
                         if (!ob.IsAttackTarget(this)) continue;
 

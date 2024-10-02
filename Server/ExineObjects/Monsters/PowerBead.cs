@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class PowerBead : MonsterObject
+    public class PowerBead : MonsterObjectSrv
     {
         public bool Summoned;
 
@@ -87,7 +87,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
 
             if (target == null || target.CurrentMap != CurrentMap || target.Node == null) return;
 
@@ -162,7 +162,7 @@ namespace Server.ExineObjects.Monsters
             };
         }
 
-        public static bool SpawnRandom(MonsterObject owner, Point spawn)
+        public static bool SpawnRandom(MonsterObjectSrv owner, Point spawn)
         {
             var beads = Envir.MonsterInfoList.Where(x => x.AI == 149).ToList();
 

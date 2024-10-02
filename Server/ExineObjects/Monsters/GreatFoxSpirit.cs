@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class GreatFoxSpirit : MonsterObject
+    public class GreatFoxSpirit : MonsterObjectSrv
     {
         private byte _stage;
         private long RecallTime;
@@ -56,7 +56,7 @@ namespace Server.ExineObjects.Monsters
             if (Functions.MaxDistance(CurrentLocation, Target.CurrentLocation) > 3 && Envir.Random.Next(10) == 0 && Envir.Time >= RecallTime)
             {
                 RecallTime = Envir.Time + 10000;
-                List<MapObject> targets = FindAllTargets(30, CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(30, CurrentLocation);
                 if (targets.Count != 0 && Envir.Random.Next(4) > 0)
                 {
                     for (int i = 0; i < targets.Count; i++)
@@ -106,7 +106,7 @@ namespace Server.ExineObjects.Monsters
 
             bool ranged = CurrentLocation == Target.CurrentLocation || Functions.MaxDistance(CurrentLocation, Target.CurrentLocation) > 2;
             
-            List<MapObject> targets = FindAllTargets(ranged ? AttackRange : 2, CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(ranged ? AttackRange : 2, CurrentLocation);
             if (targets.Count == 0) return;
 
             if (ranged) Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
@@ -124,7 +124,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 

@@ -3,7 +3,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class HellKnight : MonsterObject
+    public class HellKnight : MonsterObjectSrv
     {
         public bool Summoned;
         public HellLord Lord;

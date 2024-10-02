@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class BoneSpearman : MonsterObject
+    public class BoneSpearman : MonsterObjectSrv
     {
         protected internal BoneSpearman(MonsterInfo info)
             : base(info)

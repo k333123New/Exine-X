@@ -13,9 +13,9 @@ namespace Server.ExineObjects
             get { return MessageQueue.Instance; }
         }
 
-        private readonly PlayerObject _player;
+        private readonly PlayerObjectSrv _player;
 
-        public Reporting(PlayerObject player)
+        public Reporting(PlayerObjectSrv player)
         {
             this._player = player;
         }
@@ -154,14 +154,14 @@ namespace Server.ExineObjects
 
         #region Kill Actions
 
-        public void KilledPlayer(PlayerObject obj, string info = "", [CallerMemberName] string source = "")
+        public void KilledPlayer(PlayerObjectSrv obj, string info = "", [CallerMemberName] string source = "")
         {
             string message = $"Killed Player {obj.Name} {info}";
 
             LogMessage(message, source);
         }
 
-        public void KilledMonster(MonsterObject obj, string info = "", [CallerMemberName] string source = "")
+        public void KilledMonster(MonsterObjectSrv obj, string info = "", [CallerMemberName] string source = "")
         {
             string message = $"Killed Monster {obj.Name} {info}";
 

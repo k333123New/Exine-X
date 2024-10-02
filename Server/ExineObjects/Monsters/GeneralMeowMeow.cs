@@ -13,7 +13,7 @@ namespace Server.ExineObjects.Monsters
     /// Summons Slaves periodically
     /// </summary>
 
-    public class GeneralMeowMeow : MonsterObject
+    public class GeneralMeowMeow : MonsterObjectSrv
     {
         public long SlaveSpawnTime;        
         public int ShieldUpDuration;
@@ -139,14 +139,14 @@ namespace Server.ExineObjects.Monsters
             // Whilst Energy Shield is up, attack all players every few seconds.
             if (Envir.Time > ThunderAttackTime)
             {
-                List<MapObject> targets = FindAllTargets(AttackRange, Target.CurrentLocation);
+                List<MapObjectSrv> targets = FindAllTargets(AttackRange, Target.CurrentLocation);
                 if (targets.Count == 0) return;
 
                 for (int i = 0; i < targets.Count; i++)
                 {
                     if (targets[i].IsAttackTarget(this))
                     {
-                        var spellObj = new SpellObject
+                        var spellObj = new SpellObjectSrv
                         {
                             Spell = Spell.GeneralMeowMeowThunder,
                             Value = Envir.Random.Next(Stats[Stat.MinMC], Stats[Stat.MaxMC]),
@@ -177,7 +177,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool slamDamage = (bool)data[3];
@@ -189,13 +189,13 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteRangeAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
 
             if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
 
-            List<MapObject> targets = FindAllTargets(2, target.CurrentLocation);
+            List<MapObjectSrv> targets = FindAllTargets(2, target.CurrentLocation);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)
@@ -210,7 +210,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < count; i++)
             {
-                MonsterObject mob = null;
+                MonsterObjectSrv mob = null;
                 switch (Envir.Random.Next(4))
                 {
                     case 0:

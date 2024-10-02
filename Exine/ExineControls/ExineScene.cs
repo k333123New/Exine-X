@@ -192,9 +192,7 @@ namespace Exine.ExineControls
                 case (short)ServerPacketIds.NewRecipeInfo:
                     NewRecipeInfo((S.NewRecipeInfo)p);
                     break;
-                case (short)ServerPacketIds.NewHeroInfo:
-                    NewHeroInfo((S.NewHeroInfo)p);
-                    break;
+                
             }
         }
 
@@ -203,21 +201,7 @@ namespace Exine.ExineControls
             ExineMainScene.ItemInfoList.Add(info.Info);
         }
 
-        private void NewHeroInfo(S.NewHeroInfo info)
-        {
-            AddHeroInformation(info.Info, info.StorageIndex);
-        }
-
-        public void AddHeroInformation(ClientHeroInformation info, int storageIndex = -1)
-        {
-            if (info == null) return;
-            ExineMainScene.HeroInfoList.RemoveAll(x => x.Index == info.Index);
-            ExineMainScene.HeroInfoList.Add(info);
-
-            if (storageIndex < 0) return;
-            ExineMainScene.HeroStorage[storageIndex] = info;
-        }
-
+         
         private void NewChatItem(S.NewChatItem p)
         {
             if (ExineMainScene.ChatItemList.Any(x => x.UniqueID == p.Item.UniqueID)) return;

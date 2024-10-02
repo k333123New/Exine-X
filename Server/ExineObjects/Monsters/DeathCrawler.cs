@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class DeathCrawler : MonsterObject
+    public class DeathCrawler : MonsterObjectSrv
     {
         protected internal DeathCrawler(MonsterInfo info)
             : base(info)
@@ -18,7 +18,7 @@ namespace Server.ExineObjects.Monsters
             ActionList.Add(new DelayedAction(DelayedType.Die, Envir.Time + 500));
         }
 
-        public override void ApplyNegativeEffects(HumanObject attacker, DefenceType type, ushort levelOffset)
+        public override void ApplyNegativeEffects(HumanObjectSrv attacker, DefenceType type, ushort levelOffset)
         {
             base.ApplyNegativeEffects(attacker, type, levelOffset);
 
@@ -32,7 +32,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteDeath(IList<object> data)
         {
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation, false);
+            List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation, false);
             if (targets.Count == 0) return;
 
             for (int i = 0; i < targets.Count; i++)

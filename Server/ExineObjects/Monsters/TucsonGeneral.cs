@@ -4,7 +4,7 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class TucsonGeneral : MonsterObject
+    public class TucsonGeneral : MonsterObjectSrv
     {
 
         private long _RageTime;
@@ -61,7 +61,7 @@ namespace Server.ExineObjects.Monsters
                     var start = Envir.Random.Next(0, 5000);
                     var value = Envir.Random.Next(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
 
-                    var spellObj = new SpellObject
+                    var spellObj = new SpellObjectSrv
                     {
                         Spell = Spell.TucsonGeneralRock,
                         Value = value,
@@ -126,7 +126,7 @@ namespace Server.ExineObjects.Monsters
 
         protected override void CompleteAttack(IList<object> data)
         {
-            MapObject target = (MapObject)data[0];
+            MapObjectSrv target = (MapObjectSrv)data[0];
             int damage = (int)data[1];
             DefenceType defence = (DefenceType)data[2];
             bool stomp = (bool)data[3];
