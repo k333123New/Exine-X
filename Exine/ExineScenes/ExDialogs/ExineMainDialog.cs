@@ -8,6 +8,7 @@ using SlimDX;
 using Font = System.Drawing.Font;
 using C = ClientPackets;
 using Microsoft.VisualBasic.ApplicationServices;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -87,13 +88,16 @@ namespace Exine.ExineScenes.ExDialogs
             //33,34
             _ExHPBar = new ExineImageControl
             {
-                Index = 33,
-                Library = Libraries.PANEL0100,
+                //Index = 33,
+                //Library = Libraries.PANEL0100,
+               
+
                 Location = new Point(22, 98),
                 Visible = true,
                 Parent = _ExPortraitDialog,
             };
-            _ExHPBar.BeforeDraw += _ExHPBar_BeforeDraw;
+            _ExHPBar.AfterDraw += _ExHPBar_AfterDraw;
+            //_ExHPBar.BeforeDraw += _ExHPBar_BeforeDraw;
 
             _ExHPLabel = new ExineLabel
             {
@@ -107,13 +111,16 @@ namespace Exine.ExineScenes.ExDialogs
 
             _ExMPBar = new ExineImageControl
             {
-                Index = 34,
-                Library = Libraries.PANEL0100,
+                //Index = 34,
+                //Library = Libraries.PANEL0100,
                 Location = new Point(21, 116),
                 Visible = true,
                 Parent = _ExPortraitDialog,
             };
-            _ExMPBar.BeforeDraw += _ExMPBar_BeforeDraw;
+            _ExMPBar.AfterDraw += _ExMPBar_AfterDraw;
+            //_ExMPBar.BeforeDraw += _ExMPBar_BeforeDraw
+
+
             _ExMPLabel = new ExineLabel
             {
                 Font = new Font(Settings.FontName, 9F, FontStyle.Bold),
@@ -509,6 +516,8 @@ namespace Exine.ExineScenes.ExDialogs
             
         }
 
+      
+
         bool isPhotoUpdateOK = false;
         private void _ExPhoto_BeforeDraw(object sender, EventArgs e)
         {
@@ -559,41 +568,46 @@ namespace Exine.ExineScenes.ExDialogs
             return recvBitmap;
         }
 
-        private void _ExHPBar_BeforeDraw(object sender, EventArgs e)
+        private void _ExHPBar_AfterDraw(object sender, EventArgs e)
         {
-            if (_ExHPBar.Library == null) return;
-
-            //double percent = MapObject.User.Experience / (double)MapObject.User.MaxExperience;
+            Console.WriteLine("_ExHPBar_AfterDraw!!!!!!!!!!!!!!@@@@@@@@@");
             double percent = (double)MapObject.User.PercentHealth;//MAXHP ?
             if (percent > 1) percent = 1;
             if (percent <= 0) return;
 
+            //k333123 test
+            percent = 0.8; 
+
             Rectangle section = new Rectangle
             {
-                Size = new Size((int)((_ExHPBar.Size.Width - 3) * percent), _ExHPBar.Size.Height)
+                //Size = new Size((int)((_ExHPBar.Size.Width - 3) * percent), _ExHPBar.Size.Height) 
+                Size = new Size((int)(154 * percent), 11)
             };
-
-            _ExHPBar.Library.Draw(_ExHPBar.Index, section, _ExHPBar.DisplayLocation, Color.White, false);
+            Libraries.PANEL0100.Draw(33, section, _ExHPBar.DisplayLocation, Color.White, false); 
         }
 
-        private void _ExMPBar_BeforeDraw(object sender, EventArgs e)
+        private void _ExMPBar_AfterDraw(object sender, EventArgs e)
         {
-            if (_ExMPBar.Library == null) return;
-
-            //double percent = MapObject.User.HP / (double)MapObject.User.PercentHealth;//MAXHP ?
+            Console.WriteLine("_ExMPBar_AfterDraw!!!!!!!!!!!!!!@@@@@@@@@");
             double percent = (double)MapObject.User.PercentMana;//MAXHP ?
             if (percent > 1) percent = 1;
-            if (percent <= 0) return;
+            if (percent <= 0) percent = 0;
+            //if (percent <= 0) return; //퍼센트 부분 나오게 해야함!!! 0으로 잡히는듯
+
+                //k333123 test
+                percent = 0.5;
 
             Rectangle section = new Rectangle
             {
-                Size = new Size((int)((_ExMPBar.Size.Width - 3) * percent), _ExMPBar.Size.Height)
+                //Size = new Size((int)((_ExHPBar.Size.Width - 3) * percent), _ExHPBar.Size.Height) 
+                Size = new Size((int)(154 * percent), 11)
             };
-
-            _ExMPBar.Library.Draw(_ExMPBar.Index, section, _ExMPBar.DisplayLocation, Color.White, false);
+            //Libraries.PANEL0100.Draw(34, section, _ExMPBar.DisplayLocation, Color.White, false);
+            Libraries.PANEL0100.Draw(34, section, _ExMPBar.DisplayLocation, Color.White, false);
         }
 
 
+        //HP MP 참고하여 반영할것
         private void ExperienceBar_BeforeDraw(object sender, EventArgs e)
         {
             if (ExperienceBar.Library == null) return;
@@ -609,6 +623,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             ExperienceBar.Library.Draw(ExperienceBar.Index, section, ExperienceBar.DisplayLocation, Color.White, false);
         }
+
 
 
         public void Process()
@@ -695,10 +710,10 @@ namespace Exine.ExineScenes.ExDialogs
             _ExLevelLabel.Text = User.Level.ToString();
 
             _ExHPLabel.Text = string.Format("{0}/{1}", MapObject.User.HP , MapObject.User.Stats[Stat.HP]);
-            _ExHPLabel.Location = new Point((_ExHPBar.Size.Width / 2) - 20, -2);
+            _ExHPLabel.Location = new Point((154 / 2) - 20, -2);
 
             _ExMPLabel.Text = string.Format("{0}/{1}", MapObject.User.MP , MapObject.User.Stats[Stat.MP]);
-            _ExMPLabel.Location = new Point((_ExMPBar.Size.Width / 2) - 20, -2);
+            _ExMPLabel.Location = new Point((154 / 2) - 20, -2);
 
 
 

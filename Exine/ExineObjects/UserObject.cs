@@ -25,9 +25,6 @@ namespace Exine.ExineObjects
         public uint TradeGoldAmount;
         public bool AllowTrade;
 
-        public bool RentalGoldLocked;
-        public bool RentalItemLocked;
-        public uint RentalGoldAmount;
 
         public SpecialItemMode ItemMode;
 
