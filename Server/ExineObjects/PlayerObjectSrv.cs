@@ -231,79 +231,7 @@ namespace Server.ExineObjects
         {
             if (Node == null) return;
 
-            for (int i = Pets.Count - 1; i >= 0; i--)
-            {
-                MonsterObjectSrv pet = Pets[i];
-
-                if (pet.Race == ObjectType.Creature)
-                {
-                    //dont save Creatures they will miss alot of AI-Info when they get spawned on login
-                    UnSummonIntelligentCreature(((IntelligentCreatureObjectSrv)pet).PetType, false);
-
-                    Pets.RemoveAt(i);
-                    continue;
-                }
-
-                pet.Master = null;
-
-                if (!pet.Dead)
-                {
-                    switch (Settings.PetSave)
-                    {
-                        case true when Settings.PetSave is true:
-
-                            switch (Class)
-                            {
-                                case (ExineClass.Assassin):
-
-                                    if (Info.Name != Settings.AssassinCloneName)
-                                    {
-                                        Info.Pets.Add(new PetInfo(pet));
-                                    }
-
-                                    break;
-                                default:
-
-                                    Info.Pets.Add(new PetInfo(pet));
-
-                                    break;
-                            }
-
-                            break;
-                        case false when Settings.PetSave is false:
-
-                            switch (Class)
-                            {
-                                case (ExineClass.Wizard):
-
-                                    if (pet.Name == Settings.CloneName)
-                                    {
-                                        Info.Pets.Add(new PetInfo(pet));
-                                    }
-                                    else
-                                    {
-                                        Info.Pets.Add(new PetInfo(pet)
-                                        {
-                                            TameTime = pet.TameTime - Envir.Time
-                                        });
-                                    }
-
-                                    break;
-                            }
-
-                            break;
-                    }
-
-                    Envir.MonsterCount--;
-                    pet.CurrentMap.MonsterCount--;
-
-                    pet.CurrentMap.RemoveObject(pet);
-                    pet.Despawn();
-
-                    Pets.RemoveAt(i);
-                }
-            }
-             
+            
             
             for (int i = 0; i < Info.Magics.Count; i++)
             {
@@ -456,8 +384,7 @@ namespace Server.ExineObjects
                 _fishCounter++;
                 UpdateFish();
             }
-
-            RefreshCreaturesTimeLeft();
+             
         }
         public override void Process(DelayedAction action)
         {
@@ -549,14 +476,6 @@ namespace Server.ExineObjects
                         hitter.Enqueue(new S.RefreshItem { Item = weapon });
                     }
                 }
-            }
-
-            UnSummonIntelligentCreature(SummonedCreatureType);
-
-            for (int i = Pets.Count - 1; i >= 0; i--)
-            {
-                if (Pets[i].Dead) continue;
-                Pets[i].Die();
             }
 
             RemoveBuff(BuffType.MagicShield);
@@ -812,12 +731,7 @@ namespace Server.ExineObjects
 
             Enqueue(new S.GainExperience { Amount = amount });
 
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                MonsterObjectSrv monster = Pets[i];
-                if (monster.CurrentMap == CurrentMap && Functions.InRange(monster.CurrentLocation, CurrentLocation, Globals.DataRange) && !monster.Dead)
-                    monster.PetExp(amount);
-            }
+           
 
             if (MyGuild != null && MyGuild.Name != Settings.NewbieGuild)
                 MyGuild.GainExp(amount);
@@ -1140,70 +1054,7 @@ namespace Server.ExineObjects
             if (Info.CrossHalfMoon) Enqueue(new S.SpellToggle { ObjectID = ObjectID, Spell = Spell.CrossHalfMoon, CanUse = true });
             if (Info.DoubleSlash) Enqueue(new S.SpellToggle { ObjectID = ObjectID, Spell = Spell.DoubleSlash, CanUse = true });
 
-            for (int i = 0; i < Info.Pets.Count; i++)
-            {
-                MonsterObjectSrv monster;
-
-                PetInfo info = Info.Pets[i];
-
-                var monsterInfo = Envir.GetMonsterInfo(info.MonsterIndex);
-                if (monsterInfo == null) continue;
-
-                monster = MonsterObjectSrv.GetMonster(monsterInfo);
-                if (monster == null) continue;
-
-                monster.PetLevel = info.Level;
-                monster.MaxPetLevel = info.MaxPetLevel;
-                monster.PetExperience = info.Experience;
-                monster.Master = this;
-
-                switch (Settings.PetSave)
-                {
-                    case true when Settings.PetSave is true:
-
-                        if (monster.Info.Name == Settings.CloneName)
-                        {
-                            monster.ActionTime = Envir.Time + 1000;
-                            monster.RefreshNameColour(false);
-                        }
-
-                        break;
-                    case false when Settings.PetSave is false:
-
-                        switch (Class)
-                        {
-                            case (ExineClass.Wizard):
-
-                                if (monster.Info.Name == Settings.CloneName)
-                                {
-                                    monster.ActionTime = Envir.Time + 1000;
-                                    monster.RefreshNameColour(false);
-                                }
-                                else
-                                {
-                                    monster.TameTime = Envir.Time + info.TameTime;
-                                }
-
-                                break;
-                        }
-
-                        break;
-                }
-
-                // [grimchamp] leave refresh here incase future code sets levels or stats in above switch
-                monster.RefreshAll(); 
-
-                Pets.Add(monster);
-
-                if (!monster.Spawn(CurrentMap, Back))
-                {
-                    monster.Spawn(CurrentMap, CurrentLocation);
-                }
-
-                monster.SetHP(info.HP);
-            }
-
-            Info.Pets.Clear();
+          
 
             for (int i = 0; i < Buffs.Count; i++)
             {
@@ -1514,14 +1365,7 @@ namespace Server.ExineObjects
             Info.Equipment.CopyTo(packet.Equipment, 0);
             Info.QuestInventory.CopyTo(packet.QuestInventory, 0);
 
-            for (int i = 0; i < Info.IntelligentCreatures.Count; i++)
-            {
-                packet.IntelligentCreatures.Add(Info.IntelligentCreatures[i].CreateClientIntelligentCreature());
-            }
-
-            packet.SummonedCreatureType = SummonedCreatureType;
-            packet.CreatureSummoned = CreatureSummoned;
-
+          
             Enqueue(packet, c);
         }        
         private void GetMapInfo(ExineConnection c)
@@ -1778,12 +1622,7 @@ namespace Server.ExineObjects
 
                 if (player == null)
                 {
-                    IntelligentCreatureObjectSrv creature = GetCreatureByName(parts[0]);
-                    if (creature != null)
-                    {
-                        creature.ReceiveChat(message.Remove(0, parts[0].Length), ChatType.WhisperIn);
-                        return;
-                    }
+                     
                     ReceiveChat(string.Format("Could not find {0}.", parts[0]), ChatType.System);
                     return;
                 }
@@ -2711,11 +2550,7 @@ namespace Server.ExineObjects
                                 return;
                             }
 
-                            if (monster is IntelligentCreatureObjectSrv)
-                            {
-                                ReceiveChat("Cannot spawn an IntelligentCreatureObject.", ChatType.System);
-                                return;
-                            }
+                           
 
                             if (spread == 0)
                                 monster.Spawn(CurrentMap, Front);
@@ -2754,7 +2589,7 @@ namespace Server.ExineObjects
                         if (parts.Length > 3)
                             if (!byte.TryParse(parts[3], out petlevel) || petlevel > 7) petlevel = 0;
 
-                        if (!IsGM && (Pets.Count(t => !t.Dead && t.Race != ObjectType.Creature) >= Globals.MaxPets)) return;
+                        if (!IsGM ) return;
 
                         for (int i = 0; i < count; i++)
                         {
@@ -2767,19 +2602,7 @@ namespace Server.ExineObjects
                                 ReceiveChat($"Cannot spawn conquest item: {monster.Name}", ChatType.System);
                                 return;
                             }
-                            else if (monster is IntelligentCreatureObjectSrv)
-                            {
-                                ReceiveChat($"Cannot spawn an IntelligentCreatureObject.", ChatType.System);
-                                return;
-                            }
-
-                            monster.PetLevel = petlevel;
-                            monster.Master = this;
-                            monster.MaxPetLevel = 7;
-                            monster.Direction = Direction;
-                            monster.ActionTime = Envir.Time + 1000;
-                            monster.Spawn(CurrentMap, Front);
-                            Pets.Add(monster);
+                            
                         }
 
                         ReceiveChat((string.Format("Pet {0} x{1} has been recalled.", mInfo2.Name, count)), ChatType.System);
@@ -2858,12 +2681,7 @@ namespace Server.ExineObjects
 
                         if (count + player.Info.PearlCount >= int.MaxValue)
                             count = (uint)(int.MaxValue - player.Info.PearlCount);
-
-                        player.IntelligentCreatureGainPearls((int)count);
-                        if (count > 1)
-                            MessageQueue.Enqueue(string.Format("Player {0} has been given {1} pearls", player.Name, count));
-                        else
-                            MessageQueue.Enqueue(string.Format("Player {0} has been given {1} pearl", player.Name, count));
+                         
                         break;
                     case "GIVECREDIT":
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
@@ -4328,15 +4146,7 @@ namespace Server.ExineObjects
             if (LastHitter != attacker.Master && attacker.Master.LastHitter != this)
             {
                 bool target = false;
-
-                for (int i = 0; i < attacker.Master.Pets.Count; i++)
-                {
-                    if (attacker.Master.Pets[i].Target != this) continue;
-
-                    target = true;
-                    break;
-                }
-
+                  
                 if (!target)
                     return false;
             }
@@ -5508,138 +5318,7 @@ namespace Server.ExineObjects
 
                     RefreshStats();
                     break;
-                case ItemType.Pets:
-                    if (item.Info.Shape >= 20)
-                    {
-                        switch (item.Info.Shape)
-                        {
-                            case 20://Mirror
-                                {
-                                    Enqueue(new S.IntelligentCreatureEnableRename());
-                                }
-                                break;
-                            case 21://BlackStone
-                                {
-                                    if (item.Count > 1) item.Count--;
-                                    else Info.Inventory[index] = null;
-                                    RefreshBagWeight();
-                                    p.Success = true;
-                                    Enqueue(p);
-                                    BlackstoneRewardItem();
-                                }
-                                return;
-                            case 22://Nuts
-                                {
-                                    if (CreatureSummoned)
-                                    {
-                                        for (int i = 0; i < Pets.Count; i++)
-                                        {
-                                            if (Pets[i].Race != ObjectType.Creature) continue;
-
-                                            var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                                            if (pet.PetType != SummonedCreatureType) continue;
-                                            pet.MaintainfoodTime = item.Info.Effect * Settings.Hour / 1000;
-                                            break;
-                                        }
-                                    }
-                                }
-                                break;
-                            case 23://FairyMoss, FreshwaterClam, Mackerel, Cherry
-                                {
-                                    if (CreatureSummoned)
-                                    {
-                                        for (int i = 0; i < Pets.Count; i++)
-                                        {
-                                            if (Pets[i].Race != ObjectType.Creature) continue;
-
-                                            var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                                            if (pet.PetType != SummonedCreatureType) continue;
-                                            if (pet.Fullness < 10000)
-                                            {
-                                                pet.IncreaseFullness(item.Info.Effect * 100);
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                                break;
-                            case 24://WonderPill
-                                {
-                                    if (CreatureSummoned)
-                                    {
-                                        for (int i = 0; i < Pets.Count; i++)
-                                        {
-                                            if (Pets[i].Race != ObjectType.Creature) continue;
-
-                                            var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                                            if (pet.PetType != SummonedCreatureType) continue;
-                                            if (pet.Fullness == 0)
-                                            {
-                                                pet.IncreaseFullness(100);
-                                            }
-                                            break;
-                                        }
-                                    }
-                                }
-                                break;
-                            case 25://Strongbox
-                                {
-                                    byte boxtype = item.Info.Effect;
-                                    if (item.Count > 1) item.Count--;
-                                    else Info.Inventory[index] = null;
-                                    RefreshBagWeight();
-                                    p.Success = true;
-                                    Enqueue(p);
-                                    StrongboxRewardItem(boxtype);
-                                }
-                                break;
-                            case 26://Wonderdrug
-                                {
-                                    if (HasBuff(BuffType.WonderDrug, out _))
-                                    {
-                                        ReceiveChat("WonderDrug already active.", ChatType.System);
-                                        Enqueue(p);
-                                        return;
-                                    }
-
-                                    var time = item.Info.Durability;
-
-                                    AddBuff(BuffType.WonderDrug, this, time * Settings.Minute, new Stats(item.AddedStats));
-                                }
-                                break;
-                            case 27://FortuneCookies
-                                break;
-                            case 28://Knapsack
-                                {
-                                    var time = item.Info.Durability;
-
-                                    AddBuff(BuffType.Knapsack, this, time * Settings.Minute, new Stats { [Stat.BagWeight] = item.GetTotal(Stat.Luck) });
-                                }
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        int slotIndex = Info.IntelligentCreatures.Count;
-                        UserIntelligentCreature petInfo = new UserIntelligentCreature((IntelligentCreatureType)item.Info.Shape, slotIndex, item.Info.Effect);
-                        if (Info.CheckHasIntelligentCreature((IntelligentCreatureType)item.Info.Shape))
-                        {
-                            ReceiveChat("You already have this creature.", ChatType.Hint);
-                            petInfo = null;
-                        }
-
-                        if (petInfo == null || slotIndex >= 10)
-                        {
-                            Enqueue(p);
-                            return;
-                        }
-
-                        ReceiveChat("Obtained a new creature {" + petInfo.CustomName + "}.", ChatType.Hint);
-
-                        Info.IntelligentCreatures.Add(petInfo);
-                        Enqueue(petInfo.GetInfo());
-                    }
-                    break;
+                
                 case ItemType.Transform: //Transforms
                     {
                         AddBuff(BuffType.Transform, this, (Settings.Second * item.Info.Durability), new Stats(), values: item.Info.Shape);
@@ -5672,21 +5351,7 @@ namespace Server.ExineObjects
                     MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(monsterInfo);
                     if (monster == null) break;
 
-                    if (spawnAsPet)
-                    {
-                        if (Pets.Count(t => !t.Dead && t.Race != ObjectType.Creature) >= Globals.MaxPets)
-                        {
-                            ReceiveChat("Maximum number of pets already reached.", ChatType.Hint);
-                            Enqueue(p);
-                            return;
-                        }
-
-                        monster.Master = this;
-                        monster.PetLevel = 0;
-                        monster.MaxPetLevel = 7;
-
-                        Pets.Add(monster);
-                    }
+                     
 
                     if (conquestOnly)
                     {
@@ -8498,21 +8163,12 @@ namespace Server.ExineObjects
                 member.Enqueue(new S.ObjectHealth { ObjectID = ObjectID, Percent = PercentHealth, Expire = time });
                 Enqueue(new S.ObjectHealth { ObjectID = member.ObjectID, Percent = member.PercentHealth, Expire = time });
 
-                for (int j = 0; j < member.Pets.Count; j++)
-                {
-                    MonsterObjectSrv pet = member.Pets[j];
-
-                    Enqueue(new S.ObjectHealth { ObjectID = pet.ObjectID, Percent = pet.PercentHealth, Expire = time });
-                }
+               
             }
 
             GroupMembers.Add(this);
 
-            for (int j = 0; j < Pets.Count; j++)
-            {
-                Pets[j].BroadcastHealthChange();
-            }
-
+            
             Enqueue(p);
             GroupMemberMapNameChanged();
             GetPlayerLocation();
@@ -10644,422 +10300,6 @@ namespace Server.ExineObjects
 
             return count;
         }
-
-        #endregion
-
-        #region IntelligentCreatures
-
-        public void SummonIntelligentCreature(IntelligentCreatureType pType)
-        {
-            if (pType == IntelligentCreatureType.None) return;
-
-            if (Dead) return;
-
-            if (CreatureSummoned == true || SummonedCreatureType != IntelligentCreatureType.None) return;
-
-            for (int i = 0; i < Info.IntelligentCreatures.Count; i++)
-            {
-                if (Info.IntelligentCreatures[i].PetType != pType) continue;
-
-                MonsterInfo mInfo = Envir.GetMonsterInfo(64, (byte)pType);
-                if (mInfo == null) return;
-
-                MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(mInfo);
-
-                if (monster == null) return;
-                monster.PetLevel = 0;
-                monster.Master = this;
-                monster.MaxPetLevel = 7;
-                monster.Direction = Direction;
-                monster.ActionTime = Envir.Time + 1000;
-
-                var pet = (IntelligentCreatureObjectSrv)monster;
-
-                pet.CreatureInfo = Info.IntelligentCreatures[i];
-                pet.CreatureRules = new IntelligentCreatureRules
-                {
-                    MinimalFullness = Info.IntelligentCreatures[i].Info.MinimalFullness,
-                    MousePickupEnabled = Info.IntelligentCreatures[i].Info.MousePickupEnabled,
-                    MousePickupRange = Info.IntelligentCreatures[i].Info.MousePickupRange,
-                    AutoPickupEnabled = Info.IntelligentCreatures[i].Info.AutoPickupEnabled,
-                    AutoPickupRange = Info.IntelligentCreatures[i].Info.AutoPickupRange,
-                    SemiAutoPickupEnabled = Info.IntelligentCreatures[i].Info.SemiAutoPickupEnabled,
-                    SemiAutoPickupRange = Info.IntelligentCreatures[i].Info.SemiAutoPickupRange,
-                    CanProduceBlackStone = Info.IntelligentCreatures[i].Info.CanProduceBlackStone
-                };
-
-                if (!CurrentMap.ValidPoint(Front)) return;
-                monster.Spawn(CurrentMap, Front);
-                Pets.Add(monster);
-
-                CreatureSummoned = true;
-                SummonedCreatureType = pType;
-
-                ReceiveChat((string.Format("Creature {0} has been summoned.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
-                break;
-            }
-
-            //update client
-            GetCreaturesInfo();
-        }
-
-        public void UnSummonIntelligentCreature(IntelligentCreatureType pType, bool doUpdate = true)
-        {
-            if (pType == IntelligentCreatureType.None) return;
-
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                if (Pets[i].Race != ObjectType.Creature) continue;
-
-                var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                if (pet.PetType != pType) continue;
-                if (doUpdate) ReceiveChat(string.Format("Creature {0} has been dismissed.", pet.CustomName), ChatType.System);
-
-                pet.Die();
-
-                CreatureSummoned = false;
-                SummonedCreatureType = IntelligentCreatureType.None;
-                break;
-            }
-
-            //update client
-            if (doUpdate) GetCreaturesInfo();
-        }
-
-        public void ReleaseIntelligentCreature(IntelligentCreatureType pType, bool doUpdate = true)
-        {
-            if (pType == IntelligentCreatureType.None) return;
-
-            //remove creature
-            for (int i = 0; i < Info.IntelligentCreatures.Count; i++)
-            {
-                if (Info.IntelligentCreatures[i].PetType != pType) continue;
-
-                if (doUpdate) ReceiveChat((string.Format("Creature {0} has been released.", Info.IntelligentCreatures[i].CustomName)), ChatType.System);
-
-                Info.IntelligentCreatures.Remove(Info.IntelligentCreatures[i]);
-                break;
-            }
-
-            //re-arrange slots
-            for (int i = 0; i < Info.IntelligentCreatures.Count; i++)
-                Info.IntelligentCreatures[i].SlotIndex = i;
-
-            //update client
-            if (doUpdate) GetCreaturesInfo();
-        }
-
-        public void UpdateSummonedCreature(IntelligentCreatureType pType)
-        {
-            if (pType == IntelligentCreatureType.None) return;
-
-            UserIntelligentCreature creatureInfo = null;
-            for (int i = 0; i < Info.IntelligentCreatures.Count; i++)
-            {
-                if (Info.IntelligentCreatures[i].PetType != pType) continue;
-
-                creatureInfo = Info.IntelligentCreatures[i];
-                break;
-            }
-            if (creatureInfo == null) return;
-
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                if (Pets[i].Race != ObjectType.Creature) continue;
-
-                var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                if (pet.PetType != pType) continue;
-
-                pet.CustomName = creatureInfo.CustomName;
-                pet.ItemFilter = creatureInfo.Filter;
-                pet.CurrentPickupMode = creatureInfo.petMode;
-                break;
-            }
-        }
-
-        public void RefreshCreaturesTimeLeft()
-        {
-            if (Info.IntelligentCreatures.Count == 0) return;
-
-            if (Envir.Time > CreatureTimeLeftTicker)
-            {
-                //ExpireTime
-                List<int> releasedPets = new List<int>();
-                CreatureTimeLeftTicker = Envir.Time + Settings.Second;
-
-                for (int i = 0; i < Info.IntelligentCreatures.Count; i++)
-                {
-                    if (Info.IntelligentCreatures[i].Expire == DateTime.MinValue) continue; //permanent
-    
-                    if (Info.IntelligentCreatures[i].Expire < Envir.Now)
-                    {
-                        //Info.IntelligentCreatures[i].ExpireTime = 0;
-
-                        if (CreatureSummoned && SummonedCreatureType == Info.IntelligentCreatures[i].PetType)
-                        {
-                            UnSummonIntelligentCreature(SummonedCreatureType, false);
-                        }
-
-                        releasedPets.Add(i);
-                    }
-                }
-
-                for (int i = (releasedPets.Count - 1); i >= 0; i--)
-                {
-                    ReceiveChat(string.Format("Creature {0} has expired.", Info.IntelligentCreatures[releasedPets[i]].CustomName), ChatType.System);
-                    ReleaseIntelligentCreature(Info.IntelligentCreatures[releasedPets[i]].PetType, false);
-                }
-
-                if (SendIntelligentCreatureUpdates && CreatureSummoned && SummonedCreatureType != IntelligentCreatureType.None)
-                {
-                    //update client
-                    GetCreaturesInfo();
-                }
-            }
-        }
-
-        public void RefreshCreatureSummoned()
-        {
-            if (SummonedCreatureType == IntelligentCreatureType.None || !CreatureSummoned)
-            {
-                //make sure both are in the unsummoned state
-                CreatureSummoned = false;
-                SummonedCreatureType = IntelligentCreatureType.None;
-                return;
-            }
-
-            bool petFound = false;
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                if (Pets[i].Race != ObjectType.Creature) continue;
-
-                var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                if (pet.PetType != SummonedCreatureType) continue;
-                petFound = true;
-                break;
-            }
-
-            if (!petFound)
-            {
-                MessageQueue.EnqueueDebugging(string.Format("{0}: SummonedCreature no longer exists?!?. {1}", Name, SummonedCreatureType.ToString()));
-                CreatureSummoned = false;
-                SummonedCreatureType = IntelligentCreatureType.None;
-            }
-        }
-
-        public void IntelligentCreaturePickup(bool mousemode, Point atlocation)
-        {
-            if (!CreatureSummoned) return;
-
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                if (Pets[i].Race != ObjectType.Creature) continue;
-
-                var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                if (pet.PetType != SummonedCreatureType) continue;
-
-                pet.ManualPickup(mousemode, atlocation);
-                break;
-            }
-        }
-
-        public void IntelligentCreatureGainPearls(int amount)
-        {
-            Info.PearlCount += amount;
-            if (Info.PearlCount > int.MaxValue) Info.PearlCount = int.MaxValue;
-        }
-
-        public void IntelligentCreatureLosePearls(int amount)
-        {
-            Info.PearlCount -= amount;
-            if (Info.PearlCount < 0) Info.PearlCount = 0;
-        }
-
-        public void IntelligentCreatureProducePearl()
-        {
-            Info.PearlCount++;
-        }
-        public bool IntelligentCreatureProduceBlackStone()
-        {
-            ItemInfo iInfo = Envir.GetItemInfo(Settings.CreatureBlackStoneName);
-            if (iInfo == null) return false;
-
-            UserItem item = Envir.CreateDropItem(iInfo);
-            item.Count = 1;
-
-            if (!CanGainItem(item))
-            {
-                MailInfo mail = new MailInfo(Info.Index)
-                {
-                    MailID = ++Envir.NextMailID,
-                    Sender = "BlackStone",
-                    Message = "Your pet has produced x1 BlackStone which couldn't be added to your inventory.",
-                    Items = new List<UserItem> { item },
-                };
-
-                mail.Send();
-                return false;
-            }
-
-            GainItem(item);
-            return true;
-        }
-
-        public void IntelligentCreatureSay(IntelligentCreatureType pType, string message)
-        {
-            if (!CreatureSummoned || message == "") return;
-            if (pType != SummonedCreatureType) return;
-
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                if (Pets[i].Race != ObjectType.Creature) continue;
-
-                var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                if (pet.PetType != pType) continue;
-
-                Enqueue(new S.ObjectChat { ObjectID = Pets[i].ObjectID, Text = message, Type = ChatType.Normal });
-                return;
-            }
-        }
-
-        public void StrongboxRewardItem(int boxtype)
-        {
-            int highRate = int.MaxValue;
-            UserItem dropItem = null;
-
-            foreach (DropInfo drop in Envir.StrongboxDrops)
-            {
-                int rate = (int)(Envir.Random.Next(0, drop.Chance) / Settings.DropRate);
-                if (rate < 1) rate = 1;
-
-                if (highRate > rate)
-                {
-                    highRate = rate;
-                    dropItem = Envir.CreateFreshItem(drop.Item);
-                }
-            }
-
-            if (dropItem == null)
-            {
-                ReceiveChat("Nothing found.", ChatType.System);
-                return;
-            }
-
-            if (dropItem.Info.Type == ItemType.Pets && dropItem.Info.Shape == 26)
-            {
-                dropItem = CreateDynamicWonderDrug(boxtype, dropItem);
-            }
-            else
-                dropItem = Envir.CreateDropItem(dropItem.Info);
-
-            if (FreeSpace(Info.Inventory) < 1)
-            {
-                ReceiveChat("No more space.", ChatType.System);
-                return;
-            }
-
-            if (dropItem != null) GainItem(dropItem);
-        }
-
-        public void BlackstoneRewardItem()
-        {
-            int highRate = int.MaxValue;
-            UserItem dropItem = null;
-            foreach (DropInfo drop in Envir.BlackstoneDrops)
-            {
-                int rate = (int)(Envir.Random.Next(0, drop.Chance) / Settings.DropRate); if (rate < 1) rate = 1;
-
-                if (highRate > rate)
-                {
-                    highRate = rate;
-                    dropItem = Envir.CreateDropItem(drop.Item);
-                }
-            }
-            if (FreeSpace(Info.Inventory) < 1)
-            {
-                ReceiveChat("No more space.", ChatType.System);
-                return;
-            }
-            if (dropItem != null) GainItem(dropItem);
-        }
-
-        private UserItem CreateDynamicWonderDrug(int boxtype, UserItem dropitem)
-        {
-            dropitem.CurrentDura = (ushort)1;//* 3600
-            switch ((int)dropitem.Info.Effect)
-            {
-                case 0://exp low/med/high
-                    dropitem.AddedStats[Stat.ExpRatePercent] = 5;
-                    if (boxtype > 0) dropitem.AddedStats[Stat.ExpRatePercent] = 10;
-                    if (boxtype > 1) dropitem.AddedStats[Stat.ExpRatePercent] = 20;
-                    break;
-                case 1://drop low/med/high
-                    dropitem.AddedStats[Stat.ItemDropRatePercent] = 10;
-                    if (boxtype > 0) dropitem.AddedStats[Stat.ItemDropRatePercent] = 20;
-                    if (boxtype > 1) dropitem.AddedStats[Stat.ItemDropRatePercent] = 50;
-                    break;
-                case 2://hp low/med/high
-                    dropitem.AddedStats[Stat.HP] = 50;
-                    if (boxtype > 0) dropitem.AddedStats[Stat.HP] = 100;
-                    if (boxtype > 1) dropitem.AddedStats[Stat.HP] = 200;
-                    break;
-                case 3://mp low/med/high
-                    dropitem.AddedStats[Stat.MP] = 50;
-                    if (boxtype > 0) dropitem.AddedStats[Stat.MP] = 100;
-                    if (boxtype > 1) dropitem.AddedStats[Stat.MP] = 200;
-                    break;
-                case 4://ac low/med/high
-                    dropitem.AddedStats[Stat.MaxAC] = 1;
-                    if (boxtype > 0) dropitem.AddedStats[Stat.MaxAC] = 3;
-                    if (boxtype > 1) dropitem.AddedStats[Stat.MaxAC] = 5;
-                    break;
-                case 5://amc low/med/high
-                    dropitem.AddedStats[Stat.MaxMAC] = 1;
-                    if (boxtype > 0) dropitem.AddedStats[Stat.MaxMAC] = 3;
-                    if (boxtype > 1) dropitem.AddedStats[Stat.MaxMAC] = 5;
-                    break;
-                case 6://speed low/med/high
-                    dropitem.AddedStats[Stat.AttackSpeed] = 2;
-                    if (boxtype > 0) dropitem.AddedStats[Stat.AttackSpeed] = 3;
-                    if (boxtype > 1) dropitem.AddedStats[Stat.AttackSpeed] = 4;
-                    break;
-            }
-
-            return dropitem;
-        }
-
-        private IntelligentCreatureObjectSrv GetCreatureByName(string creatureName)
-        {
-            if (!CreatureSummoned || creatureName == "") return null;
-            if (SummonedCreatureType == IntelligentCreatureType.None) return null;
-
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                if (Pets[i].Race != ObjectType.Creature) continue;
-
-                var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                if (pet.PetType != SummonedCreatureType) continue;
-
-                return (pet);
-            }
-            return null;
-        }
-
-        private void GetCreaturesInfo()
-        {
-            S.UpdateIntelligentCreatureList packet = new S.UpdateIntelligentCreatureList
-            {
-                CreatureSummoned = CreatureSummoned,
-                SummonedCreatureType = SummonedCreatureType,
-                PearlCount = Info.PearlCount,
-            };
-
-            for (int i = 0; i < Info.IntelligentCreatures.Count; i++)
-                packet.CreatureList.Add(Info.IntelligentCreatures[i].CreateClientIntelligentCreature());
-
-            Enqueue(packet);
-        }
-
 
         #endregion
 

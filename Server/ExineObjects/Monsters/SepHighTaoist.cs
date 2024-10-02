@@ -99,32 +99,7 @@ namespace Server.ExineObjects.Monsters
                 TriangleAttack(damage, 2, 1, 800);
                 return;
             }
-
-
-            if (Pets.Count < 1)
-            {
-                MonsterObjectSrv monster;
-
-                MonsterInfo info = Envir.GetMonsterInfo(Settings.ShinsuName);
-                if (info == null) return;
-
-                monster = MonsterObjectSrv.GetMonster(info);
-                monster.PetLevel = 3;
-                monster.Master = this;
-                monster.MaxPetLevel = 7;
-                monster.Direction = Direction;
-                monster.ActionTime = Envir.Time + 1000;
-                monster.Target = Target;
-                Pets.Add(monster);
-
-                Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.SummonShinsu, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
-
-                action = new DelayedAction(DelayedType.Spawn, Envir.Time + 1000, monster, Front);
-
-                CurrentMap.ActionList.Add(action);
-                return;
-            }
-
+             
             Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.SoulFireBall, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
 
             HalfmoonAttack(damage);

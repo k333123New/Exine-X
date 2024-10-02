@@ -87,13 +87,7 @@ namespace Server
             Character.Player.Die();
         }
 
-        private void KillPetsButton_Click(object sender, EventArgs e)
-        {
-            if (Character.Player == null) return;
-
-            for (int i = Character.Player.Pets.Count - 1; i >= 0; i--)
-                Character.Player.Pets[i].Die();
-        }
+       
         private void SafeZoneButton_Click(object sender, EventArgs e)
         {
             Character.Player.Teleport(SMain.Envir.GetMap(Character.BindMapIndex), Character.BindLocation);

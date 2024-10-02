@@ -692,12 +692,7 @@ namespace Exine.ExineScenes
                     case KeybindOptions.PetmodeFocusMasterTarget:
                         Network.Enqueue(new C.ChangePMode { Mode = PetMode.FocusMasterTarget });
                         return;
-                    case KeybindOptions.CreatureAutoPickup://semiauto!
-                        Network.Enqueue(new C.IntelligentCreaturePickup { MouseMode = false, Location = MapControl.MapLocation });
-                        break;
-                    case KeybindOptions.CreaturePickup:
-                        Network.Enqueue(new C.IntelligentCreaturePickup { MouseMode = true, Location = MapControl.MapLocation });
-                        break;
+                    
                     case KeybindOptions.ChangeAttackmode:
                         ChangeAttackMode();
                         break;
@@ -1823,18 +1818,7 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.ResizeStorage:
                     ResizeStorage((S.ResizeStorage)p);
                     break;
-                case (short)ServerPacketIds.NewIntelligentCreature:
-                    NewIntelligentCreature((S.NewIntelligentCreature)p);
-                    break;
-                case (short)ServerPacketIds.UpdateIntelligentCreatureList:
-                    UpdateIntelligentCreatureList((S.UpdateIntelligentCreatureList)p);
-                    break;
-                case (short)ServerPacketIds.IntelligentCreatureEnableRename:
-                    IntelligentCreatureEnableRename((S.IntelligentCreatureEnableRename)p);
-                    break;
-                case (short)ServerPacketIds.IntelligentCreaturePickup:
-                    IntelligentCreaturePickup((S.IntelligentCreaturePickup)p);
-                    break;
+               
                 case (short)ServerPacketIds.NPCPearlGoods:
                     NPCPearlGoods((S.NPCPearlGoods)p);
                     break;
@@ -3481,11 +3465,7 @@ namespace Exine.ExineScenes
                         MapControl.Effects.Add(new Effect(Libraries.Magic2, 690, 10, 1000, ob.CurrentLocation));
                         ob.Remove();
                         break;
-                    case 2:
-                        SoundManager.PlaySound(20000 + (ushort)Spell.DarkBody * 10 + 1);
-                        MapControl.Effects.Add(new Effect(Libraries.Magic2, 2600, 10, 1200, ob.CurrentLocation));
-                        ob.Remove();
-                        break;
+                    
                 }
                 return;
             }
@@ -6067,71 +6047,6 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void NewIntelligentCreature(S.NewIntelligentCreature p)
-        {
-            /*
-            User.IntelligentCreatures.Add(p.Creature);
-
-            MirInputBox inputBox = new MirInputBox("Please give your creature a name.");
-            inputBox.InputTextBox.Text = ExineMainScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName;
-            inputBox.OKButton.Click += (o1, e1) =>
-            {
-                if (IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Update();//refresh changes
-                ExineMainScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1].CustomName = inputBox.InputTextBox.Text;
-                Network.Enqueue(new C.UpdateIntelligentCreature { Creature = ExineMainScene.User.IntelligentCreatures[User.IntelligentCreatures.Count - 1] });
-                inputBox.Dispose();
-            };
-            inputBox.Show();
-            */
-        }
-
-        private void UpdateIntelligentCreatureList(S.UpdateIntelligentCreatureList p)
-        {
-            /*
-            User.CreatureSummoned = p.CreatureSummoned;
-            User.SummonedCreatureType = p.SummonedCreatureType;
-            User.PearlCount = p.PearlCount;
-            if (p.CreatureList.Count != User.IntelligentCreatures.Count)
-            {
-                User.IntelligentCreatures.Clear();
-                for (int i = 0; i < p.CreatureList.Count; i++)
-                    User.IntelligentCreatures.Add(p.CreatureList[i]);
-
-                for (int i = 0; i < IntelligentCreatureDialog.CreatureButtons.Length; i++)
-                    IntelligentCreatureDialog.CreatureButtons[i].Clear();
-
-                IntelligentCreatureDialog.Hide();
-            }
-            else
-            {
-                for (int i = 0; i < p.CreatureList.Count; i++)
-                    User.IntelligentCreatures[i] = p.CreatureList[i];
-                if (IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Update();
-            }
-            */
-        }
-
-        private void IntelligentCreatureEnableRename(S.IntelligentCreatureEnableRename p)
-        {
-            /*
-            IntelligentCreatureDialog.CreatureRenameButton.Visible = true;
-            if (IntelligentCreatureDialog.Visible) IntelligentCreatureDialog.Update();
-            */
-        }
-
-        private void IntelligentCreaturePickup(S.IntelligentCreaturePickup p)
-        {
-            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
-            {
-                MapObject ob = MapControl.Objects[i];
-                if (ob.ObjectID != p.ObjectID) continue;
-
-                MonsterObject monOb = (MonsterObject)ob;
-
-                if (monOb != null) monOb.PlayPickupSound();
-            }
-        }
-
         private void FriendUpdate(S.FriendUpdate p)
         {
             ExineMainScene.Scene.FriendDialog.Friends = p.Friends;
@@ -6373,13 +6288,7 @@ namespace Exine.ExineScenes
                     case ItemType.Potion:
                     case ItemType.Transform: 
                         break;
-                    case ItemType.Pets:
-                        if (HoverItem.Info.Shape == 26 || HoverItem.Info.Shape == 28)//WonderDrug, Knapsack
-                        {
-                            string strTime = Functions.PrintTimeSpanFromSeconds((HoverItem.CurrentDura * 3600), false);
-                            text += string.Format(" Duration {0}", strTime);
-                        }
-                        break;
+                    
                     default:
                         text += string.Format(" {0} {1}/{2}", GameLanguage.Durability, Math.Floor(HoverItem.CurrentDura / 1000M),
                                                    Math.Floor(HoverItem.MaxDura / 1000M));
@@ -6494,9 +6403,7 @@ namespace Exine.ExineScenes
                 case ItemType.Awakening:
                     baseText = GameLanguage.ItemTypeAwakening;
                     break;
-                case ItemType.Pets:
-                    baseText = GameLanguage.ItemTypePets;
-                    break;
+                
                 case ItemType.Transform:
                     baseText = GameLanguage.ItemTypeTransform;
                     break;
@@ -6708,11 +6615,7 @@ namespace Exine.ExineScenes
             {
                 count++;
 
-                if (realItem.Type == ItemType.Pets && realItem.Shape == 28)
-                {
-                    text = string.Format("BagWeight + {0}% ", minValue + addValue);
-                }
-                else if (realItem.Type == ItemType.Potion && realItem.Shape == 4)
+                if (realItem.Type == ItemType.Potion && realItem.Shape == 4)
                 {
                     text = string.Format("Exp + {0}% ", minValue + addValue);
                 }
@@ -11205,8 +11108,7 @@ namespace Exine.ExineScenes
                 case Spell.Vampirism:
                 case Spell.Revelation:
                 case Spell.Entrapment:
-                case Spell.Hallucination:
-                case Spell.DarkBody:
+                case Spell.Hallucination: 
                 case Spell.FireBounce:
                 case Spell.MeteorShower:
                     if (actor.NextMagicObject != null)
@@ -11228,9 +11130,7 @@ namespace Exine.ExineScenes
                 case Spell.PoisonShot:
                 case Spell.CrippleShot:
                 case Spell.NapalmShot:
-                case Spell.SummonVampire:
-                case Spell.SummonToad:
-                case Spell.SummonSnakes:
+               
                     if (!actor.HasClassWeapon)
                     {
                         ExineMainScene.Scene.OutputMessage("You must be wearing a bow to perform this skill.");
@@ -11247,34 +11147,7 @@ namespace Exine.ExineScenes
 
                     if (target != null && target.Race == ObjectType.Monster) MapObject.MagicObjectID = target.ObjectID;
                     break;
-                case Spell.Stonetrap:
-                    if (!User.HasClassWeapon)
-                    {
-                        ExineMainScene.Scene.OutputMessage("You must be wearing a bow to perform this skill.");
-                        User.ClearMagic();
-                        return;
-                    }
-                    if (User.NextMagicObject != null)
-                    {
-                        if (!User.NextMagicObject.Dead && User.NextMagicObject.Race != ObjectType.Item && User.NextMagicObject.Race != ObjectType.Merchant)
-                            target = User.NextMagicObject;
-                    }
-
-                    //if(magic.Spell == Spell.ElementalShot)
-                    //{
-                    //    isTargetSpell = User.HasElements;
-                    //}
-
-                    //switch(magic.Spell)
-                    //{
-                    //    case Spell.SummonVampire:
-                    //    case Spell.SummonToad:
-                    //    case Spell.SummonSnakes:
-                    //        isTargetSpell = false;
-                    //        break;
-                    //}
-
-                    break;
+                 
                 case Spell.Purification:
                 case Spell.Healing:
                 case Spell.UltimateEnhancer:

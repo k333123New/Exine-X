@@ -84,40 +84,7 @@ namespace Server.ExineObjects.Monsters
 
         private void SpawnSlaves()
         {
-            int count = Math.Min(8, 40 - SlaveList.Count);
-
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
-            ActionTime = Envir.Time + 300;
-            AttackTime = Envir.Time + AttackSpeed;
-
-            for (int i = 0; i < count; i++)
-            {
-                MonsterObjectSrv mob = null;
-                switch (Envir.Random.Next(4))
-                {
-                    case 0:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.BoneMonster1));
-                        break;
-                    case 1:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.BoneMonster2));
-                        break;
-                    case 2:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.BoneMonster3));
-                        break;
-                    case 3:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.BoneMonster4));
-                        break;
-                }
-
-                if (mob == null) continue;
-
-                if (!mob.Spawn(CurrentMap, Front))
-                    mob.Spawn(CurrentMap, CurrentLocation);
-
-                mob.Target = Target;
-                mob.ActionTime = Envir.Time + 2000;
-                SlaveList.Add(mob);
-            }
+            
         }
     }
 }

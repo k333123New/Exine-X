@@ -62,8 +62,6 @@
         Belt8Alt,
         Logout,
         Exit,
-        CreaturePickup,
-        CreatureAutoPickup,
         Minimap,
         Bigmap,
         Trade,

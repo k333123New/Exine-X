@@ -633,15 +633,7 @@ namespace Server.ExineNetwork
                 case (short)ClientPacketIds.MailCost:
                     MailCost((C.MailCost)p);
                     break;
-                case (short)ClientPacketIds.RequestIntelligentCreatureUpdates:
-                    RequestIntelligentCreatureUpdates((C.RequestIntelligentCreatureUpdates)p);
-                    break;
-                case (short)ClientPacketIds.UpdateIntelligentCreature:
-                    UpdateIntelligentCreature((C.UpdateIntelligentCreature)p);
-                    break;
-                case (short)ClientPacketIds.IntelligentCreaturePickup:
-                    IntelligentCreaturePickup((C.IntelligentCreaturePickup)p);
-                    break;
+                
                 case (short)ClientPacketIds.AddFriend:
                     AddFriend((C.AddFriend)p);
                     break;
@@ -1772,71 +1764,6 @@ namespace Server.ExineNetwork
             uint cost = Player.GetMailCost(p.ItemsIdx, p.Gold, p.Stamped);
 
             Enqueue(new S.MailCost { Cost = cost });
-        }
-
-        private void RequestIntelligentCreatureUpdates(C.RequestIntelligentCreatureUpdates p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.SendIntelligentCreatureUpdates = p.Update;
-        }
-
-        private void UpdateIntelligentCreature(C.UpdateIntelligentCreature p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            ClientIntelligentCreature petUpdate = p.Creature;
-            if (petUpdate == null) return;
-
-            if (p.ReleaseMe)
-            {
-                Player.ReleaseIntelligentCreature(petUpdate.PetType);
-                return;
-            }
-            else if (p.SummonMe)
-            {
-                Player.SummonIntelligentCreature(petUpdate.PetType);
-                return;
-            }
-            else if (p.UnSummonMe)
-            {
-                Player.UnSummonIntelligentCreature(petUpdate.PetType);
-                return;
-            }
-            else
-            {
-                //Update the creature info
-                for (int i = 0; i < Player.Info.IntelligentCreatures.Count; i++)
-                {
-                    if (Player.Info.IntelligentCreatures[i].PetType == petUpdate.PetType)
-                    {
-                        var reg = new Regex(@"^[A-Za-z0-9]{" + Globals.MinCharacterNameLength + "," + Globals.MaxCharacterNameLength + "}$");
-
-                        if (reg.IsMatch(petUpdate.CustomName))
-                        {
-                            Player.Info.IntelligentCreatures[i].CustomName = petUpdate.CustomName;
-                        }
-
-                        Player.Info.IntelligentCreatures[i].SlotIndex = petUpdate.SlotIndex;
-                        Player.Info.IntelligentCreatures[i].Filter = petUpdate.Filter;
-                        Player.Info.IntelligentCreatures[i].petMode = petUpdate.petMode;
-                    }
-                    else continue;
-                }
-
-                if (Player.CreatureSummoned)
-                {
-                    if (Player.SummonedCreatureType == petUpdate.PetType)
-                        Player.UpdateSummonedCreature(petUpdate.PetType);
-                }
-            }
-        }
-
-        private void IntelligentCreaturePickup(C.IntelligentCreaturePickup p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.IntelligentCreaturePickup(p.MouseMode, p.Location);
         }
 
         private void AddFriend(C.AddFriend p)

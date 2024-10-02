@@ -800,7 +800,7 @@ namespace Server.ExineEnvir
                             {
                                 MonsterObjectSrv mob = (MonsterObjectSrv)action.Params[0];
                                 mob.Spawn(this, (Point)action.Params[1]);
-                                if (action.Params.Length > 2) ((MonsterObjectSrv)action.Params[2]).SlaveList.Add(mob);
+                                
                             }
                             break;
                         case ObjectType.Spell:
@@ -906,40 +906,7 @@ namespace Server.ExineEnvir
 
                 #endregion
 
-                #region SummonSkeleton, SummonShinsu, SummonHolyDeva, ArcherSummons
-
-                case Spell.SummonSkeleton:
-                case Spell.SummonShinsu:
-                case Spell.SummonHolyDeva:
-                case Spell.SummonVampire:
-                case Spell.SummonToad:
-                case Spell.SummonSnakes:
-                    monster = (MonsterObjectSrv)data[2];
-                    front = (Point)data[3];
-
-                    if (monster.Master.Dead) return;
-
-                    if (ValidPoint(front))
-                        monster.Spawn(this, front);
-                    else
-                        monster.Spawn(player.CurrentMap, player.CurrentLocation);
-
-                    monster.Master.Pets.Add(monster);
-                    break;
-                case Spell.Stonetrap:
-                    monster = (MonsterObjectSrv)data[2];
-                    front = (Point)data[3];
-
-                    if (monster.Master.Dead) return;
-
-                    if (ValidPoint(front))
-                        monster.Spawn(this, front);
-                    else
-                        monster.Spawn(player.CurrentMap, player.CurrentLocation);
-
-                    monster.Master.Pets.Add(monster);
-                    break;
-                #endregion
+                 
 
                 #region FireBang, IceStorm
 

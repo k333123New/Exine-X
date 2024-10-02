@@ -147,8 +147,7 @@ namespace Server.ExineObjects
                     return new SnakeTotem(info);
                 case 63:
                     return new CharmedSnake(info);
-                case 64:
-                    return new IntelligentCreatureObjectSrv(info);
+                 
                 case 65:
                     //Common AI: 2 Close attacks with WeakerTeleport
                     return new MutatedManworm(info);
@@ -596,7 +595,7 @@ namespace Server.ExineObjects
         public int RoutePoint;
         public bool Waiting;
         
-        public List<MonsterObjectSrv> SlaveList = new List<MonsterObjectSrv>();
+       
         public List<RouteInfo> Route = new List<RouteInfo>();
 
         public override bool Blocking
@@ -1092,16 +1091,13 @@ namespace Server.ExineObjects
             if (Target != null && (Target.CurrentMap != CurrentMap || !Target.IsAttackTarget(this) || !Functions.InRange(CurrentLocation, Target.CurrentLocation, Globals.DataRange)))
                 Target = null;
 
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
-                if (SlaveList[i].Dead || SlaveList[i].Node == null)
-                    SlaveList.RemoveAt(i);
+           
 
             if (Dead && Envir.Time >= DeadTime)
             {
                 CurrentMap.RemoveObject(this);
                 if (Master != null)
-                {
-                    Master.Pets.Remove(this);
+                { 
                     Master = null;
                 }
 
@@ -1110,8 +1106,7 @@ namespace Server.ExineObjects
             }
 
             if (Master != null && TameTime > 0 && Envir.Time >= TameTime)
-            {
-                Master.Pets.Remove(this);
+            { 
                 Master = null;
                 Broadcast(new S.ObjectName { ObjectID = ObjectID, Name = Name });
             }
@@ -1754,14 +1749,7 @@ namespace Server.ExineObjects
 
                                     if (Master != null)
                                     {
-                                        for (int j = 0; j < playerob.Pets.Count; j++)
-                                        {
-                                            MonsterObjectSrv pet = playerob.Pets[j];
-
-                                            if (!pet.IsAttackTarget(this)) continue;
-                                            Target = pet;
-                                            break;
-                                        }
+                                        
                                     }
                                     continue;
                                 default:
@@ -2277,28 +2265,14 @@ namespace Server.ExineObjects
                         return false;
                 }
 
-                for (int i = 0; i < Master.Pets.Count; i++)
-                    if (Master.Pets[i].EXPOwner == attacker.Master) return true;
-
-                for (int i = 0; i < attacker.Master.Pets.Count; i++)
-                {
-                    MonsterObjectSrv ob = attacker.Master.Pets[i];
-                    if (ob == Target || ob.Target == this) return true;
-                }
-
+                 
                 return Master.LastHitter == attacker.Master;
             }
             else if (attacker.Master != null) //Pet Attacking Wild Monster
             {
                 if (Envir.Time < ShockTime) //Shocked
                     return false;
-
-                for (int i = 0; i < attacker.Master.Pets.Count; i++)
-                {
-                    MonsterObjectSrv ob = attacker.Master.Pets[i];
-                    if (ob == Target || ob.Target == this) return true;
-                }
-
+                 
                 if (Target == attacker.Master)
                     return true;
             }
@@ -2439,12 +2413,7 @@ namespace Server.ExineObjects
                 attacker.BrownTime = Envir.Time + Settings.Minute;
             }
 
-            for (int i = 0; i < attacker.Pets.Count; i++)
-            {
-                MonsterObjectSrv ob = attacker.Pets[i];
-
-                if (IsAttackTarget(ob) && (ob.Target == null)) ob.Target = this;
-            }
+           
 
             BroadcastDamageIndicator(DamageType.Hit, armour - damage);
 
@@ -3285,7 +3254,7 @@ namespace Server.ExineObjects
         }
         public override void Despawn()
         {
-            SlaveList.Clear();
+             
             base.Despawn();
         }
 

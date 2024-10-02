@@ -153,23 +153,7 @@ namespace Server.ExineObjects.Monsters
 
         private void SpawnSlaves()
         {
-            int count = Math.Min(6, 40 - SlaveList.Count);
-
-            ActionTime = Envir.Time + 300;
-            AttackTime = Envir.Time + AttackSpeed;
-
-            for (int i = 0; i < count; i++)
-            {
-                MonsterObjectSrv mob = GetMonster(Envir.GetMonsterInfo(Settings.AncientBatName));                
-                if (mob == null) continue;
-
-                if (!mob.Spawn(CurrentMap, Target.CurrentLocation))
-                    mob.Spawn(CurrentMap, Target.CurrentLocation);
-
-                mob.Target = Target;
-                mob.ActionTime = Envir.Time + 2000;
-                SlaveList.Add(mob);
-            }
+           
         }
 
         protected override void ProcessTarget()

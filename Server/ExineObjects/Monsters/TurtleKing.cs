@@ -156,40 +156,7 @@ namespace Server.ExineObjects.Monsters
 
         private void SpawnSlaves()
         {
-            int count = Math.Min(8, 30 - SlaveList.Count);
-
-            for (int i = 0; i < count; i++)
-            {
-                MonsterObjectSrv mob = null;
-                switch (Envir.Random.Next(7))
-                {
-                    case 0:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.Turtle1));
-                        break;
-                    case 1:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.Turtle2));
-                        break;
-                    case 2:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.Turtle3));
-                        break;
-                    case 3:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.Turtle4));
-                        break;
-                    case 4:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.Turtle5));
-                        break;
-                }
-
-                if (mob == null) continue;
-
-                if (!mob.Spawn(CurrentMap, Front))
-                    mob.Spawn(CurrentMap, CurrentLocation);
-
-                //mob.Master = this;
-                mob.Target = Target;
-                mob.ActionTime = Envir.Time + 2000;
-                SlaveList.Add(mob);
-            }
+           
         }
     }
 }

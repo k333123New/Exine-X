@@ -176,27 +176,7 @@ public enum DefaultNPCType : byte
     Daily,
     Client
 }
-
-public enum IntelligentCreatureType : byte
-{
-    None = 99,
-    BabyPig = 0,
-    Chick = 1,
-    Kitten = 2,
-    BabySkeleton = 3,
-    Baekdon = 4,
-    Wimaen = 5,
-    BlackKitten = 6,
-    BabyDragon = 7,
-    OlympicFlame = 8,
-    BabySnowMan = 9,
-    Frog = 10,
-    BabyMonkey = 11,
-    AngryBird = 12,
-    Foxey = 13,
-    MedicalRat = 14,
-}
-
+ 
 
 //k333123 240319 mob image number!
 //2 blank mob files
@@ -1104,7 +1084,6 @@ public enum ItemType : byte
     Fish = 33,
     Quest = 34,
     Awakening = 35,
-    Pets = 36,
     Transform = 37,
     Deco = 38,
     Socket = 39,
@@ -1422,7 +1401,6 @@ public enum Spell : byte
     SpiritSword = 62,
     Poisoning = 63,
     SoulFireBall = 64,
-    SummonSkeleton = 65,
     Hiding = 67,
     MassHiding = 68,
     SoulShield = 69,
@@ -1434,9 +1412,7 @@ public enum Spell : byte
     MassHealing = 75,
     Hallucination = 76,
     UltimateEnhancer = 77,
-    SummonShinsu = 78,
     Reincarnation = 79,
-    SummonHolyDeva = 80,
     Curse = 81,
     Plague = 82,
     PoisonCloud = 83,
@@ -1457,7 +1433,6 @@ public enum Spell : byte
     MoonLight = 100,
     MPEater = 101,
     SwiftFeet = 102,
-    DarkBody = 103,
     Hemorrhage = 104,
     CrescentSlash = 105,
     MoonMist = 106,
@@ -1472,15 +1447,11 @@ public enum Spell : byte
     Meditation = 126,
     BackStep = 127,
     ElementalShot = 128,
-    Concentration = 129,
-    Stonetrap = 130,
+    Concentration = 129, 
     ElementalBarrier = 131,
-    SummonVampire = 132,
     VampireShot = 133,
-    SummonToad = 134,
     PoisonShot = 135,
     CrippleShot = 136,
-    SummonSnakes = 137,
     NapalmShot = 138,
     OneWithNature = 139,
     BindingShot = 140,
@@ -2037,10 +2008,6 @@ public enum ServerPacketIds : short
     MailCost,
     ResizeInventory,
     ResizeStorage,
-    NewIntelligentCreature,
-    UpdateIntelligentCreatureList,
-    IntelligentCreatureEnableRename,
-    IntelligentCreaturePickup,
     NPCPearlGoods,
     TransformUpdate,
     FriendUpdate,
@@ -2198,10 +2165,6 @@ public enum ClientPacketIds : short
     MailLockedItem,
     MailCost,
 
-    UpdateIntelligentCreature,
-    IntelligentCreaturePickup,
-    RequestIntelligentCreatureUpdates,
-
     AddFriend,
     RemoveFriend,
     RefreshFriends,
@@ -2264,12 +2227,7 @@ public enum DoorState : byte
     Open = 2,
     Closing = 3
 }
-
-public enum IntelligentCreaturePickupMode : byte
-{
-    Automatic = 0,
-    SemiAutomatic = 1,
-}
+ 
  
 public enum SpellToggleState: sbyte
 {

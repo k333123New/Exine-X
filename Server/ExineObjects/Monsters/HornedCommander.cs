@@ -542,30 +542,13 @@ namespace Server.ExineObjects.Monsters
 
                 mob.Direction = Functions.DirectionFromPoint(point, CurrentLocation);
 
-                if (mob.Spawn(CurrentMap, point))
-                {
-                    mob.Target = Target;
-                    mob.ActionTime = Envir.Time;
-                    SlaveList.Add(mob);
-                }
+                 
             }
         }
 
         private void SpawnSlave()
         {
-            ActionTime = Envir.Time + 300;
-            AttackTime = Envir.Time + AttackSpeed;
-
-            var mob = GetMonster(Envir.GetMonsterInfo(Settings.HornedCommanderMob));
-
-            if (mob == null) return;
-
-            if (!mob.Spawn(CurrentMap, Front))
-                mob.Spawn(CurrentMap, CurrentLocation);
-
-            mob.Target = Target;
-            mob.ActionTime = Envir.Time;
-            SlaveList.Add(mob);
+            
         }
 
         private void KillRockSpikes()
@@ -583,13 +566,7 @@ namespace Server.ExineObjects.Monsters
         private void KillSlaves()
         {
             //Kill Minions
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
-            {
-                if (!SlaveList[i].Dead && SlaveList[i].Node != null)
-                {
-                    SlaveList[i].Die();
-                }
-            }
+             
         }
 
         public override void Die()

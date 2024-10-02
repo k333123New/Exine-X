@@ -155,7 +155,6 @@ namespace Server.ExineObjects
 
         public Stats Stats;
 
-        public List<MonsterObjectSrv> Pets = new List<MonsterObjectSrv>();
         public virtual List<Buff> Buffs { get; set; } = new List<Buff>();
 
         public List<PlayerObjectSrv> GroupMembers;
@@ -363,8 +362,6 @@ namespace Server.ExineObjects
 
             ActionList.Clear();
 
-            for (int i = Pets.Count - 1; i >= 0; i--)
-                Pets[i].Die();
 
             Node = null;
         }

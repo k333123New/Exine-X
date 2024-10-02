@@ -206,38 +206,7 @@ namespace Server.ExineObjects.Monsters
 
         private void SpawnSlaves()
         {
-            int count = Math.Min(3, 6 - SlaveList.Count);
-
-            for (int i = 0; i < count; i++)
-            {
-                MonsterObjectSrv mob = null;
-                switch (Envir.Random.Next(4))
-                {
-                    case 0:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.GeneralMeowMeowMob1));
-                        break;
-                    case 1:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.GeneralMeowMeowMob2));
-                        break;
-                    case 2:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.GeneralMeowMeowMob3));
-                        break;
-                    case 3:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.GeneralMeowMeowMob4));
-                        break;
-                }
-
-                if (mob == null) continue;
-
-                if (!mob.Spawn(CurrentMap, Front))
-                {
-                    mob.Spawn(CurrentMap, CurrentLocation);
-                }
-
-                mob.Target = Target;
-                mob.ActionTime = Envir.Time + 2000;
-                SlaveList.Add(mob);
-            }
+              
         }
 
         protected override void ProcessTarget()

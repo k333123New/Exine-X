@@ -43,10 +43,7 @@ namespace Exine.ExineObjects
         public List<ClientMagic> Magics = new List<ClientMagic>();
         public List<ItemSets> ItemSets = new List<ItemSets>();
         public List<EquipmentSlot> MirSet = new List<EquipmentSlot>();
-
-        public List<ClientIntelligentCreature> IntelligentCreatures = new List<ClientIntelligentCreature>();
-        public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;
-        public bool CreatureSummoned;
+         
         public int PearlCount = 0;
 
         public List<ClientQuestProgress> CurrentQuests = new List<ClientQuestProgress>();
@@ -121,9 +118,7 @@ namespace Exine.ExineObjects
                 Magics[i].CastTime += CMain.Time;
             }
 
-            IntelligentCreatures = info.IntelligentCreatures;
-            SummonedCreatureType = info.SummonedCreatureType;
-            CreatureSummoned = info.CreatureSummoned;
+          
 
             BindAllItems();
 

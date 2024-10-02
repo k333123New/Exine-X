@@ -302,12 +302,6 @@ public abstract class Packet
                 return new C.MailLockedItem();
             case (short)ClientPacketIds.MailCost:
                 return new C.MailCost();
-            case (short)ClientPacketIds.RequestIntelligentCreatureUpdates:
-                return new C.RequestIntelligentCreatureUpdates();
-            case (short)ClientPacketIds.UpdateIntelligentCreature:
-                return new C.UpdateIntelligentCreature();
-            case (short)ClientPacketIds.IntelligentCreaturePickup:
-                return new C.IntelligentCreaturePickup();
             case (short)ClientPacketIds.AddFriend:
                 return new C.AddFriend();
             case (short)ClientPacketIds.RemoveFriend:
@@ -805,14 +799,6 @@ public abstract class Packet
                 return new S.ResizeInventory();
             case (short)ServerPacketIds.ResizeStorage:
                 return new S.ResizeStorage();
-            case (short)ServerPacketIds.NewIntelligentCreature:
-                return new S.NewIntelligentCreature();
-            case (short)ServerPacketIds.UpdateIntelligentCreatureList:
-                return new S.UpdateIntelligentCreatureList();
-            case (short)ServerPacketIds.IntelligentCreatureEnableRename:
-                return new S.IntelligentCreatureEnableRename();
-            case (short)ServerPacketIds.IntelligentCreaturePickup:
-                return new S.IntelligentCreaturePickup();
             case (short)ServerPacketIds.NPCPearlGoods:
                 return new S.NPCPearlGoods();
             case (short)ServerPacketIds.FriendUpdate:

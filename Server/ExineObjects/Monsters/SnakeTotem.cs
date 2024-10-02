@@ -79,15 +79,7 @@ namespace Server.ExineObjects.Monsters
             //update targets all the time ?
             AgroAllMobsInRange();
 
-            //Refresh Minions
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
-                if (SlaveList[i].Dead || SlaveList[i].Node == null)
-                {
-                    SlaveList[i].DeadTime = 0;
-                }
-
-            //Keep Minions Updated
-            if (SlaveList.Count < MaxMinions) SpawnMinion();
+           
         }
 
         public void AgroAllMobsInRange()
@@ -129,25 +121,7 @@ namespace Server.ExineObjects.Monsters
 
         public bool SpawnMinion()
         {
-            if (Pets.Count >= MaxMinions) return false;
-
-            MonsterInfo info = Envir.GetMonsterInfo(Settings.SnakesName);
-            if (info == null) return false;
-
-            MonsterObjectSrv monster;
-            monster = MonsterObjectSrv.GetMonster(info);
-            monster.PetLevel = PetLevel;
-            monster.Master = this;
-            monster.MaxPetLevel = (byte)(1 + PetLevel * 2);
-            monster.Direction = Direction;
-            monster.ActionTime = Envir.Time + 1000;
-
-            ((Monsters.CharmedSnake)monster).AliveTime = Envir.Time + ((PetLevel * 2000) + 10000);
-            ((Monsters.CharmedSnake)monster).MasterTotem = this;
-
-            SlaveList.Add(monster);
-            monster.Spawn(CurrentMap, CurrentLocation);
-
+            
             return true;
         }
 
@@ -157,13 +131,7 @@ namespace Server.ExineObjects.Monsters
 
             DeadTime = 0;
             
-            //Kill Minions
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
-                if (!SlaveList[i].Dead && SlaveList[i].Node != null)
-                {
-                    SlaveList[i].Die();
-                    SlaveList[i].DeadTime = 0;
-                }
+            
         }
 
         public override void Spawned()

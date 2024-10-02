@@ -1912,10 +1912,7 @@ namespace Exine.ExineObjects
                             case Spell.PoisonShot:
                             case Spell.CrippleShot:
                             case Spell.NapalmShot:
-                            case Spell.SummonVampire:
-                            case Spell.SummonToad:
-                            case Spell.SummonSnakes:
-                            case Spell.Stonetrap:
+                            
                                 //Frames.TryGetValue(ExAction.AttackRange2, out Frame);
                                 //CurrentAction = ExAction.AttackRange2;
                                 Frames.TryGetValue(ExAction.BOWHAND_ATTACK1, out Frame);
@@ -2385,14 +2382,7 @@ namespace Exine.ExineObjects
 
                             #endregion
 
-                            #region SummonSkeleton
-
-                            case Spell.SummonSkeleton:
-                                Effects.Add(new Effect(Libraries.Magic, 1500, 10, Frame.Count * FrameInterval, this));
-                                SoundManager.PlaySound(20000 + (ushort)Spell * 10);
-                                break;
-
-                            #endregion
+                          
                             #region StormEscape
                             case Spell.StormEscape:
                                 Effects.Add(new Effect(Libraries.Magic3, 590, 10, Frame.Count * FrameInterval, this));
@@ -2525,14 +2515,7 @@ namespace Exine.ExineObjects
 
                             #endregion
 
-                            #region SummonShinsu
-
-                            case Spell.SummonShinsu:
-                                Effects.Add(new Effect(Libraries.Magic2, 0, 10, Frame.Count * FrameInterval, this));
-                                SoundManager.PlaySound(20000 + (ushort)Spell * 10);
-                                break;
-
-                            #endregion
+                             
 
                             #region UltimateEnchancer
 
@@ -2616,14 +2599,7 @@ namespace Exine.ExineObjects
 
                             #endregion
 
-                            #region DarkBody
-
-                            case Spell.DarkBody:
-                                Effects.Add(new Effect(Libraries.Magic2, 2580, 10, 10 * FrameInterval, this));
-                                SoundManager.PlaySound(20000 + (ushort)Spell * 10);
-                                break;
-
-                            #endregion
+                            
 
                             #region ThunderStorm
 
@@ -3441,10 +3417,7 @@ namespace Exine.ExineObjects
                                                 break;
                                         }
                                     break;
-                                case Spell.BindingShot:
-                                case Spell.SummonVampire:
-                                case Spell.SummonToad:
-                                case Spell.SummonSnakes:
+                                case Spell.BindingShot: 
                                     switch (FrameIndex)
                                     {
                                         case 7:
@@ -3461,23 +3434,7 @@ namespace Exine.ExineObjects
                                             break;
                                     }
                                     break;
-                                case Spell.Stonetrap:
-                                    switch (FrameIndex)
-                                    {
-                                        case 7:
-                                            SoundManager.PlaySound(20000 + 121 * 10);
-                                            missile = CreateProjectile(2750, Libraries.Magic3, true, 5, 20, 5);
-                                            StanceTime = CMain.Time + StanceDelay;
-                                            missile.Explode = true;
-
-                                            missile.Complete += (o, e) =>
-                                            {
-                                                SoundManager.PlaySound(20000 + (ushort)Spell * 10 + 7);//sound M130-7
-                                            };
-
-                                            break;
-                                    }
-                                    break;
+                               
                                 case Spell.DelayedExplosion:
                                     switch (FrameIndex)
                                     {
@@ -4665,14 +4622,7 @@ namespace Exine.ExineObjects
 
                                     #endregion
 
-                                    #region SummonHolyDeva
-
-                                    case Spell.SummonHolyDeva:
-                                        Effects.Add(new Effect(Libraries.Magic, 1500, 10, Frame.Count * FrameInterval, this));
-                                        SoundManager.PlaySound(20000 + (ushort)Spell * 10);
-                                        break;
-
-                                    #endregion
+                                     
 
                                     #region UltimateEnhancer
 

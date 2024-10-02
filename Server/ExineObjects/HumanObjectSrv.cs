@@ -219,9 +219,7 @@ namespace Server.ExineObjects
             set { myGuild = value; }
         }
         public GuildRank MyGuildRank = null;
-
-        public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;
-        public bool CreatureSummoned;
+         
 
         public SpecialItemMode SpecialMode;
 
@@ -336,12 +334,7 @@ namespace Server.ExineObjects
 
                 ProcessItems();
             }
-
-            for (int i = Pets.Count() - 1; i >= 0; i--)
-            {
-                MonsterObjectSrv pet = Pets[i];
-                if (pet.Dead) Pets.Remove(pet);
-            }
+ 
 
             ProcessBuffs();
             ProcessRegen();
@@ -1262,75 +1255,7 @@ namespace Server.ExineObjects
                     break;
                 case ItemType.Socket:
                     break;
-                case ItemType.Pets:
-                    switch (item.Info.Shape)
-                    {
-                        case 20://mirror rename creature
-                            if (Info.IntelligentCreatures.Count == 0) return false;
-                            break;
-                        case 21://creature stone
-                            break;
-                        case 22://nuts maintain food levels
-                            if (!CreatureSummoned)
-                            {
-                                ReceiveChat("Can only be used with a creature summoned", ChatType.System);
-                                return false;
-                            }
-                            break;
-                        case 23://basic creature food
-                            if (!CreatureSummoned)
-                            {
-                                ReceiveChat("Can only be used with a creature summoned", ChatType.System);
-                                return false;
-                            }
-                            else
-                            {
-                                for (int i = 0; i < Pets.Count; i++)
-                                {
-                                    if (Pets[i].Race != ObjectType.Creature) continue;
-
-                                    var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                                    if (pet.PetType != SummonedCreatureType) continue;
-                                    if (pet.Fullness > 9900)
-                                    {
-                                        ReceiveChat(pet.Name + " is not hungry", ChatType.System);
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                                return false;
-                            }
-                        case 24://wonderpill vitalize creature
-                            if (!CreatureSummoned)
-                            {
-                                ReceiveChat("Can only be used with a creature summoned", ChatType.System);
-                                return false;
-                            }
-                            else
-                            {
-                                for (int i = 0; i < Pets.Count; i++)
-                                {
-                                    if (Pets[i].Race != ObjectType.Creature) continue;
-
-                                    var pet = (IntelligentCreatureObjectSrv)Pets[i];
-                                    if (pet.PetType != SummonedCreatureType) continue;
-                                    if (pet.Fullness > 0)
-                                    {
-                                        ReceiveChat(pet.Name + " does not need to be vitalized", ChatType.System);
-                                        return false;
-                                    }
-                                    return true;
-                                }
-                                return false;
-                            }
-                        case 25://Strongbox
-                            break;
-                        case 26://Wonderdrugs
-                            break;
-                        case 27://Fortunecookies
-                            break;
-                    }
-                    break;
+             
             }
 
             if (RidingMount && item.Info.Type != ItemType.Scroll && item.Info.Type != ItemType.Potion)
@@ -2753,13 +2678,7 @@ namespace Server.ExineObjects
                 if (this is PlayerObjectSrv player &&
                    player.PMode == PetMode.FocusMasterTarget)
                 {
-                    foreach (MonsterObjectSrv pet in player.Pets)
-                    {
-                        if (pet.Race != ObjectType.Creature)
-                        {
-                            pet.Target = target;
-                        }
-                    }
+                   
 
                 }
             }
@@ -2962,9 +2881,9 @@ namespace Server.ExineObjects
             //damageFinal = the damage you're gonna do with skills added
             int damageFinal;
 
-            if (MoonLightAttack || DarkBodyAttack)
+            if (MoonLightAttack)
             {
-                magic = MoonLightAttack ? GetMagic(Spell.MoonLight) : GetMagic(Spell.DarkBody);
+                magic = GetMagic(Spell.MoonLight);
 
                 if (magic != null)
                 {
@@ -3017,13 +2936,6 @@ namespace Server.ExineObjects
                     if (this is PlayerObjectSrv player &&
                    player.PMode == PetMode.FocusMasterTarget)
                     {
-                        foreach (MonsterObjectSrv pet in player.Pets)
-                        {
-                            if (pet.Race != ObjectType.Creature)
-                            {
-                                pet.Target = ob;
-                            }
-                        }
 
                     }
                 }
@@ -3449,14 +3361,6 @@ namespace Server.ExineObjects
                 if (this is PlayerObjectSrv player &&
                    player.PMode == PetMode.FocusMasterTarget)
                 {
-                    foreach (MonsterObjectSrv pet in player.Pets)
-                    {
-                        if (pet.Race != ObjectType.Creature)
-                        {
-                            pet.Target = target;
-                        }
-                    }
-
                     
                 }
             }
@@ -3502,9 +3406,7 @@ namespace Server.ExineObjects
                 case Spell.SoulFireBall:
                     if (!SoulFireball(target, magic, out cast)) targetID = 0;
                     break;
-                case Spell.SummonSkeleton:
-                    SummonSkeleton(magic);
-                    break;
+               
                 case Spell.Teleport:
                 case Spell.Blink:
                     ActionList.Add(new DelayedAction(DelayedType.Magic, Envir.Time + 200, magic, location));
@@ -3573,9 +3475,7 @@ namespace Server.ExineObjects
                 case Spell.Vampirism:
                     Vampirism(target, magic);
                     break;
-                case Spell.SummonShinsu:
-                    SummonShinsu(magic);
-                    break;
+               
                 case Spell.Purification:
                     if (target == null)
                     {
@@ -3634,9 +3534,7 @@ namespace Server.ExineObjects
                 case Spell.Curse:
                     Curse(magic, spellTargetLock ? (target != null ? target.CurrentLocation : location) : location, out cast);
                     break;
-                case Spell.SummonHolyDeva:
-                    SummonHolyDeva(magic);
-                    break;
+                
                 case Spell.Hallucination:
                     Hallucination(target, magic);
                     break;
@@ -3664,9 +3562,7 @@ namespace Server.ExineObjects
                 case Spell.PoisonSword:
                     PoisonSword(magic);
                     break;
-                case Spell.DarkBody:
-                    DarkBody(target, magic);
-                    break;
+              
                 case Spell.FlashDash:
                     FlashDash(magic);
                     return;
@@ -3700,14 +3596,7 @@ namespace Server.ExineObjects
                 case Spell.BindingShot:
                     BindingShot(magic, target, out cast);
                     break;
-                case Spell.SummonVampire:
-                case Spell.SummonToad:
-                case Spell.SummonSnakes:
-                    ArcherSummon(magic, target, location);
-                    break;
-                case Spell.Stonetrap:
-                    ArcherSummonStone(magic, spellTargetLock ? (target != null ? target.CurrentLocation : location) : location, out cast);
-                    break;
+                  
                 case Spell.VampireShot:
                 case Spell.PoisonShot:
                 case Spell.CrippleShot:
@@ -4017,9 +3906,9 @@ namespace Server.ExineObjects
                 return;
             }
 
-            var petBonus = Globals.MaxPets - 3;
+            //var petBonus = Globals.MaxPets - 3;
 
-            if (Pets.Count(t => !t.Dead && t.Race != ObjectType.Creature) >= magic.Level + petBonus) return;
+            //if (Pets.Count(t => !t.Dead && t.Race != ObjectType.Creature) >= magic.Level + petBonus) return;
 
             int rate = (int)(target.Stats[Stat.HP] / 100);
             if (rate <= 2) rate = 2;
@@ -4031,7 +3920,6 @@ namespace Server.ExineObjects
             if (target.Master != null)
             {
                 target.SetHP(target.Stats[Stat.HP] / 10);
-                target.Master.Pets.Remove(target);
             }
             else if (target.Respawn != null)
             {
@@ -4044,7 +3932,7 @@ namespace Server.ExineObjects
             target.Master = this;
             //target.HealthChanged = true;
             target.BroadcastHealthChange();
-            Pets.Add(target);
+            //Pets.Add(target);
             target.Target = null;
             target.RageTime = 0;
             target.ShockTime = 0;
@@ -4177,15 +4065,7 @@ namespace Server.ExineObjects
         {
             MonsterObjectSrv monster;
             DelayedAction action;
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                monster = Pets[i];
-                if ((monster.Info.Name != Settings.CloneName) || monster.Dead) continue;
-                if (monster.Node == null) continue;
-                action = new DelayedAction(DelayedType.Magic, Envir.Time + 500, this, magic, monster, Front, true);
-                CurrentMap.ActionList.Add(action);
-                return;
-            }
+            
 
             MonsterInfo info = Envir.GetMonsterInfo(Settings.CloneName);
             if (info == null) return;
@@ -4197,7 +4077,7 @@ namespace Server.ExineObjects
             monster.ActionTime = Envir.Time + 1000;
             monster.RefreshNameColour(false);
 
-            Pets.Add(monster);
+            //Pets.Add(monster);
 
             action = new DelayedAction(DelayedType.Magic, Envir.Time + 500, this, magic, monster, Front, false);
             CurrentMap.ActionList.Add(action);
@@ -4295,41 +4175,7 @@ namespace Server.ExineObjects
 
             return true;
         }
-        private void SummonSkeleton(UserMagic magic)
-        {
-            MonsterObjectSrv monster;
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                monster = Pets[i];
-                if ((monster.Info.Name != Settings.SkeletonName) || monster.Dead) continue;
-                if (monster.Node == null) continue;
-                monster.ActionList.Add(new DelayedAction(DelayedType.Recall, Envir.Time + 500));
-                return;
-            }
-
-            if (Pets.Count(x => x.Race == ObjectType.Monster) >= 2) return;
-
-            UserItem item = GetAmulet(1);
-            if (item == null) return;
-
-            MonsterInfo info = Envir.GetMonsterInfo(Settings.SkeletonName);
-            if (info == null) return;
-
-            LevelMagic(magic);
-            ConsumeItem(item, 1);
-
-            monster = MonsterObjectSrv.GetMonster(info);
-            monster.PetLevel = magic.Level;
-            monster.Master = this;
-            monster.MaxPetLevel = (byte)(4 + magic.Level);
-            monster.ActionTime = Envir.Time + 1000;
-            monster.RefreshNameColour(false);
-
-            //Pets.Add(monster);
-
-            DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + 500, this, magic, monster, Front);
-            CurrentMap.ActionList.Add(action);
-        }
+     
         private void Purification(MapObjectSrv target, UserMagic magic)
         {
             if (target == null || !target.IsFriendlyTarget(this)) return;
@@ -4338,41 +4184,7 @@ namespace Server.ExineObjects
 
             ActionList.Add(action);
         }
-        private void SummonShinsu(UserMagic magic)
-        {
-            MonsterObjectSrv monster;
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                monster = Pets[i];
-                if ((monster.Info.Name != Settings.ShinsuName) || monster.Dead) continue;
-                if (monster.Node == null) continue;
-                monster.ActionList.Add(new DelayedAction(DelayedType.Recall, Envir.Time + 500));
-                return;
-            }
-
-            if (Pets.Count(x => x.Race == ObjectType.Monster) >= 2) return;
-
-            UserItem item = GetAmulet(5);
-            if (item == null) return;
-
-            MonsterInfo info = Envir.GetMonsterInfo(Settings.ShinsuName);
-            if (info == null) return;
-
-            LevelMagic(magic);
-            ConsumeItem(item, 5);
-
-            monster = MonsterObjectSrv.GetMonster(info);
-            monster.PetLevel = magic.Level;
-            monster.Master = this;
-            monster.MaxPetLevel = (byte)(1 + magic.Level * 2);
-            monster.Direction = Direction;
-            monster.ActionTime = Envir.Time + 1000;
-
-            //Pets.Add(monster);
-
-            DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + 500, this, magic, monster, Front);
-            CurrentMap.ActionList.Add(action);
-        }
+     
         private void Hiding(UserMagic magic)
         {
             UserItem item = GetAmulet(1);
@@ -4583,41 +4395,7 @@ namespace Server.ExineObjects
             }
             return;
         }
-        private void SummonHolyDeva(UserMagic magic)
-        {
-            MonsterObjectSrv monster;
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                monster = Pets[i];
-                if ((monster.Info.Name != Settings.AngelName) || monster.Dead) continue;
-                if (monster.Node == null) continue;
-                monster.ActionList.Add(new DelayedAction(DelayedType.Recall, Envir.Time + 500));
-                return;
-            }
-
-            if (Pets.Count(x => x.Race == ObjectType.Monster) >= 2) return;
-
-            UserItem item = GetAmulet(2);
-            if (item == null) return;
-
-            MonsterInfo info = Envir.GetMonsterInfo(Settings.AngelName);
-            if (info == null) return;
-
-            LevelMagic(magic);
-            ConsumeItem(item, 2);
-
-            monster = MonsterObjectSrv.GetMonster(info);
-            monster.PetLevel = magic.Level;
-            monster.Master = this;
-            monster.MaxPetLevel = (byte)(1 + magic.Level * 2);
-            monster.Direction = Direction;
-            monster.ActionTime = Envir.Time + 1000;
-
-            //Pets.Add(monster);
-
-            DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + 1500, this, magic, monster, Front);
-            CurrentMap.ActionList.Add(action);
-        }
+    
         private void Hallucination(MapObjectSrv target, UserMagic magic)
         {
             if (target == null || target.Race != ObjectType.Monster || !target.IsAttackTarget(this)) return;
@@ -5200,42 +4978,7 @@ namespace Server.ExineObjects
             ConsumeItem(item, 1);
             return true;
         }
-        private void DarkBody(MapObjectSrv target, UserMagic magic)
-        {
-            if (target == null) return;
-
-            MonsterObjectSrv monster;
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                monster = Pets[i];
-                if ((monster.Info.Name != Settings.AssassinCloneName) || monster.Dead) continue;
-                if (monster.Node == null) continue;
-                monster.Die();
-                return;
-            }
-
-            MonsterInfo info = Envir.GetMonsterInfo(Settings.AssassinCloneName);
-            if (info == null) return;
-
-            monster = MonsterObjectSrv.GetMonster(info);
-            monster.Master = this;
-            monster.Direction = Direction;
-            monster.ActionTime = Envir.Time + 500;
-            monster.RefreshNameColour(false);
-            monster.Target = target;
-            Pets.Add(monster);
-
-            monster.Spawn(CurrentMap, CurrentLocation);
-
-            if (!HasBuff(BuffType.DarkBody, out _))
-            {
-                LevelMagic(magic);
-            }
-
-            var duration = (GetAttackPower(Stats[Stat.MinAC], Stats[Stat.MaxAC]) + (magic.Level + 1) * 5) * 500;
-
-            AddBuff(BuffType.DarkBody, this, duration, new Stats());
-        }
+     
         private void CrescentSlash(UserMagic magic)
         {
             int damageBase = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
@@ -5590,49 +5333,9 @@ namespace Server.ExineObjects
             DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + delay, this, magic, damage, target.CurrentLocation);
             CurrentMap.ActionList.Add(action);
         }
-        public void ArcherSummon(UserMagic magic, MapObjectSrv target, Point location)
-        {
-            if (target != null && target.IsAttackTarget(this))
-                location = target.CurrentLocation;
-            if (!CanFly(location)) return;
+        
 
-            uint duration = (uint)((magic.Level * 5 + 10) * 1000);
-            int value = (int)duration;
-            int delay = Functions.MaxDistance(CurrentLocation, location) * 50 + 500; //50 MS per Step
-
-            DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + delay, magic, value, location, target);
-            ActionList.Add(action);
-        }
-
-        public void ArcherSummonStone(UserMagic magic, Point location, out bool cast)
-        {
-            cast = false;
-
-            if (!CurrentMap.ValidPoint(location) ||
-                !CanFly(location))
-            {
-                return;
-            }
-
-            if (Pets.Exists(x => x.Info.GameName == Settings.StoneName))
-            {
-                MonsterObjectSrv st = Pets.First(x => x.Info.GameName == Settings.StoneName);
-                if (!st.Dead)
-                {
-                    ReceiveChat($"You can only have 1 active {Settings.StoneName} alive.", ChatType.Hint);
-                    return;
-                }
-            }
-
-            int duration = (((magic.Level * 5) + 10) * 1000);
-            int delay = Functions.MaxDistance(CurrentLocation, location) * 50 + 500; //50 MS per Step
-                                                                                     //
-            DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + delay, magic, duration, location);
-            ActionList.Add(action);
-
-            cast = true;
-        }
-
+    
         public void OneWithNature(MapObjectSrv target, UserMagic magic)
         {
             int damage = magic.GetDamage(GetAttackPower(Stats[Stat.MinMC], Stats[Stat.MaxMC]));
@@ -6521,99 +6224,7 @@ namespace Server.ExineObjects
                     break;
                 #endregion
 
-                #region ArcherSummons
-                case Spell.SummonVampire:
-                case Spell.SummonToad:
-                case Spell.SummonSnakes:
-                    value = (int)data[1];
-                    location = (Point)data[2];
-                    target = (MapObjectSrv)data[3];
-
-                    int SummonType = 0;
-                    switch (magic.Spell)
-                    {
-                        case Spell.SummonVampire:
-                            SummonType = 1;
-                            break;
-                        case Spell.SummonToad:
-                            SummonType = 2;
-                            break;
-                        case Spell.SummonSnakes:
-                            SummonType = 3;
-                            break;
-                    }
-                    if (SummonType == 0) return;
-
-                    for (int i = 0; i < Pets.Count; i++)
-                    {
-                        monster = Pets[i];
-                        if ((monster.Info.Name != (SummonType == 1 ? Settings.VampireName : (SummonType == 2 ? Settings.ToadName : Settings.SnakeTotemName))) || monster.Dead) continue;
-                        if (monster.Node == null) continue;
-                        monster.ActionList.Add(new DelayedAction(DelayedType.Recall, Envir.Time + 500, target));
-                        monster.Target = target;
-                        return;
-                    }
-
-                    if (Pets.Count(x => x.Race == ObjectType.Monster) >= 2) return;
-
-                    //left it in for future summon amulets
-                    //UserItem item = GetAmulet(5);
-                    //if (item == null) return;
-
-                    MonsterInfo info = Envir.GetMonsterInfo((SummonType == 1 ? Settings.VampireName : (SummonType == 2 ? Settings.ToadName : Settings.SnakeTotemName)));
-                    if (info == null) return;
-
-                    LevelMagic(magic);
-                    //ConsumeItem(item, 5);
-
-                    monster = MonsterObjectSrv.GetMonster(info);
-                    monster.PetLevel = magic.Level;
-                    monster.Master = this;
-                    monster.MaxPetLevel = (byte)(1 + magic.Level * 2);
-                    monster.Direction = Direction;
-                    monster.ActionTime = Envir.Time + 1000;
-                    monster.Target = target;
-
-                    if (SummonType == 1)
-                        ((Monsters.VampireSpider)monster).AliveTime = Envir.Time + ((magic.Level * 1500) + 15000);
-                    if (SummonType == 2)
-                        ((Monsters.SpittingToad)monster).AliveTime = Envir.Time + ((magic.Level * 2000) + 25000);
-                    if (SummonType == 3)
-                        ((Monsters.SnakeTotem)monster).AliveTime = Envir.Time + ((magic.Level * 1500) + 20000);
-
-                    //Pets.Add(monster);
-
-                    DelayedAction action = new DelayedAction(DelayedType.Magic, Envir.Time + 500, this, magic, monster, location);
-                    CurrentMap.ActionList.Add(action);
-                    break;
-                case Spell.Stonetrap:
-                    {
-                        duration = (int)data[1];
-                        location = (Point)data[2];
-
-                        if (Pets.Where(x => x.Race == ObjectType.Monster).Count() >= magic.Level + 1) return;
-
-                        MonsterInfo mInfo = Envir.GetMonsterInfo(Settings.StoneName);
-                        if (mInfo == null) return;
-
-                        LevelMagic(magic);
-
-                        monster = MonsterObjectSrv.GetMonster(mInfo);
-
-                        monster.Master = this;
-                        monster.MaxPetLevel = (byte)(1 + magic.Level * 2);
-                        monster.Direction = Direction;
-                        monster.ActionTime = Envir.Time + 1000;
-
-                        StoneTrap st = monster as StoneTrap;
-                        st.DieTime = Envir.Time + duration;
-
-                        DelayedAction act = new DelayedAction(DelayedType.Magic, Envir.Time + 500, this, magic, monster, location);
-                        CurrentMap.ActionList.Add(act);
-                        break;
-                    }
-                    #endregion
-
+                
             }
         }
         protected void CompleteMine(IList<object> data)

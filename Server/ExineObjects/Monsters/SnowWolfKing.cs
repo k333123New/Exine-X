@@ -135,10 +135,7 @@ namespace Server.ExineObjects.Monsters
                 }
             }
 
-            if (HealthPercent < 70 && !_SpawnedSlaves)
-            {
-                SpawnSlaves();
-            }
+             
         }
 
         protected override void CompleteAttack(IList<object> data)
@@ -171,54 +168,9 @@ namespace Server.ExineObjects.Monsters
                 }
             }
 
-            for (int i = 0; i < SlaveList.Count; i++)
-            {
-                var mob = SlaveList[i];
-
-                if (EXPOwner != null)
-                {
-                    if (EXPOwner.Pets.Count >= 6) break;
-
-                    mob.Master = EXPOwner;
-                    mob.BroadcastHealthChange();
-                    EXPOwner.Pets.Add(mob);
-
-                    mob.Target = null;
-                    mob.RageTime = 0;
-                    mob.ShockTime = 0;
-                    mob.OperateTime = 0;
-
-                    if (!Settings.PetSave)
-                    {
-                        mob.TameTime = Envir.Time + (Settings.Minute * 60);
-                    }
-
-                    mob.Broadcast(new S.ObjectName { ObjectID = mob.ObjectID, Name = mob.Name });
-                }
-            }
-
-            SlaveList.Clear();
+            
         }
 
-        private void SpawnSlaves()
-        {
-            _SpawnedSlaves = true;
-
-            ActionTime = Envir.Time + 300;
-            AttackTime = Envir.Time + AttackSpeed;
-
-            for (int i = 0; i < 3; i++)
-            {
-                MonsterObjectSrv mob = GetMonster(Envir.GetMonsterInfo(Settings.SnowWolfKingMob));
-                if (mob == null) continue;
-
-                if (!mob.Spawn(CurrentMap, Target.Back))
-                    mob.Spawn(CurrentMap, CurrentLocation);
-
-                mob.Target = Target;
-                mob.ActionTime = Envir.Time + 2000;
-                SlaveList.Add(mob);
-            }
-        }
+      
     }
 }

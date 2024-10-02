@@ -1175,12 +1175,7 @@ namespace Server.ExineObjects
 
             if (!player.CanGainItem(item)) return;
 
-            if (player.NPCPage.Key.ToUpper() == PearlBuyKey)
-            {
-                player.IntelligentCreatureLosePearls((int)cost);
-            }
-            else
-            {
+          
                 player.Account.Gold -= cost;
                 player.Enqueue(new S.LoseGold { Gold = cost });
 
@@ -1188,7 +1183,7 @@ namespace Server.ExineObjects
                 {
                     callingNPC.Conq.GuildInfo.GoldStorage += (cost - baseCost);
                 }
-            }
+            
 
             player.GainItem(item);
 

@@ -551,10 +551,7 @@ namespace ServerPackets
         public DateTime ExpandedStorageExpiryTime;
 
         public List<ClientMagic> Magics = new List<ClientMagic>();
-
-        public List<ClientIntelligentCreature> IntelligentCreatures = new List<ClientIntelligentCreature>();
-        public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;
-        public bool CreatureSummoned;
+          
         public bool AllowObserve;
         public bool Observer;
 
@@ -631,13 +628,6 @@ namespace ServerPackets
                 Magics.Add(new ClientMagic(reader));
             }
 
-            count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
-            {
-                IntelligentCreatures.Add(new ClientIntelligentCreature(reader));
-            }
-            SummonedCreatureType = (IntelligentCreatureType)reader.ReadByte();
-            CreatureSummoned = reader.ReadBoolean();
             AllowObserve = reader.ReadBoolean();
             Observer = reader.ReadBoolean();
         }
@@ -725,14 +715,6 @@ namespace ServerPackets
                 Magics[i].Save(writer);
             }
 
-            writer.Write(IntelligentCreatures.Count);
-            for (int i = 0; i < IntelligentCreatures.Count; i++)
-            {
-                IntelligentCreatures[i].Save(writer);
-            }
-
-            writer.Write((byte)SummonedCreatureType);
-            writer.Write(CreatureSummoned);
             writer.Write(AllowObserve);
             writer.Write(Observer);
         }
@@ -5518,93 +5500,6 @@ namespace ServerPackets
             writer.Write(Size);
             writer.Write(HasExpandedStorage);
             writer.Write(ExpiryTime.ToBinary());
-        }
-    }
-
-    public sealed class NewIntelligentCreature : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.NewIntelligentCreature; }
-        }
-
-        public ClientIntelligentCreature Creature;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Creature = new ClientIntelligentCreature(reader);
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            Creature.Save(writer);
-        }
-    }
-    public sealed class UpdateIntelligentCreatureList : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.UpdateIntelligentCreatureList; }
-        }
-
-        public List<ClientIntelligentCreature> CreatureList = new List<ClientIntelligentCreature>();
-        public bool CreatureSummoned = false;
-        public IntelligentCreatureType SummonedCreatureType = IntelligentCreatureType.None;
-        public int PearlCount = 0;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
-                CreatureList.Add(new ClientIntelligentCreature(reader));
-            CreatureSummoned = reader.ReadBoolean();
-            SummonedCreatureType = (IntelligentCreatureType)reader.ReadByte();
-            PearlCount = reader.ReadInt32();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(CreatureList.Count);
-            for (int i = 0; i < CreatureList.Count; i++)
-                CreatureList[i].Save(writer);
-            writer.Write(CreatureSummoned);
-            writer.Write((byte)SummonedCreatureType);
-            writer.Write(PearlCount);
-        }
-    }
-
-    public sealed class IntelligentCreatureEnableRename : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.IntelligentCreatureEnableRename; }
-        }
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-        }
-    }
-
-    public sealed class IntelligentCreaturePickup : Packet
-    {
-        public override short Index
-        {
-            get { return (short)ServerPacketIds.IntelligentCreaturePickup; }
-        }
-
-        public uint ObjectID;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            ObjectID = reader.ReadUInt32();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(ObjectID);
         }
     }
 

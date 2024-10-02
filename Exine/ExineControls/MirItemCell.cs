@@ -479,8 +479,7 @@ namespace Exine.ExineControls
                 case ItemType.Scroll:
                 case ItemType.Book:
                 case ItemType.Food:
-                case ItemType.Script:
-                case ItemType.Pets:
+                case ItemType.Script: 
                 case ItemType.Transform:
                 case ItemType.Deco:
                 case ItemType.MonsterSpawn:

@@ -38,8 +38,6 @@
         Groupleader,
         GroupCount,
         GroupCheckNearby,
-        PetLevel,
-        PetCount,
         CheckCalc,
         InGuild,
         CheckMap,

@@ -66,7 +66,7 @@ namespace Server.ExineObjects.Monsters
 
                             Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = mob.ObjectID });
 
-                            SlaveList.Add(mob);
+                             
 
                             break;
                         }
@@ -79,14 +79,7 @@ namespace Server.ExineObjects.Monsters
 
         public override void Die()
         {
-            //Kill Minions
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
-            {
-                if (!SlaveList[i].Dead && SlaveList[i].Node != null)
-                {
-                    SlaveList[i].Die();
-                }
-            }
+             
 
             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
 

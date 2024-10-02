@@ -121,12 +121,7 @@ namespace Server.ExineObjects.Monsters
                 }
 
 
-                for (int i = SlaveList.Count - 1; i >= 0; i--)
-                    if (!SlaveList[i].Dead || SlaveList[i].Node != null)
-                    {
-                        SlaveList[i].Die();
-                        SlaveList.RemoveAt(i);
-                    }
+               
             }
 
             base.Die();
@@ -210,7 +205,7 @@ namespace Server.ExineObjects.Monsters
 
                         childmob.ChildRock = true;
                         childmob.ParentRock = this;
-                        SlaveList.Add(childmob);
+                        //SlaveList.Add(childmob);
                         childmob.Show();
                         childmob.ActionTime = this.ActionTime;
                         childmob.AttackTime = this.AttackTime;

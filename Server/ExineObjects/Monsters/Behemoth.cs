@@ -166,46 +166,12 @@ namespace Server.ExineObjects.Monsters
 
         private void SpawnSlaves()
         {
-            List<MapObjectSrv> targets = FindAllTargets(10, CurrentLocation);
-
-            int count = Math.Min(8, (targets.Count * 5) - SlaveList.Count);
             
-            ActionTime = Envir.Time + 300;
-            AttackTime = Envir.Time + AttackSpeed;
-
-            for (int i = 0; i < count; i++)
-            {
-                MonsterObjectSrv mob = null;
-                switch (Envir.Random.Next(4))
-                {
-                    case 0:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.BehemothMonster1));
-                        break;
-                    case 1:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.BehemothMonster2));
-                        break;
-                    case 2:
-                        mob = GetMonster(Envir.GetMonsterInfo(Settings.BehemothMonster3));
-                        break;
-                }
-
-                if (mob == null) continue;
-
-                if (!mob.Spawn(CurrentMap, Front))
-                    mob.Spawn(CurrentMap, CurrentLocation);
-                
-                mob.Target = targets[Envir.Random.Next(targets.Count)];
-                mob.ActionTime = Envir.Time + 2000;
-                SlaveList.Add(mob);
-            }
         }
 
         public override void Die()
         {
-            foreach (var slave in SlaveList)
-            {
-                slave.Die();
-            }
+           
 
             base.Die();
         }

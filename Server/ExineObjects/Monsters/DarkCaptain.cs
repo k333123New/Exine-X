@@ -163,14 +163,7 @@ namespace Server.ExineObjects.Monsters
         {
             base.Die();
 
-            //Kill Minions
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
-            {
-                if (!SlaveList[i].Dead && SlaveList[i].Node != null)
-                {
-                    SlaveList[i].Die();
-                }
-            }
+             
         }
     }
 }

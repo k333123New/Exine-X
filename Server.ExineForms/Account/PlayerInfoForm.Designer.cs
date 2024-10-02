@@ -220,16 +220,7 @@
             this.ChatBanButton.Text = "Chat Ban";
             this.ChatBanButton.UseVisualStyleBackColor = true;
             this.ChatBanButton.Click += new System.EventHandler(this.ChatBanButton_Click);
-            // 
-            // KillPetsButton
-            // 
-            this.KillPetsButton.Location = new System.Drawing.Point(6, 77);
-            this.KillPetsButton.Name = "KillPetsButton";
-            this.KillPetsButton.Size = new System.Drawing.Size(75, 23);
-            this.KillPetsButton.TabIndex = 18;
-            this.KillPetsButton.Text = "Kill Pets";
-            this.KillPetsButton.UseVisualStyleBackColor = true;
-            this.KillPetsButton.Click += new System.EventHandler(this.KillPetsButton_Click);
+            
             // 
             // KillButton
             // 

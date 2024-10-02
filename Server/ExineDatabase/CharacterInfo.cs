@@ -84,14 +84,13 @@ namespace Server.ExineDatabase
         public bool HasRentedItem;
         public UserItem CurrentRefine = null;
         public long CollectTime = 0;
-        public List<UserMagic> Magics = new List<UserMagic>();
-        public List<PetInfo> Pets = new List<PetInfo>();
+        public List<UserMagic> Magics = new List<UserMagic>(); 
         public List<Buff> Buffs = new List<Buff>();
         public List<Poison> Poisons = new List<Poison>();
         public List<MailInfo> Mail = new List<MailInfo>();
         public List<FriendInfo> Friends = new List<FriendInfo>();
 
-        public List<UserIntelligentCreature> IntelligentCreatures = new List<UserIntelligentCreature>();
+        
         public int PearlCount;
 
         public List<QuestProgressInfo> CurrentQuests = new List<QuestProgressInfo>();
@@ -253,12 +252,7 @@ namespace Server.ExineDatabase
 
             MentalState = reader.ReadByte();
 
-            count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
-            {
-                Pets.Add(new PetInfo(reader, version, customVersion));
-            }
-
+            
             AllowGroup = reader.ReadBoolean();
 
             for (int i = 0; i < Globals.FlagIndexCount; i++)
@@ -297,17 +291,9 @@ namespace Server.ExineDatabase
                 Mail.Add(new MailInfo(reader, version, customVersion));
             }
 
-            count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
-            {
-                UserIntelligentCreature creature = new UserIntelligentCreature(reader, version, customVersion);
-                if (creature.Info == null) continue;
-                IntelligentCreatures.Add(creature);
-            }
-
+           
             if (version == 45)
-            {
-                var old1 = (IntelligentCreatureType)reader.ReadByte();
+            { 
                 var old2 = reader.ReadBoolean();
             }
 
@@ -455,11 +441,7 @@ namespace Server.ExineDatabase
             writer.Write(DoubleSlash);
             writer.Write(MentalState);
 
-            writer.Write(Pets.Count);
-            for (int i = 0; i < Pets.Count; i++)
-            {
-                Pets[i].Save(writer);
-            }
+            
 
             writer.Write(AllowGroup);
 
@@ -491,12 +473,7 @@ namespace Server.ExineDatabase
                 Mail[i].Save(writer);
             }
 
-            writer.Write(IntelligentCreatures.Count);
-            for (int i = 0; i < IntelligentCreatures.Count; i++)
-            {
-                IntelligentCreatures[i].Save(writer);
-            }
-
+            
             writer.Write(PearlCount);
 
             writer.Write(CompletedQuests.Count);
@@ -567,16 +544,7 @@ namespace Server.ExineDatabase
                     LastAccess = LastLogoutDate
                 };
         }
-
-        public bool CheckHasIntelligentCreature(IntelligentCreatureType petType)
-        {
-            for (int i = 0; i < IntelligentCreatures.Count; i++)
-            {
-                if (IntelligentCreatures[i].PetType == petType) return true;
-            }
-
-            return false;
-        }
+         
         public virtual int ResizeInventory()
         {
             if (Inventory.Length >= 86) return Inventory.Length;
@@ -594,53 +562,7 @@ namespace Server.ExineDatabase
         }
     }
 
-    public class PetInfo
-    {
-        public int MonsterIndex;
-        public int HP;
-        public uint Experience;
-        public byte Level, MaxPetLevel;
-
-        public long TameTime;
-
-        public PetInfo(MonsterObjectSrv ob)
-        {
-            MonsterIndex = ob.Info.Index;
-            HP = ob.HP;
-            Experience = ob.PetExperience;
-            Level = ob.PetLevel;
-            MaxPetLevel = ob.MaxPetLevel;
-        }
-
-        public PetInfo(BinaryReader reader, int version, int customVersion)
-        {
-            MonsterIndex = reader.ReadInt32();
-            if (MonsterIndex == 271) MonsterIndex = 275;
-
-            if (version <= 84)
-            {
-                HP = (int)reader.ReadUInt32();
-            }
-            else
-            {
-                HP = reader.ReadInt32();
-            }
-
-            Experience = reader.ReadUInt32();
-            Level = reader.ReadByte();
-            MaxPetLevel = reader.ReadByte();
-        }
-
-        public void Save(BinaryWriter writer)
-        {
-            writer.Write(MonsterIndex);
-            writer.Write(HP);
-            writer.Write(Experience);
-            writer.Write(Level);
-            writer.Write(MaxPetLevel);
-        }
-    }
-
+  
     public class MountInfo
     {
         public HumanObjectSrv Player;

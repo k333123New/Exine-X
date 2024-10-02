@@ -31,9 +31,7 @@ namespace Server.ExineObjects.Monsters
                 Target = null;
                 return;
             }
-
-            if (SlaveList.Count >= 20) return;       
-            
+             
             MonsterObjectSrv spawn = GetMonster(Envir.GetMonsterInfo(Settings.BugBatName));
 
             if (spawn == null) return;

@@ -284,18 +284,7 @@ namespace Server.ExineObjects
                 case "GROUPCHECKNEARBY":
                     CheckList.Add(new NPCChecks(CheckType.GroupCheckNearby));
                     break;
-
-                case "PETCOUNT":
-                    if (parts.Length < 3) return;
-
-                    CheckList.Add(new NPCChecks(CheckType.PetCount, parts[1], parts[2]));
-                    break;
-
-                case "PETLEVEL":
-                    if (parts.Length < 3) return;
-
-                    CheckList.Add(new NPCChecks(CheckType.PetLevel, parts[1], parts[2]));
-                    break;
+                     
 
                 case "CHECKCALC":
                     if (parts.Length < 4) return;
@@ -481,22 +470,7 @@ namespace Server.ExineObjects
                     acts.Add(new NPCActions(ActionType.GiveExp, parts[1]));
                     break;
 
-                case "GIVEPET":
-                    if (parts.Length < 2) return;
-
-                    string petcount = parts.Length > 2 ? parts[2] : "1";
-                    string petlevel = parts.Length > 3 ? parts[3] : "0";
-
-                    acts.Add(new NPCActions(ActionType.GivePet, parts[1], petcount, petlevel));
-                    break;
-                case "REMOVEPET":
-                    if (parts.Length < 2) return;
-
-                    acts.Add(new NPCActions(ActionType.RemovePet, parts[1]));
-                    break;
-                case "CLEARPETS":
-                    acts.Add(new NPCActions(ActionType.ClearPets));
-                    break;
+              
 
                 case "GOTO":
                     if (parts.Length < 2) return;
@@ -2273,28 +2247,7 @@ namespace Server.ExineObjects
                         }
                         break;
 
-                    case CheckType.PetCount:
-                        if (!int.TryParse(param[1], out tempInt))
-                        {
-                            failed = true;
-                            break;
-                        }
-
-                        failed = !Compare(param[0], player.Pets.Count(), tempInt);
-                        break;
-
-                    case CheckType.PetLevel:
-                        if (!int.TryParse(param[1], out tempInt))
-                        {
-                            failed = true;
-                            break;
-                        }
-
-                        for (int p = 0; p < player.Pets.Count(); p++)
-                        {
-                            failed = !Compare(param[0], player.Pets[p].PetLevel, tempInt);
-                        }
-                        break;
+                   
 
                     case CheckType.CheckCalc:
                         int left;
@@ -2354,18 +2307,7 @@ namespace Server.ExineObjects
                     case CheckType.CheckWeddingRing:
                         failed = !player.CheckMakeWeddingRing();
                         break;
-                    case CheckType.CheckPet:
-
-                        bool petMatch = false;
-                        for (int c = player.Pets.Count - 1; c >= 0; c--)
-                        {
-                            if (string.Compare(player.Pets[c].Info.Name, param[0], true) != 0) continue;
-
-                            petMatch = true;
-                        }
-
-                        failed = !petMatch;
-                        break;
+                   
 
                     case CheckType.HasBagSpace:
                         if (!int.TryParse(param[1], out tempInt))
@@ -2885,8 +2827,7 @@ namespace Server.ExineObjects
 
                             if (pearls + player.Info.PearlCount >= int.MaxValue)
                                 pearls = (uint)(int.MaxValue - player.Info.PearlCount);
-
-                            player.IntelligentCreatureGainPearls((int)pearls);
+                             
                         }
                         break;
 
@@ -2895,8 +2836,7 @@ namespace Server.ExineObjects
                             if (!uint.TryParse(param[0], out uint pearls)) return;
 
                             if (pearls >= player.Info.PearlCount) pearls = (uint)player.Info.PearlCount;
-
-                            player.IntelligentCreatureLosePearls((int)pearls);
+                             
                         }
                         break;
 
@@ -2992,54 +2932,6 @@ namespace Server.ExineObjects
                         }
                         break;
 
-                    case ActionType.GivePet:
-                        {
-                            byte petcount = 0;
-                            byte petlevel = 0;
-
-                            var monInfo = Envir.GetMonsterInfo(param[0]);
-                            if (monInfo == null) return;
-
-                            if (param.Count > 1)
-                                petcount = byte.TryParse(param[1], out petcount) ? Math.Min((byte)5, petcount) : (byte)1;
-
-                            if (param.Count > 2)
-                                petlevel = byte.TryParse(param[2], out petlevel) ? Math.Min((byte)7, petlevel) : (byte)0;
-
-                            for (int j = 0; j < petcount; j++)
-                            {
-                                MonsterObjectSrv monster = MonsterObjectSrv.GetMonster(monInfo);
-                                if (monster == null) return;
-                                monster.PetLevel = petlevel;
-                                monster.Master = player;
-                                monster.MaxPetLevel = 7;
-                                monster.Direction = player.Direction;
-                                monster.ActionTime = Envir.Time + 1000;
-                                monster.Spawn(player.CurrentMap, player.CurrentLocation);
-                                player.Pets.Add(monster);
-                            }
-                        }
-                        break;
-
-                    case ActionType.RemovePet:
-                        {
-                            for (int c = player.Pets.Count - 1; c >= 0; c--)
-                            {
-                                if (string.Compare(player.Pets[c].Info.Name, param[0], true) != 0) continue;
-
-                                player.Pets[c].Die();
-                            }
-                        }
-                        break;
-
-                    case ActionType.ClearPets:
-                        {
-                            for (int c = player.Pets.Count - 1; c >= 0; c--)
-                            {
-                                player.Pets[c].DieNextTurn = true;
-                            }
-                        }
-                        break;
 
                     case ActionType.AddNameList:
                         {

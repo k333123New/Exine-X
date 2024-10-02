@@ -174,7 +174,7 @@ namespace Server.ExineObjects.Monsters
 
                 if (mob.Spawn(owner.CurrentMap, spawn))
                 {
-                    owner.SlaveList.Add(mob);
+                    
                     return true;
                 }
             }
