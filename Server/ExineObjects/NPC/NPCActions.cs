@@ -102,8 +102,6 @@
         RollDie,
         RollYut,
         Drop,
-        ReviveHero,
-        SealHero,
         ConquestRepairAll
     }
 }

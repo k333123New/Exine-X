@@ -138,10 +138,6 @@ public abstract class Packet
                 return new C.DepositTradeItem();
             case (short)ClientPacketIds.RetrieveTradeItem:
                 return new C.RetrieveTradeItem();
-            case (short)ClientPacketIds.TakeBackHeroItem:
-                return new C.TakeBackHeroItem();
-            case (short)ClientPacketIds.TransferHeroItem:
-                return new C.TransferHeroItem();
             case (short)ClientPacketIds.DropGold:
                 return new C.DropGold();
             case (short)ClientPacketIds.PickUp:
@@ -193,17 +189,7 @@ public abstract class Packet
             case (short)ClientPacketIds.DellMember:
                 return new C.DelMember();
             case (short)ClientPacketIds.GroupInvite:
-                return new C.GroupInvite();
-            case (short)ClientPacketIds.NewHero:
-                return new C.NewHero();
-            case (short)ClientPacketIds.SetAutoPotValue:
-                return new C.SetAutoPotValue();
-            case (short)ClientPacketIds.SetAutoPotItem:
-                return new C.SetAutoPotItem();
-            case (short)ClientPacketIds.SetHeroBehaviour:
-                return new C.SetHeroBehaviour();
-            case (short)ClientPacketIds.ChangeHero:
-                return new C.ChangeHero();
+                return new C.GroupInvite(); 
             case (short)ClientPacketIds.TownRevive:
                 return new C.TownRevive();
             case (short)ClientPacketIds.SpellToggle:
@@ -726,27 +712,7 @@ public abstract class Packet
             case (short)ServerPacketIds.GuildStorageList:
                 return new S.GuildStorageList();
             case (short)ServerPacketIds.GuildRequestWar:
-                return new S.GuildRequestWar();
-            case (short)ServerPacketIds.HeroCreateRequest:
-                return new S.HeroCreateRequest();
-            case (short)ServerPacketIds.NewHero:
-                return new S.NewHero();
-            case (short)ServerPacketIds.HeroInformation:
-                return new S.HeroInformation();
-            case (short)ServerPacketIds.UpdateHeroSpawnState:
-                return new S.UpdateHeroSpawnState();
-            case (short)ServerPacketIds.UnlockHeroAutoPot:
-                return new S.UnlockHeroAutoPot();
-            case (short)ServerPacketIds.SetAutoPotValue:
-                return new S.SetAutoPotValue();
-            case (short)ServerPacketIds.SetAutoPotItem:
-                return new S.SetAutoPotItem();
-            case (short)ServerPacketIds.SetHeroBehaviour:
-                return new S.SetHeroBehaviour();
-            case (short)ServerPacketIds.ManageHeroes:
-                return new S.ManageHeroes();
-            case (short)ServerPacketIds.ChangeHero:
-                return new S.ChangeHero();
+                return new S.GuildRequestWar(); 
             case (short)ServerPacketIds.DefaultNPC:
                 return new S.DefaultNPC();
             case (short)ServerPacketIds.NPCUpdate:

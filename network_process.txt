@@ -1,0 +1,124 @@
+1. Shared/ClientPackets.cs 파일에 Shared/Packet.cs 클래스를 상속한 패킷생성 및 파싱 욜 클래스를 만든다.
+  ex) 
+
+  // Shared/Enums.cs
+  public enum AttackMode : byte
+  {
+    Peace = 0,
+    Group = 1,
+    Guild = 2,
+    EnemyGuild = 3,
+    RedBrown = 4,
+    All = 5
+   }
+   
+   // Shared/ClientPackets.cs
+   public sealed class ChangeAMode : Packet
+    {
+        public override short Index { get { return (short)ClientPacketIds.ChangeAMode; } }
+
+        public AttackMode Mode; //Enum.cs에 저장해둔 열거형임.
+
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            Mode = (AttackMode)reader.ReadByte();
+        }
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write((byte)Mode);
+        }
+    }
+
+2.클라이언트에서(주로 ExineMainScene.cs) 아래와 같이 Network.Enqueue(전송할 패킷);를 실행하여 서버쪽으로 패킷을 전송한다.
+  ex) Network.Enqueue(new C.ChangePMode { Mode = PetMode.Both });
+  //내부적으로 Network.Enqueue에서는 _sendList.Enqueue(p);으로 전송용 큐에 넣어둠.
+  //->CMain.cs의 Application_Idle에서 주기적으로 UpdateEnviroment를 호출하고 
+  //->UpdateEnviroment가 주기적으로  Network.Process();를 호출하고  
+  //->Network.Process();에서 주기적으로  _sendList.TryDequeue(out Packet p)를 해서 큐에서 뽑아낸 후 
+  //->BeginSend를 통해 소켓을 이용해 서버쪽으로  바이트 패킷을 전송한다.
+
+3.서버에서(SMain.cs) Envir를 생성하고 서버 화면이 로드되거나 시작 버튼을 누르면 Envir.Start();가 호출된다.
+  //-> Envir.Start();에서  _thread = new Thread(WorkLoop) { IsBackground = true };로 WorkLoop 스레드를 실행한다.
+  //WorkLoop 스레드에서  StartNetwork();를 실행한다.
+  //StartNetwork();에서는 서버 소켓을 만들고 리슨모드로 진입한다.
+  //accept모드가 되면 Connection 이벤트 핸들러를 호출한다. (maxip는 수정해야 할 것으로 보임.)
+  // Connection 이벤트 핸들러에서는 Connections에 해당 커넥션을 추가한다.
+  //WorkLoop 스레드에서 주기적으로  Connections[i].Process();를 실행한다.(Seerver.library/ExineConnection.cs)
+  //Server.library/ExineConnection.cs의 Process(); 에서 _receiveList.TryDequeue(out p) 후  ProcessPacket(p);를 호출한다.
+  // ProcessPacket(p);에서는 패킷의 종류에 따라 적절히 처리를 진행한다.
+
+  // 아래의 경우 Server.library/PlayerObject.cs( HumanObject 상속)를 사용하여 처리함.
+  //   switch (p.Index)
+       {
+            ...
+            case (short)ClientPacketIds.Turn:
+                    Turn((C.Turn) p);
+                    break;
+       }
+
+   private void Turn(C.Turn p)
+        {
+            if (Stage != GameStage.Game) return;
+
+            if (Player.ActionTime > Envir.Time)
+                _retryList.Enqueue(p);
+            else
+                Player.Turn(p.Direction);
+        }
+
+  
+  // 위의 경우 Server.library/PlayerObject.cs >   
+    public void Turn(ExineDirection dir)
+    {
+        ...
+        //해당 처리하는 부분에서 만약 전체 클라이언트가 알아야 하는 내용인 경우  Broadcast함수로 모든 클라이언트들에게 서버에서 패킷을 전달해준다.
+        // Broadcast(new S.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+        
+        ...
+        // 이후 패킷을 보낸 클라이언트에게 서버에서 패킷을 전송한다.
+        // Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
+    }
+  
+ 4.클라이언트에서는 
+  //->CMain.cs의 Application_Idle에서 주기적으로 UpdateEnviroment를 호출하고 
+  //->UpdateEnviroment가 주기적으로  Network.Process();를 호출하고  
+  //->Network.Process();에서 주기적으로 receiveList.TryDequeue(out Packet p) 하고  ProcessPacket(p);를 호출한다.
+  //여기서 패킷에 따라 클라이언트에서 필요한 처리를 해준다.
+  //->switch (p.Index)
+     {
+        ... 
+        case (short)ServerPacketIds.UserLocation:
+            UserLocation((S.UserLocation)p);
+         ...
+     }
+  //  private void UserLocation(S.UserLocation p)
+        {
+            MapControl.NextAction = 0;
+            if (User.CurrentLocation == p.Location && User.Direction == p.Direction) return;
+
+            if (Settings.DebugMode)
+            {
+                ReceiveChat(new S.Chat { Message = "Displacement", Type = ChatType.System });
+            }
+
+            MapControl.RemoveObject(User);
+            User.CurrentLocation = p.Location;
+            User.MapLocation = p.Location;
+            MapControl.AddObject(User);
+
+            MapControl.FloorValid = false;
+            MapControl.InputDelay = CMain.Time + 400;
+
+            if (User.Dead) return;
+
+            User.ClearMagic();
+            User.QueuedAction = null;
+
+            for (int i = User.ActionFeed.Count - 1; i >= 0; i--)
+            {
+                if (User.ActionFeed[i].Action == ExAction.Pushed) continue;
+                User.ActionFeed.RemoveAt(i);
+            }
+
+            User.SetAction();
+        }

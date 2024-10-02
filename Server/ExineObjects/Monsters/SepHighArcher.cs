@@ -114,7 +114,7 @@ namespace Server.ExineObjects.Monsters
                             for (int i = 0; i < cell.Objects.Count; i++)
                             {
                                 MapObject targetob = cell.Objects[i];
-                                if (targetob.Race != ObjectType.Monster && targetob.Race != ObjectType.Player && targetob.Race != ObjectType.Hero) continue;
+                                if (targetob.Race != ObjectType.Monster && targetob.Race != ObjectType.Player ) continue;
                                 if (targetob == null || !targetob.IsAttackTarget(this) || targetob.Node == null) continue;
                                 if (targetob.Dead) continue;
 

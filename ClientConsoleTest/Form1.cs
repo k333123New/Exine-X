@@ -83,56 +83,7 @@ namespace ClientConsoleTest
         public Form1()
         {
             InitializeComponent();
-            /*
-            Console.WriteLine("test");
-            string path = @".\Data\Exine\AHW\";
-            string toStringValue = "00";
-            string extention = ".ypf";
-            string suffix = "";
-
-
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            Console.WriteLine("path:" + path);
-
-            var allFiles = Directory.GetFiles(path, "*" + suffix + extention, SearchOption.TopDirectoryOnly).OrderBy(x => int.Parse(Regex.Match(x, @"\d+").Value));
-            //var allFiles = Directory.GetFiles(path, "*.ypf");
-            Console.WriteLine("allFiles.Count():"+allFiles.Count());
-            Console.ReadLine();
-            var lastFile = allFiles.Count() > 0 ? Path.GetFileName(allFiles.Last()) : "0";
-
-            int i = 0;
-            //MLibrary[] library = new MLibrary[allFiles.Count()];
-            foreach (var file in allFiles)
-            {
-                Console.WriteLine(path+Path.GetFileName(file));
-                //library[i] = new MLibrary(path+Path.GetFileName(file));
-
-
-                //library[i] = new MLibrary(path + i.ToString(toStringValue) + suffix);
-                //i++
-            }
-
-            //Console.ReadLine();
-            */
-            /*
-            var count = int.Parse(Regex.Match(lastFile, @"\d+").Value) + 1;
-            Console.WriteLine("count:"+count);
-            Console.ReadLine();
-
-
-            for (int i = 0; i < count; i++)
-            {
-                Console.WriteLine(path + i.ToString(toStringValue) + suffix); 
-            }
-
-            Console.ReadLine();
-            */
-
-
+            
             
             TestJpg();
             testAccount = GetTestAccount();
@@ -307,6 +258,7 @@ namespace ClientConsoleTest
                     }); 
                     break;
 
+
                     //Keep Alive를 주기로 동작 실행
                 case (short)ServerPacketIds.KeepAlive: 
                     
@@ -325,6 +277,30 @@ namespace ClientConsoleTest
                        }
                    );
 
+                    switch(tempDirection)
+                    {
+                        case 0:
+                        case 4:
+                            Network.Enqueue(
+                           new C.Walk
+                           {
+                               //Direction = (ExineDirection)tempDirection,
+                               Direction = (ExineDirection)tempDirection,
+                           }
+                        );
+                            break;
+                        default:
+
+                            Network.Enqueue(
+                              new C.Attack
+                              {
+                                  //Direction = (ExineDirection)tempDirection,
+                                  Direction = (ExineDirection)tempDirection,
+                                  Spell = Spell.None,
+                              }
+                           );
+                            break;
+                    }
                     if (tempDirection == 0 || tempDirection == 4)
                     {
                         Network.Enqueue(
@@ -335,18 +311,31 @@ namespace ClientConsoleTest
                            }
                         );
                     }
-                    else
-                    {
-                        Network.Enqueue(
-                          new C.Attack
-                          {
-                              //Direction = (ExineDirection)tempDirection,
-                              Direction = (ExineDirection)tempDirection,
-                              Spell= Spell.None,
-                    }
-                       );
-                    }
-
+                    //else
+                    //{
+                    Network.Enqueue(
+                      new C.Attack
+                      {
+                          //Direction = (ExineDirection)tempDirection,
+                          Direction = (ExineDirection)tempDirection,
+                          Spell = Spell.None,
+                      }
+                   );
+                    //}
+                    /*
+                    Network.Enqueue(
+                      new C.ChangeAMode
+                      {
+                          Mode=AttackMode.Peace,
+                      }
+                   );
+                    Network.Enqueue(
+                      new C.ChangeAMode
+                      {
+                          Mode = AttackMode.All,
+                      }
+                   );
+                    */
 
                     tempDirection++;
                     tempDirection = tempDirection % 7;
@@ -476,6 +465,11 @@ namespace ClientConsoleTest
 
                 case (short)ServerPacketIds.ObjectWalk:
                     Console.WriteLine("ObjectWalk.ObjectId{0}, ObjectWalk.Location{1}", ((S.ObjectWalk)recvPacket).ObjectID, ((S.ObjectWalk)recvPacket).Location.ToString()); 
+                    break;
+
+
+                case (short)ServerPacketIds.ObjectRest:
+                    Console.WriteLine("ObjectRest.ObjectId{0}, ObjectRest.Location{1}", ((S.ObjectRest)recvPacket).ObjectID, ((S.ObjectRest)recvPacket).Location.ToString());
                     break;
 
                 case (short)15:

@@ -1,25 +1,24 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using Server.ExineDatabase;
 using Server.ExineEnvir;
 using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class SepHighWarrior : MonsterObject
+    public class SepHighAssassin : MonsterObject
     {
         public long FearTime, DecreaseMPTime;
-        public byte AttackRange = 1;
+        public byte AttackRange = 3;
         public bool Summoned;
 
-        protected internal SepHighWarrior(MonsterInfo info)
+        protected internal SepHighAssassin(MonsterInfo info)
             : base(info)
         {
         }
 
         protected override bool InAttackRange()
         {
-            return CurrentMap == Target.CurrentMap && Functions.InRange(CurrentLocation, Target.CurrentLocation, AttackRange);
+            return CurrentMap == Target.CurrentMap && Functions.InRange(CurrentLocation, Target.CurrentLocation, 1);
         }
 
         protected override void ProcessTarget()
@@ -28,6 +27,12 @@ namespace Server.ExineObjects.Monsters
 
             if (!InAttackRange())
             {
+                if (CanAttack)
+                {
+                    if (Envir.Random.Next(5) == 0)
+                        RangeAttack();
+                }
+
                 if (CurrentLocation == Target.CurrentLocation)
                 {
                     ExineDirection direction = (ExineDirection)Envir.Random.Next(8);
@@ -46,129 +51,14 @@ namespace Server.ExineObjects.Monsters
 
             if (!CanAttack) return;
 
-            if (InAttackRange())
+            if (Envir.Random.Next(5) > 0)
             {
-                Attack();
+                if (InAttackRange())
+                    Attack();
             }
+            else RangeAttack();
         }
 
-        protected override void Attack()
-        {
-
-            if (!Target.IsAttackTarget(this))
-            {
-                Target = null;
-                return;
-            }
-            ShockTime = 0;
-            ActionTime = Envir.Time + 500;
-            AttackTime = Envir.Time + AttackSpeed;
-
-            int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
-            if (damage == 0) return;
-
-            Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
-
-            switch (Envir.Random.Next(5))
-            {
-                case 0:
-                    TwinDrakeBlade();
-                    break;
-                case 1:
-                    CrossHalfMoon();
-                    break;
-                case 2:
-                    BladeAvalanche();
-                    break;
-                default:
-                    base.Attack();
-                    break;
-            }
-
-        }
-
-        public void TwinDrakeBlade()
-        {
-            if (Target == null) return;
-            int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
-            if (damage == 0) return;
-
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.TwinDrakeBlade });
-            Target.Attacked(this, (int)(damage * 0.8), DefenceType.AC);
-            ProjectileAttack((int)(damage * 0.8), DefenceType.ACAgility);
-
-            if (((Target.Race != ObjectType.Player || Settings.PvpCanResistPoison) && (Envir.Random.Next(Settings.PoisonAttackWeight) >= Target.Stats[Stat.PoisonResist])) && (Target.Level <= Level + 8 && Envir.Random.Next(20) <= 5))
-            {
-                Target.ApplyPoison(new Poison { PType = PoisonType.Stun, Duration = 5, TickSpeed = 1000 }, this);
-                Target.Broadcast(new S.ObjectEffect { ObjectID = Target.ObjectID, Effect = SpellEffect.TwinDrakeBlade });
-            }
-
-        }
-        public void CrossHalfMoon()
-        {
-            int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
-            if (damage == 0) return;
-
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.CrossHalfMoon });
-
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation, false);
-            if (targets.Count == 0) return;
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
-
-            for (int i = 0; i < targets.Count; i++)
-            {
-                HalfmoonAttack(damage);
-            }
-
-        }
-        public void BladeAvalanche()
-        {
-
-            int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
-            if (damage == 0) return;
-
-
-            Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.BladeAvalanche, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
-            int col = 3;
-            int row = 3;
-
-            Point[] loc = new Point[col];
-            loc[0] = Functions.PointMove(CurrentLocation, Functions.PreviousDir(Direction), 1);
-            loc[1] = Functions.PointMove(CurrentLocation, Direction, 1);
-            loc[2] = Functions.PointMove(CurrentLocation, Functions.NextDir(Direction), 1);
-            for (int i = 0; i < col; i++)
-            {
-                Point startPoint = loc[i];
-                for (int j = 0; j < row; j++)
-                {
-                    Point hitPoint = Functions.PointMove(startPoint, Direction, j);
-
-                    if (!CurrentMap.ValidPoint(hitPoint)) continue;
-
-                    Cell cell = CurrentMap.GetCell(hitPoint);
-
-                    if (cell.Objects == null) continue;
-
-                    for (int k = 0; k < cell.Objects.Count; k++)
-                    {
-                        MapObject target = cell.Objects[k];
-                        switch (target.Race)
-                        {
-                            case ObjectType.Monster:
-                            case ObjectType.Player:
-                            case ObjectType.Hero:
-                                //Only targets
-                                if (target.IsAttackTarget(this))
-                                {
-                                    target.Attacked(this, j <= 1 ? damage : (int)(damage * 0.6), DefenceType.MAC);
-                                }
-                                break;
-                        }
-                    }
-                }
-            }
-
-        }
 
         public bool Walk(ExineDirection dir, bool br = false)
         {
@@ -275,6 +165,98 @@ namespace Server.ExineObjects.Monsters
 
             return true;
         }
+        protected override void Attack()
+        {
+            if (!Target.IsAttackTarget(this))
+            {
+                Target = null;
+                return;
+            }
+
+            ShockTime = 0;
+            ActionTime = Envir.Time + 300;
+            AttackTime = Envir.Time + AttackSpeed;
+
+            int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
+            if (damage == 0) return;
+
+            DelayedAction action;
+            Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
+
+            if (Envir.Random.Next(5) == 0)
+            {
+                Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.CrescentSlash, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
+                ExineDirection backDir = Functions.ReverseDirection(Direction);
+                ExineDirection preBackDir = Functions.PreviousDir(backDir);
+                ExineDirection nextBackDir = Functions.NextDir(backDir);
+
+                for (int i = 0; i < 8; i++)
+                {
+                    ExineDirection dir = (ExineDirection)i;
+
+                    Point hitPoint = Functions.PointMove(CurrentLocation, dir, 1);
+
+                    if (dir != backDir && dir != preBackDir && dir != nextBackDir)
+                    {
+
+                        for (int k = 0; k < 2; k++)
+                        {
+                            hitPoint = Functions.PointMove(hitPoint, dir, k);
+
+                            if (!CurrentMap.ValidPoint(hitPoint)) continue;
+
+                            Cell cell = CurrentMap.GetCell(hitPoint);
+
+                            if (cell.Objects == null) continue;
+
+                            for (int j = 0; j < cell.Objects.Count; j++)
+                            {
+                                MapObject target = cell.Objects[j];
+                                switch (target.Race)
+                                {
+                                    case ObjectType.Monster:
+                                    case ObjectType.Player: 
+
+                                        if (target.IsAttackTarget(this))
+                                        {
+                                            WideLineAttack(damage, 4, 500, DefenceType.ACAgility, false, 4);
+                                        }
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+
+            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.DoubleSlash });
+            Target.Attacked(this, damage);
+            action = new DelayedAction(DelayedType.Damage, Envir.Time + 500, Target, (int)(damage * 0.8f), DefenceType.ACAgility, false);
+            ActionList.Add(action);
+        }
+
+        public void RangeAttack()
+        {
+            if (!Target.IsAttackTarget(this))
+            {
+                Target = null;
+                return;
+            }
+
+            ShockTime = 0;
+            ActionTime = Envir.Time + 300;
+            AttackTime = Envir.Time + AttackSpeed;
+
+            int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
+            if (damage == 0) return;
+
+            Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
+
+            Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.HeavenlySword, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
+            LineAttack(damage, AttackRange);
+
+        }
         public override void Die()
         {
             if (Dead) return;
@@ -282,7 +264,6 @@ namespace Server.ExineObjects.Monsters
             HP = 0;
             Dead = true;
 
-            //DeadTime = Envir.Time + DeadDelay;
             DeadTime = 0;
 
             Broadcast(new S.ObjectDied { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = (byte)(Master != null ? 1 : 0) });
@@ -325,14 +306,14 @@ namespace Server.ExineObjects.Monsters
                 ObjectID = ObjectID,
                 Name = master != null ? master.Name : Name,
                 NameColour = NameColour,
-                Class = ExineClass.Warrior,
+                Class = ExineClass.Assassin,
                 Gender = master != null ? master.Gender : Envir.Random.Next(2) == 0 ? ExineGender.Male : ExineGender.Female,
                 Location = CurrentLocation,
                 Direction = Direction,
                 Hair = master != null ? master.Hair : (byte)Envir.Random.Next(0, 5),
-                Weapon = 52,
+                Weapon = 113,
                 Shield = -1,//k333123 add
-                Armour = 31,
+                Armour = 34,
                 Light = master != null ? master.Light : Light,
                 Poison = CurrentPoison,
                 Dead = Dead,

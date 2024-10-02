@@ -654,39 +654,6 @@ namespace ClientPackets
         }
     }
 
-    public sealed class TakeBackHeroItem : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.TakeBackHeroItem; } }
-
-        public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            From = reader.ReadInt32();
-            To = reader.ReadInt32();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(From);
-            writer.Write(To);
-        }
-    }
-
-    public sealed class TransferHeroItem : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.TransferHeroItem; } }
-
-        public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            From = reader.ReadInt32();
-            To = reader.ReadInt32();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(From);
-            writer.Write(To);
-        }
-    }
     public sealed class DropGold : Packet
     {
         public override short Index { get { return (short)ClientPacketIds.DropGold; } }
@@ -1152,97 +1119,7 @@ namespace ClientPackets
             writer.Write(AcceptInvite);
         }
     }
-
-    public sealed class NewHero : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.NewHero; } }
-
-        public string Name = string.Empty;
-        public ExineGender Gender;
-        public ExineClass Class;
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Name = reader.ReadString();
-            Gender = (ExineGender)reader.ReadByte();
-            Class = (ExineClass)reader.ReadByte();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(Name);
-            writer.Write((byte)Gender);
-            writer.Write((byte)Class);
-        }
-    }
-
-    public sealed class SetAutoPotValue : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.SetAutoPotValue; } }
-
-        public Stat Stat;
-        public uint Value;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Stat = (Stat)reader.ReadByte();
-            Value = reader.ReadUInt32();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write((byte)Stat);
-            writer.Write(Value);
-        }
-    }
-
-    public sealed class SetAutoPotItem : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.SetAutoPotItem; } }
-
-        public MirGridType Grid;
-        public int ItemIndex;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Grid = (MirGridType)reader.ReadByte();
-            ItemIndex = reader.ReadInt32();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write((byte)Grid);
-            writer.Write(ItemIndex);
-        }
-    }
-
-    public sealed class SetHeroBehaviour : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.SetHeroBehaviour; } }
-
-        public HeroBehaviour Behaviour;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            Behaviour = (HeroBehaviour)reader.ReadByte();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write((byte)Behaviour);
-        }
-    }
-
-    public sealed class ChangeHero : Packet
-    {
-        public override short Index { get { return (short)ClientPacketIds.ChangeHero; } }
-
-        public int ListIndex;
-
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            ListIndex = reader.ReadInt32();
-        }
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(ListIndex);
-        }
-    }
+     
 
     public sealed class MarriageRequest : Packet
     {

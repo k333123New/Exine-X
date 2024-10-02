@@ -33,8 +33,7 @@ namespace Server.ExineEnvir
         public List<SpellObject> Spells = new List<SpellObject>();
         public List<PlayerObject> Players = new List<PlayerObject>();
         public List<MapRespawn> Respawns = new List<MapRespawn>();
-        public List<DelayedAction> ActionList = new List<DelayedAction>();
-        public List<HeroObject> Heroes = new List<HeroObject>();
+        public List<DelayedAction> ActionList = new List<DelayedAction>(); 
 
         public List<ConquestObject> Conquest = new List<ConquestObject>();
         public ConquestObject tempConquest;
@@ -1068,8 +1067,7 @@ namespace Server.ExineEnvir
                                 switch (target.Race)
                                 {
                                     case ObjectType.Monster:
-                                    case ObjectType.Player:
-                                    case ObjectType.Hero:
+                                    case ObjectType.Player: 
                                         //Only targets
                                         if (target.IsFriendlyTarget(player))
                                         {
@@ -2344,8 +2342,7 @@ namespace Server.ExineEnvir
             }
 
             if (ob.Race == ObjectType.Merchant) NPCs.Add((NPCObject)ob);
-            if (ob.Race == ObjectType.Spell) Spells.Add((SpellObject)ob);
-            if (ob.Race == ObjectType.Hero) Heroes.Add((HeroObject)ob);
+            if (ob.Race == ObjectType.Spell) Spells.Add((SpellObject)ob); 
 
             GetCell(ob.CurrentLocation).Add(ob);
         }
@@ -2354,8 +2351,7 @@ namespace Server.ExineEnvir
         {
             if (ob.Race == ObjectType.Player) Players.Remove((PlayerObject)ob);
             if (ob.Race == ObjectType.Merchant) NPCs.Remove((NPCObject)ob);
-            if (ob.Race == ObjectType.Spell) Spells.Remove((SpellObject)ob);
-            if (ob.Race == ObjectType.Hero) Heroes.Remove((HeroObject)ob);
+            if (ob.Race == ObjectType.Spell) Spells.Remove((SpellObject)ob); 
 
             GetCell(ob.CurrentLocation).Remove(ob);
         }

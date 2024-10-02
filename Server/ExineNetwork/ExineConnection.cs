@@ -386,12 +386,7 @@ namespace Server.ExineNetwork
                 case (short)ClientPacketIds.DropItem:
                     DropItem((C.DropItem) p);
                     break;
-                case (short)ClientPacketIds.TakeBackHeroItem:
-                    TakeBackHeroItem((C.TakeBackHeroItem)p);
-                    break;
-                case (short)ClientPacketIds.TransferHeroItem:
-                    TransferHeroItem((C.TransferHeroItem)p);
-                    break;
+                
                 case (short)ClientPacketIds.DropGold:
                     DropGold((C.DropGold) p);
                     break;
@@ -470,21 +465,6 @@ namespace Server.ExineNetwork
                 case (short)ClientPacketIds.GroupInvite:
                     GroupInvite((C.GroupInvite)p);
                     return;
-                case (short)ClientPacketIds.NewHero:
-                    NewHero((C.NewHero)p);
-                    break;
-                case (short)ClientPacketIds.SetAutoPotValue:
-                    SetAutoPotValue((C.SetAutoPotValue)p);
-                    break;
-                case (short)ClientPacketIds.SetAutoPotItem:
-                    SetAutoPotItem((C.SetAutoPotItem)p);
-                    break;
-                case (short)ClientPacketIds.SetHeroBehaviour:
-                    SetHeroBehaviour((C.SetHeroBehaviour)p);
-                    break;
-                case (short)ClientPacketIds.ChangeHero:
-                    ChangeHero((C.ChangeHero)p);
-                    break;
                 case (short)ClientPacketIds.TownRevive:
                     TownRevive();
                     return;
@@ -725,6 +705,8 @@ namespace Server.ExineNetwork
                 case (short)ClientPacketIds.ConfirmItemRental:
                     ConfirmItemRental();
                     break;
+
+
                 case (short)ClientPacketIds.Rest:
                     Rest((C.Rest)p);
                     break;
@@ -1166,20 +1148,7 @@ namespace Server.ExineNetwork
 
             Player.DropItem(p.UniqueID, p.Count, p.HeroInventory);
         }
-
-        private void TakeBackHeroItem(C.TakeBackHeroItem p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.TakeBackHeroItem(p.From, p.To);
-        }
-
-        private void TransferHeroItem(C.TransferHeroItem p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.TransferHeroItem(p.From, p.To);
-        }
+ 
         private void DropGold(C.DropGold p)
         {
             if (Stage != GameStage.Game) return;
@@ -1220,10 +1189,6 @@ namespace Server.ExineNetwork
             if (p.Ranking)
             {
                 Envir.Inspect(this, (int)p.ObjectID);
-            }
-            else if (p.Hero)
-            {
-                Envir.InspectHero(this, (int)p.ObjectID);
             }
             else
             {
@@ -1354,8 +1319,7 @@ namespace Server.ExineNetwork
             HumanObject actor = Player;
             if (p.Key > 16 || p.OldKey > 16)
             {
-                if (!Player.HeroSpawned || Player.Hero.Dead) return;
-                actor = Player.Hero;
+                return;
             }
 
             for (int i = 0; i < actor.Info.Magics.Count; i++)
@@ -1376,8 +1340,7 @@ namespace Server.ExineNetwork
             if (Stage != GameStage.Game) return;
 
             HumanObject actor = Player;
-            if (Player.HeroSpawned && p.ObjectID == Player.Hero.ObjectID)
-                actor = Player.Hero;
+             
 
             if (actor.Dead) return;
 
@@ -1412,41 +1375,7 @@ namespace Server.ExineNetwork
             Player.GroupInvite(p.AcceptInvite);
         }
 
-        private void NewHero(C.NewHero p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.NewHero(p);
-        }
-
-        private void SetAutoPotValue(C.SetAutoPotValue p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.SetAutoPotValue(p.Stat, p.Value);
-        }
-
-        private void SetAutoPotItem(C.SetAutoPotItem p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.SetAutoPotItem(p.Grid, p.ItemIndex);
-        }
-
-        private void SetHeroBehaviour(C.SetHeroBehaviour p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.SetHeroBehaviour(p.Behaviour);
-        }
-
-        private void ChangeHero(C.ChangeHero p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.ChangeHero(p.ListIndex);
-        }
-
+       
         private void TownRevive()
         {
             if (Stage != GameStage.Game) return;
@@ -1463,8 +1392,7 @@ namespace Server.ExineNetwork
                 Player.SpellToggle(p.Spell, p.canUse);
                 return;
             }
-            if (Player.HeroSpawned)
-                Player.Hero.SpellToggle(p.Spell, p.canUse);            
+                 
         }
         private void ConsignItem(C.ConsignItem p)
         {
@@ -2092,26 +2020,19 @@ namespace Server.ExineNetwork
 
                 CheckItemInfo(item.Slots[i].Info);
             }
-
-            CheckHeroInfo(item);
+             
         }
-        private void CheckHeroInfo(UserItem item)
-        {
-            if (item.AddedStats[Stat.Hero] == 0) return;
-            if (SentHeroInfo.Contains(item.UniqueID)) return;
 
-            HeroInfo heroInfo = Envir.GetHeroInfo(item.AddedStats[Stat.Hero]);
-            if (heroInfo == null) return;
-
-            Enqueue(new S.NewHeroInfo { Info = heroInfo.ClientInformation });
-            SentHeroInfo.Add(item.UniqueID);
-        }
         private void Rest(C.Rest p) //231107
         {
             if (Stage != GameStage.Game) return;
 
             //Player.Rest(p.Rest, true);
-            
+
+            if (Player.ActionTime > Envir.Time)
+                _retryList.Enqueue(p);
+            else
+                Player.Rest(p.Direction);
         }
 
     }

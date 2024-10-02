@@ -1104,13 +1104,6 @@ namespace Server.ExineObjects
                     acts.Add(new NPCActions(ActionType.Drop, fileName));
                     break;
 
-                case "REVIVEHERO":
-                    acts.Add(new NPCActions(ActionType.ReviveHero));
-                    break;
-
-                case "SEALHERO":
-                    acts.Add(new NPCActions(ActionType.SealHero));
-                    break;
 
                 case "CONQUESTREPAIRALL":
                     if (parts.Length < 2) return;
@@ -4072,12 +4065,6 @@ namespace Server.ExineObjects
                                 }
                             }
                         }
-                        break;
-                    case ActionType.ReviveHero:
-                        player.ReviveHero();
-                        break;
-                    case ActionType.SealHero:
-                        player.SealHero();
                         break;
                     case ActionType.ConquestRepairAll:
                         {

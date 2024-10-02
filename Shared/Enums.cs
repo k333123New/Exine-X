@@ -1043,8 +1043,7 @@ public enum ObjectType : byte
     Spell = 4,
     Monster = 5,
     Deco = 6,
-    Creature = 7,
-    Hero = 8
+    Creature = 7
 }
 
 public enum ChatType : byte
@@ -1994,16 +1993,6 @@ public enum ServerPacketIds : short
     GuildStorageItemChange,
     GuildStorageList,
     GuildRequestWar,
-    HeroCreateRequest,
-    NewHero,
-    HeroInformation,
-    UpdateHeroSpawnState,
-    UnlockHeroAutoPot,
-    SetAutoPotValue,
-    SetAutoPotItem,
-    SetHeroBehaviour,
-    ManageHeroes,
-    ChangeHero,
     DefaultNPC,
     NPCUpdate,
     NPCImageUpdate,
@@ -2132,8 +2121,6 @@ public enum ClientPacketIds : short
     ReplaceWedRing,
     DepositTradeItem,
     RetrieveTradeItem,
-    TakeBackHeroItem,
-    TransferHeroItem,
     DropGold,
     PickUp,
     RequestMapInfo,
@@ -2160,11 +2147,6 @@ public enum ClientPacketIds : short
     AddMember,
     DellMember,
     GroupInvite,
-    NewHero,
-    SetAutoPotValue,
-    SetAutoPotItem,
-    SetHeroBehaviour,
-    ChangeHero,
     TownRevive,
     SpellToggle,
     ConsignItem,
@@ -2297,23 +2279,7 @@ public enum IntelligentCreaturePickupMode : byte
     Automatic = 0,
     SemiAutomatic = 1,
 }
-
-public enum HeroSpawnState : byte
-{
-    None = 0,
-    Unsummoned = 1,
-    Summoned = 2,
-    Dead = 3
-}
-
-public enum HeroBehaviour : byte
-{
-    Attack = 0,
-    CounterAttack = 1,
-    Follow = 2,
-    Custom = 3
-}
-
+ 
 public enum SpellToggleState: sbyte
 {
     None = -1,

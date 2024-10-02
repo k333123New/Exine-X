@@ -1018,20 +1018,7 @@ namespace Server.ExineObjects
                 chatType = ChatType.Hint;
             }
 
-            if (this is HeroObject hero)
-            {
-                if (message == GameLanguage.WeaponCurse ||
-                    message == GameLanguage.WeaponLuck)
-                {
-                    hero.Owner.Enqueue(new S.RefreshItem { Item = item });
-                }
-
-                hero.Owner.ReceiveChat($"[Hero: {hero.Name}] {message}", chatType);
-            }
-            else
-            {
                 ReceiveChat(message, chatType);
-            }
 
             return true;
         }
@@ -2759,7 +2746,7 @@ namespace Server.ExineObjects
 
             if (target != null && target.Dead) return;
 
-            if (target != null && target.Race != ObjectType.Monster && target.Race != ObjectType.Player && target.Race != ObjectType.Hero) return;
+            if (target != null && target.Race != ObjectType.Monster && target.Race != ObjectType.Player) return;
 
             if (target != null && !target.Dead && target.IsAttackTarget(this) && !target.IsFriendlyTarget(this))
             {
@@ -2774,11 +2761,6 @@ namespace Server.ExineObjects
                         }
                     }
 
-                    if (player.HeroSpawned &&
-                        !player.Hero.Dead)
-                    {
-                        player.Hero.Target = target;
-                    }
                 }
             }
 
@@ -3027,7 +3009,7 @@ namespace Server.ExineObjects
             for (int i = 0; i < cell.Objects.Count; i++)
             {
                 MapObject ob = cell.Objects[i];
-                if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster && ob.Race != ObjectType.Hero) continue;
+                if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                 if (!ob.IsAttackTarget(this)) continue;
 
                 if (ob != null && !ob.Dead && ob.IsAttackTarget(this) && !ob.IsFriendlyTarget(this))
@@ -3043,11 +3025,6 @@ namespace Server.ExineObjects
                             }
                         }
 
-                        if (player.HeroSpawned &&
-                            !player.Hero.Dead)
-                        {
-                            player.Hero.Target = ob;
-                        }
                     }
                 }
 
@@ -3446,8 +3423,6 @@ namespace Server.ExineObjects
             RegenTime = Envir.Time + RegenDelay;
             ChangeMP(-cost);
 
-            if (spell == Spell.ShoulderDash && Race == ObjectType.Hero)
-                dir = Direction;
 
             Direction = dir;
             if (spell != Spell.ShoulderDash && spell != Spell.BackStep && spell != Spell.FlashDash)
@@ -3464,7 +3439,7 @@ namespace Server.ExineObjects
                 target = FindObject(targetID, 10);
             }
 
-            if (target != null && target.Race != ObjectType.Monster && target.Race != ObjectType.Player && target.Race != ObjectType.Hero)
+            if (target != null && target.Race != ObjectType.Monster && target.Race != ObjectType.Player )
             {
                 target = null;
             }
@@ -3482,11 +3457,7 @@ namespace Server.ExineObjects
                         }
                     }
 
-                    if (player.HeroSpawned &&
-                        !player.Hero.Dead)
-                    {
-                        player.Hero.Target = target;
-                    }
+                    
                 }
             }
 
@@ -4705,8 +4676,7 @@ namespace Server.ExineObjects
             switch (target.Race)
             {
                 case ObjectType.Monster:
-                case ObjectType.Player:
-                case ObjectType.Hero:
+                case ObjectType.Player: 
                     //Only targets
                     if (target.IsFriendlyTarget(this))
                     {
@@ -4926,9 +4896,8 @@ namespace Server.ExineObjects
 
                             if ((ob.Race == ObjectType.Player ||
                                 ob.Race == ObjectType.Monster ||
-                                ob.Race == ObjectType.Hero) &&
                                 ob.IsAttackTarget(this) &&
-                                ob.Level < Level)
+                                ob.Level < Level))
                             {
                                 _target = ob;
                                 break;
@@ -6977,13 +6946,7 @@ namespace Server.ExineObjects
         public override Packet GetInfo() { return null; }
         public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
-            if (attacker.Race == ObjectType.Hero)
-            {
-                HeroObject heroAttacker = (HeroObject)attacker;
-                attacker = heroAttacker.Owner;
-                heroAttacker.Target = this;
-            }
-
+           
             var armour = GetArmour(type, attacker, out bool hit);
 
             if (!hit)

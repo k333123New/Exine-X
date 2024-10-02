@@ -203,7 +203,6 @@ namespace Exine.ExineObjects
                 {
                     case ObjectType.Player:
                     case ObjectType.Monster:
-                    case ObjectType.Hero:
                         TargetObject = this;
                         break;
                 }
@@ -635,7 +634,7 @@ namespace Exine.ExineObjects
             if (Name.Contains("(")) name = Name.Substring(Name.IndexOf("(") + 1, Name.Length - Name.IndexOf("(") - 2);
 
             if (Dead) return;
-            if (Race != ObjectType.Player && Race != ObjectType.Monster && Race != ObjectType.Hero) return;
+            if (Race != ObjectType.Player && Race != ObjectType.Monster ) return;
 
             if (CMain.Time >= HealthTime)
             {

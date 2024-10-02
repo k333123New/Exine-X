@@ -55,7 +55,6 @@ namespace Server.ExineObjects.Monsters
                             if (ob.EXPOwner == null || ob.EXPOwner.Dead)
                                 ob.EXPOwner = attacker.Master switch
                                 {
-                                    HeroObject hero => hero.Owner,
                                     _ => attacker.Master
                                 };
 

@@ -1,33 +1,32 @@
 ﻿using Server.ExineDatabase;
-using Server.ExineEnvir;
 using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class RedMoonEvil : MonsterObject
+    public class IcePillar : MonsterObject
     {
         protected override bool CanMove { get { return false; } }
-        protected override bool CanRegen { get { return false; } }     
+        protected override bool CanRegen { get { return false; } }
 
-        protected internal RedMoonEvil(MonsterInfo info) : base(info)
+        protected internal IcePillar(MonsterInfo info)
+            : base(info)
         {
             Direction = ExineDirection.Up;
-
-            ActionTime = Envir.Time + 300;
-            AttackTime = Envir.Time + AttackSpeed;
         }
-
-        protected override bool InAttackRange()
-        {
-            if (Target.CurrentMap != CurrentMap) return false;
-
-            return Target.CurrentLocation != CurrentLocation && Functions.InRange(CurrentLocation, Target.CurrentLocation, Info.ViewRange);
-        }
+        
+        protected override void FindTarget() { }
 
         public override void Turn(ExineDirection dir)
         {
         }
-        public override bool Walk(ExineDirection dir) { return false; }
+        public override bool Walk(ExineDirection dir) 
+        { 
+            return false; 
+        }        
+
+        protected override void ProcessRegen() { }
+        protected override void ProcessSearch() { }
+        protected override void ProcessRoam() { }
 
         public override int Attacked(MonsterObject attacker, int damage, DefenceType type = DefenceType.ACAgility)
         {
@@ -55,16 +54,8 @@ namespace Server.ExineObjects.Monsters
             }
 
             if (armour >= damage) return 0;
-
+            
             ShockTime = 0;
-
-            for (int i = PoisonList.Count - 1; i >= 0; i--)
-            {
-                if (PoisonList[i].PType != PoisonType.LRParalysis) continue;
-
-                PoisonList.RemoveAt(i);
-                OperateTime = 0;
-            }
 
             if (attacker.Info.AI == 6)
                 EXPOwner = null;
@@ -72,8 +63,7 @@ namespace Server.ExineObjects.Monsters
             {
                 if (EXPOwner == null || EXPOwner.Dead)
                     EXPOwner = attacker.Master switch
-                    {
-                        HeroObject hero => hero.Owner,
+                    { 
                         _ => attacker.Master
                     };
 
@@ -81,11 +71,18 @@ namespace Server.ExineObjects.Monsters
                     EXPOwnerTime = Envir.Time + EXPOwnerDelay;
             }
 
+            if(Envir.Random.Next(3) == 0)
+            {
+                CloseAttack(damage);
+            }
+
             Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
 
             ChangeHP(-1);
             return 1;
+        
         }
+
         public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
         {
             int armour = 0;
@@ -118,14 +115,6 @@ namespace Server.ExineObjects.Monsters
 
             ShockTime = 0;
 
-            for (int i = PoisonList.Count - 1; i >= 0; i--)
-            {
-                if (PoisonList[i].PType != PoisonType.LRParalysis) continue;
-
-                PoisonList.RemoveAt(i);
-                OperateTime = 0;
-            }
-
             if (Master != null && Master != attacker)
                 if (Envir.Time > Master.BrownTime && Master.PKPoints < 200)
                     attacker.BrownTime = Envir.Time + Settings.Minute;
@@ -136,6 +125,11 @@ namespace Server.ExineObjects.Monsters
             if (EXPOwner == attacker)
                 EXPOwnerTime = Envir.Time + EXPOwnerDelay;
 
+            if (Envir.Random.Next(3) == 0)
+            {
+                CloseAttack(damage);
+            }
+
             Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
             attacker.GatherElement();
             ChangeHP(-1);
@@ -143,39 +137,61 @@ namespace Server.ExineObjects.Monsters
             return 1;
         }
 
-        //public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false) { }
-
-        protected override void ProcessTarget()
+        public override int Struck(int damage, DefenceType type = DefenceType.ACAgility)
         {
-            if (!CanAttack) return;
+            return 0;
+        }
 
-            List<MapObject> targets = FindAllTargets(Info.ViewRange, CurrentLocation);
+        public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true) { }
+
+        private void CloseAttack(int damage)
+        {
+            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+
+            List<MapObject> targets = FindAllTargets(1, CurrentLocation);
+
             if (targets.Count == 0) return;
-
-            ShockTime = 0;
-
-            Broadcast(new S.ObjectAttack {ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation});
+            
             for (int i = 0; i < targets.Count; i++)
             {
-                Target = targets[i];
-                Attack();
+                Broadcast(new S.ObjectEffect { ObjectID = targets[i].ObjectID, Effect = SpellEffect.IcePillar });
+
+                if (targets[i].Attacked(this, damage, DefenceType.MACAgility) <= 0) continue;
+
+                PoisonTarget(targets[i], 5, GetAttackPower(Stats[Stat.MinMC], Stats[Stat.MaxMC]), PoisonType.Frozen, 1000);
             }
-
-
-            ActionTime = Envir.Time + 300;
-            AttackTime = Envir.Time + AttackSpeed;
         }
 
-        protected override void Attack()
+        public override void Die()
         {
+            Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+
             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
-            if (damage == 0) return;
 
-            DelayedAction action = new DelayedAction(DelayedType.Damage, Envir.Time + 300, Target, damage, DefenceType.ACAgility);
-            ActionList.Add(action);
+            List<MapObject> targets = FindAllTargets(7, CurrentLocation, false);
 
-            Broadcast(new S.ObjectEffect{ ObjectID = Target.ObjectID, Effect = SpellEffect.RedMoonEvil});
+            for (int i = 0; i < targets.Count; i++)
+            {
+                int delay = Functions.MaxDistance(CurrentLocation, targets[i].CurrentLocation) * 50 + 500; //50 MS per Step
+
+                DelayedAction action = new DelayedAction(DelayedType.Die, Envir.Time + delay, targets[i], damage, DefenceType.ACAgility);
+                ActionList.Add(action);
+            }
+            
+            base.Die();
         }
 
+        protected override void CompleteDeath(IList<object> data)
+        {
+            MapObject target = (MapObject)data[0];
+            int damage = (int)data[1];
+            DefenceType defence = (DefenceType)data[2];
+
+            if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
+
+            target.Attacked(this, damage, defence);
+
+            PoisonTarget(target, 5, 5, PoisonType.Frozen, 1000);
+        }
     }
 }

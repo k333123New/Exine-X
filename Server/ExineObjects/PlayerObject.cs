@@ -23,34 +23,7 @@ namespace Server.ExineObjects
 
         public bool WarZone = false;
 
-        public int CurrentHeroIndex;
-        private HeroInfo currentHero;
-        public HeroInfo CurrentHero
-        {
-            get { return currentHero; }
-            set
-            {
-                currentHero = value;
-
-                if (currentHero != null)
-                {
-                    Info.CurrentHeroIndex = currentHero.Index;
-                    for (int i = 0; i < Info.Heroes.Length; i++)
-                    {
-                        if (Info.Heroes[i].Index != currentHero.Index) continue;
-                        CurrentHeroIndex = i;
-                        break;
-                    }
-                }
-                else
-                {
-                    Info.CurrentHeroIndex = 0;
-                    CurrentHeroIndex = -1;
-                }
-                
-            }
-        }
-        public HeroObject Hero;
+         
 
         protected AccountInfo account;
         public virtual AccountInfo Account
@@ -143,8 +116,7 @@ namespace Server.ExineObjects
         public bool GuildMembersChanged = true;//same as above but for members
         public bool GuildCanRequestItems = true;
         public bool RequestedGuildBuffInfo = false;
-
-        public bool CanCreateHero = false;        
+           
         public bool AllowGroup
         {
             get { return Info.AllowGroup; }
@@ -227,8 +199,7 @@ namespace Server.ExineObjects
                 MyGuild = Envir.GetGuild(Info.GuildIndex);
             }
 
-            if (info.CurrentHeroIndex > 0)
-                CurrentHero = Envir.GetHeroInfo(info.CurrentHeroIndex);
+           
 
             RefreshStats();
 
@@ -332,9 +303,7 @@ namespace Server.ExineObjects
                     Pets.RemoveAt(i);
                 }
             }
-
-            if (HeroSpawned)
-                DespawnHero();
+             
             
             for (int i = 0; i < Info.Magics.Count; i++)
             {
@@ -790,12 +759,7 @@ namespace Server.ExineObjects
             else
                 GainExp((uint)expPoint);
 
-            if (HeroSpawned && !Hero.Dead)
-            {
-                expPoint = Hero.ReduceExp(amount, targetLevel);
-                expPoint = (int)(expPoint * Settings.ExpRate);
-                Hero.GainExp((uint)expPoint);
-            }
+             
         }
 
         //240827 exp 1 to 0!
@@ -1264,10 +1228,7 @@ namespace Server.ExineObjects
                     Enqueue(new S.GuildBuffList() { ActiveBuffs = MyGuild.BuffList });
                 }
             }
-
-            if (HasHero && Info.HeroSpawned)
-                SummonHero();
-
+             
             if (InSafeZone && Info.LastLogoutDate > DateTime.MinValue)
             {
                 double totalMinutes = (Envir.Now - Info.LastLogoutDate).TotalMinutes;
@@ -1529,9 +1490,7 @@ namespace Server.ExineObjects
                 MaxExperience = MaxExperience,
 
                 LevelEffects = LevelEffects,
-
-                HasHero = HasHero,
-                HeroBehaviour = Info.HeroBehaviour,
+                 
 
                 Inventory = new UserItem[Info.Inventory.Length],
                 Equipment = new UserItem[Info.Equipment.Length],
@@ -2140,55 +2099,7 @@ namespace Server.ExineObjects
                         ReceiveChat("Could not level player", ChatType.System);
                         break;
 
-                    case "LEVELHERO":
-                        if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
-
-                        if (parts.Length >= 3)
-                        {
-                            if (!IsGM) return;
-
-                            if (ushort.TryParse(parts[2], out level))
-                            {
-                                if (level == 0) return;
-                                player = Envir.GetPlayer(parts[1]);
-                                if (player == null) return;
-                                HeroObject hero = player.GetHero();
-                                if (hero == null) return;
-                                old = hero.Level;
-                                hero.Level = level;
-                                hero.LevelUp();
-
-                                ReceiveChat(string.Format("Player {0}'s hero has been Leveled {1} -> {2}.", player.Name, old, hero.Level), ChatType.System);
-                                MessageQueue.Enqueue(string.Format("Player {0}'s hero has been Leveled {1} -> {2} by {3}", player.Name, old, hero.Level, Name));
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            HeroObject hero = GetHero();
-                            if (hero == null) return;
-
-                            if (parts[1] == "-1")
-                            {
-                                parts[1] = ushort.MaxValue.ToString();
-                            }
-
-                            if (ushort.TryParse(parts[1], out level))
-                            {
-                                if (level == 0) return;
-                                old = hero.Level;
-                                hero.Level = level;
-                                hero.LevelUp();
-
-                                ReceiveChat(string.Format("{0} {1} -> {2}.", GameLanguage.LevelUp, old, hero.Level), ChatType.System);
-                                MessageQueue.Enqueue(string.Format("Player {0}'s hero has been Leveled {1} -> {2} by {3}", Name, old, hero.Level, Name));
-                                return;
-                            }
-                        }
-
-                        ReceiveChat("Could not level player", ChatType.System);
-                        break;
-
+                    
                     case "MAKE":
                         {
                             if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
@@ -3148,10 +3059,7 @@ namespace Server.ExineObjects
 
                     case "RIDE":
                         ToggleRide();
-
-                        if (HasHero && HeroSpawned && Hero.RidingMount != RidingMount)
-                            Hero.ToggleRide();
-
+                         
                         ChatTime = 0;
                         break;
                     case "SETFLAG":
@@ -3490,19 +3398,7 @@ namespace Server.ExineObjects
                         }
                         break;
 
-                    case "SUMMONHERO":
-                        {
-                            if (!HasHero) return;
-
-                            if (!HeroSpawned)
-                                SummonHero();
-                            else
-                            {
-                                DespawnHero();
-                                Info.HeroSpawned = false;
-                            }
-                        }
-                        break;
+                    
 
                     case "ALLOWOBSERVE":
                         AllowObserve = !AllowObserve;
@@ -4039,6 +3935,8 @@ namespace Server.ExineObjects
 
             return text;
         }
+
+
         public void Turn(ExineDirection dir)
         {
             _stepCounter = 0;
@@ -4083,6 +3981,16 @@ namespace Server.ExineObjects
 
             Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
         }
+
+
+        //최종적으로는 클라이언트 요청 > 서버에서 수신 후 패킷 내려줌 > 클라이언트에서 패킷 받은 후 처리 가 맞음.
+        //일단은 전체 네트워크에 뿌리고 수신하는 부분까지만 확인할것.
+        public void Rest(ExineDirection dir) //add k333123 240926
+        { 
+            Broadcast(new S.ObjectRest { ObjectID = ObjectID, Direction = dir, Location = CurrentLocation });
+            Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
+        }
+
         public void Harvest(ExineDirection dir)
         {
             if (!CanMove)
@@ -4136,6 +4044,8 @@ namespace Server.ExineObjects
             if (send)
                 ReceiveChat("You do not own any nearby carcasses.", ChatType.System);
         }        
+
+
         private void CompleteQuest(IList<object> data)
         {
             QuestProgressInfo quest = (QuestProgressInfo)data[0];
@@ -4385,8 +4295,7 @@ namespace Server.ExineObjects
 
         public override bool IsAttackTarget(HumanObject attacker)
         {            
-            if (attacker == null || attacker.Node == null) return false;
-            if (attacker.Race == ObjectType.Hero) attacker = ((HeroObject)attacker).Owner;
+            if (attacker == null || attacker.Node == null) return false; 
             if (Dead || InSafeZone || attacker.InSafeZone || attacker == this || GMGameMaster) return false;
             if (CurrentMap.Info.NoFight) return false;
 
@@ -4452,8 +4361,7 @@ namespace Server.ExineObjects
         }
         public override bool IsFriendlyTarget(HumanObject ally)
         {
-            if (ally == this) return true;
-            if (ally == Hero) return true;
+            if (ally == this) return true; 
 
             switch (ally.AMode)
             {
@@ -4828,17 +4736,9 @@ namespace Server.ExineObjects
                 toArray[to] = temp;
                 p.Success = true;
                 Enqueue(p);
-                /*
-                if (grid == MirGridType.HeroInventory)
-                {
-                    Hero.RefreshStats();
-                    Hero.Broadcast(GetUpdateInfo());
-                }
-                else
-                {*/
+                
                     RefreshStats();
-                    Broadcast(GetUpdateInfo());
-                //}
+                    Broadcast(GetUpdateInfo()); 
 
                 Report.ItemMoved(temp, fromGrid, grid, index, to);
 
@@ -5015,16 +4915,7 @@ namespace Server.ExineObjects
                 case MirGridType.Refine:
                     array = Info.Refine;
                     break;
-                    /*
-                case MirGridType.HeroInventory:
-                    if (!HasHero || !HeroSpawned)
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-                    array = CurrentHero.Inventory;
-                    break;
-                    */
+                    
                 default:
                     Enqueue(p);
                     return;
@@ -5204,15 +5095,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     toArray = Info.Equipment;
                     break;
-                /*case MirGridType.HeroInventory:
-                    if (HasHero && HeroSpawned && !Hero.Dead)
-                    {
-                        toArray = CurrentHero.Equipment;
-                        toGrid = MirGridType.HeroEquipment;
-                        actor = Hero;
-                    }                        
-                    break;
-                */
+                
             }
 
             if (toArray == null || to < 0 || to >= toArray.Length)
@@ -5248,16 +5131,7 @@ namespace Server.ExineObjects
                     }
                     array = Account.Storage;
                     break;
-                    /*
-                case MirGridType.HeroInventory:
-                    if (!HasHero || !HeroSpawned)
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-                    array = CurrentHero.Inventory;
-                    break;
-                    */
+                    
                 default:
                     Enqueue(p);
                     return;
@@ -5330,119 +5204,10 @@ namespace Server.ExineObjects
 
                 p.Success = true;
                 Enqueue(p);
-                /*
-                if (toGrid == MirGridType.HeroEquipment)
-                    Hero.RefreshStats();
-                else
-                */
+               
                     RefreshStats();
 
                 //Broadcast(GetUpdateInfo());
-                return;
-            }
-            Enqueue(p);
-        }
-        public void TakeBackHeroItem(int from, int to)
-        {
-            S.TakeBackHeroItem p = new S.TakeBackHeroItem { From = from, To = to, Success = false };
-
-            if (!HasHero || !HeroSpawned || Hero.Dead)
-            {
-                Enqueue(p);
-                return;
-            }
-
-            if (from < 0 || from >= CurrentHero.Inventory.Length)
-            {
-                Enqueue(p);
-                return;
-            }
-
-            if (to < 0 || to >= Info.Inventory.Length)
-            {
-                Enqueue(p);
-                return;
-            }
-
-            UserItem temp = CurrentHero.Inventory[from];
-
-            if (temp == null)
-            {
-                Enqueue(p);
-                return;
-            }
-
-            if (Info.Inventory[to] == null)
-            {
-                Info.Inventory[to] = temp;
-                CurrentHero.Inventory[from] = null;
-
-                //Report.ItemMoved(temp, MirGridType.HeroInventory, MirGridType.Inventory, from, to);
-
-                p.Success = true;
-                RefreshBagWeight();
-                Hero.RefreshBagWeight();
-                Enqueue(p);
-
-                return;
-            }
-            Enqueue(p);
-        }
-        public void TransferHeroItem(int from, int to)
-        {
-            S.TransferHeroItem p = new S.TransferHeroItem { From = from, To = to, Success = false };
-
-            if (!HasHero || !HeroSpawned || Hero.Dead)
-            {
-                Enqueue(p);
-                return;
-            }
-
-            if (from < 0 || from >= Info.Inventory.Length)
-            {
-                Enqueue(p);
-                return;
-            }
-
-            if (to < 0 || to >= CurrentHero.Inventory.Length)
-            {
-                Enqueue(p);
-                return;
-            }
-
-            UserItem temp = Info.Inventory[from];
-
-            if (temp == null)
-            {
-                Enqueue(p);
-                return;
-            }
-
-            if (temp.Info.Bind.HasFlag(BindMode.NoHero))
-            {
-                Enqueue(p);
-                return;
-            }
-
-            if (temp.Weight + Hero.CurrentBagWeight > Hero.Stats[Stat.BagWeight])
-            {
-                ReceiveChat("Too heavy to transfer.", ChatType.System);
-                Enqueue(p);
-                return;
-            }
-
-            if (CurrentHero.Inventory[to] == null)
-            {
-                CurrentHero.Inventory[to] = temp;
-                Info.Inventory[from] = null;
-
-                //Report.ItemMoved(temp, MirGridType.Inventory, MirGridType.HeroInventory, from, to);
-
-                p.Success = true;
-                RefreshBagWeight();
-                Hero.RefreshBagWeight();
-                Enqueue(p);
-
                 return;
             }
             Enqueue(p);
@@ -5699,26 +5464,7 @@ namespace Server.ExineObjects
                                 ReceiveChat("You haven't won anything.", ChatType.Hint);
                             }
                             break;
-                        case 13://Hero unlock autopot
-                            if (!HeroSpawned || Hero.AutoPot)
-                            {
-                                Enqueue(p);
-                                return;
-                            }
-                            Hero.AutoPot = true;
-                            Enqueue(new S.UnlockHeroAutoPot());
-                            ReceiveChat("Hero AutoPot has been unlocked.", ChatType.Hint);
-                            break;
-                        case 14: //Increase maximum hero count
-                            if (Info.MaximumHeroCount >= Settings.MaximumHeroCount)
-                            {
-                                ReceiveChat("Maximum hero count reached.", ChatType.Hint);
-                                Enqueue(p);
-                                return;
-                            }
-                            Info.MaximumHeroCount++;
-                            Array.Resize(ref Info.Heroes, Info.MaximumHeroCount);
-                            break;
+                         
                     }
                     break;
                 case ItemType.Book:
@@ -5961,15 +5707,7 @@ namespace Server.ExineObjects
                     break;
                 case ItemType.SiegeAmmo:
                     //TODO;
-                    break;
-                case ItemType.SealedHero:
-                    HeroInfo heroInfo = Envir.GetHeroInfo(item.AddedStats[Stat.Hero]);
-                    if (heroInfo == null || !AddHero(heroInfo))
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-                    break;
+                    break; 
                 default:
                     return;
             }
@@ -5983,12 +5721,7 @@ namespace Server.ExineObjects
             p.Success = true;
             Enqueue(p);
         }
-        public void HeroUseItem(ulong id)
-        {
-            if (!HasHero || !HeroSpawned)
-                return;
-            Hero.UseItem(id);
-        }
+         
         public void SplitItem(MirGridType grid, ulong id, ushort count)
         {
             S.SplitItem1 p = new S.SplitItem1 { Grid = grid, UniqueID = id, Count = count, Success = false };
@@ -6136,24 +5869,7 @@ namespace Server.ExineObjects
                     }
                     arrayFrom = Info.Equipment[(int)EquipmentSlot.Weapon].Slots;
                     break;
-                    /*
-                case MirGridType.HeroInventory:
-                    if (!HasHero || !HeroSpawned)
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-                    arrayFrom = CurrentHero.Inventory;
-                    break;
-                case MirGridType.HeroEquipment:
-                    if (!HasHero || !HeroSpawned)
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-                    arrayFrom = CurrentHero.Equipment;
-                    break;
-                    */
+                    
                 default:
                     Enqueue(p);
                     return;
@@ -6197,24 +5913,7 @@ namespace Server.ExineObjects
                     }
                     arrayTo = Info.Equipment[(int)EquipmentSlot.Weapon].Slots;
                     break;
-                    /*
-                case MirGridType.HeroInventory:
-                    if (!HasHero || !HeroSpawned)
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-                    arrayTo = CurrentHero.Inventory;
-                    break;
-                case MirGridType.HeroEquipment:
-                    if (!HasHero || !HeroSpawned)
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-                    arrayTo = CurrentHero.Equipment;
-                    break;
-                    */
+                     
                 default:
                     Enqueue(p);
                     return;
@@ -6296,12 +5995,7 @@ namespace Server.ExineObjects
                 case MirGridType.Inventory:
                     array = Info.Inventory;
                     break;
-                    /*
-                case MirGridType.HeroInventory:
-                    if (HasHero && HeroSpawned)
-                        array = CurrentHero.Inventory;
-                    break;
-                    */
+                    
             }
 
             if (array == null)
@@ -6718,11 +6412,7 @@ namespace Server.ExineObjects
                 case MirGridType.Inventory:
                     RefreshBagWeight();
                     break;
-                    /*
-                case MirGridType.HeroInventory:
-                    Hero.RefreshBagWeight();
-                    break;
-                    */
+                     
             }
 
             if (canRepair && array[indexTo] != null)
@@ -6930,7 +6620,7 @@ namespace Server.ExineObjects
 
             UserItem temp = null;
             int index = -1;
-            HeroObject currentHero = null;
+             
 
             if (!isHeroItem)
             {
@@ -6942,26 +6632,7 @@ namespace Server.ExineObjects
                     break;
                 }
             }
-            else
-            {
-                currentHero = Envir.Heroes.FirstOrDefault(h => h.Info.Index == Info.CurrentHeroIndex);
-
-                if (currentHero != null)
-                {
-                    for (int i = 0; i < currentHero.Info.Inventory.Length; i++)
-                    {
-                        temp = currentHero.Info.Inventory[i];
-                        if (temp == null || temp.UniqueID != id) continue;
-                        index = i;
-                        break;
-                    }
-                }
-                else
-                {
-                    Enqueue(p);
-                    return;
-                }
-            }
+             
 
             if (temp == null || index == -1 || count > temp.Count || count < 1)
             {
@@ -6990,14 +6661,8 @@ namespace Server.ExineObjects
                         return;
                     }
 
-                if (p.HeroItem)
-                {
-                        currentHero.Info.Inventory[index] = null;
-                }
-                else
-                {
-                    Info.Inventory[index] = null;
-                }
+                
+                    Info.Inventory[index] = null; 
                 
             }
             else
@@ -7014,17 +6679,9 @@ namespace Server.ExineObjects
             }
             p.Success = true;
             Enqueue(p);
-
-            if (p.HeroItem)
-            {
-                currentHero.RefreshBagWeight();
-                currentHero.Report.ItemChangedHero(temp, count, 1);
-            }
-            else
-            {
-                RefreshBagWeight();
-                Report.ItemChanged(temp, count, 1);
-            }  
+             
+            RefreshBagWeight();
+            Report.ItemChanged(temp, count, 1);
         }
         public void DropGold(uint gold)
         {
@@ -8875,117 +8532,7 @@ namespace Server.ExineObjects
 
         #endregion
 
-        #region Heroes
-        public void NewHero(C.NewHero p)
-        {
-            if (!Envir.CanCreateHero(p, Connection, IsGM))
-                return;
-
-            int heroCount = Info.Heroes.Count(x => x != null);
-            if (heroCount >= Info.MaximumHeroCount)
-            {
-                Enqueue(new S.NewHero { Result = 4 });
-                return;
-            }
-
-            bool passedItemCheck = true;
-            ItemInfo itemInfo = Envir.GetItemInfo(Settings.HeroSealItemName);
-            if (itemInfo != null && FreeSpace(Info.Inventory) == 0)
-                passedItemCheck = false;
-
-            if (!passedItemCheck)
-            {
-                Enqueue(new S.NewHero { Result = 6 });
-                return;
-            }
-
-            var info = new HeroInfo(p) { Index = ++Envir.NextHeroID };            
-            Envir.HeroList.Add(info);
-
-            if (itemInfo != null)
-            {
-                UserItem item = Envir.CreateFreshItem(itemInfo);
-                item.AddedStats[Stat.Hero] = info.Index;
-                GainItem(item);
-            }
-            else
-                AddHero(info);
-
-            Enqueue(new S.NewHero { Result = 10 });            
-        }
-
-        public HeroObject GetHero()
-        {
-            if (HasHero && HeroSpawned)
-                return Hero;
-
-            return null;
-        }
-
-        public void SetAutoPotValue(Stat stat, uint value)
-        {
-            if (!HeroSpawned || !Hero.AutoPot) return;
-
-            if (stat == Stat.HP)
-                Hero.AutoHPPercent = (byte)Math.Min(99, value);
-            else
-                Hero.AutoMPPercent = (byte)Math.Min(99, value);
-
-            Enqueue(new S.SetAutoPotValue() { Stat = stat, Value = value });
-        }
-
-        public void SetAutoPotItem(MirGridType Grid, int ItemIndex)
-        {
-            if (!HeroSpawned || !Hero.AutoPot) return;
-
-            if (Envir.GetItemInfo(ItemIndex) == null)
-                ItemIndex = 0;
-
-            
-                Hero.MPItemIndex = ItemIndex;
-            Enqueue(new S.SetAutoPotItem() { Grid = Grid, ItemIndex = ItemIndex });
-        }
-
-        public void SetHeroBehaviour(HeroBehaviour behaviour)
-        {
-            if (!HeroSpawned) return;
-            if (Info.HeroBehaviour == behaviour) return;
-
-            Info.HeroBehaviour = behaviour;
-            Enqueue(new S.SetHeroBehaviour() { Behaviour = behaviour });
-
-            Hero.Target = null;
-            Hero.SearchTime = 0;
-        }
-
-        public void ChangeHero(int index)
-        {
-            if (Info.Heroes.Length <= index) return;
-            bool respawn = Info.HeroSpawned;
-
-            if (Hero != null)
-            {
-                DespawnHero();
-                Info.HeroSpawned = false;
-                Enqueue(new S.UpdateHeroSpawnState { State = HeroSpawnState.None });
-            }
-
-            HeroInfo temp = Info.Heroes[index];
-            Info.Heroes[index] = Info.Heroes[0];
-            Info.Heroes[0] = temp;
-            CurrentHero = Info.Heroes[0];
-
-            Enqueue(new S.ChangeHero() { FromIndex = index - 1 });
-
-            if (Info.Heroes[0] == null || !respawn)
-            {
-                Enqueue(new S.UpdateHeroSpawnState { State = HeroSpawnState.Unsummoned });
-                return;
-            }
-
-            SummonHero();
-        }
-        #endregion
+        
 
         #region Guilds
 
@@ -13589,155 +13136,7 @@ namespace Server.ExineObjects
         public void SetCompass(Point location)
         {
             Enqueue(new S.SetCompass { Location = location });
-        }
-        public bool HasHero
-        {
-            get { return CurrentHero != null; }
-        }
-        public bool HeroSpawned
-        {
-            get { return Hero != null; }
-        }
-        public void SummonHero()
-        {
-            HeroObject hero = CurrentHero.Class switch
-            {
-                ExineClass.Warrior => new WarriorHero(CurrentHero, this),
-                ExineClass.Wizard => new WizardHero(CurrentHero, this),
-                ExineClass.Taoist => new TaoistHero(CurrentHero, this),
-                ExineClass.Assassin => new AssassinHero(CurrentHero, this),
-                _ => new HeroObject(CurrentHero, this)
-            };            
-
-            hero.ActionTime = Envir.Time + 1000;
-            hero.RefreshNameColour();
-
-            if (!hero.Dead)
-                SpawnHero(hero);
-
-            Hero = hero;
-            Info.HeroSpawned = true;
-            Enqueue(new S.UpdateHeroSpawnState { State = hero.Dead ? HeroSpawnState.Dead : HeroSpawnState.Summoned });
-        }
-        private void SpawnHero(HeroObject hero)
-        {
-            if (CurrentMap.ValidPoint(Front))
-                hero.Spawn(CurrentMap, Front);
-            else
-                hero.Spawn(CurrentMap, CurrentLocation);
-
-            for (int i = 0; i < Buffs.Count; i++)
-            {
-                var buff = Buffs[i];
-                buff.LastTime = Envir.Time;
-                buff.ObjectID = ObjectID;
-
-                AddBuff(buff.Type, null, (int)buff.ExpireTime, buff.Stats, true, true, buff.Values);
-            }
-        }
-        public void DespawnHero()
-        {         
-            Hero.Despawn(true);
-            Hero = null;
-            Enqueue(new S.UpdateHeroSpawnState { State = HeroSpawnState.Unsummoned });
-        }
-        public void ReviveHero()
-        {
-            if (CurrentHero == null) return;
-            if (CurrentHero.HP != 0) return;
-
-            if (Hero != null)
-            {
-                if (Hero.Node != null)
-                    Hero.Revive(Hero.Stats[Stat.HP], true);
-                else
-                {
-                    CurrentHero.HP = Hero.Stats[Stat.HP];
-                    Hero.Dead = false;
-                    SpawnHero(Hero);
-                }
-                Enqueue(new S.UpdateHeroSpawnState { State = HeroSpawnState.Summoned });
-            }
-            else CurrentHero.HP = -1;
-        }
-
-        public void SealHero()
-        {
-            if (CurrentHero == null) return;
-            if (FreeSpace(Info.Inventory) == 0) return;
-            if (Settings.HeroSealItemName == string.Empty) return;
-
-            if (Settings.HeroMaximumSealCount > 0 && CurrentHero.SealCount >= Settings.HeroMaximumSealCount)
-            {
-                ReceiveChat(string.Format("Hero can no longer be sealed."), ChatType.Hint);
-                return;
-            }
-
-            ItemInfo itemInfo = Envir.GetItemInfo(Settings.HeroSealItemName);
-            if (itemInfo == null) return;
-
-            if (Hero != null)
-            {
-                DespawnHero();
-                Info.HeroSpawned = false;
-                Enqueue(new S.UpdateHeroSpawnState { State = HeroSpawnState.None });
-            }
-
-            UserItem item = Envir.CreateFreshItem(itemInfo);            
-            item.AddedStats[Stat.Hero] = CurrentHero.Index;
-            if (CanGainItem(item))
-                GainItem(item);
-
-            CurrentHero.SealCount++;
-            Info.Heroes[CurrentHeroIndex] = null;
-            CurrentHero = null;
-        }
-
-        private bool AddHero(HeroInfo hero)
-        {
-            int heroCount = Info.Heroes.Count(x => x != null);
-
-            if (heroCount >= Info.MaximumHeroCount)
-            {
-                ReceiveChat(string.Format("You can not summon any more heroes."), ChatType.Hint);
-                return false;
-            }
-
-            for (int i = 0; i < Info.Heroes.Length; i++)
-            {
-                if (Info.Heroes[i] != null) continue;
-
-                Info.Heroes[i] = hero;
-                if (!HasHero)
-                {
-                    CurrentHero = hero;
-                    SummonHero();
-                }
-                else
-                {
-                    ReceiveChat(string.Format("Hero has been added to your hero storage."), ChatType.Hint);
-                    Enqueue(new S.NewHeroInfo { Info = hero.ClientInformation, StorageIndex = i - 1 });
-                }
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public void ManageHeroes()
-        {
-            S.ManageHeroes p = new S.ManageHeroes() { MaximumCount = Info.MaximumHeroCount, CurrentHero = CurrentHero?.ClientInformation };
-
-            if (!Connection.HeroStorageSent)
-            {
-                p.Heroes = new ClientHeroInformation[Info.Heroes.Length - 1];
-                for (int i = 1; i < Info.Heroes.Length; i++)
-                    p.Heroes[i - 1] = Info.Heroes[i]?.ClientInformation;
-                Connection.HeroStorageSent = true;
-            }
-
-            Enqueue(p);
-        }
+        } 
+         
     }
 }

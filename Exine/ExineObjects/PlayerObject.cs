@@ -16,8 +16,15 @@ using System.Xml.Schema;
 
 namespace Exine.ExineObjects
 {
+    /// <summary>
+    /// 나를 포함한 모든 플레이어의 정보를 가지는 클래스.
+    /// </summary>
     public class PlayerObject : MapObject
     {
+        /// <summary>
+        /// MapObject를 상속받은 PlayerObject의 경우 Race 요청시 Player(=1)로 리턴해준다.
+        /// map에서 map object들을 긁어온 후 구별을 위해 존재함.(ob is PlaterObject로도 가능할듯하긴하지만..)
+        /// </summary>
         public override ObjectType Race
         {
             get { return ObjectType.Player; }
@@ -28,30 +35,42 @@ namespace Exine.ExineObjects
             get { return !Dead; }
         }
 
+        #region 제거예정 변수
+        //public MLibrary WeaponLibrary2;                                   //엑사인에서는 양손에 다른 무기 사용 안함. 
+        public MLibrary WeaponEffectLibrary1, WingLibrary, MountLibrary;    //엑사인에서는 사용안함. 제거 예정
+        public int WeaponEffect, ArmourOffSet, HairOffSet;                  //엑사인에서는 사용안함. 제거 예정
+        public int WeaponOffSet, WingOffset, MountOffset;                   //엑사인에서는 사용안함. 제거 예정
+        public Frame WingFrame;                                             //엑사인에서는 사용안함. 제거 예정
+        #endregion
 
-        public ExineGender Gender;
-        public ExineClass Class;
-        public ExineStyle ExStyle;//add k333123
-        public ExineColor ExColor;//add k333123
-        public int ExPortraitLen; //max 8000 //add k333123
-        public byte[] ExPortraitBytes = new byte[8000]; //add k333123
-        public bool ExinePeaceMode; //add k333123 240311
-        public bool ExineRestMode; //add k333123 240311
+        public ExineGender Gender;                                          //성별 정보
+        public ExineClass Class;                                            //직업 정보. 차후 제거 예정
+        public ExineStyle ExStyle;                                          //머리 스타일 정보. add k333123
+        public ExineColor ExColor;                                          //플레이어 색상 정보 add k333123
+        public int ExPortraitLen;                                           //플레이어 초상화 데이터 길이. 최대 8000바이트 add k333123
+        public byte[] ExPortraitBytes = new byte[8000];                     //플레이어 초상화 데이터 저장 버퍼. add k333123
+        public bool ExinePeaceMode;                                         //플레이어 평화모드 여부. add k333123 240311
+        public bool ExineRestMode;                                          //플레이어 앉기 모드 여부. add k333123 240311
 
         public byte Hair;
-        public ushort Level;
+        public ushort Level;                                                //플레이어 레벨 정보
 
-        public MLibrary WeaponLibrary1, WeaponEffectLibrary1, WeaponLibrary2, HairLibrary, WingLibrary, MountLibrary, ShieldLibrary; //k333123 add shieldLibrary
-        public int Armour, Weapon, WeaponEffect, ArmourOffSet, HairOffSet, WeaponOffSet, WingOffset, MountOffset, Shield; //k333123 add Shield
+        public MLibrary WeaponLibrary1, HairLibrary, ShieldLibrary;         //무기, 머리, 방패의 이미지 프레임 정보 저장 변수 k333123 add
+        public int Armour, Weapon,  Shield;                                 //현재 장착한 갑온, 무기, 방패의 인덱스 번호. k333123 add
 
-        public int DieSound, FlinchSound, AttackSound;
+        public int DieSound, FlinchSound, AttackSound;                      //사망, 회피, 공격 사운드 인덱스
 
 
-        public FrameSet Frames;
-        public Frame Frame, WingFrame;
+        public FrameSet Frames;                                             //액션 별[키] - 프레임 정보[값](프레임 시작점. 갯수. 넘기는 프레임수 등등) 저장한 변수
+        public Frame Frame;                                                 //FrameSet에서 액션을 키로 주고 뽑은 프레임 정보를 임시 저장한다.
+
         public int FrameIndex, FrameInterval, EffectFrameIndex, EffectFrameInterval, SlowFrameIndex;
         public byte SkipFrameUpdate = 0;
 
+        #region 제거예정 함수
+
+        //무기번호가 0xx 1xx 2xx 에 따라 클래스가 정해진 것으로 보이며 제약을 가하려 한듯하지만 
+        //엑사인에서는 힘, 마나, 무게등 다른 제약 조건으로 장착이 불가능한 형태이다.
         public bool HasClassWeapon
         {
             get
@@ -68,6 +87,7 @@ namespace Exine.ExineObjects
             }
         }
 
+        //엑사인에서는 낚시를 하지않는다.
         public bool HasFishingRod
         {
             get
@@ -75,6 +95,25 @@ namespace Exine.ExineObjects
                 return Globals.FishingRodShapes.Contains(Weapon);
             }
         }
+
+
+        public static byte[] GetBytesFromJpg(string path)
+        {
+            //max 8000bytes`
+            //\Exine\RData\Profiles\charname.jpg  72*72
+            Stream jpgStream = File.Open(Application.StartupPath + path, FileMode.Open);
+            Image image = Image.FromStream(jpgStream);
+            var stream = new MemoryStream();
+            //image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+            image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+            byte[] imageBytes = stream.ToArray();
+            Console.WriteLine("imageBytes[0] : {0}, imageBytes.Length:{1}", imageBytes[0], imageBytes.Length);
+            jpgStream.Close();
+            return imageBytes;
+        }
+
+        #endregion 
 
         public Spell Spell;
         public byte SpellLevel;
@@ -125,23 +164,9 @@ namespace Exine.ExineObjects
             Frames = FrameSet.ExPlayer; //성별 정보 로드 후 추가로 할당함.
         }
 
-        public static byte[] GetBytesFromJpg(string path)
-        {
-            //max 8000bytes`
-            //\Exine\RData\Profiles\charname.jpg  72*72
-            Stream jpgStream = File.Open(Application.StartupPath + path, FileMode.Open);
-            Image image = Image.FromStream(jpgStream);
-            var stream = new MemoryStream();
-            //image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
-            image.Save(stream, System.Drawing.Imaging.ImageFormat.Jpeg);
 
-            byte[] imageBytes = stream.ToArray();
-            Console.WriteLine("imageBytes[0] : {0}, imageBytes.Length:{1}", imageBytes[0], imageBytes.Length);
-            jpgStream.Close();
-            return imageBytes;
-        }
-
-        ///maybe it is Other player! (General Player!)
+        //내가 아닌 다른 플레이어가 로그인 하면 해당 정보를 읽어서 PlayerObject 객체의 내부 변수에 저장해준다.
+        //나의 정보는 상속받은 UserObject 객체에서 Load 함수를 오버라이드 해서 처리된다.
         public void Load(S.ObjectPlayer info)
         {
             Name = info.Name;
@@ -384,6 +409,8 @@ namespace Exine.ExineObjects
                     break;
 
                 
+
+                    //다른 플레이어의 앉는 모습이 안보일 것으로 추정됨.
                 case ExAction.ONEHAND_STAND:  //k333123 add 240311
                 case ExAction.TWOHAND_STAND:  //k333123 add 240903
                 case ExAction.BOWHAND_STAND:  //k333123 add 240903
@@ -396,6 +423,14 @@ namespace Exine.ExineObjects
                             ActionFeed.Clear();
                             ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_SITDOWN, Direction = Direction, Location = CurrentLocation });
                             SetAction();
+                            //!!!여기서 c.Turn같이 sitdown을 날리는 식으로 변경해야함.
+                            Network.Enqueue(
+                                new C.Rest
+                                {
+                                    Direction = Direction,
+                                    IsRest = true,
+                                }
+                             );
                         }
                         else
                         {
@@ -852,7 +887,7 @@ namespace Exine.ExineObjects
                              Console.WriteLine("^^^^^^^^^^^^^^Set WeaponLibrary1 Null! Weapon:"+ Weapon);
                             //ShieldLibrary = null;
                             WeaponEffectLibrary1 = null;
-                            WeaponLibrary2 = null;
+                            //WeaponLibrary2 = null;
                         }
 
                         #endregion
@@ -1262,6 +1297,8 @@ namespace Exine.ExineObjects
 
             if (colour != DrawColour) ExineMainScene.Scene.MapControl.TextureValid = false;
         }
+
+
         public virtual void SetAction()
         {
             if (NextAction != null && !ExineMainScene.CanMove)
@@ -2927,6 +2964,7 @@ namespace Exine.ExineObjects
 
         }
 
+        //액션 변경에 따른 다음 액션쪽 프레임 처리 부분! 대부분의 프레임 멈춤은 여기서 시작된다!
         public virtual void ProcessFrames()
         {
             if (Frame == null) return;
@@ -6511,7 +6549,9 @@ namespace Exine.ExineObjects
             //    ShieldLibrary.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true);// k333123 add
             //}
         }
-		public void DrawWeapon2()
+		
+        /*
+        public void DrawWeapon2()
         {
             //Apply To Sheild
             ////Gender == ExineGender.Male
@@ -6520,6 +6560,7 @@ namespace Exine.ExineObjects
             if (WeaponLibrary2 != null)
                 WeaponLibrary2.Draw(DrawFrame + WeaponOffSet, DrawLocation, DrawColour, true);
         }
+        */
 
         public void DrawWings()
         {

@@ -105,12 +105,7 @@ namespace Server.ExineDatabase
 
         public Dictionary<int, int> GSpurchases = new Dictionary<int, int>();
         public int[] Rank = new int[2];//dont save this in db!(and dont send it to clients :p)
-        
-        public int MaximumHeroCount = 1;
-        public HeroInfo[] Heroes;
-        public int CurrentHeroIndex;
-        public bool HeroSpawned;
-        public HeroBehaviour HeroBehaviour;
+         
 
         public CharacterInfo() { }
 
@@ -123,9 +118,7 @@ namespace Server.ExineDatabase
             ExColor = p.ExColor;//add k333123
             ExPortraitLen = p.ExPortraitLen;//add k333123
             ExPortraitBytes = p.ExPortraitBytes;//add k333123
-
-            Heroes = new HeroInfo[MaximumHeroCount];
-
+             
             CreationIP = c.IPAddress;
             CreationDate = Envir.Now;
 
@@ -374,35 +367,7 @@ namespace Server.ExineDatabase
                 {
                     GSpurchases.Add(reader.ReadInt32(), reader.ReadInt32());
                 }
-            }
-
-            if (version > 98)
-            {
-                MaximumHeroCount = reader.ReadInt32();
-                Heroes = new HeroInfo[MaximumHeroCount];
-                if (version > 102)
-                {
-                    for (int i = 0; i < MaximumHeroCount; i++)
-                    {
-                        int heroIndex = reader.ReadInt32();
-                        if (heroIndex > 0)
-                            Heroes[i] = Envir.GetHeroInfo(heroIndex);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < MaximumHeroCount; i++)
-                        Heroes[i] = new HeroInfo(reader, version, customVersion);
-                }
-
-                if (version < 104) reader.ReadInt32();
-                CurrentHeroIndex = reader.ReadInt32();
-                HeroSpawned = reader.ReadBoolean();
-            }
-            else Heroes = new HeroInfo[MaximumHeroCount];
-
-            if (version > 100)
-                HeroBehaviour = (HeroBehaviour)reader.ReadByte();
+            } 
         }
 
         public virtual void Save(BinaryWriter writer)
@@ -587,13 +552,7 @@ namespace Server.ExineDatabase
                 writer.Write(item.Key);
                 writer.Write(item.Value);
             }
-
-            writer.Write(MaximumHeroCount);
-            for (int i = 0; i < Heroes.Length; i++)
-                writer.Write(Heroes[i] != null ? Heroes[i].Index : 0);            
-            writer.Write(CurrentHeroIndex);
-            writer.Write(HeroSpawned);
-            writer.Write((byte)HeroBehaviour);
+             
         }
 
         public SelectInfo ToSelectInfo()

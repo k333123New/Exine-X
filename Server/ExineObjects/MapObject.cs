@@ -428,8 +428,6 @@ namespace Server.ExineObjects
             {
                 case ObjectType.Player:
                     return IsAttackTarget((PlayerObject)attacker);
-                case ObjectType.Hero:
-                    return IsAttackTarget((HeroObject)attacker);
                 case ObjectType.Monster:
                     return IsAttackTarget((MonsterObject)attacker);
                 default:
@@ -517,8 +515,6 @@ namespace Server.ExineObjects
             {
                 case ObjectType.Player:
                     return IsFriendlyTarget((PlayerObject)ally);
-                case ObjectType.Hero:
-                    return IsFriendlyTarget((HeroObject)ally);
                 case ObjectType.Monster:
                     return IsFriendlyTarget((MonsterObject)ally);
                 default:
@@ -989,7 +985,6 @@ namespace Server.ExineObjects
             { 
                 return owner switch
                 {
-                    HeroObject hero => hero.Owner,
                     _ => owner
                 };
             }

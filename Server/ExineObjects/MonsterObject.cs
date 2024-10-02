@@ -891,7 +891,7 @@ namespace Server.ExineObjects
                 Envir.MonsterNPC.Call(this, string.Format("[@_DIE({0})]", Info.Index));
             }
 
-            if (EXPOwner != null && EXPOwner.Node != null && Master == null && (EXPOwner.Race == ObjectType.Player || EXPOwner.Race == ObjectType.Hero))
+            if (EXPOwner != null && EXPOwner.Node != null && Master == null && (EXPOwner.Race == ObjectType.Player))
             {
                 EXPOwner.WinExp(Experience, Level);
 
@@ -917,7 +917,6 @@ namespace Server.ExineObjects
         {
             return attacker switch
             {
-                HeroObject hero => hero.Owner,
                 _ => attacker
             };
         }
@@ -1717,7 +1716,6 @@ namespace Server.ExineObjects
                             switch (ob.Race)
                             {
                                 case ObjectType.Monster:
-                                case ObjectType.Hero:
 
                                     if (!ob.IsAttackTarget(this)) continue;
                                     if (ob.Hidden && (!CoolEye || Level < ob.Level)) continue;
@@ -2014,7 +2012,6 @@ namespace Server.ExineObjects
                             {
                                 case ObjectType.Monster:
                                 case ObjectType.Player:
-                                case ObjectType.Hero:
                                     if (!ob.IsAttackTarget(this)) continue;
                                     if (ob.Hidden && (!CoolEye || Level < ob.Level)) continue;
                                     if (ob.Race == ObjectType.Player)
@@ -2057,7 +2054,6 @@ namespace Server.ExineObjects
                             {
                                 case ObjectType.Monster:
                                 case ObjectType.Player:
-                                case ObjectType.Hero:
                                     if (ob == this || ob.Dead) continue;
                                     if (ob.IsAttackTarget(this)) continue;
                                     if (ob.Race == ObjectType.Player)
@@ -2105,7 +2101,6 @@ namespace Server.ExineObjects
                             {
                                 case ObjectType.Monster:
                                 case ObjectType.Player:
-                                case ObjectType.Hero:
                                     if (ob.Dead) continue;
                                     if (!ownAI && ob.Race == ObjectType.Monster && ((MonsterObject)ob).Info.AI == Info.AI) continue;
                                     if (!ob.IsFriendlyTarget(this)) continue;
@@ -2148,7 +2143,6 @@ namespace Server.ExineObjects
                             {
                                 case ObjectType.Monster:
                                 case ObjectType.Player:
-                                case ObjectType.Hero:
                                     targets.Add(ob);
                                     continue;
                                 default:
@@ -2186,7 +2180,6 @@ namespace Server.ExineObjects
                             {
                                 case ObjectType.Monster:
                                 case ObjectType.Player:
-                                case ObjectType.Hero:
                                     if (!ob.IsAttackTarget(this)) continue;
                                     if (ob.Hidden && (!CoolEye || Level < ob.Level) && needSight) continue;
                                     if (ob.Race == ObjectType.Player)
@@ -2211,9 +2204,6 @@ namespace Server.ExineObjects
             if (attacker == null || attacker.Node == null) return false;
             if (Dead) return false;
             if (Master == null) return true;
-
-            if (attacker.Race == ObjectType.Hero)
-                attacker = ((HeroObject)attacker).Owner;
 
             if (attacker.AMode == AttackMode.Peace) return false;
             if (Master == attacker) return attacker.AMode == AttackMode.All;
@@ -2399,7 +2389,7 @@ namespace Server.ExineObjects
                 OperateTime = 0;
             }
 
-            if (Master != null && Master != attacker && (Master.Race != ObjectType.Hero || Master.Race == ObjectType.Hero && attacker != ((HeroObject)Master).Owner))
+            if (Master != null && Master != attacker)
                 if (Envir.Time > Master.BrownTime && Master.PKPoints < 200)
                     attacker.BrownTime = Envir.Time + Settings.Minute;
 
@@ -2507,8 +2497,7 @@ namespace Server.ExineObjects
 
                     if (EXPOwner == null || EXPOwner.Dead)
                         EXPOwner = attacker.Master switch
-                        {
-                            HeroObject hero => hero.Owner,
+                        { 
                             _ => attacker.Master
                         };
 
@@ -3362,7 +3351,7 @@ namespace Server.ExineObjects
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
                     MapObject ob = cell.Objects[o];
-                    if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player || ob.Race == ObjectType.Hero)
+                    if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                     {
                         if (!ob.IsAttackTarget(this)) continue;
 
@@ -3400,7 +3389,7 @@ namespace Server.ExineObjects
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
                     MapObject ob = cell.Objects[o];
-                    if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player || ob.Race == ObjectType.Hero)
+                    if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player)
                     {
                         if (!ob.IsAttackTarget(this)) continue;
 
@@ -3469,7 +3458,7 @@ namespace Server.ExineObjects
                     for (int o = 0; o < cell.Objects.Count; o++)
                     {
                         MapObject ob = cell.Objects[o];
-                        if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player || ob.Race == ObjectType.Hero)
+                        if (ob.Race == ObjectType.Monster || ob.Race == ObjectType.Player )
                         {
                             if (!ob.IsAttackTarget(this)) continue;
 
@@ -3507,7 +3496,7 @@ namespace Server.ExineObjects
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
                     MapObject ob = cell.Objects[o];
-                    if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster && ob.Race != ObjectType.Hero) continue;
+                    if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                     if (!ob.IsAttackTarget(this)) continue;
 
                     DelayedAction action = new DelayedAction(DelayedType.Damage, Envir.Time + delay, ob, damage, defenceType);
@@ -3535,7 +3524,7 @@ namespace Server.ExineObjects
                 for (int o = 0; o < cell.Objects.Count; o++)
                 {
                     MapObject ob = cell.Objects[o];
-                    if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster && ob.Race != ObjectType.Hero) continue;
+                    if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster) continue;
                     if (!ob.IsAttackTarget(this)) continue;
 
                     DelayedAction action = new DelayedAction(DelayedType.Damage, Envir.Time + delay, ob, damage, defenceType);
@@ -3592,7 +3581,7 @@ namespace Server.ExineObjects
                     for (int o = 0; o < cell.Objects.Count; o++)
                     {
                         MapObject ob = cell.Objects[o];
-                        if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster && ob.Race != ObjectType.Hero) continue;
+                        if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Monster ) continue;
                         if (!ob.IsAttackTarget(this)) continue;
 
                         if (pushDistance > 0 && !pushed)

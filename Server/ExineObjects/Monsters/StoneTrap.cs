@@ -57,8 +57,7 @@ namespace Server.ExineObjects.Monsters
 
                             switch (ob.Race)
                             {
-                                case ObjectType.Monster:
-                                case ObjectType.Hero:
+                                case ObjectType.Monster: 
 
                                     MonsterInfo mInfo = Envir.GetMonsterInfo(ob.Name);
                                     if (mInfo == null)

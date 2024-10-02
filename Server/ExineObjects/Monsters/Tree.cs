@@ -3,17 +3,19 @@ using S = ServerPackets;
 
 namespace Server.ExineObjects.Monsters
 {
-    public class IcePillar : MonsterObject
+    public class Tree : MonsterObject
     {
         protected override bool CanMove { get { return false; } }
+        protected override bool CanAttack { get { return false; } }
         protected override bool CanRegen { get { return false; } }
 
-        protected internal IcePillar(MonsterInfo info)
+        protected internal Tree(MonsterInfo info)
             : base(info)
         {
             Direction = ExineDirection.Up;
         }
-        
+
+        protected override void Attack() { }
         protected override void FindTarget() { }
 
         public override void Turn(ExineDirection dir)
@@ -22,7 +24,9 @@ namespace Server.ExineObjects.Monsters
         public override bool Walk(ExineDirection dir) 
         { 
             return false; 
-        }        
+        }
+
+        protected override void ProcessTarget() { }
 
         protected override void ProcessRegen() { }
         protected override void ProcessSearch() { }
@@ -63,18 +67,13 @@ namespace Server.ExineObjects.Monsters
             {
                 if (EXPOwner == null || EXPOwner.Dead)
                     EXPOwner = attacker.Master switch
-                    {
-                        HeroObject hero => hero.Owner,
+                    { 
                         _ => attacker.Master
                     };
 
                 if (EXPOwner == attacker.Master)
                     EXPOwnerTime = Envir.Time + EXPOwnerDelay;
-            }
 
-            if(Envir.Random.Next(3) == 0)
-            {
-                CloseAttack(damage);
             }
 
             Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
@@ -82,6 +81,11 @@ namespace Server.ExineObjects.Monsters
             ChangeHP(-1);
             return 1;
         
+        }
+
+        public override int Struck(int damage, DefenceType type = DefenceType.ACAgility)
+        {
+            return 0;
         }
 
         public override int Attacked(HumanObject attacker, int damage, DefenceType type = DefenceType.ACAgility, bool damageWeapon = true)
@@ -126,11 +130,6 @@ namespace Server.ExineObjects.Monsters
             if (EXPOwner == attacker)
                 EXPOwnerTime = Envir.Time + EXPOwnerDelay;
 
-            if (Envir.Random.Next(3) == 0)
-            {
-                CloseAttack(damage);
-            }
-
             Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
             attacker.GatherElement();
             ChangeHP(-1);
@@ -138,61 +137,6 @@ namespace Server.ExineObjects.Monsters
             return 1;
         }
 
-        public override int Struck(int damage, DefenceType type = DefenceType.ACAgility)
-        {
-            return 0;
-        }
-
         public override void ApplyPoison(Poison p, MapObject Caster = null, bool NoResist = false, bool ignoreDefence = true) { }
-
-        private void CloseAttack(int damage)
-        {
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
-
-            List<MapObject> targets = FindAllTargets(1, CurrentLocation);
-
-            if (targets.Count == 0) return;
-            
-            for (int i = 0; i < targets.Count; i++)
-            {
-                Broadcast(new S.ObjectEffect { ObjectID = targets[i].ObjectID, Effect = SpellEffect.IcePillar });
-
-                if (targets[i].Attacked(this, damage, DefenceType.MACAgility) <= 0) continue;
-
-                PoisonTarget(targets[i], 5, GetAttackPower(Stats[Stat.MinMC], Stats[Stat.MaxMC]), PoisonType.Frozen, 1000);
-            }
-        }
-
-        public override void Die()
-        {
-            Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
-
-            int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
-
-            List<MapObject> targets = FindAllTargets(7, CurrentLocation, false);
-
-            for (int i = 0; i < targets.Count; i++)
-            {
-                int delay = Functions.MaxDistance(CurrentLocation, targets[i].CurrentLocation) * 50 + 500; //50 MS per Step
-
-                DelayedAction action = new DelayedAction(DelayedType.Die, Envir.Time + delay, targets[i], damage, DefenceType.ACAgility);
-                ActionList.Add(action);
-            }
-            
-            base.Die();
-        }
-
-        protected override void CompleteDeath(IList<object> data)
-        {
-            MapObject target = (MapObject)data[0];
-            int damage = (int)data[1];
-            DefenceType defence = (DefenceType)data[2];
-
-            if (target == null || !target.IsAttackTarget(this) || target.CurrentMap != CurrentMap || target.Node == null) return;
-
-            target.Attacked(this, damage, defence);
-
-            PoisonTarget(target, 5, 5, PoisonType.Frozen, 1000);
-        }
     }
 }

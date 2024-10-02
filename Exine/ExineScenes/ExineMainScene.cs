@@ -33,18 +33,7 @@ namespace Exine.ExineScenes
         public static long MoveTime, AttackTime, NextRunTime, LogTime, LastRunTime;
         public static bool CanMove, CanRun;
 
-        private bool hasHero;
-        public bool HasHero
-        {
-            get { return hasHero; }
-            set
-            {
-                if (hasHero == value) return;
-
-                hasHero = value;
-            }
-        }
-        public HeroSpawnState HeroSpawnState;
+        
 
         public ExineAnimatedControl _bazel_up, _bazel_down, _bazel_left, _bazel_right;//add k333123
         
@@ -1249,6 +1238,10 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.ObjectTurn:
                     ObjectTurn((S.ObjectTurn)p);
                     break;
+                case (short)ServerPacketIds.ObjectRest: //add k333123 240926
+                    ObjectRest((S.ObjectRest)p);
+                    break; 
+
                 case (short)ServerPacketIds.ObjectWalk:
                     ObjectWalk((S.ObjectWalk)p);
                     break;
@@ -1671,9 +1664,6 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.GuildRequestWar:
                     GuildRequestWar((S.GuildRequestWar)p);
                     break;
-                case (short)ServerPacketIds.HeroCreateRequest:
-                    HeroCreateRequest((S.HeroCreateRequest)p);
-                    break;
                 case (short)ServerPacketIds.DefaultNPC:
                     DefaultNPC((S.DefaultNPC)p);
                     break;
@@ -2068,8 +2058,7 @@ namespace Exine.ExineScenes
                 }
             } 
 
-            ExMainDialog.PModeLabel.Visible = User.Class == ExineClass.Wizard || User.Class == ExineClass.Taoist;
-            HasHero = p.HasHero;
+            ExMainDialog.PModeLabel.Visible = User.Class == ExineClass.Wizard || User.Class == ExineClass.Taoist; 
             Gold = p.Gold;
             Credit = p.Credit;
 
@@ -2166,7 +2155,26 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-       
+
+        
+        private void ObjectRest(S.ObjectRest p)
+        {
+            if (p.ObjectID == User.ObjectID && !Observing) return;
+
+             
+            for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
+            {
+                MapObject ob = MapControl.Objects[i];
+                if (ob.ObjectID != p.ObjectID) continue;
+
+                if (ob is PlayerObject) //add 240926 k333123
+                {
+                    ob.ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_SITDOWN, Direction = p.Direction, Location = p.Location });
+                } 
+                return;
+            }
+        }
+
         private void ObjectWalk(S.ObjectWalk p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
@@ -4384,7 +4392,7 @@ namespace Exine.ExineScenes
                         ob.Effects.Add(new Effect(Libraries.Magic3, 46, 8, 800, ob));
                         break;
                     case SpellEffect.MagicShieldUp:
-                        if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Hero) return;
+                        if (ob.Race != ObjectType.Player) return;
                         player = (PlayerObject)ob;
                         if (player.ShieldEffect != null)
                         {
@@ -4395,7 +4403,7 @@ namespace Exine.ExineScenes
                         player.Effects.Add(player.ShieldEffect = new Effect(Libraries.Magic, 3890, 3, 600, ob) { Repeat = true });
                         break;
                     case SpellEffect.MagicShieldDown:
-                        if (ob.Race != ObjectType.Player && ob.Race != ObjectType.Hero) return;
+                        if (ob.Race != ObjectType.Player) return;
                         player = (PlayerObject)ob;
                         if (player.ShieldEffect != null)
                         {
@@ -5660,21 +5668,8 @@ namespace Exine.ExineScenes
                 Bind(GuildDialog.StorageGrid[i].Item);
             }
         }
-
-        private void HeroCreateRequest(S.HeroCreateRequest p)
-        {/*
-            NewHeroDialog.WarriorButton.Visible = p.CanCreateClass[(int)MirClass.Warrior];
-            NewHeroDialog.WizardButton.Visible = p.CanCreateClass[(int)MirClass.Wizard];
-            NewHeroDialog.TaoistButton.Visible = p.CanCreateClass[(int)MirClass.Taoist];
-            NewHeroDialog.AssassinButton.Visible = p.CanCreateClass[(int)MirClass.Assassin];
-            NewHeroDialog.ArcherButton.Visible = p.CanCreateClass[(int)MirClass.Archer];
-
-            NewHeroDialog.Show();
-            */
-        }
-
-        public int HeroAvatar(ExineClass job, ExineGender gender) => 1400 + (byte)job + 10 * (byte)gender;
-
+         
+         
         
 
         private void MarriageRequest(S.MarriageRequest p)

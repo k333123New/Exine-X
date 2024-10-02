@@ -71,8 +71,7 @@ namespace Server.ExineObjects.Monsters
             {
                 if (EXPOwner == null || EXPOwner.Dead)
                     EXPOwner = attacker.Master switch
-                    {
-                        HeroObject hero => hero.Owner,
+                    { 
                         _ => attacker.Master
                     };
 

@@ -95,8 +95,7 @@ namespace Server.ExineEnvir
         public static int _playerCount;
         public int PlayerCount => Players.Count;
 
-        public int[] OnlineRankingCount = new int[6];
-        public int HeroCount => Heroes.Count;
+        public int[] OnlineRankingCount = new int[6]; 
 
         public RandomProvider Random = new RandomProvider();
 
@@ -131,8 +130,6 @@ namespace Server.ExineEnvir
         public LinkedList<AuctionInfo> Auctions = new LinkedList<AuctionInfo>();
         public List<ConquestGuildInfo> ConquestList = new List<ConquestGuildInfo>();
         public Dictionary<int, int> GameshopLog = new Dictionary<int, int>();
-        public List<HeroInfo> HeroList = new List<HeroInfo>();
-
         public int GuildCount; //This shouldn't be needed?? -> remove in the future
 
         //Live Info
@@ -145,8 +142,7 @@ namespace Server.ExineEnvir
         public List<SpellObject> Spells = new List<SpellObject>();
         public List<NPCObject> NPCs = new List<NPCObject>();
         public List<GuildObject> Guilds = new List<GuildObject>();
-        public List<ConquestObject> Conquests = new List<ConquestObject>();
-        public List<HeroObject> Heroes = new List<HeroObject>();
+        public List<ConquestObject> Conquests = new List<ConquestObject>(); 
 
         public LightSetting Lights;
         public LinkedList<MapObject> Objects = new LinkedList<MapObject>();
@@ -1084,8 +1080,7 @@ namespace Server.ExineEnvir
             public ulong NextUserItemID;
             public int NextHeroID;
             public List<GuildInfo> GuildList = new List<GuildInfo>();
-            public int NextGuildID;
-            public List<HeroInfo> HeroList = new List<HeroInfo>();
+            public int NextGuildID; 
             public List<AccountInfo> AccountList = new List<AccountInfo>();
             public ulong NextAuctionID;
             public LinkedList<AuctionInfo> Auctions = new LinkedList<AuctionInfo>();
@@ -1218,9 +1213,6 @@ namespace Server.ExineEnvir
 
                 writer.Write(GuildList.Count);
                 writer.Write(NextGuildID);
-                writer.Write(HeroList.Count);
-                for (var i = 0; i < HeroList.Count; i++)
-                    HeroList[i].Save(writer);
                 writer.Write(AccountList.Count);
                 for (var i = 0; i < AccountList.Count; i++)
                     AccountList[i].Save(writer);
@@ -1662,16 +1654,6 @@ namespace Server.ExineEnvir
                     NextGuildID = reader.ReadInt32();
 
                     int count;
-                    if (LoadVersion > 102)
-                    {
-                        count = reader.ReadInt32();
-
-                        HeroList.Clear();
-
-                        for (var i = 0; i < count; i++)
-                            HeroList.Add(new HeroInfo(reader, LoadVersion, LoadCustomVersion));
-                    }
-
                     count = reader.ReadInt32();
 
                     AccountList.Clear();
@@ -1680,9 +1662,7 @@ namespace Server.ExineEnvir
                     for (var i = 0; i < count; i++)
                     {
                         AccountList.Add(new AccountInfo(reader));
-                        CharacterList.AddRange(AccountList[i].Characters);
-                        if (LoadVersion > 98 && LoadVersion < 103)
-                            AccountList[i].Characters.ForEach(character => HeroList.AddRange(character.Heroes));
+                        CharacterList.AddRange(AccountList[i].Characters); 
                     }
 
                     foreach (var auction in Auctions)
@@ -1707,6 +1687,7 @@ namespace Server.ExineEnvir
 
                     NextMailID = reader.ReadUInt64();
 
+                    /*
                     if (LoadVersion <= 80)
                     {
                         count = reader.ReadInt32();
@@ -1721,7 +1702,8 @@ namespace Server.ExineEnvir
                                 mail.RecipientInfo.Mail.Add(mail); //add to players inbox
                             }
                         }
-                    }
+                    }*/
+
 
                     if (LoadVersion >= 63)
                     {
@@ -1975,7 +1957,7 @@ namespace Server.ExineEnvir
             MapList.Clear();
             GameshopLog.Clear();
             CustomCommands.Clear();
-            Heroes.Clear();
+             
             MonsterCount = 0;
 
             LoadDB();
@@ -2066,8 +2048,7 @@ namespace Server.ExineEnvir
             StartPoints.Clear();
             StartItems.Clear();
             Objects.Clear();
-            Players.Clear();
-            Heroes.Clear();
+            Players.Clear(); 
 
             CleanUp();
 
@@ -2652,58 +2633,7 @@ namespace Server.ExineEnvir
                 c.Enqueue(new ServerPackets.NewCharacterSuccess { CharInfo = info.ToSelectInfo() });
             }
         }
-
-        public bool CanCreateHero(ClientPackets.NewHero p, ExineConnection c, bool IsGm)
-        {
-            if (!Settings.AllowNewHero)
-            {
-                c.Enqueue(new S.NewHero { Result = 0 });
-                return false;
-            }
-
-            //if (!CharacterReg.IsMatch(p.Name))
-            if (!string.IsNullOrWhiteSpace(p.Name) && p.Name.Length > 20)//231107 
-            {
-                c.Enqueue(new S.NewHero { Result = 1 });
-                return false;
-            }
-
-            if (!IsGm && DisabledCharNames.Contains(p.Name.ToUpper()))
-            {
-                c.Enqueue(new S.NewHero { Result = 1 });
-                return false;
-            }
-
-            if (p.Gender != ExineGender.Male && p.Gender != ExineGender.Female)
-            {
-                c.Enqueue(new S.NewHero { Result = 2 });
-                return false;
-            }
-
-            if (p.Class != ExineClass.Warrior && p.Class != ExineClass.Wizard && p.Class != ExineClass.Taoist && p.Class != ExineClass.Assassin && p.Class != ExineClass.Archer)
-            {
-                c.Enqueue(new S.NewHero { Result = 3 });
-                return false;
-            }
-
-            if (p.Class == ExineClass.Assassin && !Settings.AllowCreateAssassin || p.Class == ExineClass.Archer && !Settings.AllowCreateArcher)
-            {
-                c.Enqueue(new S.NewHero { Result = 3 });
-                return false;
-            }
-
-            lock (AccountLock)
-            {
-                if (CharacterExists(p.Name))
-                {
-                    c.Enqueue(new S.NewHero { Result = 5 });
-                    return false;
-                }
-            }
-
-            return true;
-        }    
-
+         
         public bool AccountExists(string accountID)
         {
                 for (var i = 0; i < AccountList.Count; i++)
@@ -3176,10 +3106,6 @@ namespace Server.ExineEnvir
 
             return null;
         }
-        public HeroInfo GetHeroInfo(int index)
-        {
-            return HeroList.FirstOrDefault(x => x.Index == index);
-        }
 
         public ItemInfo GetItemInfo(int index)
         {
@@ -3574,59 +3500,7 @@ namespace Server.ExineEnvir
                 AllowObserve = player.AllowObserve && Settings.AllowObserve
             });
         }
-
-        public void InspectHero(ExineConnection con, int id)
-        {
-            if (ObjectID == id)
-            {
-                return;
-            }
-
-            HeroObject heroObject = Heroes.SingleOrDefault(h => h.ObjectID == id);
-
-            if (heroObject == null)
-            {
-                return;
-            }
-
-            HeroInfo heroInfo = GetHeroInfo(heroObject.Info.Index);
-
-            if (heroInfo == null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < heroInfo.Equipment.Length; i++)
-            {
-                UserItem u = heroInfo.Equipment[i];
-
-                if (u == null)
-                {
-                    continue;
-                }
-
-                con.CheckItem(u);
-            }
-
-            var ownerName = heroObject.Owner.Name;
-
-            con.Enqueue(new S.PlayerInspect
-            {
-                Name = $"{ownerName}'s Hero",
-                Equipment = heroInfo.Equipment,
-                GuildName = String.Empty,
-                GuildRank = String.Empty,
-                Hair = heroInfo.Hair,
-                Gender = heroInfo.Gender,
-                Class = heroInfo.Class,
-                Level = heroInfo.Level,
-                LoverName = String.Empty,
-                AllowObserve = false,
-                IsHero = true
-            });
-
-        }
-
+ 
         public void Observe(ExineConnection con, string Name)
         {
             var player = GetPlayer(Name);

@@ -43,7 +43,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExineEffectConvert", "Exine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortalInfoMapping", "PortalInfoMapping\PortalInfoMapping.csproj", "{139CAFF5-C5CB-4710-B54C-8BCB1DC7BAC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExineMobFrameIdxConverter", "ExineMobFrameIdxConverter\ExineMobFrameIdxConverter.csproj", "{2CA50576-499B-4969-A50C-65A9A8D00DC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExineMobFrameIdxConverter", "ExineMobFrameIdxConverter\ExineMobFrameIdxConverter.csproj", "{2CA50576-499B-4969-A50C-65A9A8D00DC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RE_Info", "RE_Info", "{F0D9209F-1BC5-4294-BF32-96B7E68A1358}"
+	ProjectSection(SolutionItems) = preProject
+		frame_process.txt = frame_process.txt
+		data_structure.txt = data_structure.txt
+		network_process.txt = network_process.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -122,6 +129,7 @@ Global
 		{E3A89E38-4344-4467-852A-49899FD60C31} = {02FF090B-782B-49FD-BFEC-E4B50DCFF698}
 		{139CAFF5-C5CB-4710-B54C-8BCB1DC7BAC0} = {02FF090B-782B-49FD-BFEC-E4B50DCFF698}
 		{2CA50576-499B-4969-A50C-65A9A8D00DC2} = {02FF090B-782B-49FD-BFEC-E4B50DCFF698}
+		{F0D9209F-1BC5-4294-BF32-96B7E68A1358} = {F75359D0-CBBC-49F2-9BB7-3AAC3B4D775F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {72BECBF0-1873-44F4-AC66-1E923AD0937A}
