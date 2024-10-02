@@ -108,28 +108,7 @@ namespace Server.ExineObjects
             }
         }
 
-        #region Sneaking
-        private bool _sneakingActive;
-        public bool SneakingActive
-        {
-            get { return _sneakingActive; }
-            set
-            {
-                if (_sneakingActive == value) return;
-                _sneakingActive = value;
-
-                Observer = _sneakingActive;
-            }
-        }
-
-        private bool _sneaking;
-        public bool Sneaking
-        {
-            get { return _sneaking; }
-            set { _sneaking = value; SneakingActive = value; }
-        }
-        #endregion
-
+        
         public MapObjectSrv _target;
         public virtual MapObjectSrv Target
         {
@@ -634,7 +613,7 @@ namespace Server.ExineObjects
                 case BuffType.MoonLight:
                 case BuffType.DarkBody:
                     Hidden = true;
-                    Sneaking = true;
+                    
                     HideFromTargets();
                     break;
                 case BuffType.Hiding:

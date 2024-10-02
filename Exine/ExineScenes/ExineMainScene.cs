@@ -1695,9 +1695,7 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.TradeCancel:
                     TradeCancel((S.TradeCancel)p);
                     break;
-                case (short)ServerPacketIds.MountUpdate:
-                     
-                    break;
+                 
                 case (short)ServerPacketIds.TransformUpdate:
                     TransformUpdate((S.TransformUpdate)p);
                     break;
@@ -1846,42 +1844,7 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.Opendoor:
                     Opendoor((S.Opendoor)p);
                     break;
-                case (short)ServerPacketIds.GetRentedItems:
-                    RentedItems((S.GetRentedItems)p);
-                    break;
-                case (short)ServerPacketIds.ItemRentalRequest:
-                    ItemRentalRequest((S.ItemRentalRequest)p);
-                    break;
-                case (short)ServerPacketIds.ItemRentalFee:
-                    ItemRentalFee((S.ItemRentalFee)p);
-                    break;
-                case (short)ServerPacketIds.ItemRentalPeriod:
-                    ItemRentalPeriod((S.ItemRentalPeriod)p);
-                    break;
-                case (short)ServerPacketIds.DepositRentalItem:
-                    DepositRentalItem((S.DepositRentalItem)p);
-                    break;
-                case (short)ServerPacketIds.RetrieveRentalItem:
-                    RetrieveRentalItem((S.RetrieveRentalItem)p);
-                    break;
-                case (short)ServerPacketIds.UpdateRentalItem:
-                    UpdateRentalItem((S.UpdateRentalItem)p);
-                    break;
-                case (short)ServerPacketIds.CancelItemRental:
-                    CancelItemRental((S.CancelItemRental)p);
-                    break;
-                case (short)ServerPacketIds.ItemRentalLock:
-                    ItemRentalLock((S.ItemRentalLock)p);
-                    break;
-                case (short)ServerPacketIds.ItemRentalPartnerLock:
-                    ItemRentalPartnerLock((S.ItemRentalPartnerLock)p);
-                    break;
-                case (short)ServerPacketIds.CanConfirmItemRental:
-                    CanConfirmItemRental((S.CanConfirmItemRental)p);
-                    break;
-                case (short)ServerPacketIds.ConfirmItemRental:
-                    ConfirmItemRental((S.ConfirmItemRental)p);
-                    break;
+                
                 case (short)ServerPacketIds.OpenBrowser:
                     OpenBrowser((S.OpenBrowser)p);
                     break;
@@ -3304,9 +3267,7 @@ namespace Exine.ExineScenes
                 User.RefreshStats();
                 switch (item.Info.Type)
                 {
-                    case ItemType.Mount:
-                        ExChatDialog.ReceiveChat(string.Format("{0} is no longer loyal to you.", item.Info.FriendlyName), ChatType.System);
-                        break;
+                   
                     default:
                         ExChatDialog.ReceiveChat(string.Format("{0}'s dura has dropped to 0.", item.Info.FriendlyName), ChatType.System);
                         break;
@@ -6278,9 +6239,7 @@ namespace Exine.ExineScenes
                     case ItemType.Meat:
                         text += string.Format(" Quality {0}", Math.Floor(HoverItem.CurrentDura / 1000M));
                         break;
-                    case ItemType.Mount:
-                        text += string.Format(" Loyalty {0} / {1}", HoverItem.CurrentDura, HoverItem.MaxDura);
-                        break;
+                    
                     case ItemType.Food:
                         text += string.Format(" Nutrition {0}", HoverItem.CurrentDura);
                         break;
@@ -6352,9 +6311,7 @@ namespace Exine.ExineScenes
                 case ItemType.Gem:
                     baseText = GameLanguage.ItemTypeGem;
                     break;
-                case ItemType.Mount:
-                    baseText = GameLanguage.ItemTypeMount;
-                    break;
+                
                 case ItemType.Book:
                     baseText = GameLanguage.ItemTypeBook;
                     break;
@@ -7939,7 +7896,7 @@ namespace Exine.ExineScenes
                 ExineLabel SOCKETLabel = new ExineLabel
                 {
                     AutoSize = true,
-                    ForeColour = (count > realItem.Slots && !realItem.IsFishingRod && realItem.Type != ItemType.Mount) ? Color.Cyan : Color.White,
+                    ForeColour = (count > realItem.Slots && !realItem.IsFishingRod ) ? Color.Cyan : Color.White,
                     Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
                     OutLine = true,
                     Parent = ItemLabel,
@@ -9301,63 +9258,6 @@ namespace Exine.ExineScenes
             MapControl.OpenDoor(p.DoorIndex, p.Close);
         }
 
-        private void RentedItems(S.GetRentedItems p)
-        {
-        }
-
-        private void ItemRentalRequest(S.ItemRentalRequest p)
-        { 
-
-        }
-
-        private void ItemRentalFee(S.ItemRentalFee p)
-        { 
-        }
-
-        private void ItemRentalPeriod(S.ItemRentalPeriod p)
-        {
-            
-        }
-
-        private void DepositRentalItem(S.DepositRentalItem p)
-        {
-            
-        }
-
-        private void RetrieveRentalItem(S.RetrieveRentalItem p)
-        {
-           
-        }
-
-        private void UpdateRentalItem(S.UpdateRentalItem p)
-        {
-            
-        }
-
-        private void CancelItemRental(S.CancelItemRental p)
-        {
-            
-        }
-
-        private void ItemRentalLock(S.ItemRentalLock p)
-        {
-             
-        }
-
-        private void ItemRentalPartnerLock(S.ItemRentalPartnerLock p)
-        {
-           
-        }
-
-        private void CanConfirmItemRental(S.CanConfirmItemRental p)
-        {
-           
-        }
-
-        private void ConfirmItemRental(S.ConfirmItemRental p)
-        {
-            
-        }
 
         private void OpenBrowser(S.OpenBrowser p)
         {

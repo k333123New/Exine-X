@@ -609,12 +609,7 @@ public class UserItem
         {
             switch (Info.Type)
             {
-                case ItemType.Mount:
-                    if (Info.Shape < 7)
-                        size = 4;
-                    else if (Info.Shape < 12)
-                        size = 5;
-                    break;
+                
                 case ItemType.Weapon:
                     if (Info.Shape == 49 || Info.Shape == 50)
                         size = 5;
@@ -1077,32 +1072,6 @@ public class Awake
 }
 
 
-public class ItemRentalInformation
-{
-    public ulong ItemId;
-    public string ItemName;
-    public string RentingPlayerName;
-    public DateTime ItemReturnDate;
-
-    public ItemRentalInformation() { }
-
-    public ItemRentalInformation(BinaryReader reader, int version = int.MaxValue, int customVersion = int.MaxValue)
-    {
-        ItemId = reader.ReadUInt64();
-        ItemName = reader.ReadString();
-        RentingPlayerName = reader.ReadString();
-        ItemReturnDate = DateTime.FromBinary(reader.ReadInt64());
-    }
-
-    public void Save(BinaryWriter writer)
-    {
-        writer.Write(ItemId);
-        writer.Write(ItemName);
-        writer.Write(RentingPlayerName);
-        writer.Write(ItemReturnDate.ToBinary());
-    }
-}
-
 
 public class ItemSets
 {
@@ -1205,9 +1174,7 @@ public class RandomItemStat
             case ItemType.Ring:
                 SetRing();
                 break;
-            case ItemType.Mount:
-                SetMount();
-                break;
+             
         }
     }
 
@@ -1403,10 +1370,7 @@ public class RandomItemStat
         MaxScMaxStat = 6;
     }
 
-    public void SetMount()
-    {
-        SetRing();
-    }
+    
 }
 
 public class ChatItem

@@ -79,9 +79,7 @@ namespace Server.ExineDatabase
         public byte MentalStateLvl;
 
         public UserItem[] Inventory = new UserItem[46], Equipment = new UserItem[14], Trade = new UserItem[10], QuestInventory = new UserItem[40], Refine = new UserItem[16];
-        public List<ItemRentalInformation> RentedItems = new List<ItemRentalInformation>();
-        public List<ItemRentalInformation> RentedItemsToRemove = new List<ItemRentalInformation>();
-        public bool HasRentedItem;
+       
         public UserItem CurrentRefine = null;
         public long CollectTime = 0;
         public List<UserMagic> Magics = new List<UserMagic>(); 
@@ -99,8 +97,7 @@ namespace Server.ExineDatabase
         public bool[] Flags = new bool[Globals.FlagIndexCount];
 
         public AccountInfo AccountInfo;
-        public PlayerObjectSrv Player;
-        public MountInfo Mount;
+        public PlayerObjectSrv Player; 
 
         public Dictionary<int, int> GSpurchases = new Dictionary<int, int>();
         public int[] Rank = new int[2];//dont save this in db!(and dont send it to clients :p)
@@ -323,18 +320,7 @@ namespace Server.ExineDatabase
             {
                 Friends.Add(new FriendInfo(reader, version, customVersion));
             }
-
-            if (version > 75)
-            {
-                count = reader.ReadInt32();
-                for (var i = 0; i < count; i++)
-                {
-                    RentedItems.Add(new ItemRentalInformation(reader, version, customVersion));
-                }
-
-                HasRentedItem = reader.ReadBoolean();
-            }
-
+             
             Married = reader.ReadInt32();
             MarriedDate = DateTime.FromBinary(reader.ReadInt64());
             
@@ -507,14 +493,6 @@ namespace Server.ExineDatabase
                 Friends[i].Save(writer);
             }
 
-            writer.Write(RentedItems.Count);
-            foreach (var rentedItemInformation in RentedItems)
-            {
-                rentedItemInformation.Save(writer);
-            }
-
-            writer.Write(HasRentedItem);
-
             writer.Write(Married);
             writer.Write(MarriedDate.ToBinary());
             writer.Write(Mentor);
@@ -561,56 +539,7 @@ namespace Server.ExineDatabase
             return Inventory.Length;
         }
     }
-
-  
-    public class MountInfo
-    {
-        public HumanObjectSrv Player;
-        public short MountType = -1;
-
-        public bool CanRide
-        {
-            get { return HasMount && Slots[(int)MountSlot.Saddle] != null; }
-        }
-        public bool CanMapRide
-        {
-            get { return HasMount && !Player.CurrentMap.Info.NoMount; }
-        }
-        public bool CanDungeonRide
-        {
-            get { return HasMount && CanMapRide && (!Player.CurrentMap.Info.NeedBridle || Slots[(int)MountSlot.Reins] != null); }
-        }
-        public bool CanAttack
-        {
-            get { return HasMount && Slots[(int)MountSlot.Bells] != null || !RidingMount; }
-        }
-        public bool SlowLoyalty
-        {
-            get { return HasMount && Slots[(int)MountSlot.Ribbon] != null; }
-        }
-
-        public bool HasMount
-        {
-            get { return Player.Info.Equipment[(int)EquipmentSlot.Mount] != null; }
-        }
-
-        private bool RidingMount
-        {
-            get { return Player.RidingMount; }
-            set { Player.RidingMount = value; }
-        }
-
-        public UserItem[] Slots
-        {
-            get { return Player.Info.Equipment[(int)EquipmentSlot.Mount].Slots; }
-        }
-
-
-        public MountInfo(HumanObjectSrv ob)
-        {
-            Player = ob;
-        }
-    }
+     
 
     public class FriendInfo
     {

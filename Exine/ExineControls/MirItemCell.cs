@@ -73,8 +73,7 @@ namespace Exine.ExineControls
                         return ExineMainScene.User.Trade;
                     case MirGridType.GuestTrade:
                         return GuestTradeDialog.GuestItems;
-                    case MirGridType.Mount:
-                        return MapObject.User.Equipment[(int)EquipmentSlot.Mount].Slots;
+                   
                     case MirGridType.Fishing:
                         return MapObject.User.Equipment[(int)EquipmentSlot.Weapon].Slots;
                     case MirGridType.QuestInventory:
@@ -345,7 +344,7 @@ namespace Exine.ExineControls
                 return;
             }
 
-            if (GridType == MirGridType.Equipment || GridType == MirGridType.Mount || GridType == MirGridType.Fishing || GridType == MirGridType.Socket)
+            if (GridType == MirGridType.Equipment || GridType == MirGridType.Fishing || GridType == MirGridType.Socket)
             {
                 RemoveItem();
                 return;
@@ -529,14 +528,7 @@ namespace Exine.ExineControls
                         Locked = true;
                     }
                     break;
-                case ItemType.Mount:
-                    if (dialog.Grid[(int)EquipmentSlot.Mount].CanWearItem(actor, Item))
-                    {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Mount });
-                        dialog.Grid[(int)EquipmentSlot.Mount].Locked = true;
-                        Locked = true;
-                    }
-                    break;
+                
                 case ItemType.Reins:
                 case ItemType.Bells:
                 case ItemType.Ribbon:
@@ -563,7 +555,7 @@ namespace Exine.ExineControls
             switch (Item.Info.Type)
             {
                 case ItemType.Socket:
-                    if (ExineMainScene.SelectedItem != null && !ExineMainScene.SelectedItem.Info.IsFishingRod && ExineMainScene.SelectedItem.Info.Type != ItemType.Mount)
+                    if (ExineMainScene.SelectedItem != null && !ExineMainScene.SelectedItem.Info.IsFishingRod )
                     {
                         switch (Item.Info.Shape)
                         {
@@ -662,12 +654,7 @@ namespace Exine.ExineControls
 
                         fromID = ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.Weapon].Item.UniqueID;
                     }
-                    else if (GridType == MirGridType.Mount)
-                    {
-                        if (ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.Mount].Item == null) return;
-
-                        fromID = ExineMainScene.Scene.ExCharacterDialog.Grid[(byte)EquipmentSlot.Mount].Item.UniqueID;
-                    }
+                   
                     else
                     {
                         if (ExineMainScene.SelectedItem == null) return;
@@ -980,28 +967,7 @@ namespace Exine.ExineControls
                                     }
                                 break;
                             #endregion
-                            #region From Item Renting Dialog
-
-                            case MirGridType.Renting:
-                                if (ExineMainScene.User.RentalItemLocked)
-                                {
-                                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("Unable to remove locked item, cancel item rental and try again.", ChatType.System);
-                                    ExineMainScene.SelectedCell = null;
-                                    return;
-                                }
-
-                                if (Item == null)
-                                {
-                                    Network.Enqueue(new C.RetrieveRentalItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
-
-                                    Locked = true;
-                                    ExineMainScene.SelectedCell.Locked = true;
-                                    ExineMainScene.SelectedCell = null;
-                                    return;
-                                }
-
-                                break;
-                            #endregion
+                           
                            
                         }
                         break;
@@ -1329,28 +1295,7 @@ namespace Exine.ExineControls
                         break;
 
                     #endregion
-                    #region To Item Renting Dialog
-
-                    case MirGridType.Renting:
-                        switch (ExineMainScene.SelectedCell.GridType)
-                        {
-                            case MirGridType.Inventory:
-
-                                if (Item == null)
-                                {
-                                    Network.Enqueue(new C.DepositRentalItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
-                                    Locked = true;
-                                    ExineMainScene.SelectedCell.Locked = true;
-                                    ExineMainScene.SelectedCell = null;
-                                    return;
-                                }
-
-                                break;
-                        }
-
-                        break;
-
-                    #endregion
+                    
                     #region To Awakening
                     case MirGridType.AwakenItem:
                         {
@@ -1616,8 +1561,7 @@ namespace Exine.ExineControls
                     return type == ItemType.Belt;
                 case EquipmentSlot.Stone:
                     return type == ItemType.Stone;
-                case EquipmentSlot.Mount:
-                    return type == ItemType.Mount;
+               
                 default:
                     return false;
             }
@@ -1776,17 +1720,7 @@ namespace Exine.ExineControls
 
             switch (Item.Info.Type)
             {
-                case ItemType.Saddle:
-                case ItemType.Ribbon:
-                case ItemType.Bells:
-                case ItemType.Mask:
-                case ItemType.Reins:
-                    if (actor.Equipment[(int)EquipmentSlot.Mount] == null)
-                    {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have a mount equipped.", ChatType.System);
-                        return false;
-                    }
-                    break;
+               
                 case ItemType.Hook:
                 case ItemType.Float:
                 case ItemType.Bait:
@@ -1982,17 +1916,9 @@ namespace Exine.ExineControls
                         return false;
                     }
                     break;
-                case ItemType.Bells:
-                case ItemType.Reins:
-                case ItemType.Ribbon:
-                case ItemType.Saddle:
-                    if (actor.MountType < 0)
-                    {
-                        return false;
-                    }
-                    break;
+                
                 case ItemType.Socket:
-                    if (ExineMainScene.SelectedItem == null || ExineMainScene.SelectedItem.Info.Type == ItemType.Mount || (ExineMainScene.SelectedItem.Info.Type == ItemType.Weapon && ExineMainScene.SelectedItem.Info.IsFishingRod))
+                    if (ExineMainScene.SelectedItem == null  || (ExineMainScene.SelectedItem.Info.Type == ItemType.Weapon && ExineMainScene.SelectedItem.Info.IsFishingRod))
                     {
                         return false;
                     }

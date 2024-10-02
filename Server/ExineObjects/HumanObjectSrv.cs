@@ -131,12 +131,7 @@ namespace Server.ExineObjects
             set { Info.Poisons = value; }
         }
 
-        public bool RidingMount;
-        public MountInfo Mount
-        {
-            get { return Info.Mount; }
-        }        
-
+      
         public Reporting Report;
         public virtual bool CanMove
         {
@@ -156,14 +151,14 @@ namespace Server.ExineObjects
         {
             get
             {
-                return !Dead && Envir.Time >= ActionTime && (_stepCounter > 0 || FastRun) && (!Sneaking || ActiveSwiftFeet) && CurrentBagWeight <= Stats[Stat.BagWeight] && !CurrentPoison.HasFlag(PoisonType.Paralysis) && !CurrentPoison.HasFlag(PoisonType.LRParalysis) && !CurrentPoison.HasFlag(PoisonType.Frozen);
+                return !Dead && Envir.Time >= ActionTime && (_stepCounter > 0 || FastRun) && ( ActiveSwiftFeet) && CurrentBagWeight <= Stats[Stat.BagWeight] && !CurrentPoison.HasFlag(PoisonType.Paralysis) && !CurrentPoison.HasFlag(PoisonType.LRParalysis) && !CurrentPoison.HasFlag(PoisonType.Frozen);
             }
         }
         public virtual bool CanAttack
         {
             get
             {
-                return !Dead && Envir.Time >= ActionTime && Envir.Time >= AttackTime && !CurrentPoison.HasFlag(PoisonType.Paralysis) && !CurrentPoison.HasFlag(PoisonType.LRParalysis) && !CurrentPoison.HasFlag(PoisonType.Frozen) && !CurrentPoison.HasFlag(PoisonType.Dazed) && Mount.CanAttack;
+                return !Dead && Envir.Time >= ActionTime && Envir.Time >= AttackTime && !CurrentPoison.HasFlag(PoisonType.Paralysis) && !CurrentPoison.HasFlag(PoisonType.LRParalysis) && !CurrentPoison.HasFlag(PoisonType.Frozen) && !CurrentPoison.HasFlag(PoisonType.Dazed) ;
             }
         }
         public bool CanRegen
@@ -178,7 +173,7 @@ namespace Server.ExineObjects
             get
             {
                 return !Dead && Envir.Time >= ActionTime && Envir.Time >= SpellTime && !CurrentPoison.HasFlag(PoisonType.Stun) && !CurrentPoison.HasFlag(PoisonType.Dazed) &&
-                    !CurrentPoison.HasFlag(PoisonType.Paralysis) && !CurrentPoison.HasFlag(PoisonType.Frozen) && Mount.CanAttack;
+                    !CurrentPoison.HasFlag(PoisonType.Paralysis) && !CurrentPoison.HasFlag(PoisonType.Frozen);
             }
         }
 
@@ -279,7 +274,7 @@ namespace Server.ExineObjects
 
             if (CellTime + 700 < Envir.Time) _stepCounter = 0;
 
-            if (Sneaking) CheckSneakRadius();
+             
 
             if (FlamingSword && Envir.Time >= FlamingSwordTime)
             {
@@ -322,11 +317,7 @@ namespace Server.ExineObjects
                 }
             }
 
-            if (Mount.HasMount && Envir.Time > IncreaseLoyaltyTime)
-            {
-                IncreaseLoyaltyTime = Envir.Time + (LoyaltyDelay * 60);
-                IncreaseMountLoyalty(1);
-            }
+           
 
             if (Envir.Time > ItemExpireTime)
             {
@@ -487,7 +478,7 @@ namespace Server.ExineObjects
                         {
                             if (!HasAnyBuffs(buff.Type, BuffType.MoonLight, BuffType.DarkBody))
                             {
-                                Sneaking = false;
+                                
                             }
                             break;
                         }
@@ -1231,17 +1222,7 @@ namespace Server.ExineObjects
                         return false;
                     }
                     break;
-                case ItemType.Saddle:
-                case ItemType.Ribbon:
-                case ItemType.Bells:
-                case ItemType.Mask:
-                case ItemType.Reins:
-                    if (Info.Equipment[(int)EquipmentSlot.Mount] == null)
-                    {
-                        ReceiveChat("Can only be used with a mount", ChatType.System);
-                        return false;
-                    }
-                    break;
+               
                 case ItemType.Hook:
                 case ItemType.Float:
                 case ItemType.Bait:
@@ -1258,7 +1239,7 @@ namespace Server.ExineObjects
              
             }
 
-            if (RidingMount && item.Info.Type != ItemType.Scroll && item.Info.Type != ItemType.Potion)
+            if (item.Info.Type != ItemType.Scroll && item.Info.Type != ItemType.Potion)
             {
                 return false;
             }
@@ -1382,16 +1363,7 @@ namespace Server.ExineObjects
                     }
                     else if (Envir.Random.Next(30) == 0)
                     {
-                        if (Envir.ReturnRentalItem(item, item.RentalInformation?.OwnerName, Info))
-                        {
-                            Info.Equipment[i] = null;
-                            Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-
-                            ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", ChatType.Hint);
-                            Report?.ItemMailed(item, 1, 1);
-
-                            continue;
-                        }
+                       
 
                         if (!DropItem(item, Settings.DropRange, true))
                         {
@@ -1459,16 +1431,7 @@ namespace Server.ExineObjects
                 }
                 else if (Envir.Random.Next(10) == 0)
                 {
-                    if (Envir.ReturnRentalItem(item, item.RentalInformation?.OwnerName, Info))
-                    {
-                        Info.Inventory[i] = null;
-                        Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-
-                        ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to has been returned to it's owner.", ChatType.Hint);
-                        Report?.ItemMailed(item, 1, 1);
-
-                        continue;
-                    }
+                    
 
                     if (!DropItem(item, Settings.DropRange, true))
                         continue;
@@ -1718,7 +1681,7 @@ namespace Server.ExineObjects
             short OldLooks_WeaponEffect = Looks_WeaponEffect;
             short OldLooks_Shield = Looks_Shield;
             short OldLooks_Armour = Looks_Armour;
-            short Old_MountType = Mount.MountType;
+           
             byte OldLooks_Wings = Looks_Wings;
             byte OldLight = Light;
 
@@ -1730,7 +1693,7 @@ namespace Server.ExineObjects
             Light = 0;
             CurrentWearWeight = 0;
             CurrentHandWeight = 0;
-            Mount.MountType = -1;
+            
 
             SpecialMode = SpecialItemMode.None;
 
@@ -1777,11 +1740,7 @@ namespace Server.ExineObjects
                 }
 
 
-                if (realItem.Type == ItemType.Mount)
-                {
-                    Mount.MountType = realItem.Shape;
-                    //RealItem.Effect;
-                }
+                 
 
                 if (temp.Info.IsFishingRod) continue;
 
@@ -1859,10 +1818,7 @@ namespace Server.ExineObjects
                 UpdateLooks(OldLooks_Weapon);                
             }
 
-            if (Old_MountType != Mount.MountType)
-            {
-                RefreshMount(false);
-            }
+             
         }
         private void RefreshSocketStats(UserItem equipItem, List<string> skillsToAdd)
         {
@@ -1873,10 +1829,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            if (equipItem.Info.Type == ItemType.Mount && !RidingMount)
-            {
-                return;
-            }
+           
 
             for (int j = 0; j < equipItem.Slots.Length; j++)
             {
@@ -2398,7 +2351,7 @@ namespace Server.ExineObjects
             else
                 InSafeZone = false;
 
-            if (RidingMount) DecreaseMountLoyalty(1);
+            
             Moved();
 
             CellTime = Envir.Time + 500;
@@ -2428,7 +2381,8 @@ namespace Server.ExineObjects
                 Walk(dir);
             }
 
-            var steps = RidingMount || ActiveSwiftFeet && !Sneaking ? 3 : 2;
+            //var steps = RidingMount || ActiveSwiftFeet && !Sneaking ? 3 : 2;
+            var steps = 2;
 
             if (!CanMove || !CanWalk || !CanRun)
             {
@@ -2447,7 +2401,7 @@ namespace Server.ExineObjects
                 }
             }            
 
-            if (Hidden && !Sneaking)
+            if (Hidden)
             {
                 RemoveBuff(BuffType.Hiding);
                 RemoveBuff(BuffType.MoonLight);
@@ -2494,10 +2448,7 @@ namespace Server.ExineObjects
                 if (CheckMovement(location)) return false;
 
             }
-            if (RidingMount && !Sneaking)
-            {
-                DecreaseMountLoyalty(2);
-            }
+            
 
             Direction = dir;
 
@@ -2523,7 +2474,7 @@ namespace Server.ExineObjects
             CellTime = Envir.Time + 500;
             ActionTime = Envir.Time + GetDelayTime(MoveDelay);
 
-            if (!RidingMount)
+             
                 _runCounter++;
 
             if (_runCounter > 10)
@@ -2787,10 +2738,7 @@ namespace Server.ExineObjects
             byte level = 0;
             UserMagic magic;
 
-            if (RidingMount)
-            {
-                spell = Spell.None;
-            }
+            
 
             switch (spell)
             {
@@ -2865,7 +2813,7 @@ namespace Server.ExineObjects
 
             Direction = dir;
 
-            if (RidingMount) DecreaseMountLoyalty(3);
+            
 
             Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
             Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = spell, Level = level });
@@ -5435,36 +5383,7 @@ namespace Server.ExineObjects
 
         #endregion
 
-        private void CheckSneakRadius()
-        {
-            if (!Sneaking) return;
-
-            for (int y = CurrentLocation.Y - 3; y <= CurrentLocation.Y + 3; y++)
-            {
-                if (y < 0) continue;
-                if (y >= CurrentMap.Height) break;
-
-                for (int x = CurrentLocation.X - 3; x <= CurrentLocation.X + 3; x++)
-                {
-                    if (x < 0) continue;
-                    if (x >= CurrentMap.Width) break;
-
-                    Cell cell = CurrentMap.GetCell(x, y);
-                    if (!cell.Valid || cell.Objects == null) continue;
-
-                    for (int i = 0; cell.Objects != null && i < cell.Objects.Count; i++)
-                    {
-                        MapObjectSrv ob = cell.Objects[i];
-                        if ((ob.Race != ObjectType.Player) || ob == this) continue;
-
-                        SneakingActive = false;
-                        return;
-                    }
-                }
-            }
-
-            SneakingActive = true;
-        }
+       
         protected void CompleteMagic(IList<object> data)
         {
             UserMagic magic = (UserMagic)data[0];
@@ -6472,7 +6391,7 @@ namespace Server.ExineObjects
 
             if (effects) Enqueue(new S.ObjectTeleportIn { ObjectID = ObjectID, Type = effectnumber });
 
-            if (RidingMount) RefreshMount();
+            
             if (ActiveBlizzard) ActiveBlizzard = false;
 
             if (CheckStacked())
@@ -6498,15 +6417,7 @@ namespace Server.ExineObjects
         {
             return false;
         }
-        private Packet GetMountInfo()
-        {
-            return new S.MountUpdate
-            {
-                ObjectID = ObjectID,
-                RidingMount = RidingMount,
-                MountType = Mount.MountType
-            };
-        }
+       
         protected Packet GetUpdateInfo()
         {
             Console.WriteLine("GetUpdateInfo _ Shield:"+Looks_Shield);
@@ -7171,10 +7082,7 @@ namespace Server.ExineObjects
                     if (item.Info.Type != ItemType.Stone)
                         return false;
                     break;
-                case EquipmentSlot.Mount:
-                    if (item.Info.Type != ItemType.Mount)
-                        return false;
-                    break;
+                
                 default:
                     return false;
             }
@@ -7274,10 +7182,7 @@ namespace Server.ExineObjects
                 if (item.Weight - (Info.Equipment[slot] != null ? Info.Equipment[slot].Weight : 0) + CurrentWearWeight > Stats[Stat.WearWeight])
                 return false;
 
-            if (RidingMount && item.Info.Type != ItemType.Torch)
-            {
-                return false;
-            }
+            
 
             return true;
         }
@@ -7935,7 +7840,7 @@ namespace Server.ExineObjects
         {
             Connection.Player = null;
             Info.Player = null;
-            Info.Mount = null;
+             
             Connection.CleanObservers();
             Connection = null;
             Info = null;
@@ -8054,82 +7959,6 @@ namespace Server.ExineObjects
             AddBuff(BuffType.MentalState, this, 0, new Stats(), false, values: Info.MentalState);
         }
 
-        #region Mounts
-
-        public void RefreshMount(bool refreshStats = true)
-        {
-            if (RidingMount)
-            {
-                if (Mount.MountType < 0)
-                {
-                    RidingMount = false;
-                }
-                else if (!Mount.CanRide)
-                {
-                    RidingMount = false;
-                    ReceiveChat("You must have a saddle to ride your mount", ChatType.System);
-                }
-                else if (!Mount.CanMapRide)
-                {
-                    RidingMount = false;
-                    ReceiveChat("You cannot ride on this map", ChatType.System);
-                }
-                else if (!Mount.CanDungeonRide)
-                {
-                    RidingMount = false;
-                    ReceiveChat("You cannot ride here without a bridle", ChatType.System);
-                }
-            }
-            else
-            {
-                RidingMount = false;
-            }
-
-            if (refreshStats)
-                RefreshStats();
-
-            Broadcast(GetMountInfo());
-            Enqueue(GetMountInfo());
-        }
-        public void IncreaseMountLoyalty(int amount)
-        {
-            UserItem item = Info.Equipment[(int)EquipmentSlot.Mount];
-            if (item != null && item.CurrentDura < item.MaxDura)
-            {
-                item.CurrentDura = (ushort)Math.Min(item.MaxDura, item.CurrentDura + amount);
-                item.DuraChanged = false;
-                Enqueue(new S.ItemRepaired { UniqueID = item.UniqueID, MaxDura = item.MaxDura, CurrentDura = item.CurrentDura });
-            }
-        }
-        public void DecreaseMountLoyalty(int amount)
-        {
-            if (Envir.Time > DecreaseLoyaltyTime)
-            {
-                DecreaseLoyaltyTime = Envir.Time + (Mount.SlowLoyalty ? (LoyaltyDelay * 2) : LoyaltyDelay);
-                UserItem item = Info.Equipment[(int)EquipmentSlot.Mount];
-                if (item != null && item.CurrentDura > 0)
-                {
-                    DamageItem(item, amount);
-
-                    if (item.CurrentDura == 0)
-                    {
-                        RefreshMount();
-                    }
-                }
-            }
-        }
-
-        public void ToggleRide()
-        {
-            if (Mount.MountType > -1)
-            {
-                RidingMount = !RidingMount;
-                RefreshMount();
-            }
-            else
-                ReceiveChat("You haven't a mount...", ChatType.System);
-        }
-
-        #endregion
+         
     }
 }

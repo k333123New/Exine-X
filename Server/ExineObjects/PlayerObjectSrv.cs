@@ -146,12 +146,6 @@ namespace Server.ExineObjects
         public bool TradeLocked = false;
         public uint TradeGoldAmount = 0;
 
-        public PlayerObjectSrv ItemRentalPartner = null;
-        public UserItem ItemRentalDepositedItem = null;
-        public uint ItemRentalFeeAmount = 0;
-        public uint ItemRentalPeriodLength = 0;
-        public bool ItemRentalFeeLocked = false;
-        public bool ItemRentalItemLocked = false;
 
         private long LastRankUpdate = Envir.Time;
 
@@ -176,7 +170,7 @@ namespace Server.ExineObjects
             }
 
             info.Player = this;
-            info.Mount = new MountInfo(this);
+             
 
             Connection = connection;
             Info = info;
@@ -275,8 +269,7 @@ namespace Server.ExineObjects
 
             Despawn();
             LeaveGroup();
-            TradeCancel();
-            CancelItemRental();
+            TradeCancel(); 
             RefineCancel();
             LogoutRelationship();
             LogoutMentor();
@@ -427,10 +420,7 @@ namespace Server.ExineObjects
             base.Moved();
             CheckConquest();
             if (TradePartner != null)
-                TradeCancel();
-
-            if (ItemRentalPartner != null)
-                CancelItemRental();
+                TradeCancel(); 
         }
         public override void Die()
         {
@@ -564,16 +554,7 @@ namespace Server.ExineObjects
                     }
                     else if (Envir.Random.Next(10) == 0)
                     {
-                        if (Envir.ReturnRentalItem(item, item.RentalInformation?.OwnerName, Info))
-                        {
-                            Info.Equipment[i] = null;
-                            Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-
-                            ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", ChatType.Hint);
-                            Report.ItemMailed(item, 1, 1, "Death Dropped Rental Item");
-
-                            continue;
-                        }
+                       
 
                         if (!DropItem(item, Settings.DropRange, true))
                             continue;
@@ -609,16 +590,7 @@ namespace Server.ExineObjects
                 if (item.SealedInfo != null && item.SealedInfo.ExpiryDate > Envir.Now)
                     continue;
 
-                if (Envir.ReturnRentalItem(item, item.RentalInformation?.OwnerName, Info))
-                {
-                    Info.Inventory[i] = null;
-                    Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-
-                    ReceiveChat($"You died and {item.Info.FriendlyName} has been returned to it's owner.", ChatType.Hint);
-                    Report.ItemMailed(item, 1, 1, "Death Dropped Rental Item");
-
-                    continue;
-                }
+               
 
                 if (!DropItem(item, Settings.DropRange, true))
                     continue;
@@ -1216,10 +1188,7 @@ namespace Server.ExineObjects
             //Cancel actions
             if (TradePartner != null)
                 TradeCancel();
-
-            if (ItemRentalPartner != null)
-                CancelItemRental();
-
+             
             GetObjectsPassive();
 
             CheckConquest();
@@ -2875,11 +2844,7 @@ namespace Server.ExineObjects
 
                         break;
 
-                    case "RIDE":
-                        ToggleRide();
-                         
-                        ChatTime = 0;
-                        break;
+                    
                     case "SETFLAG":
                         if (!IsGM && !Settings.TestServer) return;
 
@@ -3790,10 +3755,7 @@ namespace Server.ExineObjects
 
                 if (TradePartner != null)
                     TradeCancel();
-
-                if (ItemRentalPartner != null)
-                    CancelItemRental();
-
+                  
                 Broadcast(new S.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
             }
 
@@ -4048,7 +4010,7 @@ namespace Server.ExineObjects
                 Music = CurrentMap.Info.Music
             });
 
-            if (RidingMount) RefreshMount();
+            
 
             GetObjects();
 
@@ -4257,8 +4219,7 @@ namespace Server.ExineObjects
                 Hidden = Hidden,
                 Effect = HasBuff(BuffType.MagicShield, out _) ? SpellEffect.MagicShieldUp : HasBuff(BuffType.ElementalBarrier, out _) ? SpellEffect.ElementalBarrierUp : SpellEffect.None,
                 WingEffect = Looks_Wings,
-                MountType = Mount.MountType,
-                RidingMount = RidingMount,
+                
                 Fishing = Fishing,
 
                 TransformType = TransformType,
@@ -4280,9 +4241,7 @@ namespace Server.ExineObjects
 
             switch (gridTo)
             {
-                case MirGridType.Mount:
-                    item = Info.Equipment[(int)EquipmentSlot.Mount];
-                    break;
+               
                 case MirGridType.Fishing:
                     item = Info.Equipment[(int)EquipmentSlot.Weapon];
                     break;
@@ -4389,7 +4348,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            if ((item.Info.IsFishingRod || item.Info.Type == ItemType.Mount) && temp.Info.Type == ItemType.Socket)
+            if ((item.Info.IsFishingRod ) && temp.Info.Type == ItemType.Socket)
             {
                 Enqueue(p);
                 return;
@@ -4600,9 +4559,6 @@ namespace Server.ExineObjects
 
             switch (grid)
             {
-                case MirGridType.Mount:
-                    temp = Info.Equipment[(int)EquipmentSlot.Mount];
-                    break;
                 case MirGridType.Fishing:
                     temp = Info.Equipment[(int)EquipmentSlot.Weapon];
                     break;
@@ -5293,31 +5249,7 @@ namespace Server.ExineObjects
                 case ItemType.Script:
                     CallDefaultNPC(DefaultNPCType.UseItem, item.Info.Shape);
                     break;
-                case ItemType.Food:
-                    temp = Info.Equipment[(int)EquipmentSlot.Mount];
-                    if (temp == null || temp.MaxDura == temp.CurrentDura)
-                    {
-                        Enqueue(p);
-                        return;
-                    }
-
-                    switch (item.Info.Shape)
-                    {
-                        case 0:
-                            temp.MaxDura = (ushort)Math.Max(0, temp.MaxDura - Math.Min(1000, temp.MaxDura - (temp.CurrentDura / 30)));
-                            break;
-                        case 1:
-                            break;
-                    }
-
-                    temp.CurrentDura = (ushort)Math.Min(temp.MaxDura, temp.CurrentDura + item.CurrentDura);
-                    temp.DuraChanged = false;
-
-                    ReceiveChat("Your mount has been fed.", ChatType.Hint);
-                    Enqueue(new S.ItemRepaired { UniqueID = temp.UniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
-
-                    RefreshStats();
-                    break;
+               
                 
                 case ItemType.Transform: //Transforms
                     {
@@ -6572,10 +6504,6 @@ namespace Server.ExineObjects
                     return false;
             }
 
-            if (RidingMount && item.Info.Type != ItemType.Torch)
-            {
-                return false;
-            }
 
             return FreeSpace(array) > 0;
         }
@@ -11868,477 +11796,7 @@ namespace Server.ExineObjects
         }
         #endregion
 
-        #region Rental
-
-        public void GetRentedItems()
-        {
-            Enqueue(new S.GetRentedItems { RentedItems = Info.RentedItems });
-        }
-
-        public void ItemRentalRequest()
-        {
-            if (Dead)
-            {
-                ReceiveChat("Unable to rent items while dead.", ChatType.System);
-                return;
-            }
-
-            if (ItemRentalPartner != null)
-            {
-                ReceiveChat("You are already renting an item to another player.", ChatType.System);
-                return;
-            }
-
-            var targetPosition = Functions.PointMove(CurrentLocation, Direction, 1);
-            var targetCell = CurrentMap.GetCell(targetPosition);
-            PlayerObjectSrv targetPlayer = null;
-
-            if (targetCell.Objects == null || targetCell.Objects.Count < 1)
-                return;
-
-            foreach (var mapObject in targetCell.Objects)
-            {
-                if (mapObject.Race != ObjectType.Player)
-                    continue;
-
-                targetPlayer = Envir.GetPlayer(mapObject.Name);
-            }
-
-            if (targetPlayer == null)
-            {
-                ReceiveChat("Face the player you would like to rent an item too.", ChatType.System);
-                return;
-            }
-
-            if (Info.RentedItems.Count >= 3)
-            {
-                ReceiveChat("Unable to rent more than 3 items at a time.", ChatType.System);
-                return;
-            }
-
-            if (targetPlayer.Info.HasRentedItem)
-            {
-                ReceiveChat($"{targetPlayer.Name} is unable to rent anymore items at this time.", ChatType.System);
-                return;
-            }
-
-            if (!Functions.FacingEachOther(Direction, CurrentLocation, targetPlayer.Direction,
-                targetPlayer.CurrentLocation))
-            {
-                ReceiveChat("Face the player you would like to rent an item too.", ChatType.System);
-                return;
-            }
-
-            if (targetPlayer == this)
-            {
-                ReceiveChat("You are unable to rent items to yourself.", ChatType.System);
-                return;
-            }
-
-            if (targetPlayer.Dead)
-            {
-                ReceiveChat($"Unable to rent items to {targetPlayer.Name} while dead.", ChatType.System);
-                return;
-            }
-
-            if (!Functions.InRange(targetPlayer.CurrentLocation, CurrentLocation, Globals.DataRange)
-                || targetPlayer.CurrentMap != CurrentMap)
-            {
-                ReceiveChat($"{targetPlayer.Name} is not within range.", ChatType.System);
-                return;
-            }
-
-            if (targetPlayer.ItemRentalPartner != null)
-            {
-                ReceiveChat($"{targetPlayer.Name} is currently busy, try again soon.", ChatType.System);
-                return;
-            }
-
-            ItemRentalPartner = targetPlayer;
-            targetPlayer.ItemRentalPartner = this;
-
-            Enqueue(new S.ItemRentalRequest { Name = targetPlayer.Name, Renting = false });
-            ItemRentalPartner.Enqueue(new S.ItemRentalRequest { Name = Name, Renting = true });
-        }
-
-        public void SetItemRentalFee(uint amount)
-        {
-            if (ItemRentalFeeLocked)
-                return;
-
-            if ((ulong)amount + ItemRentalFeeAmount >= uint.MaxValue)
-                return;
-
-            if (Account.Gold < amount)
-                return;
-
-            if (ItemRentalPartner == null)
-                return;
-
-            ItemRentalFeeAmount += amount;
-            Account.Gold -= amount;
-
-            Enqueue(new S.LoseGold { Gold = amount });
-            ItemRentalPartner.Enqueue(new S.ItemRentalFee { Amount = amount });
-        }
-
-        public void SetItemRentalPeriodLength(uint days)
-        {
-            if (days < 1 || days > 30)
-                return;
-
-            if (ItemRentalItemLocked)
-                return;
-
-            if (ItemRentalPartner == null)
-                return;
-
-            ItemRentalPeriodLength = days;
-            ItemRentalPartner.Enqueue(new S.ItemRentalPeriod { Days = days });
-        }
-
-        public void DepositRentalItem(int from, int to)
-        {
-            var packet = new S.DepositRentalItem { From = from, To = to, Success = false };
-
-            if (ItemRentalItemLocked)
-            {
-                Enqueue(packet);
-                return;
-            }
-
-            if (from < 0 || from >= Info.Inventory.Length)
-            {
-                Enqueue(packet);
-                return;
-            }
-
-            // TODO: Change this check.
-            if (to < 0 || to >= 1)
-            {
-                Enqueue(packet);
-                return;
-            }
-
-            var item = Info.Inventory[from];
-
-            if (item == null)
-            {
-                Enqueue(packet);
-                return;
-            }
-
-            if (item.RentalInformation?.RentalLocked == true)
-            {
-                ReceiveChat($"Unable to rent {item.FriendlyName} until {item.RentalInformation.ExpiryDate}", ChatType.System);
-                Enqueue(packet);
-                return;
-            }
-
-            if (item.Info.Bind.HasFlag(BindMode.UnableToRent))
-            {
-                ReceiveChat($"Unable to rent {item.FriendlyName}", ChatType.System);
-                Enqueue(packet);
-                return;
-            }
-
-            if (item.RentalInformation != null && item.RentalInformation.BindingFlags.HasFlag(BindMode.UnableToRent))
-            {
-                ReceiveChat($"Unable to rent {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", ChatType.System);
-                Enqueue(packet);
-                return;
-            }
-
-            if (ItemRentalDepositedItem == null)
-            {
-                ItemRentalDepositedItem = item;
-                Info.Inventory[from] = null;
-
-                packet.Success = true;
-                RefreshBagWeight();
-                UpdateRentalItem();
-                Report.ItemMoved(item, MirGridType.Inventory, MirGridType.Renting, from, to);
-            }
-
-            Enqueue(packet);
-        }
-
-        public void RetrieveRentalItem(int from, int to)
-        {
-            var packet = new S.RetrieveRentalItem { From = from, To = to, Success = false };
-
-            // TODO: Change this check.
-            if (from < 0 || from >= 1)
-            {
-                Enqueue(packet);
-                return;
-            }
-
-            if (to < 0 || to >= Info.Inventory.Length)
-            {
-                Enqueue(packet);
-                return;
-            }
-
-            var item = ItemRentalDepositedItem;
-
-            if (item == null)
-            {
-                Enqueue(packet);
-                return;
-            }
-
-            if (Info.Inventory[to] == null)
-            {
-                Info.Inventory[to] = item;
-                ItemRentalDepositedItem = null;
-
-                packet.Success = true;
-                RefreshBagWeight();
-                UpdateRentalItem();
-                Report.ItemMoved(item, MirGridType.Renting, MirGridType.Inventory, from, to);
-            }
-
-            Enqueue(packet);
-        }
-
-        private void UpdateRentalItem()
-        {
-            if (ItemRentalPartner == null)
-                return;
-
-            if (ItemRentalDepositedItem != null)
-                ItemRentalPartner.CheckItem(ItemRentalDepositedItem);
-
-            ItemRentalPartner.Enqueue(new S.UpdateRentalItem { LoanItem = ItemRentalDepositedItem });
-        }
-
-        public void CancelItemRental()
-        {
-            if (ItemRentalPartner == null)
-                return;
-
-            ItemRentalRemoveLocks();
-
-            var rentalPair = new []  {
-                ItemRentalPartner,
-                this
-            };
-
-            for (var i = 0; i < 2; i++)
-            {
-                if (rentalPair[i] == null)
-                    continue;
-
-                if (rentalPair[i].ItemRentalDepositedItem != null)
-                {
-                    var item = rentalPair[i].ItemRentalDepositedItem;
-
-                    if (FreeSpace(rentalPair[i].Info.Inventory) < 1)
-                    {
-                        rentalPair[i].GainItemMail(item, 1);
-                        rentalPair[i].Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-                        rentalPair[i].ItemRentalDepositedItem = null;
-
-                        Report.ItemMailed(item, item.Count, 1);
-
-                        continue;
-                    }
-
-                    for (var j = 0; j < rentalPair[i].Info.Inventory.Length; j++)
-                    {
-                        if (rentalPair[i].Info.Inventory[j] != null)
-                            continue;
-
-                        if (rentalPair[i].CanGainItem(item))
-                            rentalPair[i].RetrieveRentalItem(0, j);
-                        else
-                        {
-                            rentalPair[i].GainItemMail(item, 1);
-                            rentalPair[i].Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-
-                            Report.ItemMailed(item, item.Count, 1);
-                        }
-
-                        rentalPair[i].ItemRentalDepositedItem = null;
-
-                        break;
-                    }
-                }
- 
-                if (rentalPair[i].ItemRentalFeeAmount > 0)
-                {
-                    rentalPair[i].GainGold(rentalPair[i].ItemRentalFeeAmount);
-                    rentalPair[i].ItemRentalFeeAmount = 0;
-
-                    Report.GoldChanged(rentalPair[i].ItemRentalFeeAmount, false);
-                }
-
-                rentalPair[i].ItemRentalPartner = null;
-                rentalPair[i].Enqueue(new S.CancelItemRental());
-            }
-        }
-
-        public void ItemRentalLockFee()
-        {
-            S.ItemRentalLock p = new S.ItemRentalLock { Success = false, GoldLocked = false, ItemLocked = false };
-
-            if (ItemRentalFeeAmount > 0)
-            {
-                ItemRentalFeeLocked = true;
-                p.GoldLocked = true;
-                p.Success = true;
-
-                ItemRentalPartner.Enqueue(new S.ItemRentalPartnerLock { GoldLocked = ItemRentalFeeLocked });
-            }
-
-            if (ItemRentalFeeLocked && ItemRentalPartner.ItemRentalItemLocked)
-                ItemRentalPartner.Enqueue(new S.CanConfirmItemRental());
-            else if (ItemRentalFeeLocked && !ItemRentalPartner.ItemRentalItemLocked)
-                ItemRentalPartner.ReceiveChat($"{Name} has locked in the rental fee.", ChatType.System);
-
-            Enqueue(p);
-        }
-
-        public void ItemRentalLockItem()
-        {
-            S.ItemRentalLock p = new S.ItemRentalLock { Success = false, GoldLocked = false, ItemLocked = false };
-
-            if (ItemRentalDepositedItem != null)
-            {
-                ItemRentalItemLocked = true;
-                p.ItemLocked = true;
-                p.Success = true;
-
-                ItemRentalPartner.Enqueue(new S.ItemRentalPartnerLock { ItemLocked = ItemRentalItemLocked });
-            }
-
-            if (ItemRentalItemLocked && ItemRentalPartner.ItemRentalFeeLocked)
-                Enqueue(new S.CanConfirmItemRental());
-            else if (ItemRentalItemLocked && !ItemRentalPartner.ItemRentalFeeLocked)
-                ItemRentalPartner.ReceiveChat($"{Name} has locked in the rental item.", ChatType.System);
-
-
-            Enqueue(p);
-        }
-
-        private void ItemRentalRemoveLocks()
-        {
-            ItemRentalFeeLocked = false;
-            ItemRentalItemLocked = false;
-
-            if (ItemRentalPartner == null)
-                return;
-
-            ItemRentalPartner.ItemRentalFeeLocked = false;
-            ItemRentalPartner.ItemRentalItemLocked = false;
-        }
-
-        public void ConfirmItemRental()
-        {
-            if (ItemRentalPartner == null)
-            {
-                CancelItemRental();
-                return;
-            }
-
-            if (Info.RentedItems.Count >= 3)
-            {
-                CancelItemRental();
-                return;
-            }
-
-            if (ItemRentalPartner.Info.HasRentedItem)
-            {
-                CancelItemRental();
-                return;
-            }
-
-            if (ItemRentalDepositedItem == null)
-                return;
-
-            if (ItemRentalPartner.ItemRentalFeeAmount <= 0)
-                return;
-
-            if (ItemRentalDepositedItem.Info.Bind.HasFlag(BindMode.UnableToRent))
-                return;
-
-            if (ItemRentalDepositedItem.RentalInformation != null &&
-                ItemRentalDepositedItem.RentalInformation.BindingFlags.HasFlag(BindMode.UnableToRent))
-                return;
-
-            if (!Functions.InRange(ItemRentalPartner.CurrentLocation, CurrentLocation, Globals.DataRange)
-                || ItemRentalPartner.CurrentMap != CurrentMap || !Functions.FacingEachOther(Direction, CurrentLocation,
-                    ItemRentalPartner.Direction, ItemRentalPartner.CurrentLocation))
-            {
-                CancelItemRental();
-                return;
-            }
-
-            if (!ItemRentalItemLocked && !ItemRentalPartner.ItemRentalFeeLocked)
-                return;
-
-            if (!ItemRentalPartner.CanGainItem(ItemRentalDepositedItem))
-            {
-                ReceiveChat($"{ItemRentalPartner.Name} is unable to receive the item.", ChatType.System);
-                Enqueue(new S.CancelItemRental());
-
-                ItemRentalPartner.ReceiveChat("Unable to accept the rental item.", ChatType.System);
-                ItemRentalPartner.Enqueue(new S.CancelItemRental());
-
-                return;
-            }
-
-            if (!CanGainGold(ItemRentalPartner.ItemRentalFeeAmount))
-            {
-                ReceiveChat("You are unable to receive any more gold.", ChatType.System);
-                Enqueue(new S.CancelItemRental());
-
-                ItemRentalPartner.ReceiveChat($"{Name} is unable to receive any more gold.", ChatType.System);
-                ItemRentalPartner.Enqueue(new S.CancelItemRental());
-
-                return;
-            }
-
-            var item = ItemRentalDepositedItem;
-            item.RentalInformation = new RentalInformation
-            {
-                OwnerName = Name,
-                ExpiryDate = Envir.Now.AddDays(ItemRentalPeriodLength),
-                BindingFlags = BindMode.DontDrop | BindMode.DontStore | BindMode.DontSell | BindMode.DontTrade | BindMode.UnableToRent | BindMode.DontUpgrade | BindMode.UnableToDisassemble
-            };
-
-            var itemRentalInformation = new ItemRentalInformation
-            {
-                ItemId = item.UniqueID,
-                ItemName = item.FriendlyName,
-                RentingPlayerName = ItemRentalPartner.Name,
-                ItemReturnDate = item.RentalInformation.ExpiryDate,
-                
-            };
-
-            Info.RentedItems.Add(itemRentalInformation);
-            ItemRentalDepositedItem = null;
-
-            ItemRentalPartner.GainItem(item);
-            ItemRentalPartner.Info.HasRentedItem = true;
-            ItemRentalPartner.ReceiveChat($"You have rented {item.FriendlyName} from {Name} until {item.RentalInformation.ExpiryDate}", ChatType.System);
-
-            GainGold(ItemRentalPartner.ItemRentalFeeAmount);
-            ReceiveChat($"Received {ItemRentalPartner.ItemRentalFeeAmount} gold for item rental.", ChatType.System);
-            ItemRentalPartner.ItemRentalFeeAmount = 0;
-
-            Enqueue(new S.ConfirmItemRental());
-            ItemRentalPartner.Enqueue(new S.ConfirmItemRental());
-
-            ItemRentalRemoveLocks();
-
-            ItemRentalPartner.ItemRentalPartner = null;
-            ItemRentalPartner = null;
-        }
-
-        #endregion
-
+     
         public Server.ExineEnvir.Timer GetTimer(string key)
         {
             var timerKey = Name + "-" + key;

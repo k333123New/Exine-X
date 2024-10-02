@@ -675,12 +675,7 @@
             ExPlayer.Add(ExAction.AttackRange3, new Frame(224, 8, 0, 100, 224, 8, 0, 100));
             ExPlayer.Add(ExAction.Jump, new Frame(288, 8, 0, 100, 288, 8, 0, 100));
 
-            //Mounts
-            ExPlayer.Add(ExAction.MountStanding, new Frame(416, 4, 0, 500, 448, 4, 0, 500));
-            ExPlayer.Add(ExAction.MountWalking, new Frame(448, 8, 0, 100, 480, 8, 0, 500));
-            ExPlayer.Add(ExAction.MountRunning, new Frame(512, 6, 0, 100, 544, 6, 0, 100));
-            ExPlayer.Add(ExAction.MountStruck, new Frame(560, 3, 0, 100, 592, 3, 0, 100));
-            ExPlayer.Add(ExAction.MountAttack, new Frame(584, 6, 0, 100, 616, 6, 0, 100));
+           
 
             //Fishing
             //ExPlayer.Add(ExAction.PEACEMODE_SITDOWN_1, new Frame(632, 8, 0, 100));
@@ -804,12 +799,7 @@
             ExPlayerWoman.Add(ExAction.AttackRange3, new Frame(224, 8, 0, 100, 224, 8, 0, 100));
             ExPlayerWoman.Add(ExAction.Jump, new Frame(288, 8, 0, 100, 288, 8, 0, 100));
 
-            //Mounts
-            ExPlayerWoman.Add(ExAction.MountStanding, new Frame(416, 4, 0, 500, 448, 4, 0, 500));
-            ExPlayerWoman.Add(ExAction.MountWalking, new Frame(448, 8, 0, 100, 480, 8, 0, 500));
-            ExPlayerWoman.Add(ExAction.MountRunning, new Frame(512, 6, 0, 100, 544, 6, 0, 100));
-            ExPlayerWoman.Add(ExAction.MountStruck, new Frame(560, 3, 0, 100, 592, 3, 0, 100));
-            ExPlayerWoman.Add(ExAction.MountAttack, new Frame(584, 6, 0, 100, 616, 6, 0, 100));
+          
 
             //Fishing
             //ExPlayerWoman.Add(ExAction.PEACEMODE_SITDOWN_1, new Frame(632, 8, 0, 100));

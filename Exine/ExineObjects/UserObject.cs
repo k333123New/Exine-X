@@ -214,7 +214,7 @@ namespace Exine.ExineObjects
             WeaponEffect = 0;
             Armour = 0;
             WingEffect = 0;
-            MountType = -1;
+            
 
             CurrentWearWeight = 0;
             CurrentHandWeight = 0;
@@ -255,10 +255,7 @@ namespace Exine.ExineObjects
                     Shield = realItem.Shape; //add k333123 240903
                 }
 
-                if (realItem.Type == ItemType.Mount)
-                {
-                    MountType = realItem.Shape;
-                }
+                
 
                 if (temp.Info.IsFishingRod) continue;
 
@@ -333,10 +330,7 @@ namespace Exine.ExineObjects
                 return;
             }
 
-            if (equipItem.Info.Type == ItemType.Mount )
-            {
-                return;
-            }
+             
 
             for (int i = 0; i < equipItem.Slots.Length; i++)
             {
@@ -843,7 +837,7 @@ namespace Exine.ExineObjects
             base.ProcessFrames();
 
             if (clear) QueuedAction = null;
-            if ((CurrentAction == ExAction.Standing || CurrentAction == ExAction.MountStanding || CurrentAction == ExAction.Stance || CurrentAction == ExAction.Stance2 || CurrentAction == ExAction.DashFail) && (QueuedAction != null || NextAction != null))
+            if ((CurrentAction == ExAction.Standing  || CurrentAction == ExAction.Stance || CurrentAction == ExAction.Stance2 || CurrentAction == ExAction.DashFail) && (QueuedAction != null || NextAction != null))
                 SetAction();
         }
 

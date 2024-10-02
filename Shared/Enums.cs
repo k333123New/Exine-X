@@ -866,12 +866,7 @@ public enum ExAction : byte
     RunningBow,
     Jump,
 
-    MountStanding,
-    MountWalking,
-    MountRunning,
-    MountStruck,
-    MountAttack,
-
+     
     FishingCast,
     FishingReel,
     FishingWait
@@ -918,12 +913,7 @@ public enum MirAction : byte
     RunningBow,
     Jump,
 
-    MountStanding,
-    MountWalking,
-    MountRunning,
-    MountStruck,
-    MountAttack,
-
+     
     FishingCast,
     FishingWait,
     FishingReel
@@ -1067,7 +1057,6 @@ public enum ItemType : byte
     CraftingMaterial = 16,
     Scroll = 17,
     Gem = 18,
-    Mount = 19,
     Book = 20,
     Script = 21,
     Reins = 22,
@@ -1104,14 +1093,11 @@ public enum MirGridType : byte
     TrustMerchant = 8,
     GuildStorage = 9,
     GuestTrade = 10,
-    Mount = 11,
     Fishing = 12,
     QuestInventory = 13,
     AwakenItem = 14,
     Mail = 15,
     Refine = 16,
-    Renting = 17,
-    GuestRenting = 18,
     Craft = 19,
     Socket = 20
 }
@@ -1130,18 +1116,9 @@ public enum EquipmentSlot : byte
     Amulet = 9,
     Belt = 10,
     Boots = 11,
-    Stone = 12,
-    Mount = 13
+    Stone = 12, 
 }
-
-public enum MountSlot : byte
-{
-    Reins = 0,
-    Bells = 1,
-    Saddle = 2,
-    Ribbon = 3,
-    Mask = 4
-}
+ 
 
 public enum FishingSlot : byte
 {
@@ -1967,7 +1944,6 @@ public enum ServerPacketIds : short
     TradeItem,
     TradeConfirm,
     TradeCancel,
-    MountUpdate,
     EquipSlotItem,
     FishingUpdate,
     ChangeQuest,
@@ -2019,18 +1995,7 @@ public enum ServerPacketIds : short
     GameShopStock,
     Rankings,
     Opendoor,
-    GetRentedItems,
-    ItemRentalRequest,
-    ItemRentalFee,
-    ItemRentalPeriod,
-    DepositRentalItem,
-    RetrieveRentalItem,
-    UpdateRentalItem,
-    CancelItemRental,
-    ItemRentalLock,
-    ItemRentalPartnerLock,
-    CanConfirmItemRental,
-    ConfirmItemRental,
+     
     NewRecipeInfo,
     OpenBrowser,
     PlaySound,
@@ -2177,16 +2142,6 @@ public enum ClientPacketIds : short
     GetRanking,
     Opendoor,
 
-    GetRentedItems,
-    ItemRentalRequest,
-    ItemRentalFee,
-    ItemRentalPeriod,
-    DepositRentalItem,
-    RetrieveRentalItem,
-    CancelItemRental,
-    ItemRentalLockFee,
-    ItemRentalLockItem,
-    ConfirmItemRental,
     Rest, //add k333123 
     UpdatePhoto
 }

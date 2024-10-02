@@ -145,11 +145,11 @@ namespace Exine.ExineObjects
 
         public SpellEffect CurrentEffect;
 
-        public bool RidingMount, Sprint, FastRun, Fishing, FoundFish;
+        public bool Sprint, FastRun, Fishing, FoundFish;
         public long StanceTime, MountTime, FishingTime;
         public long BlizzardStopTime, ReincarnationStopTime, SlashingBurstTime;
 
-        public short MountType = -1, TransformType = -1;
+        public short TransformType = -1;
 
         public string GuildName;
         public string GuildRankName;
@@ -262,10 +262,7 @@ namespace Exine.ExineObjects
 
             WingEffect = info.WingEffect;
             CurrentEffect = info.Effect;
-
-            MountType = info.MountType;
-            RidingMount = info.RidingMount;
-
+            
             Fishing = info.Fishing;
 
             TransformType = info.TransformType;
@@ -1166,8 +1163,6 @@ namespace Exine.ExineObjects
                 case ExAction.ONEHAND_WALK_RIGHT:
                 case ExAction.ONEHAND_RUN_LEFT:
                 case ExAction.ONEHAND_RUN_RIGHT:
-                case ExAction.MountWalking:
-                case ExAction.MountRunning:
                 case ExAction.Pushed:
                 case ExAction.DashL:
                 case ExAction.DashR:
@@ -1182,9 +1177,10 @@ namespace Exine.ExineObjects
                     }
 
                     var i = 0;
-                    if (CurrentAction == ExAction.MountRunning) i = 3;
-                    else if (CurrentAction == ExAction.ONEHAND_RUN_LEFT)   i = (Sprint && !Sneaking ? 3 : 2);
-                    else if (CurrentAction == ExAction.ONEHAND_RUN_RIGHT) i = (Sprint && !Sneaking ? 3 : 2);
+                    //if (CurrentAction == ExAction.ONEHAND_RUN_LEFT)   i = (Sprint && !Sneaking ? 3 : 2);
+                    //else if (CurrentAction == ExAction.ONEHAND_RUN_RIGHT) i = (Sprint && !Sneaking ? 3 : 2);
+                    if (CurrentAction == ExAction.ONEHAND_RUN_LEFT) i = 2;
+                    else if (CurrentAction == ExAction.ONEHAND_RUN_RIGHT) i = 2;
                     else i = 1;
 
                     if (CurrentAction == ExAction.Jump) i = -JumpDistance;
@@ -1309,8 +1305,6 @@ namespace Exine.ExineObjects
                     case ExAction.ONEHAND_WALK_RIGHT:
                     case ExAction.ONEHAND_RUN_LEFT:
                     case ExAction.ONEHAND_RUN_RIGHT:
-                    case ExAction.MountWalking:
-                    case ExAction.MountRunning:
                     case ExAction.Pushed:
                     case ExAction.DashL:
                     case ExAction.DashR:
@@ -1425,16 +1419,13 @@ namespace Exine.ExineObjects
                     case ExAction.ONEHAND_WALK_LEFT:
                     case ExAction.ONEHAND_WALK_RIGHT:
                     case ExAction.ONEHAND_RUN_LEFT:
-                    case ExAction.ONEHAND_RUN_RIGHT:
-                    case ExAction.MountWalking:
-                    case ExAction.MountRunning:
+                    case ExAction.ONEHAND_RUN_RIGHT: 
                     case ExAction.Pushed:
                     case ExAction.DashL:
                     case ExAction.DashR:
                     case ExAction.Sneek:
                         var steps = 0;
-                        if (CurrentAction == ExAction.MountRunning) steps = 3;
-                        else if (CurrentAction == ExAction.ONEHAND_RUN_LEFT) steps = (Sprint && !Sneaking ? 3 : 2);
+                        if (CurrentAction == ExAction.ONEHAND_RUN_LEFT) steps = (Sprint && !Sneaking ? 3 : 2);
                         else if (CurrentAction == ExAction.ONEHAND_RUN_RIGHT) steps = (Sprint && !Sneaking ? 3 : 2);
                         else steps = 1;
 
@@ -1982,7 +1973,6 @@ namespace Exine.ExineObjects
                         case ExAction.ONEHAND_STAND:
                         case ExAction.TWOHAND_STAND:
                         case ExAction.BOWHAND_STAND:
-                        case ExAction.MountStanding:
                             Network.Enqueue(new C.Turn { Direction = Direction });
                             MapControl.NextAction = CMain.Time + 2500;
                             ExineMainScene.CanRun = false;
@@ -1993,7 +1983,6 @@ namespace Exine.ExineObjects
                         case ExAction.TWOHAND_WALK_RIGHT:
                         case ExAction.BOWHAND_WALK_LEFT:
                         case ExAction.BOWHAND_WALK_RIGHT:
-                        case ExAction.MountWalking:
                         case ExAction.Sneek:
                             ExineMainScene.LastRunTime = CMain.Time;
                             Network.Enqueue(new C.Walk { Direction = Direction });
@@ -2007,7 +1996,6 @@ namespace Exine.ExineObjects
                         case ExAction.TWOHAND_RUN_RIGHT:
                         case ExAction.BOWHAND_RUN_LEFT:
                         case ExAction.BOWHAND_RUN_RIGHT:
-                        case ExAction.MountRunning:
                             ExineMainScene.LastRunTime = CMain.Time;
                             Network.Enqueue(new C.Run { Direction = Direction });
                             ExineMainScene.Scene.MapControl.FloorValid = false;
@@ -2039,7 +2027,6 @@ namespace Exine.ExineObjects
                         case ExAction.ONEHAND_ATTACK1:
                         case ExAction.TWOHAND_ATTACK1:
                         case ExAction.BOWHAND_ATTACK1:
-                        case ExAction.MountAttack:
 
                             Network.Enqueue(new C.Attack { Direction = Direction, Spell = Spell });
 
@@ -2149,8 +2136,6 @@ namespace Exine.ExineObjects
                     case ExAction.BOWHAND_RUN_LEFT:
                     case ExAction.BOWHAND_RUN_RIGHT:
 
-                    case ExAction.MountWalking:
-                    case ExAction.MountRunning:
                     case ExAction.Sneek:
                         ExineMainScene.Scene.Redraw();
                         break;
@@ -2244,7 +2229,6 @@ namespace Exine.ExineObjects
                         }
                         break;
                     case ExAction.Struck:
-                    case ExAction.MountStruck:
                         uint attackerID = (uint)action.Params[0];
                         StruckWeapon = -2;
                         for (int i = 0; i < MapControl.Objects.Count; i++)
@@ -2899,7 +2883,6 @@ namespace Exine.ExineObjects
                 switch (CurrentAction)
                 {
                     case ExAction.Struck:
-                    case ExAction.MountStruck:
                         if (ElementalBarrierEffect != null)
                         {
                             ElementalBarrierEffect.Clear();
@@ -2921,7 +2904,6 @@ namespace Exine.ExineObjects
                 switch (CurrentAction)
                 {
                     case ExAction.Struck:
-                    case ExAction.MountStruck:
                         if (ShieldEffect != null)
                         {
                             ShieldEffect.Clear();
@@ -2956,8 +2938,6 @@ namespace Exine.ExineObjects
                 case ExAction.ONEHAND_WALK_RIGHT:
                 case ExAction.ONEHAND_RUN_LEFT:
                 case ExAction.ONEHAND_RUN_RIGHT:
-                case ExAction.MountWalking:
-                case ExAction.MountRunning:
                 case ExAction.Sneek:
                 case ExAction.DashAttack:
                     if (!ExineMainScene.CanMove) return;
@@ -3087,7 +3067,6 @@ namespace Exine.ExineObjects
                 case ExAction.ONEHAND_STAND:
                 case ExAction.TWOHAND_STAND:
                 case ExAction.BOWHAND_STAND:
-                case ExAction.MountStanding:
                 case ExAction.DashFail:
                 case ExAction.Harvest:
                 case ExAction.Stance:
@@ -3232,8 +3211,7 @@ namespace Exine.ExineObjects
                 case ExAction.TWOHAND_ATTACK1:
                 case ExAction.TWOHAND_ATTACK2:
                 case ExAction.TWOHAND_ATTACK3: 
-                case ExAction.BOWHAND_ATTACK1:   
-                case ExAction.MountAttack:
+                case ExAction.BOWHAND_ATTACK1:
                 case ExAction.Mine:
                     if (CMain.Time >= NextMotion)
                     {
@@ -3550,7 +3528,6 @@ namespace Exine.ExineObjects
                     break;
 
                 case ExAction.Struck:
-                case ExAction.MountStruck:
                     if (CMain.Time >= NextMotion)
                     {
                         ExineMainScene.Scene.MapControl.TextureValid = false;
@@ -4849,7 +4826,7 @@ namespace Exine.ExineObjects
             if (this == User) return;
 
             if ((CurrentAction == ExAction.ONEHAND_STAND || CurrentAction == ExAction.TWOHAND_STAND || CurrentAction == ExAction.BOWHAND_STAND || 
-                CurrentAction == ExAction.MountStanding || CurrentAction == ExAction.Stance || CurrentAction == ExAction.Stance2 || CurrentAction == ExAction.DashFail)
+                 CurrentAction == ExAction.Stance || CurrentAction == ExAction.Stance2 || CurrentAction == ExAction.DashFail)
                 && NextAction != null)
                 SetAction();
             //if Revive and dead set action
@@ -6181,18 +6158,7 @@ namespace Exine.ExineObjects
             if (Gender == 0) { SoundManager.PlaySound(SoundList.MaleDie); }
             else { SoundManager.PlaySound(SoundList.FemaleDie); }
         }
-
-        public void PlayMountSound()
-        {
-           
-                if (MountType < 7)
-                    SoundManager.PlaySound(10219);
-                else if (MountType < 12)
-                    SoundManager.PlaySound(10189);
-            
-        }
-
-
+  
         public override void Draw()
         {
             DrawBehindEffects(Settings.Effect);
@@ -6200,8 +6166,7 @@ namespace Exine.ExineObjects
             float oldOpacity = DXManager.Opacity;
             if (Hidden && !DXManager.Blending) DXManager.SetOpacity(0.5F);
 
-            DrawMount();
-
+             
             //add
             switch(Direction)
             {
@@ -6522,14 +6487,7 @@ namespace Exine.ExineObjects
                 WingLibrary.DrawBlend(DrawWingFrame + WingOffset, DrawLocation, DrawColour, true);
         }
 
-        public void DrawMount()
-        {/*
-            if (MountType < 0 || !RidingMount) return;
-
-            if (MountLibrary != null)
-                MountLibrary.Draw(DrawFrame - 416 + MountOffset, DrawLocation, DrawColour, true);
-            */
-        }
+        
 
         private bool IsVitalEffect(Effect effect)
         {

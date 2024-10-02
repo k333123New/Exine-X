@@ -1501,7 +1501,7 @@ namespace Server.ExineObjects
                         {
                             if (!HasAnyBuffs(buff.Type, BuffType.MoonLight, BuffType.DarkBody))
                             {
-                                Sneaking = false;
+                                 
                             }
                             break;
                         }

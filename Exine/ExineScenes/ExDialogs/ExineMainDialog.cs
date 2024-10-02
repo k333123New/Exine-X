@@ -2488,8 +2488,7 @@ namespace Exine.ExineScenes.ExDialogs
             AmuletCell,
             BeltCell,
             BootsCell,
-            StoneCell,
-            MountCell;
+            StoneCell;
 
         public InspectDialog()
         {
@@ -2798,13 +2797,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(128, 242),
             };
 
-            MountCell = new MirItemCell
-            {
-                ItemSlot = (int)EquipmentSlot.Mount,
-                GridType = MirGridType.Inspect,
-                Parent = CharacterPage,
-                Location = new Point(203, 62),
-            };
+             
         }
 
         public void RefreshInferface(bool IsHero)
@@ -4570,16 +4563,7 @@ namespace Exine.ExineScenes.ExDialogs
                     if (item.CurrentDura == 0)
                         Stone.Index = 2137;
                     break;
-                case ItemType.Mount:
-                    if (item.CurrentDura > Warning)
-                        Mount.Index = 2140;
-                    if (item.CurrentDura <= Warning)
-                        Mount.Index = 2141;
-                    if (item.CurrentDura <= Danger)
-                        Mount.Index = 2142;
-                    if (item.CurrentDura == 0)
-                        Mount.Index = -1;
-                    break;
+                 
                 case ItemType.Torch:
                     if (item.CurrentDura > Warning)
                         Torch.Index = 2146;

@@ -1414,26 +1414,7 @@ namespace Server.ExineObjects
                 case "ROLLRESULT":
                     newValue = player.NPCData.TryGetValue("NPCRollResult", out object _rollResult) ? _rollResult.ToString() : "Not Rolled";
                     break;
-                case "MOUNTLOYALTY":
-                    if (!player.Mount.HasMount)
-                    {
-                        newValue = "No Mount";
-                    }
-                    else
-                    {
-                        newValue = $"{player.Info.Equipment[(int)EquipmentSlot.Mount].CurrentDura} ({player.Info.Equipment[(int)EquipmentSlot.Mount].MaxDura})";
-                    }
-                    break;
-                case "MOUNT":
-                    if (player.Mount.HasMount)
-                    {
-                        newValue = player.Info.Equipment[(int)EquipmentSlot.Mount].FriendlyName;
-                    }
-                    else
-                    {
-                        newValue = "No Mount";
-                    }
-                    break;
+                 
                 default:
                     newValue = string.Empty;
                     break;

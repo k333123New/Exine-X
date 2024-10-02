@@ -186,7 +186,7 @@ namespace Server.ExineEnvir
         public static long LastRunTime = 0;
         public int MonsterCount;
 
-        private long warTime, guildTime, conquestTime, rentalItemsTime, auctionTime, spawnTime, robotTime, timerTime;
+        private long warTime, guildTime, conquestTime, auctionTime, spawnTime, robotTime, timerTime;
         private int dailyTime = DateTime.UtcNow.Day;
 
         private bool MagicExists(Spell spell)
@@ -962,12 +962,7 @@ namespace Server.ExineEnvir
                     Conquests[i].Process();
                 }
             }
-
-            if (Time >= rentalItemsTime)
-            {
-                rentalItemsTime = Time + Settings.Minute * 5;
-                ProcessRentedItems();
-            }
+             
 
             if (Time >= auctionTime)
             {
@@ -3237,147 +3232,6 @@ namespace Server.ExineEnvir
 
                 c.Player?.CallDefaultNPC(DefaultNPCType.Daily);
             }
-        }
-
-        private void ProcessRentedItems()
-        {
-            foreach (var characterInfo in CharacterList)
-            {
-                if (characterInfo.RentedItems.Count <= 0)
-                {
-                    continue;
-                }
-
-                foreach (var rentedItemInfo in characterInfo.RentedItems)
-                {
-                    if (rentedItemInfo.ItemReturnDate >= Now)
-                        continue;
-
-                    var rentingPlayer = GetCharacterInfo(rentedItemInfo.RentingPlayerName);
-
-                    for (var i = 0; i < rentingPlayer.Inventory.Length; i++)
-                    {
-                        if (rentedItemInfo.ItemId != rentingPlayer?.Inventory[i]?.UniqueID)
-                        {
-                            continue;
-                        }
-
-                        var item = rentingPlayer.Inventory[i];
-
-                        if (item?.RentalInformation == null)
-                        {
-                            continue;
-                        }
-
-                        if (Now <= item.RentalInformation.ExpiryDate)
-                        {
-                            continue;
-                        }
-
-                        ReturnRentalItem(item, item.RentalInformation.OwnerName, rentingPlayer, false);
-                        rentingPlayer.Inventory[i] = null;
-                        rentingPlayer.HasRentedItem = false;
-
-                        if (rentingPlayer.Player == null)
-                        {
-                            continue;
-                        }
-
-                        rentingPlayer.Player.ReceiveChat($"{item.Info.FriendlyName} has just expired from your inventory.", ChatType.Hint);
-                        rentingPlayer.Player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-                        rentingPlayer.Player.RefreshStats();
-                    }
-
-                    for (var i = 0; i < rentingPlayer.Equipment.Length; i++)
-                    {
-                        var item = rentingPlayer.Equipment[i];
-
-                        if (item?.RentalInformation == null)
-                        {
-                            continue;
-                        }
-
-                        if (Now <= item.RentalInformation.ExpiryDate)
-                        {
-                            continue;
-                        }
-
-                        ReturnRentalItem(item, item.RentalInformation.OwnerName, rentingPlayer, false);
-                        rentingPlayer.Equipment[i] = null;
-                        rentingPlayer.HasRentedItem = false;
-
-                        if (rentingPlayer.Player == null)
-                        {
-                            continue;
-                        }
-
-                        rentingPlayer.Player.ReceiveChat($"{item.Info.FriendlyName} has just expired from your inventory.", ChatType.Hint);
-                        rentingPlayer.Player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-                        rentingPlayer.Player.RefreshStats();
-                    }
-                }
-            }
-
-            foreach (var characterInfo in CharacterList)
-            {
-                if (characterInfo.RentedItemsToRemove.Count <= 0)
-                {
-                    continue;
-                }
-
-                foreach (var rentalInformationToRemove in characterInfo.RentedItemsToRemove)
-                {
-                    characterInfo.RentedItems.Remove(rentalInformationToRemove);
-                }
-
-                characterInfo.RentedItemsToRemove.Clear();
-            }
-        }
-
-        public bool ReturnRentalItem(UserItem rentedItem, string ownerName, CharacterInfo rentingCharacterInfo, bool removeNow = true)
-        {
-            if (rentedItem.RentalInformation == null)
-            {
-                return false;
-            }
-
-            var owner = GetCharacterInfo(ownerName);
-            var returnItems = new List<UserItem>();
-
-            foreach (var rentalInformation in owner.RentedItems)
-            {
-                if (rentalInformation.ItemId == rentedItem.UniqueID)
-                {
-                    owner.RentedItemsToRemove.Add(rentalInformation);
-                }
-            }
-            
-            rentedItem.RentalInformation.BindingFlags = BindMode.None;
-            rentedItem.RentalInformation.RentalLocked = true;
-            rentedItem.RentalInformation.ExpiryDate = rentedItem.RentalInformation.ExpiryDate.AddDays(1);
-
-            returnItems.Add(rentedItem);
-
-            var mail = new MailInfo(owner.Index, true)
-            {
-                Sender = rentingCharacterInfo.Name,
-                Message = rentedItem.Info.FriendlyName,
-                Items = returnItems
-            };
-
-            mail.Send();
-
-            if (removeNow)
-            {
-                foreach (var rentalInformationToRemove in owner.RentedItemsToRemove)
-                {
-                    owner.RentedItems.Remove(rentalInformationToRemove);
-                }
-
-                owner.RentedItemsToRemove.Clear();
-            }
-
-            return true;
         }
 
         private void ClearDailyQuests(CharacterInfo info)

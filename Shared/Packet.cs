@@ -322,26 +322,7 @@ public abstract class Packet
                 return new C.GetRanking();
             case (short)ClientPacketIds.Opendoor:
                 return new C.Opendoor();
-            case (short)ClientPacketIds.GetRentedItems:
-                return new C.GetRentedItems();
-            case (short)ClientPacketIds.ItemRentalRequest:
-                return new C.ItemRentalRequest();
-            case (short)ClientPacketIds.ItemRentalFee:
-                return new C.ItemRentalFee();
-            case (short)ClientPacketIds.ItemRentalPeriod:
-                return new C.ItemRentalPeriod();
-            case (short)ClientPacketIds.DepositRentalItem:
-                return new C.DepositRentalItem();
-            case (short)ClientPacketIds.RetrieveRentalItem:
-                return new C.RetrieveRentalItem();
-            case (short)ClientPacketIds.CancelItemRental:
-                return new C.CancelItemRental();
-            case (short)ClientPacketIds.ItemRentalLockFee:
-                return new C.ItemRentalLockFee();
-            case (short)ClientPacketIds.ItemRentalLockItem:
-                return new C.ItemRentalLockItem();
-            case (short)ClientPacketIds.ConfirmItemRental:
-                return new C.ConfirmItemRental();
+           
             case (short)ClientPacketIds.Rest://add k333123
                 return new C.Rest();
             case (short)ClientPacketIds.UpdatePhoto://add k333123
@@ -715,8 +696,7 @@ public abstract class Packet
                 return new S.TradeConfirm();
             case (short)ServerPacketIds.TradeCancel:
                 return new S.TradeCancel();
-            case (short)ServerPacketIds.MountUpdate:
-                return new S.MountUpdate();
+             
             case (short)ServerPacketIds.TransformUpdate:
                 return new S.TransformUpdate();
             case (short)ServerPacketIds.EquipSlotItem:
@@ -819,30 +799,7 @@ public abstract class Packet
                 return new S.Rankings();
             case (short)ServerPacketIds.Opendoor:
                 return new S.Opendoor();
-            case (short)ServerPacketIds.GetRentedItems:
-                return new S.GetRentedItems();
-            case (short)ServerPacketIds.ItemRentalRequest:
-                return new S.ItemRentalRequest();
-            case (short)ServerPacketIds.ItemRentalFee:
-                return new S.ItemRentalFee();
-            case (short)ServerPacketIds.ItemRentalPeriod:
-                return new S.ItemRentalPeriod();
-            case (short)ServerPacketIds.DepositRentalItem:
-                return new S.DepositRentalItem();
-            case (short)ServerPacketIds.RetrieveRentalItem:
-                return new S.RetrieveRentalItem();
-            case (short)ServerPacketIds.UpdateRentalItem:
-                return new S.UpdateRentalItem();
-            case (short)ServerPacketIds.CancelItemRental:
-                return new S.CancelItemRental();
-            case (short)ServerPacketIds.ItemRentalLock:
-                return new S.ItemRentalLock();
-            case (short)ServerPacketIds.ItemRentalPartnerLock:
-                return new S.ItemRentalPartnerLock();
-            case (short)ServerPacketIds.CanConfirmItemRental:
-                return new S.CanConfirmItemRental();
-            case (short)ServerPacketIds.ConfirmItemRental:
-                return new S.ConfirmItemRental();
+            
             case (short)ServerPacketIds.NewRecipeInfo:
                 return new S.NewRecipeInfo();
             case (short)ServerPacketIds.OpenBrowser:
