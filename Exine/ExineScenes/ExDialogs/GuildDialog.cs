@@ -965,11 +965,11 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 string Error = "";
                 if (ExineMainScene.Scene.GuildDialog.SparePoints < BuffInfo.PointsRequirement)
-                    Error = "Insufficient points available.";
+                    Error = "사용 가능한 포인트가 부족합니다.";
                 if (ExineMainScene.Scene.GuildDialog.Level < BuffInfo.LevelRequirement)
-                    Error = "Guild level too low.";
+                    Error = "링 레벨이 너무 낮습니다.";
                 if (!ExineMainScene.Scene.GuildDialog.GetMyOptions().HasFlag(GuildRankOptions.CanActivateBuff))
-                    Error = "Guild rank does not allow buff activation.";
+                    Error = "링 등급은 버프 활성화를 허용하지 않습니다.";
                 if (Error != "")
                 {
                     ExineMessageBox messageBox = new ExineMessageBox(Error);
@@ -984,11 +984,11 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 string Error = "";
                 if (Buff.Active)
-                    Error = "Buff is still active.";
+                    Error = "버프가 여전히 활성화되어 있습니다.";
                 if (ExineMainScene.Scene.GuildDialog.Gold < BuffInfo.ActivationCost)
-                    Error = "Insufficient guild funds.";
+                    Error = "링 자금이 부족합니다.";
                 if (!ExineMainScene.Scene.GuildDialog.GetMyOptions().HasFlag(GuildRankOptions.CanActivateBuff))
-                    Error = "Guild rank does not allow buff activation.";
+                    Error = "링 등급은 버프 활성화를 허용하지 않습니다.";
                 if (Error != "")
                 {
                     ExineMessageBox messageBox = new ExineMessageBox(Error);
@@ -1496,7 +1496,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (SelectedIndex >= Ranks.Count) return;
             if (LastGuildMsg > CMain.Time) return;
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Are you sure you want to change the rank of {0} to {1}?", MembersName[Index].Text, Ranks[SelectedIndex].Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}의 순위를 {1}로 변경하시겠습니까?", MembersName[Index].Text, Ranks[SelectedIndex].Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, a) =>
             {
@@ -1519,7 +1519,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (MembersName[Index].Text == MapControl.User.Name) return;
             if (LastGuildMsg > CMain.Time) return;
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Are you sure you want to kick {0}?", MembersName[Index].Text), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}을(를) 탈퇴시키겠습니까?", MembersName[Index].Text), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, a) =>
             {
@@ -1866,7 +1866,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (Ranks.Count == 255) return;
                 if (LastGuildMsg > CMain.Time) return;
-                ExineMessageBox messageBox = new ExineMessageBox("Are you sure you want to create a new rank?", MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox("새로운 순위를 생성하시겠습니까?", MirMessageBoxButtons.YesNo);
                 messageBox.YesButton.Click += (o, a) =>
                 {
                     Network.Enqueue(new C.EditGuildMember { ChangeType = 4, RankName = String.Format("Rank-{0}", Ranks.Count - 1) });

@@ -2651,13 +2651,13 @@ namespace Exine.ExineScenes.ExDialogs
 
                 if (GroupDialog.GroupList.Count >= Globals.MaxGroup)
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("Your group already has the maximum number of members.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("그룹멤버가 꽉찼습니다.", ChatType.System);
                     return;
                 }
                 if (GroupDialog.GroupList.Count > 0 && GroupDialog.GroupList[0] != MapObject.User.Name)
                 {
 
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("You are not the leader of your group.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("당신은 당신의 그룹의 리더가 아닙니다.", ChatType.System);
                 }
 
                 Network.Enqueue(new C.AddMember { Name = Name });

@@ -303,7 +303,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (Selected == null || CMain.Time < MarketTime) return;
 
-                string message = $"I am interested in purchasing {Selected.Listing.Item.FriendlyName} for {Selected.Listing.Price}.";
+                string message = $"저는 {Selected.Listing.Item.FriendlyName}을 {Selected.Listing.Price}에 구매하고 싶습니다.";
 
                 ExineMainScene.Scene.MailComposeLetterDialog.ComposeMail(Selected.Listing.Seller, message);
             };
@@ -322,7 +322,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (CMain.Time < SearchTime)
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat(string.Format("You can search again after {0} seconds.", Math.Ceiling((SearchTime - CMain.Time) / 1000D)), ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat(string.Format("{0}초 후에 다시 검색할 수 있습니다.", Math.Ceiling((SearchTime - CMain.Time) / 1000D)), ChatType.System);
                     return;
                 }
                 SearchTime = CMain.Time + Globals.SearchDelay;
@@ -350,7 +350,7 @@ namespace Exine.ExineScenes.ExDialogs
                     {
                         if (Selected.Listing.Seller == "For Sale")
                         {
-                            ExineMessageBox box = new ExineMessageBox(string.Format("{0} has not sold, Are you sure you want to get it back?", Selected.Listing.Item.FriendlyName), MirMessageBoxButtons.YesNo);
+                            ExineMessageBox box = new ExineMessageBox(string.Format("{0}이(가) 판매되지 않았습니다. 수거하시겠습니까?", Selected.Listing.Item.FriendlyName), MirMessageBoxButtons.YesNo);
                             box.YesButton.Click += (o1, e2) =>
                             {
                                 MarketTime = CMain.Time + 3000;
@@ -368,7 +368,7 @@ namespace Exine.ExineScenes.ExDialogs
                     {
                         if (Selected.Listing.Seller == "No Bid")
                         {
-                            ExineMessageBox box = new ExineMessageBox(string.Format("{0} has not sold, Are you sure you want to get it back?", Selected.Listing.Item.FriendlyName), MirMessageBoxButtons.YesNo);
+                            ExineMessageBox box = new ExineMessageBox(string.Format("{0}이(가) 판매되지 않았습니다. 수거하시겠습니까?", Selected.Listing.Item.FriendlyName), MirMessageBoxButtons.YesNo);
                             box.YesButton.Click += (o1, e2) =>
                             {
                                 MarketTime = CMain.Time + 3000;
@@ -390,7 +390,7 @@ namespace Exine.ExineScenes.ExDialogs
                         case MarketItemType.Consign:
                         case MarketItemType.GameShop:
                             {
-                                ExineMessageBox box = new ExineMessageBox(string.Format("Are you sure you want to buy {0} for {1:#,##0} {2}?", Selected.Listing.Item.FriendlyName, Selected.Listing.Price, MarketType == MarketPanelType.GameShop ? "Credits" : "Gold"), MirMessageBoxButtons.YesNo);
+                                ExineMessageBox box = new ExineMessageBox(string.Format("{0}을 {1:#,##0} {2}에 구매하시겠습니까?", Selected.Listing.Item.FriendlyName, Selected.Listing.Price, MarketType == MarketPanelType.GameShop ? "Credits" : "Gold"), MirMessageBoxButtons.YesNo);
                                 box.YesButton.Click += (o1, e2) =>
                                 {
                                     MarketTime = CMain.Time + 3000;
@@ -405,7 +405,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                                 bidAmount.OKButton.Click += (o1, e1) =>
                                 {
-                                    ExineMessageBox box = new ExineMessageBox(string.Format("Are you sure you want to bid {0:#,##0} Gold for {1}?", bidAmount.Amount, Selected.Listing.Item.FriendlyName), MirMessageBoxButtons.YesNo);
+                                    ExineMessageBox box = new ExineMessageBox(string.Format("{0:#,#0} 데니를 {1}에 입찰하시겠습니까?", bidAmount.Amount, Selected.Listing.Item.FriendlyName), MirMessageBoxButtons.YesNo);
                                     box.YesButton.Click += (o2, e2) =>
                                     {
                                         MarketTime = CMain.Time + 3000;

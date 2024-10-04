@@ -47,9 +47,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExineMobFrameIdxConverter",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RE_Info", "RE_Info", "{F0D9209F-1BC5-4294-BF32-96B7E68A1358}"
 	ProjectSection(SolutionItems) = preProject
-		frame_process.txt = frame_process.txt
 		data_structure.txt = data_structure.txt
+		frame_process.txt = frame_process.txt
 		network_process.txt = network_process.txt
+		remove concept.txt = remove concept.txt
 	EndProjectSection
 EndProject
 Global

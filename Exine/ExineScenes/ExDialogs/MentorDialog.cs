@@ -93,7 +93,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (MentorLevel != 0)
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("You already have a Mentor.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("이미 멘토가 있습니다.", ChatType.System);
                     return;
                 }
 
@@ -130,7 +130,7 @@ namespace Exine.ExineScenes.ExDialogs
                     return;
                 }
 
-                ExineMessageBox messageBox = new ExineMessageBox(string.Format("Cancelling a Mentorship early will cause a cooldown. Are you sure?"), MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox(string.Format("멘토십을 일찍 취소하면 쿨다운이 발생합니다. 정말 진행할까요?"), MirMessageBoxButtons.YesNo);
 
                 messageBox.YesButton.Click += (oo, ee) => Network.Enqueue(new C.CancelMentor { });
                 messageBox.NoButton.Click += (oo, ee) => { messageBox.Dispose(); };

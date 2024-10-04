@@ -220,7 +220,7 @@ namespace Exine.ExineControls
 
                             if (ExineMainScene.Scene.ExChatDialog.ChatTextBox.Text.Length + text.Length > Globals.MaxChatLength)
                             {
-                                ExineMainScene.Scene.ExChatDialog.ReceiveChat("Unable to link item, message exceeds allowed length", ChatType.System);
+                                ExineMainScene.Scene.ExChatDialog.ReceiveChat("항목을 연결할 수 없습니다. 메시지 길이가 허용된 길이를 초과합니다", ChatType.System);
                                 return;
                             }
 
@@ -245,13 +245,13 @@ namespace Exine.ExineControls
                             {
                                 if (FreeSpace() == 0)
                                 {
-                                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("No room to split stack.", ChatType.System);
+                                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("스택을 분할할 공간이 없습니다.", ChatType.System);
                                     return;
                                 }
 
                                 if (Item.Count > 1)
                                 {
-                                    MirAmountBox amountBox = new MirAmountBox("Split Amount:", Item.Image, (uint)(Item.Count - 1));
+                                    MirAmountBox amountBox = new MirAmountBox("나눌 수량:", Item.Image, (uint)(Item.Count - 1));
 
                                     amountBox.OKButton.Click += (o, a) =>
                                     {
@@ -487,7 +487,7 @@ namespace Exine.ExineControls
                         if (CMain.Time < ExineMainScene.UseItemTime) return;
                         if (Item.Info.Type == ItemType.Potion && Item.Info.Shape == 4)
                         {
-                            ExineMessageBox messageBox = new ExineMessageBox("Are you use you want to use this Potion?", MirMessageBoxButtons.YesNo);
+                            ExineMessageBox messageBox = new ExineMessageBox("이 물약을 사용하시겠습니까?", MirMessageBoxButtons.YesNo);
                             messageBox.YesButton.Click += (o, e) =>
                             {
                                 Network.Enqueue(new C.UseItem { UniqueID = Item.UniqueID, Grid = GridType });
@@ -701,7 +701,7 @@ namespace Exine.ExineControls
                                 {
                                     if (CMain.Ctrl)
                                     {
-                                        ExineMessageBox messageBox = new ExineMessageBox("Do you want to try and combine these items?", MirMessageBoxButtons.YesNo);
+                                        ExineMessageBox messageBox = new ExineMessageBox("이 아이템들을 조합하시겠습니까?", MirMessageBoxButtons.YesNo);
                                         messageBox.YesButton.Click += (o, e) =>
                                         {
                                             //Combine
@@ -835,12 +835,12 @@ namespace Exine.ExineControls
                             case MirGridType.GuildStorage:
                                 if (Item != null)
                                 {
-                                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("You cannot swap items.", ChatType.System);
+                                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("아이템을 교환할 수 없습니다.", ChatType.System);
                                     return;
                                 }
                                 if (!GuildDialog.MyOptions.HasFlag(GuildRankOptions.CanRetrieveItem))
                                 {
-                                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("Insufficient rights to retrieve items.", ChatType.System);
+                                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("아이템을 저장할 수 있는 권한이 부족합니다.", ChatType.System);
                                     return;
                                 }
                                 Network.Enqueue(new C.GuildStorageItemChange { Type = 1, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
@@ -1126,7 +1126,7 @@ namespace Exine.ExineControls
                                 {
                                     if (!GuildDialog.MyOptions.HasFlag(GuildRankOptions.CanStoreItem))
                                     {
-                                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Insufficient rights to store items.", ChatType.System);
+                                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("아이템을 저장할 수 있는 권한이 부족합니다.", ChatType.System);
                                         return;
                                     }
 
@@ -1147,12 +1147,12 @@ namespace Exine.ExineControls
                                 {
                                     if (Item != null)
                                     {
-                                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You cannot swap items.", ChatType.System);
+                                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("아이템을 교환할 수 없습니다.", ChatType.System);
                                         return;
                                     }
                                     if (!GuildDialog.MyOptions.HasFlag(GuildRankOptions.CanStoreItem))
                                     {
-                                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Insufficient rights to store items.", ChatType.System);
+                                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("아이템을 저장할 수 있는 권한이 부족합니다.", ChatType.System);
                                         return;
                                     }
                                     if (ItemArray[ItemSlot] == null)
@@ -1431,13 +1431,13 @@ namespace Exine.ExineControls
                         {
                             if (Item != null)
                             {
-                                ExineMainScene.Scene.ExChatDialog.ReceiveChat("You cannot swap items.", ChatType.System);
+                                ExineMainScene.Scene.ExChatDialog.ReceiveChat("아이템을 교환할 수 없습니다.", ChatType.System);
                                 return;
                             }
 
                             if (ExineMainScene.SelectedCell.Item.Info.Bind.HasFlag(BindMode.DontTrade))
                             {
-                                ExineMainScene.Scene.ExChatDialog.ReceiveChat("You cannot mail this item.", ChatType.System);
+                                ExineMainScene.Scene.ExChatDialog.ReceiveChat("이 아이템은 우편으로 보낼 수 없습니다.", ChatType.System);
                                 return;
                             }
 
@@ -1596,35 +1596,35 @@ namespace Exine.ExineControls
                 case ExineClass.Warrior:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Warrior))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Warriors cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("전사는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case ExineClass.Wizard:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Wizard))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Wizards cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("마법사는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case ExineClass.Taoist:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Taoist))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Taoists cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("도사는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case ExineClass.Assassin:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Assassin))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Assassins cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("암살자는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case ExineClass.Archer:
                     if (!Item.Info.RequiredClass.HasFlag(RequiredClass.Archer))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Archers cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("궁수는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
@@ -1642,14 +1642,14 @@ namespace Exine.ExineControls
                 case RequiredType.MaxAC:
                     if (actor.Stats[Stat.MaxAC] < Item.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough AC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("AC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MaxMAC:
                     if (actor.Stats[Stat.MaxMAC] < Item.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough MAC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("MAC이 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
@@ -1677,42 +1677,42 @@ namespace Exine.ExineControls
                 case RequiredType.MaxLevel:
                     if (actor.Level > Item.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You have exceeded the maximum level.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("최대 레벨을 초과했습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinAC:
                     if (actor.Stats[Stat.MinAC] < Item.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base AC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 AC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinMAC:
                     if (actor.Stats[Stat.MinMAC] < Item.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base MAC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 MAC이 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinDC:
                     if (actor.Stats[Stat.MinDC] < Item.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base DC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 DC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinMC:
                     if (actor.Stats[Stat.MinMC] < Item.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base MC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 MC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinSC:
                     if (actor.Stats[Stat.MinSC] < Item.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base SC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 SC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
@@ -1728,7 +1728,7 @@ namespace Exine.ExineControls
                 case ItemType.Reel:
                     if (actor.Equipment[(int)EquipmentSlot.Weapon] == null || !actor.Equipment[(int)EquipmentSlot.Weapon].Info.IsFishingRod)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have a fishing rod equipped.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("낚싯대를 장착하지 않았습니다.", ChatType.System);
                         return false;
                     }
                     break;
@@ -1765,35 +1765,35 @@ namespace Exine.ExineControls
                 case ExineClass.Warrior:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Warrior))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Warriors cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("전사는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case ExineClass.Wizard:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Wizard))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Wizards cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("마법사는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case ExineClass.Taoist:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Taoist))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Taoists cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("도사는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case ExineClass.Assassin:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Assassin))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Assassins cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("암살자는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case ExineClass.Archer:
                     if (!i.Info.RequiredClass.HasFlag(RequiredClass.Archer))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Archers cannot use this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("궁수는 이 아이템을 사용할 수 없습니다.", ChatType.System);
                         return false;
                     }
                     break;
@@ -1811,14 +1811,14 @@ namespace Exine.ExineControls
                 case RequiredType.MaxAC:
                     if (actor.Stats[Stat.MaxAC] < i.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough AC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("AC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MaxMAC:
                     if (actor.Stats[Stat.MaxMAC] < i.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough MAC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("MAC이 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
@@ -1846,42 +1846,42 @@ namespace Exine.ExineControls
                 case RequiredType.MaxLevel:
                     if (actor.Level > i.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You have exceeded the maximum level.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("최대 레벨을 초과했습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinAC:
                     if (actor.Stats[Stat.MinAC] < i.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base AC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 AC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinMAC:
                     if (actor.Stats[Stat.MinMAC] < i.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base MAC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 MAC이 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinDC:
                     if (actor.Stats[Stat.MinDC] < i.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base DC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 DC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinMC:
                     if (actor.Stats[Stat.MinMC] < i.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base MC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 MC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
                 case RequiredType.MinSC:
                     if (actor.Stats[Stat.MinSC] < i.Info.RequiredAmount)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Base SC.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("기본 SC가 충분하지 않습니다.", ChatType.System);
                         return false;
                     }
                     break;
@@ -1899,7 +1899,7 @@ namespace Exine.ExineControls
             {
                 if (i.Weight - (Item != null ? Item.Weight : 0) + actor.CurrentWearWeight > actor.Stats[Stat.WearWeight])
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("It is too heavy to wear.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("너무 무거워서 착용할 수 없습니다.", ChatType.System);
                     return false;
                 }
             }

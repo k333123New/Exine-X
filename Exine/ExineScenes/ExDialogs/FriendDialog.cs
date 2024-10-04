@@ -174,7 +174,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (SelectedFriend == null) return;
 
-                ExineMessageBox messageBox = new ExineMessageBox(string.Format("Are you sure you wish to remove '{0}'?", SelectedFriend.Name), MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox(string.Format("'{0}'을 제거하시겠습니까?", SelectedFriend.Name), MirMessageBoxButtons.YesNo);
 
                 messageBox.YesButton.Click += (o1, e1) =>
                 {
@@ -240,7 +240,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 if (!SelectedFriend.Online)
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("Player is not online", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("플레이어가 온라인이 아닙니다", ChatType.System);
                     return;
                 }
 

@@ -727,7 +727,7 @@ namespace Exine.ExineScenes.ExDialogs
                         maxQuantity = Math.Min(ushort.MaxValue, (ushort)(ExineMainScene.Gold / (SelectedItem.Price() / SelectedItem.Count)));
                         if (maxQuantity == 0)
                         {
-                            ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough Pearls.", ChatType.System);
+                            ExineMainScene.Scene.ExChatDialog.ReceiveChat("진주가 충분하지 않습니다.", ChatType.System);
                             return;
                         }
                     }
@@ -777,7 +777,7 @@ namespace Exine.ExineScenes.ExDialogs
                     if (MapObject.User.Inventory[i] == null) break;
                     if (i == MapObject.User.Inventory.Length - 1)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("You cannot purchase any more items.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("더 많은 아이템을 구매할 수 없습니다.", ChatType.System);
                         return;
                     }
                 }
@@ -999,7 +999,7 @@ namespace Exine.ExineScenes.ExDialogs
                 case PanelType.Sell:
                     if (TargetItem.Info.Bind.HasFlag(BindMode.DontSell))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Cannot sell this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("이 아이템을 판매할 수 없습니다.", ChatType.System);
                         return;
                     }
                     if (ExineMainScene.Gold + TargetItem.Price() / 2 <= uint.MaxValue)
@@ -1008,12 +1008,12 @@ namespace Exine.ExineScenes.ExDialogs
                         TargetItem = null;
                         return;
                     }
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("Cannot carry anymore gold.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("더 이상 데니를 휴대할 수 없습니다.", ChatType.System);
                     break;
                 case PanelType.Repair:
                     if (TargetItem.Info.Bind.HasFlag(BindMode.DontRepair))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Cannot repair this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("이 아이템은 수리할 수 없습니다.", ChatType.System);
                         return;
                     }
                     if (ExineMainScene.Gold >= TargetItem.RepairPrice() * ExineMainScene.NPCRate)
@@ -1027,7 +1027,7 @@ namespace Exine.ExineScenes.ExDialogs
                 case PanelType.SpecialRepair:
                     if ((TargetItem.Info.Bind.HasFlag(BindMode.DontRepair)) || (TargetItem.Info.Bind.HasFlag(BindMode.NoSRepair)))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Cannot repair this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("이 아이템은 수리할 수 없습니다.", ChatType.System);
                         return;
                     }
                     if (ExineMainScene.Gold >= (TargetItem.RepairPrice() * 3) * ExineMainScene.NPCRate)
@@ -1041,10 +1041,10 @@ namespace Exine.ExineScenes.ExDialogs
                 case PanelType.Consign:
                     if (TargetItem.Info.Bind.HasFlag(BindMode.DontStore) || TargetItem.Info.Bind.HasFlag(BindMode.DontSell))
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("Cannot consign this item.", ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat("이 아이템은 위탁할 수 없습니다.", ChatType.System);
                         return;
                     }
-                    MirAmountBox box = new MirAmountBox("Consignment Price:", TargetItem.Image, Globals.MaxConsignment, Globals.MinConsignment)
+                    MirAmountBox box = new MirAmountBox("위탁판매 가격:", TargetItem.Image, Globals.MaxConsignment, Globals.MinConsignment)
                     {
                         InputTextBox = { Text = string.Empty },
                         Amount = 0
@@ -1081,18 +1081,18 @@ namespace Exine.ExineScenes.ExDialogs
                                 TargetItem = null;
                                 return;
                             }
-                            ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("You don't have enough gold to refine your {0}.", TargetItem.FriendlyName), ChatType.System);
+                            ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("Y{0}을(를) 정제할 만큼의 데니가 없습니다.", TargetItem.FriendlyName), ChatType.System);
                             return;
                         }
 
                     }
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("You haven't deposited any items to refine your {0} with.", TargetItem.FriendlyName), ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("{0}을(를) 정제할 아이템을 제출하지 않았습니다.", TargetItem.FriendlyName), ChatType.System);
                     break;
                 case PanelType.CheckRefine:
 
                     if (TargetItem.RefineAdded == 0)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("Your {0} hasn't been refined so it doesn't need checking.", TargetItem.FriendlyName), ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("{0}이(가) 정제되지 않았으므로 확인할 필요가 없습니다.", TargetItem.FriendlyName), ChatType.System);
                         return;
                     }
                     Network.Enqueue(new C.CheckRefine { UniqueID = TargetItem.UniqueID });
@@ -1102,7 +1102,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                     if (TargetItem.Info.Type != ItemType.Ring)
                     {
-                        ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("{0} isn't a ring.", TargetItem.FriendlyName), ChatType.System);
+                        ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("{0}은 반지가 아닙니다.", TargetItem.FriendlyName), ChatType.System);
                         return;
                     }
 
@@ -2017,7 +2017,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (Recipe.Gold > ExineMainScene.Gold)
                 {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough gold.", ChatType.System);
+                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("데니가 부족합니다.", ChatType.System);
                     return;
                 }
 
@@ -2025,7 +2025,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             if (max > 1)
             {
-                MirAmountBox amountBox = new MirAmountBox("Craft Amount:", RecipeItem.Info.Image, max, 0, max);
+                MirAmountBox amountBox = new MirAmountBox("제작 수량:", RecipeItem.Info.Image, max, 0, max);
 
                 amountBox.OKButton.Click += (o, e) =>
                 {
@@ -2033,13 +2033,13 @@ namespace Exine.ExineScenes.ExDialogs
                     {
                         if (!HasCraftItems((ushort)amountBox.Amount))
                         {
-                            ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have the required tools or ingredients.", ChatType.System);
+                            ExineMainScene.Scene.ExChatDialog.ReceiveChat("필요한 도구나 재료가 없습니다.", ChatType.System);
                             return;
                         }
                         
                         if ((Recipe.Gold * amountBox.Amount) > ExineMainScene.Gold)
                         {
-                            ExineMainScene.Scene.ExChatDialog.ReceiveChat("You do not have enough gold.", ChatType.System);
+                            ExineMainScene.Scene.ExChatDialog.ReceiveChat("데니가 부족합니다.", ChatType.System);
                             return;
                         }
 

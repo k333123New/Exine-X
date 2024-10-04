@@ -400,12 +400,12 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (SelectedNPC == null || !SelectedNPC.Info.CanTeleportTo) return;
 
-            ExineMessageBox messageBox = new ExineMessageBox($"Teleport to this NPC for {ExineMainScene.TeleportToNPCCost} Gold?", MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox($"텔레포트를 위해 이 NPC에게 {ExineMainScene.TeleportToNPCCost} 데니를 지불하시겠습니까?", MirMessageBoxButtons.YesNo);
             messageBox.YesButton.Click += (o, e) =>
             {
                 if (ExineMainScene.Gold < ExineMainScene.TeleportToNPCCost)
                 {
-                    ExineMessageBox messageBox2 = new ExineMessageBox("Not enough Gold.", MirMessageBoxButtons.OK);
+                    ExineMessageBox messageBox2 = new ExineMessageBox("돈이 부족합니다.", MirMessageBoxButtons.OK);
                     messageBox2.Show();
                     return;
                 }
@@ -618,7 +618,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             if (path == null || path.Count == 0)
             {
-                ExineMainScene.Scene.ExChatDialog.ReceiveChat("Could not find suitable path.", ChatType.System);
+                ExineMainScene.Scene.ExChatDialog.ReceiveChat("적절한 경로를 찾을 수 없습니다.", ChatType.System);
             }
             else
             {

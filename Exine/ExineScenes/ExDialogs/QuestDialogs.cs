@@ -133,7 +133,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 if (Reward.SelectedItemIndex < 0 && SelectedQuest.QuestInfo.RewardsSelectItem.Count > 0)
                 {
-                    ExineMessageBox messageBox = new ExineMessageBox("You must select a reward item.");
+                    ExineMessageBox messageBox = new ExineMessageBox("보상 항목을 선택해야 합니다.");
                     messageBox.Show();
                     return;
                 }
@@ -585,7 +585,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             _cancelButton.Click += (o, e) =>
             {
-                ExineMessageBox messageBox = new ExineMessageBox("Are you sure you want to cancel this quest?", MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox("이 퀘스트를 취소하시겠습니까?", MirMessageBoxButtons.YesNo);
 
                 messageBox.YesButton.Click += (o1, a) =>
                 {

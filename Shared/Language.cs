@@ -1,25 +1,25 @@
 ﻿public class GameLanguage
 {
     //Client
-    public static string PetMode_Both = "[Pet: Attack and Move]",
-                         PetMode_MoveOnly = "[Pet: Do Not Attack]",
-                         PetMode_AttackOnly = "[Pet: Do Not Move]",
-                         PetMode_None = "[Pet: Do Not Attack or Move]",
-                         PetMode_FocusMasterTarget = "[Pet: Focus Master Target]",
+    public static string PetMode_Both = "[펫: 공격 및 이동]",
+                         PetMode_MoveOnly = "[펫: 공격금지]",
+                         PetMode_AttackOnly = "[펫: 이동금지]",
+                         PetMode_None = "[펫: 공격 및 이동 금지]",
+                         PetMode_FocusMasterTarget = "[펫: 주인의 목표에 포커스]",
 
-                         AttackMode_Peace = "[Mode: Peaceful]",
-                         AttackMode_Group = "[Mode: Group]",
-                         AttackMode_Guild = "[Mode: Guild]",
-                         AttackMode_EnemyGuild = "[Mode: Enemy Guild]",
-                         AttackMode_RedBrown = "[Mode: Red/Brown]",
-                         AttackMode_All = "[Mode: Attack All]",
+                         AttackMode_Peace = "[공격모드: 평화로움]",
+                         AttackMode_Group = "[공격모드: 그룹]",
+                         AttackMode_Guild = "[공격모드: 길드]",
+                         AttackMode_EnemyGuild = "[공격모드: 적길드]",
+                         AttackMode_RedBrown = "[공격모드: 적/갈]",
+                         AttackMode_All = "[공격모드: 전체공격]",
 
                          LogOutTip = "Exine에서 로그아웃하시겠습니까?",
                          ExitTip = "Exine을 종료하시겠습니까?",
                          DiedTip = "당신은 죽었습니다. 신전에서 부활하시겠습니까?",
                          DropTip = "정말로 {0}을(를) 버리겠습니까?",
 
-                         Inventory = "Inventory ({0})",
+                         Inventory = "인벤토리 ({0})",
                          Character = "Character ({0})",
                          Skills = "Skills ({0})",
                          Quests = "Quests ({0})",
@@ -258,7 +258,7 @@
 
     //common
     public static string LowLevel = "You are not a high enough level.",
-                         LowGold = "Not enough gold.",
+                         LowGold = "돈이 부족합니다.",
                          LevelUp = "Congratulations! You have leveled up. Your HP and MP have been restored.",
                          LowDC = "You do not have enough DC.",
                          LowMC = "You do not have enough MC.",

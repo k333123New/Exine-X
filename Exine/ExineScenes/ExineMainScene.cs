@@ -847,7 +847,7 @@ namespace Exine.ExineScenes
 
             if (!actor.HasClassWeapon && actor.Weapon >= 0)
             {
-                ExChatDialog.ReceiveChat("You must be wearing a suitable weapon to perform this skill", ChatType.System);
+                ExChatDialog.ReceiveChat("이 기술을 수행하려면 적절한 무기를 착용하고 있어야 합니다.", ChatType.System);
                 return;
             }
 
@@ -872,7 +872,7 @@ namespace Exine.ExineScenes
                         if (CMain.Time >= OutputDelay)
                         {
                             OutputDelay = CMain.Time + 1000;
-                            Scene.OutputMessage(string.Format("You cannot cast {0} for another {1} seconds.", magic.Spell.ToString(), ((magic.CastTime + magic.Delay) - CMain.Time - 1) / 1000 + 1));
+                            Scene.OutputMessage(string.Format("{0}을 {1}초 동안 시전할 수 없습니다.", magic.Spell.ToString(), ((magic.CastTime + magic.Delay) - CMain.Time - 1) / 1000 + 1));
                         }
 
                         return;
@@ -1947,7 +1947,7 @@ namespace Exine.ExineScenes
         {
             if (info.MapIndex == -1 && info.NPCIndex == 0)
             {
-                ExineMessageBox messageBox = new ExineMessageBox("Nothing Found.", MirMessageBoxButtons.OK);
+                ExineMessageBox messageBox = new ExineMessageBox("아무것도 발견되지 않았습니다.", MirMessageBoxButtons.OK);
                 messageBox.OKButton.Click += (o, a) =>
                 {
                     BigMapDialog.SearchTextBox.SetFocus();
@@ -2780,7 +2780,7 @@ namespace Exine.ExineScenes
 
             if (quest == null) return;
 
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} would like to share a quest with you. Do you accept?", p.SharerName), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}) 퀘스트를 공유하고 싶습니다. 수락하시겠습니까?", p.SharerName), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.AcceptQuest { NPCIndex = 0, QuestIndex = quest.Index });
 
@@ -3269,7 +3269,7 @@ namespace Exine.ExineScenes
                 {
                    
                     default:
-                        ExChatDialog.ReceiveChat(string.Format("{0}'s dura has dropped to 0.", item.Info.FriendlyName), ChatType.System);
+                        ExChatDialog.ReceiveChat(string.Format("{0}의 내구도가 0으로 감소했습니다.", item.Info.FriendlyName), ChatType.System);
                         break;
                 }
 
@@ -3921,7 +3921,7 @@ namespace Exine.ExineScenes
         }
         private void NPCRequestInput(S.NPCRequestInput p)
         {
-            MirInputBox inputBox = new MirInputBox("Please enter the required information.");
+            MirInputBox inputBox = new MirInputBox("요청된 정보를 입력해주세요.");
 
             inputBox.OKButton.Click += (o1, e1) =>
             {
@@ -4560,7 +4560,7 @@ namespace Exine.ExineScenes
             GroupDialog.GroupList.Clear();
             GroupDialog.GroupMembersMap.Clear();
             BigMapViewPort.PlayerLocations.Clear();
-            ExChatDialog.ReceiveChat("You have left the group.", ChatType.Group);
+            ExChatDialog.ReceiveChat("그룹을 탈퇴했습니다.", ChatType.Group);
         }
 
         private void DeleteMember(S.DeleteMember p)
@@ -4568,12 +4568,12 @@ namespace Exine.ExineScenes
             GroupDialog.GroupList.Remove(p.Name);
             GroupDialog.GroupMembersMap.Remove(p.Name);
             BigMapViewPort.PlayerLocations.Remove(p.Name);
-            ExChatDialog.ReceiveChat(string.Format("-{0} has left the group.", p.Name), ChatType.Group);
+            ExChatDialog.ReceiveChat(string.Format("-{0}이 그룹을 떠났습니다.", p.Name), ChatType.Group);
         }
 
         private void GroupInvite(S.GroupInvite p)
         {
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Do you want to group with {0}?", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}과(와) 그룹을 하시겠습니까?", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) =>
             {
@@ -4586,7 +4586,7 @@ namespace Exine.ExineScenes
         private void AddMember(S.AddMember p)
         {
             GroupDialog.GroupList.Add(p.Name);
-            ExChatDialog.ReceiveChat(string.Format("-{0} has joined the group.", p.Name), ChatType.Group);
+            ExChatDialog.ReceiveChat(string.Format("-{0}이(가) 그룹에 가입했습니다.", p.Name), ChatType.Group);
         }
         private void GroupMembersMap(S.GroupMembersMap p)
         {
@@ -5343,7 +5343,7 @@ namespace Exine.ExineScenes
 
         private void GuildInvite(S.GuildInvite p)
         {
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Do you want to join the {0} guild?", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} 링에 가입하시겠습니까?", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.GuildInvite { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => Network.Enqueue(new C.GuildInvite { AcceptInvite = false });
@@ -5353,7 +5353,7 @@ namespace Exine.ExineScenes
 
         private void GuildNameRequest(S.GuildNameRequest p)
         {
-            MirInputBox inputBox = new MirInputBox("Please enter a guild name, length must be 3~20 characters.");
+            MirInputBox inputBox = new MirInputBox("링 이름을 입력하세요. 3~20자 이내로 입력하세요.");
             inputBox.InputTextBox.TextBox.KeyPress += (o, e) =>
             {
                 string Allowed = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -5364,7 +5364,7 @@ namespace Exine.ExineScenes
             {
                 if (inputBox.InputTextBox.Text.Contains('\\'))
                 {
-                    ExChatDialog.ReceiveChat("You cannot use the \\ sign in a guildname!", ChatType.System);
+                    ExChatDialog.ReceiveChat("링 이름에는 \\ 기호를 사용할 수 없습니다!", ChatType.System);
                     inputBox.InputTextBox.Text = "";
                 }
                 Network.Enqueue(new C.GuildNameReturn { Name = inputBox.InputTextBox.Text });
@@ -5375,7 +5375,7 @@ namespace Exine.ExineScenes
 
         private void GuildRequestWar(S.GuildRequestWar p)
         {
-            MirInputBox inputBox = new MirInputBox("Please enter the guild you would like to go to war with.");
+            MirInputBox inputBox = new MirInputBox("전쟁하고 싶은 길드를 입력하세요.");
 
             inputBox.OKButton.Click += (o, e) =>
             {
@@ -5400,20 +5400,20 @@ namespace Exine.ExineScenes
                     GuildDialog.MemberStatusChange(p.Name, false);
                     break;
                 case 1: // logged on
-                    ExChatDialog.ReceiveChat(String.Format("{0} logged on.", p.Name), ChatType.Guild);
+                    ExChatDialog.ReceiveChat(String.Format("{0}이(가) 로그인했습니다.", p.Name), ChatType.Guild);
                     GuildDialog.MemberStatusChange(p.Name, true);
                     break;
                 case 2://new member
-                    ExChatDialog.ReceiveChat(String.Format("{0} joined guild.", p.Name), ChatType.Guild);
+                    ExChatDialog.ReceiveChat(String.Format("{0}님이 링에 가입했습니다.", p.Name), ChatType.Guild);
                     GuildDialog.MemberCount++;
                     GuildDialog.MembersChanged = true;
                     break;
                 case 3://kicked member
-                    ExChatDialog.ReceiveChat(String.Format("{0} got removed from the guild.", p.Name), ChatType.Guild);
+                    ExChatDialog.ReceiveChat(String.Format("{0}이(가) 링에서 추방되었습니다.", p.Name), ChatType.Guild);
                     GuildDialog.MembersChanged = true;
                     break;
                 case 4://member left
-                    ExChatDialog.ReceiveChat(String.Format("{0} left the guild.", p.Name), ChatType.Guild);
+                    ExChatDialog.ReceiveChat(String.Format("{0}님이 링을 탈퇴했습니다.", p.Name), ChatType.Guild);
                     GuildDialog.MembersChanged = true;
                     break;
                 case 5://rank change (name or different rank)
@@ -5490,11 +5490,11 @@ namespace Exine.ExineScenes
             switch (p.Type)
             {
                 case 0:
-                    ExChatDialog.ReceiveChat(String.Format("{0} donated {1} gold to guild funds.", p.Name, p.Amount), ChatType.Guild);
+                    ExChatDialog.ReceiveChat(String.Format("{0}님이 길드 자금에 {1}골드를 기부했습니다.", p.Name, p.Amount), ChatType.Guild);
                     GuildDialog.Gold += p.Amount;
                     break;
                 case 1:
-                    ExChatDialog.ReceiveChat(String.Format("{0} retrieved {1} gold from guild funds.", p.Name, p.Amount), ChatType.Guild);
+                    ExChatDialog.ReceiveChat(String.Format("{0}이(가) 길드 자금에서 {1}골드를 가져갔습니다.", p.Name, p.Amount), ChatType.Guild);
                     if (GuildDialog.Gold > p.Amount)
                         GuildDialog.Gold -= p.Amount;
                     else
@@ -5615,7 +5615,7 @@ namespace Exine.ExineScenes
 
         private void MarriageRequest(S.MarriageRequest p)
         {
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} has asked for your hand in marriage.", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}이 당신에게 결혼을 요청했습니다.", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.MarriageReply { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.MarriageReply { AcceptInvite = false }); messageBox.Dispose(); };
@@ -5625,7 +5625,7 @@ namespace Exine.ExineScenes
 
         private void DivorceRequest(S.DivorceRequest p)
         {
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} has requested a divorce", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}이 이혼을 요청했습니다.", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.DivorceReply { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.DivorceReply { AcceptInvite = false }); messageBox.Dispose(); };
@@ -5635,7 +5635,7 @@ namespace Exine.ExineScenes
 
         private void MentorRequest(S.MentorRequest p)
         {
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} (Level {1}) has requested you teach him the ways of the {2}.", p.Name, p.Level, ExineMainScene.User.Class.ToString()), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}(레벨 {1})에서 {2}의 방법을 가르쳐 달라고 요청했습니다.", p.Name, p.Level, ExineMainScene.User.Class.ToString()), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.MentorReply { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.MentorReply { AcceptInvite = false }); messageBox.Dispose(); };
@@ -5715,7 +5715,7 @@ namespace Exine.ExineScenes
 
         private void TradeRequest(S.TradeRequest p)
         {
-            ExineMessageBox messageBox = new ExineMessageBox(string.Format("Player {0} has requested to trade with you.", p.Name), MirMessageBoxButtons.YesNo);
+            ExineMessageBox messageBox = new ExineMessageBox(string.Format("플레이어 {0}이(가) 귀하와 거래를 요청했습니다.", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.TradeReply { AcceptInvite = true });
             messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.TradeReply { AcceptInvite = false }); messageBox.Dispose(); };
@@ -5753,7 +5753,7 @@ namespace Exine.ExineScenes
             {
                 TradeDialog.TradeReset();
 
-                ExineMessageBox messageBox = new ExineMessageBox("Deal cancelled.\r\nTo deal correctly you must face the other party.", MirMessageBoxButtons.OK);
+                ExineMessageBox messageBox = new ExineMessageBox("거래가 취소되었습니다.\r\n거래를 하려면 상대방과 직접 대면해야 합니다.", MirMessageBoxButtons.OK);
                 messageBox.Show();
             }
         }
@@ -5827,7 +5827,7 @@ namespace Exine.ExineScenes
             switch (p.result)
             {
                 case -4:
-                    messageBox = new ExineMessageBox("You have not supplied enough materials.", MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox("재료가 부족합니다.", MirMessageBoxButtons.OK);
                     MapControl.AwakeningAction = false;
                     break;
                 case -3:
@@ -5835,11 +5835,11 @@ namespace Exine.ExineScenes
                     MapControl.AwakeningAction = false;
                     break;
                 case -2:
-                    messageBox = new ExineMessageBox("Awakening already at maximum level.", MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox("이미 최대 레벨에서 각성 중입니다.", MirMessageBoxButtons.OK);
                     MapControl.AwakeningAction = false;
                     break;
                 case -1:
-                    messageBox = new ExineMessageBox("Cannot awaken this item.", MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox("이 아이템을 각성시킬 수 없습니다.", MirMessageBoxButtons.OK);
                     MapControl.AwakeningAction = false;
                     break;
                 case 0:
@@ -5888,7 +5888,7 @@ namespace Exine.ExineScenes
 
         private void MailSendRequest(S.MailSendRequest p)
         {
-            MirInputBox inputBox = new MirInputBox("Please enter the name of the person you would like to mail.");
+            MirInputBox inputBox = new MirInputBox("메일을 보낼 사람의 이름을 입력하세요.");
 
             inputBox.OKButton.Click += (o1, e1) =>
             {
@@ -5928,11 +5928,11 @@ namespace Exine.ExineScenes
             switch (p.Result)
             {
                 case -1:
-                    ExineMessageBox messageBox = new ExineMessageBox(string.Format("No parcels to collect."), MirMessageBoxButtons.OK);
+                    ExineMessageBox messageBox = new ExineMessageBox(string.Format("수집할 소포가 없습니다."), MirMessageBoxButtons.OK);
                     messageBox.Show();
                     break;
                 case 0:
-                    messageBox = new ExineMessageBox(string.Format("All parcels have been collected."), MirMessageBoxButtons.OK);
+                    messageBox = new ExineMessageBox(string.Format("모든 소포를 수거했습니다."), MirMessageBoxButtons.OK);
                     messageBox.Show();
                     break;
                 case 1:
@@ -6000,7 +6000,7 @@ namespace Exine.ExineScenes
         {
             if (CMain.Time > User.DeadTime && User.CurrentAction == ExAction.Dead)
             {
-                ExineMessageBox messageBox = new ExineMessageBox("Would you like to be revived?", MirMessageBoxButtons.YesNo);
+                ExineMessageBox messageBox = new ExineMessageBox("부활하시겠습니까?", MirMessageBoxButtons.YesNo);
 
                 messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.AcceptReincarnation());
 
@@ -10457,7 +10457,7 @@ namespace Exine.ExineScenes
                 MirItemCell cell = ExineMainScene.SelectedCell;
                 if (cell.Item.Info.Bind.HasFlag(BindMode.DontDrop))
                 {
-                    ExineMessageBox messageBox = new ExineMessageBox(string.Format("You cannot drop {0}", cell.Item.FriendlyName), MirMessageBoxButtons.OK);
+                    ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}을 드롭할 수 없습니다", cell.Item.FriendlyName), MirMessageBoxButtons.OK);
                     messageBox.Show();
                     ExineMainScene.SelectedCell = null;
                     return;

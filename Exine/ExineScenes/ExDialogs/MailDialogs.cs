@@ -237,7 +237,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 if (SelectedMail.Items.Count > 0 || SelectedMail.Gold > 0)
                 {
-                    ExineMessageBox messageBox = new ExineMessageBox("This parcel contains items or gold. Are you sure you want to delete it?", MirMessageBoxButtons.YesNo);
+                    ExineMessageBox messageBox = new ExineMessageBox("이 소포에는 아이템 또는 데니가 들어 있습니다. 삭제하시겠습니까?", MirMessageBoxButtons.YesNo);
 
                     messageBox.YesButton.Click += (o1, e1) =>
                     {
