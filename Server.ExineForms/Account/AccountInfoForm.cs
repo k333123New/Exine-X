@@ -427,7 +427,7 @@ namespace Server
                     account.Characters.Clear();
                 }
 
-                SMain.Envir.Auctions.Clear();
+             
                 SMain.Envir.GuildList.Clear();
 
                 MessageBox.Show("모든 캐릭터 및 관련 데이터가 삭제되었습니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);

@@ -59,7 +59,7 @@ namespace Server.ExineDatabase
 
         public ExineConnection Connection;
         
-        public LinkedList<AuctionInfo> Auctions = new LinkedList<AuctionInfo>();
+        
         public bool AdminAccount;
 
         public AccountInfo()

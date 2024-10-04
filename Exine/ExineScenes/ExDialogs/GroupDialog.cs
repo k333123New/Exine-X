@@ -14,7 +14,7 @@ namespace Exine.ExineScenes.ExDialogs
         public static Dictionary<string, string> GroupMembersMap = new Dictionary<string, string>();
 
         public ExineImageControl TitleLabel;
-        public MirButton SwitchButton, CloseButton, AddButton, DelButton;
+        public ExineButton SwitchButton, CloseButton, AddButton, DelButton;
         public ExineLabel[] GroupMembers;
 
         public GroupDialog()
@@ -54,7 +54,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -66,7 +66,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
-            SwitchButton = new MirButton
+            SwitchButton = new ExineButton
             {
                 HoverIndex = 115,
                 Index = 114,
@@ -79,7 +79,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             SwitchButton.Click += (o, e) => Network.Enqueue(new C.SwitchGroup { AllowGroup = !AllowGroup });
 
-            AddButton = new MirButton
+            AddButton = new ExineButton
             {
                 HoverIndex = 134,
                 Index = 133,
@@ -92,7 +92,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             AddButton.Click += (o, e) => AddMember();
 
-            DelButton = new MirButton
+            DelButton = new ExineButton
             {
                 HoverIndex = 137,
                 Index = 136,
@@ -195,7 +195,7 @@ namespace Exine.ExineScenes.ExDialogs
                 return;
             }
 
-            MirInputBox inputBox = new MirInputBox(GameLanguage.GroupAddEnterName);
+            ExineInputBox inputBox = new ExineInputBox(GameLanguage.GroupAddEnterName);
 
             inputBox.OKButton.Click += (o, e) =>
             {
@@ -213,7 +213,7 @@ namespace Exine.ExineScenes.ExDialogs
                 return;
             }
 
-            MirInputBox inputBox = new MirInputBox(GameLanguage.GroupRemoveEnterName);
+            ExineInputBox inputBox = new ExineInputBox(GameLanguage.GroupRemoveEnterName);
 
             inputBox.OKButton.Click += (o, e) =>
             {

@@ -6,7 +6,7 @@ namespace Exine.ExineControls
     public sealed class MirAmountBox : ExineImageControl
     {
         public ExineLabel TitleLabel, TextLabel;
-        public MirButton OKButton, CancelButton, CloseButton;
+        public ExineButton OKButton, CancelButton, CloseButton;
         public ExineTextBox InputTextBox;
         public ExineControl ItemImage;
         public int ImageIndex;
@@ -35,7 +35,7 @@ namespace Exine.ExineControls
                 Text = title
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -55,7 +55,7 @@ namespace Exine.ExineControls
             };
             ItemImage.AfterDraw += (o, e) => DrawItem();
 
-            OKButton = new MirButton
+            OKButton = new ExineButton
             {
                 HoverIndex = 201,
                 Index = 200,
@@ -66,7 +66,7 @@ namespace Exine.ExineControls
             };
             OKButton.Click += (o, e) => Dispose();
 
-            CancelButton = new MirButton
+            CancelButton = new ExineButton
             {
                 HoverIndex = 204,
                 Index = 203,
@@ -126,7 +126,7 @@ namespace Exine.ExineControls
                 Text = message
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -146,7 +146,7 @@ namespace Exine.ExineControls
             };
             ItemImage.AfterDraw += (o, e) => DrawItem();
 
-            OKButton = new MirButton
+            OKButton = new ExineButton
             {
                 HoverIndex = 201,
                 Index = 200,
@@ -157,7 +157,7 @@ namespace Exine.ExineControls
             };
             OKButton.Click += (o, e) => Dispose();
 
-            CancelButton = new MirButton
+            CancelButton = new ExineButton
             {
                 HoverIndex = 204,
                 Index = 203,

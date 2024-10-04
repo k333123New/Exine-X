@@ -14,7 +14,7 @@ namespace Exine.ExineScenes.ExDialogs
         public MirItemCell[] Grid;
         public MirItemCell[] QuestGrid;
 
-        public MirButton CloseButton, ItemButton, ItemButton2, QuestButton, AddButton;
+        public ExineButton CloseButton, ItemButton, ItemButton2, QuestButton, AddButton;
         public ExineLabel GoldLabel, WeightLabel;
 
         public ExineInventoryDialog()
@@ -38,7 +38,7 @@ namespace Exine.ExineScenes.ExDialogs
                 NotControl = true,
             };
            
-          ItemButton = new MirButton
+          ItemButton = new ExineButton
           {
               Index = 197,
               Library = Libraries.Title,
@@ -50,7 +50,7 @@ namespace Exine.ExineScenes.ExDialogs
           };
           ItemButton.Click += Button_Click;
             
-         ItemButton2 = new MirButton
+         ItemButton2 = new ExineButton
          {
              Index = 738,
              Library = Libraries.Title,
@@ -62,7 +62,7 @@ namespace Exine.ExineScenes.ExDialogs
          };
          ItemButton2.Click += Button_Click;
 
-         QuestButton = new MirButton
+         QuestButton = new ExineButton
          {
              Index = 739,
              Library = Libraries.Title,
@@ -74,7 +74,7 @@ namespace Exine.ExineScenes.ExDialogs
          };
          QuestButton.Click += Button_Click;
 
-         AddButton = new MirButton
+         AddButton = new ExineButton
          {
              Index = 483,
              HoverIndex = 484,
@@ -379,7 +379,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class BeltDialog : ExineImageControl
     {
         public ExineLabel[] Key = new ExineLabel[6];
-        public MirButton CloseButton, RotateButton;
+        public ExineButton CloseButton, RotateButton;
         public MirItemCell[] Grid;
 
         public BeltDialog()
@@ -404,7 +404,7 @@ namespace Exine.ExineScenes.ExDialogs
                 };
             }
 
-            RotateButton = new MirButton
+            RotateButton = new ExineButton
             {
                 HoverIndex = 1927,
                 Index = 1926,
@@ -417,7 +417,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             RotateButton.Click += (o, e) => Flip();
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 1924,
                 Index = 1923,

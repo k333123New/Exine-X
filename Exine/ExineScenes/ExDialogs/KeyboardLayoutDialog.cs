@@ -8,10 +8,10 @@ namespace Exine.ExineScenes.ExDialogs
     {
         public ExineImageControl TitleLabel, EnforceButtonChecked;
         public ExineLabel PageLabel, EnforceButtonLabel;
-        public MirButton CloseButton;
+        public ExineButton CloseButton;
 
-        public MirButton ScrollUpButton, ScrollDownButton, PositionBar;
-        public MirButton ResetButton, EnforceButton;
+        public ExineButton ScrollUpButton, ScrollDownButton, PositionBar;
+        public ExineButton ResetButton, EnforceButton;
 
         public List<ExineControl> Rows = new List<ExineControl>();
 
@@ -50,7 +50,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(135, 34)
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -67,7 +67,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Hide();
             };
 
-            ScrollUpButton = new MirButton
+            ScrollUpButton = new ExineButton
             {
                 Index = 197,
                 HoverIndex = 198,
@@ -90,7 +90,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdatePositionBar();
             };
 
-            ScrollDownButton = new MirButton
+            ScrollDownButton = new ExineButton
             {
                 Index = 207,
                 HoverIndex = 208,
@@ -113,7 +113,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdatePositionBar();
             };
 
-            PositionBar = new MirButton
+            PositionBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,
@@ -128,7 +128,7 @@ namespace Exine.ExineScenes.ExDialogs
             PositionBar.OnMoving += PositionBar_OnMoving;
 
 
-            ResetButton = new MirButton
+            ResetButton = new ExineButton
             {
                 Index = 120,
                 HoverIndex = 121,
@@ -164,7 +164,7 @@ namespace Exine.ExineScenes.ExDialogs
                 messageBox.Show();
             };
 
-            EnforceButton = new MirButton
+            EnforceButton = new ExineButton
             {
                 Visible = true,
                 Index = 1346,
@@ -335,7 +335,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class KeybindRow : ExineControl
     {
         public ExineLabel BindName, DefaultBind;
-        public MirButton CurrentBindButton;
+        public ExineButton CurrentBindButton;
 
         public KeyBind KeyBind;
 
@@ -364,7 +364,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = true
             };
 
-            CurrentBindButton = new MirButton
+            CurrentBindButton = new ExineButton
             {
                 Parent = this,
                 Text = string.Format("  {0}", CMain.InputKeys.GetKey(option, false)),
@@ -387,10 +387,10 @@ namespace Exine.ExineScenes.ExDialogs
 
                 ExineMainScene.Scene.KeyboardLayoutDialog.WaitingForBind = KeyBind;
 
-                ((MirButton)o).Text = string.Format("  {0}", "????");
-                ((MirButton)o).Index = 192;
-                ((MirButton)o).HoverIndex = 192;
-                ((MirButton)o).PressedIndex = 192;
+                ((ExineButton)o).Text = string.Format("  {0}", "????");
+                ((ExineButton)o).Index = 192;
+                ((ExineButton)o).HoverIndex = 192;
+                ((ExineButton)o).PressedIndex = 192;
             };
 
         }

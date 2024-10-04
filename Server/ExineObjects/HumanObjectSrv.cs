@@ -2,6 +2,7 @@
 using Server.ExineEnvir;
 using Server.ExineNetwork;
 using Server.ExineObjects.Monsters;
+using ServerPackets;
 using System.Numerics;
 using S = ServerPackets;
 
@@ -250,6 +251,7 @@ namespace Server.ExineObjects
         protected virtual void NewCharacter()
         {
             Level = 1;
+            
             Hair = (byte)Envir.Random.Next(0, 9);
 
             for (int i = 0; i < Envir.StartItems.Count; i++)
@@ -1747,6 +1749,7 @@ namespace Server.ExineObjects
                 Stats.Add(realItem.Stats);
                 Stats.Add(temp.AddedStats);
 
+                /*
                 Stats[Stat.MinAC] += temp.Awake.GetAC();
                 Stats[Stat.MaxAC] += temp.Awake.GetAC();
                 Stats[Stat.MinMAC] += temp.Awake.GetMAC();
@@ -1761,7 +1764,7 @@ namespace Server.ExineObjects
 
                 Stats[Stat.HP] += temp.Awake.GetHPMP();
                 Stats[Stat.MP] += temp.Awake.GetHPMP();
-
+                */
                 if (realItem.Light > Light) Light = realItem.Light;
                 if (realItem.Unique != SpecialItemMode.None)
                 {

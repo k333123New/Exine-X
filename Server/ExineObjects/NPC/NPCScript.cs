@@ -53,17 +53,12 @@ namespace Server.ExineObjects
             BuyBackKey = "[@BUYBACK]",
             StorageKey = "[@STORAGE]",
             ConsignKey = "[@CONSIGN]",
-            MarketKey = "[@MARKET]",
+            
             CraftKey = "[@CRAFT]",
 
             GuildCreateKey = "[@CREATEGUILD]",
             RequestWarKey = "[@REQUESTWAR]",
-            SendParcelKey = "[@SENDPARCEL]",
-            CollectParcelKey = "[@COLLECTPARCEL]",
-            AwakeningKey = "[@AWAKENING]",
-            DisassembleKey = "[@DISASSEMBLE]",
-            DowngradeKey = "[@DOWNGRADE]",
-            ResetKey = "[@RESET]",
+            
             PearlBuyKey = "[@PEARLBUY]",
             BuyUsedKey = "[@BUYUSED]",
             BuyNewKey = "[@BUYNEW]",
@@ -1036,10 +1031,7 @@ namespace Server.ExineObjects
                 case ConsignKey:
                     player.Enqueue(new S.NPCConsign());
                     break;
-                case MarketKey:
-                    player.UserMatch = false;
-                    player.GetMarket(string.Empty, ItemType.Nothing);
-                    break;
+               
                 case GuildCreateKey:
                     if (player.Info.Level < Settings.Guild_RequiredLevel)
                     {
@@ -1068,39 +1060,7 @@ namespace Server.ExineObjects
                         player.ReceiveChat(GameLanguage.NotInGuild, ChatType.System);
                     }
                     break;
-                case SendParcelKey:
-                    player.Enqueue(new S.MailSendRequest());
-                    break;
-                case CollectParcelKey:
-
-                    sbyte result = 0;
-
-                    if (player.GetMailAwaitingCollectionAmount() < 1)
-                    {
-                        result = -1;
-                    }
-                    else
-                    {
-                        foreach (var mail in player.Info.Mail)
-                        {
-                            if (mail.Parcel) mail.Collected = true;
-                        }
-                    }
-                    player.Enqueue(new S.ParcelCollected { Result = result });
-                    player.GetMail();
-                    break;
-                case AwakeningKey:
-                    player.Enqueue(new S.NPCAwakening());
-                    break;
-                case DisassembleKey:
-                    player.Enqueue(new S.NPCDisassemble());
-                    break;
-                case DowngradeKey:
-                    player.Enqueue(new S.NPCDowngrade());
-                    break;
-                case ResetKey:
-                    player.Enqueue(new S.NPCReset());
-                    break;
+               
                 case PearlBuyKey:
                     for (int i = 0; i < Goods.Count; i++)
                         player.CheckItem(Goods[i]);

@@ -1,10 +1,25 @@
-각성
-메일
-소포
+우선제거
+
+-상점 동작 확인 할것-
+Server/ExineObjects/PlayerObjectSrv.cs/
+if (Level == 0)
+            {
+                NewCharacter();
+                Account.Gold = 10000; //add k333123 241004 starting gold set for test
+            }
+
+
+각성(awakening)
+메일(mail)
+ - 소포(parcel)
+경매(옥션)
+
+
+
+
 게입샵
 퀘스트 공유
 스킬 레벨업 멘토
-경매(옥션)
 PetMode
 정제(refine)
 진주(Pearl)

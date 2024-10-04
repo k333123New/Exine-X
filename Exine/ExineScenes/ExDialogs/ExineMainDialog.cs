@@ -21,7 +21,7 @@ namespace Exine.ExineScenes.ExDialogs
         }
 
         public ExineImageControl WeightBar, LeftCap, RightCap;//ExperienceBar,
-        public MirButton  MenuButton, InventoryButton, CharacterButton, SkillButton, QuestButton, OptionButton;
+        public ExineButton  MenuButton, InventoryButton, CharacterButton, SkillButton, QuestButton, OptionButton;
         public ExineControl HealthOrb;
         public ExineLabel HealthLabel, ManaLabel, TopLabel, BottomLabel,  GoldLabel, WeightLabel, SpaceLabel, AModeLabel, PModeLabel, SModeLabel;//ExperienceLabel,
 
@@ -254,7 +254,7 @@ namespace Exine.ExineScenes.ExDialogs
                 RightCap.Visible = true;
             }
 
-            InventoryButton = new MirButton
+            InventoryButton = new ExineButton
             {
                 HoverIndex = 1904,
                 Index = 1903,
@@ -276,7 +276,7 @@ namespace Exine.ExineScenes.ExDialogs
                     ExineMainScene.Scene.InventoryDialog.Show();
             };*/
 
-            CharacterButton = new MirButton
+            CharacterButton = new ExineButton
             {
                 HoverIndex = 1901,
                 Index = 1900,
@@ -299,7 +299,7 @@ namespace Exine.ExineScenes.ExDialogs
                 }
             };
 
-            SkillButton = new MirButton
+            SkillButton = new ExineButton
             {
                 HoverIndex = 1907,
                 Index = 1906,
@@ -322,7 +322,7 @@ namespace Exine.ExineScenes.ExDialogs
                 }
             };
 
-            QuestButton = new MirButton
+            QuestButton = new ExineButton
             {
                 HoverIndex = 1910,
                 Index = 1909,
@@ -341,7 +341,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.QuestLogDialog.Hide();
             };
 
-            OptionButton = new MirButton
+            OptionButton = new ExineButton
             {
                 HoverIndex = 1913,
                 Index = 1912,
@@ -360,7 +360,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.OptionDialog.Hide();
             };
 
-            MenuButton = new MirButton
+            MenuButton = new ExineButton
             {
                 HoverIndex = 1961,
                 Index = 1960,
@@ -826,7 +826,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class ExineChatControlBar : ExineImageControl
     {
         //public MirButton SizeButton, SettingsButton, NormalButton, ShoutButton, WhisperButton, LoverButton, MentorButton, GroupButton, GuildButton, ReportButton, TradeButton;
-        public MirButton NormalButton, ShoutButton, WhisperButton, GroupButton, GuildButton;
+        public ExineButton NormalButton, ShoutButton, WhisperButton, GroupButton, GuildButton;
 
         //이부분이 엔터가 눌러지면 같이 나와야 할듯함.
         public ExineChatControlBar()
@@ -884,7 +884,7 @@ namespace Exine.ExineScenes.ExDialogs
                 //GameScene.Scene.ChatDialog.UpdateBackground();
             };
             */
-            NormalButton = new MirButton
+            NormalButton = new ExineButton
             {
                 /*
                 Index = 2036,
@@ -911,7 +911,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ToggleChatFilter("All");
             };
 
-            ShoutButton = new MirButton
+            ShoutButton = new ExineButton
             {/*
                 Index = 2039,
                 HoverIndex = 2040,
@@ -936,7 +936,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ToggleChatFilter("Shout");
             };
 
-            GroupButton = new MirButton
+            GroupButton = new ExineButton
             {
                 /*
                 Index = 2051,
@@ -964,7 +964,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
 
-            WhisperButton = new MirButton
+            WhisperButton = new ExineButton
             {
                 /*
                 Index = 2042,
@@ -990,7 +990,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ToggleChatFilter("Whisper");
             };
 
-            GuildButton = new MirButton
+            GuildButton = new ExineButton
             {
                 /*
                 Index = 2054,
@@ -1205,7 +1205,7 @@ namespace Exine.ExineScenes.ExDialogs
         public List<ChatItem> LinkedItems = new List<ChatItem>();
         public List<ExineLabel> LinkedItemButtons = new List<ExineLabel>();
 
-        public MirButton HomeButton, UpButton, EndButton, DownButton, PositionBar;
+        public ExineButton HomeButton, UpButton, EndButton, DownButton, PositionBar;
         public ExineImageControl CountBar, _ExExperienceBar;
         public ExineTextBox ChatTextBox;
         public ExineLabel _ExExperienceLabel;
@@ -1255,7 +1255,7 @@ namespace Exine.ExineScenes.ExDialogs
             ChatTextBox.TextBox.KeyDown += ChatTextBox_KeyDown;
             ChatTextBox.TextBox.KeyUp += ChatTextBox_KeyUp;
 
-            HomeButton = new MirButton
+            HomeButton = new ExineButton
             {
                 Index = 2018,
                 HoverIndex = 2019,
@@ -1273,7 +1273,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
 
-            UpButton = new MirButton
+            UpButton = new ExineButton
             {
                 Index = 2021,
                 HoverIndex = 2022,
@@ -1291,7 +1291,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
 
-            EndButton = new MirButton
+            EndButton = new ExineButton
             {
                 Index = 2027,
                 HoverIndex = 2028,
@@ -1308,7 +1308,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Update();
             };
 
-            DownButton = new MirButton
+            DownButton = new ExineButton
             {
                 Index = 2024,
                 HoverIndex = 2025,
@@ -1333,7 +1333,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this,
             };
 
-            PositionBar = new MirButton
+            PositionBar = new ExineButton
             {
                 Index = 2015,
                 HoverIndex = 2016,
@@ -2024,7 +2024,7 @@ namespace Exine.ExineScenes.ExDialogs
     /// </summary>
     public sealed class SkillBarDialog : ExineImageControl
     {
-        private readonly MirButton _switchBindsButton;
+        private readonly ExineButton _switchBindsButton;
 
         public bool AltBind;
         public bool HasSkill = false;
@@ -2048,7 +2048,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             BeforeDraw += MagicKeyDialog_BeforeDraw;
 
-            _switchBindsButton = new MirButton
+            _switchBindsButton = new ExineButton
             {
                 Index = 2247,
                 Library = Libraries.Prguse,
@@ -2541,7 +2541,7 @@ namespace Exine.ExineScenes.ExDialogs
         public string LoverName;
         public bool AllowObserve;
 
-        public MirButton CloseButton, GroupButton, FriendButton, MailButton, TradeButton, LoverButton, ObserveButton;
+        public ExineButton CloseButton, GroupButton, FriendButton, TradeButton, LoverButton, ObserveButton;
         public ExineImageControl CharacterPage, ClassImage;
         public ExineLabel NameLabel;
         public ExineLabel GuildLabel, LoverLabel;
@@ -2621,7 +2621,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -2635,7 +2635,7 @@ namespace Exine.ExineScenes.ExDialogs
 
 
 
-            GroupButton = new MirButton
+            GroupButton = new ExineButton
             {
                 HoverIndex = 432,
                 Index = 431,
@@ -2664,7 +2664,7 @@ namespace Exine.ExineScenes.ExDialogs
                 return;
             };
 
-            FriendButton = new MirButton
+            FriendButton = new ExineButton
             {
                 HoverIndex = 435,
                 Index = 434,
@@ -2680,20 +2680,9 @@ namespace Exine.ExineScenes.ExDialogs
                 Network.Enqueue(new C.AddFriend { Name = Name, Blocked = false });
             };
 
-            MailButton = new MirButton
-            {
-                HoverIndex = 438,
-                Index = 437,
-                Location = new Point(135, 357),
-                Library = Libraries.Prguse,
-                Parent = this,
-                PressedIndex = 439,
-                Sound = SoundList.ButtonA,
-                Hint = "Send Mail",
-            };
-            MailButton.Click += (o, e) => ExineMainScene.Scene.MailComposeLetterDialog.ComposeMail(Name);
+            
 
-            TradeButton = new MirButton
+            TradeButton = new ExineButton
             {
                 HoverIndex = 524,
                 Index = 523,
@@ -2706,7 +2695,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             TradeButton.Click += (o, e) => Network.Enqueue(new C.TradeRequest());
 
-            ObserveButton = new MirButton
+            ObserveButton = new ExineButton
             {
                 Index = 854,
                 HoverIndex = 855,
@@ -2741,7 +2730,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ExineMainScene.Scene.ExChatDialog.ChatTextBox.TextBox.SelectionStart = Name.Length + 2;
 
             };
-            LoverButton = new MirButton
+            LoverButton = new ExineButton
             {
                 Index = 604,
                 Location = new Point(17, 17),
@@ -2918,7 +2907,7 @@ namespace Exine.ExineScenes.ExDialogs
             ObserveButton.Visible = AllowObserve;
 
             TradeButton.Visible = !IsHero;
-            MailButton.Visible = !IsHero;
+             
             FriendButton.Visible = !IsHero;
             GroupButton.Visible = !IsHero;
 
@@ -2928,18 +2917,18 @@ namespace Exine.ExineScenes.ExDialogs
     }
     public sealed class OptionDialog : ExineImageControl
     {
-        public MirButton SkillModeOn, SkillModeOff;
-        public MirButton SkillBarOn, SkillBarOff;
-        public MirButton EffectOn, EffectOff;
-        public MirButton DropViewOn, DropViewOff;
-        public MirButton NameViewOn, NameViewOff;
-        public MirButton HPViewOn, HPViewOff;
-        public MirButton NewMoveOn, NewMoveOff;
-        public MirButton ObserveOn, ObserveOff;
+        public ExineButton SkillModeOn, SkillModeOff;
+        public ExineButton SkillBarOn, SkillBarOff;
+        public ExineButton EffectOn, EffectOff;
+        public ExineButton DropViewOn, DropViewOff;
+        public ExineButton NameViewOn, NameViewOff;
+        public ExineButton HPViewOn, HPViewOff;
+        public ExineButton NewMoveOn, NewMoveOff;
+        public ExineButton ObserveOn, ObserveOff;
         public ExineImageControl SoundBar, MusicSoundBar;
         public ExineImageControl VolumeBar, MusicVolumeBar;
 
-        public MirButton CloseButton;
+        public ExineButton CloseButton;
 
 
         public OptionDialog()
@@ -2953,7 +2942,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             BeforeDraw += OptionPanel_BeforeDraw;
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 Index = 360,
                 HoverIndex = 361,
@@ -2966,7 +2955,7 @@ namespace Exine.ExineScenes.ExDialogs
             CloseButton.Click += (o, e) => Hide();
 
             //tilde option
-            SkillModeOn = new MirButton
+            SkillModeOn = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(159, 68),
@@ -2981,7 +2970,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
             //ctrl option
-            SkillModeOff = new MirButton
+            SkillModeOff = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(201, 68),
@@ -2995,7 +2984,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ExineMainScene.Scene.ChangeSkillMode(true);
             };
 
-            SkillBarOn = new MirButton
+            SkillBarOn = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(159, 93),
@@ -3006,7 +2995,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             SkillBarOn.Click += (o, e) => Settings.SkillBar = true;
 
-            SkillBarOff = new MirButton
+            SkillBarOff = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(201, 93),
@@ -3017,7 +3006,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             SkillBarOff.Click += (o, e) => Settings.SkillBar = false;
 
-            EffectOn = new MirButton
+            EffectOn = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(159, 118),
@@ -3028,7 +3017,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             EffectOn.Click += (o, e) => Settings.Effect = true;
 
-            EffectOff = new MirButton
+            EffectOff = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(201, 118),
@@ -3039,7 +3028,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             EffectOff.Click += (o, e) => Settings.Effect = false;
 
-            DropViewOn = new MirButton
+            DropViewOn = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(159, 143),
@@ -3050,7 +3039,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             DropViewOn.Click += (o, e) => Settings.DropView = true;
 
-            DropViewOff = new MirButton
+            DropViewOff = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(201, 143),
@@ -3061,7 +3050,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             DropViewOff.Click += (o, e) => Settings.DropView = false;
 
-            NameViewOn = new MirButton
+            NameViewOn = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(159, 168),
@@ -3072,7 +3061,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             NameViewOn.Click += (o, e) => Settings.NameView = true;
 
-            NameViewOff = new MirButton
+            NameViewOff = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(201, 168),
@@ -3083,7 +3072,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             NameViewOff.Click += (o, e) => Settings.NameView = false;
 
-            HPViewOn = new MirButton
+            HPViewOn = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(159, 193),
@@ -3098,7 +3087,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ExineMainScene.Scene.ExChatDialog.ReceiveChat("[HP/MP Mode 1]", ChatType.Hint);
             };
 
-            HPViewOff = new MirButton
+            HPViewOff = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(201, 193),
@@ -3155,7 +3144,7 @@ namespace Exine.ExineScenes.ExDialogs
                 NotControl = true,
             };
 
-            NewMoveOn = new MirButton
+            NewMoveOn = new ExineButton
             {
                 Library = Libraries.Title,
                 Location = new Point(159, 296),
@@ -3170,7 +3159,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ExineMainScene.Scene.ExChatDialog.ReceiveChat("[New Movement Style]", ChatType.Hint);
             };
 
-            NewMoveOff = new MirButton
+            NewMoveOff = new ExineButton
             {
                 Library = Libraries.Title,
                 Location = new Point(201, 296),
@@ -3185,7 +3174,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ExineMainScene.Scene.ExChatDialog.ReceiveChat("[Old Movement Style]", ChatType.Hint);
             };
 
-            ObserveOn = new MirButton
+            ObserveOn = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(159, 271),
@@ -3196,7 +3185,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             ObserveOn.Click += (o, e) => ToggleObserve(true);
 
-            ObserveOff = new MirButton
+            ObserveOff = new ExineButton
             {
                 Library = Libraries.Prguse2,
                 Location = new Point(201, 271),
@@ -3408,7 +3397,7 @@ namespace Exine.ExineScenes.ExDialogs
     }
     public sealed class MenuDialog : ExineImageControl
     {
-        public MirButton ExitButton,
+        public ExineButton ExitButton,
                          LogOutButton,
                          HelpButton,
                          KeyboardLayoutButton,
@@ -3431,7 +3420,7 @@ namespace Exine.ExineScenes.ExDialogs
             Visible = false;
             Movable = true;
 
-            ExitButton = new MirButton
+            ExitButton = new ExineButton
             {
                 HoverIndex = 634,
                 Index = 633,
@@ -3443,7 +3432,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             ExitButton.Click += (o, e) => ExineMainScene.Scene.QuitGame();
 
-            LogOutButton = new MirButton
+            LogOutButton = new ExineButton
             {
                 HoverIndex = 637,
                 Index = 636,
@@ -3456,7 +3445,7 @@ namespace Exine.ExineScenes.ExDialogs
             LogOutButton.Click += (o, e) => ExineMainScene.Scene.LogOut();
 
 
-            HelpButton = new MirButton
+            HelpButton = new ExineButton
             {
                 Index = 1970,
                 HoverIndex = 1971,
@@ -3473,7 +3462,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.HelpDialog.Show();
             };
 
-            KeyboardLayoutButton = new MirButton
+            KeyboardLayoutButton = new ExineButton
             {
                 Index = 1973,
                 HoverIndex = 1974,
@@ -3491,7 +3480,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.KeyboardLayoutDialog.Show();
             };
 
-            RankingButton = new MirButton
+            RankingButton = new ExineButton
             {
                 Index = 2000,
                 HoverIndex = 2001,
@@ -3509,7 +3498,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.RankingDialog.Show();
             };
 
-            CraftingButton = new MirButton
+            CraftingButton = new ExineButton
             {
                 Index = 2000,
                 HoverIndex = 2001,
@@ -3525,7 +3514,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
              
-            FriendButton = new MirButton
+            FriendButton = new ExineButton
             {
                 Index = 1982,
                 HoverIndex = 1983,
@@ -3543,7 +3532,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.FriendDialog.Show();
             };
 
-            MentorButton = new MirButton
+            MentorButton = new ExineButton
             {
                 Index = 1985,
                 HoverIndex = 1986,
@@ -3562,7 +3551,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
 
-            RelationshipButton = new MirButton  /* lover button */
+            RelationshipButton = new ExineButton  /* lover button */
             {
                 Index = 1988,
                 HoverIndex = 1989,
@@ -3580,7 +3569,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.RelationshipDialog.Show();
             };
 
-            GroupButton = new MirButton
+            GroupButton = new ExineButton
             {
                 Index = 1991,
                 HoverIndex = 1992,
@@ -3597,7 +3586,7 @@ namespace Exine.ExineScenes.ExDialogs
                 else ExineMainScene.Scene.GroupDialog.Show();
             };
 
-            GuildButton = new MirButton
+            GuildButton = new ExineButton
             {
                 Index = 1994,
                 HoverIndex = 1995,
@@ -3623,10 +3612,10 @@ namespace Exine.ExineScenes.ExDialogs
 
     public sealed class ExMagicInactiveButton : ExineControl
     {
-        public MirButton MagicInactiveIcon;
+        public ExineButton MagicInactiveIcon;
         public ExMagicInactiveButton()
         {
-            MagicInactiveIcon = new MirButton
+            MagicInactiveIcon = new ExineButton
             {
                 Index = 0,
                 PressedIndex = 0,
@@ -3648,7 +3637,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class ExMagicButton : ExineControl
     {
         public ExineImageControl LevelImage, ExpImage;
-        public MirButton SkillButton;
+        public ExineButton SkillButton;
         public ExineLabel LevelLabel, NameLabel, ExpLabel, KeyLabel;
         public ClientMagic Magic;
         public ExineImageControl CoolDown;
@@ -3660,7 +3649,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             Size = new Size(231, 33);
 
-            SkillButton = new MirButton
+            SkillButton = new ExineButton
             {
                 Index = 0,
                 PressedIndex = 0,
@@ -4287,11 +4276,11 @@ namespace Exine.ExineScenes.ExDialogs
     */
     public sealed class AssignKeyPanel : ExineImageControl
     {
-        public MirButton SaveButton, NoneButton;
+        public ExineButton SaveButton, NoneButton;
         public UserObject Actor;
         public ExineLabel TitleLabel;
         public ExineImageControl MagicImage;
-        public MirButton[] FKeys;
+        public ExineButton[] FKeys;
 
         public ClientMagic Magic;
         public byte Key;
@@ -4327,7 +4316,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Text = string.Format(GameLanguage.SelectKey, magic.Name)
             };
 
-            NoneButton = new MirButton
+            NoneButton = new ExineButton
             {
                 Index = 287, //154
                 HoverIndex = 288,
@@ -4338,7 +4327,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             NoneButton.Click += (o, e) => Key = 0;
 
-            SaveButton = new MirButton
+            SaveButton = new ExineButton
             {
                 Library = Libraries.Title,
                 Parent = this,
@@ -4363,11 +4352,11 @@ namespace Exine.ExineScenes.ExDialogs
                 Dispose();
             };
 
-            FKeys = new MirButton[keyStrings.Length];
+            FKeys = new ExineButton[keyStrings.Length];
 
             for (byte i = 0; i < FKeys.Length; i++)
             {
-                FKeys[i] = new MirButton
+                FKeys[i] = new ExineButton
                 {
                     Index = 0,
                     PressedIndex = 1,
@@ -4407,14 +4396,14 @@ namespace Exine.ExineScenes.ExDialogs
     }
     public sealed class DuraStatusDialog : ExineImageControl
     {
-        public MirButton Character;
+        public ExineButton Character;
 
         public DuraStatusDialog()
         {
             Size = new Size(40, 19);
             Location = new Point((ExineMainScene.Scene.MiniMapDialog.Location.X + 86), ExineMainScene.Scene.MiniMapDialog.Size.Height);
 
-            Character = new MirButton()
+            Character = new ExineButton()
             {
                 Index = 2113,
                 Library = Libraries.Prguse,

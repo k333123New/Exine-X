@@ -10,9 +10,9 @@ namespace Exine.ExineScenes.ExDialogs
     /// </summary>
     public sealed class ExineCharacterDialog : ExineImageControl
     {
-        public MirButton CloseButton, SkillTabButton, MagicTabButton,MakerSkillTabButton, RingSkillTabButton, DivienSkillTabButton, SkillButton;//,  CharacterButton,StatusButton, StateButton;
+        public ExineButton CloseButton, SkillTabButton, MagicTabButton,MakerSkillTabButton, RingSkillTabButton, DivienSkillTabButton, SkillButton;//,  CharacterButton,StatusButton, StateButton;
 
-        public MirButton[] SkillTypeButton = new MirButton[9];//,  CharacterButton,StatusButton, StateButton;
+        public ExineButton[] SkillTypeButton = new ExineButton[9];//,  CharacterButton,StatusButton, StateButton;
 
 
         public ExineImageControl CharacterPage, SkillPage, ActionTree; //StatusPage, StatePage,  ClassImage;
@@ -212,7 +212,7 @@ namespace Exine.ExineScenes.ExDialogs
                 DivienSkillTabButton.Index = 36;
             }
            
-            MagicTabButton = new MirButton
+            MagicTabButton = new ExineButton
             {
                 Index = 0,
                 PressedIndex = 5,
@@ -227,7 +227,7 @@ namespace Exine.ExineScenes.ExDialogs
                 MagicTabButton.Index = MagicTabButton.PressedIndex;
 
                 SkillPage.Library = Libraries.PANEL0602;
-                SkillTypeButton = new MirButton[9];
+                SkillTypeButton = new ExineButton[9];
 
                 for (int i = 0; i < SkillTypeButton.Length; i++)
                 {
@@ -236,7 +236,7 @@ namespace Exine.ExineScenes.ExDialogs
                     y = (i / 7) * 20;
                     x = (i * 46) % 322;
 
-                    SkillTypeButton[i] = new MirButton
+                    SkillTypeButton[i] = new ExineButton
                     {
                         Index = i * 8 + 1,
                         PressedIndex = i * 8 + 1 + 5,
@@ -261,7 +261,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
            
 
-            SkillTabButton = new MirButton
+            SkillTabButton = new ExineButton
             {
                 Index = 9,
                 PressedIndex = 14,
@@ -276,7 +276,7 @@ namespace Exine.ExineScenes.ExDialogs
                 SkillTabButton.Index = SkillTabButton.PressedIndex;
 
                 SkillPage.Library = Libraries.PANEL0601;
-                SkillTypeButton = new MirButton[9];
+                SkillTypeButton = new ExineButton[9];
 
                 for (int i = 0; i < SkillTypeButton.Length; i++)
                 {
@@ -285,7 +285,7 @@ namespace Exine.ExineScenes.ExDialogs
                     y = (i / 7) * 20;
                     x = (i * 46) % 322;
 
-                    SkillTypeButton[i] = new MirButton
+                    SkillTypeButton[i] = new ExineButton
                     {
                         Index = i * 8 + 1,
                         PressedIndex = i * 8 + 1 + 5,
@@ -309,7 +309,7 @@ namespace Exine.ExineScenes.ExDialogs
                 //RefreshInterface();//k333123
             };
 
-            MakerSkillTabButton = new MirButton
+            MakerSkillTabButton = new ExineButton
             {
                 Index = 18,
                 PressedIndex = 23,
@@ -324,7 +324,7 @@ namespace Exine.ExineScenes.ExDialogs
                 MakerSkillTabButton.Index = MakerSkillTabButton.PressedIndex;
 
                 SkillPage.Library = Libraries.PANEL0603;
-                SkillTypeButton = new MirButton[5];
+                SkillTypeButton = new ExineButton[5];
 
                 for (int i = 0; i < SkillTypeButton.Length; i++)
                 {
@@ -333,7 +333,7 @@ namespace Exine.ExineScenes.ExDialogs
                     y = (i / 7) * 20;
                     x = (i * 46) % 322;
 
-                    SkillTypeButton[i] = new MirButton
+                    SkillTypeButton[i] = new ExineButton
                     {
                         Index = i * 8 + 1,
                         PressedIndex = i * 8 + 1 + 5,
@@ -353,7 +353,7 @@ namespace Exine.ExineScenes.ExDialogs
                 //RefreshInterface();
             };
 
-            RingSkillTabButton = new MirButton
+            RingSkillTabButton = new ExineButton
             {
                 Index = 27,
                 PressedIndex = 32,
@@ -378,7 +378,7 @@ namespace Exine.ExineScenes.ExDialogs
                 //RefreshInterface();
             };
 
-            DivienSkillTabButton = new MirButton
+            DivienSkillTabButton = new ExineButton
             {
                 Index = 36,
                 PressedIndex = 41,
@@ -441,7 +441,7 @@ namespace Exine.ExineScenes.ExDialogs
            };
            StateButton.Click += (o, e) => ShowStatePage();
            */
-            SkillButton = new MirButton
+            SkillButton = new ExineButton
             {
                 Library = Libraries.Title,
                 Location = new Point(194, 70),
@@ -453,7 +453,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             //SkillButton.Click += (o, e) => ShowSkillPage();
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 90,
                 Index = 89,

@@ -2,7 +2,7 @@
 
 namespace Exine.ExineControls
 {
-    public class MirButton : ExineImageControl
+    public class ExineButton : ExineImageControl
     {
         #region Font Colour
         public virtual Color FontColour
@@ -157,7 +157,7 @@ namespace Exine.ExineControls
 
         public bool OnlyDrawWhenActive;
 
-        public MirButton()
+        public ExineButton()
         {
             HoverIndex = -1;
             PressedIndex = -1;

@@ -12,7 +12,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class BigMapDialog : ExineImageControl
     {
         ExineLabel CoordinateLabel, TitleLabel;
-        public MirButton CloseButton, ScrollUpButton, ScrollDownButton, ScrollBar, WorldButton, MyLocationButton, TeleportToButton, SearchButton;
+        public ExineButton CloseButton, ScrollUpButton, ScrollDownButton, ScrollBar, WorldButton, MyLocationButton, TeleportToButton, SearchButton;
         public ExineTextBox SearchTextBox;
 
         private float GapPerRow;
@@ -98,7 +98,7 @@ namespace Exine.ExineScenes.ExDialogs
             Location = Center;
             NotControl = false;
 
-            ScrollUpButton = new MirButton
+            ScrollUpButton = new ExineButton
             {
                 Index = 197,
                 HoverIndex = 198,
@@ -110,7 +110,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             ScrollUpButton.Click += (o, e) => ScrollUp();
 
-            ScrollDownButton = new MirButton
+            ScrollDownButton = new ExineButton
             {
                 Index = 207,
                 HoverIndex = 208,
@@ -122,7 +122,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             ScrollDownButton.Click += (o, e) => ScrollDown();
 
-            ScrollBar = new MirButton
+            ScrollBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,
@@ -146,7 +146,7 @@ namespace Exine.ExineScenes.ExDialogs
                 SetNPCButtonVisibility(true);
             };
 
-            WorldButton = new MirButton
+            WorldButton = new ExineButton
             {
                 Index = 827,
                 HoverIndex = 828,
@@ -158,7 +158,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             WorldButton.Click += (o, e) => OpenWorldMap();
 
-            MyLocationButton = new MirButton
+            MyLocationButton = new ExineButton
             {
                 Index = 824,
                 HoverIndex = 825,
@@ -171,7 +171,7 @@ namespace Exine.ExineScenes.ExDialogs
             MyLocationButton.Click += (o, e) => TargetMyLocation();
 
 
-            TeleportToButton = new MirButton
+            TeleportToButton = new ExineButton
             {
                 Index = 821,
                 HoverIndex = 822,
@@ -185,7 +185,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             TeleportToButton.Click += (o, e) => TeleportToNPC();
 
-            SearchButton = new MirButton
+            SearchButton = new ExineButton
             {
                 Index = 1340,
                 HoverIndex = 1341,
@@ -239,7 +239,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(10, 0)
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -469,7 +469,7 @@ namespace Exine.ExineScenes.ExDialogs
     {
         private new ExineImageControl Border;
         private ExineImageControl Clouds;
-        private List<MirButton> ButtonList = new List<MirButton>();
+        private List<ExineButton> ButtonList = new List<ExineButton>();
         private ExineLabel TitleLabel;
         public WorldMapImage()
         {
@@ -512,7 +512,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             foreach (WorldMapIcon icon in icons)
             {
-                MirButton button = new MirButton()
+                ExineButton button = new ExineButton()
                 {
                     Index = icon.ImageIndex,
                     UseOffSet = true,
@@ -781,7 +781,7 @@ namespace Exine.ExineScenes.ExDialogs
         }
     }
 
-    public class BigMapNPCRow : MirButton
+    public class BigMapNPCRow : ExineButton
     {
         BigMapDialog ParentDialog;
         public ClientNPCInfo Info;
@@ -851,7 +851,7 @@ namespace Exine.ExineScenes.ExDialogs
     {
         public int Index;
         public ClientMapInfo MapInfo;
-        public Dictionary<ClientMovementInfo, MirButton> MovementButtons = new Dictionary<ClientMovementInfo, MirButton>();
+        public Dictionary<ClientMovementInfo, ExineButton> MovementButtons = new Dictionary<ClientMovementInfo, ExineButton>();
         public List<BigMapNPCRow> NPCButtons = new List<BigMapNPCRow>();
 
         public BigMapRecord() { }

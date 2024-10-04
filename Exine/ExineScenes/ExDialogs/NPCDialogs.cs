@@ -19,7 +19,7 @@ namespace Exine.ExineScenes.ExDialogs
         public static Regex B = new Regex(@"<<((.*?)\/(\@.*?))>>");
 
         //public MirButton CloseButton, UpButton, DownButton, PositionBar, QuestButton, HelpButton;
-        public MirButton CloseButton, UpButton, DownButton, PositionBar, QuestButton;
+        public ExineButton CloseButton, UpButton, DownButton, PositionBar, QuestButton;
         public ExineLabel[] TextLabel;
         public List<ExineLabel> TextButtons;
         public List<BigButton> BigButtons;
@@ -86,7 +86,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true
             };
 
-            UpButton = new MirButton
+            UpButton = new ExineButton
             {
                 Index = 197,
                 HoverIndex = 198,
@@ -108,7 +108,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdatePositionBar();
             };
 
-            DownButton = new MirButton
+            DownButton = new ExineButton
             {
                 Index = 207,
                 HoverIndex = 208,
@@ -130,7 +130,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdatePositionBar();
             };
 
-            PositionBar = new MirButton
+            PositionBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,
@@ -144,7 +144,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             PositionBar.OnMoving += PositionBar_OnMoving;            
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 11,
                 Index = 9,
@@ -517,11 +517,10 @@ namespace Exine.ExineScenes.ExDialogs
             ExineMainScene.Scene.NPCGoodsDialog.Hide();
             ExineMainScene.Scene.NPCSubGoodsDialog.Hide();
             ExineMainScene.Scene.NPCCraftGoodsDialog.Hide();
-            ExineMainScene.Scene.NPCDropDialog.Hide();
-            ExineMainScene.Scene.NPCAwakeDialog.Hide();
+            ExineMainScene.Scene.NPCDropDialog.Hide(); 
             ExineMainScene.Scene.RefineDialog.Hide();
             ExineMainScene.Scene.StorageDialog.Hide();
-            ExineMainScene.Scene.TrustMerchantDialog.Hide();
+             
             ExineMainScene.Scene.QuestListDialog.Hide();
             ExineMainScene.Scene.ExInventoryDialog.Location = new Point(0, 0);
             //ExineMainScene.Scene.RollControl.Hide();
@@ -548,18 +547,23 @@ namespace Exine.ExineScenes.ExDialogs
         public List<UserItem> Goods = new List<UserItem>();
         public List<UserItem> DisplayGoods = new List<UserItem>();
         public MirGoodsCell[] Cells;
-        public MirButton BuyButton, CloseButton;
+        public ExineButton BuyButton, CloseButton;
         public ExineImageControl BuyLabel;
 
-        public MirButton UpButton, DownButton, PositionBar;
+        public ExineButton UpButton, DownButton, PositionBar;
 
         public NPCGoodsDialog(PanelType type)
         {
             PType = type;
 
-            Index = 1000;
-            Library = Libraries.Prguse;
-            Location = new Point(0, 224);
+            //물건 목록
+            //Index = 1000;
+            //Library = Libraries.Prguse;
+            
+            Index = 0;
+            Library = Libraries.PANEL0501;
+
+            Location = new Point(0 + 112, 224-84);
             Cells = new MirGoodsCell[8];
             Sort = true;
 
@@ -596,7 +600,7 @@ namespace Exine.ExineScenes.ExDialogs
                 };
             }
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -608,7 +612,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
-            BuyButton = new MirButton
+            BuyButton = new ExineButton
             {
                 HoverIndex = 313,
                 Index = 312,
@@ -634,7 +638,7 @@ namespace Exine.ExineScenes.ExDialogs
                 BuyButton.Visible = false;
             }
 
-            UpButton = new MirButton
+            UpButton = new ExineButton
             {
                 Index = 197,
                 HoverIndex = 198,
@@ -651,7 +655,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Update();
             };
 
-            DownButton = new MirButton
+            DownButton = new ExineButton
             {
                 Index = 207,
                 HoverIndex = 208,
@@ -670,7 +674,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Update();
             };
 
-            PositionBar = new MirButton
+            PositionBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,
@@ -907,7 +911,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class NPCDropDialog : ExineImageControl
     {
 
-        public readonly MirButton ConfirmButton, HoldButton;
+        public readonly ExineButton ConfirmButton, HoldButton;
         public readonly MirItemCell ItemCell;
         public MirItemCell OldCell;
         public readonly ExineLabel InfoLabel;
@@ -919,6 +923,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public NPCDropDialog()
         {
+            //올려두는 원형쟁반 모양
             Index = 392;
             Library = Libraries.Prguse;
             Location = new Point(264, 224);
@@ -926,7 +931,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             Click += NPCDropPanel_Click;
 
-            HoldButton = new MirButton
+            HoldButton = new ExineButton
             {
                 HoverIndex = 294,
                 Index = 293,
@@ -938,7 +943,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             HoldButton.Click += (o, e) => Hold = !Hold;
 
-            ConfirmButton = new MirButton
+            ConfirmButton = new ExineButton
             {
                 HoverIndex = 291,
                 Index = 290,
@@ -1057,18 +1062,7 @@ namespace Exine.ExineScenes.ExDialogs
                         TargetItem = null;
                     };
                     return;
-                case PanelType.Disassemble:
-                    Network.Enqueue(new C.DisassembleItem { UniqueID = TargetItem.UniqueID });
-                    break;
-                case PanelType.Downgrade:
-                    Network.Enqueue(new C.DowngradeAwakening { UniqueID = TargetItem.UniqueID });
-                    break;
-                case PanelType.Reset:
-                    if (TargetItem.Info.NeedIdentify == false)
-                    {
-                        Network.Enqueue(new C.ResetAddedItem { UniqueID = TargetItem.UniqueID });
-                    }
-                    break;
+                 
                 case PanelType.Refine:
 
                     for (int i = 0; i < ExineMainScene.Scene.RefineDialog.Grid.Length; i++)
@@ -1125,49 +1119,7 @@ namespace Exine.ExineScenes.ExDialogs
                 OldCell = null;
             }
 
-            if (ExineMainScene.SelectedCell != null && PType == PanelType.Disassemble)
-            {
-                if (ExineMainScene.SelectedCell.Item.Info.Grade != ItemGrade.None &&
-                    ExineMainScene.SelectedCell.Item.Info.Type != ItemType.Awakening)
-                {
-                    TargetItem = ExineMainScene.SelectedCell.Item;
-                    OldCell = ExineMainScene.SelectedCell;
-                    OldCell.Locked = true;
-                    ExineMainScene.SelectedCell = null;
-                    return;
-                }
-            }
-
-            if (ExineMainScene.SelectedCell != null && PType == PanelType.Downgrade)
-            {
-                if (ExineMainScene.SelectedCell.Item.Awake.GetAwakeLevel() != 0)
-                {
-                    TargetItem = ExineMainScene.SelectedCell.Item;
-                    OldCell = ExineMainScene.SelectedCell;
-                    OldCell.Locked = true;
-                    ExineMainScene.SelectedCell = null;
-                    return;
-                }
-            }
-
-            if (ExineMainScene.SelectedCell != null && PType == PanelType.Reset)
-            {
-                if (ExineMainScene.SelectedCell.Item.IsAdded)
-                {
-                    TargetItem = ExineMainScene.SelectedCell.Item;
-                    OldCell = ExineMainScene.SelectedCell;
-                    OldCell.Locked = true;
-                    ExineMainScene.SelectedCell = null;
-                    return;
-                }
-            }
-
-            if (ExineMainScene.SelectedCell != null && (PType == PanelType.Disassemble || PType == PanelType.Downgrade || PType == PanelType.Reset))
-            {
-                ExineMainScene.SelectedCell.Locked = false;
-                ExineMainScene.SelectedCell = null;
-                return;
-            }
+          
 
             //////////////////////////////////////
 
@@ -1241,27 +1193,8 @@ namespace Exine.ExineScenes.ExDialogs
                 case PanelType.Consign:
                     InfoLabel.Text = "Consignment: ";
                     return;
-                case PanelType.Disassemble:
-                    text = "Item will be Destroyed\n\n\n\n\n\n\n\n         ";
-                    HoldButton.Visible = false;
-                    Index = 711;
-                    Library = Libraries.Title;
-                    Location = new Point(234, 224);
-                    ConfirmButton.HoverIndex = 716;
-                    ConfirmButton.Index = 715;
-                    ConfirmButton.PressedIndex = 717;
-                    ConfirmButton.Location = new Point(62, 190);
-                    InfoLabel.Location = new Point(44, 60);
-                    ItemCell.Location = new Point(83, 94);
-                    break;
-                case PanelType.Downgrade:
-                    text = "Downgrade: ";
-                    HoldButton.Visible = false;
-                    break;
-                case PanelType.Reset:
-                    text = "Reset: ";
-                    HoldButton.Visible = false;
-                    break;
+                
+                
                 case PanelType.Refine:
                     text = "Refine: ";
                     HoldButton.Visible = false;
@@ -1297,15 +1230,8 @@ namespace Exine.ExineScenes.ExDialogs
                     case PanelType.SpecialRepair:
                         text += ((TargetItem.RepairPrice() * 3) * ExineMainScene.NPCRate).ToString();
                         break;
-                    case PanelType.Disassemble:
-                        text += TargetItem.DisassemblePrice().ToString();
-                        break;
-                    case PanelType.Downgrade:
-                        text += TargetItem.DowngradePrice().ToString();
-                        break;
-                    case PanelType.Reset:
-                        text += TargetItem.ResetPrice().ToString();
-                        break;
+                   
+                     
                     case PanelType.Refine:
                         text += ((TargetItem.Info.RequiredAmount * 10) * ExineMainScene.NPCRate).ToString();
                         break;
@@ -1338,385 +1264,7 @@ namespace Exine.ExineScenes.ExDialogs
             Visible = true;
         }
     }
-    public sealed class NPCAwakeDialog : ExineImageControl
-    {
-
-        public MirButton UpgradeButton, CloseButton;
-        public MirItemCell[] ItemCells = new MirItemCell[7];
-        public MirDropDownBox SelectAwakeType;
-        public AwakeType CurrentAwakeType = AwakeType.None;
-        public ExineLabel GoldLabel, NeedItemLabel1, NeedItemLabel2;
-
-        public static UserItem[] Items = new UserItem[7];
-        public static int[] ItemsIdx = new int[7];
-
-        public NPCAwakeDialog()
-        {
-            Index = 710;
-            Library = Libraries.Title;
-            Location = new Point(0, 0);
-            Sort = true;
-            Movable = true;
-
-            GoldLabel = new ExineLabel
-            {
-                AutoSize = true,
-                Location = new Point(112, 354),
-                Parent = this,
-                NotControl = true,
-            };
-
-            NeedItemLabel1 = new ExineLabel
-            {
-                AutoSize = true,
-                Location = new Point(67, 317),//
-                Parent = this,
-                NotControl = true,
-            };
-
-            NeedItemLabel2 = new ExineLabel
-            {
-                AutoSize = true,
-                Location = new Point(192, 317),//(155, 316),
-                Parent = this,
-                NotControl = true,
-            };
-
-            UpgradeButton = new MirButton
-            {
-                HoverIndex = 713,
-                Index = 712,
-                Location = new Point(115, 391), //new Point(181, 135),
-                Library = Libraries.Title,
-                Parent = this,
-                PressedIndex = 714,
-                Sound = SoundList.ButtonA,
-            };
-            UpgradeButton.Click += (o, e) => Awakening();
-
-            CloseButton = new MirButton
-            {
-                HoverIndex = 361,
-                Index = 360,
-                Location = new Point(284, 4),
-                Library = Libraries.Prguse2,
-                Parent = this,
-                PressedIndex = 362,
-                Sound = SoundList.ButtonA,
-            };
-            CloseButton.Click += (o, e) => Hide();
-
-            ItemCells[0] = new MirItemCell
-            {
-                BorderColour = Color.Lime,
-                GridType = MirGridType.AwakenItem,
-                Library = Libraries.Items,
-                Parent = this,
-                Location = new Point(202, 91),
-                ItemSlot = 0,
-            };
-            //ItemCells[0].AfterDraw += (o, e) => ItemCell_AfterDraw();
-            //ItemCells[0].Click += (o, e) => ItemCell_Click();
-
-            ItemCells[1] = new MirItemCell //Required
-            {
-                BorderColour = Color.Lime,
-                GridType = MirGridType.AwakenItem,
-                Library = Libraries.Items,
-                Parent = this,
-                Location = new Point(31, 316),
-                ItemSlot = 1,
-                Enabled = false,
-
-            };
-
-            ItemCells[2] = new MirItemCell //Required
-            {
-                BorderColour = Color.Lime,
-                GridType = MirGridType.AwakenItem,
-                Library = Libraries.Items,
-                Parent = this,
-                Location = new Point(155, 316),
-                ItemSlot = 2,
-                Enabled = false,
-            };
-
-            ItemCells[3] = new MirItemCell
-            {
-                BorderColour = Color.Lime,
-                GridType = MirGridType.AwakenItem,
-                Library = Libraries.Items,
-                Parent = this,
-                Location = new Point(175, 199),
-                ItemSlot = 3,
-            };
-
-            ItemCells[4] = new MirItemCell
-            {
-                BorderColour = Color.Lime,
-                GridType = MirGridType.AwakenItem,
-                Library = Libraries.Items,
-                Parent = this,
-                Location = new Point(230, 199),
-                ItemSlot = 4,
-            };
-
-            ItemCells[5] = new MirItemCell
-            {
-                BorderColour = Color.Lime,
-                GridType = MirGridType.AwakenItem,
-                Library = Libraries.Items,
-                Parent = this,
-                Location = new Point(175, 256),
-                ItemSlot = 5,
-            };
-
-            ItemCells[6] = new MirItemCell
-            {
-                BorderColour = Color.Lime,
-                GridType = MirGridType.AwakenItem,
-                Library = Libraries.Items,
-                Parent = this,
-                Location = new Point(230, 256),
-                ItemSlot = 6,
-            };
-
-            SelectAwakeType = new MirDropDownBox()
-            {
-                Parent = this,
-                Location = new Point(35, 141),
-                Size = new Size(109, 14),
-                ForeColour = Color.White,
-                Visible = true,
-                Enabled = true,
-            };
-            SelectAwakeType.ValueChanged += (o, e) => OnAwakeTypeSelect(SelectAwakeType._WantedIndex);
-        }
-
-        public void ItemCellClear()
-        {
-            if (ItemCells[1].Item != null)
-            {
-                ItemCells[1].Item = null;
-            }
-            if (ItemCells[2].Item != null)
-            {
-                ItemCells[2].Item = null;
-            }
-
-
-            NeedItemLabel2.Text = "";
-            NeedItemLabel1.Text = "";
-            GoldLabel.Text = "";
-        }
-
-        public void ItemCell_Click()
-        {
-            ItemCellClear();
-            SelectAwakeType.Items.Clear();
-
-            if (Items[0] == null)
-            {
-                SelectAwakeType.Items.Add("Select Upgrade Item.");
-                SelectAwakeType.SelectedIndex = SelectAwakeType.Items.Count - 1;
-                CurrentAwakeType = AwakeType.None;
-            }
-            else
-            {
-                if (Items[0].Awake.GetAwakeLevel() == 0)
-                {
-                    SelectAwakeType.Items.Add("Select Upgrade Type.");
-                    if (Items[0].Info.Type == ItemType.Weapon)
-                    {
-                        SelectAwakeType.Items.Add("Bravery Glyph");
-                        SelectAwakeType.Items.Add("Magic Glyph");
-                        SelectAwakeType.Items.Add("Soul Glyph");
-                    }
-                    else if (Items[0].Info.Type == ItemType.Helmet)
-                    {
-                        SelectAwakeType.Items.Add("Protection Glyph");
-                        SelectAwakeType.Items.Add("EvilSlayer Glyph");
-                    }
-                    else
-                    {
-                        SelectAwakeType.Items.Add("Body Glyph");
-                    }
-                }
-                else
-                {
-                    SelectAwakeType.Items.Add(getAwakeTypeText(Items[0].Awake.Type));
-                    if (CurrentAwakeType != Items[0].Awake.Type)
-                    {
-                        CurrentAwakeType = Items[0].Awake.Type;
-                        OnAwakeTypeSelect(0);
-                    }
-                }
-            }
-        }
-
-        public string getAwakeTypeText(AwakeType type)
-        {
-            string typeName = "";
-            switch (type)
-            {
-                case AwakeType.DC:
-                    typeName = "Bravery Glyph";
-                    break;
-                case AwakeType.MC:
-                    typeName = "Magic Glyph";
-                    break;
-                case AwakeType.SC:
-                    typeName = "Soul Glyph";
-                    break;
-                case AwakeType.AC:
-                    typeName = "Protection Glyph";
-                    break;
-                case AwakeType.MAC:
-                    typeName = "EvilSlayer Glyph";
-                    break;
-                case AwakeType.HPMP:
-                    typeName = "Body Glyph";
-                    break;
-                default:
-                    typeName = "Select Upgrade Item.";
-                    break;
-            }
-            return typeName;
-        }
-
-        public AwakeType getAwakeType(string typeName)
-        {
-            AwakeType type = AwakeType.None;
-            switch (typeName)
-            {
-                case "Bravery Glyph":
-                    type = AwakeType.DC;
-                    break;
-                case "Magic Glyph":
-                    type = AwakeType.MC;
-                    break;
-                case "Soul Glyph":
-                    type = AwakeType.SC;
-                    break;
-                case "Protection Glyph":
-                    type = AwakeType.AC;
-                    break;
-                case "EvilSlayer Glyph":
-                    type = AwakeType.MAC;
-                    break;
-                case "Body Glyph":
-                    type = AwakeType.HPMP;
-                    break;
-                default:
-                    type = AwakeType.None;
-                    break;
-            }
-
-            return type;
-        }
-
-        public void OnAwakeTypeSelect(int Index)
-        {
-            SelectAwakeType.SelectedIndex = Index;
-
-            AwakeType type = getAwakeType(SelectAwakeType.Items[SelectAwakeType.SelectedIndex]);
-            CurrentAwakeType = type;
-            if (type != AwakeType.None)
-            {
-                Network.Enqueue(new C.AwakeningNeedMaterials { UniqueID = Items[0].UniqueID, Type = type });
-            }
-        }
-
-        public void setNeedItems(ItemInfo[] Materials, byte[] MaterialsCount)
-        {
-            if (MaterialsCount[0] != 0)
-            {
-                ItemCells[1].Item = new UserItem(Materials[0]);
-                ItemCells[1].Item.Count = MaterialsCount[0];
-                NeedItemLabel1.Text = Regex.Replace(ItemCells[1].Item.Info.Name, @"[\d-]", string.Empty) + "\nQuantity: " + MaterialsCount[0].ToString();
-            }
-            else
-            {
-                ItemCells[1].Item = null;
-                NeedItemLabel1.Text = "";
-            }
-
-            if (MaterialsCount[1] != 0)
-            {
-                ItemCells[2].Item = new UserItem(Materials[1]);
-                ItemCells[2].Item.Count = MaterialsCount[1];
-                NeedItemLabel2.Text = Regex.Replace(ItemCells[2].Item.Info.Name, @"[\d-]", string.Empty) + "\nQuantity:" + MaterialsCount[1].ToString();
-            }
-            else
-            {
-                ItemCells[2].Item = null;
-                NeedItemLabel2.Text = "";
-            }
-
-            if (ItemCells[0].Item != null)
-                GoldLabel.Text = ItemCells[0].Item.AwakeningPrice().ToString();
-        }
-
-        public bool CheckNeedMaterials()
-        {
-            int maxEqual = (Items[1] == null || Items[2] == null) ? 1 : 2;
-            int equal = 0;
-            for (int i = 1; i < 3; i++)
-            {
-                if (Items[i] == null) continue;
-                for (int j = 3; j < 5; j++)
-                {
-                    if (Items[j] == null) continue;
-                    if (Items[i].Info.Name == Items[j].Info.Name &&
-                        Items[i].Count <= Items[j].Count)
-                        equal++;
-                }
-            }
-            return equal >= maxEqual;
-        }
-
-        public void Awakening()
-        {
-            if (CheckNeedMaterials())
-            {
-                AwakeType type = getAwakeType(SelectAwakeType.Items[SelectAwakeType.SelectedIndex]);
-
-                if (type != AwakeType.None)
-                {
-                    Network.Enqueue(new C.Awakening { UniqueID = Items[0].UniqueID, Type = type });
-                    MapControl.AwakeningAction = true;
-                }
-            }
-        }
-
-        public override void Hide()
-        {
-            foreach (var item in ItemCells)
-            {
-                if (item.Item != null)
-                {
-                    Network.Enqueue(new C.AwakeningLockedItem { UniqueID = item.Item.UniqueID, Locked = false });
-                    item.Item = null;
-                }
-            }
-
-            for (int i = 0; i < ItemsIdx.Length; i++)
-            {
-                ItemsIdx[i] = 0;
-            }
-
-            ItemCell_Click();
-            Visible = false;
-        }
-
-        public override void Show()
-        {
-            Visible = true;
-
-            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(Size.Width + 5, 0);
-            ExineMainScene.Scene.ExInventoryDialog.Show();
-        }
-    }
+    
     public sealed class CraftDialog : ExineImageControl
     {
         public UserItem RecipeItem;
@@ -1733,7 +1281,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public MirItemCell[] Grid;
 
-        public MirButton CraftButton, AutoFillButton, CloseButton;
+        public ExineButton CraftButton, AutoFillButton, CloseButton;
 
         public ExineLabel RecipeLabel;
         public ExineLabel PossibilityLabel;
@@ -1816,7 +1364,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Grid[x].Click += Grid_Click;
             }
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 Index = 360,
                 HoverIndex = 361,
@@ -1828,7 +1376,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
-            AutoFillButton = new MirButton
+            AutoFillButton = new ExineButton
             {
                 HoverIndex = 181,
                 Index = 180,
@@ -1840,7 +1388,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             AutoFillButton.Click += (o, e) => AutoFill();
 
-            CraftButton = new MirButton
+            CraftButton = new ExineButton
             {
                 HoverIndex = 337,
                 Index = 336,
@@ -2190,7 +1738,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class RefineDialog : ExineImageControl
     {
         public MirItemCell[] Grid;
-        public MirButton RefineButton;
+        public ExineButton RefineButton;
 
         public RefineDialog()
         {
@@ -2262,7 +1810,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class StorageDialog : ExineImageControl
     {
         public MirItemCell[] Grid;
-        public MirButton Storage1Button, Storage2Button, RentButton, ProtectButton, CloseButton;
+        public ExineButton Storage1Button, Storage2Button, RentButton, ProtectButton, CloseButton;
         public ExineImageControl LockedPage;
         public ExineLabel RentalLabel;
 
@@ -2290,7 +1838,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = false
             };
 
-            Storage1Button = new MirButton
+            Storage1Button = new ExineButton
             {
                 HoverIndex = 743,
                 Index = 743,
@@ -2305,7 +1853,7 @@ namespace Exine.ExineScenes.ExDialogs
                 RefreshStorage1();
             };
 
-            Storage2Button = new MirButton
+            Storage2Button = new ExineButton
             {
                 HoverIndex = 746,
                 Index = 746,
@@ -2320,7 +1868,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 RefreshStorage2();
             };
-            RentButton = new MirButton
+            RentButton = new ExineButton
             {
                 Index = 483,
                 HoverIndex = 484,
@@ -2347,7 +1895,7 @@ namespace Exine.ExineScenes.ExDialogs
                 messageBox.Show();
             };
 
-            ProtectButton = new MirButton
+            ProtectButton = new ExineButton
             {
                 HoverIndex = 114,
                 Index = 113,
@@ -2358,7 +1906,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonA,
                 Visible = true
             };
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -2532,7 +2080,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             if (buttons.Count > MaximumRows)
             {
-                MirButton upButton = new MirButton
+                ExineButton upButton = new ExineButton
                 {
                     Index = 197,
                     HoverIndex = 198,
@@ -2548,7 +2096,7 @@ namespace Exine.ExineScenes.ExDialogs
                     ScrollUp();
                 };
 
-                MirButton downButton = new MirButton
+                ExineButton downButton = new ExineButton
                 {
                     Index = 207,
                     HoverIndex = 208,
@@ -2612,7 +2160,7 @@ namespace Exine.ExineScenes.ExDialogs
             RefreshButtons();
         }
     }
-    public sealed class BigButton : MirButton
+    public sealed class BigButton : ExineButton
     {
         #region Label
         private ExineLabel _shadowLabel;

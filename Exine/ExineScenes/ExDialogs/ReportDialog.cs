@@ -7,7 +7,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class ReportDialog : ExineImageControl
     {
         MirDropDownBox ReportType;
-        MirButton SendButton, CloseButton;
+        ExineButton SendButton, CloseButton;
         ExineTextBox MessageArea;
 
         public ReportDialog()
@@ -18,7 +18,7 @@ namespace Exine.ExineScenes.ExDialogs
             Sort = true;
             Location = Center;
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -53,7 +53,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             MessageArea.MultiLine();
 
-            SendButton = new MirButton
+            SendButton = new ExineButton
             {
                 Parent = this,
                 Library = Libraries.Title,

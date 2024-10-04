@@ -24,10 +24,7 @@ public enum PanelType : byte
     SpecialRepair,
     Consign,
     Refine,
-    CheckRefine,
-    Disassemble,
-    Downgrade,
-    Reset,
+    CheckRefine, 
     CollectRefine,
     ReplaceWedRing,
 }
@@ -35,7 +32,6 @@ public enum PanelType : byte
 public enum MarketItemType : byte
 {
     Consign,
-    Auction,
     GameShop
 }
 
@@ -43,7 +39,6 @@ public enum MarketPanelType : byte
 {
     Market,
     Consign,
-    Auction,
     GameShop
 }
 
@@ -1089,14 +1084,11 @@ public enum MirGridType : byte
     Storage = 4,
     BuyBack = 5,
     DropPanel = 6,
-    Inspect = 7,
-    TrustMerchant = 8,
+    Inspect = 7, 
     GuildStorage = 9,
     GuestTrade = 10,
     Fishing = 12,
-    QuestInventory = 13,
-    AwakenItem = 14,
-    Mail = 15,
+    QuestInventory = 13, 
     Refine = 16,
     Craft = 19,
     Socket = 20
@@ -1641,10 +1633,6 @@ public enum SpellEffect : byte
     MPEater,
     Hemorrhage,
     Bleeding,
-    AwakeningSuccess,
-    AwakeningFail,
-    AwakeningMiss,
-    AwakeningHit,
     StormEscape,
     TurtleKing,
     Behemoth,
@@ -1911,12 +1899,8 @@ public enum ServerPacketIds : short
     ObjectDash,
     UserDashFail,
     ObjectDashFail,
-    NPCConsign,
-    NPCMarket,
-    NPCMarketPage,
-    ConsignItem,
-    MarketFail,
-    MarketSuccess,
+    NPCConsign, 
+    ConsignItem, 
     ObjectSitDown,
     InTrapRock,
     BaseStatsInfo,
@@ -1968,20 +1952,9 @@ public enum ServerPacketIds : short
     ObjectSneaking,
     ObjectLevelEffects,
     SetBindingShot,
-    SendOutputMessage,
-    NPCAwakening,
-    NPCDisassemble,
-    NPCDowngrade,
-    NPCReset,
-    AwakeningNeedMaterials,
-    AwakeningLockedItem,
-    Awakening,
-    ReceiveMail,
-    MailLockedItem,
-    MailSendRequest,
-    MailSent,
-    ParcelCollected,
-    MailCost,
+    SendOutputMessage,  
+      
+
     ResizeInventory,
     ResizeStorage,
     NPCPearlGoods,
@@ -2072,13 +2045,7 @@ public enum ClientPacketIds : short
     GroupInvite,
     TownRevive,
     SpellToggle,
-    ConsignItem,
-    MarketSearch,
-    MarketRefresh,
-    MarketPage,
-    MarketBuy,
-    MarketGetBack,
-    MarketSellNow,
+    ConsignItem, 
     RequestUserName,
     RequestChatItem,
     EditGuildMember,
@@ -2114,26 +2081,11 @@ public enum ClientPacketIds : short
     AcceptReincarnation,
     CancelReincarnation,
     CombineItem,
-
-    AwakeningNeedMaterials,
-    AwakeningLockedItem,
-    Awakening,
-    DisassembleItem,
-    DowngradeAwakening,
-    ResetAddedItem,
-
-    SendMail,
-    ReadMail,
-    CollectParcel,
-    DeleteMail,
-    LockMail,
-    MailLockedItem,
-    MailCost,
-
+       
     AddFriend,
     RemoveFriend,
     RefreshFriends,
-    AddMemo,
+    
     GuildBuffUpdate,
     NPCConfirmInput,
     GameshopBuy,

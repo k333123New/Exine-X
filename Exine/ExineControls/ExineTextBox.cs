@@ -387,13 +387,13 @@ namespace Exine.ExineControls
         public void DialogChanged()
         {
             ExineMessageBox box1 = null;
-            MirInputBox box2 = null;
+            ExineInputBox box2 = null;
             MirAmountBox box3 = null;
 
             if (ExineScene.ActiveScene != null && ExineScene.ActiveScene.Controls.Count > 0)
             {
                 box1 = (ExineMessageBox) ExineScene.ActiveScene.Controls.FirstOrDefault(ob => ob is ExineMessageBox);
-                box2 = (MirInputBox) ExineScene.ActiveScene.Controls.FirstOrDefault(O => O is MirInputBox);
+                box2 = (ExineInputBox) ExineScene.ActiveScene.Controls.FirstOrDefault(O => O is ExineInputBox);
                 box3 = (MirAmountBox) ExineScene.ActiveScene.Controls.FirstOrDefault(ob => ob is MirAmountBox);
             }
 

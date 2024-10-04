@@ -10,7 +10,7 @@ namespace Exine.ExineScenes.ExDialogs
     {
         public MirItemCell[] Grid;
         public ExineLabel NameLabel, GoldLabel;
-        public MirButton ConfirmButton, CloseButton;
+        public ExineButton ConfirmButton, CloseButton;
 
         public TradeDialog()
         {
@@ -22,7 +22,7 @@ namespace Exine.ExineScenes.ExDialogs
             Sort = true;
 
             #region Buttons
-            ConfirmButton = new MirButton
+            ConfirmButton = new ExineButton
             {
                 Index = 520,
                 HoverIndex = 521,
@@ -39,7 +39,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Network.Enqueue(new C.TradeConfirm { Locked = ExineMainScene.User.TradeLocked });
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -200,7 +200,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public ExineLabel GuestNameLabel, GuestGoldLabel;
 
-        public MirButton ConfirmButton;
+        public ExineButton ConfirmButton;
 
         public GuestTradeDialog()
         {

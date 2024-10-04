@@ -10,7 +10,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class RelationshipDialog : ExineImageControl
     {
         public ExineImageControl TitleLabel;
-        public MirButton CloseButton, AllowButton, RequestButton, DivorceButton, MailButton, WhisperButton;
+        public ExineButton CloseButton, AllowButton, RequestButton, DivorceButton, WhisperButton;
         public ExineLabel LoverNameLabel, LoverDateLabel, LoverOnlineLabel, LoverLengthLabel;
 
 
@@ -42,7 +42,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -54,7 +54,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
-            AllowButton = new MirButton
+            AllowButton = new ExineButton
             {
                 HoverIndex = 611,
                 Index = 610,
@@ -67,7 +67,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             AllowButton.Click += (o, e) => Network.Enqueue(new C.ChangeMarriage());
 
-            RequestButton = new MirButton
+            RequestButton = new ExineButton
             {
                 HoverIndex = 601,
                 Index = 600,
@@ -89,7 +89,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Network.Enqueue(new C.MarriageRequest());
             };
 
-            DivorceButton = new MirButton
+            DivorceButton = new ExineButton
             {
                 HoverIndex = 617,
                 Index = 616,
@@ -111,29 +111,9 @@ namespace Exine.ExineScenes.ExDialogs
                 Network.Enqueue(new C.DivorceRequest());
             };
 
-            MailButton = new MirButton
-            {
-                HoverIndex = 438,
-                Index = 437,
-                Location = new Point(155, 164),
-                Library = Libraries.Prguse,
-                Parent = this,
-                PressedIndex = 439,
-                Sound = SoundList.ButtonA,
-                Hint = GameLanguage.MailLover
-            };
-            MailButton.Click += (o, e) =>
-            {
-                if (LoverName == "")
-                {
-                    ExineMainScene.Scene.ExChatDialog.ReceiveChat("당신은 결혼하지 않았습니다.", ChatType.System);
-                    return;
-                }
+            
 
-                ExineMainScene.Scene.MailComposeLetterDialog.ComposeMail(LoverName);
-            };
-
-            WhisperButton = new MirButton
+            WhisperButton = new ExineButton
             {
                 HoverIndex = 567,
                 Index = 566,

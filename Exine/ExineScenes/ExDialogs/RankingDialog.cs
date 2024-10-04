@@ -6,8 +6,8 @@ namespace Exine.ExineScenes.ExDialogs
 {
     public class RankingDialog : ExineImageControl
     {
-        public MirButton AllButton, WarButton, WizButton, TaoButton, SinButton, ArchButton, Tab7, NextButton, PrevButton, ScrollBar;
-        public MirButton CloseButton;
+        public ExineButton AllButton, WarButton, WizButton, TaoButton, SinButton, ArchButton, Tab7, NextButton, PrevButton, ScrollBar;
+        public ExineButton CloseButton;
         public ExineLabel MyRank;
         public MirCheckBox OnlineOnlyButton;
 
@@ -42,7 +42,7 @@ namespace Exine.ExineScenes.ExDialogs
             Sort = true;
             Location = new Point((Settings.ScreenWidth - Size.Width) / 2, (Settings.ScreenHeight - Size.Height) / 2);
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -54,7 +54,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
-            AllButton = new MirButton
+            AllButton = new ExineButton
             {
                 Index = 751,
                 PressedIndex = 752,
@@ -67,7 +67,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             };
             AllButton.Click += (o, e) => SelectRank(0);
-            TaoButton = new MirButton
+            TaoButton = new ExineButton
             {
                 Index = 760,
                 PressedIndex = 761,
@@ -79,7 +79,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonA,
             };
             TaoButton.Click += (o, e) => SelectRank(3);
-            WarButton = new MirButton
+            WarButton = new ExineButton
             {
                 Index = 754,
                 PressedIndex = 755,
@@ -91,7 +91,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonA,
             };
             WarButton.Click += (o, e) => SelectRank(1);
-            WizButton = new MirButton
+            WizButton = new ExineButton
             {
                 Index = 763,
                 PressedIndex = 764,
@@ -103,7 +103,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonA,
             };
             WizButton.Click += (o, e) => SelectRank(2);
-            SinButton = new MirButton
+            SinButton = new ExineButton
             {
                 Index = 757,
                 PressedIndex = 758,
@@ -115,7 +115,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonA,
             };
             SinButton.Click += (o, e) => SelectRank(4);
-            ArchButton = new MirButton
+            ArchButton = new ExineButton
             {
                 Index = 766,
                 PressedIndex = 767,
@@ -128,7 +128,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             ArchButton.Click += (o, e) => SelectRank(5);
 
-            NextButton = new MirButton
+            NextButton = new ExineButton
             {
                 Index = 207,
                 HoverIndex = 208,
@@ -140,7 +140,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             NextButton.Click += (o, e) => Move(1);
             
-            PrevButton = new MirButton
+            PrevButton = new ExineButton
             {
                 Index = 197,
                 HoverIndex = 198,
@@ -154,7 +154,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             ScrollHeight = NextButton.Location.Y - PrevButton.Location.Y - 32;
 
-            ScrollBar = new MirButton
+            ScrollBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,

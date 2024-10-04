@@ -127,7 +127,7 @@ namespace Server.ExineEnvir
         public List<AccountInfo> AccountList = new List<AccountInfo>();
         public List<CharacterInfo> CharacterList = new List<CharacterInfo>();
         public List<GuildInfo> GuildList = new List<GuildInfo>();
-        public LinkedList<AuctionInfo> Auctions = new LinkedList<AuctionInfo>();
+        
         public List<ConquestGuildInfo> ConquestList = new List<ConquestGuildInfo>();
         public Dictionary<int, int> GameshopLog = new Dictionary<int, int>();
         public int GuildCount; //This shouldn't be needed?? -> remove in the future
@@ -186,7 +186,7 @@ namespace Server.ExineEnvir
         public static long LastRunTime = 0;
         public int MonsterCount;
 
-        private long warTime, guildTime, conquestTime, auctionTime, spawnTime, robotTime, timerTime;
+        private long warTime, guildTime, conquestTime, spawnTime, robotTime, timerTime;
         private int dailyTime = DateTime.UtcNow.Day;
 
         private bool MagicExists(Spell spell)
@@ -964,12 +964,7 @@ namespace Server.ExineEnvir
             }
              
 
-            if (Time >= auctionTime)
-            {
-                auctionTime = Time + Settings.Minute * 10;
-                ProcessAuction();
-            }
-
+            
             if (Time >= spawnTime)
             {
                 spawnTime = Time + Settings.Second * 10;
@@ -995,36 +990,6 @@ namespace Server.ExineEnvir
                         Timers.Remove(key);
                     }
                 }
-            }
-        }
-
-        private void ProcessAuction()
-        {
-            LinkedListNode<AuctionInfo> current = Auctions.First;
-
-            while (current != null)
-            {
-                AuctionInfo info = current.Value;
-
-                if (!info.Expired && !info.Sold && Now >= info.ConsignmentDate.AddDays(Globals.ConsignmentLength))
-                {
-                    if (info.ItemType == MarketItemType.Auction && info.CurrentBid > info.Price)
-                    {
-                        string message = string.Format("You won {0} for {1:#,##0} Gold.", info.Item.FriendlyName, info.CurrentBid);
-
-                        info.Sold = true;
-                        MailCharacter(info.CurrentBuyerInfo, item: info.Item, customMessage: message);
-
-                        MessageAccount(info.CurrentBuyerInfo.AccountInfo, string.Format("You bought {0} for {1:#,##0} Gold", info.Item.FriendlyName, info.CurrentBid), ChatType.Hint);
-                        MessageAccount(info.SellerInfo.AccountInfo, string.Format("You sold {0} for {1:#,##0} Gold", info.Item.FriendlyName, info.CurrentBid), ChatType.Hint);
-                    }
-                    else
-                    {
-                        info.Expired = true;
-                    }
-                }
-
-                current = current.Next;
             }
         }
 
@@ -1075,8 +1040,7 @@ namespace Server.ExineEnvir
             public List<GuildInfo> GuildList = new List<GuildInfo>();
             public int NextGuildID; 
             public List<AccountInfo> AccountList = new List<AccountInfo>();
-            public ulong NextAuctionID;
-            public LinkedList<AuctionInfo> Auctions = new LinkedList<AuctionInfo>();
+            
             public ulong NextMailID;
             public Dictionary<int, int> GameshopLog = new Dictionary<int, int>();
             public List<MapRespawn> SavedSpawns = new List<MapRespawn>();
@@ -1210,11 +1174,7 @@ namespace Server.ExineEnvir
                 for (var i = 0; i < AccountList.Count; i++)
                     AccountList[i].Save(writer);
 
-                writer.Write(NextAuctionID);
-                writer.Write(Auctions.Count);
-                foreach (var auction in Auctions)
-                    auction.Save(writer);
-
+                  
                 writer.Write(NextMailID);
 
                 writer.Write(GameshopLog.Count);
@@ -1657,47 +1617,7 @@ namespace Server.ExineEnvir
                         AccountList.Add(new AccountInfo(reader));
                         CharacterList.AddRange(AccountList[i].Characters); 
                     }
-
-                    foreach (var auction in Auctions)
-                    {
-                        auction.SellerInfo.AccountInfo.Auctions.Remove(auction);
-                    }
-
-                    Auctions.Clear();
-
-                    NextAuctionID = reader.ReadUInt64();
-
-                    count = reader.ReadInt32();
-                    for (var i = 0; i < count; i++)
-                    {
-                        var auction = new AuctionInfo(reader, LoadVersion, LoadCustomVersion);
-
-                        if (!BindItem(auction.Item) || !BindCharacter(auction)) continue;
-
-                        Auctions.AddLast(auction);
-                        auction.SellerInfo.AccountInfo.Auctions.AddLast(auction);
-                    }
-
-                    NextMailID = reader.ReadUInt64();
-
-                    /*
-                    if (LoadVersion <= 80)
-                    {
-                        count = reader.ReadInt32();
-                        for (var i = 0; i < count; i++)
-                        {
-                            var mail = new MailInfo(reader, LoadVersion, LoadCustomVersion);
-
-                            mail.RecipientInfo = GetCharacterInfo(mail.RecipientIndex);
-
-                            if (mail.RecipientInfo != null)
-                            {
-                                mail.RecipientInfo.Mail.Add(mail); //add to players inbox
-                            }
-                        }
-                    }*/
-
-
+                     
                     if (LoadVersion >= 63)
                     {
                         var logCount = reader.ReadInt32();
@@ -1865,27 +1785,7 @@ namespace Server.ExineEnvir
             }
         }
 
-        private bool BindCharacter(AuctionInfo auction)
-        {
-            bool bound = false;
-
-            for (int i = 0; i < CharacterList.Count; i++)
-            {
-                if (CharacterList[i].Index == auction.SellerIndex)
-                {
-                    auction.SellerInfo = CharacterList[i];
-                    bound = true;
-                }
-
-                else if (CharacterList[i].Index == auction.CurrentBuyerIndex)
-                {
-                    auction.CurrentBuyerInfo = CharacterList[i];
-                    bound = true;
-                }
-            }
-
-            return bound;
-        }
+        
 
         public void Start()
         {
@@ -2138,16 +2038,7 @@ namespace Server.ExineEnvir
                     #endregion
                 }
 
-                if (info.Mail.Count > Settings.MailCapacity)
-                {
-                    for (var j = info.Mail.Count - 1 - (int)Settings.MailCapacity; j >= 0; j--)
-                    {
-                        if (info.Mail[j].DateOpened > Now && info.Mail[j].Collected && info.Mail[j].Items.Count == 0 && info.Mail[j].Gold == 0)
-                        {
-                            info.Mail.Remove(info.Mail[j]);
-                        }
-                    }
-                }
+                
             }
         }
 
@@ -3164,40 +3055,7 @@ namespace Server.ExineEnvir
         }
 
 
-        public void MailCharacter(CharacterInfo info, UserItem item = null, uint gold = 0, int reason = 0, string customMessage = null)
-        {
-            string sender = "Bichon Administrator";
-
-            string message = "You have been mailed due to the following reason:\r\n\r\n";
-
-            switch (reason)
-            {
-                case 1:
-                    message += "Could not return item to bag after trade.";
-                    break;
-                case 99:
-                    message += "Code didn't correctly handle checking inventory space.";
-                    break;
-                default:
-                    message += customMessage ?? "No reason provided.";
-                    break;
-            }
-
-            MailInfo mail = new MailInfo(info.Index)
-            {
-                Sender = sender,
-                Message = message,
-                Gold = gold
-            };
-
-            if (item != null)
-            {
-                mail.Items.Add(item);
-            }
-
-            mail.Send();
-        }
-
+        
         public GuildObjectSrv GetGuild(string name)
         {
             for (var i = 0; i < Guilds.Count; i++)

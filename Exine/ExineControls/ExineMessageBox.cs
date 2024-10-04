@@ -7,7 +7,7 @@ namespace Exine.ExineControls
     public sealed class ExineMessageBox : ExineImageControl
     {
         public ExineLabel Label;
-        public MirButton OKButton, CancelButton, NoButton, YesButton;
+        public ExineButton OKButton, CancelButton, NoButton, YesButton;
         public MirMessageBoxButtons Buttons;
         public bool AllowKeyPress = true;
 
@@ -40,7 +40,7 @@ namespace Exine.ExineControls
             switch (Buttons)
             {
                 case MirMessageBoxButtons.OK:
-                    OKButton = new MirButton
+                    OKButton = new ExineButton
                     {
                         HoverIndex = 201,
                         Index = 200,
@@ -52,7 +52,7 @@ namespace Exine.ExineControls
                     OKButton.Click += (o, e) => Dispose();
                     break;
                 case MirMessageBoxButtons.OKCancel:
-                    OKButton = new MirButton
+                    OKButton = new ExineButton
                     {
                         HoverIndex = 201,
                         Index = 200,
@@ -62,7 +62,7 @@ namespace Exine.ExineControls
                         PressedIndex = 202,
                     };
                     OKButton.Click += (o, e) => Dispose();
-                    CancelButton = new MirButton
+                    CancelButton = new ExineButton
                     {
                         HoverIndex = 204,
                         Index = 203,
@@ -74,7 +74,7 @@ namespace Exine.ExineControls
                     CancelButton.Click += (o, e) => Dispose();
                     break;
                 case MirMessageBoxButtons.YesNo:
-                    YesButton = new MirButton
+                    YesButton = new ExineButton
                     {
                         HoverIndex = 207,
                         Index = 206,
@@ -84,7 +84,7 @@ namespace Exine.ExineControls
                         PressedIndex = 208,
                     };
                     YesButton.Click += (o, e) => Dispose();
-                    NoButton = new MirButton
+                    NoButton = new ExineButton
                     {
                         HoverIndex = 211,
                         Index = 210,
@@ -96,7 +96,7 @@ namespace Exine.ExineControls
                     NoButton.Click += (o, e) => Dispose();
                     break;
                 case MirMessageBoxButtons.YesNoCancel:
-                    YesButton = new MirButton
+                    YesButton = new ExineButton
                     {
                         HoverIndex = 207,
                         Index = 206,
@@ -106,7 +106,7 @@ namespace Exine.ExineControls
                         PressedIndex = 208,
                     };
                     YesButton.Click += (o, e) => Dispose();
-                    NoButton = new MirButton
+                    NoButton = new ExineButton
                     {
                         HoverIndex = 211,
                         Index = 210,
@@ -116,7 +116,7 @@ namespace Exine.ExineControls
                         PressedIndex = 212,
                     };
                     NoButton.Click += (o, e) => Dispose();
-                    CancelButton = new MirButton
+                    CancelButton = new ExineButton
                     {
                         HoverIndex = 204,
                         Index = 203,
@@ -128,7 +128,7 @@ namespace Exine.ExineControls
                     CancelButton.Click += (o, e) => Dispose();
                     break;
                 case MirMessageBoxButtons.Cancel:
-                    CancelButton = new MirButton
+                    CancelButton = new ExineButton
                     {
                         HoverIndex = 204,
                         Index = 203,

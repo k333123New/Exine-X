@@ -61,7 +61,7 @@ namespace Server.ExineObjects
             }
         }
 
-        public bool NewMail = false;
+        
 
         public override int PKPoints
         {
@@ -106,8 +106,7 @@ namespace Server.ExineObjects
         public MarketPanelType MarketPanelType;
         public short MinShapes, MaxShapes;
 
-        public int PageSent;
-        public List<AuctionInfo> Search = new List<AuctionInfo>();        
+        public int PageSent;    
 
         public bool CanCreateGuild = false;        
         
@@ -186,7 +185,12 @@ namespace Server.ExineObjects
                 MessageQueue.Enqueue(string.Format("{0} is now a GM", Name));
             }
 
-            if (Level == 0) NewCharacter();
+            //Set Starting Character
+            if (Level == 0)
+            {
+                NewCharacter();
+                Account.Gold = 10000; //add k333123 241004 starting gold set for test
+            }
 
             if (Info.GuildIndex != -1)
             {
@@ -357,14 +361,7 @@ namespace Server.ExineObjects
 
                 RestedTime = Envir.Time + Settings.Second;
             }
-
-            if (NewMail)
-            {
-                ReceiveChat(GameLanguage.NewMail, ChatType.System);
-
-                GetMail();
-            }
-
+             
             if (Account.HasExpandedStorage && Envir.Now > Account.ExpandedStorageExpiryDate)
             {
                 Account.HasExpandedStorage = false;
@@ -984,8 +981,7 @@ namespace Server.ExineObjects
             GetRecipeInfo();
 
             GetCompletedQuests();
-
-            GetMail();
+             
             GetFriends();
             GetRelationship();
 
@@ -1058,11 +1054,7 @@ namespace Server.ExineObjects
 
                 _restedCounter = (int)(totalMinutes * 60);
             }
-
-            if (Info.Mail.Count > Settings.MailCapacity)
-            {
-                ReceiveChat("Your mailbox is overflowing.", ChatType.System);
-            }
+             
 
             Report.Connected(Connection.IPAddress);
 
@@ -3010,85 +3002,7 @@ namespace Server.ExineObjects
 
                         break;
 
-                    case "AWAKENING":
-                        {
-                            if ((!IsGM && !Settings.TestServer) || parts.Length < 3) return;
-
-                            ItemType type;
-
-                            if (!Enum.TryParse(parts[1], true, out type)) return;
-
-                            AwakeType awakeType;
-
-                            if (!Enum.TryParse(parts[2], true, out awakeType)) return;
-
-                            foreach (UserItem temp in Info.Equipment)
-                            {
-                                if (temp == null) continue;
-
-                                ItemInfo realItem = Functions.GetRealItem(temp.Info, Info.Level, Info.Class, Envir.ItemInfoList);
-
-                                if (realItem.Type == type)
-                                {
-                                    Awake awake = temp.Awake;
-                                    bool[] isHit;
-                                    int result = awake.UpgradeAwake(temp, awakeType, out isHit);
-                                    switch (result)
-                                    {
-                                        case -1:
-                                            ReceiveChat(string.Format("{0} : Condition Error.", temp.FriendlyName), ChatType.System);
-                                            break;
-                                        case 0:
-                                            ReceiveChat(string.Format("{0} : Upgrade Failed.", temp.FriendlyName), ChatType.System);
-                                            break;
-                                        case 1:
-                                            ReceiveChat(string.Format("{0} : AWAKE Level {1}, value {2}~{3}.", temp.FriendlyName, awake.GetAwakeLevel(), awake.GetAwakeValue(), awake.GetAwakeValue()), ChatType.System);
-                                            p = new S.RefreshItem { Item = temp };
-                                            Enqueue(p);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "REMOVEAWAKENING":
-                        {
-                            if ((!IsGM && !Settings.TestServer) || parts.Length < 2) return;
-
-                            ItemType type;
-
-                            if (!Enum.TryParse(parts[1], true, out type)) return;
-
-                            foreach (UserItem temp in Info.Equipment)
-                            {
-                                if (temp == null) continue;
-
-                                ItemInfo realItem = Functions.GetRealItem(temp.Info, Info.Level, Info.Class, Envir.ItemInfoList);
-
-                                if (realItem.Type == type)
-                                {
-                                    Awake awake = temp.Awake;
-                                    int result = awake.RemoveAwake();
-                                    switch (result)
-                                    {
-                                        case 0:
-                                            ReceiveChat(string.Format("{0} : Remove failed Level 0", temp.FriendlyName), ChatType.System);
-                                            break;
-                                        case 1:
-                                            ReceiveChat(string.Format("{0} : Remove success. Level {1}", temp.FriendlyName, temp.Awake.GetAwakeLevel()), ChatType.System);
-                                            p = new S.RefreshItem { Item = temp };
-                                            Enqueue(p);
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                        break;
-
+                    
                     case "STARTWAR":
                         if (!IsGM) return;
                         if (parts.Length < 2) return;
@@ -6482,10 +6396,7 @@ namespace Server.ExineObjects
 
             Enqueue(new S.GainedCredit { Credit = credit });
         }
-        public void GainItemMail(UserItem item, int reason)
-        {
-            Envir.MailCharacter(Info, item: item, reason: reason);
-        }                 
+                        
         public bool CanRemoveItem(MirGridType grid, UserItem item)
         {
             //Item  Stuck
@@ -6987,21 +6898,7 @@ namespace Server.ExineObjects
                         }
                     }
                     break;
-                case MarketPanelType.Auction:
-                    {
-                        if (price < Globals.MinStartingBid || price > Globals.MaxStartingBid)
-                        {
-                            Enqueue(p);
-                            return;
-                        }
-
-                        if (Account.Gold < Globals.AuctionCost)
-                        {
-                            Enqueue(p);
-                            return;
-                        }
-                    }
-                    break;
+                
                 default:
                     Enqueue(p);
                     return;
@@ -7036,15 +6933,10 @@ namespace Server.ExineObjects
                     return;
                 }
 
-                MarketItemType type = panelType == MarketPanelType.Consign ? MarketItemType.Consign : MarketItemType.Auction;
-                uint cost = panelType == MarketPanelType.Consign ? Globals.ConsignmentCost : Globals.AuctionCost;
+                MarketItemType type =MarketItemType.Consign;
+                uint cost = Globals.ConsignmentCost;
 
                 //TODO Check Max Consignment.
-
-                AuctionInfo auction = new AuctionInfo(Info, temp, price, type);
-
-                Account.Auctions.AddLast(auction);
-                Envir.Auctions.AddFirst(auction);
 
                 p.Success = true;
                 Enqueue(p);
@@ -7059,837 +6951,14 @@ namespace Server.ExineObjects
 
             Enqueue(p);
         }
+         
 
-        private bool Match(AuctionInfo info)
-        {
-            return (UserMatch || !info.Expired && !info.Sold)
-                && (!UserMatch || ((MarketPanelType == MarketPanelType.Auction && info.ItemType == MarketItemType.Auction) || (MarketPanelType != MarketPanelType.Auction && info.ItemType == MarketItemType.Consign)))
-                && ((MatchType == ItemType.Nothing || info.Item.Info.Type == MatchType)
-                && (info.Item.Info.Shape >= MinShapes && info.Item.Info.Shape <= MaxShapes)
-                && (string.IsNullOrWhiteSpace(MatchName) || info.Item.Info.Name.Replace(" ", "").IndexOf(MatchName, StringComparison.OrdinalIgnoreCase) >= 0));
-        }
-
-        public void MarketPage(int page)
-        {
-            if (Dead || Envir.Time < SearchTime) return;
-
-            if (MarketPanelType != MarketPanelType.GameShop)
-            {
-                bool failed = true;
-
-                if (NPCPage == null || (!String.Equals(NPCPage.Key, NPCScript.MarketKey, StringComparison.CurrentCultureIgnoreCase)) || page <= PageSent) return;
-
-                SearchTime = Envir.Time + Globals.SearchDelay;
-
-                for (int n = 0; n < CurrentMap.NPCs.Count; n++)
-                {
-                    NPCObjectSrv ob = CurrentMap.NPCs[n];
-                    if (ob.ObjectID != NPCObjectID) continue;
-                    if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
-                    failed = false;
-                }
-
-                if (failed)
-                {
-                    return;
-                }
-            }
-
-            List<AuctionInfo> listings = new List<AuctionInfo>();
-            List<ClientAuction> clientListings = new List<ClientAuction>();
-
-            for (int i = 0; i < 10; i++)
-            {
-                if (i + page * 10 >= Search.Count) break;
-                listings.Add(Search[i + page * 10]);
-            }
-
-            foreach (var listing in listings)
-            {
-                clientListings.Add(listing.CreateClientAuction(UserMatch));
-            }
-
-            for (int i = 0; i < listings.Count; i++)
-            {
-                CheckItem(listings[i].Item);
-            }
-
-            PageSent = page;
-            Enqueue(new S.NPCMarketPage { Listings = clientListings });
-        }
-
-        public void GetMarket(string name, ItemType type)
-        {
-            Search.Clear();
-            MatchName = name.Replace(" ", "");
-            MatchType = type;
-            PageSent = 0;
-
-            long start = Envir.Stopwatch.ElapsedMilliseconds;
-
-            if (MarketPanelType == MarketPanelType.GameShop)
-            {
-                //Search = Envir.GameShopList.Where(x => (MatchType == ItemType.Nothing || x.Info.Type == MatchType)
-                //&& (x.Info.Shape >= MinShapes && x.Info.Shape <= MaxShapes)
-                //&& (string.IsNullOrWhiteSpace(MatchName) || x.Info.Name.Replace(" ", "").IndexOf(MatchName, StringComparison.OrdinalIgnoreCase) >= 0)).ToList();
-            }
-            else
-            {
-                LinkedListNode<AuctionInfo> current = UserMatch ? Account.Auctions.First : Envir.Auctions.First;
-
-                while (current != null)
-                {
-                    if (Match(current.Value)) Search.Add(current.Value);
-                    current = current.Next;
-                }
-            }
-
-            List<AuctionInfo> listings = new List<AuctionInfo>();
-            List<ClientAuction> clientListings = new List<ClientAuction>();
-
-            for (int i = 0; i < 10; i++)
-            {
-                if (i >= Search.Count) break;
-                listings.Add(Search[i]);
-            }
-
-            foreach (var listing in listings)
-            {
-                clientListings.Add(listing.CreateClientAuction(UserMatch));
-            }
-
-            for (int i = 0; i < listings.Count; i++)
-                CheckItem(listings[i].Item);
-
-            Enqueue(new S.NPCMarket { Listings = clientListings, Pages = (Search.Count - 1) / 10 + 1, UserMode = UserMatch });
-
-            MessageQueue.EnqueueDebugging(string.Format("{0}ms to match {1} items", Envir.Stopwatch.ElapsedMilliseconds - start, MarketPanelType == MarketPanelType.GameShop ? Envir.GameShopList.Count : (UserMatch ? Account.Auctions.Count : Envir.Auctions.Count)));
-        }
-
-        public void MarketSearch(string match, ItemType type)
-        {
-            if (Dead || Envir.Time < SearchTime) return;
-
-            SearchTime = Envir.Time + Globals.SearchDelay;
-
-            if (MarketPanelType == MarketPanelType.GameShop)
-            {
-                GetMarket(match, type);
-            }
-            else
-            {
-                if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.MarketKey, StringComparison.CurrentCultureIgnoreCase)) return;
-
-                for (int n = 0; n < CurrentMap.NPCs.Count; n++)
-                {
-                    NPCObjectSrv ob = CurrentMap.NPCs[n];
-                    if (ob.ObjectID != NPCObjectID) continue;
-
-                    if (!Functions.InRange(CurrentLocation, ob.CurrentLocation, Globals.DataRange)) return;
-
-                    GetMarket(match, type);
-                }
-            }
-        }
-
-        public void MarketBuy(ulong auctionID, uint bidPrice = 0)
-        {
-            if (Dead)
-            {
-                Enqueue(new S.MarketFail { Reason = 0 });
-                return;
-            }
-
-            if (MarketPanelType == MarketPanelType.GameShop)
-            {
-                foreach (AuctionInfo auction in Search)
-                {
-                    if (auction.AuctionID != auctionID) continue;
-                    if (auction.ItemType != MarketItemType.GameShop) continue;
-
-                    if (auction.Price > Account.Credit)
-                    {
-                        Enqueue(new S.MarketFail { Reason = 4 });
-                        return;
-                    }
-
-                    if (!CanGainItem(auction.Item))
-                    {
-                        Enqueue(new S.MarketFail { Reason = 5 });
-                        return;
-                    }
-
-                    UserItem item = Envir.CreateFreshItem(auction.Item.Info);
-
-                    Account.Credit -= auction.Price;
-                    GainItem(item);
-                    Enqueue(new S.MarketSuccess { Message = string.Format("You bought {0} for {1:#,##0} Credit", auction.Item.FriendlyName, auction.Price) });
-                    MarketSearch(MatchName, MatchType);
-
-                    return;
-                }
-            }
-            else
-            {
-                if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.MarketKey, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    Enqueue(new S.MarketFail { Reason = 1 });
-                    return;
-                }
-
-                for (int n = 0; n < CurrentMap.NPCs.Count; n++)
-                {
-                    NPCObjectSrv ob = CurrentMap.NPCs[n];
-                    if (ob.ObjectID != NPCObjectID) continue;
-
-                    if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
-
-                    foreach (AuctionInfo auction in Search)
-                    {
-                        if (auction.AuctionID != auctionID) continue;
-                        if (auction.ItemType != MarketItemType.Consign && auction.ItemType != MarketItemType.Auction) continue;
-
-                        if (auction.Sold)
-                        {
-                            Enqueue(new S.MarketFail { Reason = 2 });
-                            return;
-                        }
-
-                        if (auction.Expired)
-                        {
-                            Enqueue(new S.MarketFail { Reason = 3 });
-                            return;
-                        }
-
-                        if (!Envir.Auctions.Contains(auction))
-                        {
-                            Enqueue(new S.MarketFail { Reason = 3 });
-                            return;
-                        }
-
-                        if (!CanGainItem(auction.Item))
-                        {
-                            Enqueue(new S.MarketFail { Reason = 5 });
-                            return;
-                        }
-
-                        if (Account.Auctions.Contains(auction))
-                        {
-                            Enqueue(new S.MarketFail { Reason = 6 });
-                            return;
-                        }
-
-                        if (auction.Price > Account.Gold || bidPrice > Account.Gold)
-                        {
-                            Enqueue(new S.MarketFail { Reason = 4 });
-                            return;
-                        }
-
-                        if (auction.ItemType == MarketItemType.Consign)
-                        {
-                            auction.Sold = true;
-
-                            Account.Gold -= auction.Price;
-
-                            Enqueue(new S.LoseGold { Gold = auction.Price });
-                            GainItem(auction.Item);
-
-                            Envir.MessageAccount(auction.SellerInfo.AccountInfo, string.Format("You sold {0} for {1:#,##0} Gold", auction.Item.FriendlyName, auction.Price), ChatType.Hint);
-                            Enqueue(new S.MarketSuccess { Message = string.Format("You bought {0} for {1:#,##0} Gold", auction.Item.FriendlyName, auction.Price) });
-                            MarketSearch(MatchName, MatchType);
-                        }
-                        else
-                        {
-                            if (auction.CurrentBid > bidPrice)
-                            {
-                                Enqueue(new S.MarketFail { Reason = 9 });
-                                return;
-                            }
-
-                            if (auction.CurrentBuyerInfo != null)
-                            {
-                                string message = string.Format("You have been outbid on {0}. Refunded {1:#,##0} Gold.", auction.Item.FriendlyName, auction.CurrentBid);
-
-                                Envir.MailCharacter(auction.CurrentBuyerInfo, gold: auction.CurrentBid, customMessage: message);
-                            }
-
-                            auction.CurrentBid = bidPrice;
-                            auction.CurrentBuyerIndex = Info.Index;
-                            auction.CurrentBuyerInfo = Info;
-
-                            Account.Gold -= bidPrice;
-                            Enqueue(new S.LoseGold { Gold = bidPrice });
-
-                            Envir.MessageAccount(auction.SellerInfo.AccountInfo, string.Format("Someone has bid {1:#,##0} Gold for {0}", auction.Item.FriendlyName, auction.CurrentBid), ChatType.Hint);
-                            Enqueue(new S.MarketSuccess { Message = string.Format("You bid {1:#,##0} Gold for {0}", auction.Item.FriendlyName, auction.CurrentBid) });
-                            MarketSearch(MatchName, MatchType);
-                        }
-
-                        return;
-                    }
-                }
-            }
-
-            Enqueue(new S.MarketFail { Reason = 7 });
-        }
-
-        public void MarketSellNow(ulong auctionID)
-        {
-            if (Dead)
-            {
-                Enqueue(new S.MarketFail { Reason = 0 });
-                return;
-            }
-
-            if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.MarketKey, StringComparison.CurrentCultureIgnoreCase))
-            {
-                Enqueue(new S.MarketFail { Reason = 1 });
-                return;
-            }
-
-            for (int n = 0; n < CurrentMap.NPCs.Count; n++)
-            {
-                NPCObjectSrv ob = CurrentMap.NPCs[n];
-                if (ob.ObjectID != NPCObjectID) continue;
-                if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
-
-                foreach (AuctionInfo auction in Account.Auctions)
-                {
-                    if (auction.AuctionID != auctionID) continue;
-
-                    if (auction.ItemType != MarketItemType.Auction)
-                    {
-                        return;
-                    }
-
-                    if (auction.CurrentBid <= auction.Price || auction.CurrentBuyerInfo == null)
-                    {
-                        Enqueue(new S.MarketFail { Reason = 9 });
-                        return;
-                    }
-
-                    if (auction.Sold && auction.Expired)
-                    {
-                        MessageQueue.Enqueue(string.Format("Auction both sold and Expired {0}", Account.AccountID));
-                        return;
-                    }
-
-                    if (auction.Expired || auction.Sold || Envir.Now >= auction.ConsignmentDate.AddDays(Globals.ConsignmentLength))
-                    {
-                        Enqueue(new S.MarketFail { Reason = 10 });
-                        return;
-                    }
-
-                    uint cost = auction.CurrentBid;
-
-                    uint gold = (uint)Math.Max(0, cost - cost * Globals.Commission);
-
-                    if (!CanGainGold(auction.CurrentBid))
-                    {
-                        Enqueue(new S.MarketFail { Reason = 8 });
-                        return;
-                    }
-
-                    auction.Sold = true;
-
-                    string message = string.Format("You won {0} for {1:#,##0} Gold.", auction.Item.FriendlyName, auction.CurrentBid);
-
-                    Envir.MailCharacter(auction.CurrentBuyerInfo, item: auction.Item, customMessage: message);
-                    Envir.MessageAccount(auction.CurrentBuyerInfo.AccountInfo, string.Format("You bought {0} for {1:#,##0} Gold", auction.Item.FriendlyName, auction.CurrentBid), ChatType.Hint);
-
-                    Account.Auctions.Remove(auction);
-                    Envir.Auctions.Remove(auction);
-                    GainGold(gold);
-                    Enqueue(new S.MarketSuccess { Message = string.Format("You sold {0} for {1:#,##0} Gold. \nEarnings: {2:#,##0} Gold.\nCommision: {3:#,##0} Gold.‎", auction.Item.FriendlyName, cost, gold, cost - gold) });
-                    MarketSearch(MatchName, MatchType);
-                    return;
-                }
-
-            }
-
-            Enqueue(new S.MarketFail { Reason = 7 });
-        }
-
-        public void MarketGetBack(ulong auctionID)
-        {
-            if (Dead)
-            {
-                Enqueue(new S.MarketFail { Reason = 0 });
-                return;
-            }
-
-            if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.MarketKey, StringComparison.CurrentCultureIgnoreCase))
-            {
-                Enqueue(new S.MarketFail { Reason = 1 });
-                return;
-            }
-
-            for (int n = 0; n < CurrentMap.NPCs.Count; n++)
-            {
-                NPCObjectSrv ob = CurrentMap.NPCs[n];
-                if (ob.ObjectID != NPCObjectID) continue;
-                if (!Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange)) return;
-
-                foreach (AuctionInfo auction in Account.Auctions)
-                {
-                    if (auction.AuctionID != auctionID) continue;
-
-                    if (auction.Sold && auction.Expired)
-                    {
-                        MessageQueue.Enqueue(string.Format("Auction both sold and Expired {0}", Account.AccountID));
-                        return;
-                    }
-
-                    if (!auction.Sold || auction.Expired)
-                    {
-                        if (!CanGainItem(auction.Item))
-                        {
-                            Enqueue(new S.MarketFail { Reason = 5 });
-                            return;
-                        }
-
-                        if (auction.CurrentBuyerInfo != null)
-                        {
-                            string message = string.Format("You have been outbid on {0}. Refunded {1:#,##0} Gold.", auction.Item.FriendlyName, auction.CurrentBid);
-
-                            Envir.MailCharacter(auction.CurrentBuyerInfo, gold: auction.CurrentBid, customMessage: message);
-                        }
-
-                        Account.Auctions.Remove(auction);
-                        Envir.Auctions.Remove(auction);
-                        GainItem(auction.Item);
-                        MarketSearch(MatchName, MatchType);
-                        return;
-                    }
-
-                    uint cost = auction.ItemType == MarketItemType.Consign ? auction.Price : auction.CurrentBid;
-
-                    if (!CanGainGold(cost))
-                    {
-                        Enqueue(new S.MarketFail { Reason = 8 });
-                        return;
-                    }
-
-                    uint gold = (uint)Math.Max(0, cost - cost * Globals.Commission);
-
-                    Account.Auctions.Remove(auction);
-                    Envir.Auctions.Remove(auction);
-                    GainGold(gold);
-                    Enqueue(new S.MarketSuccess { Message = string.Format("You sold {0} for {1:#,##0} Gold. \nEarnings: {2:#,##0} Gold.\nCommision: {3:#,##0} Gold.‎", auction.Item.FriendlyName, cost, gold, cost - gold) });
-                    MarketSearch(MatchName, MatchType);
-                    return;
-                }
-
-            }
-
-            Enqueue(new S.MarketFail { Reason = 7 });
-        }
-
+        
         public void RequestUserName(uint id)
         {
             CharacterInfo Character = Envir.GetCharacterInfo((int)id);
             if (Character != null)
                 Enqueue(new S.UserName { Id = (uint)Character.Index, Name = Character.Name });
-        }
-
-        #endregion
-
-        #region Awakening
-
-        public void Awakening(ulong UniqueID, AwakeType type)
-        {
-            if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.AwakeningKey, StringComparison.CurrentCultureIgnoreCase))
-                return;
-
-            if (type == AwakeType.None) return;
-
-            for (int i = 0; i < Info.Inventory.Length; i++)
-            {
-                UserItem item = Info.Inventory[i];
-                if (item == null || item.UniqueID != UniqueID) continue;
-
-                Awake awake = item.Awake;
-
-                if (item.Info.Bind.HasFlag(BindMode.DontUpgrade))
-                {
-                    Enqueue(new S.Awakening { result = -1, removeID = -1 });
-                    return;
-                }
-
-                if (item.RentalInformation != null && item.RentalInformation.BindingFlags.HasFlag(BindMode.DontUpgrade))
-                {
-                    Enqueue(new S.Awakening { result = -1, removeID = -1 });
-                    return;
-                }
-
-                if (!item.Info.CanAwakening)
-                {
-                    Enqueue(new S.Awakening { result = -1, removeID = -1 });
-                    return;
-                }
-
-                if (awake.IsMaxLevel())
-                {
-                    Enqueue(new S.Awakening { result = -2, removeID = -1 });
-                    return;
-                }
-
-                if (Info.AccountInfo.Gold < item.AwakeningPrice())
-                {
-                    Enqueue(new S.Awakening { result = -3, removeID = -1 });
-                    return;
-                }
-
-                if (HasAwakeningNeedMaterials(item, type))
-                {
-                    Info.AccountInfo.Gold -= item.AwakeningPrice();
-                    Enqueue(new S.LoseGold { Gold = item.AwakeningPrice() });
-
-                    bool[] isHit;
-
-                    switch (awake.UpgradeAwake(item, type, out isHit))
-                    {
-                        case -1:
-                            Enqueue(new S.Awakening { result = -1, removeID = -1 });
-                            break;
-                        case 0:
-                            AwakeningEffect(false, isHit);
-                            Info.Inventory[i] = null;
-                            Enqueue(new S.Awakening { result = 0, removeID = (long)item.UniqueID });
-                            break;
-                        case 1:
-                            Enqueue(new S.RefreshItem { Item = item });
-                            AwakeningEffect(true, isHit);
-                            Enqueue(new S.Awakening { result = 1, removeID = -1 });
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-
-        public void DowngradeAwakening(ulong UniqueID)
-        {
-            if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.DowngradeKey, StringComparison.CurrentCultureIgnoreCase))
-                return;
-
-            for (int i = 0; i < Info.Inventory.Length; i++)
-            {
-                UserItem item = Info.Inventory[i];
-                if (item != null)
-                {
-                    if (item.UniqueID == UniqueID)
-                    {
-                        if (item.RentalInformation != null)
-                        {
-                            ReceiveChat($"Unable to downgrade {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", ChatType.System);
-                            return;
-                        }
-
-                        if (Info.AccountInfo.Gold >= item.DowngradePrice())
-                        {
-                            Info.AccountInfo.Gold -= item.DowngradePrice();
-                            Enqueue(new S.LoseGold { Gold = item.DowngradePrice() });
-
-                            Awake awake = item.Awake;
-                            int result = awake.RemoveAwake();
-                            switch (result)
-                            {
-                                case 0:
-                                    ReceiveChat(string.Format("{0} : Remove failed Level 0", item.FriendlyName), ChatType.System);
-                                    break;
-                                case 1:
-                                    ushort maxDura = (Envir.Random.Next(20) == 0) ? (ushort)(item.MaxDura - 1000) : item.MaxDura;
-                                    if (maxDura < 1000) maxDura = 1000;
-
-                                    Info.Inventory[i].CurrentDura = (Info.Inventory[i].CurrentDura >= maxDura) ? maxDura : Info.Inventory[i].CurrentDura;
-                                    Info.Inventory[i].MaxDura = maxDura;
-                                    ReceiveChat(string.Format("{0} : Remove success. Level {1}", item.FriendlyName, item.Awake.GetAwakeLevel()), ChatType.System);
-                                    Enqueue(new S.RefreshItem { Item = item });
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public void DisassembleItem(ulong UniqueID)
-        {
-            if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.DisassembleKey, StringComparison.CurrentCultureIgnoreCase))
-                return;
-
-            for (int i = 0; i < Info.Inventory.Length; i++)
-            {
-                UserItem item = Info.Inventory[i];
-
-                if (item == null || item.UniqueID != UniqueID)
-                    continue;
-
-                if (item.Info.Bind.HasFlag(BindMode.UnableToDisassemble))
-                {
-                    ReceiveChat($"Unable to disassemble {item.FriendlyName}", ChatType.System);
-                    return;
-                }
-
-                if (item.RentalInformation != null && item.RentalInformation.BindingFlags.HasFlag(BindMode.UnableToDisassemble))
-                {
-                    ReceiveChat($"Unable to disassemble {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", ChatType.System);
-                    return;
-                }
-
-                if (Info.AccountInfo.Gold >= item.DisassemblePrice())
-                {
-                    List<ItemInfo> dropList = new List<ItemInfo>();
-                    foreach (DropInfo drop in Envir.AwakeningDrops)
-                    {
-                        if (drop.Item.Grade == item.Info.Grade - 1 ||
-                            drop.Item.Grade == item.Info.Grade + 1)
-                        {
-                            if (Envir.Random.Next((drop.Chance <= 0) ? 1 : drop.Chance) == 0)
-                            {
-                                dropList.Add(drop.Item);
-                            }
-                        }
-
-                        if (drop.Item.Grade == item.Info.Grade)
-                        {
-                            dropList.Add(drop.Item);
-                        }
-                    }
-
-                    if (dropList.Count == 0) continue;
-
-                    UserItem gainItem = Envir.CreateDropItem(dropList[Envir.Random.Next(dropList.Count)]);
-                    if (gainItem == null) continue;
-                    gainItem.Count = (ushort)Envir.Random.Next(Math.Min(ushort.MaxValue, (int)((((byte)item.Info.Grade * item.Info.RequiredAmount) / 10) + item.Quality())));
-                    if (gainItem.Count < 1) gainItem.Count = 1;
-
-                    GainItem(gainItem);
-
-                    Enqueue(new S.LoseGold { Gold = item.DisassemblePrice() });
-                    Info.AccountInfo.Gold -= item.DisassemblePrice();
-
-                    Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-                    Info.Inventory[i] = null;
-                }
-            }
-        }
-
-        public void ResetAddedItem(ulong UniqueID)
-        {
-            if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.ResetKey, StringComparison.CurrentCultureIgnoreCase))
-                return;
-
-            for (int i = 0; i < Info.Inventory.Length; i++)
-            {
-                UserItem item = Info.Inventory[i];
-                if (item != null)
-                {
-                    if (item.UniqueID == UniqueID)
-                    {
-                        if (item.RentalInformation != null)
-                        {
-                            ReceiveChat($"Unable to reset {item.FriendlyName} as it belongs to {item.RentalInformation.OwnerName}", ChatType.System);
-                            return;
-                        }
-
-                        if (Info.AccountInfo.Gold >= item.ResetPrice())
-                        {
-                            Info.AccountInfo.Gold -= item.ResetPrice();
-                            Enqueue(new S.LoseGold { Gold = item.ResetPrice() });
-
-                            UserItem newItem = new UserItem(item.Info);
-
-                            ushort maxDura = (Envir.Random.Next(20) == 0) ? (ushort)(item.MaxDura - 1000) : item.MaxDura;
-                            if (maxDura < 1000) maxDura = 1000;
-
-                            newItem.UniqueID = item.UniqueID;
-                            newItem.ItemIndex = item.ItemIndex;
-                            newItem.CurrentDura = (item.CurrentDura >= maxDura) ? maxDura : item.CurrentDura;
-                            newItem.MaxDura = maxDura;
-                            newItem.Count = item.Count;
-                            newItem.Slots = item.Slots;
-                            newItem.Awake = item.Awake;
-                            newItem.ExpireInfo = item.ExpireInfo;
-                            newItem.SealedInfo = item.SealedInfo;
-
-                            Info.Inventory[i] = newItem;
-
-                            Enqueue(new S.RefreshItem { Item = Info.Inventory[i] });
-                        }
-                    }
-                }
-            }
-        }
-
-        public void AwakeningNeedMaterials(ulong UniqueID, AwakeType type)
-        {
-            if (type == AwakeType.None) return;
-
-            foreach (UserItem item in Info.Inventory)
-            {
-                if (item != null)
-                {
-                    if (item.UniqueID == UniqueID)
-                    {
-                        Awake awake = item.Awake;
-
-                        byte[] materialCount = new byte[2];
-                        int idx = 0;
-                        foreach (List<byte> material in Awake.AwakeMaterials[(int)type - 1])
-                        {
-                            byte materialRate = (byte)(Awake.AwakeMaterialRate[(int)item.Info.Grade - 1] * (float)awake.GetAwakeLevel());
-                            materialCount[idx] = material[(int)item.Info.Grade - 1];
-                            materialCount[idx] += materialRate;
-                            idx++;
-                        }
-
-                        ItemInfo[] materials = new ItemInfo[2];
-
-                        foreach (ItemInfo info in Envir.ItemInfoList)
-                        {
-                            if (item.Info.Grade == info.Grade &&
-                                info.Type == ItemType.Awakening)
-                            {
-                                if (info.Shape == (short)type - 1)
-                                {
-                                    materials[0] = info;
-                                }
-                                else if (info.Shape == 100)
-                                {
-                                    materials[1] = info;
-                                }
-                            }
-                        }
-
-                        Enqueue(new S.AwakeningNeedMaterials { Materials = materials, MaterialsCount = materialCount });
-                        break;
-                    }
-                }
-            }
-        }
-
-        public void AwakeningEffect(bool isSuccess, bool[] isHit)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                Enqueue(new S.ObjectEffect { ObjectID = ObjectID, Effect = isHit[i] ? SpellEffect.AwakeningHit : SpellEffect.AwakeningMiss, EffectType = 0, DelayTime = (uint)(i * 500) });
-                Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = isHit[i] ? SpellEffect.AwakeningHit : SpellEffect.AwakeningMiss, EffectType = 0, DelayTime = (uint)(i * 500) });
-            }
-
-            Enqueue(new S.ObjectEffect { ObjectID = ObjectID, Effect = isSuccess ? SpellEffect.AwakeningSuccess : SpellEffect.AwakeningFail, EffectType = 0, DelayTime = 2500 });
-            Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = isSuccess ? SpellEffect.AwakeningSuccess : SpellEffect.AwakeningFail, EffectType = 0, DelayTime = 2500 });
-        }
-
-        public bool HasAwakeningNeedMaterials(UserItem item, AwakeType type)
-        {
-            Awake awake = item.Awake;
-
-            byte[] materialCount = new byte[2];
-
-            int idx = 0;
-            foreach (List<byte> material in Awake.AwakeMaterials[(int)type - 1])
-            {
-                byte materialRate = (byte)(Awake.AwakeMaterialRate[(int)item.Info.Grade - 1] * (float)awake.GetAwakeLevel());
-                materialCount[idx] = material[(int)item.Info.Grade - 1];
-                materialCount[idx] += materialRate;
-                idx++;
-            }
-
-            byte[] currentCount = new byte[2] { 0, 0 };
-
-            for (int i = 0; i < Info.Inventory.Length; i++)
-            {
-                UserItem materialItem = Info.Inventory[i];
-                if (materialItem != null)
-                {
-                    if (materialItem.Info.Grade == item.Info.Grade &&
-                        materialItem.Info.Type == ItemType.Awakening)
-                    {
-                        if (materialItem.Info.Shape == ((int)type - 1) &&
-                            materialCount[0] - currentCount[0] != 0)
-                        {
-                            if (materialItem.Count <= materialCount[0] - currentCount[0])
-                            {
-                                currentCount[0] += (byte)materialItem.Count;
-                            }
-                            else if (materialItem.Count > materialCount[0] - currentCount[0])
-                            {
-                                currentCount[0] = (byte)(materialCount[0] - currentCount[0]);
-                            }
-                        }
-                        else if (materialItem.Info.Shape == 100 &&
-                            materialCount[1] - currentCount[1] != 0)
-                        {
-                            if (materialItem.Count <= materialCount[1] - currentCount[1])
-                            {
-                                currentCount[1] += (byte)materialItem.Count;
-                            }
-                            else if (materialItem.Count > materialCount[1] - currentCount[1])
-                            {
-                                currentCount[1] = (byte)(materialCount[1] - currentCount[1]);
-                            }
-                        }
-                    }
-                }
-            }
-
-            for (int i = 0; i < materialCount.Length; i++)
-            {
-                if (materialCount[i] != currentCount[i])
-                {
-                    Enqueue(new S.Awakening { result = -4, removeID = -1 });
-                    return false;
-                }
-            }
-
-            for (int i = 0; i < Info.Inventory.Length; i++)
-            {
-                if (Info.Inventory[i] != null)
-                {
-                    if (Info.Inventory[i].Info.Grade == item.Info.Grade &&
-                        Info.Inventory[i].Info.Type == ItemType.Awakening)
-                    {
-                        if (Info.Inventory[i].Info.Shape == ((int)type - 1) &&
-                            currentCount[0] > 0)
-                        {
-                            if (Info.Inventory[i].Count <= currentCount[0])
-                            {
-                                Enqueue(new S.DeleteItem { UniqueID = Info.Inventory[i].UniqueID, Count = Info.Inventory[i].Count });
-                                currentCount[0] -= (byte)Info.Inventory[i].Count;
-                                Info.Inventory[i] = null;
-                            }
-                            else if (Info.Inventory[i].Count > currentCount[0])
-                            {
-                                Enqueue(new S.DeleteItem { UniqueID = Info.Inventory[i].UniqueID, Count = currentCount[0] });
-                                Info.Inventory[i].Count -= currentCount[0];
-                                currentCount[0] = 0;
-                            }
-                        }
-                        else if (Info.Inventory[i].Info.Shape == 100 &&
-                            currentCount[1] > 0)
-                        {
-                            if (Info.Inventory[i].Count <= currentCount[1])
-                            {
-                                Enqueue(new S.DeleteItem { UniqueID = Info.Inventory[i].UniqueID, Count = Info.Inventory[i].Count });
-                                currentCount[1] -= (byte)Info.Inventory[i].Count;
-                                Info.Inventory[i] = null;
-                            }
-                            else if (Info.Inventory[i].Count > currentCount[1])
-                            {
-                                Enqueue(new S.DeleteItem { UniqueID = Info.Inventory[i].UniqueID, Count = currentCount[1] });
-                                Info.Inventory[i].Count -= currentCount[1];
-                                currentCount[1] = 0;
-                            }
-                        }
-                    }
-                }
-            }
-            return true;
         }
 
         #endregion
@@ -9185,9 +8254,7 @@ namespace Server.ExineObjects
 
                         if(FreeSpace(TradePair[p].Info.Inventory) < 1)
                         {
-                            TradePair[p].GainItemMail(temp, 1);
-                            Report.ItemMailed(temp, temp.Count, 1);
-
+                            
                             TradePair[p].Enqueue(new S.DeleteItem { UniqueID = temp.UniqueID, Count = temp.Count });
                             TradePair[p].Info.Trade[t] = null;
                             continue;
@@ -9202,14 +8269,7 @@ namespace Server.ExineObjects
                             {
                                 TradePair[p].RetrieveTradeItem(t, i);
                             }
-                            else //Send item to mailbox if it can no longer be stored
-                            {
-                                TradePair[p].GainItemMail(temp, 1);
-                                Report.ItemMailed(temp, temp.Count, 1);
-
-                                TradePair[p].Enqueue(new S.DeleteItem { UniqueID = temp.UniqueID, Count = temp.Count });
-                            }
-
+                            
                             TradePair[p].Info.Trade[t] = null;
 
                             break;
@@ -9940,297 +9000,7 @@ namespace Server.ExineObjects
 
         #endregion
 
-        #region Mail
-
-        public void SendMail(string name, string message)
-        {
-            CharacterInfo player = Envir.GetCharacterInfo(name);
-
-            if (player == null)
-            {
-                ReceiveChat(string.Format(GameLanguage.CouldNotFindPlayer, name), ChatType.System);
-                return;
-            }
-
-            if (player.Friends.Any(e => e.Info == Info && e.Blocked))
-            {
-                ReceiveChat("Player is not accepting your mail.", ChatType.System);
-                return;
-            }
-
-            if (Info.Friends.Any(e => e.Info == player && e.Blocked))
-            {
-                ReceiveChat("Cannot mail player whilst they are on your blacklist.", ChatType.System);
-                return;
-            }
-
-            //sent from player
-            MailInfo mail = new MailInfo(player.Index, true)
-            {
-                Sender = Info.Name,
-                Message = message,
-                Gold = 0
-            };
-
-            mail.Send();
-        }
-
-        public void SendMail(string name, string message, uint gold, ulong[] items, bool stamped)
-        {
-            CharacterInfo player = Envir.GetCharacterInfo(name);
-
-            if (player == null)
-            {
-                ReceiveChat(string.Format(GameLanguage.CouldNotFindPlayer, name), ChatType.System);
-                return;
-            }
-
-            bool hasStamp = false;
-            uint totalGold = 0;
-            uint parcelCost = GetMailCost(items, gold, stamped);
-
-            totalGold = gold + parcelCost;
-
-            if (Account.Gold < totalGold || Account.Gold < gold || gold > totalGold)
-            {
-                Enqueue(new S.MailSent { Result = -1 });
-                return;
-            }
-
-            //Validate user has stamp
-            if (stamped)
-            {
-                for (int i = 0; i < Info.Inventory.Length; i++)
-                {
-                    UserItem item = Info.Inventory[i];
-
-                    if (item == null || item.Info.Type != ItemType.Nothing || item.Info.Shape != 1 || item.Count < 1) continue;
-
-                    hasStamp = true;
-
-                    if (item.Count > 1) item.Count--;
-                    else Info.Inventory[i] = null;
-
-                    Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = 1 });
-                    break;
-                }
-            }
-
-            List<UserItem> giftItems = new List<UserItem>();
-
-            for (int j = 0; j < (hasStamp ? 5 : 1); j++)
-            {
-                if (items[j] < 1) continue;
-
-                for (int i = 0; i < Info.Inventory.Length; i++)
-                {
-                    UserItem item = Info.Inventory[i];
-
-                    if (item == null || items[j] != item.UniqueID) continue;
-
-                    if(item.Info.Bind.HasFlag(BindMode.DontTrade))
-                    {
-                        ReceiveChat(string.Format("{0} cannot be mailed", item.FriendlyName), ChatType.System);
-                        return;
-                    }
-
-                    if (item.Info.Bind.HasFlag(BindMode.NoMail))
-                    {
-                        ReceiveChat(string.Format("{0} cannot be mailed", item.FriendlyName), ChatType.System);
-                        Enqueue(new S.MailSent { Result = -1 });
-                        return;
-                    }
-
-                    if (item.RentalInformation != null && item.RentalInformation.BindingFlags.HasFlag(BindMode.DontTrade))
-                    {
-                        ReceiveChat(string.Format("{0} cannot be mailed", item.FriendlyName), ChatType.System);
-                        return;
-                    }
-
-                    giftItems.Add(item);
-
-                    Info.Inventory[i] = null;
-                    Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
-                }
-            }
-
-            if (totalGold > 0)
-            {
-                Account.Gold -= totalGold;
-                Enqueue(new S.LoseGold { Gold = totalGold });
-            }
-
-            //Create parcel
-            MailInfo mail = new MailInfo(player.Index, true)
-            {
-                MailID = ++Envir.NextMailID,
-                Sender = Info.Name,
-                Message = message,
-                Gold = gold,
-                Items = giftItems
-            };
-
-            mail.Send();
-
-            Enqueue(new S.MailSent { Result = 1 });
-        }
-
-        public void ReadMail(ulong mailID)
-        {
-            MailInfo mail = Info.Mail.SingleOrDefault(e => e.MailID == mailID);
-
-            if (mail == null) return;
-
-            mail.DateOpened = Envir.Now;
-
-            GetMail();
-        }
-
-        public void CollectMail(ulong mailID)
-        {
-            MailInfo mail = Info.Mail.SingleOrDefault(e => e.MailID == mailID);
-
-            if (mail == null) return;
-
-            if (!mail.Collected)
-            {
-                ReceiveChat("Mail must be collected from the post office.", ChatType.System);
-                return;
-            }
-
-            if (mail.Items.Count > 0)
-            {
-                if (!CanGainItems(mail.Items.ToArray()))
-                {
-                    ReceiveChat("Cannot collect items when bag is full.", ChatType.System);
-                    return;
-                }
-
-                for (int i = 0; i < mail.Items.Count; i++)
-                {
-                    GainItem(mail.Items[i]);
-                }
-            }
-
-            if (mail.Gold > 0)
-            {
-                uint gold = mail.Gold;
-
-                if (gold + Account.Gold >= uint.MaxValue)
-                    gold = uint.MaxValue - Account.Gold;
-
-                GainGold(gold);
-            }
-
-            mail.Items = new List<UserItem>();
-            mail.Gold = 0;
-
-            mail.Collected = true;
-
-            Enqueue(new S.ParcelCollected { Result = 1 });
-
-            GetMail();
-        }
-
-        public void DeleteMail(ulong mailID)
-        {
-            MailInfo mail = Info.Mail.SingleOrDefault(e => e.MailID == mailID);
-
-            if (mail == null) return;
-
-            Info.Mail.Remove(mail);
-
-            GetMail();
-        }
-
-        public void LockMail(ulong mailID, bool lockMail)
-        {
-            MailInfo mail = Info.Mail.SingleOrDefault(e => e.MailID == mailID);
-
-            if (mail == null) return;
-
-            mail.Locked = lockMail;
-
-            GetMail();
-        }
-
-        public uint GetMailCost(ulong[] items, uint gold, bool stamped)
-        {
-            uint cost = 0;
-
-            if (!Settings.MailFreeWithStamp || !stamped)
-            {
-                if (gold > 0 && Settings.MailCostPer1KGold > 0)
-                {
-                    cost += (uint)Math.Floor((decimal)gold / 1000) * Settings.MailCostPer1KGold;
-                }
-
-                if (items != null && items.Length > 0 && Settings.MailItemInsurancePercentage > 0)
-                {
-                    for (int j = 0; j < (stamped ? 5 : 1); j++)
-                    {
-                        if (items[j] < 1) continue;
-
-                        for (int i = 0; i < Info.Inventory.Length; i++)
-                        {
-                            UserItem item = Info.Inventory[i];
-
-                            if (item == null || items[j] != item.UniqueID) continue;
-
-                            cost += (uint)Math.Floor((double)item.Price() / 100 * Settings.MailItemInsurancePercentage);
-                        }
-                    }
-                }
-            }
-
-
-            return cost;
-        }
-
-        public void GetMail()
-        {
-            List<ClientMail> mail = new List<ClientMail>();
-
-            int start = (Info.Mail.Count - Settings.MailCapacity) > 0 ? (Info.Mail.Count - (int)Settings.MailCapacity) : 0;
-
-            for (int i = start; i < Info.Mail.Count; i++)
-            {
-                foreach (UserItem itm in Info.Mail[i].Items)
-                {
-                    CheckItem(itm);
-                }
-
-                mail.Add(Info.Mail[i].CreateClientMail());
-            }
-
-            //foreach (MailInfo m in Info.Mail)
-            //{
-            //    foreach (UserItem itm in m.Items)
-            //    {
-            //        CheckItem(itm);
-            //    }
-
-            //    mail.Add(m.CreateClientMail());
-            //}
-
-            NewMail = false;
-
-            Enqueue(new S.ReceiveMail { Mail = mail });
-        }
-
-        public int GetMailAwaitingCollectionAmount()
-        {
-            int count = 0;
-            for (int i = 0; i < Info.Mail.Count; i++)
-            {
-                if (!Info.Mail[i].Collected) count++;
-            }
-
-            return count;
-        }
-
-        #endregion
-
+       
         #region Friends
         public void AddFriend(string name, bool blocked = false)
         {
@@ -10274,22 +9044,7 @@ namespace Server.ExineObjects
 
             GetFriends();
         }
-
-        public void AddMemo(int index, string memo)
-        {
-            if (string.IsNullOrEmpty(memo) || memo.Length > 200) return;
-
-            FriendInfo friend = Info.Friends.FirstOrDefault(e => e.Index == index);
-
-            if (friend == null)
-            {
-                return;
-            }
-
-            friend.Memo = memo;
-
-            GetFriends();
-        }
+ 
 
         public void GetFriends()
         {
@@ -10431,16 +9186,7 @@ namespace Server.ExineObjects
                     else //Send item via mail if it can no longer be stored
                     {
                         Enqueue(new S.DeleteItem { UniqueID = temp.UniqueID, Count = temp.Count });
-
-                        MailInfo mail = new MailInfo(Info.Index)
-                        {
-                            MailID = ++Envir.NextMailID,
-                            Sender = "Refiner",
-                            Message = "Refining was cancelled with an item which couldn't be returned to your inventory.",
-                            Items = new List<UserItem> { temp },
-                        };
-
-                        mail.Send();
+                         
                     }
 
                     Info.Refine[t] = null;
@@ -11714,14 +10460,7 @@ namespace Server.ExineObjects
                 }
             }
 
-            MailInfo mail = new MailInfo(Info.Index)
-            {
-                MailID = ++Envir.NextMailID,
-                Sender = "Gameshop",
-                Message = "Thank you for your purchase from the Gameshop. Your item(s) are enclosed.",
-                Items = mailItems,
-            };
-            mail.Send();
+            
 
             MessageQueue.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Purchases Sent!");
             ReceiveChat("Your purchases have been sent to your Mailbox.", ChatType.Hint);

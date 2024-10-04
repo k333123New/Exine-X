@@ -8,7 +8,7 @@ namespace Exine.ExineScenes.ExDialogs
     {
         public List<ClientBuff> Buffs = new List<ClientBuff>();
 
-        protected MirButton _expandCollapseButton;
+        protected ExineButton _expandCollapseButton;
         protected ExineLabel _buffCountLabel;
         protected List<ExineImageControl> _buffList = new List<ExineImageControl>();
         protected bool _fadedOut, _fadedIn;
@@ -37,7 +37,7 @@ namespace Exine.ExineScenes.ExDialogs
             Opacity = 0f;
             _fadedOut = true;
 
-            _expandCollapseButton = new MirButton
+            _expandCollapseButton = new ExineButton
             {
                 Index = 7,
                 HoverIndex = 8,
@@ -545,7 +545,7 @@ namespace Exine.ExineScenes.ExDialogs
     {
         public List<ClientPoisonBuff> Buffs = new List<ClientPoisonBuff>();
 
-        private MirButton _expandCollapseButton;
+        private ExineButton _expandCollapseButton;
         private ExineLabel _buffCountLabel;
         private List<ExineImageControl> _buffList = new List<ExineImageControl>();
         private bool _fadedOut, _fadedIn;
@@ -567,7 +567,7 @@ namespace Exine.ExineScenes.ExDialogs
             Opacity = 0f;
             _fadedOut = true;
 
-            _expandCollapseButton = new MirButton
+            _expandCollapseButton = new ExineButton
             {
                 Index = 7,
                 HoverIndex = 8,

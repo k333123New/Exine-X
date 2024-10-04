@@ -474,24 +474,7 @@ namespace Server.ExineNetwork
                 case (short)ClientPacketIds.ConsignItem:
                     ConsignItem((C.ConsignItem)p);
                     return;
-                case (short)ClientPacketIds.MarketSearch:
-                    MarketSearch((C.MarketSearch)p);
-                    return;
-                case (short)ClientPacketIds.MarketRefresh:
-                    MarketRefresh();
-                    return;
-                case (short)ClientPacketIds.MarketPage:
-                    MarketPage((C.MarketPage) p);
-                    return;
-                case (short)ClientPacketIds.MarketBuy:
-                    MarketBuy((C.MarketBuy)p);
-                    return;
-                case (short)ClientPacketIds.MarketGetBack:
-                    MarketGetBack((C.MarketGetBack)p);
-                    return;
-                case (short)ClientPacketIds.MarketSellNow:
-                    MarketSellNow((C.MarketSellNow)p);
-                    return;
+                
                 case (short)ClientPacketIds.RequestUserName:
                     RequestUserName((C.RequestUserName)p);
                     return;
@@ -594,45 +577,7 @@ namespace Server.ExineNetwork
                 case (short)ClientPacketIds.CombineItem:
                     CombineItem((C.CombineItem)p);
                     break;
-                case (short)ClientPacketIds.AwakeningNeedMaterials:
-                    AwakeningNeedMaterials((C.AwakeningNeedMaterials)p);
-                    break;
-                case (short)ClientPacketIds.AwakeningLockedItem:
-                    Enqueue(new S.AwakeningLockedItem { UniqueID = ((C.AwakeningLockedItem)p).UniqueID, Locked = ((C.AwakeningLockedItem)p).Locked });
-                    break;
-                case (short)ClientPacketIds.Awakening:
-                    Awakening((C.Awakening)p);
-                    break;
-                case (short)ClientPacketIds.DisassembleItem:
-                    DisassembleItem((C.DisassembleItem)p);
-                    break;
-                case (short)ClientPacketIds.DowngradeAwakening:
-                    DowngradeAwakening((C.DowngradeAwakening)p);
-                    break;
-                case (short)ClientPacketIds.ResetAddedItem:
-                    ResetAddedItem((C.ResetAddedItem)p);
-                    break;
-                case (short)ClientPacketIds.SendMail:
-                    SendMail((C.SendMail)p);
-                    break;
-                case (short)ClientPacketIds.ReadMail:
-                    ReadMail((C.ReadMail)p);
-                    break;
-                case (short)ClientPacketIds.CollectParcel:
-                    CollectParcel((C.CollectParcel)p);
-                    break;
-                case (short)ClientPacketIds.DeleteMail:
-                    DeleteMail((C.DeleteMail)p);
-                    break;
-                case (short)ClientPacketIds.LockMail:
-                    LockMail((C.LockMail)p);
-                    break;
-                case (short)ClientPacketIds.MailLockedItem:
-                    Enqueue(new S.MailLockedItem { UniqueID = ((C.MailLockedItem)p).UniqueID, Locked = ((C.MailLockedItem)p).Locked });
-                    break;
-                case (short)ClientPacketIds.MailCost:
-                    MailCost((C.MailCost)p);
-                    break;
+                
                 
                 case (short)ClientPacketIds.AddFriend:
                     AddFriend((C.AddFriend)p);
@@ -646,9 +591,7 @@ namespace Server.ExineNetwork
                         Player.GetFriends();
                         break;
                     }
-                case (short)ClientPacketIds.AddMemo:
-                    AddMemo((C.AddMemo)p);
-                    break;
+                 
                 case (short)ClientPacketIds.GuildBuffUpdate:
                     GuildBuffUpdate((C.GuildBuffUpdate)p);
                     break;
@@ -1361,49 +1304,8 @@ namespace Server.ExineNetwork
 
             Player.ConsignItem(p.UniqueID, p.Price, p.Type);
         }
-        private void MarketSearch(C.MarketSearch p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.UserMatch = p.Usermode;
-            Player.MinShapes = p.MinShape;
-            Player.MaxShapes = p.MaxShape;
-            Player.MarketPanelType = p.MarketType;
-
-            Player.MarketSearch(p.Match, p.Type);
-        }
-        private void MarketRefresh()
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.MarketSearch(string.Empty, Player.MatchType);
-        }
-
-        private void MarketPage(C.MarketPage p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.MarketPage(p.Page);
-        }
-        private void MarketBuy(C.MarketBuy p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.MarketBuy(p.AuctionID, p.BidPrice);
-        }
-        private void MarketSellNow(C.MarketSellNow p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.MarketSellNow(p.AuctionID);
-        }
-
-        private void MarketGetBack(C.MarketGetBack p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.MarketGetBack(p.AuctionID);
-        }
+       
+        
         private void RequestUserName(C.RequestUserName p)
         {
             if (Stage != GameStage.Game) return;
@@ -1649,91 +1551,8 @@ namespace Server.ExineNetwork
             Player.CombineItem(p.Grid, p.IDFrom, p.IDTo);
         }
 
-        private void Awakening(C.Awakening p)
-        {
-            if (Stage != GameStage.Game) return;
 
-            Player.Awakening(p.UniqueID, p.Type);
-        }
-
-        private void AwakeningNeedMaterials(C.AwakeningNeedMaterials p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.AwakeningNeedMaterials(p.UniqueID, p.Type);
-        }
-
-        private void DisassembleItem(C.DisassembleItem p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.DisassembleItem(p.UniqueID);
-        }
-
-        private void DowngradeAwakening(C.DowngradeAwakening p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.DowngradeAwakening(p.UniqueID);
-        }
-
-        private void ResetAddedItem(C.ResetAddedItem p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.ResetAddedItem(p.UniqueID);
-        }
-
-        public void SendMail(C.SendMail p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            if (p.Gold > 0 || p.ItemsIdx.Length > 0)
-            {
-                Player.SendMail(p.Name, p.Message, p.Gold, p.ItemsIdx, p.Stamped);
-            }
-            else
-            {
-                Player.SendMail(p.Name, p.Message);
-            }
-        }
-
-        public void ReadMail(C.ReadMail p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.ReadMail(p.MailID);
-        }
-
-        public void CollectParcel(C.CollectParcel p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.CollectMail(p.MailID);
-        }
-
-        public void DeleteMail(C.DeleteMail p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.DeleteMail(p.MailID);
-        }
-
-        public void LockMail(C.LockMail p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.LockMail(p.MailID, p.Lock);
-        }
-
-        public void MailCost(C.MailCost p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            uint cost = Player.GetMailCost(p.ItemsIdx, p.Gold, p.Stamped);
-
-            Enqueue(new S.MailCost { Cost = cost });
-        }
+      
 
         private void AddFriend(C.AddFriend p)
         {
@@ -1749,12 +1568,7 @@ namespace Server.ExineNetwork
             Player.RemoveFriend(p.CharacterIndex);
         }
 
-        private void AddMemo(C.AddMemo p)
-        {
-            if (Stage != GameStage.Game) return;
-
-            Player.AddMemo(p.CharacterIndex, p.Memo);
-        }
+       
 
         private void UpdatePhoto(C.UpdatePhoto p)
         {

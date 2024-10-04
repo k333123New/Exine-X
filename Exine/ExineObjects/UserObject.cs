@@ -258,7 +258,7 @@ namespace Exine.ExineObjects
 
                 Stats.Add(realItem.Stats);
                 Stats.Add(temp.AddedStats);
-
+                /*
                 Stats[Stat.MinAC] += temp.Awake.GetAC();
                 Stats[Stat.MaxAC] += temp.Awake.GetAC();
                 Stats[Stat.MinMAC] += temp.Awake.GetMAC();
@@ -273,7 +273,7 @@ namespace Exine.ExineObjects
 
                 Stats[Stat.HP] += temp.Awake.GetHPMP();
                 Stats[Stat.MP] += temp.Awake.GetHPMP();
-
+                */
                 if (realItem.Light > Light) Light = realItem.Light;
                 if (realItem.Unique != SpecialItemMode.None)
                 {

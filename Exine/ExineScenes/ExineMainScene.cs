@@ -51,8 +51,7 @@ namespace Exine.ExineScenes
         public NPCGoodsDialog NPCGoodsDialog;
         public NPCGoodsDialog NPCSubGoodsDialog;
         public NPCGoodsDialog NPCCraftGoodsDialog;
-        public NPCDropDialog NPCDropDialog;
-        public NPCAwakeDialog NPCAwakeDialog;
+        public NPCDropDialog NPCDropDialog; 
         
 
 
@@ -75,8 +74,7 @@ namespace Exine.ExineScenes
         //public NewCharacterDialog NewHeroDialog;
 
 
-        public BigMapDialog BigMapDialog;
-        public TrustMerchantDialog TrustMerchantDialog;
+        public BigMapDialog BigMapDialog; 
         public CharacterDuraPanel CharacterDuraPanel;
         public DuraStatusDialog DuraStatusPanel;
         public TradeDialog TradeDialog;
@@ -95,14 +93,10 @@ namespace Exine.ExineScenes
 
         public RankingDialog RankingDialog;
 
-        public MailListDialog MailListDialog;
-        public MailComposeLetterDialog MailComposeLetterDialog;
-        public MailComposeParcelDialog MailComposeParcelDialog;
-        public MailReadLetterDialog MailReadLetterDialog;
-        public MailReadParcelDialog MailReadParcelDialog;
+       
 
         public FriendDialog FriendDialog;
-        public MemoDialog MemoDialog;
+        
         public RelationshipDialog RelationshipDialog;
         public MentorDialog MentorDialog; 
 
@@ -206,7 +200,7 @@ namespace Exine.ExineScenes
             NPCSubGoodsDialog = new NPCGoodsDialog(PanelType.BuySub) { Parent = this, Visible = false };
             NPCCraftGoodsDialog = new NPCGoodsDialog(PanelType.Craft) { Parent = this, Visible = false };
             NPCDropDialog = new NPCDropDialog { Parent = this, Visible = false };
-            NPCAwakeDialog = new NPCAwakeDialog { Parent = this, Visible = false };
+             
 
             HelpDialog = new HelpDialog { Parent = this, Visible = false };
             KeyboardLayoutDialog = new KeyboardLayoutDialog { Parent = this, Visible = false };
@@ -218,7 +212,7 @@ namespace Exine.ExineScenes
             GuildDialog = new GuildDialog { Parent = this, Visible = false };
             
             BigMapDialog = new BigMapDialog { Parent = this, Visible = false };
-            TrustMerchantDialog = new TrustMerchantDialog { Parent = this, Visible = false };
+             
             CharacterDuraPanel = new CharacterDuraPanel { Parent = this, Visible = false };
             //DuraStatusPanel = new DuraStatusDialog { Parent = this, Visible = true };
             DuraStatusPanel = new DuraStatusDialog { Parent = this, Visible = false };
@@ -241,16 +235,12 @@ namespace Exine.ExineScenes
 
             RankingDialog = new RankingDialog { Parent = this, Visible = false };
 
-            MailListDialog = new MailListDialog { Parent = this, Visible = false };
-            MailComposeLetterDialog = new MailComposeLetterDialog { Parent = this, Visible = false };
-            MailComposeParcelDialog = new MailComposeParcelDialog { Parent = this, Visible = false };
-            MailReadLetterDialog = new MailReadLetterDialog { Parent = this, Visible = false };
-            MailReadParcelDialog = new MailReadParcelDialog { Parent = this, Visible = false };
+            
 
             RefineDialog = new RefineDialog { Parent = this, Visible = false };
             RelationshipDialog = new RelationshipDialog { Parent = this, Visible = false };
             FriendDialog = new FriendDialog { Parent = this, Visible = false };
-            MemoDialog = new MemoDialog { Parent = this, Visible = false };
+            
             MentorDialog = new MentorDialog { Parent = this, Visible = false }; 
             ReportDialog = new ReportDialog { Parent = this, Visible = false }; 
 
@@ -589,19 +579,14 @@ namespace Exine.ExineScenes
                         GuildDialog.Hide();
                         InspectDialog.Hide();
                         StorageDialog.Hide();
-                        TrustMerchantDialog.Hide();
+                         
                         //CharacterDuraPanel.Hide();
                         QuestListDialog.Hide();
                         QuestDetailDialog.Hide();
                         QuestLogDialog.Hide();
-                        NPCAwakeDialog.Hide();
                         RefineDialog.Hide();
                         BigMapDialog.Hide(); 
-                        MailComposeLetterDialog.Hide();
-                        MailComposeParcelDialog.Hide();
-                        MailListDialog.Hide();
-                        MailReadLetterDialog.Hide();
-                        MailReadParcelDialog.Hide();
+                       
                         NoticeDialog.Hide();
 
 
@@ -1595,21 +1580,11 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.NPCConsign:
                     NPCConsign();
                     break;
-                case (short)ServerPacketIds.NPCMarket:
-                    NPCMarket((S.NPCMarket)p);
-                    break;
-                case (short)ServerPacketIds.NPCMarketPage:
-                    NPCMarketPage((S.NPCMarketPage)p);
-                    break;
+                 
                 case (short)ServerPacketIds.ConsignItem:
                     ConsignItem((S.ConsignItem)p);
                     break;
-                case (short)ServerPacketIds.MarketFail:
-                    MarketFail((S.MarketFail)p);
-                    break;
-                case (short)ServerPacketIds.MarketSuccess:
-                    MarketSuccess((S.MarketSuccess)p);
-                    break;
+                 
                 case (short)ServerPacketIds.ObjectSitDown:
                     ObjectSitDown((S.ObjectSitDown)p);
                     break;
@@ -1771,45 +1746,8 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.SendOutputMessage:
                     SendOutputMessage((S.SendOutputMessage)p);
                     break;
-                case (short)ServerPacketIds.NPCAwakening:
-                    NPCAwakening();
-                    break;
-                case (short)ServerPacketIds.NPCDisassemble:
-                    NPCDisassemble();
-                    break;
-                case (short)ServerPacketIds.NPCDowngrade:
-                    NPCDowngrade();
-                    break;
-                case (short)ServerPacketIds.NPCReset:
-                    NPCReset();
-                    break;
-                case (short)ServerPacketIds.AwakeningNeedMaterials:
-                    AwakeningNeedMaterials((S.AwakeningNeedMaterials)p);
-                    break;
-                case (short)ServerPacketIds.AwakeningLockedItem:
-                    AwakeningLockedItem((S.AwakeningLockedItem)p);
-                    break;
-                case (short)ServerPacketIds.Awakening:
-                    Awakening((S.Awakening)p);
-                    break;
-                case (short)ServerPacketIds.ReceiveMail:
-                    ReceiveMail((S.ReceiveMail)p);
-                    break;
-                case (short)ServerPacketIds.MailLockedItem:
-                    MailLockedItem((S.MailLockedItem)p);
-                    break;
-                case (short)ServerPacketIds.MailSent:
-                    MailSent((S.MailSent)p);
-                    break;
-                case (short)ServerPacketIds.MailSendRequest:
-                    MailSendRequest((S.MailSendRequest)p);
-                    break;
-                case (short)ServerPacketIds.ParcelCollected:
-                    ParcelCollected((S.ParcelCollected)p);
-                    break;
-                case (short)ServerPacketIds.MailCost:
-                    MailCost((S.MailCost)p);
-                    break;
+               
+                 
                 case (short)ServerPacketIds.ResizeInventory:
                     ResizeInventory((S.ResizeInventory)p);
                     break;
@@ -1907,7 +1845,7 @@ namespace Exine.ExineScenes
 
             foreach (ClientMovementInfo mInfo in record.MapInfo.Movements)
             {
-                MirButton button = new MirButton()
+                ExineButton button = new ExineButton()
                 {
                     Library = Libraries.MapLinkIcon,
                     Index = mInfo.Icon,
@@ -3532,11 +3470,10 @@ namespace Exine.ExineScenes
             NPCSubGoodsDialog.Hide();
             NPCCraftGoodsDialog.Hide();
             NPCDropDialog.Hide();
-            StorageDialog.Hide();
-            NPCAwakeDialog.Hide();
+            StorageDialog.Hide(); ;
             RefineDialog.Hide();
             StorageDialog.Hide();
-            TrustMerchantDialog.Hide();
+             
             QuestListDialog.Hide();
         }
 
@@ -3921,7 +3858,7 @@ namespace Exine.ExineScenes
         }
         private void NPCRequestInput(S.NPCRequestInput p)
         {
-            MirInputBox inputBox = new MirInputBox("요청된 정보를 입력해주세요.");
+            ExineInputBox inputBox = new ExineInputBox("요청된 정보를 입력해주세요.");
 
             inputBox.OKButton.Click += (o1, e1) =>
             {
@@ -4408,40 +4345,7 @@ namespace Exine.ExineScenes
                             }
                         }
                         break;
-                    case SpellEffect.AwakeningSuccess:
-                        {
-                            Effect ef = new Effect(Libraries.Magic3, 900, 16, 1600, ob, CMain.Time + p.DelayTime);
-                            ef.Played += (o, e) => SoundManager.PlaySound(50002);
-                            ef.Complete += (o, e) => MapControl.AwakeningAction = false;
-                            ob.Effects.Add(ef);
-                            ob.Effects.Add(new Effect(Libraries.Magic3, 840, 16, 1600, ob, CMain.Time + p.DelayTime) { Blend = false });
-                        }
-                        break;
-                    case SpellEffect.AwakeningFail:
-                        {
-                            Effect ef = new Effect(Libraries.Magic3, 920, 9, 900, ob, CMain.Time + p.DelayTime);
-                            ef.Played += (o, e) => SoundManager.PlaySound(50003);
-                            ef.Complete += (o, e) => MapControl.AwakeningAction = false;
-                            ob.Effects.Add(ef);
-                            ob.Effects.Add(new Effect(Libraries.Magic3, 860, 9, 900, ob, CMain.Time + p.DelayTime) { Blend = false });
-                        }
-                        break;
-                    case SpellEffect.AwakeningHit:
-                        {
-                            Effect ef = new Effect(Libraries.Magic3, 880, 5, 500, ob, CMain.Time + p.DelayTime);
-                            ef.Played += (o, e) => SoundManager.PlaySound(50001);
-                            ob.Effects.Add(ef);
-                            ob.Effects.Add(new Effect(Libraries.Magic3, 820, 5, 500, ob, CMain.Time + p.DelayTime) { Blend = false });
-                        }
-                        break;
-                    case SpellEffect.AwakeningMiss:
-                        {
-                            Effect ef = new Effect(Libraries.Magic3, 890, 5, 500, ob, CMain.Time + p.DelayTime);
-                            ef.Played += (o, e) => SoundManager.PlaySound(50000);
-                            ob.Effects.Add(ef);
-                            ob.Effects.Add(new Effect(Libraries.Magic3, 830, 5, 500, ob, CMain.Time + p.DelayTime) { Blend = false });
-                        }
-                        break;
+                    
                     case SpellEffect.TurtleKing:
                         {
                             Effect ef = new Effect(Libraries.Monsters[(ushort)Monster.TurtleKing], CMain.Random.Next(2) == 0 ? 922 : 934, 12, 1200, ob);
@@ -5215,29 +5119,7 @@ namespace Exine.ExineScenes
             NPCDropDialog.PType = PanelType.Consign;
             NPCDropDialog.Show();
         }
-        private void NPCMarket(S.NPCMarket p)
-        {
-            for (int i = 0; i < p.Listings.Count; i++)
-                Bind(p.Listings[i].Item);
-
-            TrustMerchantDialog.Show();
-            TrustMerchantDialog.UserMode = p.UserMode;
-            TrustMerchantDialog.Listings = p.Listings;
-            TrustMerchantDialog.Page = 0;
-            TrustMerchantDialog.PageCount = p.Pages;
-            TrustMerchantDialog.UpdateInterface();
-        }
-        private void NPCMarketPage(S.NPCMarketPage p)
-        {
-            if (!TrustMerchantDialog.Visible) return;
-
-            for (int i = 0; i < p.Listings.Count; i++)
-                Bind(p.Listings[i].Item);
-
-            TrustMerchantDialog.Listings.AddRange(p.Listings);
-            TrustMerchantDialog.Page = (TrustMerchantDialog.Listings.Count - 1) / 10;
-            TrustMerchantDialog.UpdateInterface();
-        }
+        
         private void ConsignItem(S.ConsignItem p)
         {
             MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
@@ -5252,52 +5134,7 @@ namespace Exine.ExineScenes
 
             User.RefreshStats();
         }
-        private void MarketFail(S.MarketFail p)
-        {
-            TrustMerchantDialog.MarketTime = 0;
-            switch (p.Reason)
-            {
-                case 0:
-                    ExineMessageBox.Show("You cannot use the TrustMerchant when dead.");
-                    break;
-                case 1:
-                    ExineMessageBox.Show("You cannot buy from the TrustMerchant without using.");
-                    break;
-                case 2:
-                    ExineMessageBox.Show("This item has already been sold.");
-                    break;
-                case 3:
-                    ExineMessageBox.Show("This item has Expired and cannot be brought.");
-                    break;
-                case 4:
-                    ExineMessageBox.Show(GameLanguage.LowGold);
-                    break;
-                case 5:
-                    ExineMessageBox.Show("You do not have enough weight or space spare to buy this item.");
-                    break;
-                case 6:
-                    ExineMessageBox.Show("You cannot buy your own items.");
-                    break;
-                case 7:
-                    ExineMessageBox.Show("You are too far away from the Trust Merchant.");
-                    break;
-                case 8:
-                    ExineMessageBox.Show("You cannot hold enough gold to get your sale.");
-                    break;
-                case 9:
-                    ExineMessageBox.Show("This item has not met the minimum bid yet.");
-                    break;
-                case 10:
-                    ExineMessageBox.Show("Auction has already ended for this item.");
-                    break;
-            }
-
-        }
-        private void MarketSuccess(S.MarketSuccess p)
-        {
-            TrustMerchantDialog.MarketTime = 0;
-            ExineMessageBox.Show(p.Message);
-        }
+        
         private void ObjectSitDown(S.ObjectSitDown p)
         {
             if (p.ObjectID == User.ObjectID) return;
@@ -5353,7 +5190,7 @@ namespace Exine.ExineScenes
 
         private void GuildNameRequest(S.GuildNameRequest p)
         {
-            MirInputBox inputBox = new MirInputBox("링 이름을 입력하세요. 3~20자 이내로 입력하세요.");
+            ExineInputBox inputBox = new ExineInputBox("링 이름을 입력하세요. 3~20자 이내로 입력하세요.");
             inputBox.InputTextBox.TextBox.KeyPress += (o, e) =>
             {
                 string Allowed = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -5375,7 +5212,7 @@ namespace Exine.ExineScenes
 
         private void GuildRequestWar(S.GuildRequestWar p)
         {
-            MirInputBox inputBox = new MirInputBox("전쟁하고 싶은 길드를 입력하세요.");
+            ExineInputBox inputBox = new ExineInputBox("전쟁하고 싶은 길드를 입력하세요.");
 
             inputBox.OKButton.Click += (o, e) =>
             {
@@ -5756,190 +5593,10 @@ namespace Exine.ExineScenes
                 ExineMessageBox messageBox = new ExineMessageBox("거래가 취소되었습니다.\r\n거래를 하려면 상대방과 직접 대면해야 합니다.", MirMessageBoxButtons.OK);
                 messageBox.Show();
             }
-        }
-        private void NPCAwakening()
-        {
-            if (NPCAwakeDialog.Visible != true)
-                NPCAwakeDialog.Show();
-        }
-        private void NPCDisassemble()
-        {
-            if (!ExNPCDialog.Visible) return;
-            NPCDropDialog.PType = PanelType.Disassemble;
-            NPCDropDialog.Show();
-        }
-        private void NPCDowngrade()
-        {
-            if (!ExNPCDialog.Visible) return;
-            NPCDropDialog.PType = PanelType.Downgrade;
-            NPCDropDialog.Show();
-        }
-        private void NPCReset()
-        {
-            if (!ExNPCDialog.Visible) return;
-            NPCDropDialog.PType = PanelType.Reset;
-            NPCDropDialog.Show();
-        }
-        private void AwakeningNeedMaterials(S.AwakeningNeedMaterials p)
-        {
-            NPCAwakeDialog.setNeedItems(p.Materials, p.MaterialsCount);
-        }
-        private void AwakeningLockedItem(S.AwakeningLockedItem p)
-        {
-            MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID);
-            if (cell != null)
-                cell.Locked = p.Locked;
-        }
-        private void Awakening(S.Awakening p)
-        {
-            if (NPCAwakeDialog.Visible)
-                NPCAwakeDialog.Hide();
-            if (ExInventoryDialog.Visible)
-                ExInventoryDialog.Hide();
+        } 
 
-            MirItemCell cell = ExInventoryDialog.GetCell((ulong)p.removeID);
-            if (cell != null)
-            {
-                cell.Locked = false;
-                cell.Item = null;
-            }
-
-            for (int i = 0; i < ExInventoryDialog.Grid.Length; i++)
-            {
-                if (ExInventoryDialog.Grid[i].Locked == true)
-                {
-                    ExInventoryDialog.Grid[i].Locked = false;
-
-                    //if (InventoryDialog.Grid[i].Item.UniqueID == (ulong)p.removeID)
-                    //{
-                    //    InventoryDialog.Grid[i].Item = null;
-                    //}
-                }
-            }
-
-            for (int i = 0; i < NPCAwakeDialog.ItemsIdx.Length; i++)
-            {
-                NPCAwakeDialog.ItemsIdx[i] = 0;
-            }
-
-            ExineMessageBox messageBox = null;
-
-            switch (p.result)
-            {
-                case -4:
-                    messageBox = new ExineMessageBox("재료가 부족합니다.", MirMessageBoxButtons.OK);
-                    MapControl.AwakeningAction = false;
-                    break;
-                case -3:
-                    messageBox = new ExineMessageBox(GameLanguage.LowGold, MirMessageBoxButtons.OK);
-                    MapControl.AwakeningAction = false;
-                    break;
-                case -2:
-                    messageBox = new ExineMessageBox("이미 최대 레벨에서 각성 중입니다.", MirMessageBoxButtons.OK);
-                    MapControl.AwakeningAction = false;
-                    break;
-                case -1:
-                    messageBox = new ExineMessageBox("이 아이템을 각성시킬 수 없습니다.", MirMessageBoxButtons.OK);
-                    MapControl.AwakeningAction = false;
-                    break;
-                case 0:
-                    //messageBox = new MirMessageBox("Upgrade Failed.", MirMessageBoxButtons.OK);
-                    break;
-                case 1:
-                    //messageBox = new MirMessageBox("Upgrade Success.", MirMessageBoxButtons.OK);
-                    break;
-
-            }
-
-            if (messageBox != null) messageBox.Show();
-        }
-
-        private void ReceiveMail(S.ReceiveMail p)
-        {
-            NewMail = false;
-            NewMailCounter = 0;
-            User.Mail.Clear();
-
-            User.Mail = p.Mail.OrderByDescending(e => !e.Locked).ThenByDescending(e => e.DateSent).ToList();
-
-            foreach (ClientMail mail in User.Mail)
-            {
-                foreach (UserItem itm in mail.Items)
-                {
-                    Bind(itm);
-                }
-            }
-
-            //display new mail received
-            if (User.Mail.Any(e => e.Opened == false))
-            {
-                NewMail = true;
-            }
-
-            ExineMainScene.Scene.MailListDialog.UpdateInterface();
-        }
-
-        private void MailLockedItem(S.MailLockedItem p)
-        {
-            MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID);
-            if (cell != null)
-                cell.Locked = p.Locked;
-        }
-
-        private void MailSendRequest(S.MailSendRequest p)
-        {
-            MirInputBox inputBox = new MirInputBox("메일을 보낼 사람의 이름을 입력하세요.");
-
-            inputBox.OKButton.Click += (o1, e1) =>
-            {
-                ExineMainScene.Scene.MailComposeParcelDialog.ComposeMail(inputBox.InputTextBox.Text);
-                //ExineMainScene.Scene.InventoryDialog.Show();
-
-                //open letter dialog, pass in name
-                inputBox.Dispose();
-            };
-
-            inputBox.Show();
-        }
-
-        private void MailSent(S.MailSent p)
-        {
-            for (int i = 0; i < ExInventoryDialog.Grid.Length; i++)
-            {
-                if (ExInventoryDialog.Grid[i].Locked == true)
-                {
-                    ExInventoryDialog.Grid[i].Locked = false;
-                }
-            }
-
-            for (int i = 0; i < BeltDialog.Grid.Length; i++)
-            {
-                if (BeltDialog.Grid[i].Locked == true)
-                {
-                    BeltDialog.Grid[i].Locked = false;
-                }
-            }
-
-            ExineMainScene.Scene.MailComposeParcelDialog.Hide();
-        }
-
-        private void ParcelCollected(S.ParcelCollected p)
-        {
-            switch (p.Result)
-            {
-                case -1:
-                    ExineMessageBox messageBox = new ExineMessageBox(string.Format("수집할 소포가 없습니다."), MirMessageBoxButtons.OK);
-                    messageBox.Show();
-                    break;
-                case 0:
-                    messageBox = new ExineMessageBox(string.Format("모든 소포를 수거했습니다."), MirMessageBoxButtons.OK);
-                    messageBox.Show();
-                    break;
-                case 1:
-                    ExineMainScene.Scene.MailReadParcelDialog.Hide();
-                    break;
-            }
-        }
+        
+        
 
         private void ResizeInventory(S.ResizeInventory p)
         {
@@ -5955,17 +5612,7 @@ namespace Exine.ExineScenes
 
             StorageDialog.RefreshStorage2();
         }
-
-        private void MailCost(S.MailCost p)
-        {
-            if (ExineMainScene.Scene.MailComposeParcelDialog.Visible)
-            {
-                if (p.Cost > 0)
-                    SoundManager.PlaySound(SoundList.Gold);
-
-                ExineMainScene.Scene.MailComposeParcelDialog.ParcelCostLabel.Text = p.Cost.ToString();
-            }
-        }
+         
 
         public void AddQuestItem(UserItem item)
         {
@@ -6160,19 +5807,7 @@ namespace Exine.ExineScenes
             if (ItemLabel != null && !ItemLabel.IsDisposed)
                 ItemLabel.Dispose();
             ItemLabel = null;
-        }
-        public void DisposeMailLabel()
-        {
-            if (MailLabel != null && !MailLabel.IsDisposed)
-                MailLabel.Dispose();
-            MailLabel = null;
-        }
-        public void DisposeMemoLabel()
-        {
-            if (MemoLabel != null && !MemoLabel.IsDisposed)
-                MemoLabel.Dispose();
-            MemoLabel = null;
-        }
+        } 
         public void DisposeGuildBuffLabel()
         {
             if (GuildBuffLabel != null && !GuildBuffLabel.IsDisposed)
@@ -7776,106 +7411,7 @@ namespace Exine.ExineScenes
             }
             return null;
         }
-        public ExineControl AwakeInfoLabel(UserItem item, bool Inspect = false)
-        {
-            ushort level = Inspect ? InspectDialog.Level : MapObject.User.Level;
-            ExineClass job = Inspect ? InspectDialog.Class : MapObject.User.Class;
-            HoverItem = item;
-            ItemInfo realItem = Functions.GetRealItem(item.Info, level, job, ItemInfoList);
-
-            ItemLabel.Size = new Size(ItemLabel.Size.Width, ItemLabel.Size.Height + 4);
-
-            int count = 0;
-
-            #region AWAKENAME
-            if (HoverItem.Awake.GetAwakeLevel() > 0)
-            {
-                count++;
-                ExineLabel AWAKENAMELabel = new ExineLabel
-                {
-                    AutoSize = true,
-                    ForeColour = GradeNameColor(HoverItem.Info.Grade),
-                    Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    Parent = ItemLabel,
-                    Text = string.Format("{0} Awakening({1})", HoverItem.Awake.Type.ToString(), HoverItem.Awake.GetAwakeLevel())
-                };
-
-                ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, AWAKENAMELabel.DisplayRectangle.Right + 4),
-                    Math.Max(ItemLabel.Size.Height, AWAKENAMELabel.DisplayRectangle.Bottom));
-            }
-
-            #endregion
-
-            #region AWAKE_TOTAL_VALUE
-            if (HoverItem.Awake.GetAwakeValue() > 0)
-            {
-                count++;
-                ExineLabel AWAKE_TOTAL_VALUELabel = new ExineLabel
-                {
-                    AutoSize = true,
-                    ForeColour = Color.White,
-                    Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    Parent = ItemLabel,
-                    Text = string.Format(realItem.Type != ItemType.Armour ? "{0} + {1}~{2}" : "MAX {0} + {1}", HoverItem.Awake.Type.ToString(), HoverItem.Awake.GetAwakeValue(), HoverItem.Awake.GetAwakeValue())
-                };
-
-                ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, AWAKE_TOTAL_VALUELabel.DisplayRectangle.Right + 4),
-                    Math.Max(ItemLabel.Size.Height, AWAKE_TOTAL_VALUELabel.DisplayRectangle.Bottom));
-            }
-
-            #endregion
-
-            #region AWAKE_LEVEL_VALUE
-            if (HoverItem.Awake.GetAwakeLevel() > 0)
-            {
-                count++;
-                for (int i = 0; i < HoverItem.Awake.GetAwakeLevel(); i++)
-                {
-                    ExineLabel AWAKE_LEVEL_VALUELabel = new ExineLabel
-                    {
-                        AutoSize = true,
-                        ForeColour = Color.White,
-                        Location = new Point(4, ItemLabel.DisplayRectangle.Bottom),
-                        OutLine = true,
-                        Parent = ItemLabel,
-                        Text = string.Format(realItem.Type != ItemType.Armour ? "Level {0} : {1} + {2}~{3}" : "Level {0} : MAX {1} + {2}~{3}", i + 1, HoverItem.Awake.Type.ToString(), HoverItem.Awake.GetAwakeLevelValue(i), HoverItem.Awake.GetAwakeLevelValue(i))
-                    };
-
-                    ItemLabel.Size = new Size(Math.Max(ItemLabel.Size.Width, AWAKE_LEVEL_VALUELabel.DisplayRectangle.Right + 4),
-                        Math.Max(ItemLabel.Size.Height, AWAKE_LEVEL_VALUELabel.DisplayRectangle.Bottom));
-                }
-            }
-
-            #endregion
-
-            if (count > 0)
-            {
-                ItemLabel.Size = new Size(ItemLabel.Size.Width, ItemLabel.Size.Height + 4);
-
-                #region OUTLINE
-                ExineControl outLine = new ExineControl
-                {
-                    BackColour = Color.FromArgb(255, 50, 50, 50),
-                    Border = true,
-                    BorderColour = Color.Gray,
-                    NotControl = true,
-                    Parent = ItemLabel,
-                    Opacity = 0.4F,
-                    Location = new Point(0, 0)
-                };
-                outLine.Size = ItemLabel.Size;
-                #endregion
-
-                return outLine;
-            }
-            else
-            {
-                ItemLabel.Size = new Size(ItemLabel.Size.Width, ItemLabel.Size.Height - 4);
-            }
-            return null;
-        }
+      
         public ExineControl SocketInfoLabel(UserItem item, bool Inspect = false)
         {
             ushort level = Inspect ? InspectDialog.Level : MapObject.User.Level;
@@ -9065,8 +8601,7 @@ namespace Exine.ExineScenes
             outlines[2] = DefenceInfoLabel(item, inspect, hideAdded);
             //Attribute Info3 Label - Weight Info
             outlines[3] = WeightInfoLabel(item, inspect);
-            //Awake Info Label
-            outlines[4] = AwakeInfoLabel(item, inspect);
+             
             //Socket Info Label
             outlines[5] = SocketInfoLabel(item, inspect);
             //need Info Label
@@ -9088,117 +8623,7 @@ namespace Exine.ExineScenes
 
             //ItemLabel.Visible = true;
         }
-        public void CreateMailLabel(ClientMail mail)
-        {
-            if (mail == null)
-            {
-                DisposeMailLabel();
-                return;
-            }
-
-            if (MailLabel != null && !MailLabel.IsDisposed) return;
-
-            MailLabel = new ExineControl
-            {
-                BackColour = Color.FromArgb(255, 50, 50, 50),
-                Border = true,
-                BorderColour = Color.Gray,
-                DrawControlTexture = true,
-                NotControl = true,
-                Parent = this,
-                Opacity = 0.7F
-            };
-
-            ExineLabel nameLabel = new ExineLabel
-            {
-                AutoSize = true,
-                ForeColour = Color.Yellow,
-                Location = new Point(4, 4),
-                OutLine = true,
-                Parent = MailLabel,
-                Text = mail.SenderName
-            };
-
-            MailLabel.Size = new Size(Math.Max(MailLabel.Size.Width, nameLabel.DisplayRectangle.Right + 4),
-                Math.Max(MailLabel.Size.Height, nameLabel.DisplayRectangle.Bottom));
-
-            ExineLabel dateLabel = new ExineLabel
-            {
-                AutoSize = true,
-                ForeColour = Color.White,
-                Location = new Point(4, MailLabel.DisplayRectangle.Bottom),
-                OutLine = true,
-                Parent = MailLabel,
-                Text = string.Format(GameLanguage.DateSent, mail.DateSent.ToString("dd/MM/yy H:mm:ss"))
-            };
-
-            MailLabel.Size = new Size(Math.Max(MailLabel.Size.Width, dateLabel.DisplayRectangle.Right + 4),
-                Math.Max(MailLabel.Size.Height, dateLabel.DisplayRectangle.Bottom));
-
-            if (mail.Gold > 0)
-            {
-                ExineLabel goldLabel = new ExineLabel
-                {
-                    AutoSize = true,
-                    ForeColour = Color.White,
-                    Location = new Point(4, MailLabel.DisplayRectangle.Bottom),
-                    OutLine = true,
-                    Parent = MailLabel,
-                    Text = "Gold: " + mail.Gold
-                };
-
-                MailLabel.Size = new Size(Math.Max(MailLabel.Size.Width, goldLabel.DisplayRectangle.Right + 4),
-                Math.Max(MailLabel.Size.Height, goldLabel.DisplayRectangle.Bottom));
-            }
-
-            ExineLabel openedLabel = new ExineLabel
-            {
-                AutoSize = true,
-                ForeColour = Color.Red,
-                Location = new Point(4, MailLabel.DisplayRectangle.Bottom),
-                OutLine = true,
-                Parent = MailLabel,
-                Text = mail.Opened ? "[Old]" : "[New]"
-            };
-
-            MailLabel.Size = new Size(Math.Max(MailLabel.Size.Width, openedLabel.DisplayRectangle.Right + 4),
-            Math.Max(MailLabel.Size.Height, openedLabel.DisplayRectangle.Bottom));
-        }
-        public void CreateMemoLabel(ClientFriend friend)
-        {
-            if (friend == null)
-            {
-                DisposeMemoLabel();
-                return;
-            }
-
-            if (MemoLabel != null && !MemoLabel.IsDisposed) return;
-
-            MemoLabel = new ExineControl
-            {
-                BackColour = Color.FromArgb(255, 50, 50, 50),
-                Border = true,
-                BorderColour = Color.Gray,
-                DrawControlTexture = true,
-                NotControl = true,
-                Parent = this,
-                Opacity = 0.7F
-            };
-
-            ExineLabel memoLabel = new ExineLabel
-            {
-                AutoSize = true,
-                ForeColour = Color.White,
-                Location = new Point(4, 4),
-                OutLine = true,
-                Parent = MemoLabel,
-                Text = Functions.StringOverLines(friend.Memo, 5, 20)
-            };
-
-            MemoLabel.Size = new Size(Math.Max(MemoLabel.Size.Width, memoLabel.DisplayRectangle.Right + 4),
-                Math.Max(MemoLabel.Size.Height, memoLabel.DisplayRectangle.Bottom + 4));
-        }
-
+      
         public static ItemInfo GetInfo(int index)
         {
             for (int i = 0; i < ItemInfoList.Count; i++)

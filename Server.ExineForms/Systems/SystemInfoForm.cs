@@ -7,7 +7,7 @@ namespace Server
     {
         public Envir Envir => SMain.EditEnvir;
 
-        public bool FishingChanged = false, MailChanged = false, GoodsChanged = false, RefineChanged = false, MarriageChanged = false, MentorChanged = false, GemChanged = false, SpawnChanged = false;
+        public bool FishingChanged = false,  GoodsChanged = false, RefineChanged = false, MarriageChanged = false, MentorChanged = false, GemChanged = false, SpawnChanged = false;
 
         public SystemInfoForm()
         {
@@ -22,8 +22,7 @@ namespace Server
 
             this.tabControl1.SelectedIndex = selectedTab;
 
-            UpdateFishing();
-            UpdateMail();
+            UpdateFishing(); 
             UpdateGoods();
             UpdateRefine();
             UpdateMarriage();
@@ -53,16 +52,7 @@ namespace Server
             if (fishingMob != null)
                 FishingMobIndexComboBox.SelectedIndex = Envir.GetMonsterInfo(Settings.FishingMonster).Index - 1;
         }
-
-        private void UpdateMail()
-        {
-            MailAutoSendGoldCheckbox.Checked = Settings.MailAutoSendGold;
-            MailAutoSendItemsCheckbox.Checked = Settings.MailAutoSendItems;
-            MailFreeWithStampCheckbox.Checked = Settings.MailFreeWithStamp;
-            MailCostPer1kTextBox.Text = Settings.MailCostPer1KGold.ToString();
-            MailInsurancePercentageTextBox.Text = Settings.MailItemInsurancePercentage.ToString();
-        }
-
+         
         private void UpdateGoods()
         {
             GoodsOnCheckBox.Checked = Settings.GoodsOn;
@@ -145,9 +135,7 @@ namespace Server
         {
             if (FishingChanged)
                 Settings.SaveFishing();
-
-            if (MailChanged)
-                Settings.SaveMail();
+             
 
             if (GoodsChanged)
                 Settings.SaveGoods();
@@ -264,63 +252,7 @@ namespace Server
 
         #endregion
 
-        #region Mail
-
-        private void MailAutoSendGoldCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ActiveControl != sender) return;
-
-            Settings.MailAutoSendGold = MailAutoSendGoldCheckbox.Checked;
-            MailChanged = true;
-        }
-
-        private void MailAutoSendItemsCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ActiveControl != sender) return;
-
-            Settings.MailAutoSendItems = MailAutoSendItemsCheckbox.Checked;
-            MailChanged = true;
-        }
-
-        private void MailFreeWithStampCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ActiveControl != sender) return;
-
-            Settings.MailFreeWithStamp = MailFreeWithStampCheckbox.Checked;
-            MailChanged = true;
-        }
-
-        private void MailCostPer1kTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (ActiveControl != sender) return;
-            uint temp;
-
-            if (!uint.TryParse(ActiveControl.Text, out temp) || temp > 1000)
-            {
-                ActiveControl.BackColor = Color.Red;
-                return;
-            }
-
-            ActiveControl.BackColor = SystemColors.Window;
-            Settings.MailCostPer1KGold = temp;
-            MailChanged = true;
-        }
-
-        private void MailInsurancePercentageTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (ActiveControl != sender) return;
-            uint temp;
-
-            if (!uint.TryParse(ActiveControl.Text, out temp) || temp > 100 || temp < 0)
-            {
-                ActiveControl.BackColor = Color.Red;
-                return;
-            }
-
-            ActiveControl.BackColor = SystemColors.Window;
-            Settings.MailItemInsurancePercentage = temp;
-            MailChanged = true;
-        }
+       
 
         private void LoverRecall_checkbox_CheckedChanged(object sender, EventArgs e)
         {
@@ -627,9 +559,7 @@ namespace Server
             Settings.MentorSkillBoost = MenteeSkillBoost_checkbox.Checked;
             MentorChanged = true;
         }
-
-        #endregion
-
+         
         #region Goods
 
         private void GoodsOnCheckBox_CheckedChanged(object sender, EventArgs e)

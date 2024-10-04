@@ -85,7 +85,6 @@ namespace Server.ExineDatabase
         public List<UserMagic> Magics = new List<UserMagic>(); 
         public List<Buff> Buffs = new List<Buff>();
         public List<Poison> Poisons = new List<Poison>();
-        public List<MailInfo> Mail = new List<MailInfo>();
         public List<FriendInfo> Friends = new List<FriendInfo>();
 
         
@@ -282,12 +281,7 @@ namespace Server.ExineDatabase
                 Buffs.Add(buff);
             }
 
-            count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
-            {
-                Mail.Add(new MailInfo(reader, version, customVersion));
-            }
-
+            
            
             if (version == 45)
             { 
@@ -452,12 +446,7 @@ namespace Server.ExineDatabase
             {
                 Buffs[i].Save(writer);
             }
-
-            writer.Write(Mail.Count);
-            for (int i = 0; i < Mail.Count; i++)
-            {
-                Mail[i].Save(writer);
-            }
+             
 
             
             writer.Write(PearlCount);

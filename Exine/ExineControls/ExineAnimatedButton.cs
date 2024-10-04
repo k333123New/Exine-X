@@ -1,6 +1,6 @@
 ﻿namespace Exine.ExineControls
 {
-    public class ExineAnimatedButton : MirButton
+    public class ExineAnimatedButton : ExineButton
     {
         public static List<ExineAnimatedButton> Animations = new List<ExineAnimatedButton>();
 

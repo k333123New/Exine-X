@@ -2,7 +2,7 @@
 
 namespace Exine.ExineControls
 {
-    public class MirCheckBox : MirButton
+    public class MirCheckBox : ExineButton
     {
 
         #region TickedIndex

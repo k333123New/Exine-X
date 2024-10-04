@@ -17,11 +17,7 @@ namespace Exine.ExineControls
             {
                 if (GridType == MirGridType.DropPanel)
                     return NPCDropDialog.TargetItem;
-
-                if (GridType == MirGridType.TrustMerchant)
-                    return TrustMerchantDialog.SellItemSlot;
-
-                
+  
                 if (ItemArray != null && _itemSlot >= 0 && _itemSlot < ItemArray.Length)
                     return ItemArray[_itemSlot];
                 return null;
@@ -30,9 +26,6 @@ namespace Exine.ExineControls
             {
                 if (GridType == MirGridType.DropPanel)
                     NPCDropDialog.TargetItem = value;
-               
-                else if (GridType == MirGridType.TrustMerchant)
-                    TrustMerchantDialog.SellItemSlot = value;
                 
                 else if (ItemArray != null && _itemSlot >= 0 && _itemSlot < ItemArray.Length)
                     ItemArray[_itemSlot] = value;
@@ -78,10 +71,7 @@ namespace Exine.ExineControls
                         return MapObject.User.Equipment[(int)EquipmentSlot.Weapon].Slots;
                     case MirGridType.QuestInventory:
                         return MapObject.User.QuestInventory;
-                    case MirGridType.AwakenItem:
-                        return NPCAwakeDialog.Items;
-                    case MirGridType.Mail:
-                        return MailComposeParcelDialog.Items;
+                     
                     case MirGridType.Refine:
                         return ExineMainScene.Refine;
                     case MirGridType.Craft:
@@ -194,7 +184,7 @@ namespace Exine.ExineControls
 
             if (ExineMainScene.PickedUpGold || GridType == MirGridType.Inspect || GridType == MirGridType.QuestInventory) return;
 
-            if (ExineMainScene.SelectedCell == null && (GridType == MirGridType.Mail)) return;
+          
 
             base.OnMouseClick(e);
             
@@ -282,7 +272,7 @@ namespace Exine.ExineControls
         {
             if (Locked) return;
 
-            if (ExineMainScene.PickedUpGold || GridType == MirGridType.Inspect || GridType == MirGridType.TrustMerchant || GridType == MirGridType.Craft) return;
+            if (ExineMainScene.PickedUpGold || GridType == MirGridType.Inspect || GridType == MirGridType.Craft) return;
 
             base.OnMouseClick(e);
 
@@ -333,7 +323,7 @@ namespace Exine.ExineControls
 
         public void UseItem()
         {
-            if (Locked || GridType == MirGridType.Inspect || GridType == MirGridType.TrustMerchant || GridType == MirGridType.GuildStorage || GridType == MirGridType.Craft) return;
+            if (Locked || GridType == MirGridType.Inspect || GridType == MirGridType.GuildStorage || GridType == MirGridType.Craft) return;
 
            
             if ( Item.Info.Type != ItemType.Scroll && Item.Info.Type != ItemType.Potion && Item.Info.Type != ItemType.Torch) return;
@@ -679,7 +669,7 @@ namespace Exine.ExineControls
        
         private void MoveItem()
         {
-            if (GridType == MirGridType.BuyBack || GridType == MirGridType.DropPanel || GridType == MirGridType.Inspect || GridType == MirGridType.TrustMerchant || GridType == MirGridType.Craft) return;
+            if (GridType == MirGridType.BuyBack || GridType == MirGridType.DropPanel || GridType == MirGridType.Inspect || GridType == MirGridType.Craft) return;
 
             if (ExineMainScene.SelectedCell != null)
             {
@@ -902,18 +892,7 @@ namespace Exine.ExineControls
                                     }
                                 break;
                             #endregion
-                            #region From AwakenItem
-                            case MirGridType.AwakenItem: //From AwakenItem
-                                Network.Enqueue(new C.MoveItem { Grid = GridType, From = NPCAwakeDialog.ItemsIdx[ExineMainScene.SelectedCell.ItemSlot], To = NPCAwakeDialog.ItemsIdx[ExineMainScene.SelectedCell.ItemSlot] });
-                                ExineMainScene.SelectedCell.Locked = false;
-                                ExineMainScene.SelectedCell.Item = null;
-                                NPCAwakeDialog.ItemsIdx[ExineMainScene.SelectedCell.ItemSlot] = 0;
-
-                                if (ExineMainScene.SelectedCell.ItemSlot == 0)
-                                    ExineMainScene.Scene.NPCAwakeDialog.ItemCell_Click();
-                                ExineMainScene.SelectedCell = null;
-                                break;
-                            #endregion
+                             
                             #region From Refine
                             case MirGridType.Refine: //From AwakenItem
                                 if (Item != null && ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Amulet)
@@ -1295,166 +1274,7 @@ namespace Exine.ExineControls
                         break;
 
                     #endregion
-                    
-                    #region To Awakening
-                    case MirGridType.AwakenItem:
-                        {
-                            int errorCode = 0;
-
-                            if (ExineMainScene.SelectedCell.GridType != MirGridType.Inventory && _itemSlot < 1) return;
-
-                            switch (_itemSlot)
-                            {
-                                //baseitem
-                                case 0:
-                                    {
-                                        if ((ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Weapon ||
-                                            ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Helmet ||
-                                            ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Armour) &&
-                                            ExineMainScene.SelectedCell.Item.Info.Grade != ItemGrade.None &&
-                                            _itemSlot == 0)
-                                        {
-                                            if (Item == null)
-                                            {
-                                                Item = ExineMainScene.SelectedCell.Item;
-                                                ExineMainScene.SelectedCell.Locked = true;
-                                                NPCAwakeDialog.ItemsIdx[_itemSlot] = ExineMainScene.SelectedCell._itemSlot;
-                                            }
-                                            else
-                                            {
-                                                Network.Enqueue(new C.AwakeningLockedItem { UniqueID = Item.UniqueID, Locked = false });
-
-                                                Item = ExineMainScene.SelectedCell.Item;
-                                                ExineMainScene.SelectedCell.Locked = true;
-                                                NPCAwakeDialog.ItemsIdx[_itemSlot] = ExineMainScene.SelectedCell._itemSlot;
-                                            }
-                                            ExineMainScene.Scene.NPCAwakeDialog.ItemCell_Click();
-                                            ExineMainScene.Scene.NPCAwakeDialog.OnAwakeTypeSelect(0);
-                                        }
-                                        else
-                                        {
-                                            errorCode = -2;
-                                        }
-                                    }
-                                    break;
-                                //view materials
-                                case 1:
-                                case 2:
-                                    break;
-                                //materials
-                                case 3:
-                                case 4:
-                                    {
-                                        switch (ExineMainScene.SelectedCell.GridType)
-                                        {
-                                            case MirGridType.Inventory:
-                                                {
-                                                    if (ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Awakening &&
-                                                        ExineMainScene.SelectedCell.Item.Info.Shape < 200 && NPCAwakeDialog.ItemsIdx[_itemSlot] == 0)
-                                                    {
-                                                        Item = ExineMainScene.SelectedCell.Item;
-                                                        ExineMainScene.SelectedCell.Locked = true;
-                                                        NPCAwakeDialog.ItemsIdx[_itemSlot] = ExineMainScene.SelectedCell._itemSlot;
-                                                    }
-                                                    else
-                                                    {
-                                                        errorCode = -2;
-                                                    }
-                                                }
-                                                break;
-                                            case MirGridType.AwakenItem:
-                                                {
-                                                    if (ExineMainScene.SelectedCell.ItemSlot == ItemSlot || ExineMainScene.SelectedCell.ItemSlot == 0)
-                                                    {
-                                                        Locked = false;
-                                                        ExineMainScene.SelectedCell = null;
-                                                    }
-                                                    else
-                                                    {
-                                                        ExineMainScene.SelectedCell.Locked = false;
-                                                        Locked = false;
-
-                                                        int beforeIdx = NPCAwakeDialog.ItemsIdx[ExineMainScene.SelectedCell._itemSlot];
-                                                        NPCAwakeDialog.ItemsIdx[ExineMainScene.SelectedCell._itemSlot] = NPCAwakeDialog.ItemsIdx[_itemSlot];
-                                                        NPCAwakeDialog.ItemsIdx[_itemSlot] = beforeIdx;
-
-                                                        UserItem item = ExineMainScene.SelectedCell.Item;
-                                                        ExineMainScene.SelectedCell.Item = Item;
-                                                        Item = item;
-                                                        ExineMainScene.SelectedCell = null;
-                                                    }
-                                                }
-                                                break;
-                                        }
-
-                                    }
-                                    break;
-                                //SuccessRateUpItem or RandomValueUpItem or CancelDestroyedItem etc.
-                                //AllCashItem Korea Server Not Implementation.
-                                case 5:
-                                case 6:
-                                    if (ExineMainScene.SelectedCell.Item.Info.Type == ItemType.Awakening &&
-                                            ExineMainScene.SelectedCell.Item.Info.Shape == 200)
-                                    {
-                                        Item = ExineMainScene.SelectedCell.Item;
-                                        ExineMainScene.SelectedCell.Locked = true;
-                                        NPCAwakeDialog.ItemsIdx[_itemSlot] = ExineMainScene.SelectedCell._itemSlot;
-                                    }
-                                    else
-                                    {
-                                        errorCode = -2;
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            ExineMainScene.SelectedCell = null;
-
-                            switch (errorCode)
-                            {
-                                //case -1:
-                                //    messageBox = new MirMessageBox("Item must be in your inventory.", MirMessageBoxButtons.OK);
-                                //    messageBox.Show();
-                                //    break;
-                                case -2:
-                                    //messageBox = new MirMessageBox("Cannot awaken this item.", MirMessageBoxButtons.OK);
-                                    //messageBox.Show();
-                                    break;
-                            }
-                        }
-                        return;
-                    #endregion
-                    #region To Mail
-                    case MirGridType.Mail: //To Mail
-                        if (ExineMainScene.SelectedCell.GridType == MirGridType.Inventory)
-                        {
-                            if (Item != null)
-                            {
-                                ExineMainScene.Scene.ExChatDialog.ReceiveChat("아이템을 교환할 수 없습니다.", ChatType.System);
-                                return;
-                            }
-
-                            if (ExineMainScene.SelectedCell.Item.Info.Bind.HasFlag(BindMode.DontTrade))
-                            {
-                                ExineMainScene.Scene.ExChatDialog.ReceiveChat("이 아이템은 우편으로 보낼 수 없습니다.", ChatType.System);
-                                return;
-                            }
-
-                            if (ItemArray[ItemSlot] == null)
-                            {
-                                Item = ExineMainScene.SelectedCell.Item;
-                                ExineMainScene.SelectedCell.Locked = true;
-                                MailComposeParcelDialog.ItemsIdx[_itemSlot] = ExineMainScene.SelectedCell.Item.UniqueID;
-                                ExineMainScene.SelectedCell = null;
-                                ExineMainScene.Scene.MailComposeParcelDialog.CalculatePostage();
-
-                                return;
-                            }
-                        }
-                        break;
-                    #endregion
-                   
+                     
                 }
 
                 return;

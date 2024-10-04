@@ -10,7 +10,7 @@ namespace Exine.ExineScenes.ExDialogs
 {
     public sealed class QuestListDialog : ExineImageControl
     {
-        private readonly MirButton _acceptButton, _finishButton;
+        private readonly ExineButton _acceptButton, _finishButton;
         private ExineLabel _availableQuestLabel;
 
         public List<ClientQuestProgress> Quests = new List<ClientQuestProgress>();
@@ -45,7 +45,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #region QuestSelection
 
-            MirButton upQuestButton = new MirButton
+            ExineButton upQuestButton = new ExineButton
             {
                 Index = 951,
                 HoverIndex = 952,
@@ -70,7 +70,7 @@ namespace Exine.ExineScenes.ExDialogs
                 RefreshInterface();
             };
 
-            MirButton downQuestButton = new MirButton
+            ExineButton downQuestButton = new ExineButton
             {
                 Index = 957,
                 HoverIndex = 958,
@@ -98,7 +98,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #region Buttons
 
-            _acceptButton = new MirButton
+            _acceptButton = new ExineButton
             {
                 Index = 270,
                 HoverIndex = 271,
@@ -116,7 +116,7 @@ namespace Exine.ExineScenes.ExDialogs
                 //Hide();
             };
 
-            _finishButton = new MirButton
+            _finishButton = new ExineButton
             {
                 Index = 273,
                 HoverIndex = 274,
@@ -142,7 +142,7 @@ namespace Exine.ExineScenes.ExDialogs
                 //Hide();
             };
 
-            MirButton leaveButton = new MirButton
+            ExineButton leaveButton = new ExineButton
             {
                 Index = 276,
                 HoverIndex = 277,
@@ -158,7 +158,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #region Message Area
 
-            MirButton upButton = new MirButton
+            ExineButton upButton = new ExineButton
             {
                 Index = 197,
                 HoverIndex = 198,
@@ -171,7 +171,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = true
             };
 
-            MirButton downButton = new MirButton
+            ExineButton downButton = new ExineButton
             {
                 Index = 207,
                 HoverIndex = 208,
@@ -184,7 +184,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = true
             };
 
-            MirButton positionBar = new MirButton
+            ExineButton positionBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,
@@ -229,7 +229,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(210, 8)
             };
 
-            MirButton closeButton = new MirButton
+            ExineButton closeButton = new ExineButton
             {
                 Index = 360,
                 HoverIndex = 361,
@@ -241,7 +241,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             closeButton.Click += (o, e) => Hide();
 
-            MirButton helpButton = new MirButton
+            ExineButton helpButton = new ExineButton
             {
                 Index = 257,
                 HoverIndex = 258,
@@ -458,7 +458,7 @@ namespace Exine.ExineScenes.ExDialogs
     }
     public sealed class QuestDetailDialog : ExineImageControl
     {
-        private readonly MirButton _shareButton, _pauseButton, _cancelButton;
+        private readonly ExineButton _shareButton, _pauseButton, _cancelButton;
 
         public ClientQuestProgress Quest;
         public QuestMessage Message;
@@ -482,7 +482,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #region Message Area
 
-            MirButton upButton = new MirButton
+            ExineButton upButton = new ExineButton
             {
                 Index = 197,
                 HoverIndex = 198,
@@ -495,7 +495,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = true
             };
 
-            MirButton downButton = new MirButton
+            ExineButton downButton = new ExineButton
             {
                 Index = 207,
                 HoverIndex = 208,
@@ -508,7 +508,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = true
             };
 
-            MirButton positionBar = new MirButton
+            ExineButton positionBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,
@@ -546,7 +546,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #region Buttons
 
-            _shareButton = new MirButton
+            _shareButton = new ExineButton
             {
                 Index = 616,
                 HoverIndex = 617,
@@ -561,7 +561,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Network.Enqueue(new C.ShareQuest { QuestIndex = Quest.Id });
             };
 
-            _pauseButton = new MirButton
+            _pauseButton = new ExineButton
             {
                 Index = 270,
                 HoverIndex = 271,
@@ -573,7 +573,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = false
             };
 
-            _cancelButton = new MirButton
+            _cancelButton = new ExineButton
             {
                 Index = 203,
                 HoverIndex = 204,
@@ -597,7 +597,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #endregion
 
-            MirButton closeButton = new MirButton
+            ExineButton closeButton = new ExineButton
             {
                 Index = 360,
                 HoverIndex = 361,
@@ -642,7 +642,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public List<string> ExpandedGroups = new List<string>();
 
-        private MirButton _closeButton;
+        private ExineButton _closeButton;
         private ExineLabel _takenQuestsLabel;
 
         public QuestDiaryDialog()
@@ -669,7 +669,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(210, 7)
             };
 
-            _closeButton = new MirButton
+            _closeButton = new ExineButton
             {
                 Index = 193,
                 HoverIndex = 194,
@@ -681,7 +681,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             _closeButton.Click += (o, e) => Hide();
 
-            MirButton closeButton = new MirButton
+            ExineButton closeButton = new ExineButton
             {
                 Index = 360,
                 HoverIndex = 361,
@@ -1000,7 +1000,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class QuestMessage : ExineControl
     {
         public ClientQuestProgress Quest;
-        public MirButton ScrollUpButton, ScrollDownButton, PositionBar;
+        public ExineButton ScrollUpButton, ScrollDownButton, PositionBar;
 
         private static readonly Regex C = new Regex(@"{(.*?/.*?)}");
 
@@ -1019,7 +1019,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         private const string TaskTitle = "Tasks", ProgressTitle = "Progress", ReturnTitle = "Quest Return", TimeLimitTitle = "Time Limit";
 
-        public QuestMessage(MirButton scrollUpButton, MirButton scrollDownButton, MirButton positionBar, int lineCount, bool displayProgress = false)
+        public QuestMessage(ExineButton scrollUpButton, ExineButton scrollDownButton, ExineButton positionBar, int lineCount, bool displayProgress = false)
         {
             ScrollUpButton = scrollUpButton;
             ScrollDownButton = scrollDownButton;
@@ -1681,7 +1681,7 @@ namespace Exine.ExineScenes.ExDialogs
         public bool Expanded = true;
         public int SizeY = 15;
 
-        private readonly MirButton _expandButton;
+        private readonly ExineButton _expandButton;
         private readonly ExineLabel _groupLabel;
         private readonly List<QuestSingleQuestItem> _tasks = new List<QuestSingleQuestItem>();
 
@@ -1705,7 +1705,7 @@ namespace Exine.ExineScenes.ExDialogs
             Quests = quests;
             Expanded = expanded;
 
-            _expandButton = new MirButton
+            _expandButton = new ExineButton
             {
                 Index = Expanded ? 917 : 918,
                 Library = Libraries.Prguse,

@@ -6,11 +6,11 @@ namespace Exine.ExineScenes.ExDialogs
 {
     public class ChatOptionDialog : ExineImageControl
     {
-        public MirButton FilterTabButton, ChatTabButton;
-        public MirButton CloseButton;
+        public ExineButton FilterTabButton, ChatTabButton;
+        public ExineButton CloseButton;
 
-        public MirButton AllButton, GeneralButton, WhisperButton, ShoutButton, SystemButton, LoverButton, MentorButton, GroupButton, GuildButton;
-        public MirButton TransparencyOnButton, TransparencyOffButton;
+        public ExineButton AllButton, GeneralButton, WhisperButton, ShoutButton, SystemButton, LoverButton, MentorButton, GroupButton, GuildButton;
+        public ExineButton TransparencyOnButton, TransparencyOffButton;
 
         public bool AllFiltersOff = true;
 
@@ -25,7 +25,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             BeforeDraw += ChatFilterPanel_BeforeDraw;
 
-            FilterTabButton = new MirButton
+            FilterTabButton = new ExineButton
             {
                 Index = 463,
                 PressedIndex = 462,
@@ -36,7 +36,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             FilterTabButton.Click += (o, e) => SwitchTab(0);
 
-            ChatTabButton = new MirButton
+            ChatTabButton = new ExineButton
             {
                 Index = 464,
                 PressedIndex = 465,
@@ -47,7 +47,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             ChatTabButton.Click += (o, e) => SwitchTab(1);
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -61,7 +61,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #region Filters
 
-            AllButton = new MirButton
+            AllButton = new ExineButton
             {
                 Index = 2087,
                 Library = Libraries.Prguse,
@@ -72,7 +72,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             AllButton.Click += (o, e) => ToggleAllFilters();
 
-            GeneralButton = new MirButton
+            GeneralButton = new ExineButton
             {
                 Index = 2071,
                 Library = Libraries.Prguse,
@@ -86,7 +86,7 @@ namespace Exine.ExineScenes.ExDialogs
                 CheckAllFilters();
             };
 
-            WhisperButton = new MirButton
+            WhisperButton = new ExineButton
             {
                 Index = 2075,
                 Library = Libraries.Prguse,
@@ -100,7 +100,7 @@ namespace Exine.ExineScenes.ExDialogs
                 CheckAllFilters();
             };
 
-            ShoutButton = new MirButton
+            ShoutButton = new ExineButton
             {
                 Index = 2073,
                 Library = Libraries.Prguse,
@@ -114,7 +114,7 @@ namespace Exine.ExineScenes.ExDialogs
                 CheckAllFilters();
             };
 
-            SystemButton = new MirButton
+            SystemButton = new ExineButton
             {
                 Index = 2085,
                 Library = Libraries.Prguse,
@@ -128,7 +128,7 @@ namespace Exine.ExineScenes.ExDialogs
                 CheckAllFilters();
             };
 
-            LoverButton = new MirButton
+            LoverButton = new ExineButton
             {
                 Index = 2077,
                 Library = Libraries.Prguse,
@@ -142,7 +142,7 @@ namespace Exine.ExineScenes.ExDialogs
                 CheckAllFilters();
             };
 
-            MentorButton = new MirButton
+            MentorButton = new ExineButton
             {
                 Index = 2079,
                 Library = Libraries.Prguse,
@@ -156,7 +156,7 @@ namespace Exine.ExineScenes.ExDialogs
                 CheckAllFilters();
             };
 
-            GroupButton = new MirButton
+            GroupButton = new ExineButton
             {
                 Index = 2081,
                 Library = Libraries.Prguse,
@@ -170,7 +170,7 @@ namespace Exine.ExineScenes.ExDialogs
                 CheckAllFilters();
             };
 
-            GuildButton = new MirButton
+            GuildButton = new ExineButton
             {
                 Index = 2083,
                 Library = Libraries.Prguse,
@@ -188,7 +188,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #region Transparency
 
-            TransparencyOffButton = new MirButton
+            TransparencyOffButton = new ExineButton
             {
                 Index = 471,
                 HoverIndex = 472,
@@ -205,7 +205,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdateTransparency();
             };
 
-            TransparencyOnButton = new MirButton
+            TransparencyOnButton = new ExineButton
             {
                 Index = 474,
                 HoverIndex = 475,

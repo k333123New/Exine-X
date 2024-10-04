@@ -9,7 +9,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class MentorDialog : ExineImageControl
     {
         public ExineImageControl TitleLabel;
-        public MirButton CloseButton, AllowButton, AddButton, RemoveButton;
+        public ExineButton CloseButton, AllowButton, AddButton, RemoveButton;
         public ExineLabel MentorNameLabel, MentorLevelLabel, MentorOnlineLabel, StudentNameLabel, StudentLevelLabel, StudentOnlineLabel, MentorLabel, StudentLabel, MenteeEXPLabel;
 
         public string MentorName;
@@ -36,7 +36,7 @@ namespace Exine.ExineScenes.ExDialogs
 
 
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -48,7 +48,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
-            AllowButton = new MirButton
+            AllowButton = new ExineButton
             {
                 HoverIndex = 115,
                 Index = 114,
@@ -78,7 +78,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
 
 
-            AddButton = new MirButton
+            AddButton = new ExineButton
             {
                 HoverIndex = 214,
                 Index = 213,
@@ -99,7 +99,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 string message = GameLanguage.MentorEnterName;
 
-                MirInputBox inputBox = new MirInputBox(message);
+                ExineInputBox inputBox = new ExineInputBox(message);
 
                 inputBox.OKButton.Click += (o1, e1) =>
                 {
@@ -111,7 +111,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             };
 
-            RemoveButton = new MirButton
+            RemoveButton = new ExineButton
             {
                 HoverIndex = 217,
                 Index = 216,

@@ -13,7 +13,7 @@ namespace Exine.ExineScenes
     {
         
         private ExineAnimatedControl  _background, _light1, _light2, _light3, _light4, _genderOrb;//_background2
-        private MirButton _okBtn, _cancelBtn, _styleBtnL, _styleBtnR, _colorBtnL, _colorBtnR;
+        private ExineButton _okBtn, _cancelBtn, _styleBtnL, _styleBtnR, _colorBtnL, _colorBtnR;
         private ExineImageControl _charImage;
         private ExineTextBox _newIdTextBox, _newPwTextBox, _newConfirmPwTextBox;
         int colorIdx = 0;
@@ -246,7 +246,7 @@ namespace Exine.ExineScenes
 
 
             //_styleBtnL 1~4 73,537
-            _styleBtnL = new MirButton
+            _styleBtnL = new ExineButton
             {
                 Index = 1,
                 HoverIndex = 2,
@@ -287,7 +287,7 @@ namespace Exine.ExineScenes
             };
 
                 //_styleBtnR 5~8 ,223,537
-            _styleBtnR = new MirButton
+            _styleBtnR = new ExineButton
             {
                 Index = 5,
                 HoverIndex = 6,
@@ -326,7 +326,7 @@ namespace Exine.ExineScenes
 
            
 
-            _colorBtnL = new MirButton
+            _colorBtnL = new ExineButton
             {
                 Index = 9,
                 HoverIndex = 10,
@@ -345,7 +345,7 @@ namespace Exine.ExineScenes
             }; 
 
             //_colorBtnR 13~16 ,453,537
-            _colorBtnR = new MirButton
+            _colorBtnR = new ExineButton
             {
                 Index = 13,
                 HoverIndex = 14,
@@ -363,7 +363,7 @@ namespace Exine.ExineScenes
             };
 
             //ok 17~20 69,430
-            _okBtn = new MirButton
+            _okBtn = new ExineButton
             {
                 Index = 17,
                 HoverIndex = 18,
@@ -397,7 +397,7 @@ namespace Exine.ExineScenes
 
 
             //cancel 21~24 10,480
-            _cancelBtn = new MirButton
+            _cancelBtn = new ExineButton
             {
                 Index = 21,
                 HoverIndex = 22,

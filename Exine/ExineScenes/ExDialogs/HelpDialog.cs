@@ -8,7 +8,7 @@ namespace Exine.ExineScenes.ExDialogs
     {
         public List<HelpPage> Pages = new List<HelpPage>();
 
-        public MirButton CloseButton, NextButton, PreviousButton;
+        public ExineButton CloseButton, NextButton, PreviousButton;
         public ExineLabel PageLabel;
         public HelpPage CurrentPage;
 
@@ -31,7 +31,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this
             };
 
-            PreviousButton = new MirButton
+            PreviousButton = new ExineButton
             {
                 Index = 240,
                 HoverIndex = 241,
@@ -51,7 +51,7 @@ namespace Exine.ExineScenes.ExDialogs
                 DisplayPage(CurrentPageNumber);
             };
 
-            NextButton = new MirButton
+            NextButton = new ExineButton
             {
                 Index = 243,
                 HoverIndex = 244,
@@ -82,7 +82,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Size = new Size(80, 20)
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,

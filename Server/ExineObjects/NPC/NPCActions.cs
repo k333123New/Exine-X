@@ -63,10 +63,7 @@
         RefreshEffects,
         ChangeHair,
         CanGainExp,
-        ComposeMail,
-        AddMailItem,
-        AddMailGold,
-        SendMail,
+        
         GroupGoto,
         EnterMap,
         GivePearls,

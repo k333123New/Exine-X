@@ -2,14 +2,14 @@
 
 namespace Exine.ExineControls
 {
-    public sealed class MirInputBox : ExineImageControl
+    public sealed class ExineInputBox : ExineImageControl
     {
         public readonly ExineLabel CaptionLabel;
-        public readonly MirButton OKButton, CancelButton;
+        public readonly ExineButton OKButton, CancelButton;
         public readonly ExineTextBox InputTextBox;
 
 
-        public MirInputBox(string message)
+        public ExineInputBox(string message)
         {
             Modal = true;
             Movable = false;
@@ -40,7 +40,7 @@ namespace Exine.ExineControls
             InputTextBox.SetFocus();
             InputTextBox.TextBox.KeyPress += MirInputBox_KeyPress;
 
-            OKButton = new MirButton
+            OKButton = new ExineButton
             {
                 HoverIndex = 201,
                 Index = 200,
@@ -50,7 +50,7 @@ namespace Exine.ExineControls
                 PressedIndex = 202,
             };
 
-            CancelButton = new MirButton
+            CancelButton = new ExineButton
             {
                 HoverIndex = 204,
                 Index = 203,

@@ -884,32 +884,7 @@ namespace Server.ExineObjects
                     if (parts.Length < 2) return;
                     acts.Add(new NPCActions(ActionType.CanGainExp, parts[1]));
                     break;
-
-                case "COMPOSEMAIL":
-                    match = regexQuote.Match(line);
-                    if (match.Success)
-                    {
-                        var message = match.Groups[1].Captures[0].Value;
-
-                        var last = parts.Count() - 1;
-                        acts.Add(new NPCActions(ActionType.ComposeMail, message, parts[last]));
-                    }
-                    break;
-
-                case "ADDMAILGOLD":
-                    if (parts.Length < 2) return;
-                    acts.Add(new NPCActions(ActionType.AddMailGold, parts[1]));
-                    break;
-
-                case "ADDMAILITEM":
-                    if (parts.Length < 3) return;
-                    acts.Add(new NPCActions(ActionType.AddMailItem, parts[1], parts[2]));
-                    break;
-
-                case "SENDMAIL":
-                    acts.Add(new NPCActions(ActionType.SendMail));
-                    break;
-
+                     
                 case "GROUPGOTO":
                     if (parts.Length < 2) return;
                     acts.Add(new NPCActions(ActionType.GroupGoto, parts[1]));
@@ -1403,9 +1378,7 @@ namespace Server.ExineObjects
                 case "GUILDWARFEE":
                     newValue = Settings.Guild_WarCost.ToString();
                     break;
-                case "PARCELAMOUNT":
-                    newValue = player.GetMailAwaitingCollectionAmount().ToString();
-                    break;
+               
                 case "GUILDNAME":
                     if (player.MyGuild == null) return "No Guild";
                     else
@@ -2685,7 +2658,7 @@ namespace Server.ExineObjects
         }
         private void Act(IList<NPCActions> acts, PlayerObjectSrv player)
         {
-            MailInfo mailInfo = null;
+           
 
             for (var i = 0; i < acts.Count; i++)
             {
@@ -3425,74 +3398,7 @@ namespace Server.ExineObjects
                             player.CanGainExp = tempBool;
                         }
                         break;
-
-                    case ActionType.ComposeMail:
-                        {
-                            mailInfo = new MailInfo(player.Info.Index, false)
-                            {
-                                Sender = param[1],
-                                Message = param[0]
-                            };
-                        }
-                        break;
-                    case ActionType.AddMailGold:
-                        {
-                            if (mailInfo == null) return;
-
-                            uint.TryParse(param[0], out uint tempUint);
-
-                            mailInfo.Gold += tempUint;
-                        }
-                        break;
-
-                    case ActionType.AddMailItem:
-                        {
-                            if (mailInfo == null) return;
-                            if (mailInfo.Items.Count > 5) return;
-
-                            if (param.Count < 2 || !ushort.TryParse(param[1], out ushort count)) count = 1;
-
-                            var info = Envir.GetItemInfo(param[0]);
-
-                            if (info == null)
-                            {
-                                MessageQueue.Enqueue(string.Format("Failed to get ItemInfo: {0}, Page: {1}", param[0], Key));
-                                break;
-                            }
-
-                            while (count > 0 && mailInfo.Items.Count < 5)
-                            {
-                                UserItem item = Envir.CreateFreshItem(info);
-
-                                if (item == null)
-                                {
-                                    MessageQueue.Enqueue(string.Format("Failed to create UserItem: {0}, Page: {1}", param[0], Key));
-                                    return;
-                                }
-
-                                if (item.Info.StackSize > count)
-                                {
-                                    item.Count = count;
-                                    count = 0;
-                                }
-                                else
-                                {
-                                    count -= item.Info.StackSize;
-                                    item.Count = item.Info.StackSize;
-                                }
-
-                                mailInfo.Items.Add(item);
-                            }
-                        }
-                        break;
-
-                    case ActionType.SendMail:
-                        {
-                            if (mailInfo == null) return;
-
-                            mailInfo.Send();
-                        }
-                        break;
+ 
 
                     case ActionType.GroupGoto:
                         {

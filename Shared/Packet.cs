@@ -196,18 +196,7 @@ public abstract class Packet
                 return new C.SpellToggle();
             case (short)ClientPacketIds.ConsignItem:
                 return new C.ConsignItem();
-            case (short)ClientPacketIds.MarketSearch:
-                return new C.MarketSearch();
-            case (short)ClientPacketIds.MarketRefresh:
-                return new C.MarketRefresh();
-            case (short)ClientPacketIds.MarketPage:
-                return new C.MarketPage();
-            case (short)ClientPacketIds.MarketBuy:
-                return new C.MarketBuy();
-            case (short)ClientPacketIds.MarketGetBack:
-                return new C.MarketGetBack();
-            case (short)ClientPacketIds.MarketSellNow:
-                return new C.MarketSellNow();
+            
             case (short)ClientPacketIds.RequestUserName:
                 return new C.RequestUserName();
             case (short)ClientPacketIds.RequestChatItem:
@@ -276,40 +265,15 @@ public abstract class Packet
                 return new C.CancelReincarnation();
             case (short)ClientPacketIds.CombineItem:
                 return new C.CombineItem();
-            case (short)ClientPacketIds.AwakeningNeedMaterials:
-                return new C.AwakeningNeedMaterials();
-            case (short)ClientPacketIds.AwakeningLockedItem:
-                return new C.AwakeningLockedItem();
-            case (short)ClientPacketIds.Awakening:
-                return new C.Awakening();
-            case (short)ClientPacketIds.DisassembleItem:
-                return new C.DisassembleItem();
-            case (short)ClientPacketIds.DowngradeAwakening:
-                return new C.DowngradeAwakening();
-            case (short)ClientPacketIds.ResetAddedItem:
-                return new C.ResetAddedItem();
-            case (short)ClientPacketIds.SendMail:
-                return new C.SendMail();
-            case (short)ClientPacketIds.ReadMail:
-                return new C.ReadMail();
-            case (short)ClientPacketIds.CollectParcel:
-                return new C.CollectParcel();
-            case (short)ClientPacketIds.DeleteMail:
-                return new C.DeleteMail();
-            case (short)ClientPacketIds.LockMail:
-                return new C.LockMail();
-            case (short)ClientPacketIds.MailLockedItem:
-                return new C.MailLockedItem();
-            case (short)ClientPacketIds.MailCost:
-                return new C.MailCost();
+             
+           
             case (short)ClientPacketIds.AddFriend:
                 return new C.AddFriend();
             case (short)ClientPacketIds.RemoveFriend:
                 return new C.RemoveFriend();
             case (short)ClientPacketIds.RefreshFriends:
                 return new C.RefreshFriends();
-            case (short)ClientPacketIds.AddMemo:
-                return new C.AddMemo();
+            
             case (short)ClientPacketIds.GuildBuffUpdate:
                 return new C.GuildBuffUpdate();
             case (short)ClientPacketIds.GameshopBuy:
@@ -630,16 +594,10 @@ public abstract class Packet
                 return new S.ObjectDashFail();
             case (short)ServerPacketIds.NPCConsign:
                 return new S.NPCConsign();
-            case (short)ServerPacketIds.NPCMarket:
-                return new S.NPCMarket();
-            case (short)ServerPacketIds.NPCMarketPage:
-                return new S.NPCMarketPage();
+             
             case (short)ServerPacketIds.ConsignItem:
                 return new S.ConsignItem();
-            case (short)ServerPacketIds.MarketFail:
-                return new S.MarketFail();
-            case (short)ServerPacketIds.MarketSuccess:
-                return new S.MarketSuccess();
+            
             case (short)ServerPacketIds.ObjectSitDown:
                 return new S.ObjectSitDown();
             case (short)ServerPacketIds.InTrapRock:
@@ -749,32 +707,7 @@ public abstract class Packet
                 return new S.SetBindingShot();
             case (short)ServerPacketIds.SendOutputMessage:
                 return new S.SendOutputMessage();
-            case (short)ServerPacketIds.NPCAwakening:
-                return new S.NPCAwakening();
-            case (short)ServerPacketIds.NPCDisassemble:
-                return new S.NPCDisassemble();
-            case (short)ServerPacketIds.NPCDowngrade:
-                return new S.NPCDowngrade();
-            case (short)ServerPacketIds.NPCReset:
-                return new S.NPCReset();
-            case (short)ServerPacketIds.AwakeningNeedMaterials:
-                return new S.AwakeningNeedMaterials();
-            case (short)ServerPacketIds.AwakeningLockedItem:
-                return new S.AwakeningLockedItem();
-            case (short)ServerPacketIds.Awakening:
-                return new S.Awakening();
-            case (short)ServerPacketIds.ReceiveMail:
-                return new S.ReceiveMail();
-            case (short)ServerPacketIds.MailLockedItem:
-                return new S.MailLockedItem();
-            case (short)ServerPacketIds.MailSent:
-                return new S.MailSent();
-            case (short)ServerPacketIds.MailSendRequest:
-                return new S.MailSendRequest();
-            case (short)ServerPacketIds.ParcelCollected:
-                return new S.ParcelCollected();
-            case (short)ServerPacketIds.MailCost:
-                return new S.MailCost();
+             
             case (short)ServerPacketIds.ResizeInventory:
                 return new S.ResizeInventory();
             case (short)ServerPacketIds.ResizeStorage:

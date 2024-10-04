@@ -13,18 +13,18 @@ namespace Exine.ExineScenes.ExDialogs
     {
         #region NoticeBase
         public ExineLabel GuildName;
-        public MirButton CloseButton;
+        public ExineButton CloseButton;
         #endregion
 
         #region GuildLeft
-        public MirButton NoticeButton, MembersButton, StorageButton, RankButton;
+        public ExineButton NoticeButton, MembersButton, StorageButton, RankButton;
         public ExineImageControl NoticePage, MembersPage, StoragePage, RankPage;
         public ExineImageControl StoragePageBase, MembersPageBase;
         public ExineImageControl TitleLabel;
         #endregion
 
         #region GuildRight
-        public MirButton BuffButton, StatusButton;
+        public ExineButton BuffButton, StatusButton;
         public ExineImageControl BuffPage, StatusPage, StatusPageBase;
 
         public GuildBuffButton[] Buffs;
@@ -65,19 +65,19 @@ namespace Exine.ExineScenes.ExDialogs
         public bool NoticeChanged = true;
         public long LastNoticeRequest = 0;
         public int NoticeScrollIndex = 0;
-        public MirButton NoticeUpButton, NoticeDownButton, NoticePositionBar, NoticeEditButton, NoticeSaveButton;
+        public ExineButton NoticeUpButton, NoticeDownButton, NoticePositionBar, NoticeEditButton, NoticeSaveButton;
         public ExineTextBox Notice;
         #endregion
 
         #region MembersPagePub
         public int MemberScrollIndex = 0, MembersShowCount = 1;
-        public MirButton MembersUpButton, MembersDownButton, MembersPositionBar;
+        public ExineButton MembersUpButton, MembersDownButton, MembersPositionBar;
         public ExineLabel MembersHeaderRank, MembersHeaderName, MembersHeaderStatus, MembersShowOffline;
-        public MirButton MembersShowOfflineButton;
+        public ExineButton MembersShowOfflineButton;
         public ExineImageControl MembersShowOfflineStatus;
         public MirDropDownBox[] MembersRanks;
         public ExineLabel[] MembersName, MembersStatus;
-        public MirButton[] MembersDelete;
+        public ExineButton[] MembersDelete;
         public int MemberPageRows = 18;
         public bool MembersShowOfflinesetting = true;
         #endregion
@@ -89,14 +89,14 @@ namespace Exine.ExineScenes.ExDialogs
         public ExineImageControl StatusExpBar;
         public ExineLabel StatusExpLabel, RecruitMemberLabel;
         public ExineTextBox MembersRecruitName;
-        public MirButton RecruitMemberButton;
+        public ExineButton RecruitMemberButton;
         #endregion
 
         #region StoragePagePub
         public ExineLabel StorageGoldText;
-        public MirButton StorageGoldAdd, StorageGoldRemove, StorageGoldIcon;
+        public ExineButton StorageGoldAdd, StorageGoldRemove, StorageGoldIcon;
         public MirItemCell[] StorageGrid;
-        public MirButton StorageUpButton, StorageDownButton, StoragePositionBar;
+        public ExineButton StorageUpButton, StorageDownButton, StoragePositionBar;
         public int StorageIndex = 1;
         #endregion
 
@@ -105,10 +105,10 @@ namespace Exine.ExineScenes.ExDialogs
         public ExineLabel RanksSelectTextR, RanksSelectTextL, PointsLeft;
         public ExineTextBox RanksName;
         public ExineImageControl[] RanksOptionsStatus;
-        public MirButton[] RanksOptionsButtons;
+        public ExineButton[] RanksOptionsButtons;
         public ExineLabel[] RanksOptionsTexts;
         public MirDropDownBox RanksSelectBox;
-        public MirButton RanksSaveName, UpButton, DownButton, PositionBar;
+        public ExineButton RanksSaveName, UpButton, DownButton, PositionBar;
         #endregion
 
         #region BuffPagePub
@@ -135,7 +135,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Parent = this
             };
 
-            NoticeButton = new MirButton
+            NoticeButton = new ExineButton
             {
                 Library = Libraries.Title,
                 Index = 93,
@@ -145,7 +145,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(20, 38)
             };
             NoticeButton.Click += (o, e) => LeftDialog(0);
-            MembersButton = new MirButton
+            MembersButton = new ExineButton
             {
                 Library = Libraries.Title,
                 Index = 99,
@@ -155,7 +155,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Location = new Point(91, 38),
             };
             MembersButton.Click += (o, e) => LeftDialog(1);
-            StorageButton = new MirButton
+            StorageButton = new ExineButton
             {
                 Library = Libraries.Title,
                 Index = 105,
@@ -166,7 +166,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = false
             };
             StorageButton.Click += (o, e) => LeftDialog(2);
-            RankButton = new MirButton // Ranks
+            RankButton = new ExineButton // Ranks
             {
                 Library = Libraries.Title,
                 Index = 101,
@@ -177,7 +177,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             RankButton.Click += (o, e) => LeftDialog(3);
 
-            StatusButton = new MirButton
+            StatusButton = new ExineButton
             {
                 Library = Libraries.Title,
                 Parent = this,
@@ -187,7 +187,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             StatusButton.Click += (o, e) => RightDialog(0);
 
-            BuffButton = new MirButton
+            BuffButton = new ExineButton
             {
                 Library = Libraries.Title,
                 Parent = this,
@@ -198,7 +198,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             BuffButton.Click += (o, e) => RightDialog(1);
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -231,7 +231,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             Notice.MultiLine();
 
-            NoticeEditButton = new MirButton
+            NoticeEditButton = new ExineButton
             {
                 Visible = false,
                 Index = 560,
@@ -244,7 +244,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             NoticeEditButton.Click += (o, e) => EditNotice();
 
-            NoticeSaveButton = new MirButton
+            NoticeSaveButton = new ExineButton
             {
                 Visible = false,
                 Index = 554,
@@ -257,7 +257,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             NoticeSaveButton.Click += (o, e) => EditNotice();
 
-            NoticeUpButton = new MirButton
+            NoticeUpButton = new ExineButton
             {
                 HoverIndex = 198,
                 Index = 197,
@@ -277,7 +277,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdateNoticeScrollPosition();
             };
 
-            NoticeDownButton = new MirButton
+            NoticeDownButton = new ExineButton
             {
                 HoverIndex = 208,
                 Index = 207,
@@ -298,7 +298,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdateNoticeScrollPosition();
             };
 
-            NoticePositionBar = new MirButton
+            NoticePositionBar = new ExineButton
             {
                 Index = 206,
                 Library = Libraries.Prguse2,
@@ -335,7 +335,7 @@ namespace Exine.ExineScenes.ExDialogs
             MembersRanks = new MirDropDownBox[MemberPageRows];
             MembersName = new ExineLabel[MemberPageRows];
             MembersStatus = new ExineLabel[MemberPageRows];
-            MembersDelete = new MirButton[MemberPageRows];
+            MembersDelete = new ExineButton[MemberPageRows];
 
             for (int i = MembersRanks.Length - 1; i >= 0; i--)
             {
@@ -387,7 +387,7 @@ namespace Exine.ExineScenes.ExDialogs
             for (int i = 0; i < MembersDelete.Length; i++)
             {
                 int index = i;
-                MembersDelete[i] = new MirButton()
+                MembersDelete[i] = new ExineButton()
                 {
                     Enabled = true,
                     Visible = true,
@@ -399,7 +399,7 @@ namespace Exine.ExineScenes.ExDialogs
                 MembersDelete[index].MouseWheel += MembersPanel_MouseWheel;
                 MembersDelete[index].Click += (o, e) => DeleteMember(index);
             }
-            MembersUpButton = new MirButton
+            MembersUpButton = new ExineButton
             {
                 HoverIndex = 198,
                 Index = 197,
@@ -418,7 +418,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdateMembers();
                 UpdateMembersScrollPosition();
             };
-            MembersDownButton = new MirButton
+            MembersDownButton = new ExineButton
             {
                 HoverIndex = 208,
                 Index = 207,
@@ -438,7 +438,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdateMembersScrollPosition();
             };
 
-            MembersPositionBar = new MirButton
+            MembersPositionBar = new ExineButton
             {
                 Index = 206,
                 Library = Libraries.Prguse2,
@@ -449,7 +449,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             MembersPositionBar.OnMoving += MembersPositionBar_OnMoving;
 
-            MembersShowOfflineButton = new MirButton
+            MembersShowOfflineButton = new ExineButton
             {
                 Visible = true,
                 Index = 1346,
@@ -588,7 +588,7 @@ namespace Exine.ExineScenes.ExDialogs
                 BorderColour = Color.FromArgb(255, 35, 35, 35),
                 CanLoseFocus = true
             };
-            RecruitMemberButton = new MirButton()
+            RecruitMemberButton = new ExineButton()
             {
                 Parent = StatusPage,
                 Enabled = true,
@@ -647,7 +647,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Text = "0",
                 NotControl = true,
             };
-            StorageGoldAdd = new MirButton()
+            StorageGoldAdd = new ExineButton()
             {
                 Parent = StoragePage,
                 Library = Libraries.Prguse,
@@ -658,7 +658,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             StorageGoldAdd.Click += (o, e) => StorageAddGold();
 
-            StorageGoldRemove = new MirButton()
+            StorageGoldRemove = new ExineButton()
             {
                 Parent = StoragePage,
                 Library = Libraries.Prguse,
@@ -691,7 +691,7 @@ namespace Exine.ExineScenes.ExDialogs
                 }
             }
 
-            StorageUpButton = new MirButton
+            StorageUpButton = new ExineButton
             {
                 HoverIndex = 198,
                 Index = 197,
@@ -711,7 +711,7 @@ namespace Exine.ExineScenes.ExDialogs
                 StorageUpdatePositionBar();
             };
 
-            StorageDownButton = new MirButton
+            StorageDownButton = new ExineButton
             {
                 HoverIndex = 208,
                 Index = 207,
@@ -731,7 +731,7 @@ namespace Exine.ExineScenes.ExDialogs
                 StorageUpdatePositionBar();
             };
 
-            StoragePositionBar = new MirButton
+            StoragePositionBar = new ExineButton
             {
                 Index = 206,
                 Library = Libraries.Prguse2,
@@ -805,7 +805,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             RanksName.BeforeDraw += (o, e) => RanksName_BeforeDraw();
             RanksName.TextBox.KeyPress += RanksName_KeyPress;
-            RanksSaveName = new MirButton()
+            RanksSaveName = new ExineButton()
             {
                 Location = new Point(155, 290),
                 Enabled = false,
@@ -822,12 +822,12 @@ namespace Exine.ExineScenes.ExDialogs
                 RanksChangeName();
             };
             String[] Options = { "Edit ranks", "Recruit member", "Kick member", "Store item", "Retrieve item", "Alter alliance", "Change notice", "Activate Buff" };
-            RanksOptionsButtons = new MirButton[8];
+            RanksOptionsButtons = new ExineButton[8];
             RanksOptionsStatus = new ExineImageControl[8];
             RanksOptionsTexts = new ExineLabel[8];
             for (int i = 0; i < RanksOptionsButtons.Length; i++)
             {
-                RanksOptionsButtons[i] = new MirButton()
+                RanksOptionsButtons[i] = new ExineButton()
                 {
                     Visible = true,
                     Enabled = false,
@@ -901,7 +901,7 @@ namespace Exine.ExineScenes.ExDialogs
                 NotControl = true
             };
 
-            UpButton = new MirButton
+            UpButton = new ExineButton
             {
                 Index = 197,
                 HoverIndex = 198,
@@ -918,7 +918,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdatePositionBar();
                 RefreshInterface();
             };
-            DownButton = new MirButton
+            DownButton = new ExineButton
             {
                 Index = 207,
                 HoverIndex = 208,
@@ -937,7 +937,7 @@ namespace Exine.ExineScenes.ExDialogs
                 RefreshInterface();
             };
 
-            PositionBar = new MirButton
+            PositionBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,

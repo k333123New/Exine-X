@@ -343,7 +343,7 @@ namespace ClientConsoleTest
 
                 case (short)ServerPacketIds.UserInformation:
                     var p = ((S.UserInformation)recvPacket);
-                    Console.WriteLine("name:{0} NameColour:{1} Style{2} Color{3} ExPortraitLen{4}", p.Name,p.NameColour,p.ExStyle, p.ExColor, p.ExPortraitLen);
+                    Console.WriteLine("name:{0} NameColour:{1} Style{2} Color{3} ExPortraitLen{4} Gold{5}", p.Name,p.NameColour,p.ExStyle, p.ExColor, p.ExPortraitLen, p.Gold);
                      
                     
                     break;

@@ -10,7 +10,7 @@ namespace Exine.ExineScenes.ExDialogs
     /// </summary>
     public sealed class ExineStateDialog : ExineImageControl
     {
-        public MirButton CloseButton, StatusButton,  RingButton, FamilyButton, AKAButton, SkillButton;//,  CharacterButton,StatusButton, StateButton;
+        public ExineButton CloseButton, StatusButton,  RingButton, FamilyButton, AKAButton, SkillButton;//,  CharacterButton,StatusButton, StateButton;
         public ExineImageControl StatusPage, RingPage, FamilyPage, AKAPage, SkillPage;//,  ClassImage;
 
         public ExineLabel NameLabel, GuildLabel, LoverLabel;//, GoldLabel, WeightLabel, WeightMaxLabel;
@@ -24,7 +24,7 @@ namespace Exine.ExineScenes.ExDialogs
         public ExineLabel GrandFatherLabel, GrandMotherLabel, FatherLabel, MotherLabel, Daughter1stLabel, Daughter2ndLabel, Daughter3rdLabel, Son1stLabel, Son2ndLabel, Son3rdLabel;
 
 
-        public MirButton NextButton, BackButton;
+        public ExineButton NextButton, BackButton;
 
         public MirItemCell[] Grid;
         private MirGridType GridType;
@@ -129,7 +129,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Visible = false
             };
              
-            StatusButton = new MirButton
+            StatusButton = new ExineButton
             {
                 Library = Libraries.PANEL0503,
                 Location = new Point(365-10, 50-13),
@@ -141,7 +141,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             StatusButton.Click += (o, e) => ShowStatusPage();
 
-            RingButton = new MirButton
+            RingButton = new ExineButton
             {
                 Library = Libraries.PANEL0503,
                 Location = new Point(365-10, 124- 13),
@@ -152,7 +152,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             RingButton.Click += (o, e) => ShowRingPage();
 
-            FamilyButton = new MirButton
+            FamilyButton = new ExineButton
             {
                 Library = Libraries.PANEL0503,
                 Location = new Point(365-10, 198- 13),
@@ -164,7 +164,7 @@ namespace Exine.ExineScenes.ExDialogs
             FamilyButton.Click += (o, e) => ShowFamilyPage();
 
 
-            AKAButton = new MirButton
+            AKAButton = new ExineButton
             {
                 Library = Libraries.PANEL0503,
                 Location = new Point(365-10, 272- 13),
@@ -175,7 +175,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             AKAButton.Click += (o, e) => ShowAKAPage();
 
-            SkillButton = new MirButton
+            SkillButton = new ExineButton
             {
                 Library = Libraries.Title,
                 Location = new Point(365, 70),
@@ -187,7 +187,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             //SkillButton.Click += (o, e) => ShowSkillPage();
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 90,
                 Index = 89,
@@ -454,7 +454,7 @@ namespace Exine.ExineScenes.ExDialogs
                     HeroMagic = false
                 };
              
-            NextButton = new MirButton
+            NextButton = new ExineButton
             {
                 Index = 396,
                 Location = new Point(140, 250),
@@ -471,7 +471,7 @@ namespace Exine.ExineScenes.ExDialogs
                 RefreshInterface();
             };
 
-            BackButton = new MirButton
+            BackButton = new ExineButton
             {
                 Index = 398,
                 Location = new Point(90, 250),

@@ -18,7 +18,7 @@ namespace Exine.ExineScenes
 
 
         private ExineAnimatedControl _background, _orb1, _orb2, _gargoyle;//_background2, 
-        private MirButton _okBtn, _newBtn, _cancelBtn, _quitBtn, _pkBtn, _npkBtn, _upBtn, _downBtn, _serverBtn1, _serverBtn2, _serverBtn3, _serverBtn4, _loginDialog;
+        private ExineButton _okBtn, _newBtn, _cancelBtn, _quitBtn, _pkBtn, _npkBtn, _upBtn, _downBtn, _serverBtn1, _serverBtn2, _serverBtn3, _serverBtn4, _loginDialog;
         private ExineTextBox _loginIdTextBox, _loginPwTextBox;
         private ExineImageControl _lastLogin;
         private ExineLabel _lastLoginInfo;
@@ -129,7 +129,7 @@ namespace Exine.ExineScenes
                 Visible = true,
             };
 
-            _loginDialog = new MirButton
+            _loginDialog = new ExineButton
             {
                 Index = 2,
                 HoverIndex = 3,
@@ -171,7 +171,7 @@ namespace Exine.ExineScenes
 
 
             //0,8
-            _serverBtn1 = new MirButton
+            _serverBtn1 = new ExineButton
             { 
                 //0~2
                 Index = 0,
@@ -189,7 +189,7 @@ namespace Exine.ExineScenes
             };
 
             //16,24
-            _serverBtn2 = new MirButton
+            _serverBtn2 = new ExineButton
             { 
                 Index = 18,
                 HoverIndex = 17,
@@ -206,7 +206,7 @@ namespace Exine.ExineScenes
             };
 
             //32, 40
-            _serverBtn3 = new MirButton
+            _serverBtn3 = new ExineButton
             {
                 //10~13
                 //618 ,319
@@ -225,7 +225,7 @@ namespace Exine.ExineScenes
             };
 
             //48,56
-            _serverBtn4 = new MirButton
+            _serverBtn4 = new ExineButton
             {
                 //10~13
                 //618 ,319
@@ -244,7 +244,7 @@ namespace Exine.ExineScenes
             };
 
 
-            _newBtn = new MirButton
+            _newBtn = new ExineButton
             {
                 //10~13
                 //618 ,319
@@ -285,7 +285,7 @@ namespace Exine.ExineScenes
             };
 
 
-            _okBtn = new MirButton
+            _okBtn = new ExineButton
             {
                 //6~9
                 Index = 6,
@@ -352,7 +352,7 @@ namespace Exine.ExineScenes
             _okBtn.Hide();
             _newBtn.Hide();
 
-            _cancelBtn = new MirButton
+            _cancelBtn = new ExineButton
             {
                 //14~17
                 //527,409
@@ -365,7 +365,7 @@ namespace Exine.ExineScenes
                 Location = new Point((1024 - 800) / 2 + 527, (768 - 600) / 2 + 409),
                 Visible = false,
             }; 
-            _quitBtn = new MirButton
+            _quitBtn = new ExineButton
             {
                 //18~21
                 //527,409
@@ -384,7 +384,7 @@ namespace Exine.ExineScenes
             };
 
             
-            _pkBtn = new MirButton
+            _pkBtn = new ExineButton
             {
                 //22~24
                 //9,246
@@ -471,7 +471,7 @@ namespace Exine.ExineScenes
 
             };
 
-            _npkBtn = new MirButton
+            _npkBtn = new ExineButton
             {
                 //30~32
                 //9,349
@@ -545,7 +545,7 @@ namespace Exine.ExineScenes
  
             };
 
-            _upBtn = new MirButton
+            _upBtn = new ExineButton
             {
                 //38~41
                 //18,109
@@ -558,7 +558,7 @@ namespace Exine.ExineScenes
                 Location = new Point((1024 - 800) / 2 + 27, (768 - 600) / 2 + 109),
                 Visible = true,
             };
-            _downBtn = new MirButton
+            _downBtn = new ExineButton
             {
                 //42~45
                 //18,507

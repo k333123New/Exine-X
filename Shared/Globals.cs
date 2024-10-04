@@ -41,7 +41,6 @@
                       ConsignmentCost = 5000,
                       MinConsignment = 5000,
                       MaxConsignment = 50000000,
-                      AuctionCost = 5000,
                       MinStartingBid = 0,
                       MaxStartingBid = 50000;
 

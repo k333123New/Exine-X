@@ -7,7 +7,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class SocketDialog : ExineImageControl
     {
         public MirItemCell[] Grid;
-        public MirButton CloseButton;
+        public ExineButton CloseButton;
 
         public SocketDialog()
         {
@@ -36,7 +36,7 @@ namespace Exine.ExineScenes.ExDialogs
                 }
             }
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,

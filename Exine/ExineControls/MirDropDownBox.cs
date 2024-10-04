@@ -5,9 +5,9 @@ namespace Exine.ExineControls
     public class MirDropDownBox : ExineControl
     {
         private ExineLabel _label;
-        private MirButton _DropDownButton;
+        private ExineButton _DropDownButton;
         private ExineLabel[] _Option = new ExineLabel[5];
-        private MirButton _ScrollUp, _ScrollDown, _ScrollPosition;
+        private ExineButton _ScrollUp, _ScrollDown, _ScrollPosition;
 
         public int _SelectedIndex = -1;
         public int _WantedIndex = -1;
@@ -153,7 +153,7 @@ namespace Exine.ExineControls
                         _Option[index].Text = _Items[ScrollIndex + index + MinimumOption];
                 };
             }
-            _DropDownButton = new MirButton
+            _DropDownButton = new ExineButton
             {
                 Index = 207,
                 Library = Libraries.Prguse2,
@@ -164,7 +164,7 @@ namespace Exine.ExineControls
                 Visible = false,
             };
             _DropDownButton.Click += (o, e) => DropDownClick();
-            _ScrollUp = new MirButton
+            _ScrollUp = new ExineButton
             {
                 HoverIndex = 2022,
                 Index = 2021,
@@ -175,7 +175,7 @@ namespace Exine.ExineControls
                 Visible = false
             };
             _ScrollUp.Click += (o, e) => ScrollUp();
-            _ScrollDown = new MirButton
+            _ScrollDown = new ExineButton
             {
                 HoverIndex = 2025,
                 Index = 2024,
@@ -187,7 +187,7 @@ namespace Exine.ExineControls
             };
             _ScrollDown.Click += (o, e) => ScrollDown();
            
-            _ScrollPosition = new MirButton
+            _ScrollPosition = new ExineButton
             {
                 HoverIndex = 2016,
                 Index = 2015,

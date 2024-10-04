@@ -104,30 +104,7 @@ namespace Server.ExineObjects
 
             LogMessage(message, source);
         }
-
-        public void ItemMailed(UserItem item, uint amount, int reason, [CallerMemberName] string source = "")
-        {
-            string msg;
-            switch (reason)
-            {
-                case 1:
-                    msg = "Could not return item to bag after trade.";
-                    break;
-                case 2:
-                    msg = "Item rental expired.";
-                    break;
-                case 3:
-                    msg = "Could not return item to bag after rental.";
-                    break;
-                default:
-                    msg = "No reason provided.";
-                    break;
-            }
-
-            string message = $"Mailed {item.Info.FriendlyName} x{amount}. Reason : {msg}.";
-
-            LogMessage(message, source);
-        }
+ 
 
         public void GoldChanged(uint amount, bool lost = true, string info = "", [CallerMemberName] string source = "")
         {

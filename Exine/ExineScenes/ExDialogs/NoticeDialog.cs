@@ -12,7 +12,7 @@ namespace Exine.ExineScenes.ExDialogs
         public static Regex C = new Regex(@"{((.*?)\/(.*?))}");
         public static Regex L = new Regex(@"\(((.*?)\/(.*?))\)");
 
-        public MirButton CloseButton, UpButton, DownButton, PositionBar, OkButton;
+        public ExineButton CloseButton, UpButton, DownButton, PositionBar, OkButton;
         public ExineLabel[] TextLabel;
         public List<ExineLabel> TextButtons;
         public ExineImageControl TitleLabel;
@@ -48,7 +48,7 @@ namespace Exine.ExineScenes.ExDialogs
                 AutoSize = true
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 Index = 360,
                 HoverIndex = 361,
@@ -60,7 +60,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
-            OkButton = new MirButton
+            OkButton = new ExineButton
             {
                 Enabled = true,
                 HoverIndex = 194,
@@ -72,7 +72,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             OkButton.Click += (o, e) => Hide();
 
-            UpButton = new MirButton
+            UpButton = new ExineButton
             {
                 Index = 470,
                 HoverIndex = 471,
@@ -94,7 +94,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdatePositionBar();
             };
 
-            DownButton = new MirButton
+            DownButton = new ExineButton
             {
                 Index = 473,
                 HoverIndex = 474,
@@ -116,7 +116,7 @@ namespace Exine.ExineScenes.ExDialogs
                 UpdatePositionBar();
             };
 
-            PositionBar = new MirButton
+            PositionBar = new ExineButton
             {
                 Index = 205,
                 HoverIndex = 206,

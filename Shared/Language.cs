@@ -240,7 +240,7 @@
                          CanNotDungeon = "여기서는 던전 이스케이프를 사용할 수 없습니다",
                          CannotResurrection = "살아있는 동안 부활 스크롤을 사용할 수 없습니다",
                          CanNotDrop = "이 맵에는 아이템을 놓을 수 없습니다.",
-                         NewMail = "새 메일이 도착했습니다.",
+                         
                          CouldNotFindPlayer = "{0} 플레이어를 찾을 수 없습니다",
                          BeenPoisoned = "독에 당했습니다",
                          AllowingMentorRequests = "이제 멘토 요청을 허용합니다.",
@@ -784,7 +784,7 @@
         GameLanguage.NotFemale = reader.ReadString("Language", "NotFemale", GameLanguage.NotFemale);
         GameLanguage.NotMale = reader.ReadString("Language", "NotMale", GameLanguage.NotMale);
         GameLanguage.NotInGuild = reader.ReadString("Language", "NotInGuild", GameLanguage.NotInGuild);
-        GameLanguage.NewMail = reader.ReadString("Language", "NewMail", GameLanguage.NewMail);
+       
         GameLanguage.CouldNotFindPlayer = reader.ReadString("Language", "CouldNotFindPlayer", GameLanguage.CouldNotFindPlayer);
         GameLanguage.NoMentorship = reader.ReadString("Language", "NoMentorship", GameLanguage.NoMentorship);
         GameLanguage.NoBagSpace = reader.ReadString("Language", "NoBagSpace", GameLanguage.NoBagSpace);
@@ -823,7 +823,7 @@
         reader.Write("Language", "NotFemale", GameLanguage.NotFemale);
         reader.Write("Language", "NotMale", GameLanguage.NotMale);
         reader.Write("Language", "NotInGuild", GameLanguage.NotInGuild);
-        reader.Write("Language", "NewMail", GameLanguage.NewMail);
+       
         reader.Write("Language", "CouldNotFindPlayer", GameLanguage.CouldNotFindPlayer);
         reader.Write("Language", "NoMentorship", GameLanguage.NoMentorship);
         reader.Write("Language", "NoBagSpace", GameLanguage.NoBagSpace);

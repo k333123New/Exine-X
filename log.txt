@@ -1,3 +1,6 @@
+check buy&sell!!!
+
+
 L key => relation dialog
 
 family packet

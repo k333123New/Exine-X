@@ -195,13 +195,7 @@ namespace Server
         public static int FishingMobSpawnChance = 5;
         public static string FishingMonster = "GiantKeratoid";
 
-        //Mail Settings
-        public static bool MailAutoSendGold = false;
-        public static bool MailAutoSendItems = false;
-        public static bool MailFreeWithStamp = true;
-        public static uint MailCostPer1KGold = 100;
-        public static uint MailItemInsurancePercentage = 5;
-        public static uint MailCapacity = 100;
+      
 
         //Refine Settings
         public static bool OnlyRefineWeapon = true;
@@ -538,10 +532,8 @@ namespace Server
             LoadBaseStats();
             LoadRandomItemStats();
             LoadMines();
-            LoadGuildSettings();
-			LoadAwakeAttribute();
-            LoadFishing();
-            LoadMail();
+            LoadGuildSettings(); 
+            LoadFishing(); 
             LoadRefine();
             LoadMarriage();
             LoadMentor();
@@ -755,8 +747,7 @@ namespace Server
             Reader.Write("Game", "TeleportToNPCCost", TeleportToNPCCost);
 
             Reader.Write("Game", "HeroName", HeroName);
-
-            SaveAwakeAttribute();
+             
         }
 
         public static void LoadEXP()
@@ -1261,105 +1252,7 @@ namespace Server
                   
             }
         }
-
-		public static void LoadAwakeAttribute()
-        {
-            if (!File.Exists(Path.Combine(ConfigPath, "AwakeningSystem.ini")))
-            {
-                return;
-            }
-
-            InIReader reader = new InIReader(Path.Combine(ConfigPath, "AwakeningSystem.ini"));
-            Awake.AwakeSuccessRate = reader.ReadByte("Attribute", "SuccessRate", Awake.AwakeSuccessRate);
-            Awake.AwakeHitRate = reader.ReadByte("Attribute", "HitRate", Awake.AwakeHitRate);
-            Awake.MaxAwakeLevel = reader.ReadInt32("Attribute", "MaxUpgradeLevel", Awake.MaxAwakeLevel);
-            Awake.Awake_WeaponRate = reader.ReadByte("IncreaseValue", "WeaponValue", Awake.Awake_WeaponRate);
-            Awake.Awake_HelmetRate = reader.ReadByte("IncreaseValue", "HelmetValue", Awake.Awake_HelmetRate);
-            Awake.Awake_ArmorRate = reader.ReadByte("IncreaseValue", "ArmorValue", Awake.Awake_ArmorRate);
-
-            for (int i = 0; i < 4; i++)
-            {
-                Awake.AwakeChanceMax[i] = reader.ReadByte("Value", "ChanceMax_" + ((ItemGrade)(i + 1)).ToString(), Awake.AwakeChanceMax[i]);
-            }
-
-            for (int i = 0; i < (int)AwakeType.HPMP; i++)
-            {
-                List<byte>[] value = new List<byte>[2];
-
-                for (int k = 0; k < 2; k++)
-                {
-                    value[k] = new List<byte>();
-                }
-
-                for (int j = 0; j < 4; j++)
-                {
-                    byte material1 = 1;
-                    material1 = reader.ReadByte("Materials_BaseValue", ((AwakeType)(i + 1)).ToString() + "_" + ((ItemGrade)(j + 1)).ToString() + "_Material1", material1);
-                    byte material2 = 1;
-                    material2 = reader.ReadByte("Materials_BaseValue", ((AwakeType)(i + 1)).ToString() + "_" + ((ItemGrade)(j + 1)).ToString() + "_Material2", material2);
-                    value[0].Add(material1);
-                    value[1].Add(material2);
-                }
-
-                Awake.AwakeMaterials.Add(value);
-            }
-
-            for (int c = 0; c < 4; c++)
-            {
-                Awake.AwakeMaterialRate[c] = reader.ReadFloat("Materials_IncreaseValue", "Materials_" + ((ItemGrade)(c + 1)).ToString(), Awake.AwakeMaterialRate[c]);
-            }
-
-        }
-        public static void SaveAwakeAttribute()
-        {
-            File.Delete(Path.Combine(ConfigPath, "AwakeningSystem.ini"));
-            InIReader reader = new InIReader(Path.Combine(ConfigPath, "AwakeningSystem.ini"));
-            reader.Write("Attribute", "SuccessRate", Awake.AwakeSuccessRate);
-            reader.Write("Attribute", "HitRate", Awake.AwakeHitRate);
-            reader.Write("Attribute", "MaxUpgradeLevel", Awake.MaxAwakeLevel);
-
-            reader.Write("IncreaseValue", "WeaponValue", Awake.Awake_WeaponRate);
-            reader.Write("IncreaseValue", "HelmetValue", Awake.Awake_HelmetRate);
-            reader.Write("IncreaseValue", "ArmorValue", Awake.Awake_ArmorRate);
-
-            for (int i = 0; i < 4; i++)
-            {
-                reader.Write("Value", "ChanceMax_" + ((ItemGrade)(i + 1)).ToString(), Awake.AwakeChanceMax[i]);
-            }
-
-            if (Awake.AwakeMaterials.Count == 0)
-            {
-                for (int i = 0; i < (int)AwakeType.HPMP; i++)
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        reader.Write("Materials_BaseValue", ((AwakeType)(i + 1)).ToString() + "_" + ((ItemGrade)(j + 1)).ToString() + "_Material1", 1);
-                        reader.Write("Materials_BaseValue", ((AwakeType)(i + 1)).ToString() + "_" + ((ItemGrade)(j + 1)).ToString() + "_Material2", 1);
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < (int)AwakeType.HPMP; i++)
-                {
-                    List<byte>[] value = Awake.AwakeMaterials[i];
-
-                    for (int j = 0; j < value[0].Count; j++)
-                    {
-                        reader.Write("Materials_BaseValue", ((AwakeType)(i + 1)).ToString() + "_" + ((ItemGrade)(j + 1)).ToString() + "_Material1", value[0][j]);
-                        reader.Write("Materials_BaseValue", ((AwakeType)(i + 1)).ToString() + "_" + ((ItemGrade)(j + 1)).ToString() + "_Material2", value[1][j]);
-                    }
-
-                    Awake.AwakeMaterials.Add(value);
-                }
-            }
-
-            for (int c = 0; c < 4; c++)
-            {
-                reader.Write("Materials_IncreaseValue", "Materials_" + ((ItemGrade)(c + 1)).ToString(), Awake.AwakeMaterialRate[c]);
-            }
-        }
-
+         
         public static void LoadFishing()
         {
             if (!File.Exists(Path.Combine(ConfigPath, "FishingSystem.ini")))
@@ -1388,34 +1281,7 @@ namespace Server
             reader.Write("Game", "Monster", FishingMonster);
         }
 
-        public static void LoadMail()
-        {
-            if (!File.Exists(Path.Combine(ConfigPath, "MailSystem.ini")))
-            {
-                SaveMail();
-                return;
-            }
-
-            InIReader reader = new InIReader(Path.Combine(ConfigPath, "MailSystem.ini"));
-            MailAutoSendGold = reader.ReadBoolean("AutoSend", "Gold", MailAutoSendGold);
-            MailAutoSendItems = reader.ReadBoolean("AutoSend", "Items", MailAutoSendItems);
-            MailFreeWithStamp = reader.ReadBoolean("Rates", "FreeWithStamp", MailFreeWithStamp);
-            MailCostPer1KGold = reader.ReadUInt32("Rates", "CostPer1k", MailCostPer1KGold);
-            MailItemInsurancePercentage = reader.ReadUInt32("Rates", "InsurancePerItem", MailItemInsurancePercentage);
-            MailCapacity = reader.ReadUInt32("General", "MailCapacity", MailCapacity);
-        }
-        public static void SaveMail()
-        {
-            File.Delete(Path.Combine(ConfigPath, "MailSystem.ini"));
-            InIReader reader = new InIReader(Path.Combine(ConfigPath, "MailSystem.ini"));
-            reader.Write("AutoSend", "Gold", MailAutoSendGold);
-            reader.Write("AutoSend", "Items", MailAutoSendItems);
-            reader.Write("Rates", "FreeWithStamp", MailFreeWithStamp);
-            reader.Write("Rates", "CostPer1k", MailCostPer1KGold);
-            reader.Write("Rates", "InsurancePerItem", MailItemInsurancePercentage);
-            reader.Write("General", "MailCapacity", MailCapacity);
-        }
-
+       
         public static void LoadRefine()
         {
             if (!File.Exists(Path.Combine(ConfigPath, "RefineSystem.ini")))

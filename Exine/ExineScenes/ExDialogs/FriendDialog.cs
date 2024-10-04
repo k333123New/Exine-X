@@ -10,8 +10,8 @@ namespace Exine.ExineScenes.ExDialogs
     {
         public ExineImageControl TitleLabel, FriendLabel, BlacklistLabel;
         public ExineLabel PageNumberLabel;
-        public MirButton CloseButton, PreviousButton, NextButton;
-        public MirButton AddButton, RemoveButton, MemoButton, EmailButton, WhisperButton;
+        public ExineButton CloseButton, PreviousButton, NextButton;
+        public ExineButton AddButton, RemoveButton, EmailButton, WhisperButton;
         public FriendRow[] Rows = new FriendRow[12];
 
         public List<ClientFriend> Friends = new List<ClientFriend>();
@@ -78,7 +78,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             #region Buttons
 
-            PreviousButton = new MirButton
+            PreviousButton = new ExineButton
             {
                 Index = 240,
                 HoverIndex = 241,
@@ -97,7 +97,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Update();
             };
 
-            NextButton = new MirButton
+            NextButton = new ExineButton
             {
                 Index = 243,
                 HoverIndex = 244,
@@ -117,7 +117,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Update();
             };
 
-            CloseButton = new MirButton
+            CloseButton = new ExineButton
             {
                 HoverIndex = 361,
                 Index = 360,
@@ -129,7 +129,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             CloseButton.Click += (o, e) => Hide();
 
-            AddButton = new MirButton
+            AddButton = new ExineButton
             {
                 Index = 554,
                 HoverIndex = 555,
@@ -148,7 +148,7 @@ namespace Exine.ExineScenes.ExDialogs
                     message = GameLanguage.FriendEnterBlockName;
                 }
 
-                MirInputBox inputBox = new MirInputBox(message);
+                ExineInputBox inputBox = new ExineInputBox(message);
 
                 inputBox.OKButton.Click += (o1, e1) =>
                 {
@@ -159,7 +159,7 @@ namespace Exine.ExineScenes.ExDialogs
                 inputBox.Show();
             };
 
-            RemoveButton = new MirButton
+            RemoveButton = new ExineButton
             {
                 Index = 557,
                 HoverIndex = 558,
@@ -184,46 +184,9 @@ namespace Exine.ExineScenes.ExDialogs
 
                 messageBox.Show();
             };
+ 
 
-            MemoButton = new MirButton
-            {
-                Index = 560,
-                HoverIndex = 561,
-                PressedIndex = 562,
-                Library = Libraries.Prguse,
-                Location = new Point(116, 241),
-                Parent = this,
-                Sound = SoundList.ButtonA,
-                Hint = GameLanguage.FriendMemo
-
-            };
-            MemoButton.Click += (o, e) =>
-            {
-                if (SelectedFriend == null) return;
-
-                ExineMainScene.Scene.MemoDialog.Friend = SelectedFriend;
-                ExineMainScene.Scene.MemoDialog.Show();
-            };
-
-            EmailButton = new MirButton
-            {
-                Index = 563,
-                HoverIndex = 564,
-                PressedIndex = 565,
-                Library = Libraries.Prguse,
-                Location = new Point(144, 241),
-                Parent = this,
-                Sound = SoundList.ButtonA,
-                Hint = GameLanguage.FriendMail,
-            };
-            EmailButton.Click += (o, e) =>
-            {
-                if (SelectedFriend == null) return;
-
-                ExineMainScene.Scene.MailComposeLetterDialog.ComposeMail(SelectedFriend.Name);
-            };
-
-            WhisperButton = new MirButton
+            WhisperButton = new ExineButton
             {
                 Index = 566,
                 HoverIndex = 567,
@@ -271,9 +234,7 @@ namespace Exine.ExineScenes.ExDialogs
                     FriendLabel.Index = 163;
                     BlacklistLabel.Index = 167;
                 }
-                Update();
-                ExineMainScene.Scene.MemoDialog.Hide();
-                ExineMainScene.Scene.DisposeMemoLabel();
+                Update(); 
             }
         }
 
@@ -385,8 +346,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (!Visible) return;
             Visible = false;
-
-            ExineMainScene.Scene.MemoDialog.Hide();
+             
         }
         public override void Show()
         {
@@ -458,13 +418,11 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (Friend == null || Friend.Memo.Length < 1) return;
 
-            base.OnMouseEnter();
-            ExineMainScene.Scene.CreateMemoLabel(Friend);
+            base.OnMouseEnter(); 
         }
         protected override void OnMouseLeave()
         {
-            base.OnMouseLeave();
-            ExineMainScene.Scene.DisposeMemoLabel();
+            base.OnMouseLeave(); 
         }
 
         protected override void Dispose(bool disposing)
@@ -477,93 +435,5 @@ namespace Exine.ExineScenes.ExDialogs
             Selected = false;
         }
     }
-    public sealed class MemoDialog : ExineImageControl
-    {
-        //public MirImageControl TitleLabel;
-        public ExineTextBox MemoTextBox;
-        public MirButton CloseButton, OKButton, CancelButton;
-
-        public ClientFriend Friend;
-
-        public MemoDialog()
-        {
-            Index = 209;
-            Library = Libraries.Title;
-            Movable = true;
-            Sort = true;
-            Location = Center;
-
-            MemoTextBox = new ExineTextBox
-            {
-                ForeColour = Color.White,
-                Parent = this,
-                Font = new Font(Settings.FontName, 8F),
-                Location = new Point(15, 30),
-                Size = new Size(165, 100),
-            };
-            MemoTextBox.MultiLine();
-
-            OKButton = new MirButton
-            {
-                Index = 382,
-                HoverIndex = 383,
-                PressedIndex = 384,
-                Parent = this,
-                Library = Libraries.Title,
-                Sound = SoundList.ButtonA,
-                Location = new Point(30, 133)
-            };
-            OKButton.Click += (o, e) =>
-            {
-                Network.Enqueue(new C.AddMemo { CharacterIndex = Friend.Index, Memo = MemoTextBox.Text });
-                Hide();
-            };
-
-            CancelButton = new MirButton
-            {
-                Index = 385,
-                HoverIndex = 386,
-                PressedIndex = 387,
-                Parent = this,
-                Library = Libraries.Title,
-                Sound = SoundList.ButtonA,
-                Location = new Point(115, 133)
-            };
-            CancelButton.Click += (o, e) => Hide();
-
-            #region Buttons
-
-            CloseButton = new MirButton
-            {
-                HoverIndex = 361,
-                Index = 360,
-                Location = new Point(168, 3),
-                Library = Libraries.Prguse2,
-                Parent = this,
-                PressedIndex = 362,
-                Sound = SoundList.ButtonA,
-            };
-            CloseButton.Click += (o, e) => Hide();
-
-            #endregion
-        }
-
-        public override void Show()
-        {
-            if (Visible) return;
-            Visible = true;
-
-
-            if (Friend == null)
-            {
-                Hide();
-                return;
-            }
-
-            MemoTextBox.Text = Friend.Memo;
-            MemoTextBox.SetFocus();
-            MemoTextBox.TextBox.SelectionLength = 0;
-            MemoTextBox.TextBox.SelectionStart = MemoTextBox.Text.Length;
-        }
-    }
+ 
 }
