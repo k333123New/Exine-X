@@ -546,12 +546,13 @@ namespace Exine.ExineScenes.ExDialogs
 
         public List<UserItem> Goods = new List<UserItem>();
         public List<UserItem> DisplayGoods = new List<UserItem>();
-        public MirGoodsCell[] Cells;
+        public ExineGoodsCell[] Cells;
         public ExineButton BuyButton, CloseButton;
-        public ExineImageControl BuyLabel;
+        //public ExineImageControl BuyLabel;
 
         public ExineButton UpButton, DownButton, PositionBar;
 
+        public const int goodsLineCount = 6;//add k333123 241005
         public NPCGoodsDialog(PanelType type)
         {
             PType = type;
@@ -563,21 +564,23 @@ namespace Exine.ExineScenes.ExDialogs
             Index = 0;
             Library = Libraries.PANEL0501;
 
-            Location = new Point(0 + 112, 224-84);
-            Cells = new MirGoodsCell[8];
-            Sort = true;
+            Location = new Point(0 + 112, -471);
+            //Cells = new ExineGoodsCell[8];
+            Cells = new ExineGoodsCell[goodsLineCount];
+            //Sort = true;
 
             for (int i = 0; i < Cells.Length; i++)
             {
-                Cells[i] = new MirGoodsCell
+                Cells[i] = new ExineGoodsCell
                 {
                     Parent = this,
-                    Location = new Point(10, 34 + i * 33),
+                    //Location = new Point(10, 34 + i * 33 ),
+                    Location = new Point(10+47, 34 + i * 33 +186+15),
                     Sound = SoundList.ButtonC
                 };
                 Cells[i].Click += (o, e) =>
                 {
-                    SelectedItem = ((MirGoodsCell)o).Item;
+                    SelectedItem = ((ExineGoodsCell)o).Item;
                     Update();
 
                     if (PType == PanelType.Craft)
@@ -602,39 +605,48 @@ namespace Exine.ExineScenes.ExDialogs
 
             CloseButton = new ExineButton
             {
-                HoverIndex = 361,
-                Index = 360,
-                Location = new Point(217, 3),
-                Library = Libraries.Prguse2,
+                HoverIndex = 106,
+                //Index = 360,
+                Index = 105,
+                Location = new Point(217+47+29+49, 3+186+247+5),
+                //Library = Libraries.Prguse2,
+                Library = Libraries.PANEL0501,
                 Parent = this,
-                PressedIndex = 362,
+                //PressedIndex = 362,
+                PressedIndex = 107,
                 Sound = SoundList.ButtonA,
             };
             CloseButton.Click += (o, e) => Hide();
 
             BuyButton = new ExineButton
             {
-                HoverIndex = 313,
-                Index = 312,
-                Location = new Point(77, 304),
-                Library = Libraries.Title,
+                //HoverIndex = 313,
+                HoverIndex = 102,
+                //Index = 312,
+                Index = 101,
+                Location = new Point(77+47-170, 304+186+51),
+                //Library = Libraries.Title,
+                Library = Libraries.PANEL0501,
                 Parent = this,
-                PressedIndex = 314,
+                //PressedIndex = 314,
+                PressedIndex = 103,
                 Sound = SoundList.ButtonA,
             };
             BuyButton.Click += (o, e) => BuyItem();
 
+            /*
             BuyLabel = new ExineImageControl
             {
                 Index = 27,
                 Library = Libraries.Title,
                 Parent = this,
-                Location = new Point(20, 9),
+                Location = new Point(20+47, 9+186),
             };
+            */
 
             if (PType == PanelType.Craft)
             {
-                BuyLabel.Index = 12;
+                //BuyLabel.Index = 12;
                 BuyButton.Visible = false;
             }
 
@@ -643,7 +655,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Index = 197,
                 HoverIndex = 198,
                 Library = Libraries.Prguse2,
-                Location = new Point(219, 35),
+                Location = new Point(219+47, 35+186),
                 Parent = this,
                 PressedIndex = 199,
                 Sound = SoundList.ButtonA
@@ -660,16 +672,18 @@ namespace Exine.ExineScenes.ExDialogs
                 Index = 207,
                 HoverIndex = 208,
                 Library = Libraries.Prguse2,
-                Location = new Point(219, 284),
+                Location = new Point(219+47, 284+186),
                 Parent = this,
                 PressedIndex = 209,
                 Sound = SoundList.ButtonA
             };
             DownButton.Click += (o, e) =>
             {
-                if (DisplayGoods.Count <= 8) return;
+                //if (DisplayGoods.Count <= 8) return;
+                if (DisplayGoods.Count <= goodsLineCount) return;
 
-                if (StartIndex == DisplayGoods.Count - 8) return;
+                //if (StartIndex == DisplayGoods.Count - 8) return;
+                if (StartIndex == DisplayGoods.Count - goodsLineCount) return;
                 StartIndex++;
                 Update();
             };
@@ -679,7 +693,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Index = 205,
                 HoverIndex = 206,
                 Library = Libraries.Prguse2,
-                Location = new Point(219, 49),
+                Location = new Point(219+47, 49+186),
                 Parent = this,
                 PressedIndex = 206,
                 Movable = true,
@@ -802,21 +816,25 @@ namespace Exine.ExineScenes.ExDialogs
         }
         private void Update()
         {
-            if (StartIndex > DisplayGoods.Count - 8) StartIndex = DisplayGoods.Count - 8;
+            //if (StartIndex > DisplayGoods.Count - 8) StartIndex = DisplayGoods.Count - 8;
+            if (StartIndex > DisplayGoods.Count - goodsLineCount) StartIndex = DisplayGoods.Count - goodsLineCount;
             if (StartIndex <= 0) StartIndex = 0;
 
-            if (DisplayGoods.Count > 8)
+            //if (DisplayGoods.Count > 8)
+            if (DisplayGoods.Count > goodsLineCount)
             {
                 PositionBar.Visible = true;
                 int h = 233 - PositionBar.Size.Height;
-                h = (int)((h / (float)(DisplayGoods.Count - 8)) * StartIndex);
-                PositionBar.Location = new Point(219, 49 + h);
+                //h = (int)((h / (float)(DisplayGoods.Count - 8)) * StartIndex);
+                h = (int)((h / (float)(DisplayGoods.Count - goodsLineCount)) * StartIndex);
+                PositionBar.Location = new Point(219+47, 49 + h+186);
             }
             else
                 PositionBar.Visible = false;
 
 
-            for (int i = 0; i < 8; i++)
+            //for (int i = 0; i < 8; i++)
+            for (int i = 0; i < goodsLineCount; i++)
             {
                 if (i + StartIndex >= DisplayGoods.Count)
                 {
@@ -842,9 +860,10 @@ namespace Exine.ExineScenes.ExDialogs
             if (y < 49) y = 49;
 
             int h = 233 - PositionBar.Size.Height;
-            h = (int)Math.Round(((y - 49) / (h / (float)(DisplayGoods.Count - 8))));
+            //h = (int)Math.Round(((y - 49) / (h / (float)(DisplayGoods.Count - 8))));
+            h = (int)Math.Round(((y - 49) / (h / (float)(DisplayGoods.Count - goodsLineCount))));
 
-            PositionBar.Location = new Point(x, y);
+            PositionBar.Location = new Point(x+47, y+186);
 
             if (h == StartIndex) return;
             StartIndex = h;
@@ -893,19 +912,42 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 ExineMainScene.Scene.CraftDialog.Hide();
             }
+
+            //add 241005
+            if(ExineMainScene.Scene.ExCharacterDialog!=null && ExineMainScene.Scene.ExCharacterDialog.Visible)
+            {
+                ExineMainScene.Scene.ExCharacterDialog.Hide();
+            }
+            if(ExineMainScene.Scene.ExInventoryDialog != null && ExineMainScene.Scene.ExInventoryDialog.Visible)
+            {
+                ExineMainScene.Scene.ExInventoryDialog.Hide();
+            }
+            //ExineMainScene.Scene.ExCharacterDialog.Hide(); 
+            //ExineMainScene.Scene.ExInventoryDialog.Hide();//k33123 add
         }
+    
 
         public override void Show()
         {
+            //add 241005
+            ExineMainScene.Scene.ExCharacterDialog.Show();
+            ExineMainScene.Scene.ExCharacterDialog.ShowCharacterPage();
+            ExineMainScene.Scene.ExInventoryDialog.Location = new Point(541, 378);//k333123
+            ExineMainScene.Scene.ExInventoryDialog.Show();//k33123 add
+
             for (int i = 0; i < Cells.Length; i++)
             {
                 Cells[i].Recipe = PType == PanelType.Craft;
             }
 
-            Location = new Point(Location.X, ExineMainScene.Scene.ExNPCDialog.Size.Height);
+            //Location = new Point(Location.X, ExineMainScene.Scene.ExNPCDialog.Size.Height); //포지션 동적 변경되는 원인이였음.
+            Location = new Point(Location.X+3, ExineMainScene.Scene.ExNPCDialog.Size.Height-400+13); //포지션 동적 변경되는 원인이였음.
             Visible = true;
 
-            ExineMainScene.Scene.ExInventoryDialog.Show();
+
+            //ExineMainScene.Scene.ExInventoryDialog.Show();
+
+          
         }
     }
     public sealed class NPCDropDialog : ExineImageControl
@@ -926,7 +968,8 @@ namespace Exine.ExineScenes.ExDialogs
             //올려두는 원형쟁반 모양
             Index = 392;
             Library = Libraries.Prguse;
-            Location = new Point(264, 224);
+            //Location = new Point(264, 224);
+            Location = new Point(264+50+125, 224-169);
             Sort = true;
 
             Click += NPCDropPanel_Click;
@@ -1168,7 +1211,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             Index = 351;
             Library = Libraries.Prguse2;
-            Location = new Point(264, ExineMainScene.Scene.ExNPCDialog.Size.Height);
+            Location = new Point(264+125, ExineMainScene.Scene.ExNPCDialog.Size.Height-172);//k333123 mod 241005
 
             ConfirmButton.HoverIndex = 291;
             ConfirmButton.Index = 290;

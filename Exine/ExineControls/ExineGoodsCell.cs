@@ -4,7 +4,7 @@ using SlimDX;
 
 namespace Exine.ExineControls
 {
-    public sealed class MirGoodsCell : ExineControl
+    public sealed class ExineGoodsCell : ExineControl
     {
         public UserItem Item;
 
@@ -15,9 +15,12 @@ namespace Exine.ExineControls
         public bool MultipleAvailable = false;
         public ExineImageControl NewIcon;
 
-        public MirGoodsCell()
+        public const int height = 24;
+
+        public ExineGoodsCell()
         {
-            Size = new Size(205, 32);
+            //Size = new Size(205, 32);
+            Size = new Size(205, height);
             BorderColour = Color.Lime;
 
             NameLabel = new ExineLabel
@@ -43,7 +46,7 @@ namespace Exine.ExineControls
                 AutoSize = true,
                 Parent = this,
                 NotControl = true,
-                Location = new Point(44, 14),
+                Location = new Point(44+70+47, 14-14),
             };
 
             NewIcon = new ExineImageControl
@@ -78,11 +81,13 @@ namespace Exine.ExineControls
             {
                 ClientRecipeInfo recipe = ExineMainScene.RecipeInfoList.SingleOrDefault(x => x.Item.ItemIndex == Item.ItemIndex);
 
-                PriceLabel.Text = string.Format("Price: {0} gold", (uint)(recipe.Gold * ExineMainScene.NPCRate));
+                //PriceLabel.Text = string.Format("Price: {0} gold", (uint)(recipe.Gold * ExineMainScene.NPCRate));
+                PriceLabel.Text = string.Format("{0}", (uint)(recipe.Gold * ExineMainScene.NPCRate));
             }
             else
             {
-                PriceLabel.Text = string.Format("Price: {0} gold", (uint)(Item.Price() * ExineMainScene.NPCRate));
+                //PriceLabel.Text = string.Format("Price: {0} gold", (uint)(Item.Price() * ExineMainScene.NPCRate));
+                PriceLabel.Text = string.Format("{0}", (uint)(Item.Price() * ExineMainScene.NPCRate));
             }
         }
 
@@ -137,7 +142,8 @@ namespace Exine.ExineControls
             if (Item == null || Item.Info == null) return;
 
             Size size = Libraries.Items.GetTrueSize(Item.Image);
-            Point offSet = new Point((40 - size.Width)/2, (32 - size.Height)/2);
+            //Point offSet = new Point((40 - size.Width)/2, (32 - size.Height)/2);
+            Point offSet = new Point((40 - size.Width) / 2, (height - size.Height) / 2);
             Libraries.Items.Draw(Item.Image, offSet.X + DisplayLocation.X, offSet.Y + DisplayLocation.Y);
 
             CountLabel.Draw();
