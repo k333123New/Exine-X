@@ -8,6 +8,7 @@ using Exine.ExineSounds;
 using Font = System.Drawing.Font;
 using C = ClientPackets;
 using System.Diagnostics;
+using System.Xml;
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -553,8 +554,13 @@ namespace Exine.ExineScenes.ExDialogs
         public ExineButton UpButton, DownButton, PositionBar;
 
         public const int goodsLineCount = 6;//add k333123 241005
+
+        public ExineImageControl SelectedItemImage;
+        public ExineLabel SelectedItemNameLabel, SelectedItemInfoLabel, SelectedItemPriceLabel;
+
         public NPCGoodsDialog(PanelType type)
         {
+            
             PType = type;
 
             //물건 목록
@@ -581,6 +587,13 @@ namespace Exine.ExineScenes.ExDialogs
                 Cells[i].Click += (o, e) =>
                 {
                     SelectedItem = ((ExineGoodsCell)o).Item;
+
+                    //여기서 위쪽 정보창쪽에 표시할 수 있어야함.
+                    SelectedItemImage.Index = SelectedItem.Image;
+                    SelectedItemNameLabel.Text = SelectedItem.FriendlyName;
+                    
+                    SelectedItemPriceLabel.Text = SelectedItem.Info.Price.ToString();
+
                     Update();
 
                     if (PType == PanelType.Craft)
@@ -602,6 +615,43 @@ namespace Exine.ExineScenes.ExDialogs
                     BuyItem();
                 };
             }
+             
+            SelectedItemNameLabel = new ExineLabel
+            {
+                Text="선택 아이템 이름부분",
+                AutoSize = true,
+                Parent = this,
+                NotControl = true,
+                Location = new Point(44+87, 0+44),
+            };
+
+            SelectedItemInfoLabel = new ExineLabel
+            {
+                Text = "선택 아이템 정보부분",
+                AutoSize = true,
+                Parent = this,
+                NotControl = true,
+                Location = new Point(44+91, 30+36),
+            };
+
+            SelectedItemPriceLabel = new ExineLabel
+            {
+                Text = "선택 아이템 가격부분",
+                AutoSize = true,
+                Parent = this,
+                NotControl = true,
+                Location = new Point(44+277, 30+10),
+            };
+
+
+            SelectedItemImage = new ExineImageControl
+            {
+                Index = 1,
+                Library = Libraries.StateItems,
+                Parent = this,
+                Location = new Point(44-45, 9 + 50-31),
+                UseOffSet = true,
+            };
 
             CloseButton = new ExineButton
             {
@@ -965,6 +1015,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public NPCDropDialog()
         {
+            
             //올려두는 원형쟁반 모양
             Index = 392;
             Library = Libraries.Prguse;
