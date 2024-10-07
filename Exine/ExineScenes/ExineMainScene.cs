@@ -48,9 +48,9 @@ namespace Exine.ExineScenes
         public ExineStateDialog ExStateDialog;
 
         public ExineNPCDialog ExNPCDialog;
-        public NPCGoodsDialog NPCGoodsDialog;
-        public NPCGoodsDialog NPCSubGoodsDialog;
-        public NPCGoodsDialog NPCCraftGoodsDialog;
+        public ExineNPCGoodsDialog ExNPCGoodsDialog;
+        public ExineNPCGoodsDialog NPCSubGoodsDialog;
+        public ExineNPCGoodsDialog NPCCraftGoodsDialog;
         public NPCDropDialog NPCDropDialog; 
         
 
@@ -180,7 +180,7 @@ namespace Exine.ExineScenes
             BeltDialog = new BeltDialog { Parent = this, Visible=false };//임시로 꺼둠
             ExNPCDialog = new ExineNPCDialog { Parent = this, Visible = false };
             MiniMapDialog = new MiniMapDialog { Parent = this };
-
+            ExNPCGoodsDialog = new ExineNPCGoodsDialog(PanelType.Buy) { Parent = this, Visible = false };
 
 
 
@@ -196,9 +196,9 @@ namespace Exine.ExineScenes
             MenuDialog = new MenuDialog { Parent = this, Visible = false };
             
             
-            NPCGoodsDialog = new NPCGoodsDialog(PanelType.Buy) { Parent = this, Visible = false };
-            NPCSubGoodsDialog = new NPCGoodsDialog(PanelType.BuySub) { Parent = this, Visible = false };
-            NPCCraftGoodsDialog = new NPCGoodsDialog(PanelType.Craft) { Parent = this, Visible = false };
+            
+            NPCSubGoodsDialog = new ExineNPCGoodsDialog(PanelType.BuySub) { Parent = this, Visible = false };
+            NPCCraftGoodsDialog = new ExineNPCGoodsDialog(PanelType.Craft) { Parent = this, Visible = false };
             NPCDropDialog = new NPCDropDialog { Parent = this, Visible = false };
              
 
@@ -3466,7 +3466,7 @@ namespace Exine.ExineScenes
             else
                 ExNPCDialog.Hide();
 
-            NPCGoodsDialog.Hide();
+            ExNPCGoodsDialog.Hide();
             NPCSubGoodsDialog.Hide();
             NPCCraftGoodsDialog.Hide();
             NPCDropDialog.Hide();
@@ -3805,9 +3805,9 @@ namespace Exine.ExineScenes
             switch (p.Type)
             {
                 case PanelType.Buy:
-                    NPCGoodsDialog.UsePearls = false;
-                    NPCGoodsDialog.NewGoods(p.List);
-                    NPCGoodsDialog.Show();
+                    ExNPCGoodsDialog.UsePearls = false;
+                    ExNPCGoodsDialog.NewGoods(p.List);
+                    ExNPCGoodsDialog.Show();
                     break;
                 case PanelType.BuySub:
                     NPCSubGoodsDialog.UsePearls = false;
@@ -3833,9 +3833,9 @@ namespace Exine.ExineScenes
 
             if (!ExNPCDialog.Visible) return;
 
-            NPCGoodsDialog.UsePearls = true;
-            NPCGoodsDialog.NewGoods(p.List);
-            NPCGoodsDialog.Show();
+            ExNPCGoodsDialog.UsePearls = true;
+            ExNPCGoodsDialog.NewGoods(p.List);
+            ExNPCGoodsDialog.Show();
         }
 
         private void NPCSell()

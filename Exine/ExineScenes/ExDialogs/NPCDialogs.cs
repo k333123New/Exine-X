@@ -9,6 +9,7 @@ using Font = System.Drawing.Font;
 using C = ClientPackets;
 using System.Diagnostics;
 using System.Xml;
+using System.Text;
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -515,7 +516,7 @@ namespace Exine.ExineScenes.ExDialogs
         public override void Hide()
         {
             Visible = false;
-            ExineMainScene.Scene.NPCGoodsDialog.Hide();
+            ExineMainScene.Scene.ExNPCGoodsDialog.Hide();
             ExineMainScene.Scene.NPCSubGoodsDialog.Hide();
             ExineMainScene.Scene.NPCCraftGoodsDialog.Hide();
             ExineMainScene.Scene.NPCDropDialog.Hide(); 
@@ -537,7 +538,7 @@ namespace Exine.ExineScenes.ExDialogs
             UpdatePortrait();
         }
     }
-    public sealed class NPCGoodsDialog : ExineImageControl
+    public sealed class ExineNPCGoodsDialog : ExineImageControl
     {
         public PanelType PType;
         public bool UsePearls;
@@ -558,7 +559,7 @@ namespace Exine.ExineScenes.ExDialogs
         public ExineImageControl SelectedItemImage;
         public ExineLabel SelectedItemNameLabel, SelectedItemInfoLabel, SelectedItemPriceLabel;
 
-        public NPCGoodsDialog(PanelType type)
+        public ExineNPCGoodsDialog(PanelType type)
         {
             
             PType = type;
@@ -566,7 +567,8 @@ namespace Exine.ExineScenes.ExDialogs
             //물건 목록
             //Index = 1000;
             //Library = Libraries.Prguse;
-            
+
+            StringBuilder itemDetailStringBuilder = new StringBuilder();
             Index = 0;
             Library = Libraries.PANEL0501;
 
@@ -591,8 +593,138 @@ namespace Exine.ExineScenes.ExDialogs
                     //여기서 위쪽 정보창쪽에 표시할 수 있어야함.
                     SelectedItemImage.Index = SelectedItem.Image;
                     SelectedItemNameLabel.Text = SelectedItem.FriendlyName;
-                    
                     SelectedItemPriceLabel.Text = SelectedItem.Info.Price.ToString();
+
+                    //detail info 
+                    //have to show info is depend on Item Type!
+                    itemDetailStringBuilder.AppendLine("Type:" + SelectedItem.Info.Type.ToString());
+                    itemDetailStringBuilder.AppendLine(String.Format("Durability:{0}/{0}", SelectedItem.Info.Durability));
+                    itemDetailStringBuilder.AppendLine("WearWeight:" + SelectedItem.Info.Stats[Stat.WearWeight]);
+
+                    if(SelectedItem.Info.Stats[Stat.Accuracy]!=0) 
+                        itemDetailStringBuilder.AppendLine("Accuracy:" + SelectedItem.Info.Stats[Stat.Accuracy]);
+
+                    if (SelectedItem.Info.Stats[Stat.Agility] != 0) 
+                        itemDetailStringBuilder.AppendLine("Agility:" + SelectedItem.Info.Stats[Stat.Agility]);
+
+                    if (SelectedItem.Info.Stats[Stat.AttackSpeed] != 0)
+                        itemDetailStringBuilder.AppendLine("AttackSpeed:" + SelectedItem.Info.Stats[Stat.AttackSpeed]);
+
+                    if (SelectedItem.Info.Stats[Stat.CriticalDamage] != 0)
+                        itemDetailStringBuilder.AppendLine("CriticalDamage:" + SelectedItem.Info.Stats[Stat.CriticalDamage]);
+
+                    if (SelectedItem.Info.Stats[Stat.CriticalRate] != 0)
+                        itemDetailStringBuilder.AppendLine("CriticalRate:" + SelectedItem.Info.Stats[Stat.CriticalRate]);
+
+
+                    if (SelectedItem.Info.Stats[Stat.AttackSpeed] != 0)
+                        itemDetailStringBuilder.AppendLine("Luck:" + SelectedItem.Info.Stats[Stat.Luck]);
+                    if (SelectedItem.Info.Stats[Stat.AttackSpeed] != 0)
+                        itemDetailStringBuilder.AppendLine("MagicResist:" + SelectedItem.Info.Stats[Stat.MagicResist]);
+
+                    if (SelectedItem.Info.Stats[Stat.MinAC] != 0)
+                        itemDetailStringBuilder.AppendLine("MinAC:" + SelectedItem.Info.Stats[Stat.MinAC]);
+                    if (SelectedItem.Info.Stats[Stat.MaxAC] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxAC:" + SelectedItem.Info.Stats[Stat.MaxAC]);
+                    if (SelectedItem.Info.Stats[Stat.MaxACRatePercent] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxACRatePercent:" + SelectedItem.Info.Stats[Stat.MaxACRatePercent]);
+
+
+                    if (SelectedItem.Info.Stats[Stat.MinDC] != 0)
+                        itemDetailStringBuilder.AppendLine("MinDC:" + SelectedItem.Info.Stats[Stat.MinDC]);
+
+                    if (SelectedItem.Info.Stats[Stat.MaxDC] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxDC:" + SelectedItem.Info.Stats[Stat.MaxDC]);
+
+                    if (SelectedItem.Info.Stats[Stat.MaxDCRatePercent] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxDCRatePercent:" + SelectedItem.Info.Stats[Stat.MaxDCRatePercent]);
+
+
+                    if (SelectedItem.Info.Stats[Stat.MinMAC] != 0)
+                        itemDetailStringBuilder.AppendLine("MinMAC:" + SelectedItem.Info.Stats[Stat.MinMAC]);
+
+                    if (SelectedItem.Info.Stats[Stat.MaxMAC] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxMAC:" + SelectedItem.Info.Stats[Stat.MaxMAC]);
+
+                    if (SelectedItem.Info.Stats[Stat.MaxMACRatePercent] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxMACRatePercent:" + SelectedItem.Info.Stats[Stat.MaxMACRatePercent]);
+
+
+                    if (SelectedItem.Info.Stats[Stat.MinMC] != 0)
+                        itemDetailStringBuilder.AppendLine("MinMC:" + SelectedItem.Info.Stats[Stat.MinMC]);
+
+                    if (SelectedItem.Info.Stats[Stat.MaxMC] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxMC:" + SelectedItem.Info.Stats[Stat.MaxMC]);
+
+                    if (SelectedItem.Info.Stats[Stat.MaxMCRatePercent] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxMCRatePercent:" + SelectedItem.Info.Stats[Stat.MaxMCRatePercent]);
+
+
+                    if (SelectedItem.Info.Stats[Stat.MinSC] != 0)
+                        itemDetailStringBuilder.AppendLine("MinSC:" + SelectedItem.Info.Stats[Stat.MinSC]);
+
+                    if (SelectedItem.Info.Stats[Stat.MaxSC] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxSC:" + SelectedItem.Info.Stats[Stat.MaxSC]);
+
+                    if (SelectedItem.Info.Stats[Stat.MaxSCRatePercent] != 0)
+                        itemDetailStringBuilder.AppendLine("MaxSCRatePercent:" + SelectedItem.Info.Stats[Stat.MaxSCRatePercent]);
+
+
+                    if (SelectedItem.Info.Stats[Stat.HP] != 0)
+                        itemDetailStringBuilder.AppendLine("HP:" + SelectedItem.Info.Stats[Stat.HP]);
+
+                    if (SelectedItem.Info.Stats[Stat.HPRatePercent] != 0)
+                        itemDetailStringBuilder.AppendLine("HPRatePercent:" + SelectedItem.Info.Stats[Stat.HPRatePercent]);
+
+
+                    if (SelectedItem.Info.Stats[Stat.MP] != 0)
+                        itemDetailStringBuilder.AppendLine("MP:" + SelectedItem.Info.Stats[Stat.MP]);
+
+                    if (SelectedItem.Info.Stats[Stat.MPRatePercent] != 0)
+                        itemDetailStringBuilder.AppendLine("MPRatePercent:" + SelectedItem.Info.Stats[Stat.MPRatePercent]);
+
+
+                    if (SelectedItem.Info.Stats[Stat.HealthRecovery] != 0)
+                        itemDetailStringBuilder.AppendLine("HealthRecovery:" + SelectedItem.Info.Stats[Stat.HealthRecovery]);
+
+
+                    /*
+                    itemDetailStringBuilder.AppendLine("DamageReductionPercent:" + SelectedItem.Info.Stats[Stat.DamageReductionPercent]);
+                    itemDetailStringBuilder.AppendLine("AttackBonus:" + SelectedItem.Info.Stats[Stat.AttackBonus]); 
+                    itemDetailStringBuilder.AppendLine("AttackSpeedRatePercent:" + SelectedItem.Info.Stats[Stat.AttackSpeedRatePercent]); 
+                    itemDetailStringBuilder.AppendLine("BagWeight:" + SelectedItem.Info.Stats[Stat.BagWeight]);
+                    itemDetailStringBuilder.AppendLine("CraftRatePercent:" + SelectedItem.Info.Stats[Stat.CraftRatePercent]);  
+                    itemDetailStringBuilder.AppendLine("EnergyShieldHPGain:" + SelectedItem.Info.Stats[Stat.EnergyShieldHPGain]);
+                    itemDetailStringBuilder.AppendLine("EnergyShieldPercent:" + SelectedItem.Info.Stats[Stat.EnergyShieldPercent]);
+                    itemDetailStringBuilder.AppendLine("ExpRatePercent:" + SelectedItem.Info.Stats[Stat.ExpRatePercent]);
+                    itemDetailStringBuilder.AppendLine("FishRatePercent:" + SelectedItem.Info.Stats[Stat.FishRatePercent]);
+                    itemDetailStringBuilder.AppendLine("Freezing:" + SelectedItem.Info.Stats[Stat.Freezing]);
+                    itemDetailStringBuilder.AppendLine("GemRatePercent:" + SelectedItem.Info.Stats[Stat.GemRatePercent]);
+                    itemDetailStringBuilder.AppendLine("GoldDropRatePercent:" + SelectedItem.Info.Stats[Stat.GoldDropRatePercent]);
+                    itemDetailStringBuilder.AppendLine("HandWeight:" + SelectedItem.Info.Stats[Stat.HandWeight]);
+                    itemDetailStringBuilder.AppendLine("Holy:" + SelectedItem.Info.Stats[Stat.Holy]); 
+                    itemDetailStringBuilder.AppendLine("HPDrainRatePercent:" + SelectedItem.Info.Stats[Stat.HPDrainRatePercent]); 
+                    itemDetailStringBuilder.AppendLine("ItemDropRatePercent:" + SelectedItem.Info.Stats[Stat.ItemDropRatePercent]);
+                    itemDetailStringBuilder.AppendLine("LoverExpRatePercent:" + SelectedItem.Info.Stats[Stat.LoverExpRatePercent]); 
+                    itemDetailStringBuilder.AppendLine("ManaPenaltyPercent:" + SelectedItem.Info.Stats[Stat.ManaPenaltyPercent]); 
+                    itemDetailStringBuilder.AppendLine("MentorDamageRatePercent:" + SelectedItem.Info.Stats[Stat.MentorDamageRatePercent]);
+                    itemDetailStringBuilder.AppendLine("MentorExpRatePercent:" + SelectedItem.Info.Stats[Stat.MentorExpRatePercent]); 
+                    itemDetailStringBuilder.AppendLine("MineRatePercent:" + SelectedItem.Info.Stats[Stat.MineRatePercent]); 
+                    itemDetailStringBuilder.AppendLine("PoisonAttack:" + SelectedItem.Info.Stats[Stat.PoisonAttack]);
+                    itemDetailStringBuilder.AppendLine("PoisonRecovery:" + SelectedItem.Info.Stats[Stat.PoisonRecovery]);
+                    itemDetailStringBuilder.AppendLine("PoisonResist:" + SelectedItem.Info.Stats[Stat.PoisonResist]);
+                    itemDetailStringBuilder.AppendLine("Reflect:" + SelectedItem.Info.Stats[Stat.Reflect]);
+                    itemDetailStringBuilder.AppendLine("SkillGainMultiplier:" + SelectedItem.Info.Stats[Stat.SkillGainMultiplier]);
+                    itemDetailStringBuilder.AppendLine("SpellRecovery:" + SelectedItem.Info.Stats[Stat.SpellRecovery]);
+                    itemDetailStringBuilder.AppendLine("Strong:" + SelectedItem.Info.Stats[Stat.Strong]);
+                    itemDetailStringBuilder.AppendLine("TeleportManaPenaltyPercent:" + SelectedItem.Info.Stats[Stat.TeleportManaPenaltyPercent]);
+                    itemDetailStringBuilder.AppendLine("Unknown:" + SelectedItem.Info.Stats[Stat.Unknown]);
+                    */
+
+                    SelectedItemInfoLabel.Text = itemDetailStringBuilder.ToString();
+                    
+
+
 
                     Update();
 
