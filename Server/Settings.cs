@@ -755,7 +755,8 @@ namespace Server
             long exp = 100;
             InIReader reader = new InIReader(Path.Combine(ConfigPath, "ExpList.ini"));
 
-            for (int i = 1; i <= 500; i++)
+            //for (int i = 1; i <= 500; i++)
+            for (int i = 1; i <= 100; i++) //k333123 mod 241008
             {
                 exp = reader.ReadInt64("Exp", "Level" + i, exp);
                 ExperienceList.Add(exp);
