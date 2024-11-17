@@ -1,0 +1,94 @@
+==================
+DC : phygical damage(Moolgong)
+AC : Armour (MoolBang)
+Accuracy : junghwakdo(MyoungJoong)
+Aggility : evade(Hwepi)
+
+MC : Magical Damage(Magong)
+MAC :Magic Armour(Mabang)
+
+SC : Spirit Damage(Element)
+
+==================
+
+
+
+name,exp,lv,isFirstattack,dropitem,
+nm,lv,att,sh,agi,spd, fr,wr,ar,lr (rgb)
+=>
+
+
+
+name,exp,lv,isFirstattack,(rgb),dropitem,att,sh,agi,spd, fr,wr,ar,lr 
+
+<field dg>
+ hoachin,25,2,x,arke around,[tul,boohwalscroll],,,,,,,,,
+ grachin,27,3,x,arke around,[brendi]
+ dinggo,30,3,x,arke around,[bbang, eunggup_suriscroll]
+ dingcos,35,6,x,arke around,[whisky]
+ guswarm,40,5,x,beach,[sukyoung]
+ kelphi,50,7,o,trigosoop,[gajuk,gogi,hwakin_scroll]
+ haphi,60,8,o,beach, kokirion dg,[gogi,gwail]
+ fron,70,10,o,trigosoop,[?]
+ frogon,120,15,o,trigosoop,[?]
+ shock,560,25,o,?,[?]
+
+
+ <kokirion dg>
+ flaty,77,11,o,1~3-2,[sukyoung,gogi]
+ armadil,90,13,o,1~3-2,[yaccho,gunpo,gogi]
+ arkadil,130,16,o,1~3-2,[{gld:skillbook,booleusimjang,rikenpot}{blu:rikenpot,younghoneubaram}{rd:arkelpot,pyoungoneubit,rikenpot}{chungrok:saengmyoungeuesle}{guri:eyedrop}{all:rare staff}]
+ elraphi,105,14,o,3-3ipgujulbyuk,[gogi,gunpo]
+ tenaga,350,18,o,1~3-2,[topaz,crystal,memory scroll(blue,red), eventdunjun scroll]
+ stoma,150,20,o,3-3~7, [gogi,gunpo,arkelpot,hwakinscroll]
+ chakku,140,19,o,3-3~7, [skillbook(magic-5,6 line)gunpo, uenggupsuriscroll, arkelpot]
+ techakku,160,21,o,3-3~7,[arkelpot,gunpo]
+ delphine,538,23,o,3-3~7,[emerald,ruby,cube(east,west,south,north)scroll, dusk]
+ corike,440,27,o,?,[?] //140+50*6
+ siegertail,440,27,o,?,[?]
+ Crotle,540,29,o,?,[?]//140+50*8
+ Cubetechakku,540,29,o,?,[?]
+ vegia,690,32,o,?,[?]//140+50*11
+ madvegia(yellow,red,blue,green),720,32,o,?,[?]
+ Cubetenaga,990,36,o,?,[?]//140+50*15+100
+ Cubedelphine,1140,39,o,?,[?]//140+50*18+100
+ nint,4500,25,o,8,[ansikeuhwanggi]
+
+ <vant dg>
+ spinel,1237,43,o,1~7,[gogi,arkelpot,dusk,wand,21reargum, 31reargum]
+ kael,1575,46,o,1~7,[gogi,gunpo,arkelpot,chainbanggap, dustk,harp 200hp_300hp,harp banggap]
+ trokael,2080,49,o,1~7,[gunpo,arkeumpot,diamond,asta(31 spear)]
+ vant,9360,53,o,?,?//2080*4.5
+
+ <karoon dg>
+ kael,1575,46,o,1~3,[gogi,gunpo]
+ Trokael,1977,49,o,?,[?]//1575+134*3
+ Bloodykael,1977,49,o,?,[?]
+ samael,1844,48,o,1~3,[BBeydague,arkelpot
+ BloodySamael,2245,51,o,?,[?]//1575+134*5
+ samark,2611,51,o,?,[BBeyjogag,arkelpot]
+ karoon,14749,54,o,?,?//2611*4.5+a
+
+ <robiatal>
+ samael,1844,48,o,1~3,[BBeydague,arkelpot]
+ BloodySamael,2245,51,o,?,[?]
+ payrus,2385,52,o,1~3,[Ober(300,400,banggap),ssap, rear bow]
+ BloodyPayrus,2585,52,o,?,[?]
+ defirudean,2853,50,o,[1~3,arkeumpot,goorze, rear bow]
+ roots,3589,61,o,2~3,[gunpo,arkelpot]
+ robiatal,18150,55,o,4?//3589*4.5+a
+
+ <gwang dg>
+ ritrico,6690,72,o,1~10,[arkelpot,rikenpot,raer ring,raer robe]
+ garkonorc,6795,73,o,1~10,[?]
+ detor,6914,74,o,1~10,[arkelpot,rikenpot,platearmor600pigap, fullplatearmor700pigab,rear ring]
+ kurdelorc,6914,74,o,?,[?]
+ ilooksorc,7046,75,o,1~10,[rear boots, dalmatika300magap, dalmatika400magap,minchup_earring(lv71),him_ring(lv71)]
+ grantrico,7311,76,o,1~10,[arkeumpot,rikaumpot,returnscroll,gogeupboohwalscroll,magicsuriscroll,rearaccesory]
+ kugelorc,7311,76,o,?,[?]
+ kurdelorc(red),7511,77,o,?,[?]
+ blackgrantrico,7681,78,o,1~10,[arkeumpot,rikaumpot,gogeupboohwalscroll,magicsuriscroll,uniquaccesory]
+ slime,6540,71,?,?,[?]
+
+ <radon>
+ radon,71250,55,o,radon doongzi

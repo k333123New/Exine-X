@@ -2229,6 +2229,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
        
+        //hero equipment item
         private void EquipSlotItem(S.EquipSlotItem p)
         {
             MirItemCell fromCell;

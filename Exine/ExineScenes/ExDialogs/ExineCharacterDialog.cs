@@ -24,7 +24,7 @@ namespace Exine.ExineScenes.ExDialogs
         //public ExineLabel HeadingLabel, StatLabel;
         //public MirButton NextButton, BackButton;
 
-        public MirItemCell[] Grid;
+        public MirItemCell[] Grid;//제거해보면 참조하는것 확인 가능함.
         private MirGridType GridType;
         public ExMagicInactiveButton[] exMagicInactiveButtons; //background Magic Icon!(Not Active Magic Icon)
         public ExMagicButton[] Magics;//Active Magic Icon!
@@ -91,7 +91,7 @@ namespace Exine.ExineScenes.ExDialogs
                     RealItem = Functions.GetRealItem(Grid[(int)EquipmentSlot.Weapon].Item.Info, actor.Level, actor.Class, ExineMainScene.ItemInfoList);
                     //Libraries.StateItems.Draw(RealItem.Image, DisplayLocation, Color.White, true, 1F);
                     Libraries.StateItems.Draw(RealItem.Image, new Point( DisplayLocation.X+23, DisplayLocation.Y+104), Color.White, true, 1F);
-
+                      
                 }
 
                 if (Grid[(int)EquipmentSlot.Helmet].Item != null)
@@ -115,12 +115,17 @@ namespace Exine.ExineScenes.ExDialogs
 
                 }
 
-                //add 
+                //add (sheild)
                 if (Grid[(int)EquipmentSlot.Belt].Item != null)
                 {
                     RealItem = Functions.GetRealItem(Grid[(int)EquipmentSlot.Belt].Item.Info, actor.Level, actor.Class, ExineMainScene.ItemInfoList);
                     //Libraries.StateItems.Draw(RealItem.Image, DisplayLocation, Color.White, true, 1F);
+
                     Libraries.StateItems.Draw(RealItem.Image, new Point(DisplayLocation.X+309 , DisplayLocation.Y+80 ), Color.White, true, 1F);
+
+                    //241008 add k333123 for test 
+                    //Grid[(int)EquipmentSlot.Belt].Item.Info.Image = 0;  
+                   
                 }
             };
             /*
@@ -627,7 +632,7 @@ namespace Exine.ExineScenes.ExDialogs
                 ItemSlot = (int)EquipmentSlot.Belt,
                 GridType = gridType,
                 Parent = CharacterPage,
-                Location = new Point(88+ 229, 242-97),
+                Location = new Point(88+ 229, 242-97), 
             };
 
             /*
