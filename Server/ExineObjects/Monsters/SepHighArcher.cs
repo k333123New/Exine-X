@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -47,7 +47,7 @@ namespace Server.ExineObjects.Monsters
 
             if (Envir.Random.Next(3) == 0 && Functions.InRange(CurrentLocation, Target.CurrentLocation, 2))
             {
-                Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.BackStep, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
+                Broadcast(new ServerPacket.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.BackStep, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
                 int travel = 0;
                 bool blocked = false;
                 int jumpDistance = 3;
@@ -84,7 +84,7 @@ namespace Server.ExineObjects.Monsters
                         AddObjects(jumpDir, 1);
                     }
                    
-                    Broadcast(new S.ObjectBackStep { ObjectID = ObjectID, Direction = Direction, Location = location, Distance = jumpDistance });
+                    Broadcast(new ServerPacket.ObjectBackStep { ObjectID = ObjectID, Direction = Direction, Location = location, Distance = jumpDistance });
                 }
                 return;
             }
@@ -94,7 +94,7 @@ namespace Server.ExineObjects.Monsters
 
             if (hasPoisonBuff && Envir.Random.Next(2) == 0)
             {
-                Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.CrippleShot, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
+                Broadcast(new ServerPacket.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.CrippleShot, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
 
                 PoisonTarget(Target, 5, 8, PoisonType.Green, 2000);
 
@@ -137,7 +137,7 @@ namespace Server.ExineObjects.Monsters
             }
 
 
-            Broadcast(new S.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.PoisonShot, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
+            Broadcast(new ServerPacket.ObjectMagic { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Spell = Spell.PoisonShot, TargetID = Target.ObjectID, Target = Target.CurrentLocation, Cast = true, Level = 3 });
             if (Envir.Random.Next(10) <= 4)
             {
                 if (!hasPoisonBuff)
@@ -310,9 +310,9 @@ namespace Server.ExineObjects.Monsters
             InSafeZone = CurrentMap.GetSafeZone(CurrentLocation) != null;
 
             if (isBreak)
-                Broadcast(new S.ObjectWalk { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectWalk { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
             else
-                Broadcast(new S.ObjectRun { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectRun { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
 
             cell = CurrentMap.GetCell(CurrentLocation);
@@ -339,7 +339,7 @@ namespace Server.ExineObjects.Monsters
 
             DeadTime = 0;
 
-            Broadcast(new S.ObjectDied { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = (byte)(Master != null ? 1 : 0) });
+            Broadcast(new ServerPacket.ObjectDied { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = (byte)(Master != null ? 1 : 0) });
 
             if (EXPOwner != null && Master == null && EXPOwner.Race == ObjectType.Player) EXPOwner.WinExp(Experience, Level);
 
@@ -374,7 +374,7 @@ namespace Server.ExineObjects.Monsters
                 armour = master.Looks_Armour;
                 wing = master.Looks_Wings;
             }
-            return new S.ObjectPlayer
+            return new ServerPacket.ObjectPlayer
             {
                 ObjectID = ObjectID,
                 Name = master != null ? master.Name : Name,

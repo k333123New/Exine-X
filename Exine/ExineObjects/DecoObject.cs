@@ -1,6 +1,6 @@
 ﻿using Exine.ExineGraphics;
 using Exine.ExineScenes;
-using S = ServerPackets;
+//
 
 namespace Exine.ExineObjects
 {
@@ -23,7 +23,7 @@ namespace Exine.ExineObjects
         {
         }
 
-        public void Load(S.ObjectDeco info)
+        public void Load(ServerPacket.ObjectDeco info)
         {
             CurrentLocation = info.Location;
             MapLocation = info.Location;

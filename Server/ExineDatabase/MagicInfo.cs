@@ -1,5 +1,5 @@
 ﻿using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineDatabase
 {
@@ -145,7 +145,7 @@ namespace Server.ExineDatabase
 
         public Packet GetInfo(bool hero)
         {
-            return new S.NewMagic
+            return new ServerPacket.NewMagic
                 {
                     Magic = CreateClientMagic(),
                     Hero = hero

@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -74,7 +74,7 @@ namespace Server.ExineObjects.Monsters
                 return;
             }
 
-            Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
+            Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
 
             DelayedAction action = new DelayedAction(DelayedType.RangeDamage, Envir.Time + 300, Target);
 
@@ -121,7 +121,7 @@ namespace Server.ExineObjects.Monsters
                         target.ExplosionInflictedTime = 0;
                         target.ExplosionInflictedStage = 0;
 
-                        target.Broadcast(new S.RemoveDelayedExplosion { ObjectID = target.ObjectID });
+                        target.Broadcast(new ServerPacket.RemoveDelayedExplosion { ObjectID = target.ObjectID });
                     }
 
                     target.PoisonList.Clear();
@@ -143,7 +143,7 @@ namespace Server.ExineObjects.Monsters
 
         public override Packet GetInfo()
         {
-            return new S.ObjectMonster
+            return new ServerPacket.ObjectMonster
             {
                 ObjectID = ObjectID,
                 Name = Name,

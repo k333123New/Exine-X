@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects
 {
@@ -364,7 +364,7 @@ namespace Server.ExineObjects
         public override Packet GetInfo()
         {
             if (Item != null)
-                return new S.ObjectItem
+                return new ServerPacket.ObjectItem
                     {
                         ObjectID = ObjectID,
                         Name = Item.Count > 1 ? string.Format("{0} ({1})", Name, Item.Count) : Name,
@@ -373,7 +373,7 @@ namespace Server.ExineObjects
                         Image = Item.Image
                     };
 
-            return new S.ObjectGold
+            return new ServerPacket.ObjectGold
                 {
                     ObjectID =  ObjectID,
                     Gold = Gold,

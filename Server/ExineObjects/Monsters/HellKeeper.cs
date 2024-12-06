@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -80,7 +80,7 @@ namespace Server.ExineObjects.Monsters
 
             }
 
-            Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
 
             ChangeHP(armour - damage);
             return 1;
@@ -135,7 +135,7 @@ namespace Server.ExineObjects.Monsters
             if (EXPOwner == attacker)
                 EXPOwnerTime = Envir.Time + EXPOwnerDelay;
 
-            Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
             attacker.GatherElement();
 
             ChangeHP(armour - damage);
@@ -163,7 +163,7 @@ namespace Server.ExineObjects.Monsters
         {
             byte attacktype1 = (byte)(Envir.Random.Next(3) > 0 ? 0 : 1);
 
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = attacktype1 });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = attacktype1 });
 
             DelayedAction action = new DelayedAction(DelayedType.Damage, Envir.Time + 300, attacktype1);
             ActionList.Add(action);

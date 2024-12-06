@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -80,7 +80,7 @@ namespace Server.ExineObjects.Monsters
                 _CalledShield = true;
                 _Immune = true;
 
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 4, Level = _ShieldSeconds });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 4, Level = _ShieldSeconds });
 
                 AddBuff(BuffType.HornedCommanderShield, this, Settings.Second * _ShieldSeconds, new Stats());
 
@@ -95,7 +95,7 @@ namespace Server.ExineObjects.Monsters
                     SetupRockSpike();
 
                     _CalledRockSpikes = true;
-                    Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
+                    Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
                 }
             }
 
@@ -193,7 +193,7 @@ namespace Server.ExineObjects.Monsters
                 ActionTime = Envir.Time + (rockFallDuration) + 500;
                 AttackTime = Envir.Time + (rockFallDuration) + 500 + AttackSpeed;
 
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 3, Level = rockFallLoops });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 3, Level = rockFallLoops });
 
                 var front = Functions.PointMove(CurrentLocation, Direction, 2);
 
@@ -217,7 +217,7 @@ namespace Server.ExineObjects.Monsters
                 ActionTime = Envir.Time + spinDuration + 1500;
                 AttackTime = Envir.Time + spinDuration + 1500 + AttackSpeed;
 
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2, Level = spinLoops });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2, Level = spinLoops });
 
                 int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]) * spinLoops;
 
@@ -233,7 +233,7 @@ namespace Server.ExineObjects.Monsters
             //Hammer Smash
             if (_StartAdvanced && Envir.Random.Next(10) == 0)
             {
-                Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
+                Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
 
                 int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
                 if (damage == 0) return;
@@ -246,7 +246,7 @@ namespace Server.ExineObjects.Monsters
             //Teleport
             if (_StartAdvanced && Envir.Random.Next(10) == 0)
             {
-                Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+                Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
                 DelayedAction action = new DelayedAction(DelayedType.RangeDamage, Envir.Time + 300);
                 ActionList.Add(action);
@@ -257,7 +257,7 @@ namespace Server.ExineObjects.Monsters
             //Normal Attacks
             if (Envir.Random.Next(2) == 0)
             {
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
                 int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
                 if (damage == 0) return;
@@ -267,7 +267,7 @@ namespace Server.ExineObjects.Monsters
             }
             else
             {
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
 
                 int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
                 if (damage == 0) return;

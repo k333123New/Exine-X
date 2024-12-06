@@ -1,5 +1,5 @@
 ﻿using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -27,7 +27,7 @@ namespace Server.ExineObjects.Monsters
                 target.Attacked(this, damage, defence);
             }
 
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
         }
 
         protected override void ProcessTarget()

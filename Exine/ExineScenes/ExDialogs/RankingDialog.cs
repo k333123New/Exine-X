@@ -276,7 +276,7 @@ namespace Exine.ExineScenes.ExDialogs
         public void RequestRanks(byte RankType)
         {
             if (RankType > 6) return;
-            ExineNetwork.Network.Enqueue(new ClientPackets.GetRanking { RankType = RankType, RankIndex = RowOffset, OnlineOnly = OnlineOnly});
+            ExineNetwork.Network.SendPacketToServer(new ClientPacket.GetRanking { RankType = RankType, RankIndex = RowOffset, OnlineOnly = OnlineOnly});
         }
 
         public void RecieveRanks(List<RankCharacterInfo> Ranking, byte rankType, int MyRank, int Count)
@@ -371,7 +371,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 ExineMainScene.InspectTime = CMain.Time + 500;
                 InspectDialog.InspectID = (uint)Index;
-                ExineNetwork.Network.Enqueue(new ClientPackets.Inspect { ObjectID = (uint)Index, Ranking = true });
+                ExineNetwork.Network.SendPacketToServer(new ClientPacket.Inspect { ObjectID = (uint)Index, Ranking = true });
             }
 
             public void Clear()

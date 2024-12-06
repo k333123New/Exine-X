@@ -1,5 +1,5 @@
 ﻿using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -28,7 +28,7 @@ namespace Server.ExineObjects.Monsters
 
             if (spawn == null) return;
 
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             ActionTime = Envir.Time + 300;
             AttackTime = Envir.Time + 3000;

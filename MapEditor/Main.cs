@@ -426,13 +426,13 @@ namespace Map_Editor
                 var index = selectImageIndex;
                 var drawX = (cellX - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
                 var drawY = (cellY - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
-                var s = Libraries.MapLibs[libIndex].GetSize(index);
-                if ((s.Width != CellWidth || s.Height != CellHeight) &&
-                    (s.Width != CellWidth*2 || s.Height != CellHeight*2))
+                var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
+                if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) &&
+                    (imgSize.Width != CellWidth*2 || imgSize.Height != CellHeight*2))
                 {
                     drawY = (cellY - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
                     //Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
-                    Draw(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX,true); //k333123
+                    Draw(libIndex, index, drawX, drawY - imgSize.Height * zoomMIN / zoomMAX,true); //k333123
                 }
                 else
                 {
@@ -452,12 +452,12 @@ namespace Map_Editor
                 var index = selectImageIndex;
                 var drawX = (cellX - mapPoint.X)*(CellWidth*zoomMIN/zoomMAX);
                 var drawY = (cellY - mapPoint.Y)*(CellHeight*zoomMIN/zoomMAX);
-                var s = Libraries.MapLibs[libIndex].GetSize(index);
-                if ((s.Width != CellWidth || s.Height != CellHeight) &&
-                    (s.Width != CellWidth*2 || s.Height != CellHeight*2))
+                var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
+                if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) &&
+                    (imgSize.Width != CellWidth*2 || imgSize.Height != CellHeight*2))
                 {
                     drawY = (cellY - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
-                    Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                    Draw(libIndex, index, drawX, drawY - imgSize.Height*zoomMIN/zoomMAX);
                 }
                 else
                 {
@@ -521,12 +521,12 @@ namespace Map_Editor
                     }
                 }
 
-                var s = Libraries.MapLibs[libIndex].GetSize(index);
-                if ((s.Width != CellWidth || s.Height != CellHeight) &&
-                    (s.Width != CellWidth*2 || s.Height != CellHeight*2))
+                var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
+                if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) &&
+                    (imgSize.Width != CellWidth*2 || imgSize.Height != CellHeight*2))
                 {
                     drawY = (datas[i].Y + cellY - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
-                    Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                    Draw(libIndex, index, drawX, drawY - imgSize.Height*zoomMIN/zoomMAX);
                 }
                 else
                 {
@@ -552,7 +552,7 @@ namespace Map_Editor
                 libIndex = datas[i].CellInfo.FrontIndex;
                 if (libIndex < 0 || libIndex >= Libraries.MapLibs.Length) continue;
                 if (index < 0 || index >= Libraries.MapLibs[libIndex].Images.Count) continue;
-                var s = Libraries.MapLibs[libIndex].GetSize(index);
+                var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
                 byte animation;
                 bool blend;
                 animation = datas[i].CellInfo.FrontAnimationFrame;
@@ -573,8 +573,8 @@ namespace Map_Editor
                 }
 
                 //It's not a 48*24 or 96*48 floor tile, it's a big object
-                if ((s.Width != CellWidth || s.Height != CellHeight) &&
-                    (s.Width != CellWidth*2 || s.Height != CellHeight*2))
+                if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) &&
+                    (imgSize.Width != CellWidth*2 || imgSize.Height != CellHeight*2))
                 {
                     drawY = (datas[i].Y + cellY - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
                     //If there is animation
@@ -592,20 +592,20 @@ namespace Map_Editor
                             //Old map lamppost index >= 2723 && index <= 2732
                             else
                             {
-                                DrawBlend(libIndex, index, new Point(drawX, drawY - s.Height*zoomMIN/zoomMAX),
+                                DrawBlend(libIndex, index, new Point(drawX, drawY - imgSize.Height*zoomMIN/zoomMAX),
                                     Color.White, index >= 2723 && index <= 2732);
                             }
                         }
                         //No mixing required
                         else
                         {
-                            Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                            Draw(libIndex, index, drawX, drawY - imgSize.Height*zoomMIN/zoomMAX);
                         }
                     }
                     //If there is no animation
                     else
                     {
-                        Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                        Draw(libIndex, index, drawX, drawY - imgSize.Height*zoomMIN/zoomMAX);
                     }
                 }
                 //Is 48*24 or 96*48 floor tiles
@@ -801,10 +801,10 @@ namespace Map_Editor
                         }
 
                         var doorOffset = X2CellInfo[x, y].DoorOffset;
-                        var s = Libraries.MapLibs[libIndex].GetSize(index);
+                        var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
                         //It's not a 48*24 or 96*48 floor tile, it's a big object
-                        if ((s.Width != CellWidth || s.Height != CellHeight) &&
-                            (s.Width != CellWidth*2 || s.Height != CellHeight*2))
+                        if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) &&
+                            (imgSize.Width != CellWidth*2 || imgSize.Height != CellHeight*2))
                         {
                             drawY = (y - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
                             //If there is animation
@@ -822,14 +822,14 @@ namespace Map_Editor
                                     //Old map lamppost index >= 2723 && index <= 2732
                                     else
                                     {
-                                        DrawBlend(libIndex, index, new Point(drawX, drawY - s.Height*zoomMIN/zoomMAX),
+                                        DrawBlend(libIndex, index, new Point(drawX, drawY - imgSize.Height*zoomMIN/zoomMAX),
                                             Color.White, index >= 2723 && index <= 2732);
                                     }
                                 }
                                 //No mixing required
                                 else
                                 {
-                                    Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                                    Draw(libIndex, index, drawX, drawY - imgSize.Height*zoomMIN/zoomMAX);
                                 }
                             }
                             //If there is no animation
@@ -837,7 +837,7 @@ namespace Map_Editor
                             {
                                 //여기서 움직이지 않는 객체를 그린다.
                                 //Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
-                                Draw(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX,true);//k333123
+                                Draw(libIndex, index, drawX, drawY - imgSize.Height * zoomMIN / zoomMAX,true);//k333123
 
                                 //DrawExineObject(libIndex, index, drawX, drawY - s.Height * zoomMIN / zoomMAX);//실제 좌표를 그린다.
                             }
@@ -852,7 +852,7 @@ namespace Map_Editor
                         if (chkDoor.Checked && (doorOffset > 0))
                         {
                             drawY = (y - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
-                            Draw(libIndex, index + doorOffset, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                            Draw(libIndex, index + doorOffset, drawX, drawY - imgSize.Height*zoomMIN/zoomMAX);
                         }
                     }
                 }
@@ -938,12 +938,12 @@ namespace Map_Editor
                             }
                         }
 
-                        var s = Libraries.MapLibs[libIndex].GetSize(index);
-                        if ((s.Width != CellWidth || s.Height != CellHeight) &&
-                            (s.Width != CellWidth*2 || s.Height != CellHeight*2))
+                        var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
+                        if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) &&
+                            (imgSize.Width != CellWidth*2 || imgSize.Height != CellHeight*2))
                         {
                             drawY = (y - mapPoint.Y + 1)*(CellHeight*zoomMIN/zoomMAX);
-                            Draw(libIndex, index, drawX, drawY - s.Height*zoomMIN/zoomMAX);
+                            Draw(libIndex, index, drawX, drawY - imgSize.Height*zoomMIN/zoomMAX);
                         }
                         else
                         {
@@ -1555,8 +1555,8 @@ namespace Map_Editor
 
         private bool CheckImageSizeIsBigTile(int libIndex, int index)
         {
-            var s = Libraries.MapLibs[libIndex].GetSize(index);
-            if ((s.Width != 2*CellWidth) && (s.Height != 2*CellHeight))
+            var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
+            if ((imgSize.Width != 2*CellWidth) && (imgSize.Height != 2*CellHeight))
             {
                 return false;
             }
@@ -2182,11 +2182,11 @@ namespace Map_Editor
                 if (libIndex < 0 || libIndex >= Libraries.MapLibs.Length) continue;
                 if (index < 0 || index >= Libraries.MapLibs[libIndex].Images.Count) continue;
 
-                var s = Libraries.MapLibs[libIndex].GetSize(index);
-                if ((s.Width != CellWidth || s.Height != CellHeight) &&
-                    (s.Width != CellWidth*2 || s.Height != CellHeight*2))
+                var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
+                if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) &&
+                    (imgSize.Width != CellWidth*2 || imgSize.Height != CellHeight*2))
                 {
-                    drawY = (datas[i].Y + 1 + h/4)*CellHeight - s.Height;
+                    drawY = (datas[i].Y + 1 + h/4)*CellHeight - imgSize.Height;
                 }
                 else
                 {
@@ -2209,11 +2209,11 @@ namespace Map_Editor
                 if (libIndex < 0 || libIndex >= Libraries.MapLibs.Length) continue;
                 if (index < 0 || index >= Libraries.MapLibs[libIndex].Images.Count) continue;
 
-                var s = Libraries.MapLibs[libIndex].GetSize(index);
-                if ((s.Width != CellWidth || s.Height != CellHeight) &&
-                    (s.Width != CellWidth*2 || s.Height != CellHeight*2))
+                var imgSize = Libraries.MapLibs[libIndex].GetSize(index);
+                if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) &&
+                    (imgSize.Width != CellWidth*2 || imgSize.Height != CellHeight*2))
                 {
-                    drawY = (datas[i].Y + 1 + h/4)*CellHeight - s.Height;
+                    drawY = (datas[i].Y + 1 + h/4)*CellHeight - imgSize.Height;
                 }
                 else
                 {

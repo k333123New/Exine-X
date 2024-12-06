@@ -4,8 +4,8 @@ using Exine.ExineControls;
 using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineSounds;
-using S = ServerPackets;
-using C = ClientPackets;
+
+
 
 namespace Exine.ExineScenes
 {
@@ -380,7 +380,7 @@ namespace Exine.ExineScenes
                 if (_newPwTextBox.Text != _newConfirmPwTextBox.Text) return;
 
                 Console.WriteLine("id:{0} pw:{1} rePw:{2}", _newIdTextBox.Text, _newPwTextBox.Text, _newConfirmPwTextBox.Text);
-                Network.Enqueue(new C.NewAccount
+                Network.SendPacketToServer(new ClientPacket.NewAccount
                 {
                     AccountID = _newIdTextBox.Text,//"필11111",
                     Password = _newPwTextBox.Text,//"12481248",
@@ -444,17 +444,17 @@ namespace Exine.ExineScenes
         }
 
         override
-        public void ProcessPacket(Packet recvPacket)
+        public void ProcessRecvPacket(Packet recvPacket)
         {
             Console.WriteLine("recvPacket.Type :" + ServerPackIdsToString((ServerPacketIds)recvPacket.Index));
             switch (recvPacket.Index)
             {
                 case (short)ServerPacketIds.NewAccount:
-                    Console.Write("Recv ServerPacketIds.NewAccount " + "result :" + ((S.NewAccount)recvPacket).Result);
+                    Console.Write("Recv ServerPacketIds.NewAccount " + "result :" + ((ServerPacket.NewAccount)recvPacket).Result);
                     //password not apply special charactor
 
                     //exist : 7  //ok : 8
-                    if (((S.NewAccount)recvPacket).Result == 7 || ((S.NewAccount)recvPacket).Result == 8)
+                    if (((ServerPacket.NewAccount)recvPacket).Result == 7 || ((ServerPacket.NewAccount)recvPacket).Result == 8)
                     {
                         Console.WriteLine(" > Send [Login]");
 
@@ -472,8 +472,8 @@ namespace Exine.ExineScenes
                             }
                         }
                         */
-                        Network.Enqueue(
-                            new C.Login
+                        Network.SendPacketToServer(
+                            new ClientPacket.Login
                             {
                                 AccountID = _newIdTextBox.Text,
                                 Password = _newPwTextBox.Text
@@ -485,7 +485,7 @@ namespace Exine.ExineScenes
                 case (short)ServerPacketIds.LoginSuccess:
                     Console.WriteLine("Recv ServerPacketIds.LoginSuccess -> Send [NewCha]");
                     charList.Clear();
-                    charList.AddRange(((S.LoginSuccess)recvPacket).Characters);
+                    charList.AddRange(((ServerPacket.LoginSuccess)recvPacket).Characters);
                     for (int i = 0; i < charList.Count; i++)
                     {
                         Console.WriteLine("name : " + charList[i].Name + "Index : " + charList[i].Index);
@@ -507,8 +507,8 @@ namespace Exine.ExineScenes
                     }
 
                     //Select Scene
-                    Network.Enqueue(
-                         new C.NewCharacter
+                    Network.SendPacketToServer(
+                         new ClientPacket.NewCharacter
                          {
                              Name = _newIdTextBox.Text,//"필11111",
                              Class = 0, //Change to Color
@@ -526,13 +526,13 @@ namespace Exine.ExineScenes
                     break;
 
                 case (short)ServerPacketIds.NewCharacterSuccess: 
-                    Network.Enqueue(new C.LogOut { });
+                    Network.SendPacketToServer(new ClientPacket.LogOut { });
                     ActiveScene = new ExineLoginScene();
                     Dispose();
                     break;
 
                 case (short)ServerPacketIds.NewCharacter: 
-                    Network.Enqueue(new C.LogOut{});
+                    Network.SendPacketToServer(new ClientPacket.LogOut{});
                     ActiveScene = new ExineLoginScene();
                     Dispose();
                     break;

@@ -1,5 +1,4 @@
-﻿using S = ServerPackets;
-using Exine.ExineControls;
+﻿using Exine.ExineControls;
 using Exine.ExineGraphics;
 
 namespace Exine.ExineScenes.ExDialogs
@@ -148,7 +147,7 @@ namespace Exine.ExineScenes.ExDialogs
             return ActiveTimers.FirstOrDefault(x => x.Key == key);
         }
 
-        public void AddTimer(S.SetTimer p)
+        public void AddTimer(ServerPacket.SetTimer p)
         {
             var currentTimer = GetTimer(p.Key);
 

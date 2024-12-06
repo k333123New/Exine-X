@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -33,7 +33,7 @@ namespace Server.ExineObjects.Monsters
                 ActionTime = Envir.Time + 500;
                 AttackTime = Envir.Time + AttackSpeed;
 
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
                 DelayedAction action = new DelayedAction(DelayedType.Damage, Envir.Time + 500, Target, damage, DefenceType.MACAgility);
                 ActionList.Add(action);
             }
@@ -47,13 +47,13 @@ namespace Server.ExineObjects.Monsters
                     ActionTime = Envir.Time + 500;
                     AttackTime = Envir.Time + AttackSpeed;
 
-                    Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
+                    Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
                     DelayedAction action = new DelayedAction(DelayedType.RangeDamage, Envir.Time + 800, Target, damage, DefenceType.AC);
                     ActionList.Add(action);
                 }
                 else
                 {
-                    Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 1 });
+                    Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 1 });
 
                     TeleportTarget(4, 4);
 
@@ -112,7 +112,7 @@ namespace Server.ExineObjects.Monsters
 
         public override Packet GetInfo()
         {
-            return new S.ObjectMonster
+            return new ServerPacket.ObjectMonster
             {
                 ObjectID = ObjectID,
                 Name = Name,

@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -52,7 +52,7 @@ namespace Server.ExineObjects.Monsters
                     case 0: //Spin
                     case 1:
                         {
-                            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+                            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
                             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
                             if (damage == 0) return;
@@ -65,7 +65,7 @@ namespace Server.ExineObjects.Monsters
                         {
                             if (hpPercent >= 50) //Tornado
                             {
-                                Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 1 });
+                                Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 1 });
 
                                 int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
                                 if (damage == 0) return;
@@ -75,7 +75,7 @@ namespace Server.ExineObjects.Monsters
                             }
                             else //Stomp
                             {
-                                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
+                                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
 
                                 int damage = Stats[Stat.MaxDC];
                                 if (damage == 0) return;
@@ -92,7 +92,7 @@ namespace Server.ExineObjects.Monsters
                 ActionTime = Envir.Time + 300;
                 AttackTime = Envir.Time + (AttackSpeed * 2);
 
-                Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
+                Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
 
                 int damage = GetAttackPower(Stats[Stat.MinMC], Stats[Stat.MaxMC]);
                 if (damage == 0) return;

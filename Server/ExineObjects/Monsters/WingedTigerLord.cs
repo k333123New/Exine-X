@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -50,7 +50,7 @@ namespace Server.ExineObjects.Monsters
             {
                 if (tornado)
                 {
-                    Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0, TargetID = Target.ObjectID });
+                    Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0, TargetID = Target.ObjectID });
 
                     damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
 
@@ -76,7 +76,7 @@ namespace Server.ExineObjects.Monsters
                 if (stomp)
                 {
                     //Foot stomp
-                    Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
+                    Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
 
                     ExineDirection dir = Functions.PreviousDir(Direction);
    
@@ -116,7 +116,7 @@ namespace Server.ExineObjects.Monsters
                 {
                     case 0:
                         //Slash
-                        Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+                        Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
                         damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
                         action = new DelayedAction(DelayedType.Damage, Envir.Time + 300, Target, damage, DefenceType.ACAgility, AttackType.SingleSlash);
@@ -128,7 +128,7 @@ namespace Server.ExineObjects.Monsters
                         break;
                     case 1:
                         //Two hand slash
-                        Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
+                        Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
 
                         damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
                         action = new DelayedAction(DelayedType.Damage, Envir.Time + 300, Target, damage, DefenceType.ACAgility, AttackType.SingleSlash);

@@ -1,7 +1,7 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
 using Server.ExineObjects.Monsters;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects
 {
@@ -86,7 +86,7 @@ namespace Server.ExineObjects
             {
                 if (_hidden == value) return;
                 _hidden = value;
-                CurrentMap.Broadcast(new S.ObjectHidden { ObjectID = ObjectID, Hidden = value }, CurrentLocation);
+                CurrentMap.Broadcast(new ServerPacket.ObjectHidden { ObjectID = ObjectID, Hidden = value }, CurrentLocation);
             }
         }
 
@@ -104,7 +104,7 @@ namespace Server.ExineObjects
                 if (!_observer)
                     BroadcastInfo();
                 else
-                    Broadcast(new S.ObjectRemove { ObjectID = ObjectID });
+                    Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID });
             }
         }
 
@@ -258,7 +258,7 @@ namespace Server.ExineObjects
 
         public virtual void Remove(HumanObjectSrv player)
         {
-            player.Enqueue(new S.ObjectRemove { ObjectID = ObjectID });
+            player.SendPacketToClient(new ServerPacket.ObjectRemove { ObjectID = ObjectID });
         }
         public virtual void Add(HumanObjectSrv player)
         {
@@ -271,7 +271,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            player.Enqueue(GetInfo());
+            player.SendPacketToClient(GetInfo());
 
             //if (Race == ObjectType.Player)
             //{
@@ -332,7 +332,7 @@ namespace Server.ExineObjects
         {
             if (Node == null) return;
             
-            Broadcast(new S.ObjectRemove { ObjectID = ObjectID });
+            Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID });
             Envir.Objects.Remove(Node);
             if (Settings.Multithreaded && (Race == ObjectType.Monster))
             {
@@ -385,7 +385,7 @@ namespace Server.ExineObjects
                 if (player == this) continue;
 
                 if (Functions.InRange(CurrentLocation, player.CurrentLocation, Globals.DataRange))
-                    player.Enqueue(p);
+                    player.SendPacketToClient(p);
             }
         }
 
@@ -739,8 +739,8 @@ namespace Server.ExineObjects
             if (temp == null || !temp.ValidPoint(location)) return false;
 
             CurrentMap.RemoveObject(this);
-            if (effects) Broadcast(new S.ObjectTeleportOut {ObjectID = ObjectID, Type = effectnumber});
-            Broadcast(new S.ObjectRemove {ObjectID = ObjectID});
+            if (effects) Broadcast(new ServerPacket.ObjectTeleportOut {ObjectID = ObjectID, Type = effectnumber});
+            Broadcast(new ServerPacket.ObjectRemove {ObjectID = ObjectID});
             
             CurrentMap = temp;
             CurrentLocation = location;
@@ -750,7 +750,7 @@ namespace Server.ExineObjects
             CurrentMap.AddObject(this);
             BroadcastInfo();
 
-            if (effects) Broadcast(new S.ObjectTeleportIn { ObjectID = ObjectID, Type = effectnumber });
+            if (effects) Broadcast(new ServerPacket.ObjectTeleportIn { ObjectID = ObjectID, Type = effectnumber });
             
             BroadcastHealthChange();
             
@@ -800,7 +800,7 @@ namespace Server.ExineObjects
             if (Race != ObjectType.Player && Race != ObjectType.Monster) return;
 
             byte time = Math.Min(byte.MaxValue, (byte)Math.Max(5, (RevTime - Envir.Time) / 1000));
-            Packet p = new S.ObjectHealth { ObjectID = ObjectID, Percent = PercentHealth, Expire = time };
+            Packet p = new ServerPacket.ObjectHealth { ObjectID = ObjectID, Percent = PercentHealth, Expire = time };
 
             if (Envir.Time < RevTime)
             {
@@ -820,7 +820,7 @@ namespace Server.ExineObjects
 
                         if (this == member) continue;
                         if (member.CurrentMap != CurrentMap || !Functions.InRange(member.CurrentLocation, CurrentLocation, Globals.DataRange)) continue;
-                        member.Enqueue(p);
+                        member.SendPacketToClient(p);
                     }
                 }
 
@@ -831,7 +831,7 @@ namespace Server.ExineObjects
             {
                 PlayerObjectSrv player = (PlayerObjectSrv)Master;
 
-                player.Enqueue(p);
+                player.SendPacketToClient(p);
 
                 if (player.GroupMembers != null) //Send pet HP to group
                 {
@@ -842,7 +842,7 @@ namespace Server.ExineObjects
                         if (player == member) continue;
 
                         if (member.CurrentMap != CurrentMap || !Functions.InRange(member.CurrentLocation, CurrentLocation, Globals.DataRange)) continue;
-                        member.Enqueue(p);
+                        member.SendPacketToClient(p);
                     }
                 }
             }
@@ -854,7 +854,7 @@ namespace Server.ExineObjects
 
                 if (player.IsMember(Master)) return;
                 
-                player.Enqueue(p);
+                player.SendPacketToClient(p);
 
                 if (player.GroupMembers != null)
                 {
@@ -864,7 +864,7 @@ namespace Server.ExineObjects
 
                         if (player == member) continue;
                         if (member.CurrentMap != CurrentMap || !Functions.InRange(member.CurrentLocation, CurrentLocation, Globals.DataRange)) continue;
-                        member.Enqueue(p);
+                        member.SendPacketToClient(p);
                     }
                 }
             }
@@ -872,12 +872,12 @@ namespace Server.ExineObjects
 
         public void BroadcastDamageIndicator(DamageType type, int damage = 0)
         {
-            Packet p = new S.DamageIndicator { ObjectID = ObjectID, Damage = damage, Type = type };
+            Packet p = new ServerPacket.DamageIndicator { ObjectID = ObjectID, Damage = damage, Type = type };
 
             if (Race == ObjectType.Player)
             {
                 PlayerObjectSrv player = (PlayerObjectSrv)this;
-                player.Enqueue(p);
+                player.SendPacketToClient(p);
             }
             Broadcast(p);
         }
@@ -906,7 +906,7 @@ namespace Server.ExineObjects
                 if (this is PlayerObjectSrv)
                 {
                     var player = (PlayerObjectSrv)this;
-                    player.Enqueue(new S.InTrapRock { Trapped = value });
+                    player.SendPacketToClient(new ServerPacket.InTrapRock { Trapped = value });
                 }
             }
             get

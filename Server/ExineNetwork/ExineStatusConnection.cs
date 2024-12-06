@@ -52,7 +52,7 @@ namespace Server.ExineNetwork
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Server.ExineNetwork
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
         }
         public void Disconnect()
@@ -126,7 +126,7 @@ namespace Server.ExineNetwork
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
         }
         public void SendDisconnect()

@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.Library.Utils
 {
@@ -54,7 +54,7 @@ namespace Server.Library.Utils
                         var question = request.QueryString["question"];
                         var answer = request.QueryString["answer"];
                         var ip = request.QueryString["ip"];
-                        var p = new ClientPackets.NewAccount();
+                        var p = new ClientPacket.NewAccount();
                         p.AccountID = id;
                         p.Password = psd;
                         p.EMailAddress = email;
@@ -77,7 +77,7 @@ namespace Server.Library.Utils
                             WriteResponse(response, "short");
                             return;
                         }
-                        Envir.Main.Broadcast(new S.Chat
+                        Envir.Main.Broadcast(new ServerPacket.Chat
                         {
                             Message = msg.Trim(),
                             Type = ChatType.Shout2

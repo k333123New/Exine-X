@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -44,7 +44,7 @@ namespace Server.ExineObjects.Monsters
             {
                 _OrbTime = Envir.Time + 20000;
 
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
 
                 ActionTime = Envir.Time + AttackSpeed + 300;
 
@@ -70,7 +70,7 @@ namespace Server.ExineObjects.Monsters
             {
                 _MassThunderTime = Envir.Time + 10000 + Envir.Random.Next(0, 5000);
 
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 3 });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 3 });
 
                 ActionTime = Envir.Time + AttackSpeed + 300;
 
@@ -87,7 +87,7 @@ namespace Server.ExineObjects.Monsters
             {
                 if (Envir.Random.Next(4) > 0)
                 {
-                    Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+                    Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
                     ActionTime = Envir.Time + AttackSpeed + 300;
 
@@ -99,7 +99,7 @@ namespace Server.ExineObjects.Monsters
                 }
                 else
                 {
-                    Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
+                    Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
 
                     ActionTime = Envir.Time + AttackSpeed + 3400;
 
@@ -134,7 +134,7 @@ namespace Server.ExineObjects.Monsters
             {
                 if (Envir.Random.Next(3) == 0)
                 {
-                    Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
+                    Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID, Type = 0 });
 
                     ActionTime = Envir.Time + AttackSpeed + 300;
 

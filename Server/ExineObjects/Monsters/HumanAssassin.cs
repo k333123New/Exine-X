@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -110,9 +110,9 @@ namespace Server.ExineObjects.Monsters
             InSafeZone = CurrentMap.GetSafeZone(CurrentLocation) != null;
 
             if (isBreak)
-                Broadcast(new S.ObjectWalk { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectWalk { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
             else
-                Broadcast(new S.ObjectRun { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectRun { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
 
             cell = CurrentMap.GetCell(CurrentLocation);
@@ -242,7 +242,7 @@ namespace Server.ExineObjects.Monsters
 
 
             Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
 
             ActionTime = Envir.Time + 300;
@@ -276,7 +276,7 @@ namespace Server.ExineObjects.Monsters
             //DeadTime = Envir.Time + DeadDelay;
             DeadTime = 0;
 
-            Broadcast(new S.ObjectDied { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = (byte)2 });
+            Broadcast(new ServerPacket.ObjectDied { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = (byte)2 });
 
             if (EXPOwner != null && EXPOwner.Node != null && Master == null && EXPOwner.Race == ObjectType.Player) EXPOwner.WinExp(Experience);
 
@@ -345,7 +345,7 @@ namespace Server.ExineObjects.Monsters
                 wing = master.Looks_Wings;
             }
 
-            return new S.ObjectPlayer
+            return new ServerPacket.ObjectPlayer
             {
                 ObjectID = ObjectID,
                 Name = master != null ? master.Name : Name,

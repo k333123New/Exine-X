@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 
 namespace Server.ExineObjects.Monsters
@@ -76,7 +76,7 @@ namespace Server.ExineObjects.Monsters
             if (!Stoned) return;
 
             Stoned = false;
-            Broadcast(new S.ObjectShow { ObjectID = ObjectID });
+            Broadcast(new ServerPacket.ObjectShow { ObjectID = ObjectID });
             ActionTime = Envir.Time + 1000;
         }
 
@@ -160,7 +160,7 @@ namespace Server.ExineObjects.Monsters
 
             InSafeZone = CurrentMap.GetSafeZone(CurrentLocation) != null;
 
-            Broadcast(new S.ObjectWalk { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectWalk { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             cell = CurrentMap.GetCell(CurrentLocation);
 
@@ -178,7 +178,7 @@ namespace Server.ExineObjects.Monsters
 
         public override Packet GetInfo()
         {
-            return new S.ObjectMonster
+            return new ServerPacket.ObjectMonster
             {
                 ObjectID = ObjectID,
                 Name = Name,

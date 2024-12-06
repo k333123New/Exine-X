@@ -1,5 +1,5 @@
 ﻿using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -51,7 +51,7 @@ namespace Server.ExineObjects.Monsters
                     Visible = true;
                     CellTime = Envir.Time + 500;
                     Broadcast(GetInfo());
-                    Broadcast(new S.ObjectShow { ObjectID = ObjectID });
+                    Broadcast(new ServerPacket.ObjectShow { ObjectID = ObjectID });
                     ActionTime = Envir.Time + 2000;
                     DigOutTime = Envir.Time;
                     DigOutLocation = CurrentLocation;

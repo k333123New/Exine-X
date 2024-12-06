@@ -1,5 +1,5 @@
 using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -34,7 +34,7 @@ namespace Server.ExineObjects.Monsters
             }
             else
             {
-                Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+                Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
                 List<MapObjectSrv> targets = FindAllTargets(AttackRange, CurrentLocation, false);
 

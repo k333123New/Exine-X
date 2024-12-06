@@ -1,7 +1,7 @@
 ﻿using Exine.ExineGraphics;
 using Exine.ExineScenes;
 using Exine.ExineSounds;
-using S = ServerPackets;
+//
 
 namespace Exine.ExineObjects
 {
@@ -27,7 +27,7 @@ namespace Exine.ExineObjects
         {
         }
 
-        public void Load(S.ObjectSpell info)
+        public void Load(ServerPacket.ObjectSpell info)
         {
             CurrentLocation = info.Location;
             MapLocation = info.Location;

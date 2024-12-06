@@ -6,7 +6,7 @@ using Exine.ExineObjects;
 using Exine.ExineSounds;
 using SlimDX;
 using Font = System.Drawing.Font;
-using C = ClientPackets;
+
 using Microsoft.VisualBasic.ApplicationServices;
 using static System.Collections.Specialized.BitVector32;
 
@@ -1062,7 +1062,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonC,
                 Hint = string.Format(GameLanguage.Trade, CMain.InputKeys.GetKey(KeybindOptions.Trade)),
             };
-            TradeButton.Click += (o, e) => Network.Enqueue(new C.TradeRequest());
+            TradeButton.Click += (o, e) => Network.Enqueue(new ClientPacket.TradeRequest());
 
             ReportButton = new MirButton
             {
@@ -1462,7 +1462,7 @@ namespace Exine.ExineScenes.ExDialogs
                             Settings.TargetDead = !Settings.TargetDead;
                         }
 
-                        Network.Enqueue(new C.Chat
+                        Network.SendPacketToServer(new ClientPacket.Chat
                         {
                             Message = msg,
                             LinkedItems = new List<ChatItem>(LinkedItems)
@@ -2660,7 +2660,7 @@ namespace Exine.ExineScenes.ExDialogs
                     ExineMainScene.Scene.ExChatDialog.ReceiveChat("당신은 당신의 그룹의 리더가 아닙니다.", ChatType.System);
                 }
 
-                Network.Enqueue(new C.AddMember { Name = Name });
+                Network.SendPacketToServer(new ClientPacket.AddMember { Name = Name });
                 return;
             };
 
@@ -2677,7 +2677,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             FriendButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.AddFriend { Name = Name, Blocked = false });
+                Network.SendPacketToServer(new ClientPacket.AddFriend { Name = Name, Blocked = false });
             };
 
             
@@ -2693,7 +2693,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonA,
                 Hint = "Trade",
             };
-            TradeButton.Click += (o, e) => Network.Enqueue(new C.TradeRequest());
+            TradeButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.TradeRequest());
 
             ObserveButton = new ExineButton
             {
@@ -2709,7 +2709,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             ObserveButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.Observe { Name = Name });
+                Network.SendPacketToServer(new ClientPacket.Observe { Name = Name });
             };
 
             NameLabel = new ExineLabel
@@ -3201,7 +3201,7 @@ namespace Exine.ExineScenes.ExDialogs
         {
             if (ExineMainScene.AllowObserve == allow) return;
 
-            Network.Enqueue(new C.Chat
+            Network.SendPacketToServer(new ClientPacket.Chat
             {
                 Message = "@ALLOWOBSERVE",
             });
@@ -4344,7 +4344,7 @@ namespace Exine.ExineScenes.ExDialogs
                         Actor.Magics[i].Key = 0;
                 }
 
-                Network.Enqueue(new C.MagicKey { Spell = Magic.Spell, Key = Key, OldKey = Magic.Key });
+                Network.SendPacketToServer(new ClientPacket.MagicKey { Spell = Magic.Spell, Key = Key, OldKey = Magic.Key });
                 Magic.Key = Key;
                 foreach (SkillBarDialog Bar in ExineMainScene.Scene.SkillBarDialogs)
                     Bar.Update();

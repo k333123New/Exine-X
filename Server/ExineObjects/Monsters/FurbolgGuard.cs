@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -57,7 +57,7 @@ namespace Server.ExineObjects.Monsters
             {
                 int dist = Functions.MaxDistance(CurrentLocation, Target.CurrentLocation);
                 Point location = Functions.PointMove(CurrentLocation, Functions.ReverseDirection(Direction), 3);
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
                 if (dist <= 2 && CurrentMap.ValidPoint(location) && Envir.Random.Next(3) == 0)
                 {
@@ -69,7 +69,7 @@ namespace Server.ExineObjects.Monsters
             }
             else
             {
-                Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID });
+                Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID });
                 ProjectileAttack(damage);
             }
         }

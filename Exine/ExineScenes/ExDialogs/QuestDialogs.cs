@@ -4,7 +4,7 @@ using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineObjects;
 using Exine.ExineSounds;
-using C = ClientPackets;
+
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -112,7 +112,7 @@ namespace Exine.ExineScenes.ExDialogs
             {
                 if (Reward == null || SelectedQuest.Taken) return;
 
-                Network.Enqueue(new C.AcceptQuest { NPCIndex = SelectedQuest.QuestInfo.NPCIndex, QuestIndex = SelectedQuest.QuestInfo.Index });
+                Network.SendPacketToServer(new ClientPacket.AcceptQuest { NPCIndex = SelectedQuest.QuestInfo.NPCIndex, QuestIndex = SelectedQuest.QuestInfo.Index });
                 //Hide();
             };
 
@@ -138,7 +138,7 @@ namespace Exine.ExineScenes.ExDialogs
                     return;
                 }
 
-                Network.Enqueue(new C.FinishQuest { QuestIndex = SelectedQuest.QuestInfo.Index, SelectedItemIndex = Reward.SelectedItemIndex });
+                Network.SendPacketToServer(new ClientPacket.FinishQuest { QuestIndex = SelectedQuest.QuestInfo.Index, SelectedItemIndex = Reward.SelectedItemIndex });
                 //Hide();
             };
 
@@ -558,7 +558,7 @@ namespace Exine.ExineScenes.ExDialogs
             };
             _shareButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.ShareQuest { QuestIndex = Quest.Id });
+                Network.SendPacketToServer(new ClientPacket.ShareQuest { QuestIndex = Quest.Id });
             };
 
             _pauseButton = new ExineButton
@@ -589,7 +589,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 messageBox.YesButton.Click += (o1, a) =>
                 {
-                    Network.Enqueue(new C.AbandonQuest { QuestIndex = Quest.Id });
+                    Network.SendPacketToServer(new ClientPacket.AbandonQuest { QuestIndex = Quest.Id });
                     Hide();
                 };
                 messageBox.Show();
@@ -1002,7 +1002,7 @@ namespace Exine.ExineScenes.ExDialogs
         public ClientQuestProgress Quest;
         public ExineButton ScrollUpButton, ScrollDownButton, PositionBar;
 
-        private static readonly Regex C = new Regex(@"{(.*?/.*?)}");
+        private static readonly Regex CPattern = new Regex(@"{(.*?/.*?)}");
 
         private readonly ExineLabel[] _textLabel;
         private readonly List<ExineLabel> _textButtons = new List<ExineLabel>();
@@ -1272,7 +1272,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 string currentLine = lines[i];
 
-                List<Match> matchList = C.Matches(currentLine).Cast<Match>().ToList();
+                List<Match> matchList = CPattern.Matches(currentLine).Cast<Match>().ToList();
 
                 int oldLength = currentLine.Length;
 
@@ -1286,7 +1286,7 @@ namespace Exine.ExineScenes.ExDialogs
                     string text = currentLine.Substring(0, capture.Index - 1 - offSet) + " ";
                     Size size = TextRenderer.MeasureText(CMain.Graphics, text, _textLabel[i - TopLine].Font, _textLabel[i - TopLine].Size, TextFormatFlags.TextBoxControl);
 
-                    if (C.Match(match.Value).Success)
+                    if (CPattern.Match(match.Value).Success)
                         NewColour(values[0], values[1], _textLabel[i - TopLine].Location.Add(new Point(size.Width - 10, 0)));
                 }
 

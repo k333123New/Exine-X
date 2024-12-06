@@ -1,6 +1,6 @@
 ﻿using Exine.ExineGraphics;
 using Exine.ExineScenes;
-using S = ServerPackets;
+//
 using System.Text.RegularExpressions;
 
 namespace Exine.ExineObjects
@@ -24,7 +24,7 @@ namespace Exine.ExineObjects
         }
 
 
-        public void Load(S.ObjectItem info)
+        public void Load(ServerPacket.ObjectItem info)
         {
             Name = info.Name;
             NameColour = info.NameColour;
@@ -41,7 +41,7 @@ namespace Exine.ExineObjects
             DrawY = CurrentLocation.Y;
 
         }
-        public void Load(S.ObjectGold info)
+        public void Load(ServerPacket.ObjectGold info)
         {
             Name = string.Format("Gold ({0:###,###,###})", info.Gold);
 

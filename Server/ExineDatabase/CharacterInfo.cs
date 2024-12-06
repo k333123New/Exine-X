@@ -104,7 +104,7 @@ namespace Server.ExineDatabase
 
         public CharacterInfo() { }
 
-        public CharacterInfo(ClientPackets.NewCharacter p, ExineConnection c)
+        public CharacterInfo(ClientPacket.NewCharacter p, ExineConnection c)
         {
             Name = p.Name;
             Class = p.Class;

@@ -191,7 +191,7 @@ namespace Server.ExineObjects
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
         }
 
@@ -205,7 +205,7 @@ namespace Server.ExineObjects
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
         }
 

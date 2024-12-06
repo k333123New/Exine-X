@@ -4,8 +4,8 @@ using Exine.ExineControls;
 using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineSounds;
-using S = ServerPackets;
-using C = ClientPackets;
+
+
 
 namespace Exine.ExineScenes
 {

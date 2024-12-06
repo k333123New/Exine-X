@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -39,7 +39,7 @@ namespace Server.ExineObjects.Monsters
 
                 if (Envir.Random.Next(3) == 0 && hpPercent < 50)
                 {
-                    Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+                    Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
                     ActionTime = Envir.Time + 300;
                     AttackTime = Envir.Time + AttackSpeed;
@@ -49,7 +49,7 @@ namespace Server.ExineObjects.Monsters
                 else
                 {
                     Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
-                    Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID });
+                    Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID });
 
                     ActionTime = Envir.Time + 300;
                     AttackTime = Envir.Time + AttackSpeed;

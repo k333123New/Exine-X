@@ -1,7 +1,7 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
 using System.Text.RegularExpressions;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects
 {
@@ -153,7 +153,7 @@ namespace Server.ExineObjects
                 }
             }
             else
-                MessageQueue.Enqueue(string.Format("Script Not Found: {0}", FileName));
+                MessageQueue.SendMsg(string.Format("Script Not Found: {0}", FileName));
         }
         public void ClearInfo()
         {
@@ -306,7 +306,7 @@ namespace Server.ExineObjects
                 string path = Path.Combine(Settings.EnvirPath, split[1].Substring(1, split[1].Length - 2));
 
                 if (!File.Exists(path))
-                    MessageQueue.Enqueue(string.Format("INSERT Script Not Found: {0}", path));
+                    MessageQueue.SendMsg(string.Format("INSERT Script Not Found: {0}", path));
                 else
                     newLines = File.ReadAllLines(path).ToList();
 
@@ -335,7 +335,7 @@ namespace Server.ExineObjects
 
                 if (!File.Exists(path))
                 {
-                    MessageQueue.Enqueue(string.Format("INCLUDE Script Not Found: {0}", path));
+                    MessageQueue.SendMsg(string.Format("INCLUDE Script Not Found: {0}", path));
                     return parsedLines;
                 }
 
@@ -659,7 +659,7 @@ namespace Server.ExineObjects
 
                     if (goods == null || Goods.Contains(goods))
                     {
-                        MessageQueue.Enqueue(string.Format("Could not find Item: {0}, File: {1}", lines[i], FileName));
+                        MessageQueue.SendMsg(string.Format("Could not find Item: {0}, File: {1}", lines[i], FileName));
                         continue;
                     }
 
@@ -758,13 +758,13 @@ namespace Server.ExineObjects
 
                     if (recipe == null)
                     {
-                        MessageQueue.Enqueue(string.Format("Could not find recipe: {0}, File: {1}", lines[i], FileName));
+                        MessageQueue.SendMsg(string.Format("Could not find recipe: {0}, File: {1}", lines[i], FileName));
                         continue;
                     }
 
                     if (recipe.Ingredients.Count == 0)
                     {
-                        MessageQueue.Enqueue(string.Format("Could not find ingredients: {0}, File: {1}", lines[i], FileName));
+                        MessageQueue.SendMsg(string.Format("Could not find ingredients: {0}, File: {1}", lines[i], FileName));
                         continue;
                     }
 
@@ -839,7 +839,7 @@ namespace Server.ExineObjects
 
                     if (!found)
                     {
-                        MessageQueue.Enqueue(string.Format("Player: {0} was prevented access to NPC key: '{1}' ", player.Name, key));
+                        MessageQueue.SendMsg(string.Format("Player: {0} was prevented access to NPC key: '{1}' ", player.Name, key));
                         return;
                     }
                 }
@@ -852,7 +852,7 @@ namespace Server.ExineObjects
             if (key.StartsWith("[@@") && !player.NPCData.TryGetValue("NPCInputStr", out object _npcInputStr))
             {
                 //send off packet to request input
-                player.Enqueue(new S.NPCRequestInput { NPCID = player.NPCObjectID, PageName = key });
+                player.SendPacketToClient(new ServerPacket.NPCRequestInput { NPCID = player.NPCObjectID, PageName = key });
                 return;
             }
 
@@ -883,7 +883,7 @@ namespace Server.ExineObjects
 
         private void Response(PlayerObjectSrv player, NPCPage page)
         {
-            player.Enqueue(new S.NPCResponse { Page = player.NPCSpeech });
+            player.SendPacketToClient(new ServerPacket.NPCResponse { Page = player.NPCSpeech });
 
             ProcessSpecial(player, page);
         }
@@ -933,11 +933,11 @@ namespace Server.ExineObjects
                         sentGoods.AddRange(callingNPC.UsedGoods);
                     }
 
-                    player.Enqueue(new S.NPCGoods { List = sentGoods, Rate = PriceRate(player), Type = PanelType.Buy, HideAddedStats = Settings.GoodsHideAddedStats });
+                    player.SendPacketToClient(new ServerPacket.NPCGoods { List = sentGoods, Rate = PriceRate(player), Type = PanelType.Buy, HideAddedStats = Settings.GoodsHideAddedStats });
 
                     if (key == BuySellKey)
                     {
-                        player.Enqueue(new S.NPCSell());
+                        player.SendPacketToClient(new ServerPacket.NPCSell());
                     }
                     break;
                 case BuyNewKey:
@@ -947,50 +947,50 @@ namespace Server.ExineObjects
                     for (int i = 0; i < Goods.Count; i++)
                         player.CheckItem(Goods[i]);
 
-                    player.Enqueue(new S.NPCGoods { List = sentGoods, Rate = PriceRate(player), Type = PanelType.Buy, HideAddedStats = Settings.GoodsHideAddedStats });
+                    player.SendPacketToClient(new ServerPacket.NPCGoods { List = sentGoods, Rate = PriceRate(player), Type = PanelType.Buy, HideAddedStats = Settings.GoodsHideAddedStats });
 
                     if (key == BuySellNewKey)
                     {
-                        player.Enqueue(new S.NPCSell());
+                        player.SendPacketToClient(new ServerPacket.NPCSell());
                     }
                     break;
                 case SellKey:
-                    player.Enqueue(new S.NPCSell());
+                    player.SendPacketToClient(new ServerPacket.NPCSell());
                     break;
                 case RepairKey:
-                    player.Enqueue(new S.NPCRepair { Rate = PriceRate(player) });
+                    player.SendPacketToClient(new ServerPacket.NPCRepair { Rate = PriceRate(player) });
                     break;
                 case SRepairKey:
-                    player.Enqueue(new S.NPCSRepair { Rate = PriceRate(player) });
+                    player.SendPacketToClient(new ServerPacket.NPCSRepair { Rate = PriceRate(player) });
                     break;
                 case CraftKey:
                     for (int i = 0; i < CraftGoods.Count; i++)
                         player.CheckItemInfo(CraftGoods[i].Item.Info);
 
-                    player.Enqueue(new S.NPCGoods { List = (from x in CraftGoods where x.CanCraft(player) select x.Item).ToList(), Rate = PriceRate(player), Type = PanelType.Craft });
+                    player.SendPacketToClient(new ServerPacket.NPCGoods { List = (from x in CraftGoods where x.CanCraft(player) select x.Item).ToList(), Rate = PriceRate(player), Type = PanelType.Craft });
                     break;
                 case RefineKey:
                     if (player.Info.CurrentRefine != null)
                     {
                         player.ReceiveChat("You're already refining an item.", ChatType.System);
-                        player.Enqueue(new S.NPCRefine { Rate = (Settings.RefineCost), Refining = true });
+                        player.SendPacketToClient(new ServerPacket.NPCRefine { Rate = (Settings.RefineCost), Refining = true });
                         break;
                     }
                     else
-                        player.Enqueue(new S.NPCRefine { Rate = (Settings.RefineCost), Refining = false });
+                        player.SendPacketToClient(new ServerPacket.NPCRefine { Rate = (Settings.RefineCost), Refining = false });
                     break;
                 case RefineCheckKey:
-                    player.Enqueue(new S.NPCCheckRefine());
+                    player.SendPacketToClient(new ServerPacket.NPCCheckRefine());
                     break;
                 case RefineCollectKey:
                     player.CollectRefine();
                     break;
                 case ReplaceWedRingKey:
-                    player.Enqueue(new S.NPCReplaceWedRing { Rate = Settings.ReplaceWedRingCost });
+                    player.SendPacketToClient(new ServerPacket.NPCReplaceWedRing { Rate = Settings.ReplaceWedRingCost });
                     break;
                 case StorageKey:
                     player.SendStorage();
-                    player.Enqueue(new S.NPCStorage());
+                    player.SendPacketToClient(new ServerPacket.NPCStorage());
                     break;
                 case BuyBackKey:
                     {
@@ -1007,7 +1007,7 @@ namespace Server.ExineObjects
                                     player.CheckItem(callingNPC.BuyBack[player.Name][i]);
                                 }
 
-                                player.Enqueue(new S.NPCGoods { List = callingNPC.BuyBack[player.Name], Rate = PriceRate(player), Type = PanelType.Buy });
+                                player.SendPacketToClient(new ServerPacket.NPCGoods { List = callingNPC.BuyBack[player.Name], Rate = PriceRate(player), Type = PanelType.Buy });
                             }
                         }
                     }
@@ -1023,13 +1023,13 @@ namespace Server.ExineObjects
                                 for (int i = 0; i < callingNPC.UsedGoods.Count; i++)
                                     player.CheckItem(callingNPC.UsedGoods[i]);
 
-                                player.Enqueue(new S.NPCGoods { List = callingNPC.UsedGoods, Rate = PriceRate(player), Type = PanelType.BuySub, HideAddedStats = Settings.GoodsHideAddedStats });
+                                player.SendPacketToClient(new ServerPacket.NPCGoods { List = callingNPC.UsedGoods, Rate = PriceRate(player), Type = PanelType.BuySub, HideAddedStats = Settings.GoodsHideAddedStats });
                             }
                         }
                     }
                     break;
                 case ConsignKey:
-                    player.Enqueue(new S.NPCConsign());
+                    player.SendPacketToClient(new ServerPacket.NPCConsign());
                     break;
                
                 case GuildCreateKey:
@@ -1040,7 +1040,7 @@ namespace Server.ExineObjects
                     else if (player.MyGuild == null)
                     {
                         player.CanCreateGuild = true;
-                        player.Enqueue(new S.GuildNameRequest());
+                        player.SendPacketToClient(new ServerPacket.GuildNameRequest());
                     }
                     else
                         player.ReceiveChat("You are already part of a guild.", ChatType.System);
@@ -1053,7 +1053,7 @@ namespace Server.ExineObjects
                             player.ReceiveChat("You must be the leader to request a war.", ChatType.System);
                             return;
                         }
-                        player.Enqueue(new S.GuildRequestWar());
+                        player.SendPacketToClient(new ServerPacket.GuildRequestWar());
                     }
                     else
                     {
@@ -1065,7 +1065,7 @@ namespace Server.ExineObjects
                     for (int i = 0; i < Goods.Count; i++)
                         player.CheckItem(Goods[i]);
 
-                    player.Enqueue(new S.NPCPearlGoods { List = Goods, Rate = PriceRate(player), Type = PanelType.Buy });
+                    player.SendPacketToClient(new ServerPacket.NPCPearlGoods { List = Goods, Rate = PriceRate(player), Type = PanelType.Buy });
                     break;
                 
             }
@@ -1137,7 +1137,7 @@ namespace Server.ExineObjects
 
           
                 player.Account.Gold -= cost;
-                player.Enqueue(new S.LoseGold { Gold = cost });
+                player.SendPacketToClient(new ServerPacket.LoseGold { Gold = cost });
 
                 if (callingNPC != null && callingNPC.Conq != null)
                 {
@@ -1157,7 +1157,7 @@ namespace Server.ExineObjects
 
                 callingNPC.NeedSave = true;
 
-                player.Enqueue(new S.NPCGoods
+                player.SendPacketToClient(new ServerPacket.NPCGoods
                 {
                     List = newGoodsList,
                     Rate = PriceRate(player),
@@ -1169,7 +1169,7 @@ namespace Server.ExineObjects
             if (isBuyBack)
             {
                 callingNPC.BuyBack[player.Name].Remove(goods); //If used or buyback will destroy whole stack instead of reducing to remaining quantity
-                player.Enqueue(new S.NPCGoods { List = callingNPC.BuyBack[player.Name], Rate = PriceRate(player), HideAddedStats = false });
+                player.SendPacketToClient(new ServerPacket.NPCGoods { List = callingNPC.BuyBack[player.Name], Rate = PriceRate(player), HideAddedStats = false });
             }
         }
         public void Sell(PlayerObjectSrv player, UserItem item)
@@ -1178,7 +1178,7 @@ namespace Server.ExineObjects
         }
         public void Craft(PlayerObjectSrv player, ulong index, ushort count, int[] slots)
         {
-            S.CraftItem p = new S.CraftItem();
+            ServerPacket.CraftItem p = new ServerPacket.CraftItem();
 
             RecipeInfo recipe = null;
 
@@ -1193,13 +1193,13 @@ namespace Server.ExineObjects
 
             if (goods == null || count == 0 || count > goods.Info.StackSize)
             {
-                player.Enqueue(p);
+                player.SendPacketToClient(p);
                 return;
             }
 
             if (player.Account.Gold < (recipe.Gold * count))
             {
-                player.Enqueue(p);
+                player.SendPacketToClient(p);
                 return;
             }
 
@@ -1242,7 +1242,7 @@ namespace Server.ExineObjects
             {
                 if (ingredient.Count * count > ingredient.Info.StackSize)
                 {
-                    player.Enqueue(p);
+                    player.SendPacketToClient(p);
                     return;
                 }
 
@@ -1287,13 +1287,13 @@ namespace Server.ExineObjects
 
             if (!hasItems || usedSlots.Count != (recipe.Tools.Count + recipe.Ingredients.Count))
             {
-                player.Enqueue(p);
+                player.SendPacketToClient(p);
                 return;
             }
 
             if (count > (goods.Info.StackSize / goods.Count) || count < 1)
             {
-                player.Enqueue(p);
+                player.SendPacketToClient(p);
                 return;
             }
 
@@ -1302,7 +1302,7 @@ namespace Server.ExineObjects
 
             if (!player.CanGainItem(craftedItem))
             {
-                player.Enqueue(p);
+                player.SendPacketToClient(p);
                 return;
             }
 
@@ -1352,13 +1352,13 @@ namespace Server.ExineObjects
 
                     if (item.Count > amount)
                     {
-                        player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = amount });
+                        player.SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = amount });
                         player.Info.Inventory[slot].Count -= amount;
                         break;
                     }
                     else
                     {
-                        player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
+                        player.SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                         amount -= item.Count;
                         player.Info.Inventory[slot] = null;
                     }
@@ -1369,7 +1369,7 @@ namespace Server.ExineObjects
 
             //Take Gold
             player.Account.Gold -= (recipe.Gold * count);
-            player.Enqueue(new S.LoseGold { Gold = (recipe.Gold * count) });
+            player.SendPacketToClient(new ServerPacket.LoseGold { Gold = (recipe.Gold * count) });
 
             if (Envir.Random.Next(100) >= recipe.Chance + player.Stats[Stat.CraftRatePercent])
             {
@@ -1382,7 +1382,7 @@ namespace Server.ExineObjects
             }
 
             p.Success = true;
-            player.Enqueue(p);
+            player.SendPacketToClient(p);
         }
     }
 

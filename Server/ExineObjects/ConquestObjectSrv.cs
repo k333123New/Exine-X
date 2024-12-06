@@ -642,7 +642,7 @@ namespace Server.ExineObjects
                     if (player != null)
                     {
                         tempGuild.SendGuildStatus(player);
-                        p = new ServerPackets.ObjectGuildNameChanged { ObjectID = player.ObjectID, GuildName = player.MyGuild.GetName()};
+                        p = new ServerPacket.ObjectGuildNameChanged { ObjectID = player.ObjectID, GuildName = player.MyGuild.GetName()};
                         BroadcastGuildName(player, p);
                     }
                 }
@@ -660,7 +660,7 @@ namespace Server.ExineObjects
                 if (Functions.InRange(player.CurrentLocation, tempPlayer.CurrentLocation, Globals.DataRange))
                 {
                     if (p != null)
-                        tempPlayer.Enqueue(p);
+                        tempPlayer.SendPacketToClient(p);
                 }
             }
         }

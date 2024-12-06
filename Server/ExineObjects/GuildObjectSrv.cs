@@ -142,7 +142,7 @@ namespace Server.ExineObjects
                 }
             }
 
-            SendServerPacket(new ServerPackets.GuildMemberChange() {Name = member.Name, Status = (byte)(New? 2: online? 1: 0)});
+            SendServerPacket(new ServerPacket.GuildMemberChange() {Name = member.Name, Status = (byte)(New? 2: online? 1: 0)});
 
             if (online && !New)
             {
@@ -159,7 +159,7 @@ namespace Server.ExineObjects
                 gName += "[" + Conquest.Info.Name + "]";
             }
 
-            member.Enqueue(new ServerPackets.GuildStatus()
+            member.SendPacketToClient(new ServerPacket.GuildStatus()
                 {
                     GuildName = gName,
                     GuildRankName = member.MyGuildRank != null? member.MyGuildRank.Name: "",
@@ -252,7 +252,7 @@ namespace Server.ExineObjects
             if (player != null)
             {
                 player.MyGuildRank = Ranks[rankIndex];
-                player.Enqueue(new ServerPackets.GuildMemberChange() { Name = self.Info.Name, Status = (byte)8, Ranks = NewRankList });
+                player.SendPacketToClient(new ServerPacket.GuildMemberChange() { Name = self.Info.Name, Status = (byte)8, Ranks = NewRankList });
                 player.BroadcastInfo();
             }
 
@@ -261,7 +261,7 @@ namespace Server.ExineObjects
                     if ((Ranks[i].Members[j].Player != null) && (Ranks[i].Members[j].Player != Member.Player))
                     {
                         player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
-                        player.Enqueue(new ServerPackets.GuildMemberChange() { Name = Member.Name, Status = (byte)5, RankIndex = (byte)MemberRank.Index });
+                        player.SendPacketToClient(new ServerPacket.GuildMemberChange() { Name = Member.Name, Status = (byte)5, RankIndex = (byte)MemberRank.Index });
                         player.GuildMembersChanged = true;
                     }
             return true;
@@ -282,7 +282,7 @@ namespace Server.ExineObjects
             {
                 NewRank
             };
-            SendServerPacket(new ServerPackets.GuildMemberChange() { Name = Self.Name, Status = (byte)6, Ranks = NewRankList});
+            SendServerPacket(new ServerPacket.GuildMemberChange() { Name = Self.Name, Status = (byte)6, Ranks = NewRankList});
             NeedSave = true;
             return true;
         }
@@ -309,7 +309,7 @@ namespace Server.ExineObjects
             {
                 Ranks[RankIndex]
             };
-            SendServerPacket(new ServerPackets.GuildMemberChange() { Name = Self.Name, Status = (byte)7, Ranks = NewRankList });
+            SendServerPacket(new ServerPacket.GuildMemberChange() { Name = Self.Name, Status = (byte)7, Ranks = NewRankList });
             NeedSave = true;
             return true;
         }
@@ -352,7 +352,7 @@ namespace Server.ExineObjects
                     PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
-                        player.Enqueue(new ServerPackets.GuildMemberChange() { Name = Self.Info.Name, Status = (byte)7, Ranks = NewRankList });
+                        player.SendPacketToClient(new ServerPacket.GuildMemberChange() { Name = Self.Info.Name, Status = (byte)7, Ranks = NewRankList });
                         player.GuildMembersChanged = true;
                         if (i == RankIndex)
                         {
@@ -453,7 +453,7 @@ namespace Server.ExineObjects
                     if ((Ranks[i].Members[j].Player != null) && (Ranks[i].Members[j].Player != formerMember))
                     {
                         PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
-                        player.Enqueue(new ServerPackets.GuildMemberChange() { Name = name, Status = (byte)(kickSelf ? 4 : 3) });
+                        player.SendPacketToClient(new ServerPacket.GuildMemberChange() { Name = name, Status = (byte)(kickSelf ? 4 : 3) });
                         player.GuildMembersChanged = true;
                     }
                 }
@@ -466,7 +466,7 @@ namespace Server.ExineObjects
                 formerMember.MyGuildRank = null;
                 formerMember.ReceiveChat(kickSelf ? "You have left your guild." : "You have been removed from your guild.", ChatType.Guild);
                 formerMember.RefreshStats();
-                formerMember.Enqueue(new ServerPackets.GuildStatus() { GuildName = "", GuildRankName = "", MyOptions = (GuildRankOptions)0 });
+                formerMember.SendPacketToClient(new ServerPacket.GuildStatus() { GuildName = "", GuildRankName = "", MyOptions = (GuildRankOptions)0 });
                 formerMember.BroadcastInfo();
             }
         }
@@ -504,7 +504,7 @@ namespace Server.ExineObjects
                 }
             }
 
-            SendServerPacket(new ServerPackets.GuildNoticeChange() { update = -1 });
+            SendServerPacket(new ServerPacket.GuildNoticeChange() { update = -1 });
         }
 
         public void SendServerPacket(Packet p)
@@ -516,7 +516,7 @@ namespace Server.ExineObjects
                     PlayerObjectSrv player = (PlayerObjectSrv)Ranks[i].Members[j].Player;
                     if (player != null)
                     {
-                        player.Enqueue(p);
+                        player.SendPacketToClient(p);
                     }
                 }
             }
@@ -606,7 +606,7 @@ namespace Server.ExineObjects
                 if (NextExpUpdate < Envir.Time)
                 {
                     NextExpUpdate = Envir.Time + 10000;
-                    SendServerPacket(new ServerPackets.GuildExpGain() { Amount = expAmount });
+                    SendServerPacket(new ServerPacket.GuildExpGain() { Amount = expAmount });
                 }
             }
         }
@@ -643,7 +643,7 @@ namespace Server.ExineObjects
                     if (player != null)
                     {
                         //player.Enqueue(player.GetInfoEx(player));
-                        player.Enqueue(new ServerPackets.ColourChanged { NameColour = player.GetNameColour(player) });
+                        player.SendPacketToClient(new ServerPacket.ColourChanged { NameColour = player.GetNameColour(player) });
                         player.BroadcastInfo();
                     }
                 }
@@ -726,7 +726,7 @@ namespace Server.ExineObjects
             {
                 if (UpdatedBuffs.Count > 0)
                 {
-                    SendServerPacket(new ServerPackets.GuildBuffList { ActiveBuffs = UpdatedBuffs });
+                    SendServerPacket(new ServerPacket.GuildBuffList { ActiveBuffs = UpdatedBuffs });
                 }
 
                 RefreshAllStats();
@@ -774,7 +774,7 @@ namespace Server.ExineObjects
                 buff
             };
 
-            SendServerPacket(new ServerPackets.GuildBuffList { ActiveBuffs = NewBuff });
+            SendServerPacket(new ServerPacket.GuildBuffList { ActiveBuffs = NewBuff });
 
             //now tell everyone our new sparepoints
             for (int i = 0; i < Ranks.Count; i++)
@@ -818,8 +818,8 @@ namespace Server.ExineObjects
                 buff
             };
 
-            SendServerPacket(new ServerPackets.GuildBuffList { ActiveBuffs = NewBuff });
-            SendServerPacket(new ServerPackets.GuildStorageGoldChange() { Type = 2, Name = "", Amount = (uint)buff.Info.ActivationCost });
+            SendServerPacket(new ServerPacket.GuildBuffList { ActiveBuffs = NewBuff });
+            SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 2, Name = "", Amount = (uint)buff.Info.ActivationCost });
 
             NeedSave = true;
 
@@ -829,7 +829,7 @@ namespace Server.ExineObjects
         public void RemoveAllBuffs()
         {
             //note this removes them all but doesnt reset the sparepoints!(should make some sort of 'refreshpoints' procedure for that
-            SendServerPacket(new ServerPackets.GuildBuffList {Remove = 1, ActiveBuffs = BuffList});
+            SendServerPacket(new ServerPacket.GuildBuffList {Remove = 1, ActiveBuffs = BuffList});
 
             BuffList.Clear();
             RefreshAllStats();

@@ -2,7 +2,7 @@
 using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineSounds;
-using C = ClientPackets;
+
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -36,7 +36,7 @@ namespace Exine.ExineScenes.ExDialogs
             ConfirmButton.Click += (o, e) => 
             {
                 ChangeLockState(!ExineMainScene.User.TradeLocked);
-                Network.Enqueue(new C.TradeConfirm { Locked = ExineMainScene.User.TradeLocked });
+                Network.SendPacketToServer(new ClientPacket.TradeConfirm { Locked = ExineMainScene.User.TradeLocked });
             };
 
             CloseButton = new ExineButton
@@ -88,7 +88,7 @@ namespace Exine.ExineScenes.ExDialogs
                         if (amountBox.Amount > 0)
                         {
                             ExineMainScene.User.TradeGoldAmount += amountBox.Amount;
-                            Network.Enqueue(new C.TradeGold { Amount = amountBox.Amount });
+                            Network.SendPacketToServer(new ClientPacket.TradeGold { Amount = amountBox.Amount });
 
                             RefreshInterface();
                         }
@@ -135,7 +135,7 @@ namespace Exine.ExineScenes.ExDialogs
             //if (!cancelled)
             //{
             //    //Send lock info to server
-            //    Network.Enqueue(new C.TradeConfirm { Locked = lockState });
+            //    Network.Enqueue(new ClientPacket.TradeConfirm { Locked = lockState });
             //}
         }
 
@@ -178,7 +178,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void TradeCancel()
         {
-            Network.Enqueue(new C.TradeCancel());
+            Network.SendPacketToServer(new ClientPacket.TradeCancel());
         }
 
         public MirItemCell GetCell(ulong id)

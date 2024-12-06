@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -109,13 +109,13 @@ namespace Server.ExineObjects.Monsters
             List<MapObjectSrv> targets = FindAllTargets(ranged ? AttackRange : 2, CurrentLocation);
             if (targets.Count == 0) return;
 
-            if (ranged) Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
-            else Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            if (ranged) Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            else Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             for (int i = 0; i < targets.Count; i++)
             {
                 Target = targets[i];
-                if (ranged) Broadcast(new S.ObjectEffect { ObjectID = Target.ObjectID, Effect = SpellEffect.GreatFoxSpirit });
+                if (ranged) Broadcast(new ServerPacket.ObjectEffect { ObjectID = Target.ObjectID, Effect = SpellEffect.GreatFoxSpirit });
 
                 DelayedAction action = new DelayedAction(DelayedType.Damage, Envir.Time + 300, Target, damage, DefenceType.MAC);
                 ActionList.Add(action);
@@ -178,7 +178,7 @@ namespace Server.ExineObjects.Monsters
         
         public override Packet GetInfo()
         {
-            return new S.ObjectMonster
+            return new ServerPacket.ObjectMonster
             {
                 ObjectID = ObjectID,
                 Name = Name,

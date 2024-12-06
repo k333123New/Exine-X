@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -24,7 +24,7 @@ namespace Server.ExineObjects.Monsters
 
             if (Envir.Random.Next(3) == 0)
             {
-                Broadcast(new S.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.DeathCrawlerBreath });
+                Broadcast(new ServerPacket.ObjectEffect { ObjectID = ObjectID, Effect = SpellEffect.DeathCrawlerBreath });
 
                 PoisonTarget(attacker, 5, 5, PoisonType.Green, 2000);
             }

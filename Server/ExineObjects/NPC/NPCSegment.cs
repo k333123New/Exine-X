@@ -3,7 +3,7 @@ using Server.ExineEnvir;
 using System.Globalization;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using S = ServerPackets;
+
 using Timer = Server.ExineEnvir.Timer;
 
 namespace Server.ExineObjects
@@ -1600,7 +1600,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
                             return true;
                         }
                         break;
@@ -1658,7 +1658,7 @@ namespace Server.ExineObjects
                             }
                             catch (ArgumentException)
                             {
-                                MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                                MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                                 return true;
                             }
                         }
@@ -1803,7 +1803,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
                             return true;
                         }
                         break;
@@ -1860,7 +1860,7 @@ namespace Server.ExineObjects
                             }
                             catch (ArgumentException)
                             {
-                                MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                                MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                                 return true;
                             }
                         }
@@ -1879,7 +1879,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -1896,7 +1896,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -1913,7 +1913,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2047,7 +2047,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2220,7 +2220,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
                             return true;
                         }
                         break;
@@ -2300,7 +2300,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2333,7 +2333,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2366,7 +2366,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2399,7 +2399,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2432,7 +2432,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2476,7 +2476,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2503,7 +2503,7 @@ namespace Server.ExineObjects
                         }
                         catch (ArgumentException)
                         {
-                            MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                            MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                             return true;
                         }
                         break;
@@ -2542,7 +2542,7 @@ namespace Server.ExineObjects
                             }
                             catch (ArgumentException)
                             {
-                                MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
+                                MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[0], Key));
                                 return true;
                             }
                         }
@@ -2586,7 +2586,7 @@ namespace Server.ExineObjects
                     case ActionType.GlobalMessage:
                         if (!Enum.TryParse(param[1], true, out chatType)) return;
 
-                        p = new S.Chat { Message = param[0], Type = chatType };
+                        p = new ServerPacket.Chat { Message = param[0], Type = chatType };
                         Envir.Broadcast(p);
                         break;
 
@@ -2729,7 +2729,7 @@ namespace Server.ExineObjects
                             if (gold >= player.Account.Gold) gold = player.Account.Gold;
 
                             player.Account.Gold -= gold;
-                            player.Enqueue(new S.LoseGold { Gold = gold });
+                            player.SendPacketToClient(new ServerPacket.LoseGold { Gold = gold });
                         }
                         break;
                     case ActionType.GiveGuildGold:
@@ -2740,7 +2740,7 @@ namespace Server.ExineObjects
                                 gold = uint.MaxValue - player.MyGuild.Gold;
 
                             player.MyGuild.Gold += gold;
-                            player.MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 3, Amount = gold });
+                            player.MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 3, Amount = gold });
                         }
                         break;
                     case ActionType.TakeGuildGold:
@@ -2750,7 +2750,7 @@ namespace Server.ExineObjects
                             if (gold >= player.MyGuild.Gold) gold = player.MyGuild.Gold;
 
                             player.MyGuild.Gold -= gold;
-                            player.MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 2, Amount = gold });
+                            player.MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 2, Amount = gold });
                         }
                         break;
                     case ActionType.GiveCredit:
@@ -2771,7 +2771,7 @@ namespace Server.ExineObjects
                             if (credit >= player.Account.Credit) credit = player.Account.Credit;
 
                             player.Account.Credit -= credit;
-                            player.Enqueue(new S.LoseCredit { Credit = credit });
+                            player.SendPacketToClient(new ServerPacket.LoseCredit { Credit = credit });
                         }
                         break;
 
@@ -2802,7 +2802,7 @@ namespace Server.ExineObjects
 
                             if (info == null)
                             {
-                                MessageQueue.Enqueue(string.Format("Failed to get ItemInfo: {0}, Page: {1}", param[0], Key));
+                                MessageQueue.SendMsg(string.Format("Failed to get ItemInfo: {0}, Page: {1}", param[0], Key));
                                 break;
                             }
 
@@ -2812,7 +2812,7 @@ namespace Server.ExineObjects
 
                                 if (item == null)
                                 {
-                                    MessageQueue.Enqueue(string.Format("Failed to create UserItem: {0}, Page: {1}", param[0], Key));
+                                    MessageQueue.SendMsg(string.Format("Failed to create UserItem: {0}, Page: {1}", param[0], Key));
                                     return;
                                 }
 
@@ -2843,7 +2843,7 @@ namespace Server.ExineObjects
 
                             if (info == null)
                             {
-                                MessageQueue.Enqueue(string.Format("Failed to get ItemInfo: {0}, Page: {1}", param[0], Key));
+                                MessageQueue.SendMsg(string.Format("Failed to get ItemInfo: {0}, Page: {1}", param[0], Key));
                                 break;
                             }
 
@@ -2860,14 +2860,14 @@ namespace Server.ExineObjects
 
                                 if (count > item.Count)
                                 {
-                                    player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
+                                    player.SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                                     player.Info.Inventory[j] = null;
 
                                     count -= item.Count;
                                     continue;
                                 }
 
-                                player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = count });
+                                player.SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = count });
                                 if (count == item.Count)
                                     player.Info.Inventory[j] = null;
                                 else
@@ -3059,7 +3059,7 @@ namespace Server.ExineObjects
                         {
                             if (!Enum.TryParse(param[1], true, out ChatType chatType)) return;
 
-                            var p = new S.Chat { Message = param[0], Type = chatType };
+                            var p = new ServerPacket.Chat { Message = param[0], Type = chatType };
                             Envir.Broadcast(p);
                         }
                         break;
@@ -3096,7 +3096,7 @@ namespace Server.ExineObjects
                                 if (player.Info.Magics[j].Spell != skill) continue;
 
                                 player.Info.Magics.RemoveAt(j);
-                                player.Enqueue(new S.RemoveMagic { PlaceId = j });
+                                player.SendPacketToClient(new ServerPacket.RemoveMagic { PlaceId = j });
                             }
                         }
                         break;
@@ -3327,7 +3327,7 @@ namespace Server.ExineObjects
                                 }
                                 catch (ArgumentException)
                                 {
-                                    MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
+                                    MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
                                 }
                             }
                             else
@@ -3386,8 +3386,8 @@ namespace Server.ExineObjects
                     case ActionType.RefreshEffects:
                         {
                             player.SetLevelEffects();
-                            var p = new S.ObjectLevelEffects { ObjectID = player.ObjectID, LevelEffects = player.LevelEffects };
-                            player.Enqueue(p);
+                            var p = new ServerPacket.ObjectLevelEffects { ObjectID = player.ObjectID, LevelEffects = player.LevelEffects };
+                            player.SendPacketToClient(p);
                             player.Broadcast(p);
                         }
                         break;
@@ -3483,7 +3483,7 @@ namespace Server.ExineObjects
                                 if (player.MyGuild == null || player.MyGuild.Gold < conquestArcher.GetRepairCost()) return;
 
                                 player.MyGuild.Gold -= conquestArcher.GetRepairCost();
-                                player.MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 2, Amount = conquestArcher.GetRepairCost() });
+                                player.MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 2, Amount = conquestArcher.GetRepairCost() });
 
                                 conquestArcher.Spawn(true);
                             }
@@ -3508,7 +3508,7 @@ namespace Server.ExineObjects
                                 if (player.MyGuild == null || player.MyGuild.Gold < conquestGate.GetRepairCost()) return;
 
                                 player.MyGuild.Gold -= (uint)conquestGate.GetRepairCost();
-                                player.MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 2, Amount = (uint)conquestGate.GetRepairCost() });
+                                player.MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 2, Amount = (uint)conquestGate.GetRepairCost() });
 
                                 conquestGate.Repair();
                             }
@@ -3534,7 +3534,7 @@ namespace Server.ExineObjects
                                 if (player.MyGuild == null || player.MyGuild.Gold < conquestWall.GetRepairCost()) return;
 
                                 player.MyGuild.Gold -= (uint)conquestWall.GetRepairCost();
-                                player.MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 2, Amount = (uint)conquestWall.GetRepairCost() });
+                                player.MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 2, Amount = (uint)conquestWall.GetRepairCost() });
 
                                 conquestWall.Repair();
                             }
@@ -3564,7 +3564,7 @@ namespace Server.ExineObjects
                                 if (player.MyGuild == null || player.MyGuild.Gold < conquestSiege.GetRepairCost()) return;
 
                                 player.MyGuild.Gold -= (uint)conquestSiege.GetRepairCost();
-                                player.MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 2, Amount = (uint)conquestSiege.GetRepairCost() });
+                                player.MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 2, Amount = (uint)conquestSiege.GetRepairCost() });
 
                                 conquestSiege.Repair();
                             } 
@@ -3579,7 +3579,7 @@ namespace Server.ExineObjects
                             if (player.MyGuild != null && player.MyGuild.Guildindex == conquest.GuildInfo.Owner)
                             {
                                 player.MyGuild.Gold += conquest.GuildInfo.GoldStorage;
-                                player.MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 3, Amount = conquest.GuildInfo.GoldStorage });
+                                player.MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 3, Amount = conquest.GuildInfo.GoldStorage });
                                 conquest.GuildInfo.GoldStorage = 0;
                             }
                         }
@@ -3608,14 +3608,14 @@ namespace Server.ExineObjects
                                 conquest.StartType = ConquestType.Forced;
                                 conquest.StartWar(conquest.GameType);
 
-                                MessageQueue.Enqueue(string.Format("{0} War Started.", conquest.Info.Name));
+                                MessageQueue.SendMsg(string.Format("{0} War Started.", conquest.Info.Name));
 
                             }
                             else
                             {
                                 conquest.WarIsOn = false;
 
-                                MessageQueue.Enqueue(string.Format("{0} War Stopped.", conquest.Info.Name));
+                                MessageQueue.SendMsg(string.Format("{0} War Stopped.", conquest.Info.Name));
                             }
 
                             foreach (var pl in Envir.Players)
@@ -3674,7 +3674,7 @@ namespace Server.ExineObjects
                         break;
                     case ActionType.OpenBrowser:
                         {
-                            player.Enqueue(new S.OpenBrowser { Url = param[0] });
+                            player.SendPacketToClient(new ServerPacket.OpenBrowser { Url = param[0] });
                         }
                         break;
                     case ActionType.GetRandomText:
@@ -3682,7 +3682,7 @@ namespace Server.ExineObjects
                             string randomTextPath = Path.Combine(Settings.NPCPath, param[0]);
                             if (!File.Exists(randomTextPath))
                             {
-                                MessageQueue.Enqueue(string.Format("the randomTextFile:{0} does not exist.", randomTextPath));
+                                MessageQueue.SendMsg(string.Format("the randomTextFile:{0} does not exist.", randomTextPath));
                             }
                             else
                             {
@@ -3696,7 +3696,7 @@ namespace Server.ExineObjects
                     case ActionType.PlaySound:
                         {
                             if (!int.TryParse(param[0], out int soundID)) return;
-                            player.Enqueue(new S.PlaySound { Sound = soundID });
+                            player.SendPacketToClient(new ServerPacket.PlaySound { Sound = soundID });
                         }
                         break;
 
@@ -3763,7 +3763,7 @@ namespace Server.ExineObjects
                                 }
                             }
 
-                            S.UserSlotsRefresh packet = new S.UserSlotsRefresh
+                            ServerPacket.UserSlotsRefresh packet = new ServerPacket.UserSlotsRefresh
                             {
                                 Inventory = new UserItem[player.Info.Inventory.Length],
                                 Equipment = new UserItem[player.Info.Equipment.Length],
@@ -3772,7 +3772,7 @@ namespace Server.ExineObjects
                             player.Info.Inventory.CopyTo(packet.Inventory, 0);
                             player.Info.Equipment.CopyTo(packet.Equipment, 0);
 
-                            player.Enqueue(packet);
+                            player.SendPacketToClient(packet);
 
                             player.RefreshStats();
                         }
@@ -3783,10 +3783,10 @@ namespace Server.ExineObjects
 
                             var result = Envir.Random.Next(1, 7);
 
-                            S.Roll p = new S.Roll { Type = 0, Page = param[0], AutoRoll = autoRoll, Result = result };
+                            ServerPacket.Roll p = new ServerPacket.Roll { Type = 0, Page = param[0], AutoRoll = autoRoll, Result = result };
 
                             player.NPCData["NPCRollResult"] = result;
-                            player.Enqueue(p);
+                            player.SendPacketToClient(p);
                         }
                         break;
                     case ActionType.RollYut:
@@ -3795,10 +3795,10 @@ namespace Server.ExineObjects
 
                             var result = Envir.Random.Next(1, 7);
 
-                            S.Roll p = new S.Roll { Type = 1, Page = param[0], AutoRoll = autoRoll, Result = result };
+                            ServerPacket.Roll p = new ServerPacket.Roll { Type = 1, Page = param[0], AutoRoll = autoRoll, Result = result };
 
                             player.NPCData["NPCRollResult"] = result;
-                            player.Enqueue(p);
+                            player.SendPacketToClient(p);
                         }
                         break;
                     case ActionType.Drop:
@@ -3850,7 +3850,7 @@ namespace Server.ExineObjects
                             if(!player.IsGM)
                             {
                                 player.ReceiveChat($"You are not a GM and this command is not enabled for you.", ChatType.System);
-                                MessageQueue.Enqueue($"GM Command @CONQUESTREPAIRALL invoked by non-GM player: {player.Name}");
+                                MessageQueue.SendMsg($"GM Command @CONQUESTREPAIRALL invoked by non-GM player: {player.Name}");
                                 return;
                             }
 
@@ -3858,16 +3858,16 @@ namespace Server.ExineObjects
                             var conquest = Envir.Conquests.FirstOrDefault(z => z.Info.Index == tempInt);
                             if (conquest == null) return;
 
-                            MessageQueue.Enqueue($"@CONQUESTREPAIRALL invoked by GM: {player.Name} on account index: {player.Info.AccountInfo.Index}");
-                            MessageQueue.Enqueue($"Conquest: {conquest.Info.Name}");
+                            MessageQueue.SendMsg($"@CONQUESTREPAIRALL invoked by GM: {player.Name} on account index: {player.Info.AccountInfo.Index}");
+                            MessageQueue.SendMsg($"Conquest: {conquest.Info.Name}");
 
                             if (conquest.Guild != null)
                             {
-                                MessageQueue.Enqueue($"Owner: {conquest.Guild.Name}");
+                                MessageQueue.SendMsg($"Owner: {conquest.Guild.Name}");
                             }
                             else
                             {
-                                MessageQueue.Enqueue($"No current owner.");
+                                MessageQueue.SendMsg($"No current owner.");
                             }
 
                             int _fixed = 0;
@@ -3881,7 +3881,7 @@ namespace Server.ExineObjects
                                 }
                             }
                             player.ReceiveChat($"Archers repaired: {_fixed}/{conquest.ArcherList.Count}", ChatType.System);
-                            MessageQueue.Enqueue($"Archers repaired: {_fixed}/{conquest.ArcherList.Count}");
+                            MessageQueue.SendMsg($"Archers repaired: {_fixed}/{conquest.ArcherList.Count}");
 
                             _fixed = 0;
                             foreach (ConquestGuildGateInfo conquestGate in conquest.GateList)
@@ -3893,7 +3893,7 @@ namespace Server.ExineObjects
                                 }
                             }
                             player.ReceiveChat($"Gates repaired: {_fixed}/{conquest.GateList.Count}", ChatType.System);
-                            MessageQueue.Enqueue($"Gates repaired: {_fixed}/{conquest.GateList.Count}");
+                            MessageQueue.SendMsg($"Gates repaired: {_fixed}/{conquest.GateList.Count}");
 
                             _fixed = 0;
                             foreach (ConquestGuildWallInfo conquestWall in conquest.WallList)
@@ -3905,7 +3905,7 @@ namespace Server.ExineObjects
                                 }
                             }
                             player.ReceiveChat($"Walls repaired: {_fixed}/{conquest.WallList.Count}", ChatType.System);
-                            MessageQueue.Enqueue($"Walls repaired: {_fixed}/{conquest.WallList.Count}");
+                            MessageQueue.SendMsg($"Walls repaired: {_fixed}/{conquest.WallList.Count}");
 
                             _fixed = 0;
                             foreach (ConquestGuildSiegeInfo conquestSiege in conquest.SiegeList)
@@ -3917,7 +3917,7 @@ namespace Server.ExineObjects
                                 }
                             }
                             player.ReceiveChat($"Sieges repaired: {_fixed}/{conquest.SiegeList.Count}", ChatType.System);
-                            MessageQueue.Enqueue($"Sieges repaired: {_fixed}/{conquest.SiegeList.Count}");
+                            MessageQueue.SendMsg($"Sieges repaired: {_fixed}/{conquest.SiegeList.Count}");
 
                             break;
                         }
@@ -3955,7 +3955,7 @@ namespace Server.ExineObjects
                         {
                             if (!Enum.TryParse(param[1], true, out ChatType chatType)) return;
 
-                            var p = new S.Chat { Message = param[0], Type = chatType };
+                            var p = new ServerPacket.Chat { Message = param[0], Type = chatType };
                             Envir.Broadcast(p);
                         }
                         break;
@@ -4065,7 +4065,7 @@ namespace Server.ExineObjects
                                 }
                                 catch (ArgumentException)
                                 {
-                                    MessageQueue.Enqueue(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
+                                    MessageQueue.SendMsg(string.Format("Incorrect operator: {0}, Page: {1}", param[1], Key));
                                 }
                             }
                             else

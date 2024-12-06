@@ -6,7 +6,7 @@ using Exine.ExineNetwork;
 using Exine.ExineObjects;
 using Exine.ExineSounds;
 using Font = System.Drawing.Font;
-using C = ClientPackets;
+
 using System.Diagnostics;
 using System.Xml;
 using System.Text;
@@ -16,7 +16,7 @@ namespace Exine.ExineScenes.ExDialogs
     public sealed class ExineNPCDialog : ExineImageControl
     {
         public static Regex R = new Regex(@"<((.*?)\/(\@.*?))>");
-        public static Regex C = new Regex(@"{((.*?)\/(.*?))}");
+        public static Regex CPattern = new Regex(@"{((.*?)\/(.*?))}");
         public static Regex L = new Regex(@"\(((.*?)\/(.*?))\)");
         public static Regex B = new Regex(@"<<((.*?)\/(\@.*?))>>");
 
@@ -252,7 +252,7 @@ namespace Exine.ExineScenes.ExDialogs
             if (CMain.Time <= ExineMainScene.NPCTime) return;
 
             ExineMainScene.NPCTime = CMain.Time + 5000;
-            Network.Enqueue(new C.CallNPC { ObjectID = ExineMainScene.NPCID, Key = $"[{action}]" });
+            Network.SendPacketToServer(new ClientPacket.CallNPC { ObjectID = ExineMainScene.NPCID, Key = $"[{action}]" });
         }
 
         public void UpdatePortrait()
@@ -393,7 +393,7 @@ namespace Exine.ExineScenes.ExDialogs
                 string currentLine = lines[i];
 
                 List<Match> matchList = R.Matches(currentLine).Cast<Match>().ToList();
-                matchList.AddRange(C.Matches(currentLine).Cast<Match>());
+                matchList.AddRange(CPattern.Matches(currentLine).Cast<Match>());
                 matchList.AddRange(L.Matches(currentLine).Cast<Match>());
 
                 int oldLength = currentLine.Length;
@@ -413,7 +413,7 @@ namespace Exine.ExineScenes.ExDialogs
                     if (R.Match(match.Value).Success)
                         NewButton(txt, action, TextLabel[i].Location.Add(new Point(size.Width - 10, 0))); 
 
-                    if (C.Match(match.Value).Success)
+                    if (CPattern.Match(match.Value).Success)
                         NewColour(txt, action, TextLabel[i].Location.Add(new Point(size.Width - 10, 0))); 
 
                     if (L.Match(match.Value).Success)
@@ -958,7 +958,7 @@ namespace Exine.ExineScenes.ExDialogs
                 {
                     if (amountBox.Amount > 0)
                     {
-                        Network.Enqueue(new C.BuyItem { ItemIndex = SelectedItem.UniqueID, Count = (ushort)amountBox.Amount, Type = PanelType.Buy });
+                        Network.SendPacketToServer(new ClientPacket.BuyItem { ItemIndex = SelectedItem.UniqueID, Count = (ushort)amountBox.Amount, Type = PanelType.Buy });
                     }
                 };
 
@@ -982,7 +982,7 @@ namespace Exine.ExineScenes.ExDialogs
                     }
                 }
 
-                Network.Enqueue(new C.BuyItem { ItemIndex = SelectedItem.UniqueID, Count = 1, Type = PanelType.Buy });
+                Network.SendPacketToServer(new ClientPacket.BuyItem { ItemIndex = SelectedItem.UniqueID, Count = 1, Type = PanelType.Buy });
             }
         }
 
@@ -1235,7 +1235,7 @@ namespace Exine.ExineScenes.ExDialogs
                     }
                     if (ExineMainScene.Gold + TargetItem.Price() / 2 <= uint.MaxValue)
                     {
-                        Network.Enqueue(new C.SellItem { UniqueID = TargetItem.UniqueID, Count = TargetItem.Count });
+                        Network.SendPacketToServer(new ClientPacket.SellItem { UniqueID = TargetItem.UniqueID, Count = TargetItem.Count });
                         TargetItem = null;
                         return;
                     }
@@ -1249,7 +1249,7 @@ namespace Exine.ExineScenes.ExDialogs
                     }
                     if (ExineMainScene.Gold >= TargetItem.RepairPrice() * ExineMainScene.NPCRate)
                     {
-                        Network.Enqueue(new C.RepairItem { UniqueID = TargetItem.UniqueID });
+                        Network.SendPacketToServer(new ClientPacket.RepairItem { UniqueID = TargetItem.UniqueID });
                         TargetItem = null;
                         return;
                     }
@@ -1263,7 +1263,7 @@ namespace Exine.ExineScenes.ExDialogs
                     }
                     if (ExineMainScene.Gold >= (TargetItem.RepairPrice() * 3) * ExineMainScene.NPCRate)
                     {
-                        Network.Enqueue(new C.SRepairItem { UniqueID = TargetItem.UniqueID });
+                        Network.SendPacketToServer(new ClientPacket.SRepairItem { UniqueID = TargetItem.UniqueID });
                         TargetItem = null;
                         return;
                     }
@@ -1284,7 +1284,7 @@ namespace Exine.ExineScenes.ExDialogs
                     box.Show();
                     box.OKButton.Click += (o, e) =>
                     {
-                        Network.Enqueue(new C.ConsignItem { UniqueID = TargetItem.UniqueID, Price = box.Amount, Type = MarketPanelType.Consign });
+                        Network.SendPacketToServer(new ClientPacket.ConsignItem { UniqueID = TargetItem.UniqueID, Price = box.Amount, Type = MarketPanelType.Consign });
                         TargetItem = null;
                     };
                     return;
@@ -1297,7 +1297,7 @@ namespace Exine.ExineScenes.ExDialogs
                         {
                             if (ExineMainScene.Gold >= ((TargetItem.Info.RequiredAmount * 10) * ExineMainScene.NPCRate))
                             {
-                                Network.Enqueue(new C.RefineItem { UniqueID = TargetItem.UniqueID });
+                                Network.SendPacketToServer(new ClientPacket.RefineItem { UniqueID = TargetItem.UniqueID });
                                 TargetItem = null;
                                 return;
                             }
@@ -1315,7 +1315,7 @@ namespace Exine.ExineScenes.ExDialogs
                         ExineMainScene.Scene.ExChatDialog.ReceiveChat(String.Format("{0}이(가) 정제되지 않았으므로 확인할 필요가 없습니다.", TargetItem.FriendlyName), ChatType.System);
                         return;
                     }
-                    Network.Enqueue(new C.CheckRefine { UniqueID = TargetItem.UniqueID });
+                    Network.SendPacketToServer(new ClientPacket.CheckRefine { UniqueID = TargetItem.UniqueID });
                     break;
 
                 case PanelType.ReplaceWedRing:
@@ -1326,7 +1326,7 @@ namespace Exine.ExineScenes.ExDialogs
                         return;
                     }
 
-                    Network.Enqueue(new C.ReplaceWedRing { UniqueID = TargetItem.UniqueID });
+                    Network.SendPacketToServer(new ClientPacket.ReplaceWedRing { UniqueID = TargetItem.UniqueID });
                     break;
             }
 
@@ -1817,7 +1817,7 @@ namespace Exine.ExineScenes.ExDialogs
                             return;
                         }
 
-                        Network.Enqueue(new C.CraftItem
+                        Network.SendPacketToServer(new ClientPacket.CraftItem
                         {
                             UniqueID = RecipeItem.UniqueID,
                             Count = (ushort)amountBox.Amount,
@@ -1830,7 +1830,7 @@ namespace Exine.ExineScenes.ExDialogs
             }
             else
             {
-                Network.Enqueue(new C.CraftItem
+                Network.SendPacketToServer(new ClientPacket.CraftItem
                 {
                     UniqueID = RecipeItem.UniqueID,
                     Count = 1,
@@ -2011,7 +2011,7 @@ namespace Exine.ExineScenes.ExDialogs
 
         public void RefineCancel()
         {
-            Network.Enqueue(new C.RefineCancel());
+            Network.SendPacketToServer(new ClientPacket.RefineCancel());
         }
 
         public void RefineReset()
@@ -2116,7 +2116,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 messageBox.OKButton.Click += (o1, a) =>
                 {
-                    Network.Enqueue(new C.Chat { Message = "@ADDSTORAGE" });
+                    Network.SendPacketToServer(new ClientPacket.Chat { Message = "@ADDSTORAGE" });
                 };
                 messageBox.Show();
             };

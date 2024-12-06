@@ -1,7 +1,7 @@
 ﻿using Exine.ExineScenes;
 //using Client.MirScenes.Dialogs;
 using Exine.ExineScenes.ExDialogs;
-using S = ServerPackets;
+//
 
 namespace Exine.ExineObjects
 {
@@ -61,7 +61,7 @@ namespace Exine.ExineObjects
         }
 
         ///maybe it is My player! 
-        public virtual void Load(S.UserInformation info)
+        public virtual void Load(ServerPacket.UserInformation info)
         {
             Id = info.RealId;
             Name = info.Name;
@@ -124,7 +124,7 @@ namespace Exine.ExineObjects
             SetAction();
         }
 
-        public void SetSlots(S.UserSlotsRefresh p)
+        public void SetSlots(ServerPacket.UserSlotsRefresh p)
         {
             Inventory = p.Inventory;
             Equipment = p.Equipment;
@@ -356,33 +356,33 @@ namespace Exine.ExineObjects
 
         private void RefreshItemSetStats()
         {
-            foreach (var s in ItemSets)
+            foreach (var itemSet in ItemSets)
             {
-                if ((s.Set == ItemSet.Smash) &&
-                    ((s.Type.Contains(ItemType.Ring) && s.Type.Contains(ItemType.Bracelet)) || (s.Type.Contains(ItemType.Ring) && s.Type.Contains(ItemType.Necklace)) || (s.Type.Contains(ItemType.Bracelet) && s.Type.Contains(ItemType.Necklace))))
+                if ((itemSet.Set == ItemSet.Smash) &&
+                    ((itemSet.Type.Contains(ItemType.Ring) && itemSet.Type.Contains(ItemType.Bracelet)) || (itemSet.Type.Contains(ItemType.Ring) && itemSet.Type.Contains(ItemType.Necklace)) || (itemSet.Type.Contains(ItemType.Bracelet) && itemSet.Type.Contains(ItemType.Necklace))))
                 {
                     Stats[Stat.AttackSpeed] += 2;
                 }
 
-                if ((s.Set == ItemSet.Purity) && (s.Type.Contains(ItemType.Ring)) && (s.Type.Contains(ItemType.Bracelet)))
+                if ((itemSet.Set == ItemSet.Purity) && (itemSet.Type.Contains(ItemType.Ring)) && (itemSet.Type.Contains(ItemType.Bracelet)))
                 {
                     Stats[Stat.Holy] += 3;
                 }
 
-                if ((s.Set == ItemSet.HwanDevil) && (s.Type.Contains(ItemType.Ring)) && (s.Type.Contains(ItemType.Bracelet)))
+                if ((itemSet.Set == ItemSet.HwanDevil) && (itemSet.Type.Contains(ItemType.Ring)) && (itemSet.Type.Contains(ItemType.Bracelet)))
                 {
                     Stats[Stat.WearWeight] += 5;
                     Stats[Stat.BagWeight] += 20;
                 }
 
-                if ((s.Set == ItemSet.DarkGhost) && (s.Type.Contains(ItemType.Necklace)) && (s.Type.Contains(ItemType.Bracelet)))
+                if ((itemSet.Set == ItemSet.DarkGhost) && (itemSet.Type.Contains(ItemType.Necklace)) && (itemSet.Type.Contains(ItemType.Bracelet)))
                 {
                     Stats[Stat.HP] += 25;
                 }
 
-                if (!s.SetComplete) continue;
+                if (!itemSet.SetComplete) continue;
 
-                switch (s.Set)
+                switch (itemSet.Set)
                 {
                     case ItemSet.Mundane:
                         Stats[Stat.HP] += 50;

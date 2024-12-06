@@ -5,7 +5,7 @@ using Exine.ExineScenes;
 using Exine.ExineSounds;
 //using Client.MirScenes.Dialogs;
 using Exine.ExineScenes.ExDialogs;
-using C = ClientPackets;
+//using ClientPacket = ClientPacket1;
 
 namespace Exine.ExineControls
 {
@@ -246,7 +246,7 @@ namespace Exine.ExineControls
                                     amountBox.OKButton.Click += (o, a) =>
                                     {
                                         if (amountBox.Amount == 0 || amountBox.Amount >= Item.Count) return;
-                                        Network.Enqueue(new C.SplitItem { Grid = GridType, UniqueID = Item.UniqueID, Count = (ushort)amountBox.Amount });
+                                        Network.SendPacketToServer(new ClientPacket.SplitItem { Grid = GridType, UniqueID = Item.UniqueID, Count = (ushort)amountBox.Amount });
                                         Locked = true;
                                     };
 
@@ -294,7 +294,7 @@ namespace Exine.ExineControls
 
                 amountBox.OKButton.Click += (o, e) =>
                 {
-                    Network.Enqueue(new C.BuyItemBack { UniqueID = Item.UniqueID, Count = (ushort)amountBox.Amount });
+                    Network.SendPacketToServer(new ClientPacket.BuyItemBack { UniqueID = Item.UniqueID, Count = (ushort)amountBox.Amount });
                     Locked = true;
                 };
             }
@@ -304,7 +304,7 @@ namespace Exine.ExineControls
 
                 amountBox.OKButton.Click += (o, e) =>
                 {
-                    Network.Enqueue(new C.BuyItemBack { UniqueID = Item.UniqueID, Count = 1 });
+                    Network.SendPacketToServer(new ClientPacket.BuyItemBack { UniqueID = Item.UniqueID, Count = 1 });
                     Locked = true;
                 };
             }
@@ -354,7 +354,7 @@ namespace Exine.ExineControls
                 case ItemType.Weapon:
                     if (dialog.Grid[(int)EquipmentSlot.Weapon].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Weapon });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Weapon });
                         dialog.Grid[(int)EquipmentSlot.Weapon].Locked = true;
                         Locked = true;
                     }
@@ -362,7 +362,7 @@ namespace Exine.ExineControls
                 case ItemType.Armour:
                     if (dialog.Grid[(int)EquipmentSlot.Armour].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Armour });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Armour });
                         dialog.Grid[(int)EquipmentSlot.Armour].Locked = true;
                         Locked = true;
                     }
@@ -370,7 +370,7 @@ namespace Exine.ExineControls
                 case ItemType.Helmet:
                     if (dialog.Grid[(int)EquipmentSlot.Helmet].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Helmet });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Helmet });
                         dialog.Grid[(int)EquipmentSlot.Helmet].Locked = true;
                         Locked = true;
                     }
@@ -378,7 +378,7 @@ namespace Exine.ExineControls
                 case ItemType.Necklace:
                     if (dialog.Grid[(int)EquipmentSlot.Necklace].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Necklace });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Necklace });
                         dialog.Grid[(int)EquipmentSlot.Necklace].Locked = true;
                         Locked = true;
                     }
@@ -386,13 +386,13 @@ namespace Exine.ExineControls
                 case ItemType.Bracelet:
                     if ((dialog.Grid[(int)EquipmentSlot.BraceletR].Item == null || dialog.Grid[(int)EquipmentSlot.BraceletR].Item.Info.Type == ItemType.Amulet) && dialog.Grid[(int)EquipmentSlot.BraceletR].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.BraceletR });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.BraceletR });
                         dialog.Grid[(int)EquipmentSlot.BraceletR].Locked = true;
                         Locked = true;
                     }
                     else if (dialog.Grid[(int)EquipmentSlot.BraceletL].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.BraceletL });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.BraceletL });
                         dialog.Grid[(int)EquipmentSlot.BraceletL].Locked = true;
                         Locked = true;
                     }
@@ -400,13 +400,13 @@ namespace Exine.ExineControls
                 case ItemType.Ring:
                     if (dialog.Grid[(int)EquipmentSlot.RingR].Item == null && dialog.Grid[(int)EquipmentSlot.RingR].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.RingR });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.RingR });
                         dialog.Grid[(int)EquipmentSlot.RingR].Locked = true;
                         Locked = true;
                     }
                     else if (dialog.Grid[(int)EquipmentSlot.RingL].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.RingL });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.RingL });
                         dialog.Grid[(int)EquipmentSlot.RingL].Locked = true;
                         Locked = true;
                     }
@@ -418,7 +418,7 @@ namespace Exine.ExineControls
                     {
                         if (dialog.Grid[(int)EquipmentSlot.Amulet].Item.Info == Item.Info && dialog.Grid[(int)EquipmentSlot.Amulet].Item.Count < dialog.Grid[(int)EquipmentSlot.Amulet].Item.Info.StackSize)
                         {
-                            Network.Enqueue(new C.MergeItem { GridFrom = GridType, GridTo = MirGridType.Equipment, IDFrom = Item.UniqueID, IDTo = dialog.Grid[(int)EquipmentSlot.Amulet].Item.UniqueID });
+                            Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = GridType, GridTo = MirGridType.Equipment, IDFrom = Item.UniqueID, IDTo = dialog.Grid[(int)EquipmentSlot.Amulet].Item.UniqueID });
 
                             Locked = true;
                             return;
@@ -427,7 +427,7 @@ namespace Exine.ExineControls
 
                     if (dialog.Grid[(int)EquipmentSlot.Amulet].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Amulet });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Amulet });
                         dialog.Grid[(int)EquipmentSlot.Amulet].Locked = true;
                         Locked = true;
                     }
@@ -435,7 +435,7 @@ namespace Exine.ExineControls
                 case ItemType.Belt:
                     if (dialog.Grid[(int)EquipmentSlot.Belt].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Belt });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Belt });
                         dialog.Grid[(int)EquipmentSlot.Belt].Locked = true;
                         Locked = true;
                     }
@@ -443,7 +443,7 @@ namespace Exine.ExineControls
                 case ItemType.Boots:
                     if (dialog.Grid[(int)EquipmentSlot.Boots].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Boots });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Boots });
                         dialog.Grid[(int)EquipmentSlot.Boots].Locked = true;
                         Locked = true;
                     }
@@ -451,7 +451,7 @@ namespace Exine.ExineControls
                 case ItemType.Stone:
                     if (dialog.Grid[(int)EquipmentSlot.Stone].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Stone });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Stone });
                         dialog.Grid[(int)EquipmentSlot.Stone].Locked = true;
                         Locked = true;
                     }
@@ -459,7 +459,7 @@ namespace Exine.ExineControls
                 case ItemType.Torch:
                     if (dialog.Grid[(int)EquipmentSlot.Torch].CanWearItem(actor, Item))
                     {
-                        Network.Enqueue(new C.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Torch });
+                        Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = GridType, UniqueID = Item.UniqueID, To = (int)EquipmentSlot.Torch });
                         dialog.Grid[(int)EquipmentSlot.Torch].Locked = true;
                         Locked = true;
                     }
@@ -480,14 +480,14 @@ namespace Exine.ExineControls
                             ExineMessageBox messageBox = new ExineMessageBox("이 물약을 사용하시겠습니까?", MirMessageBoxButtons.YesNo);
                             messageBox.YesButton.Click += (o, e) =>
                             {
-                                Network.Enqueue(new C.UseItem { UniqueID = Item.UniqueID, Grid = GridType });
+                                Network.SendPacketToServer(new ClientPacket.UseItem { UniqueID = Item.UniqueID, Grid = GridType });
 
                                 if (Item.Count == 1 && ItemSlot < ExineMainScene.User.BeltIdx)
                                 {
                                     for (int i = ExineMainScene.User.BeltIdx; i < ExineMainScene.User.Inventory.Length; i++)
                                         if (ItemArray[i] != null && ItemArray[i].Info == Item.Info)
                                         {
-                                            Network.Enqueue(new C.MoveItem { Grid = MirGridType.Inventory, From = i, To = ItemSlot });
+                                            Network.SendPacketToServer(new ClientPacket.MoveItem { Grid = MirGridType.Inventory, From = i, To = ItemSlot });
                                             ExineMainScene.Scene.ExInventoryDialog.Grid[i - ExineMainScene.User.BeltIdx].Locked = true;
                                             break;
                                         }
@@ -501,7 +501,7 @@ namespace Exine.ExineControls
                             return;
                         }
 
-                        Network.Enqueue(new C.UseItem { UniqueID = Item.UniqueID, Grid = GridType });
+                        Network.SendPacketToServer(new ClientPacket.UseItem { UniqueID = Item.UniqueID, Grid = GridType });
 
                        
                             if (Item.Count == 1 && ItemSlot < ExineMainScene.User.BeltIdx)
@@ -509,7 +509,7 @@ namespace Exine.ExineControls
                                 for (int i = ExineMainScene.User.BeltIdx; i < ExineMainScene.User.Inventory.Length; i++)
                                     if (ItemArray[i] != null && ItemArray[i].Info == Item.Info)
                                     {
-                                        Network.Enqueue(new C.MoveItem { Grid = MirGridType.Inventory, From = i, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.MoveItem { Grid = MirGridType.Inventory, From = i, To = ItemSlot });
                                         ExineMainScene.Scene.ExInventoryDialog.Grid[i - ExineMainScene.User.BeltIdx].Locked = true;
                                         break;
                                     }
@@ -570,7 +570,7 @@ namespace Exine.ExineControls
 
                         if (cell != null && cell.CanWearItem(ExineMainScene.User, Item))
                         {
-                            Network.Enqueue(new C.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = cell.ItemSlot, GridTo = MirGridType.Socket, ToUniqueID = ExineMainScene.SelectedItem.UniqueID });
+                            Network.SendPacketToServer(new ClientPacket.EquipSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = cell.ItemSlot, GridTo = MirGridType.Socket, ToUniqueID = ExineMainScene.SelectedItem.UniqueID });
                             cell.Locked = true;
                             Locked = true;
                         }
@@ -610,7 +610,7 @@ namespace Exine.ExineControls
                 if (item != null && ((item.Count + Item.Count) <= item.Info.StackSize))
                 {
                     //Merge.
-                    Network.Enqueue(new C.MergeItem { GridFrom = GridType, GridTo = MirGridType.Inventory, IDFrom = Item.UniqueID, IDTo = item.UniqueID });
+                    Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = GridType, GridTo = MirGridType.Inventory, IDFrom = Item.UniqueID, IDTo = item.UniqueID });
 
                     Locked = true;
 
@@ -652,11 +652,11 @@ namespace Exine.ExineControls
                         fromID = ExineMainScene.SelectedItem.UniqueID;
                     }
 
-                    Network.Enqueue(new C.RemoveSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = itemCell.ItemSlot, GridTo = MirGridType.Inventory, FromUniqueID = fromID });
+                    Network.SendPacketToServer(new ClientPacket.RemoveSlotItem { Grid = GridType, UniqueID = Item.UniqueID, To = itemCell.ItemSlot, GridTo = MirGridType.Inventory, FromUniqueID = fromID });
                 }
                 else
                 {
-                    Network.Enqueue(new C.RemoveItem { Grid = MirGridType.Inventory, UniqueID = Item.UniqueID, To = itemCell.ItemSlot });
+                    Network.SendPacketToServer(new ClientPacket.RemoveItem { Grid = MirGridType.Inventory, UniqueID = Item.UniqueID, To = itemCell.ItemSlot });
                 }
 
                 Locked = true;
@@ -695,7 +695,7 @@ namespace Exine.ExineControls
                                         messageBox.YesButton.Click += (o, e) =>
                                         {
                                             //Combine
-                                            Network.Enqueue(new C.CombineItem { Grid = ExineMainScene.SelectedCell.GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                            Network.SendPacketToServer(new ClientPacket.CombineItem { Grid = ExineMainScene.SelectedCell.GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
                                             Locked = true;
                                             ExineMainScene.SelectedCell.Locked = true;
                                             ExineMainScene.SelectedCell = null;
@@ -708,7 +708,7 @@ namespace Exine.ExineControls
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
                                         //Merge
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -717,7 +717,7 @@ namespace Exine.ExineControls
                                     }
                                 }
 
-                                Network.Enqueue(new C.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                Network.SendPacketToServer(new ClientPacket.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
 
                                 Locked = true;
                                 ExineMainScene.SelectedCell.Locked = true;
@@ -730,7 +730,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -746,7 +746,7 @@ namespace Exine.ExineControls
                                 }
                                 if (Item == null)
                                 {
-                                    Network.Enqueue(new C.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = ItemSlot });
 
                                     Locked = true;
                                     ExineMainScene.SelectedCell.Locked = true;
@@ -757,7 +757,7 @@ namespace Exine.ExineControls
                                 for (int x = 6; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
-                                        Network.Enqueue(new C.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = x });
+                                        Network.SendPacketToServer(new ClientPacket.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = x });
 
                                         MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
@@ -774,7 +774,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -787,7 +787,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -799,7 +799,7 @@ namespace Exine.ExineControls
 
                                 if (Item == null)
                                 {
-                                    Network.Enqueue(new C.TakeBackItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.TakeBackItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
 
                                     Locked = true;
                                     ExineMainScene.SelectedCell.Locked = true;
@@ -810,7 +810,7 @@ namespace Exine.ExineControls
                                 for (int x = 6; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
-                                        Network.Enqueue(new C.TakeBackItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
+                                        Network.SendPacketToServer(new ClientPacket.TakeBackItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
                                         MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
@@ -833,7 +833,7 @@ namespace Exine.ExineControls
                                     ExineMainScene.Scene.ExChatDialog.ReceiveChat("아이템을 저장할 수 있는 권한이 부족합니다.", ChatType.System);
                                     return;
                                 }
-                                Network.Enqueue(new C.GuildStorageItemChange { Type = 1, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                Network.SendPacketToServer(new ClientPacket.GuildStorageItemChange { Type = 1, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
                                 Locked = true;
                                 ExineMainScene.SelectedCell.Locked = true;
                                 ExineMainScene.SelectedCell = null;
@@ -845,7 +845,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -858,7 +858,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -870,7 +870,7 @@ namespace Exine.ExineControls
 
                                 if (Item == null)
                                 {
-                                    Network.Enqueue(new C.RetrieveTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.RetrieveTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
 
                                     Locked = true;
                                     ExineMainScene.SelectedCell.Locked = true;
@@ -881,7 +881,7 @@ namespace Exine.ExineControls
                                 for (int x = 6; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
-                                        Network.Enqueue(new C.RetrieveTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
+                                        Network.SendPacketToServer(new ClientPacket.RetrieveTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
                                         MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
@@ -899,7 +899,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -912,7 +912,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -924,7 +924,7 @@ namespace Exine.ExineControls
 
                                 if (Item == null)
                                 {
-                                    Network.Enqueue(new C.RetrieveRefineItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.RetrieveRefineItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
 
                                     Locked = true;
                                     ExineMainScene.SelectedCell.Locked = true;
@@ -935,7 +935,7 @@ namespace Exine.ExineControls
                                 for (int x = 6; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
-                                        Network.Enqueue(new C.RetrieveRefineItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
+                                        Network.SendPacketToServer(new ClientPacket.RetrieveRefineItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
                                         MirItemCell temp = x < ExineMainScene.User.BeltIdx ? ExineMainScene.Scene.BeltDialog.Grid[x] : ExineMainScene.Scene.ExInventoryDialog.Grid[x - ExineMainScene.User.BeltIdx];
 
@@ -961,7 +961,7 @@ namespace Exine.ExineControls
                         {
                             if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                             {
-                                Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                 Locked = true;
                                 ExineMainScene.SelectedCell.Locked = true;
@@ -974,7 +974,7 @@ namespace Exine.ExineControls
                         {
                             if (CanWearItem(ExineMainScene.User, ExineMainScene.SelectedCell.Item))
                             {
-                                Network.Enqueue(new C.EquipItem { Grid = ExineMainScene.SelectedCell.GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = ItemSlot });
+                                Network.SendPacketToServer(new ClientPacket.EquipItem { Grid = ExineMainScene.SelectedCell.GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = ItemSlot });
                                 Locked = true;
                                 ExineMainScene.SelectedCell.Locked = true;
                             }
@@ -992,7 +992,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1004,7 +1004,7 @@ namespace Exine.ExineControls
 
                                 if (ItemArray[ItemSlot] == null)
                                 {
-                                    Network.Enqueue(new C.StoreItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.StoreItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
                                     Locked = true;
                                     ExineMainScene.SelectedCell.Locked = true;
                                     ExineMainScene.SelectedCell = null;
@@ -1014,7 +1014,7 @@ namespace Exine.ExineControls
                                 for (int x = 0; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
-                                        Network.Enqueue(new C.StoreItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
+                                        Network.SendPacketToServer(new ClientPacket.StoreItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
                                         MirItemCell temp = ExineMainScene.Scene.StorageDialog.Grid[x];
                                         if (temp != null) temp.Locked = true;
@@ -1031,7 +1031,7 @@ namespace Exine.ExineControls
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
                                         //Merge.
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1048,7 +1048,7 @@ namespace Exine.ExineControls
 
                                 if (Item == null)
                                 {
-                                    Network.Enqueue(new C.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = ItemSlot });
 
                                     Locked = true;
                                     ExineMainScene.SelectedCell.Locked = true;
@@ -1059,7 +1059,7 @@ namespace Exine.ExineControls
                                 for (int x = 0; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
-                                        Network.Enqueue(new C.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = x });
+                                        Network.SendPacketToServer(new ClientPacket.RemoveItem { Grid = GridType, UniqueID = ExineMainScene.SelectedCell.Item.UniqueID, To = x });
 
                                         MirItemCell temp = ExineMainScene.Scene.StorageDialog.Grid[x];
                                         if (temp != null) temp.Locked = true;
@@ -1076,7 +1076,7 @@ namespace Exine.ExineControls
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
                                         //Merge.
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1085,7 +1085,7 @@ namespace Exine.ExineControls
                                     }
                                 }
 
-                                Network.Enqueue(new C.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                Network.SendPacketToServer(new ClientPacket.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
                                 Locked = true;
                                 ExineMainScene.SelectedCell.Locked = true;
                                 ExineMainScene.SelectedCell = null;
@@ -1111,7 +1111,7 @@ namespace Exine.ExineControls
 
                                     //if (ItemArray[ItemSlot] == null)
                                     //{
-                                    Network.Enqueue(new C.GuildStorageItemChange { Type = 2, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.GuildStorageItemChange { Type = 2, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
                                     Locked = true;
                                     ExineMainScene.SelectedCell.Locked = true;
                                     ExineMainScene.SelectedCell = null;
@@ -1136,7 +1136,7 @@ namespace Exine.ExineControls
                                     }
                                     if (ItemArray[ItemSlot] == null)
                                     {
-                                        Network.Enqueue(new C.GuildStorageItemChange { Type = 0, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                        Network.SendPacketToServer(new ClientPacket.GuildStorageItemChange { Type = 0, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
                                         ExineMainScene.SelectedCell = null;
@@ -1161,7 +1161,7 @@ namespace Exine.ExineControls
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
                                         //Merge.
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1170,7 +1170,7 @@ namespace Exine.ExineControls
                                     }
                                 }
 
-                                Network.Enqueue(new C.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                Network.SendPacketToServer(new ClientPacket.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
 
                                 Locked = true;
                                 ExineMainScene.SelectedCell.Locked = true;
@@ -1184,7 +1184,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1196,7 +1196,7 @@ namespace Exine.ExineControls
 
                                 if (ItemArray[ItemSlot] == null)
                                 {
-                                    Network.Enqueue(new C.DepositTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                    Network.SendPacketToServer(new ClientPacket.DepositTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
                                     Locked = true;
                                     ExineMainScene.SelectedCell.Locked = true;
                                     ExineMainScene.SelectedCell = null;
@@ -1206,7 +1206,7 @@ namespace Exine.ExineControls
                                 for (int x = 0; x < ItemArray.Length; x++)
                                     if (ItemArray[x] == null)
                                     {
-                                        Network.Enqueue(new C.DepositTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
+                                        Network.SendPacketToServer(new ClientPacket.DepositTradeItem { From = ExineMainScene.SelectedCell.ItemSlot, To = x });
 
                                         MirItemCell temp = ExineMainScene.Scene.TradeDialog.Grid[x];
                                         if (temp != null) temp.Locked = true;
@@ -1233,7 +1233,7 @@ namespace Exine.ExineControls
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
                                         //Merge.
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1242,7 +1242,7 @@ namespace Exine.ExineControls
                                     }
                                 }
 
-                                Network.Enqueue(new C.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                Network.SendPacketToServer(new ClientPacket.MoveItem { Grid = GridType, From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
                                 Locked = true;
                                 ExineMainScene.SelectedCell.Locked = true;
                                 ExineMainScene.SelectedCell = null;
@@ -1255,7 +1255,7 @@ namespace Exine.ExineControls
                                 {
                                     if (ExineMainScene.SelectedCell.Item.Info == Item.Info && Item.Count < Item.Info.StackSize)
                                     {
-                                        Network.Enqueue(new C.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
+                                        Network.SendPacketToServer(new ClientPacket.MergeItem { GridFrom = ExineMainScene.SelectedCell.GridType, GridTo = GridType, IDFrom = ExineMainScene.SelectedCell.Item.UniqueID, IDTo = Item.UniqueID });
 
                                         Locked = true;
                                         ExineMainScene.SelectedCell.Locked = true;
@@ -1264,7 +1264,7 @@ namespace Exine.ExineControls
                                     }
                                 }
 
-                                Network.Enqueue(new C.DepositRefineItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
+                                Network.SendPacketToServer(new ClientPacket.DepositRefineItem { From = ExineMainScene.SelectedCell.ItemSlot, To = ItemSlot });
                                 Locked = true;
                                 ExineMainScene.SelectedCell.Locked = true;
                                 ExineMainScene.SelectedCell = null;

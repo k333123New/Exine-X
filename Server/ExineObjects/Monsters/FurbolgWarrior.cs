@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 
 namespace Server.ExineObjects.Monsters
@@ -49,7 +49,7 @@ namespace Server.ExineObjects.Monsters
             if (ranged)
             {
                 Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
                 for (int i = 1; i <= 2; i++)
                 {
@@ -94,7 +94,7 @@ namespace Server.ExineObjects.Monsters
             else
             {
                 Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1});
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1});
 
                 ExineDirection dir = Functions.PreviousDir(Direction);
 

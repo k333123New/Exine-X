@@ -1,5 +1,5 @@
 ﻿using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 
 namespace Server.ExineObjects
@@ -138,7 +138,7 @@ namespace Server.ExineObjects
                         if (ob.Dead || ob.HealAmount != 0 || ob.PercentHealth == 100) return;
 
                         ob.HealAmount += 25;
-                        Broadcast(new S.ObjectEffect { ObjectID = ob.ObjectID, Effect = SpellEffect.Healing });
+                        Broadcast(new ServerPacket.ObjectEffect { ObjectID = ob.ObjectID, Effect = SpellEffect.Healing });
                     }
                     break;
                 case Spell.PoisonCloud:
@@ -378,7 +378,7 @@ namespace Server.ExineObjects
                         if (ob.Dead || ob.HealAmount != 0 || ob.PercentHealth == 100) return;
 
                         ob.HealAmount += 25;
-                        Broadcast(new S.ObjectEffect { ObjectID = ob.ObjectID, Effect = SpellEffect.Healing });
+                        Broadcast(new ServerPacket.ObjectEffect { ObjectID = ob.ObjectID, Effect = SpellEffect.Healing });
                     }
                     else if (ob.IsAttackTarget(Caster))
                     {
@@ -516,7 +516,7 @@ namespace Server.ExineObjects
                     if (!Show)
                         return null;
 
-                    return new S.ObjectSpell
+                    return new ServerPacket.ObjectSpell
                     {
                         ObjectID = ObjectID,
                         Location = CastLocation,
@@ -524,7 +524,7 @@ namespace Server.ExineObjects
                         Direction = Direction
                     };
                 case Spell.ExplosiveTrap:
-                    return new S.ObjectSpell
+                    return new ServerPacket.ObjectSpell
                     {
                         ObjectID = ObjectID,
                         Location = CurrentLocation,
@@ -533,7 +533,7 @@ namespace Server.ExineObjects
                         Param = DetonatedTrap
                     };
                 default:
-                    return new S.ObjectSpell
+                    return new ServerPacket.ObjectSpell
                     {
                         ObjectID = ObjectID,
                         Location = CurrentLocation,
@@ -577,7 +577,7 @@ namespace Server.ExineObjects
             if (Spell == Spell.Reincarnation && Caster != null && Caster.Node != null)
             {
                 ((HumanObjectSrv)Caster).ActiveReincarnation = false;
-                ((HumanObjectSrv)Caster).Enqueue(new S.CancelReincarnation { });
+                ((HumanObjectSrv)Caster).SendPacketToClient(new ServerPacket.CancelReincarnation { });
             }
 
             if (Spell == Spell.ExplosiveTrap && Caster != null)
@@ -624,7 +624,7 @@ namespace Server.ExineObjects
                         p = GetInfo();
 
                         if (p != null)
-                            player.Enqueue(p);
+                            player.SendPacketToClient(p);
                     }
                 }
             }

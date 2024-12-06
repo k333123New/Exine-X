@@ -5,7 +5,7 @@ using Exine.ExineObjects;
 using Exine.ExineSounds;
 using SlimDX;
 using Font = System.Drawing.Font;
-using C = ClientPackets;
+
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -311,7 +311,7 @@ namespace Exine.ExineScenes.ExDialogs
             SearchTextBox.Visible = true;
             SelectedNPC = null;
             if (!ExineMainScene.MapInfoList.ContainsKey(MapIndex))
-                Network.Enqueue(new C.RequestMapInfo() { MapIndex = MapIndex });
+                Network.SendPacketToServer(new ClientPacket.RequestMapInfo() { MapIndex = MapIndex });
             else
                 CurrentRecord = ExineMainScene.MapInfoList[MapIndex];
             Redraw();
@@ -409,7 +409,7 @@ namespace Exine.ExineScenes.ExDialogs
                     messageBox2.Show();
                     return;
                 }
-                Network.Enqueue(new C.TeleportToNPC { ObjectID = SelectedNPC.Info.ObjectID });
+                Network.SendPacketToServer(new ClientPacket.TeleportToNPC { ObjectID = SelectedNPC.Info.ObjectID });
             };
 
             messageBox.Show();
@@ -428,7 +428,7 @@ namespace Exine.ExineScenes.ExDialogs
             if (CMain.Now < NextSearchTime) return;
 
             NextSearchTime = CMain.Now.AddSeconds(1);
-            Network.Enqueue(new C.SearchMap { Text = SearchTextBox.Text });
+            Network.SendPacketToServer(new ClientPacket.SearchMap { Text = SearchTextBox.Text });
         }
 
         public void SearchTextBox_KeyPress(object sender, KeyPressEventArgs e)

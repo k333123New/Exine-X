@@ -142,7 +142,7 @@ namespace Server.ExineDatabase
                 ParseFile(lines);
             }
             else
-                MessageQueue.Enqueue(string.Format("File Not Found: {0}, Quest: {1}", fileName, Name));
+                MessageQueue.SendMsg(string.Format("File Not Found: {0}, Quest: {1}", fileName, Name));
         }
 
         public void ClearInfo()

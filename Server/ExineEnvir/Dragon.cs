@@ -67,7 +67,7 @@ namespace Server.ExineEnvir
                 MonsterInfo info = Envir.GetMonsterInfo(Info.MonsterName);
                 if (info == null)
                 {
-                    MessageQueue.Enqueue("Failed to load Dragon (bad monster name): " + Info.MonsterName);
+                    MessageQueue.SendMsg("Failed to load Dragon (bad monster name): " + Info.MonsterName);
                     return false;
                 }
                 LinkedMonster = MonsterObjectSrv.GetMonster(info);
@@ -75,13 +75,13 @@ namespace Server.ExineEnvir
                 Map map = Envir.GetMapByNameAndInstance(Info.MapFileName);
                 if (map == null)
                 {
-                    MessageQueue.Enqueue("Failed to load Dragon (bad map name): " + Info.MapFileName);
+                    MessageQueue.SendMsg("Failed to load Dragon (bad map name): " + Info.MapFileName);
                     return false;
                 }
 
                 if (Info.Location.X > map.Width || Info.Location.Y > map.Height)
                 {
-                    MessageQueue.Enqueue("Failed to load Dragon (bad map XY): " + Info.MapFileName);
+                    MessageQueue.SendMsg("Failed to load Dragon (bad map XY): " + Info.MapFileName);
                     return false;
                 }
 
@@ -114,10 +114,10 @@ namespace Server.ExineEnvir
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
 
-            MessageQueue.Enqueue("Failed to load Dragon");
+            MessageQueue.SendMsg("Failed to load Dragon");
             return false;
         }
         public void GainExp(int ammount)

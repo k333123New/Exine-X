@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Sockets;
 //using Client.MirControls;
-using C = ClientPackets;
+//
 
 
 namespace ClientConsoleTest
@@ -189,7 +189,7 @@ namespace ClientConsoleTest
                     while (_receiveList != null && !_receiveList.IsEmpty)
                     {
                         if (!_receiveList.TryDequeue(out Packet p) || p == null) continue;
-                        if (!(p is ServerPackets.Disconnect) && !(p is ServerPackets.ClientVersion)) continue;
+                        if (!(p is ServerPacket.Disconnect) && !(p is ServerPacket.ClientVersion)) continue;
 
                         //MirScene.ActiveScene.ProcessPacket(p);
                         Form1.ProcessPacket(p);
@@ -227,7 +227,7 @@ namespace ClientConsoleTest
 
 
             if (Form1.Time > TimeOutTime && _sendList != null && _sendList.IsEmpty)
-                _sendList.Enqueue(new C.KeepAlive());
+                _sendList.Enqueue(new ClientPacket.KeepAlive());
 
             if (_sendList == null || _sendList.IsEmpty) return;
 
@@ -246,7 +246,7 @@ namespace ClientConsoleTest
             BeginSend(data);
         }
         
-        public static void Enqueue(Packet p)
+        public static void SendPacket(Packet p)
         {
             Console.WriteLine("Enqueue");
             if (_sendList != null && p != null)

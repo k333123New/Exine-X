@@ -6,8 +6,8 @@ using Exine.ExineSounds;
 using SlimDX;
 using SlimDX.Direct3D9;
 using Font = System.Drawing.Font;
-using S = ServerPackets; 
-using C = ClientPackets;
+// 
+
 using Effect = Exine.ExineObjects.Effect;
 //using Client.MirScenes.Dialogs;
 using Exine.Utils;
@@ -32,14 +32,13 @@ namespace Exine.ExineScenes
 
         public static long MoveTime, AttackTime, NextRunTime, LogTime, LastRunTime;
         public static bool CanMove, CanRun;
-
-        
-
-        public ExineAnimatedControl _bazel_up, _bazel_down, _bazel_left, _bazel_right;//add k333123
-        
+         
+         
         public MapControl MapControl;
         //public MainDialog MainDialog;
 
+        #region UI variable
+        public ExineAnimatedControl _bazel_up, _bazel_down, _bazel_left, _bazel_right;//add k333123
         public ExineMainDialog ExMainDialog;
         public ExineChatDialog ExChatDialog;
         public ExineChatControlBar ExChatControl; 
@@ -53,10 +52,6 @@ namespace Exine.ExineScenes
         public ExineNPCGoodsDialog NPCCraftGoodsDialog;
         public NPCDropDialog NPCDropDialog; 
         
-
-
-
-
         public CraftDialog CraftDialog;
         public StorageDialog StorageDialog;
         public BeltDialog BeltDialog;
@@ -71,9 +66,7 @@ namespace Exine.ExineScenes
         public GroupDialog GroupDialog;
         public GuildDialog GuildDialog;
 
-        //public NewCharacterDialog NewHeroDialog;
-
-
+        //public NewCharacterDialog NewHeroDialog; 
         public BigMapDialog BigMapDialog; 
         public CharacterDuraPanel CharacterDuraPanel;
         public DuraStatusDialog DuraStatusPanel;
@@ -109,7 +102,8 @@ namespace Exine.ExineScenes
         public NoticeDialog NoticeDialog;
 
         public TimerDialog TimerControl;
-        public CompassDialog CompassControl; 
+        public CompassDialog CompassControl;
+        #endregion UI variable
 
         public static List<ItemInfo> ItemInfoList = new List<ItemInfo>();
         public static List<UserId> UserIdList = new List<UserId>();
@@ -612,7 +606,7 @@ namespace Exine.ExineScenes
                         if (CMain.Time > PickUpTime)
                         {
                             PickUpTime = CMain.Time + 200;
-                            Network.Enqueue(new C.PickUp());
+                            Network.SendPacketToServer(new ClientPacket.PickUp());
                         }
                         break;
                     case KeybindOptions.Belt1:
@@ -655,7 +649,7 @@ namespace Exine.ExineScenes
                         BigMapDialog.Toggle();
                         break;
                     case KeybindOptions.Trade:
-                        Network.Enqueue(new C.TradeRequest());
+                        Network.SendPacketToServer(new ClientPacket.TradeRequest());
                         break;
                     case KeybindOptions.Rental:
                         break;
@@ -663,41 +657,41 @@ namespace Exine.ExineScenes
                         ChangePetMode();
                         break;
                     case KeybindOptions.PetmodeBoth:
-                        Network.Enqueue(new C.ChangePMode { Mode = PetMode.Both });
+                        Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.Both });
                         return;
                     case KeybindOptions.PetmodeMoveonly:
-                        Network.Enqueue(new C.ChangePMode { Mode = PetMode.MoveOnly });
+                        Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.MoveOnly });
                         return;
                     case KeybindOptions.PetmodeAttackonly:
-                        Network.Enqueue(new C.ChangePMode { Mode = PetMode.AttackOnly });
+                        Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.AttackOnly });
                         return;
                     case KeybindOptions.PetmodeNone:
-                        Network.Enqueue(new C.ChangePMode { Mode = PetMode.None });
+                        Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.None });
                         return;
                     case KeybindOptions.PetmodeFocusMasterTarget:
-                        Network.Enqueue(new C.ChangePMode { Mode = PetMode.FocusMasterTarget });
+                        Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.FocusMasterTarget });
                         return;
                     
                     case KeybindOptions.ChangeAttackmode:
                         ChangeAttackMode();
                         break;
                     case KeybindOptions.AttackmodePeace:
-                        Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Peace });
+                        Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.Peace });
                         return;
                     case KeybindOptions.AttackmodeGroup:
-                        Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Group });
+                        Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.Group });
                         return;
                     case KeybindOptions.AttackmodeGuild:
-                        Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Guild });
+                        Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.Guild });
                         return;
                     case KeybindOptions.AttackmodeEnemyguild:
-                        Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.EnemyGuild });
+                        Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.EnemyGuild });
                         return;
                     case KeybindOptions.AttackmodeRedbrown:
-                        Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.RedBrown });
+                        Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.RedBrown });
                         return;
                     case KeybindOptions.AttackmodeAll:
-                        Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.All });
+                        Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.All });
                         return;
 
                     case KeybindOptions.Help:
@@ -781,19 +775,19 @@ namespace Exine.ExineScenes
             switch (PMode)
             {
                 case PetMode.Both:
-                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.MoveOnly });
+                    Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.MoveOnly });
                     return;
                 case PetMode.MoveOnly:
-                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.AttackOnly });
+                    Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.AttackOnly });
                     return;
                 case PetMode.AttackOnly:
-                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.None });
+                    Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.None });
                     return;
                 case PetMode.None:
-                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.FocusMasterTarget });
+                    Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.FocusMasterTarget });
                     return;
                 case PetMode.FocusMasterTarget:
-                    Network.Enqueue(new C.ChangePMode { Mode = PetMode.Both });
+                    Network.SendPacketToServer(new ClientPacket.ChangePMode { Mode = PetMode.Both });
                     return;
             }
         }
@@ -804,22 +798,22 @@ namespace Exine.ExineScenes
             switch (AMode)
             {
                 case AttackMode.Peace:
-                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Group });
+                    Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.Group });
                     return;
                 case AttackMode.Group:
-                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Guild });
+                    Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.Guild });
                     return;
                 case AttackMode.Guild:
-                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.EnemyGuild });
+                    Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.EnemyGuild });
                     return;
                 case AttackMode.EnemyGuild:
-                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.RedBrown });
+                    Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.RedBrown });
                     return;
                 case AttackMode.RedBrown:
-                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.All });
+                    Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.All });
                     return;
                 case AttackMode.All:
-                    Network.Enqueue(new C.ChangeAMode { Mode = AttackMode.Peace });
+                    Network.SendPacketToServer(new ClientPacket.ChangeAMode { Mode = AttackMode.Peace });
                     return;
             }
         }
@@ -962,9 +956,9 @@ namespace Exine.ExineScenes
         private void SendSpellToggle(UserObject Actor, Spell Spell, bool CanUse)
         {
             if (Actor == User)
-                Network.Enqueue(new C.SpellToggle { Spell = Spell, CanUse = CanUse });
+                Network.SendPacketToServer(new ClientPacket.SpellToggle { Spell = Spell, CanUse = CanUse });
             else
-                Network.Enqueue(new C.SpellToggle { Spell = Spell });
+                Network.SendPacketToServer(new ClientPacket.SpellToggle { Spell = Spell });
         }
        
         public void QuitGame()
@@ -990,7 +984,7 @@ namespace Exine.ExineScenes
                 ExineMessageBox messageBox = new ExineMessageBox(GameLanguage.LogOutTip, MirMessageBoxButtons.YesNo);
                 messageBox.YesButton.Click += (o, e) =>
                 {
-                    Network.Enqueue(new C.LogOut());
+                    Network.SendPacketToServer(new ClientPacket.LogOut());
                     Enabled = false;
                 };
                 messageBox.Show();
@@ -1045,7 +1039,7 @@ namespace Exine.ExineScenes
             if (CMain.Time >= CMain.NextPing)
             {
                 CMain.NextPing = CMain.Time + 60000;
-                Network.Enqueue(new C.KeepAlive() { Time = CMain.Time });
+                Network.SendPacketToServer(new ClientPacket.KeepAlive() { Time = CMain.Time });
             }
 
             TimerControl.Process();
@@ -1122,7 +1116,7 @@ namespace Exine.ExineScenes
 
                 messageBox.YesButton.Click += (o, e) =>
                 {
-                    if (User.Dead) Network.Enqueue(new C.TownRevive());
+                    if (User.Dead) Network.SendPacketToServer(new ClientPacket.TownRevive());
                 };
 
                 messageBox.AfterDraw += (o, e) =>
@@ -1181,594 +1175,594 @@ namespace Exine.ExineScenes
                 CharacterDuraPanel.Hide();
         }
 
-        public override void ProcessPacket(Packet p)
+        public override void ProcessRecvPacket(Packet p)
         {
             switch (p.Index)
             {
                 case (short)ServerPacketIds.KeepAlive:
-                    KeepAlive((S.KeepAlive)p);
+                    OnRecvKeepAliveHandler((ServerPacket.KeepAlive)p);
                     break;
                 case (short)ServerPacketIds.MapInformation: //MapInfo
-                    MapInformation((S.MapInformation)p);
+                    OnRecvMapInformationHandler((ServerPacket.MapInformation)p);
                     break;
                 case (short)ServerPacketIds.NewMapInfo:
-                    NewMapInfo((S.NewMapInfo)p);
+                    OnRecvNewMapInfoHandler((ServerPacket.NewMapInfo)p);
                     break;
                 case (short)ServerPacketIds.WorldMapSetup:
-                    WorldMapSetup((S.WorldMapSetupInfo)p);
+                    OnRecvWorldMapSetupHandler((ServerPacket.WorldMapSetupInfo)p);
                     break;
                 case (short)ServerPacketIds.SearchMapResult:
-                    SearchMapResult((S.SearchMapResult)p);
+                    OnRecvSearchMapResultHandler((ServerPacket.SearchMapResult)p);
                     break;
                 case (short)ServerPacketIds.UserInformation:
-                    UserInformation((S.UserInformation)p);
+                    OnRecvUserInformationHandler((ServerPacket.UserInformation)p);
                     break;
                 case (short)ServerPacketIds.UserSlotsRefresh:
-                    UserSlotsRefresh((S.UserSlotsRefresh)p);
+                    OnRecvUserSlotsRefreshHandler((ServerPacket.UserSlotsRefresh)p);
                     break;
                 case (short)ServerPacketIds.UserLocation:
-                    UserLocation((S.UserLocation)p);
+                    OnRecvUserLocationHandler((ServerPacket.UserLocation)p);
                     break;
                 case (short)ServerPacketIds.ObjectPlayer:
-                    ObjectPlayer((S.ObjectPlayer)p);
+                    OnRecvObjectPlayerHandler((ServerPacket.ObjectPlayer)p);
                     break;
                 case (short)ServerPacketIds.ObjectRemove:
-                    ObjectRemove((S.ObjectRemove)p);
+                    OnRecvObjectRemoveHandler((ServerPacket.ObjectRemove)p);
                     break;
                 case (short)ServerPacketIds.ObjectTurn:
-                    ObjectTurn((S.ObjectTurn)p);
+                    OnRecvObjectTurnHandler((ServerPacket.ObjectTurn)p);
                     break;
                 case (short)ServerPacketIds.ObjectRest: //add k333123 240926
-                    ObjectRest((S.ObjectRest)p);
+                    OnRecvObjectRestHandler((ServerPacket.ObjectRest)p);
                     break; 
 
                 case (short)ServerPacketIds.ObjectWalk:
-                    ObjectWalk((S.ObjectWalk)p);
+                    OnRecvObjectWalkHandler((ServerPacket.ObjectWalk)p);
                     break;
                 case (short)ServerPacketIds.ObjectRun:
-                    ObjectRun((S.ObjectRun)p);
+                    OnRecvObjectRunHandler((ServerPacket.ObjectRun)p);
                     break;
                 case (short)ServerPacketIds.Chat:
-                    ReceiveChat((S.Chat)p);
+                    OnRecvReceiveChatHandler((ServerPacket.Chat)p);
                     break;
                 case (short)ServerPacketIds.ObjectChat:
-                    ObjectChat((S.ObjectChat)p);
+                    OnRecvObjectChatHandler((ServerPacket.ObjectChat)p);
                     break;
                 case (short)ServerPacketIds.MoveItem:
-                    MoveItem((S.MoveItem)p);
+                    OnRecvMoveItemHandler((ServerPacket.MoveItem)p);
                     break;
                 case (short)ServerPacketIds.EquipItem:
-                    EquipItem((S.EquipItem)p);
+                    OnRecvEquipItemHandler((ServerPacket.EquipItem)p);
                     break;
                 case (short)ServerPacketIds.MergeItem:
-                    MergeItem((S.MergeItem)p);
+                    OnRecvMergeItemHandler((ServerPacket.MergeItem)p);
                     break;
                 case (short)ServerPacketIds.RemoveItem:
-                    RemoveItem((S.RemoveItem)p);
+                    OnRecvRemoveItemHandler((ServerPacket.RemoveItem)p);
                     break;
                 case (short)ServerPacketIds.RemoveSlotItem:
-                    RemoveSlotItem((S.RemoveSlotItem)p);
+                    OnRecvRemoveSlotItemHandler((ServerPacket.RemoveSlotItem)p);
                     break;
                 case (short)ServerPacketIds.TakeBackItem:
-                    TakeBackItem((S.TakeBackItem)p);
+                    OnRecvTakeBackItemHandler((ServerPacket.TakeBackItem)p);
                     break;
                 case (short)ServerPacketIds.StoreItem:
-                    StoreItem((S.StoreItem)p);
+                    OnRecvStoreItemHandler((ServerPacket.StoreItem)p);
                     break;
                 case (short)ServerPacketIds.DepositRefineItem:
-                    DepositRefineItem((S.DepositRefineItem)p);
+                    OnRecvDepositRefineItemHandler((ServerPacket.DepositRefineItem)p);
                     break;
                 case (short)ServerPacketIds.RetrieveRefineItem:
-                    RetrieveRefineItem((S.RetrieveRefineItem)p);
+                    OnRecvRetrieveRefineItemHandler((ServerPacket.RetrieveRefineItem)p);
                     break;
                 case (short)ServerPacketIds.RefineCancel:
-                    RefineCancel((S.RefineCancel)p);
+                    OnRecvRefineCancelHandler((ServerPacket.RefineCancel)p);
                     break;
                 case (short)ServerPacketIds.RefineItem:
-                    RefineItem((S.RefineItem)p);
+                    OnRecvRefineItemHandler((ServerPacket.RefineItem)p);
                     break;
                 case (short)ServerPacketIds.DepositTradeItem:
-                    DepositTradeItem((S.DepositTradeItem)p);
+                    OnRecvDepositTradeItemHandler((ServerPacket.DepositTradeItem)p);
                     break;
                 case (short)ServerPacketIds.RetrieveTradeItem:
-                    RetrieveTradeItem((S.RetrieveTradeItem)p);
+                    OnRecvRetrieveTradeItemHandler((ServerPacket.RetrieveTradeItem)p);
                     break;
                 case (short)ServerPacketIds.SplitItem:
-                    SplitItem((S.SplitItem)p);
+                    OnRecvSplitItemHandler((ServerPacket.SplitItem)p);
                     break;
                 case (short)ServerPacketIds.SplitItem1:
-                    SplitItem1((S.SplitItem1)p);
+                    OnRecvSplitItem1Handler((ServerPacket.SplitItem1)p);
                     break;
                 case (short)ServerPacketIds.UseItem:
-                    UseItem((S.UseItem)p);
+                    OnRecvUseItemHandler((ServerPacket.UseItem)p);
                     break;
                 case (short)ServerPacketIds.DropItem:
-                    DropItem((S.DropItem)p);
+                    OnRecvDropItemHandler((ServerPacket.DropItem)p);
                     break;
                 
                 case (short)ServerPacketIds.PlayerUpdate:
-                    PlayerUpdate((S.PlayerUpdate)p);
+                    OnRecvPlayerUpdateHandler((ServerPacket.PlayerUpdate)p);
                     break;
                 case (short)ServerPacketIds.PlayerInspect:
-                    PlayerInspect((S.PlayerInspect)p);
+                    OnRecvPlayerInspectHandler((ServerPacket.PlayerInspect)p);
                     break;
                 case (short)ServerPacketIds.LogOutSuccess:
-                    LogOutSuccess((S.LogOutSuccess)p);
+                    OnRecvLogOutSuccessHandler((ServerPacket.LogOutSuccess)p);
                     break;
                 case (short)ServerPacketIds.LogOutFailed:
-                    LogOutFailed((S.LogOutFailed)p);
+                    OnRecvLogOutFailedHandler((ServerPacket.LogOutFailed)p);
                     break;
                 case (short)ServerPacketIds.ReturnToLogin:
-                    ReturnToLogin((S.ReturnToLogin)p);
+                    OnRecvReturnToLoginHandler((ServerPacket.ReturnToLogin)p);
                     break;
                 case (short)ServerPacketIds.TimeOfDay:
-                    TimeOfDay((S.TimeOfDay)p);
+                    OnRecvTimeOfDayHandler((ServerPacket.TimeOfDay)p);
                     break;
                 case (short)ServerPacketIds.ChangeAMode:
-                    ChangeAMode((S.ChangeAMode)p);
+                    OnRecvChangeAModeHandler((ServerPacket.ChangeAMode)p);
                     break;
                 case (short)ServerPacketIds.ChangePMode:
-                    ChangePMode((S.ChangePMode)p);
+                    OnRecvChangePModeHandler((ServerPacket.ChangePMode)p);
                     break;
                 case (short)ServerPacketIds.ObjectItem:
-                    ObjectItem((S.ObjectItem)p);
+                    OnRecvObjectItemHandler((ServerPacket.ObjectItem)p);
                     break;
                 case (short)ServerPacketIds.ObjectGold:
-                    ObjectGold((S.ObjectGold)p);
+                    OnRecvObjectGoldHandler((ServerPacket.ObjectGold)p);
                     break;
                 case (short)ServerPacketIds.GainedItem:
-                    GainedItem((S.GainedItem)p);
+                    OnRecvGainedItemHandler((ServerPacket.GainedItem)p);
                     break;
                 case (short)ServerPacketIds.GainedGold:
-                    GainedGold((S.GainedGold)p);
+                    OnRecvGainedGoldHandler((ServerPacket.GainedGold)p);
                     break;
                 case (short)ServerPacketIds.LoseGold:
-                    LoseGold((S.LoseGold)p);
+                    OnRecvLoseGoldHandler((ServerPacket.LoseGold)p);
                     break;
                 case (short)ServerPacketIds.GainedCredit:
-                    GainedCredit((S.GainedCredit)p);
+                    OnRecvGainedCreditHandler((ServerPacket.GainedCredit)p);
                     break;
                 case (short)ServerPacketIds.LoseCredit:
-                    LoseCredit((S.LoseCredit)p);
+                    OnRecvLoseCreditHandler((ServerPacket.LoseCredit)p);
                     break;
                 case (short)ServerPacketIds.ObjectMonster:
-                    ObjectMonster((S.ObjectMonster)p);
+                    OnRecvObjectMonsterHandler((ServerPacket.ObjectMonster)p);
                     break;
                 case (short)ServerPacketIds.ObjectAttack:
-                    ObjectAttack((S.ObjectAttack)p);
+                    OnRecvObjectAttackHandler((ServerPacket.ObjectAttack)p);
                     break;
                 case (short)ServerPacketIds.Struck:
-                    Struck((S.Struck)p);
+                    OnRecvStruckHandler((ServerPacket.Struck)p);
                     break;
                 case (short)ServerPacketIds.DamageIndicator:
-                    DamageIndicator((S.DamageIndicator)p);
+                    OnRecvDamageIndicatorHandler((ServerPacket.DamageIndicator)p);
                     break;
                 case (short)ServerPacketIds.ObjectStruck:
-                    ObjectStruck((S.ObjectStruck)p);
+                    OnRecvObjectStruckHandler((ServerPacket.ObjectStruck)p);
                     break;
                 case (short)ServerPacketIds.DuraChanged:
-                    DuraChanged((S.DuraChanged)p);
+                    OnRecvDuraChangedHandler((ServerPacket.DuraChanged)p);
                     break;
                 case (short)ServerPacketIds.HealthChanged:
-                    HealthChanged((S.HealthChanged)p);
+                    OnRecvHealthChangedHandler((ServerPacket.HealthChanged)p);
                     break;
                 case (short)ServerPacketIds.DeleteItem:
-                    DeleteItem((S.DeleteItem)p);
+                    OnRecvDeleteItemHandler((ServerPacket.DeleteItem)p);
                     break;
                 case (short)ServerPacketIds.Death:
-                    Death((S.Death)p);
+                    OnRecvDeathHandler((ServerPacket.Death)p);
                     break;
                 case (short)ServerPacketIds.ObjectDied:
-                    ObjectDied((S.ObjectDied)p);
+                    OnRecvObjectDiedHandler((ServerPacket.ObjectDied)p);
                     break;
                 case (short)ServerPacketIds.ColourChanged:
-                    ColourChanged((S.ColourChanged)p);
+                    OnRecvColourChangedHandler((ServerPacket.ColourChanged)p);
                     break;
                 case (short)ServerPacketIds.ObjectColourChanged:
-                    ObjectColourChanged((S.ObjectColourChanged)p);
+                    OnRecvObjectColourChangedHandler((ServerPacket.ObjectColourChanged)p);
                     break;
                 case (short)ServerPacketIds.ObjectGuildNameChanged:
-                    ObjectGuildNameChanged((S.ObjectGuildNameChanged)p);
+                    OnRecvObjectGuildNameChangedHandler((ServerPacket.ObjectGuildNameChanged)p);
                     break;
                 case (short)ServerPacketIds.GainExperience:
-                    GainExperience((S.GainExperience)p);
+                    OnRecvGainExperienceHandler((ServerPacket.GainExperience)p);
                     break;
                 case (short)ServerPacketIds.LevelChanged:
-                    LevelChanged((S.LevelChanged)p);
+                    OnRecvLevelChangedHandler((ServerPacket.LevelChanged)p);
                     break;
                 case (short)ServerPacketIds.ObjectLeveled:
-                    ObjectLeveled((S.ObjectLeveled)p);
+                    OnRecvObjectLeveledHandler((ServerPacket.ObjectLeveled)p);
                     break;
                 case (short)ServerPacketIds.ObjectHarvest:
-                    ObjectHarvest((S.ObjectHarvest)p);
+                    OnRecvObjectHarvestHandler((ServerPacket.ObjectHarvest)p);
                     break;
                 case (short)ServerPacketIds.ObjectHarvested:
-                    ObjectHarvested((S.ObjectHarvested)p);
+                    OnRecvObjectHarvestedHandler((ServerPacket.ObjectHarvested)p);
                     break;
                 case (short)ServerPacketIds.ObjectNpc:
-                    ObjectNPC((S.ObjectNPC)p);
+                    OnRecvObjectNPCHandler((ServerPacket.ObjectNPC)p);
                     break;
                 case (short)ServerPacketIds.NPCResponse:
-                    NPCResponse((S.NPCResponse)p);
+                    OnRecvNPCResponseHandler((ServerPacket.NPCResponse)p);
                     break;
                 case (short)ServerPacketIds.ObjectHide:
-                    ObjectHide((S.ObjectHide)p);
+                    OnRecvObjectHideHandler((ServerPacket.ObjectHide)p);
                     break;
                 case (short)ServerPacketIds.ObjectShow:
-                    ObjectShow((S.ObjectShow)p);
+                    OnRecvObjectShowHandler((ServerPacket.ObjectShow)p);
                     break;
                 case (short)ServerPacketIds.Poisoned:
-                    Poisoned((S.Poisoned)p);
+                    OnRecvPoisonedHandler((ServerPacket.Poisoned)p);
                     break;
                 case (short)ServerPacketIds.ObjectPoisoned:
-                    ObjectPoisoned((S.ObjectPoisoned)p);
+                    OnRecvObjectPoisonedHandler((ServerPacket.ObjectPoisoned)p);
                     break;
                 case (short)ServerPacketIds.MapChanged:
-                    MapChanged((S.MapChanged)p);
+                    OnRecvMapChangedHandler((ServerPacket.MapChanged)p);
                     break;
                 case (short)ServerPacketIds.ObjectTeleportOut:
-                    ObjectTeleportOut((S.ObjectTeleportOut)p);
+                    OnRecvObjectTeleportOutHandler((ServerPacket.ObjectTeleportOut)p);
                     break;
                 case (short)ServerPacketIds.ObjectTeleportIn:
-                    ObjectTeleportIn((S.ObjectTeleportIn)p);
+                    OnRecvObjectTeleportInHandler((ServerPacket.ObjectTeleportIn)p);
                     break;
                 case (short)ServerPacketIds.TeleportIn:
-                    TeleportIn();
+                    OnRecvTeleportInHandler();
                     break;
                 case (short)ServerPacketIds.NPCGoods:
-                    NPCGoods((S.NPCGoods)p);
+                    OnRecvNPCGoodsHandler((ServerPacket.NPCGoods)p);
                     break;
                 case (short)ServerPacketIds.NPCSell:
-                    NPCSell();
+                    OnRecvNPCSellHandler();
                     break;
                 case (short)ServerPacketIds.NPCRepair:
-                    NPCRepair((S.NPCRepair)p);
+                    OnRecvNPCRepairHandler((ServerPacket.NPCRepair)p);
                     break;
                 case (short)ServerPacketIds.NPCSRepair:
-                    NPCSRepair((S.NPCSRepair)p);
+                    OnRecvNPCSRepairHandler((ServerPacket.NPCSRepair)p);
                     break;
                 case (short)ServerPacketIds.NPCRefine:
-                    NPCRefine((S.NPCRefine)p);
+                    OnRecvNPCRefineHandler((ServerPacket.NPCRefine)p);
                     break;
                 case (short)ServerPacketIds.NPCCheckRefine:
-                    NPCCheckRefine((S.NPCCheckRefine)p);
+                    OnRecvNPCCheckRefineHandler((ServerPacket.NPCCheckRefine)p);
                     break;
                 case (short)ServerPacketIds.NPCCollectRefine:
-                    NPCCollectRefine((S.NPCCollectRefine)p);
+                    OnRecvNPCCollectRefineHandler((ServerPacket.NPCCollectRefine)p);
                     break;
                 case (short)ServerPacketIds.NPCReplaceWedRing:
-                    NPCReplaceWedRing((S.NPCReplaceWedRing)p);
+                    OnRecvNPCReplaceWedRingHandler((ServerPacket.NPCReplaceWedRing)p);
                     break;
                 case (short)ServerPacketIds.NPCStorage:
-                    NPCStorage();
+                    OnRecvNPCStorageHandler();
                     break;
                 case (short)ServerPacketIds.NPCRequestInput:
-                    NPCRequestInput((S.NPCRequestInput)p);
+                    OnRecvNPCRequestInputHandler((ServerPacket.NPCRequestInput)p);
                     break;
                 case (short)ServerPacketIds.SellItem:
-                    SellItem((S.SellItem)p);
+                    OnRecvSellItemHandler((ServerPacket.SellItem)p);
                     break;
                 case (short)ServerPacketIds.CraftItem:
-                    CraftItem((S.CraftItem)p);
+                    OnRecvCraftItemHandler((ServerPacket.CraftItem)p);
                     break;
                 case (short)ServerPacketIds.RepairItem:
-                    RepairItem((S.RepairItem)p);
+                    OnRecvRepairItemHandler((ServerPacket.RepairItem)p);
                     break;
                 case (short)ServerPacketIds.ItemRepaired:
-                    ItemRepaired((S.ItemRepaired)p);
+                    OnRecvItemRepairedHandler((ServerPacket.ItemRepaired)p);
                     break;
                 case (short)ServerPacketIds.ItemSlotSizeChanged:
-                    ItemSlotSizeChanged((S.ItemSlotSizeChanged)p);
+                    OnRecvItemSlotSizeChangedHandler((ServerPacket.ItemSlotSizeChanged)p);
                     break;
                 case (short)ServerPacketIds.ItemSealChanged:
-                    ItemSealChanged((S.ItemSealChanged)p);
+                    OnRecvItemSealChangedHandler((ServerPacket.ItemSealChanged)p);
                     break;
                 case (short)ServerPacketIds.NewMagic:
-                    NewMagic((S.NewMagic)p);
+                    OnRecvNewMagicHandler((ServerPacket.NewMagic)p);
                     break;
                 case (short)ServerPacketIds.MagicLeveled:
-                    MagicLeveled((S.MagicLeveled)p);
+                    OnRecvMagicLeveledHandler((ServerPacket.MagicLeveled)p);
                     break;
                 case (short)ServerPacketIds.Magic:
-                    Magic((S.Magic)p);
+                    OnRecvMagicHandler((ServerPacket.Magic)p);
                     break;
                 case (short)ServerPacketIds.MagicDelay:
-                    MagicDelay((S.MagicDelay)p);
+                    OnRecvMagicDelayHandler((ServerPacket.MagicDelay)p);
                     break;
                 case (short)ServerPacketIds.MagicCast:
-                    MagicCast((S.MagicCast)p);
+                    OnRecvMagicCastHandler((ServerPacket.MagicCast)p);
                     break;
                 case (short)ServerPacketIds.ObjectMagic:
-                    ObjectMagic((S.ObjectMagic)p);
+                    OnRecvObjectMagicHandler((ServerPacket.ObjectMagic)p);
                     break;
                 case (short)ServerPacketIds.ObjectProjectile:
-                    ObjectProjectile((S.ObjectProjectile)p);
+                    OnRecvObjectProjectileHandler((ServerPacket.ObjectProjectile)p);
                     break;
                 case (short)ServerPacketIds.ObjectEffect:
-                    ObjectEffect((S.ObjectEffect)p);
+                    OnRecvObjectEffectHandler((ServerPacket.ObjectEffect)p);
                     break;
                 case (short)ServerPacketIds.RangeAttack:
-                    RangeAttack((S.RangeAttack)p);
+                    OnRecvRangeAttackHandler((ServerPacket.RangeAttack)p);
                     break;
                 case (short)ServerPacketIds.Pushed:
-                    Pushed((S.Pushed)p);
+                    OnRecvPushedHandler((ServerPacket.Pushed)p);
                     break;
                 case (short)ServerPacketIds.ObjectPushed:
-                    ObjectPushed((S.ObjectPushed)p);
+                    OnRecvObjectPushedHandler((ServerPacket.ObjectPushed)p);
                     break;
                 case (short)ServerPacketIds.ObjectName:
-                    ObjectName((S.ObjectName)p);
+                    OnRecvObjectNameHandler((ServerPacket.ObjectName)p);
                     break;
                 case (short)ServerPacketIds.UserStorage:
-                    UserStorage((S.UserStorage)p);
+                    OnRecvUserStorageHandler((ServerPacket.UserStorage)p);
                     break;
                 case (short)ServerPacketIds.SwitchGroup:
-                    SwitchGroup((S.SwitchGroup)p);
+                    OnRecvSwitchGroupHandler((ServerPacket.SwitchGroup)p);
                     break;
                 case (short)ServerPacketIds.DeleteGroup:
-                    DeleteGroup();
+                    OnRecvDeleteGroupHandler();
                     break;
                 case (short)ServerPacketIds.DeleteMember:
-                    DeleteMember((S.DeleteMember)p);
+                    OnRecvDeleteMemberHandler((ServerPacket.DeleteMember)p);
                     break;
                 case (short)ServerPacketIds.GroupInvite:
-                    GroupInvite((S.GroupInvite)p);
+                    OnRecvGroupInviteHandler((ServerPacket.GroupInvite)p);
                     break;
                 case (short)ServerPacketIds.AddMember:
-                    AddMember((S.AddMember)p);
+                    OnRecvAddMemberHandler((ServerPacket.AddMember)p);
                     break;
                 case (short)ServerPacketIds.GroupMembersMap:
-                    GroupMembersMap((S.GroupMembersMap)p);
+                    OnRecvGroupMembersMapHandler((ServerPacket.GroupMembersMap)p);
                     break;
                 case (short)ServerPacketIds.SendMemberLocation:
-                    SendMemberLocation((S.SendMemberLocation)p);
+                    OnRecvSendMemberLocationHandler((ServerPacket.SendMemberLocation)p);
                     break;
                 case (short)ServerPacketIds.Revived:
-                    Revived();
+                    OnRecvRevivedHandler();
                     break;
                 case (short)ServerPacketIds.ObjectRevived:
-                    ObjectRevived((S.ObjectRevived)p);
+                    OnRecvObjectRevivedHandler((ServerPacket.ObjectRevived)p);
                     break;
                 case (short)ServerPacketIds.SpellToggle:
-                    SpellToggle((S.SpellToggle)p);
+                    OnRecvSpellToggleHandler((ServerPacket.SpellToggle)p);
                     break;
                 case (short)ServerPacketIds.ObjectHealth:
-                    ObjectHealth((S.ObjectHealth)p);
+                    OnRecvObjectHealthHandler((ServerPacket.ObjectHealth)p);
                     break;
                 case (short)ServerPacketIds.ObjectMana:
-                    ObjectMana((S.ObjectMana)p);
+                    OnRecvObjectManaHandler((ServerPacket.ObjectMana)p);
                     break;
                 case (short)ServerPacketIds.MapEffect:
-                    MapEffect((S.MapEffect)p);
+                    OnRecvMapEffectHandler((ServerPacket.MapEffect)p);
                     break;
                 case (short)ServerPacketIds.AllowObserve:
-                    AllowObserve = ((S.AllowObserve)p).Allow;
+                    AllowObserve = ((ServerPacket.AllowObserve)p).Allow;
                     break;
                 case (short)ServerPacketIds.ObjectRangeAttack:
-                    ObjectRangeAttack((S.ObjectRangeAttack)p);
+                    OnRecvObjectRangeAttackHandler((ServerPacket.ObjectRangeAttack)p);
                     break;
                 case (short)ServerPacketIds.AddBuff:
-                    AddBuff((S.AddBuff)p);
+                    OnRecvAddBuffHandler((ServerPacket.AddBuff)p);
                     break;
                 case (short)ServerPacketIds.RemoveBuff:
-                    RemoveBuff((S.RemoveBuff)p);
+                    OnRecvRemoveBuffHandler((ServerPacket.RemoveBuff)p);
                     break;
                 case (short)ServerPacketIds.PauseBuff:
-                    PauseBuff((S.PauseBuff)p);
+                    OnRecvPauseBuffHandler((ServerPacket.PauseBuff)p);
                     break;
                 case (short)ServerPacketIds.ObjectHidden:
-                    ObjectHidden((S.ObjectHidden)p);
+                    OnRecvObjectHiddenHandler((ServerPacket.ObjectHidden)p);
                     break;
                 case (short)ServerPacketIds.RefreshItem:
-                    RefreshItem((S.RefreshItem)p);
+                    OnRecvRefreshItemHandler((ServerPacket.RefreshItem)p);
                     break;
                 case (short)ServerPacketIds.ObjectSpell:
-                    ObjectSpell((S.ObjectSpell)p);
+                    OnRecvObjectSpellHandler((ServerPacket.ObjectSpell)p);
                     break;
                 case (short)ServerPacketIds.UserDash:
-                    UserDash((S.UserDash)p);
+                    OnRecvUserDashHandler((ServerPacket.UserDash)p);
                     break;
                 case (short)ServerPacketIds.ObjectDash:
-                    ObjectDash((S.ObjectDash)p);
+                    OnRecvObjectDashHandler((ServerPacket.ObjectDash)p);
                     break;
                 case (short)ServerPacketIds.UserDashFail:
-                    UserDashFail((S.UserDashFail)p);
+                    OnRecvUserDashFailHandler((ServerPacket.UserDashFail)p);
                     break;
                 case (short)ServerPacketIds.ObjectDashFail:
-                    ObjectDashFail((S.ObjectDashFail)p);
+                    OnRecvObjectDashFailHandler((ServerPacket.ObjectDashFail)p);
                     break;
                 case (short)ServerPacketIds.NPCConsign:
-                    NPCConsign();
+                    OnRecvNPCConsignHandler();
                     break;
                  
                 case (short)ServerPacketIds.ConsignItem:
-                    ConsignItem((S.ConsignItem)p);
+                    OnRecvConsignItemHandler((ServerPacket.ConsignItem)p);
                     break;
                  
                 case (short)ServerPacketIds.ObjectSitDown:
-                    ObjectSitDown((S.ObjectSitDown)p);
+                    OnRecvObjectSitDownHandler((ServerPacket.ObjectSitDown)p);
                     break;
                 case (short)ServerPacketIds.InTrapRock:
-                    S.InTrapRock packetdata = (S.InTrapRock)p;
+                    ServerPacket.InTrapRock packetdata = (ServerPacket.InTrapRock)p;
                     User.InTrapRock = packetdata.Trapped;
                     break;
                 case (short)ServerPacketIds.RemoveMagic:
-                    RemoveMagic((S.RemoveMagic)p);
+                    OnRecvRemoveMagicHandler((ServerPacket.RemoveMagic)p);
                     break;
                 case (short)ServerPacketIds.BaseStatsInfo:
-                    BaseStatsInfo((S.BaseStatsInfo)p);
+                    OnRecvBaseStatsInfoHandler((ServerPacket.BaseStatsInfo)p);
                     break;
                 case (short)ServerPacketIds.UserName:
-                    UserName((S.UserName)p);
+                    OnRecvUserNameHandler((ServerPacket.UserName)p);
                     break;
                 case (short)ServerPacketIds.ChatItemStats:
-                    ChatItemStats((S.ChatItemStats)p);
+                    OnRecvChatItemStatsHandler((ServerPacket.ChatItemStats)p);
                     break;
                 case (short)ServerPacketIds.GuildInvite:
-                    GuildInvite((S.GuildInvite)p);
+                    OnRecvGuildInviteHandler((ServerPacket.GuildInvite)p);
                     break;
                 case (short)ServerPacketIds.GuildMemberChange:
-                    GuildMemberChange((S.GuildMemberChange)p);
+                    OnRecvGuildMemberChangeHandler((ServerPacket.GuildMemberChange)p);
                     break;
                 case (short)ServerPacketIds.GuildNoticeChange:
-                    GuildNoticeChange((S.GuildNoticeChange)p);
+                    OnRecvGuildNoticeChangeHandler((ServerPacket.GuildNoticeChange)p);
                     break;
                 case (short)ServerPacketIds.GuildStatus:
-                    GuildStatus((S.GuildStatus)p);
+                    OnRecvGuildStatusHandler((ServerPacket.GuildStatus)p);
                     break;
                 case (short)ServerPacketIds.GuildExpGain:
-                    GuildExpGain((S.GuildExpGain)p);
+                    OnRecvGuildExpGainHandler((ServerPacket.GuildExpGain)p);
                     break;
                 case (short)ServerPacketIds.GuildNameRequest:
-                    GuildNameRequest((S.GuildNameRequest)p);
+                    OnRecvGuildNameRequestHandler((ServerPacket.GuildNameRequest)p);
                     break;
                 case (short)ServerPacketIds.GuildStorageGoldChange:
-                    GuildStorageGoldChange((S.GuildStorageGoldChange)p);
+                    OnRecvGuildStorageGoldChangeHandler((ServerPacket.GuildStorageGoldChange)p);
                     break;
                 case (short)ServerPacketIds.GuildStorageItemChange:
-                    GuildStorageItemChange((S.GuildStorageItemChange)p);
+                    OnRecvGuildStorageItemChangeHandler((ServerPacket.GuildStorageItemChange)p);
                     break;
                 case (short)ServerPacketIds.GuildStorageList:
-                    GuildStorageList((S.GuildStorageList)p);
+                    OnRecvGuildStorageListHandler((ServerPacket.GuildStorageList)p);
                     break;
                 case (short)ServerPacketIds.GuildRequestWar:
-                    GuildRequestWar((S.GuildRequestWar)p);
+                    OnRecvGuildRequestWarHandler((ServerPacket.GuildRequestWar)p);
                     break;
                 case (short)ServerPacketIds.DefaultNPC:
-                    DefaultNPC((S.DefaultNPC)p);
+                    OnRecvDefaultNPCHandler((ServerPacket.DefaultNPC)p);
                     break;
                 case (short)ServerPacketIds.NPCUpdate:
-                    NPCUpdate((S.NPCUpdate)p);
+                    OnRecvNPCUpdateHandler((ServerPacket.NPCUpdate)p);
                     break;
                 case (short)ServerPacketIds.NPCImageUpdate:
-                    NPCImageUpdate((S.NPCImageUpdate)p);
+                    OnRecvNPCImageUpdateHandler((ServerPacket.NPCImageUpdate)p);
                     break;
                 case (short)ServerPacketIds.MarriageRequest:
-                    MarriageRequest((S.MarriageRequest)p);
+                    OnRecvMarriageRequestHandler((ServerPacket.MarriageRequest)p);
                     break;
                 case (short)ServerPacketIds.DivorceRequest:
-                    DivorceRequest((S.DivorceRequest)p);
+                    OnRecvDivorceRequestHandler((ServerPacket.DivorceRequest)p);
                     break;
                 case (short)ServerPacketIds.MentorRequest:
-                    MentorRequest((S.MentorRequest)p);
+                    OnRecvMentorRequestHandler((ServerPacket.MentorRequest)p);
                     break;
                 case (short)ServerPacketIds.TradeRequest:
-                    TradeRequest((S.TradeRequest)p);
+                    OnRecvTradeRequestHandler((ServerPacket.TradeRequest)p);
                     break;
                 case (short)ServerPacketIds.TradeAccept:
-                    TradeAccept((S.TradeAccept)p);
+                    OnRecvTradeAcceptHandler((ServerPacket.TradeAccept)p);
                     break;
                 case (short)ServerPacketIds.TradeGold:
-                    TradeGold((S.TradeGold)p);
+                    OnRecvTradeGoldHandler((ServerPacket.TradeGold)p);
                     break;
                 case (short)ServerPacketIds.TradeItem:
-                    TradeItem((S.TradeItem)p);
+                    OnRecvTradeItemHandler((ServerPacket.TradeItem)p);
                     break;
                 case (short)ServerPacketIds.TradeConfirm:
-                    TradeConfirm();
+                    OnRecvTradeConfirm();
                     break;
                 case (short)ServerPacketIds.TradeCancel:
-                    TradeCancel((S.TradeCancel)p);
+                    OnRecvTradeCancelHandler((ServerPacket.TradeCancel)p);
                     break;
                  
                 case (short)ServerPacketIds.TransformUpdate:
-                    TransformUpdate((S.TransformUpdate)p);
+                    OnRecvTransformUpdateHandler((ServerPacket.TransformUpdate)p);
                     break;
                 case (short)ServerPacketIds.EquipSlotItem:
-                    EquipSlotItem((S.EquipSlotItem)p);
+                    OnRecvEquipSlotItemHandler((ServerPacket.EquipSlotItem)p);
                     break;
                 case (short)ServerPacketIds.FishingUpdate: 
                     break;
                 case (short)ServerPacketIds.ChangeQuest:
-                    ChangeQuest((S.ChangeQuest)p);
+                    OnRecvChangeQuestHandler((ServerPacket.ChangeQuest)p);
                     break;
                 case (short)ServerPacketIds.CompleteQuest:
-                    CompleteQuest((S.CompleteQuest)p);
+                    OnRecvCompleteQuestHandler((ServerPacket.CompleteQuest)p);
                     break;
                 case (short)ServerPacketIds.ShareQuest:
-                    ShareQuest((S.ShareQuest)p);
+                    OnRecvShareQuestHandler((ServerPacket.ShareQuest)p);
                     break;
                 case (short)ServerPacketIds.GainedQuestItem:
-                    GainedQuestItem((S.GainedQuestItem)p);
+                    OnRecvGainedQuestItemHandler((ServerPacket.GainedQuestItem)p);
                     break;
                 case (short)ServerPacketIds.DeleteQuestItem:
-                    DeleteQuestItem((S.DeleteQuestItem)p);
+                    OnRecvDeleteQuestItemHandler((ServerPacket.DeleteQuestItem)p);
                     break;
                 case (short)ServerPacketIds.CancelReincarnation:
                     User.ReincarnationStopTime = 0;
                     break;
                 case (short)ServerPacketIds.RequestReincarnation:
                     if (!User.Dead) return;
-                    RequestReincarnation();
+                    OnRecvRequestReincarnationHandler();
                     break;
                 case (short)ServerPacketIds.UserBackStep:
-                    UserBackStep((S.UserBackStep)p);
+                    OnRecvUserBackStepHandler((ServerPacket.UserBackStep)p);
                     break;
                 case (short)ServerPacketIds.ObjectBackStep:
-                    ObjectBackStep((S.ObjectBackStep)p);
+                    OnRecvObjectBackStepHandler((ServerPacket.ObjectBackStep)p);
                     break;
                 case (short)ServerPacketIds.UserDashAttack:
-                    UserDashAttack((S.UserDashAttack)p);
+                    OnRecvUserDashAttackHandler((ServerPacket.UserDashAttack)p);
                     break;
                 case (short)ServerPacketIds.ObjectDashAttack:
-                    ObjectDashAttack((S.ObjectDashAttack)p);
+                    OnRecvObjectDashAttackHandler((ServerPacket.ObjectDashAttack)p);
                     break;
                 case (short)ServerPacketIds.UserAttackMove://Warrior Skill - SlashingBurst
-                    UserAttackMove((S.UserAttackMove)p);
+                    OnRecvUserAttackMoveHandler((ServerPacket.UserAttackMove)p);
                     break;
                 case (short)ServerPacketIds.CombineItem:
-                    CombineItem((S.CombineItem)p);
+                    OnRecvCombineItemHandler((ServerPacket.CombineItem)p);
                     break;
                 case (short)ServerPacketIds.ItemUpgraded:
-                    ItemUpgraded((S.ItemUpgraded)p);
+                    OnRecvItemUpgradedHandler((ServerPacket.ItemUpgraded)p);
                     break;
                 case (short)ServerPacketIds.SetConcentration:
-                    SetConcentration((S.SetConcentration)p);
+                    OnRecvSetConcentrationHandler((ServerPacket.SetConcentration)p);
                     break;
                 case (short)ServerPacketIds.SetElemental:
-                    SetElemental((S.SetElemental)p);
+                    OnRecvSetElementalHandler((ServerPacket.SetElemental)p);
                     break;
                 case (short)ServerPacketIds.RemoveDelayedExplosion:
-                    RemoveDelayedExplosion((S.RemoveDelayedExplosion)p);
+                    OnRecvRemoveDelayedExplosionHandler((ServerPacket.RemoveDelayedExplosion)p);
                     break;
                 case (short)ServerPacketIds.ObjectDeco:
-                    ObjectDeco((S.ObjectDeco)p);
+                    OnRecvObjectDecoHandler((ServerPacket.ObjectDeco)p);
                     break;
                 case (short)ServerPacketIds.ObjectSneaking:
-                    ObjectSneaking((S.ObjectSneaking)p);
+                    OnRecvObjectSneakingHandler((ServerPacket.ObjectSneaking)p);
                     break;
                 case (short)ServerPacketIds.ObjectLevelEffects:
-                    ObjectLevelEffects((S.ObjectLevelEffects)p);
+                    OnRecvObjectLevelEffectsHandler((ServerPacket.ObjectLevelEffects)p);
                     break;
                 case (short)ServerPacketIds.SetBindingShot:
-                    SetBindingShot((S.SetBindingShot)p);
+                    OnRecvSetBindingShotHandler((ServerPacket.SetBindingShot)p);
                     break;
                 case (short)ServerPacketIds.SendOutputMessage:
-                    SendOutputMessage((S.SendOutputMessage)p);
+                    OnRecvSendOutputMessageHandler((ServerPacket.SendOutputMessage)p);
                     break;
                
                  
                 case (short)ServerPacketIds.ResizeInventory:
-                    ResizeInventory((S.ResizeInventory)p);
+                    OnRecvResizeInventoryHandler((ServerPacket.ResizeInventory)p);
                     break;
                 case (short)ServerPacketIds.ResizeStorage:
-                    ResizeStorage((S.ResizeStorage)p);
+                    OnRecvResizeStorageHandler((ServerPacket.ResizeStorage)p);
                     break;
                
                 case (short)ServerPacketIds.NPCPearlGoods:
-                    NPCPearlGoods((S.NPCPearlGoods)p);
+                    OnRecvNPCPearlGoodsHandler((ServerPacket.NPCPearlGoods)p);
                     break;
                 case (short)ServerPacketIds.FriendUpdate:
-                    FriendUpdate((S.FriendUpdate)p);
+                    OnRecvFriendUpdateHandler((ServerPacket.FriendUpdate)p);
                     break;
                 case (short)ServerPacketIds.LoverUpdate:
-                    LoverUpdate((S.LoverUpdate)p);
+                    OnRecvLoverUpdateHandler((ServerPacket.LoverUpdate)p);
                     break;
                 case (short)ServerPacketIds.MentorUpdate:
-                    MentorUpdate((S.MentorUpdate)p);
+                    OnRecvMentorUpdateHandler((ServerPacket.MentorUpdate)p);
                     break;
                 case (short)ServerPacketIds.GuildBuffList:
-                    GuildBuffList((S.GuildBuffList)p);
+                    OnRecvGuildBuffListHandler((ServerPacket.GuildBuffList)p);
                     break;
                 case (short)ServerPacketIds.GameShopInfo:
                      
@@ -1777,46 +1771,47 @@ namespace Exine.ExineScenes
                      
                     break;
                 case (short)ServerPacketIds.Rankings:
-                    Rankings((S.Rankings)p);
+                    OnRecvRankingsHandler((ServerPacket.Rankings)p);
                     break;
                 case (short)ServerPacketIds.Opendoor:
-                    Opendoor((S.Opendoor)p);
+                    OnRecvOpendoorHandler((ServerPacket.Opendoor)p);
                     break;
                 
                 case (short)ServerPacketIds.OpenBrowser:
-                    OpenBrowser((S.OpenBrowser)p);
+                    OnRecvOpenBrowserHandler((ServerPacket.OpenBrowser)p);
                     break;
                 case (short)ServerPacketIds.PlaySound:
-                    PlaySound((S.PlaySound)p);
+                    OnRecvPlaySoundHandler((ServerPacket.PlaySound)p);
                     break;
                 case (short)ServerPacketIds.SetTimer:
-                    SetTimer((S.SetTimer)p);
+                    OnRecvSetTimerHandler((ServerPacket.SetTimer)p);
                     break;
                 case (short)ServerPacketIds.ExpireTimer:
-                    ExpireTimer((S.ExpireTimer)p);
+                    OnRecvExpireTimerHandler((ServerPacket.ExpireTimer)p);
                     break;
                 case (short)ServerPacketIds.UpdateNotice:
-                    ShowNotice((S.UpdateNotice)p);
+                    OnRecvShowNoticeHandler((ServerPacket.UpdateNotice)p);
                     break;
                 case (short)ServerPacketIds.Roll:
-                    Roll((S.Roll)p);
+                    OnRecvRollHandler((ServerPacket.Roll)p);
                     break;
                 case (short)ServerPacketIds.SetCompass:
-                    SetCompass((S.SetCompass)p);
+                    OnRecvSetCompassHandler((ServerPacket.SetCompass)p);
                     break;
                 default:
-                    base.ProcessPacket(p);
+                    base.ProcessRecvPacket(p);
                     break;
             }
         }
 
-        private void KeepAlive(S.KeepAlive p)
+        #region OnRecv From Server Handler 
+        private void OnRecvKeepAliveHandler(ServerPacket.KeepAlive p)
         {
             if (p.Time == 0) return;
             CMain.PingTime = (CMain.Time - p.Time);
         }
        
-        private void MapInformation(S.MapInformation p)
+        private void OnRecvMapInformationHandler(ServerPacket.MapInformation p)
         {
             if (MapControl != null && !MapControl.IsDisposed)
                 MapControl.Dispose();
@@ -1825,13 +1820,13 @@ namespace Exine.ExineScenes
             InsertControl(0, MapControl);
         }
 
-        private void WorldMapSetup(S.WorldMapSetupInfo info)
+        private void OnRecvWorldMapSetupHandler(ServerPacket.WorldMapSetupInfo info)
         {
             BigMapDialog.WorldMapSetup(info.Setup);
             TeleportToNPCCost = info.TeleportToNPCCost;
         }
 
-        private void NewMapInfo(S.NewMapInfo info)
+        private void OnRecvNewMapInfoHandler(ServerPacket.NewMapInfo info)
         {
             BigMapRecord newRecord = new BigMapRecord() { Index = info.MapIndex, MapInfo = info.Info };
             CreateBigMapButtons(newRecord);
@@ -1881,7 +1876,7 @@ namespace Exine.ExineScenes
                 CreateBigMapButtons(record);
         }
 
-        private void SearchMapResult(S.SearchMapResult info)
+        private void OnRecvSearchMapResultHandler(ServerPacket.SearchMapResult info)
         {
             if (info.MapIndex == -1 && info.NPCIndex == 0)
             {
@@ -1914,7 +1909,7 @@ namespace Exine.ExineScenes
             return imageBytes;
         }
 
-        private void UserInformation(S.UserInformation p)
+        private void OnRecvUserInformationHandler(ServerPacket.UserInformation p)
         {
             User = new UserObject(p.ObjectID); 
             User.Load(p);
@@ -1935,10 +1930,10 @@ namespace Exine.ExineScenes
 
 
                     //k333123 240307 now!
-                    //SendToServer(C.UpdatePhoto)
+                    //SendToServer(ClientPacket.UpdatePhoto)
 
                     Console.WriteLine("@@@444 UpdatePhoto");
-                    Network.Enqueue(new C.UpdatePhoto { photoData = User.ExPortraitBytes, photoDataLen = User.ExPortraitLen }); //this cause server disconnect!
+                    Network.SendPacketToServer(new ClientPacket.UpdatePhoto { photoData = User.ExPortraitBytes, photoDataLen = User.ExPortraitLen }); //this cause server disconnect!
 
                 }
             } 
@@ -1956,19 +1951,19 @@ namespace Exine.ExineScenes
             Observing = p.Observer;
         }
         
-        private void UserSlotsRefresh(S.UserSlotsRefresh p)
+        private void OnRecvUserSlotsRefreshHandler(ServerPacket.UserSlotsRefresh p)
         {
             User.SetSlots(p);
         }
 
-        private void UserLocation(S.UserLocation p)
+        private void OnRecvUserLocationHandler(ServerPacket.UserLocation p)
         {
             MapControl.NextAction = 0;
             if (User.CurrentLocation == p.Location && User.Direction == p.Direction) return;
 
             if (Settings.DebugMode)
             {
-                ReceiveChat(new S.Chat { Message = "Displacement", Type = ChatType.System });
+                OnRecvReceiveChatHandler(new ServerPacket.Chat { Message = "Displacement", Type = ChatType.System });
             }
 
             MapControl.RemoveObject(User);
@@ -1993,18 +1988,18 @@ namespace Exine.ExineScenes
             User.SetAction();
         }
        
-        private void ReceiveChat(S.Chat p)
+        private void OnRecvReceiveChatHandler(ServerPacket.Chat p)
         {
             ExChatDialog.ReceiveChat(p.Message, p.Type);
         }
         
-        private void ObjectPlayer(S.ObjectPlayer p)
+        private void OnRecvObjectPlayerHandler(ServerPacket.ObjectPlayer p)
         { 
             PlayerObject player = new PlayerObject(p.ObjectID);
             player.Load(p); 
         }
 
-        private void ObjectRemove(S.ObjectRemove p)
+        private void OnRecvObjectRemoveHandler(ServerPacket.ObjectRemove p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -2017,7 +2012,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectTurn(S.ObjectTurn p)
+        private void OnRecvObjectTurnHandler(ServerPacket.ObjectTurn p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
 
@@ -2042,7 +2037,7 @@ namespace Exine.ExineScenes
         }
 
         
-        private void ObjectRest(S.ObjectRest p)
+        private void OnRecvObjectRestHandler(ServerPacket.ObjectRest p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
 
@@ -2060,7 +2055,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectWalk(S.ObjectWalk p)
+        private void OnRecvObjectWalkHandler(ServerPacket.ObjectWalk p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
               
@@ -2081,7 +2076,7 @@ namespace Exine.ExineScenes
             }
         }
         
-        private void ObjectRun(S.ObjectRun p)
+        private void OnRecvObjectRunHandler(ServerPacket.ObjectRun p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
              
@@ -2101,7 +2096,7 @@ namespace Exine.ExineScenes
             }
         }
         
-        private void ObjectChat(S.ObjectChat p)
+        private void OnRecvObjectChatHandler(ServerPacket.ObjectChat p)
         {
             ExChatDialog.ReceiveChat(p.Text, p.Type);
 
@@ -2133,7 +2128,7 @@ namespace Exine.ExineScenes
 
         }
        
-        private void MoveItem(S.MoveItem p)
+        private void OnRecvMoveItemHandler(ServerPacket.MoveItem p)
         {
             MirItemCell toCell, fromCell;
 
@@ -2191,7 +2186,7 @@ namespace Exine.ExineScenes
             CharacterDuraPanel.GetCharacterDura();
         }
         
-        private void EquipItem(S.EquipItem p)
+        private void OnRecvEquipItemHandler(ServerPacket.EquipItem p)
         {
             MirItemCell fromCell, toCell;
 
@@ -2230,7 +2225,7 @@ namespace Exine.ExineScenes
         }
        
         //hero equipment item
-        private void EquipSlotItem(S.EquipSlotItem p)
+        private void OnRecvEquipSlotItemHandler(ServerPacket.EquipSlotItem p)
         {
             MirItemCell fromCell;
             MirItemCell toCell;
@@ -2271,7 +2266,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
 
-        private void CombineItem(S.CombineItem p)
+        private void OnRecvCombineItemHandler(ServerPacket.CombineItem p)
         {
             MirItemCell fromCell = null;
             MirItemCell toCell = null;
@@ -2302,7 +2297,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void MergeItem(S.MergeItem p)
+        private void OnRecvMergeItemHandler(ServerPacket.MergeItem p)
         {
             MirItemCell toCell, fromCell;
 
@@ -2366,7 +2361,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
        
-        private void RemoveItem(S.RemoveItem p)
+        private void OnRecvRemoveItemHandler(ServerPacket.RemoveItem p)
         {
             MirItemCell toCell;
 
@@ -2407,7 +2402,7 @@ namespace Exine.ExineScenes
 
         }
        
-        private void RemoveSlotItem(S.RemoveSlotItem p)
+        private void OnRecvRemoveSlotItemHandler(ServerPacket.RemoveSlotItem p)
         {
             MirItemCell fromCell;
             MirItemCell toCell;
@@ -2446,7 +2441,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
        
-        private void TakeBackItem(S.TakeBackItem p)
+        private void OnRecvTakeBackItemHandler(ServerPacket.TakeBackItem p)
         {
             MirItemCell fromCell = StorageDialog.Grid[p.From];
 
@@ -2464,7 +2459,7 @@ namespace Exine.ExineScenes
             CharacterDuraPanel.GetCharacterDura();
         }
       
-        private void StoreItem(S.StoreItem p)
+        private void OnRecvStoreItemHandler(ServerPacket.StoreItem p)
         {
             MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
 
@@ -2480,7 +2475,7 @@ namespace Exine.ExineScenes
             fromCell.Item = null;
             User.RefreshStats();
         }
-        private void DepositRefineItem(S.DepositRefineItem p)
+        private void OnRecvDepositRefineItemHandler(ServerPacket.DepositRefineItem p)
         {
             MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
 
@@ -2497,7 +2492,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
 
-        private void RetrieveRefineItem(S.RetrieveRefineItem p)
+        private void OnRecvRetrieveRefineItemHandler(ServerPacket.RetrieveRefineItem p)
         {
             MirItemCell fromCell = RefineDialog.Grid[p.From];
             MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
@@ -2513,12 +2508,12 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
 
-        private void RefineCancel(S.RefineCancel p)
+        private void OnRecvRefineCancelHandler(ServerPacket.RefineCancel p)
         {
             RefineDialog.RefineReset();
         }
 
-        private void RefineItem(S.RefineItem p)
+        private void OnRecvRefineItemHandler(ServerPacket.RefineItem p)
         {
             RefineDialog.RefineReset();
             for (int i = 0; i < User.Inventory.Length; i++)
@@ -2532,7 +2527,7 @@ namespace Exine.ExineScenes
             ExNPCDialog.Hide();
         }
         
-        private void DepositTradeItem(S.DepositTradeItem p)
+        private void OnRecvDepositTradeItemHandler(ServerPacket.DepositTradeItem p)
         {
             MirItemCell fromCell = p.From < User.BeltIdx ? BeltDialog.Grid[p.From] : ExInventoryDialog.Grid[p.From - User.BeltIdx];
 
@@ -2550,7 +2545,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
        
-        private void RetrieveTradeItem(S.RetrieveTradeItem p)
+        private void OnRecvRetrieveTradeItemHandler(ServerPacket.RetrieveTradeItem p)
         {
             MirItemCell fromCell = TradeDialog.Grid[p.From];
             MirItemCell toCell = p.To < User.BeltIdx ? BeltDialog.Grid[p.To] : ExInventoryDialog.Grid[p.To - User.BeltIdx];
@@ -2567,7 +2562,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
        
-        private void SplitItem(S.SplitItem p)
+        private void OnRecvSplitItemHandler(ServerPacket.SplitItem p)
         {
             Bind(p.Item);
 
@@ -2625,7 +2620,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void SplitItem1(S.SplitItem1 p)
+        private void OnRecvSplitItem1Handler(ServerPacket.SplitItem1 p)
         {
             MirItemCell cell;
 
@@ -2650,7 +2645,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
         
-        private void UseItem(S.UseItem p)
+        private void OnRecvUseItemHandler(ServerPacket.UseItem p)
         {
             MirItemCell cell = null;
             bool hero = false;
@@ -2673,7 +2668,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
        
-        private void DropItem(S.DropItem p)
+        private void OnRecvDropItemHandler(ServerPacket.DropItem p)
         {
             MirItemCell cell;
             cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
@@ -2694,7 +2689,7 @@ namespace Exine.ExineScenes
 
         }
  
-        private void TransformUpdate(S.TransformUpdate p)
+        private void OnRecvTransformUpdateHandler(ServerPacket.TransformUpdate p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -2708,12 +2703,12 @@ namespace Exine.ExineScenes
             }
         }
  
-        private void CompleteQuest(S.CompleteQuest p)
+        private void OnRecvCompleteQuestHandler(ServerPacket.CompleteQuest p)
         {
             User.CompletedQuests = p.CompletedQuests;
         }
 
-        private void ShareQuest(S.ShareQuest p)
+        private void OnRecvShareQuestHandler(ServerPacket.ShareQuest p)
         {
             ClientQuestInfo quest = ExineMainScene.QuestInfoList.FirstOrDefault(e => e.Index == p.QuestIndex);
 
@@ -2721,12 +2716,12 @@ namespace Exine.ExineScenes
 
             ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}) 퀘스트를 공유하고 싶습니다. 수락하시겠습니까?", p.SharerName), MirMessageBoxButtons.YesNo);
 
-            messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.AcceptQuest { NPCIndex = 0, QuestIndex = quest.Index });
+            messageBox.YesButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.AcceptQuest { NPCIndex = 0, QuestIndex = quest.Index });
 
             messageBox.Show();
         }
 
-        private void ChangeQuest(S.ChangeQuest p)
+        private void OnRecvChangeQuestHandler(ServerPacket.ChangeQuest p)
         {
             switch (p.QuestState)
             {
@@ -2785,7 +2780,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void PlayerUpdate(S.PlayerUpdate p)
+        private void OnRecvPlayerUpdateHandler(ServerPacket.PlayerUpdate p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -2796,7 +2791,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void PlayerInspect(S.PlayerInspect p)
+        private void OnRecvPlayerInspectHandler(ServerPacket.PlayerInspect p)
         {
             InspectDialog.Items = p.Equipment;
 
@@ -2813,7 +2808,7 @@ namespace Exine.ExineScenes
             InspectDialog.RefreshInferface(p.IsHero);
             InspectDialog.Show();
         }
-        private void LogOutSuccess(S.LogOutSuccess p)
+        private void OnRecvLogOutSuccessHandler(ServerPacket.LogOutSuccess p)
         {
             for (int i = 0; i <= 3; i++)//Fix for orbs sound
                 SoundManager.StopSound(20000 + 126 * 10 + 5 + i);
@@ -2829,12 +2824,12 @@ namespace Exine.ExineScenes
 
             Dispose();
         }
-        private void LogOutFailed(S.LogOutFailed p)
+        private void OnRecvLogOutFailedHandler(ServerPacket.LogOutFailed p)
         {
             Enabled = true;
         }
 
-        private void ReturnToLogin(S.ReturnToLogin p)
+        private void OnRecvReturnToLoginHandler(ServerPacket.ReturnToLogin p)
         {
             User = null;
             if (Settings.Resolution != 1024)
@@ -2845,7 +2840,7 @@ namespace Exine.ExineScenes
             ExineMessageBox.Show("The person you was observing has logged off.");
         }
 
-        private void TimeOfDay(S.TimeOfDay p)
+        private void OnRecvTimeOfDayHandler(ServerPacket.TimeOfDay p)
         {
             Lights = p.Lights;
             switch (Lights)
@@ -2865,7 +2860,7 @@ namespace Exine.ExineScenes
                     break;
             }
         }
-        private void ChangeAMode(S.ChangeAMode p)
+        private void OnRecvChangeAModeHandler(ServerPacket.ChangeAMode p)
         {
             AMode = p.Mode;
 
@@ -2891,7 +2886,7 @@ namespace Exine.ExineScenes
                     break;
             }
         }
-        private void ChangePMode(S.ChangePMode p)
+        private void OnRecvChangePModeHandler(ServerPacket.ChangePMode p)
         {
             PMode = p.Mode;
             switch (p.Mode)
@@ -2914,7 +2909,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectItem(S.ObjectItem p)
+        private void OnRecvObjectItemHandler(ServerPacket.ObjectItem p)
         {
             ItemObject ob = new ItemObject(p.ObjectID);
             ob.Load(p);
@@ -2926,12 +2921,12 @@ namespace Exine.ExineScenes
             }
             */
         }
-        private void ObjectGold(S.ObjectGold p)
+        private void OnRecvObjectGoldHandler(ServerPacket.ObjectGold p)
         {
             ItemObject ob = new ItemObject(p.ObjectID);
             ob.Load(p);
         }
-        private void GainedItem(S.GainedItem p)
+        private void OnRecvGainedItemHandler(ServerPacket.GainedItem p)
         {
             Bind(p.Item);
             AddItem(p.Item);
@@ -2939,13 +2934,13 @@ namespace Exine.ExineScenes
 
             OutputMessage(string.Format(GameLanguage.YouGained, p.Item.FriendlyName));
         }
-        private void GainedQuestItem(S.GainedQuestItem p)
+        private void OnRecvGainedQuestItemHandler(ServerPacket.GainedQuestItem p)
         {
             Bind(p.Item);
             AddQuestItem(p.Item);
         }
 
-        private void GainedGold(S.GainedGold p)
+        private void OnRecvGainedGoldHandler(ServerPacket.GainedGold p)
         {
             if (p.Gold == 0) return;
 
@@ -2953,12 +2948,12 @@ namespace Exine.ExineScenes
             SoundManager.PlaySound(SoundList.Gold);
             OutputMessage(string.Format(GameLanguage.YouGained2, p.Gold, GameLanguage.Gold));
         }
-        private void LoseGold(S.LoseGold p)
+        private void OnRecvLoseGoldHandler(ServerPacket.LoseGold p)
         {
             Gold -= p.Gold;
             SoundManager.PlaySound(SoundList.Gold);
         }
-        private void GainedCredit(S.GainedCredit p)
+        private void OnRecvGainedCreditHandler(ServerPacket.GainedCredit p)
         {
             if (p.Credit == 0) return;
 
@@ -2966,12 +2961,12 @@ namespace Exine.ExineScenes
             SoundManager.PlaySound(SoundList.Gold);
             OutputMessage(string.Format(GameLanguage.YouGained2, p.Credit, GameLanguage.Credit));
         }
-        private void LoseCredit(S.LoseCredit p)
+        private void OnRecvLoseCreditHandler(ServerPacket.LoseCredit p)
         {
             Credit -= p.Credit;
             SoundManager.PlaySound(SoundList.Gold);
         }
-        private void ObjectMonster(S.ObjectMonster p)
+        private void OnRecvObjectMonsterHandler(ServerPacket.ObjectMonster p)
         {
             var found = false;
             var mob = (MonsterObject)MapControl.Objects.Find(ob => ob.ObjectID == p.ObjectID);
@@ -2981,7 +2976,7 @@ namespace Exine.ExineScenes
                 mob = new MonsterObject(p.ObjectID);
             mob.Load(p, found);
         }
-        private void ObjectAttack(S.ObjectAttack p)
+        private void OnRecvObjectAttackHandler(ServerPacket.ObjectAttack p)
         {
             if (p.ObjectID == User.ObjectID && !Observing) return;
 
@@ -3034,7 +3029,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void Struck(S.Struck p)
+        private void OnRecvStruckHandler(ServerPacket.Struck p)
         {
             LogTime = CMain.Time + Globals.LogDelay;
 
@@ -3042,7 +3037,7 @@ namespace Exine.ExineScenes
             User.BlizzardStopTime = 0;
             User.ClearMagic();
             if (User.ReincarnationStopTime > CMain.Time)
-                Network.Enqueue(new C.CancelReincarnation { });
+                Network.SendPacketToServer(new ClientPacket.CancelReincarnation { });
 
             ExineDirection dir = User.Direction;
             Point location = User.CurrentLocation;
@@ -3088,7 +3083,7 @@ namespace Exine.ExineScenes
             User.ActionFeed.Add(action);
 
         }
-        private void ObjectStruck(S.ObjectStruck p)
+        private void OnRecvObjectStruckHandler(ServerPacket.ObjectStruck p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -3136,7 +3131,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void DamageIndicator(S.DamageIndicator p)
+        private void OnRecvDamageIndicatorHandler(ServerPacket.DamageIndicator p)
         {
             if (Settings.DisplayDamage)
             {
@@ -3163,7 +3158,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void DuraChanged(S.DuraChanged p)
+        private void OnRecvDuraChangedHandler(ServerPacket.DuraChanged p)
         {
             UserItem item = null;
             for (int i = 0; i < User.Inventory.Length; i++)
@@ -3222,7 +3217,7 @@ namespace Exine.ExineScenes
 
             CharacterDuraPanel.UpdateCharacterDura(item);
         }
-        private void HealthChanged(S.HealthChanged p)
+        private void OnRecvHealthChangedHandler(ServerPacket.HealthChanged p)
         {
             User.HP = p.HP;
             User.MP = p.MP;
@@ -3230,7 +3225,7 @@ namespace Exine.ExineScenes
             User.PercentHealth = (byte)(User.HP / (float)User.Stats[Stat.HP] * 100);
         }
 
-        private void DeleteQuestItem(S.DeleteQuestItem p)
+        private void OnRecvDeleteQuestItemHandler(ServerPacket.DeleteQuestItem p)
         {
             for (int i = 0; i < User.QuestInventory.Length; i++)
             {
@@ -3246,7 +3241,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void DeleteItem(S.DeleteItem p)
+        private void OnRecvDeleteItemHandler(ServerPacket.DeleteItem p)
         {
             UserObject actor = null;
             for (int i = 0; i < User.Inventory.Length; i++)
@@ -3330,7 +3325,7 @@ namespace Exine.ExineScenes
             }
             actor?.RefreshStats();
         }
-        private void Death(S.Death p)
+        private void OnRecvDeathHandler(ServerPacket.Death p)
         {
             User.Dead = true;
 
@@ -3339,7 +3334,7 @@ namespace Exine.ExineScenes
 
             LogTime = 0;
         }
-        private void ObjectDied(S.ObjectDied p)
+        private void OnRecvObjectDiedHandler(ServerPacket.ObjectDied p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -3370,11 +3365,11 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void ColourChanged(S.ColourChanged p)
+        private void OnRecvColourChangedHandler(ServerPacket.ColourChanged p)
         {
             User.NameColour = p.NameColour;
         }
-        private void ObjectColourChanged(S.ObjectColourChanged p)
+        private void OnRecvObjectColourChangedHandler(ServerPacket.ObjectColourChanged p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -3387,7 +3382,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectGuildNameChanged(S.ObjectGuildNameChanged p)
+        private void OnRecvObjectGuildNameChangedHandler(ServerPacket.ObjectGuildNameChanged p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -3400,13 +3395,13 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void GainExperience(S.GainExperience p)
+        private void OnRecvGainExperienceHandler(ServerPacket.GainExperience p)
         {
             OutputMessage(string.Format(GameLanguage.ExperienceGained, p.Amount));
             MapObject.User.Experience += p.Amount;
         }
 
-        private void LevelChanged(S.LevelChanged p)
+        private void OnRecvLevelChangedHandler(ServerPacket.LevelChanged p)
         {
             User.Level = p.Level;
             User.Experience = p.Experience;
@@ -3418,7 +3413,7 @@ namespace Exine.ExineScenes
             ExChatDialog.ReceiveChat(GameLanguage.LevelUp, ChatType.LevelUp);
         }
         
-        private void ObjectLeveled(S.ObjectLeveled p)
+        private void OnRecvObjectLeveledHandler(ServerPacket.ObjectLeveled p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3429,7 +3424,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void ObjectHarvest(S.ObjectHarvest p)
+        private void OnRecvObjectHarvestHandler(ServerPacket.ObjectHarvest p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3439,7 +3434,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void ObjectHarvested(S.ObjectHarvested p)
+        private void OnRecvObjectHarvestedHandler(ServerPacket.ObjectHarvested p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3449,12 +3444,12 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void ObjectNPC(S.ObjectNPC p)
+        private void OnRecvObjectNPCHandler(ServerPacket.ObjectNPC p)
         {
             NPCObject ob = new NPCObject(p.ObjectID);
             ob.Load(p); 
         }
-        private void NPCResponse(S.NPCResponse p)
+        private void OnRecvNPCResponseHandler(ServerPacket.NPCResponse p)
         {
             NPCTime = 0;
             ExNPCDialog.BigButtons.Clear();
@@ -3478,12 +3473,12 @@ namespace Exine.ExineScenes
             QuestListDialog.Hide();
         }
 
-        private void NPCUpdate(S.NPCUpdate p)
+        private void OnRecvNPCUpdateHandler(ServerPacket.NPCUpdate p)
         {
             ExineMainScene.NPCID = p.NPCID; //Updates the client with the correct NPC ID if it's manually called from the client
         }
 
-        private void NPCImageUpdate(S.NPCImageUpdate p)
+        private void OnRecvNPCImageUpdateHandler(ServerPacket.NPCImageUpdate p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3498,13 +3493,13 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void DefaultNPC(S.DefaultNPC p)
+        private void OnRecvDefaultNPCHandler(ServerPacket.DefaultNPC p)
         {
             ExineMainScene.DefaultNPCID = p.ObjectID; //Updates the client with the correct Default NPC ID
         }
 
 
-        private void ObjectHide(S.ObjectHide p)
+        private void OnRecvObjectHideHandler(ServerPacket.ObjectHide p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3514,7 +3509,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void ObjectShow(S.ObjectShow p)
+        private void OnRecvObjectShowHandler(ServerPacket.ObjectShow p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3524,7 +3519,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void Poisoned(S.Poisoned p)
+        private void OnRecvPoisonedHandler(ServerPacket.Poisoned p)
         {
             var previousPoisons = User.Poison;
 
@@ -3540,7 +3535,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectPoisoned(S.ObjectPoisoned p)
+        private void OnRecvObjectPoisonedHandler(ServerPacket.ObjectPoisoned p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3550,7 +3545,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void MapChanged(S.MapChanged p)
+        private void OnRecvMapChangedHandler(ServerPacket.MapChanged p)
         {
             var isCurrentMap = (MapControl.Index == p.MapIndex);
 
@@ -3587,7 +3582,7 @@ namespace Exine.ExineScenes
             MapControl.FloorValid = false;
             MapControl.InputDelay = CMain.Time + 400;
         }
-        private void ObjectTeleportOut(S.ObjectTeleportOut p)
+        private void OnRecvObjectTeleportOutHandler(ServerPacket.ObjectTeleportOut p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3690,7 +3685,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void ObjectTeleportIn(S.ObjectTeleportIn p)
+        private void OnRecvObjectTeleportInHandler(ServerPacket.ObjectTeleportIn p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -3786,12 +3781,12 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void TeleportIn()
+        private void OnRecvTeleportInHandler()
         {
             User.Effects.Add(new Effect(Libraries.Magic, 260, 10, 500, User));
             SoundManager.PlaySound(SoundList.Teleport);
         }
-        private void NPCGoods(S.NPCGoods p)
+        private void OnRecvNPCGoodsHandler(ServerPacket.NPCGoods p)
         {
             for (int i = 0; i < p.List.Count; i++)
             {
@@ -3823,7 +3818,7 @@ namespace Exine.ExineScenes
                     break;
             }
         }
-        private void NPCPearlGoods(S.NPCPearlGoods p)
+        private void OnRecvNPCPearlGoodsHandler(ServerPacket.NPCPearlGoods p)
         {
             for (int i = 0; i < p.List.Count; i++)
             {
@@ -3839,37 +3834,37 @@ namespace Exine.ExineScenes
             ExNPCGoodsDialog.Show();
         }
 
-        private void NPCSell()
+        private void OnRecvNPCSellHandler()
         {
             if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Sell;
             NPCDropDialog.Show();
         }
-        private void NPCRepair(S.NPCRepair p)
+        private void OnRecvNPCRepairHandler(ServerPacket.NPCRepair p)
         {
             NPCRate = p.Rate;
             if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Repair;
             NPCDropDialog.Show();
         }
-        private void NPCStorage()
+        private void OnRecvNPCStorageHandler()
         {
             if (ExNPCDialog.Visible)
                 StorageDialog.Show();
         }
-        private void NPCRequestInput(S.NPCRequestInput p)
+        private void OnRecvNPCRequestInputHandler(ServerPacket.NPCRequestInput p)
         {
             ExineInputBox inputBox = new ExineInputBox("요청된 정보를 입력해주세요.");
 
             inputBox.OKButton.Click += (o1, e1) =>
             {
-                Network.Enqueue(new C.NPCConfirmInput { Value = inputBox.InputTextBox.Text, NPCID = p.NPCID, PageName = p.PageName });
+                Network.SendPacketToServer(new ClientPacket.NPCConfirmInput { Value = inputBox.InputTextBox.Text, NPCID = p.NPCID, PageName = p.PageName });
                 inputBox.Dispose();
             };
             inputBox.Show();
         }
 
-        private void NPCSRepair(S.NPCSRepair p)
+        private void OnRecvNPCSRepairHandler(ServerPacket.NPCSRepair p)
         {
             NPCRate = p.Rate;
             if (!ExNPCDialog.Visible) return;
@@ -3877,7 +3872,7 @@ namespace Exine.ExineScenes
             NPCDropDialog.Show();
         }
 
-        private void NPCRefine(S.NPCRefine p)
+        private void OnRecvNPCRefineHandler(ServerPacket.NPCRefine p)
         {
             NPCRate = p.Rate;
             if (!ExNPCDialog.Visible) return;
@@ -3891,20 +3886,20 @@ namespace Exine.ExineScenes
                 NPCDropDialog.Show();
         }
 
-        private void NPCCheckRefine(S.NPCCheckRefine p)
+        private void OnRecvNPCCheckRefineHandler(ServerPacket.NPCCheckRefine p)
         {
             if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.CheckRefine;
             NPCDropDialog.Show();
         }
 
-        private void NPCCollectRefine(S.NPCCollectRefine p)
+        private void OnRecvNPCCollectRefineHandler(ServerPacket.NPCCollectRefine p)
         {
             if (!ExNPCDialog.Visible) return;
             ExNPCDialog.Hide();
         }
 
-        private void NPCReplaceWedRing(S.NPCReplaceWedRing p)
+        private void OnRecvNPCReplaceWedRingHandler(ServerPacket.NPCReplaceWedRing p)
         {
             if (!ExNPCDialog.Visible) return;
             NPCRate = p.Rate;
@@ -3913,7 +3908,7 @@ namespace Exine.ExineScenes
         }
 
 
-        private void SellItem(S.SellItem p)
+        private void OnRecvSellItemHandler(ServerPacket.SellItem p)
         {
             MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
 
@@ -3930,7 +3925,7 @@ namespace Exine.ExineScenes
 
             User.RefreshStats();
         }
-        private void RepairItem(S.RepairItem p)
+        private void OnRecvRepairItemHandler(ServerPacket.RepairItem p)
         {
             MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
 
@@ -3938,14 +3933,14 @@ namespace Exine.ExineScenes
 
             cell.Locked = false;
         }
-        private void CraftItem(S.CraftItem p)
+        private void OnRecvCraftItemHandler(ServerPacket.CraftItem p)
         {
             if (!p.Success) return;
 
             CraftDialog.UpdateCraftCells();
             User.RefreshStats();
         }
-        private void ItemRepaired(S.ItemRepaired p)
+        private void OnRecvItemRepairedHandler(ServerPacket.ItemRepaired p)
         {
             UserItem item = null;
             for (int i = 0; i < User.Inventory.Length; i++)
@@ -3981,7 +3976,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ItemSlotSizeChanged(S.ItemSlotSizeChanged p)
+        private void OnRecvItemSlotSizeChangedHandler(ServerPacket.ItemSlotSizeChanged p)
         {
             UserItem item = null;
             for (int i = 0; i < User.Inventory.Length; i++)
@@ -4011,7 +4006,7 @@ namespace Exine.ExineScenes
             item.SetSlotSize(p.SlotSize);
         }
 
-        private void ItemSealChanged(S.ItemSealChanged p)
+        private void OnRecvItemSealChangedHandler(ServerPacket.ItemSealChanged p)
         {
             UserItem item = null;
             for (int i = 0; i < User.Inventory.Length; i++)
@@ -4047,7 +4042,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ItemUpgraded(S.ItemUpgraded p)
+        private void OnRecvItemUpgradedHandler(ServerPacket.ItemUpgraded p)
         {
             UserItem item = null;
             MirGridType grid = MirGridType.Inventory;
@@ -4085,7 +4080,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void NewMagic(S.NewMagic p)
+        private void OnRecvNewMagicHandler(ServerPacket.NewMagic p)
         {
             ClientMagic magic = p.Magic;
 
@@ -4099,7 +4094,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void RemoveMagic(S.RemoveMagic p)
+        private void OnRecvRemoveMagicHandler(ServerPacket.RemoveMagic p)
         {
             User.Magics.RemoveAt(p.PlaceId);
             User.RefreshStats();
@@ -4109,7 +4104,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void MagicLeveled(S.MagicLeveled p)
+        private void OnRecvMagicLeveledHandler(ServerPacket.MagicLeveled p)
         {
             UserObject actor = User;
 
@@ -4128,7 +4123,7 @@ namespace Exine.ExineScenes
                 break;
             }
         }
-        private void Magic(S.Magic p)
+        private void OnRecvMagicHandler(ServerPacket.Magic p)
         {
             User.Spell = p.Spell;
             User.Cast = p.Cast;
@@ -4143,7 +4138,7 @@ namespace Exine.ExineScenes
             magic.CastTime = CMain.Time;
         }
 
-        private void MagicDelay(S.MagicDelay p)
+        private void OnRecvMagicDelayHandler(ServerPacket.MagicDelay p)
         {
             ClientMagic magic;
            
@@ -4151,13 +4146,13 @@ namespace Exine.ExineScenes
             magic.Delay = p.Delay;
         }
 
-        private void MagicCast(S.MagicCast p)
+        private void OnRecvMagicCastHandler(ServerPacket.MagicCast p)
         {
             ClientMagic magic = User.GetMagic(p.Spell);
             magic.CastTime = CMain.Time;
         }
 
-        private void ObjectMagic(S.ObjectMagic p)
+        private void OnRecvObjectMagicHandler(ServerPacket.ObjectMagic p)
         {
             if (p.SelfBroadcast == false && p.ObjectID == User.ObjectID && !Observing) return;
 
@@ -4180,7 +4175,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectProjectile(S.ObjectProjectile p)
+        private void OnRecvObjectProjectileHandler(ServerPacket.ObjectProjectile p)
         {
             MapObject source = MapControl.GetObject(p.Source);
 
@@ -4210,7 +4205,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectEffect(S.ObjectEffect p)
+        private void OnRecvObjectEffectHandler(ServerPacket.ObjectEffect p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -4399,19 +4394,19 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void RangeAttack(S.RangeAttack p)
+        private void OnRecvRangeAttackHandler(ServerPacket.RangeAttack p)
         {
             User.TargetID = p.TargetID;
             User.TargetPoint = p.Target;
             User.Spell = p.Spell;
         }
 
-        private void Pushed(S.Pushed p)
+        private void OnRecvPushedHandler(ServerPacket.Pushed p)
         {
             User.ActionFeed.Add(new QueuedAction { Action = ExAction.Pushed, Direction = p.Direction, Location = p.Location });
         }
 
-        private void ObjectPushed(S.ObjectPushed p)
+        private void OnRecvObjectPushedHandler(ServerPacket.ObjectPushed p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -4425,7 +4420,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectName(S.ObjectName p)
+        private void OnRecvObjectNameHandler(ServerPacket.ObjectName p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -4437,7 +4432,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void UserStorage(S.UserStorage p)
+        private void OnRecvUserStorageHandler(ServerPacket.UserStorage p)
         {
             if (Storage.Length != p.Storage.Length)
             {
@@ -4452,15 +4447,15 @@ namespace Exine.ExineScenes
                 Bind(Storage[i]);
             }
         }
-        private void SwitchGroup(S.SwitchGroup p)
+        private void OnRecvSwitchGroupHandler(ServerPacket.SwitchGroup p)
         {
             GroupDialog.AllowGroup = p.AllowGroup;
 
             if (!p.AllowGroup && GroupDialog.GroupList.Count > 0)
-                DeleteGroup();
+                OnRecvDeleteGroupHandler();
         }
 
-        private void DeleteGroup()
+        private void OnRecvDeleteGroupHandler()
         {
             GroupDialog.GroupList.Clear();
             GroupDialog.GroupMembersMap.Clear();
@@ -4468,7 +4463,7 @@ namespace Exine.ExineScenes
             ExChatDialog.ReceiveChat("그룹을 탈퇴했습니다.", ChatType.Group);
         }
 
-        private void DeleteMember(S.DeleteMember p)
+        private void OnRecvDeleteMemberHandler(ServerPacket.DeleteMember p)
         {
             GroupDialog.GroupList.Remove(p.Name);
             GroupDialog.GroupMembersMap.Remove(p.Name);
@@ -4476,24 +4471,24 @@ namespace Exine.ExineScenes
             ExChatDialog.ReceiveChat(string.Format("-{0}이 그룹을 떠났습니다.", p.Name), ChatType.Group);
         }
 
-        private void GroupInvite(S.GroupInvite p)
+        private void OnRecvGroupInviteHandler(ServerPacket.GroupInvite p)
         {
             ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}과(와) 그룹을 하시겠습니까?", p.Name), MirMessageBoxButtons.YesNo);
 
             messageBox.YesButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.GroupInvite { AcceptInvite = true });
+                Network.SendPacketToServer(new ClientPacket.GroupInvite { AcceptInvite = true });
                 GroupDialog.Show();
             };
-            messageBox.NoButton.Click += (o, e) => Network.Enqueue(new C.GroupInvite { AcceptInvite = false });
+            messageBox.NoButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.GroupInvite { AcceptInvite = false });
             messageBox.Show();
         }
-        private void AddMember(S.AddMember p)
+        private void OnRecvAddMemberHandler(ServerPacket.AddMember p)
         {
             GroupDialog.GroupList.Add(p.Name);
             ExChatDialog.ReceiveChat(string.Format("-{0}이(가) 그룹에 가입했습니다.", p.Name), ChatType.Group);
         }
-        private void GroupMembersMap(S.GroupMembersMap p)
+        private void OnRecvGroupMembersMapHandler(ServerPacket.GroupMembersMap p)
         {
             if (!GroupDialog.GroupMembersMap.ContainsKey(p.PlayerName))
                 GroupDialog.GroupMembersMap.Add(p.PlayerName, p.PlayerMap);
@@ -4503,7 +4498,7 @@ namespace Exine.ExineScenes
                 GroupDialog.GroupMembersMap.Add(p.PlayerName, p.PlayerMap);
             }
         }
-        private void SendMemberLocation(S.SendMemberLocation p)
+        private void OnRecvSendMemberLocationHandler(ServerPacket.SendMemberLocation p)
         {
             if (!BigMapViewPort.PlayerLocations.ContainsKey(p.MemberName))
                 BigMapViewPort.PlayerLocations.Add(p.MemberName, p.MemberLocation);
@@ -4513,14 +4508,14 @@ namespace Exine.ExineScenes
                 BigMapViewPort.PlayerLocations.Add(p.MemberName, p.MemberLocation);
             }
         }
-        private void Revived()
+        private void OnRecvRevivedHandler()
         {
             User.SetAction();
             User.Dead = false;
             User.Effects.Add(new Effect(Libraries.Magic2, 1220, 20, 2000, User));
             SoundManager.PlaySound(SoundList.Revive);
         }
-        private void ObjectRevived(S.ObjectRevived p)
+        private void OnRecvObjectRevivedHandler(ServerPacket.ObjectRevived p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -4537,7 +4532,7 @@ namespace Exine.ExineScenes
                 return;
             }
         }
-        private void SpellToggle(S.SpellToggle p)
+        private void OnRecvSpellToggleHandler(ServerPacket.SpellToggle p)
         {
             UserObject actor = User;
             string prefix = string.Empty; 
@@ -4574,7 +4569,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectHealth(S.ObjectHealth p)
+        private void OnRecvObjectHealthHandler(ServerPacket.ObjectHealth p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -4586,7 +4581,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectMana(S.ObjectMana p)
+        private void OnRecvObjectManaHandler(ServerPacket.ObjectMana p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -4597,7 +4592,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void MapEffect(S.MapEffect p)
+        private void OnRecvMapEffectHandler(ServerPacket.MapEffect p)
         {
             switch (p.Effect)
             {
@@ -4613,7 +4608,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectRangeAttack(S.ObjectRangeAttack p)
+        private void OnRecvObjectRangeAttackHandler(ServerPacket.ObjectRangeAttack p)
         {
             if (p.ObjectID == User.ObjectID &&
                 !Observing) return;
@@ -4666,7 +4661,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void AddBuff(S.AddBuff p)
+        private void OnRecvAddBuffHandler(ServerPacket.AddBuff p)
         {
             ClientBuff buff = p.Buff;
 
@@ -4712,7 +4707,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void RemoveBuff(S.RemoveBuff p)
+        private void OnRecvRemoveBuffHandler(ServerPacket.RemoveBuff p)
         {
             if (User.ObjectID == p.ObjectID)
             {
@@ -4751,7 +4746,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void PauseBuff(S.PauseBuff p)
+        private void OnRecvPauseBuffHandler(ServerPacket.PauseBuff p)
         {
             if (User.ObjectID == p.ObjectID)
             {
@@ -4777,7 +4772,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectHidden(S.ObjectHidden p)
+        private void OnRecvObjectHiddenHandler(ServerPacket.ObjectHidden p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -4788,7 +4783,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectSneaking(S.ObjectSneaking p)
+        private void OnRecvObjectSneakingHandler(ServerPacket.ObjectSneaking p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -4799,7 +4794,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectLevelEffects(S.ObjectLevelEffects p)
+        private void OnRecvObjectLevelEffectsHandler(ServerPacket.ObjectLevelEffects p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -4815,7 +4810,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void RefreshItem(S.RefreshItem p)
+        private void OnRecvRefreshItemHandler(ServerPacket.RefreshItem p)
         {
             Bind(p.Item);
 
@@ -4849,19 +4844,19 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectSpell(S.ObjectSpell p)
+        private void OnRecvObjectSpellHandler(ServerPacket.ObjectSpell p)
         {
             SpellObject ob = new SpellObject(p.ObjectID);
             ob.Load(p);
         }
 
-        private void ObjectDeco(S.ObjectDeco p)
+        private void OnRecvObjectDecoHandler(ServerPacket.ObjectDeco p)
         {
             DecoObject ob = new DecoObject(p.ObjectID);
             ob.Load(p);
         }
 
-        private void UserDash(S.UserDash p)
+        private void OnRecvUserDashHandler(ServerPacket.UserDash p)
         {
             if (User.Direction == p.Direction && User.CurrentLocation == p.Location)
             {
@@ -4886,13 +4881,13 @@ namespace Exine.ExineScenes
             User.ActionFeed.Add(new QueuedAction { Action = action, Direction = p.Direction, Location = p.Location });
         }
 
-        private void UserDashFail(S.UserDashFail p)
+        private void OnRecvUserDashFailHandler(ServerPacket.UserDashFail p)
         {
             MapControl.NextAction = 0;
             User.ActionFeed.Add(new QueuedAction { Action = ExAction.DashFail, Direction = p.Direction, Location = p.Location });
         }
 
-        private void ObjectDash(S.ObjectDash p)
+        private void OnRecvObjectDashHandler(ServerPacket.ObjectDash p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -4912,7 +4907,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void ObjectDashFail(S.ObjectDashFail p)
+        private void OnRecvObjectDashFailHandler(ServerPacket.ObjectDashFail p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -4927,7 +4922,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void UserBackStep(S.UserBackStep p)
+        private void OnRecvUserBackStepHandler(ServerPacket.UserBackStep p)
         {
             if (User.Direction == p.Direction && User.CurrentLocation == p.Location)
             {
@@ -4937,7 +4932,7 @@ namespace Exine.ExineScenes
             User.ActionFeed.Add(new QueuedAction { Action = ExAction.Jump, Direction = p.Direction, Location = p.Location });
         }
 
-        private void ObjectBackStep(S.ObjectBackStep p)
+        private void OnRecvObjectBackStepHandler(ServerPacket.ObjectBackStep p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -4954,7 +4949,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void UserDashAttack(S.UserDashAttack p)
+        private void OnRecvUserDashAttackHandler(ServerPacket.UserDashAttack p)
         {
             if (User.Direction == p.Direction && User.CurrentLocation == p.Location)
             {
@@ -4965,7 +4960,7 @@ namespace Exine.ExineScenes
             User.ActionFeed.Add(new QueuedAction { Action = ExAction.DashAttack, Direction = p.Direction, Location = p.Location });
         }
 
-        private void ObjectDashAttack(S.ObjectDashAttack p)
+        private void OnRecvObjectDashAttackHandler(ServerPacket.ObjectDashAttack p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -4982,7 +4977,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void UserAttackMove(S.UserAttackMove p)//Warrior Skill - SlashingBurst
+        private void OnRecvUserAttackMoveHandler(ServerPacket.UserAttackMove p)//Warrior Skill - SlashingBurst
         {
             MapControl.NextAction = 0;
             if (User.CurrentLocation == p.Location && User.Direction == p.Direction) return;
@@ -5017,7 +5012,7 @@ namespace Exine.ExineScenes
             User.ActionFeed.Add(new QueuedAction { Action = ExAction.ONEHAND_STAND, Direction = p.Direction, Location = p.Location });
         }
 
-        private void SetConcentration(S.SetConcentration p)
+        private void OnRecvSetConcentrationHandler(ServerPacket.SetConcentration p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -5043,7 +5038,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void SetElemental(S.SetElemental p)
+        private void OnRecvSetElementalHandler(ServerPacket.SetElemental p)
         {
             for (int i = MapControl.Objects.Count - 1; i >= 0; i--)
             {
@@ -5065,7 +5060,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void RemoveDelayedExplosion(S.RemoveDelayedExplosion p)
+        private void OnRecvRemoveDelayedExplosionHandler(ServerPacket.RemoveDelayedExplosion p)
         {
             //if (p.ObjectID == User.ObjectID) return;
 
@@ -5074,7 +5069,7 @@ namespace Exine.ExineScenes
                 DelayedExplosionEffect.effectlist[effectid].Remove();
         }
 
-        private void SetBindingShot(S.SetBindingShot p)
+        private void OnRecvSetBindingShotHandler(ServerPacket.SetBindingShot p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -5109,19 +5104,19 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void SendOutputMessage(S.SendOutputMessage p)
+        private void OnRecvSendOutputMessageHandler(ServerPacket.SendOutputMessage p)
         {
             OutputMessage(p.Message, p.Type);
         }
 
-        private void NPCConsign()
+        private void OnRecvNPCConsignHandler()
         {
             if (!ExNPCDialog.Visible) return;
             NPCDropDialog.PType = PanelType.Consign;
             NPCDropDialog.Show();
         }
         
-        private void ConsignItem(S.ConsignItem p)
+        private void OnRecvConsignItemHandler(ServerPacket.ConsignItem p)
         {
             MirItemCell cell = ExInventoryDialog.GetCell(p.UniqueID) ?? BeltDialog.GetCell(p.UniqueID);
 
@@ -5136,7 +5131,7 @@ namespace Exine.ExineScenes
             User.RefreshStats();
         }
         
-        private void ObjectSitDown(S.ObjectSitDown p)
+        private void OnRecvObjectSitDownHandler(ServerPacket.ObjectSitDown p)
         {
             if (p.ObjectID == User.ObjectID) return;
 
@@ -5151,13 +5146,13 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void BaseStatsInfo(S.BaseStatsInfo p)
+        private void OnRecvBaseStatsInfoHandler(ServerPacket.BaseStatsInfo p)
         {
             User.CoreStats = p.Stats;
             User.RefreshStats();
         }
 
-        private void UserName(S.UserName p)
+        private void OnRecvUserNameHandler(ServerPacket.UserName p)
         {
             for (int i = 0; i < UserIdList.Count; i++)
                 if (UserIdList[i].Id == p.Id)
@@ -5169,7 +5164,7 @@ namespace Exine.ExineScenes
             HoverItem = null;
         }
 
-        private void ChatItemStats(S.ChatItemStats p)
+        private void OnRecvChatItemStatsHandler(ServerPacket.ChatItemStats p)
         {
             //for (int i = 0; i < ChatItemList.Count; i++)
             //    if (ChatItemList[i].ID == p.ChatItemId)
@@ -5179,17 +5174,17 @@ namespace Exine.ExineScenes
             //    }
         }
 
-        private void GuildInvite(S.GuildInvite p)
+        private void OnRecvGuildInviteHandler(ServerPacket.GuildInvite p)
         {
             ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0} 링에 가입하시겠습니까?", p.Name), MirMessageBoxButtons.YesNo);
 
-            messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.GuildInvite { AcceptInvite = true });
-            messageBox.NoButton.Click += (o, e) => Network.Enqueue(new C.GuildInvite { AcceptInvite = false });
+            messageBox.YesButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.GuildInvite { AcceptInvite = true });
+            messageBox.NoButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.GuildInvite { AcceptInvite = false });
 
             messageBox.Show();
         }
 
-        private void GuildNameRequest(S.GuildNameRequest p)
+        private void OnRecvGuildNameRequestHandler(ServerPacket.GuildNameRequest p)
         {
             ExineInputBox inputBox = new ExineInputBox("링 이름을 입력하세요. 3~20자 이내로 입력하세요.");
             inputBox.InputTextBox.TextBox.KeyPress += (o, e) =>
@@ -5205,32 +5200,32 @@ namespace Exine.ExineScenes
                     ExChatDialog.ReceiveChat("링 이름에는 \\ 기호를 사용할 수 없습니다!", ChatType.System);
                     inputBox.InputTextBox.Text = "";
                 }
-                Network.Enqueue(new C.GuildNameReturn { Name = inputBox.InputTextBox.Text });
+                Network.SendPacketToServer(new ClientPacket.GuildNameReturn { Name = inputBox.InputTextBox.Text });
                 inputBox.Dispose();
             };
             inputBox.Show();
         }
 
-        private void GuildRequestWar(S.GuildRequestWar p)
+        private void OnRecvGuildRequestWarHandler(ServerPacket.GuildRequestWar p)
         {
             ExineInputBox inputBox = new ExineInputBox("전쟁하고 싶은 길드를 입력하세요.");
 
             inputBox.OKButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.GuildWarReturn { Name = inputBox.InputTextBox.Text });
+                Network.SendPacketToServer(new ClientPacket.GuildWarReturn { Name = inputBox.InputTextBox.Text });
                 inputBox.Dispose();
             };
             inputBox.Show();
         }
 
-        private void GuildNoticeChange(S.GuildNoticeChange p)
+        private void OnRecvGuildNoticeChangeHandler(ServerPacket.GuildNoticeChange p)
         {
             if (p.update == -1)
                 GuildDialog.NoticeChanged = true;
             else
                 GuildDialog.NoticeChange(p.notice);
         }
-        private void GuildMemberChange(S.GuildMemberChange p)
+        private void OnRecvGuildMemberChangeHandler(ServerPacket.GuildMemberChange p)
         {
             switch (p.Status)
             {
@@ -5275,7 +5270,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void GuildStatus(S.GuildStatus p)
+        private void OnRecvGuildStatusHandler(ServerPacket.GuildStatus p)
         {
             if ((User.GuildName == "") && (p.GuildName != ""))
             {
@@ -5312,18 +5307,18 @@ namespace Exine.ExineScenes
             {
                 GuildDialog.EnabledBuffs.Clear();
                 GuildDialog.UpdateActiveStats();
-                RemoveBuff(new S.RemoveBuff { ObjectID = User.ObjectID, Type = BuffType.Guild });
+                OnRecvRemoveBuffHandler(new ServerPacket.RemoveBuff { ObjectID = User.ObjectID, Type = BuffType.Guild });
                 User.RefreshStats();
             }
         }
 
-        private void GuildExpGain(S.GuildExpGain p)
+        private void OnRecvGuildExpGainHandler(ServerPacket.GuildExpGain p)
         {
             //OutputMessage(string.Format("Guild Experience Gained {0}.", p.Amount));
             GuildDialog.Experience += p.Amount;
         }
 
-        private void GuildStorageGoldChange(S.GuildStorageGoldChange p)
+        private void OnRecvGuildStorageGoldChangeHandler(ServerPacket.GuildStorageGoldChange p)
         {
             switch (p.Type)
             {
@@ -5350,7 +5345,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void GuildStorageItemChange(S.GuildStorageItemChange p)
+        private void OnRecvGuildStorageItemChangeHandler(ServerPacket.GuildStorageItemChange p)
         {
             MirItemCell fromCell = null;
             MirItemCell toCell = null;
@@ -5433,7 +5428,7 @@ namespace Exine.ExineScenes
                     break;
             }
         }
-        private void GuildStorageList(S.GuildStorageList p)
+        private void OnRecvGuildStorageListHandler(ServerPacket.GuildStorageList p)
         {
             for (int i = 0; i < p.Items.Length; i++)
             {
@@ -5451,32 +5446,32 @@ namespace Exine.ExineScenes
          
         
 
-        private void MarriageRequest(S.MarriageRequest p)
+        private void OnRecvMarriageRequestHandler(ServerPacket.MarriageRequest p)
         {
             ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}이 당신에게 결혼을 요청했습니다.", p.Name), MirMessageBoxButtons.YesNo);
 
-            messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.MarriageReply { AcceptInvite = true });
-            messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.MarriageReply { AcceptInvite = false }); messageBox.Dispose(); };
+            messageBox.YesButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.MarriageReply { AcceptInvite = true });
+            messageBox.NoButton.Click += (o, e) => { Network.SendPacketToServer(new ClientPacket.MarriageReply { AcceptInvite = false }); messageBox.Dispose(); };
 
             messageBox.Show();
         }
 
-        private void DivorceRequest(S.DivorceRequest p)
+        private void OnRecvDivorceRequestHandler(ServerPacket.DivorceRequest p)
         {
             ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}이 이혼을 요청했습니다.", p.Name), MirMessageBoxButtons.YesNo);
 
-            messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.DivorceReply { AcceptInvite = true });
-            messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.DivorceReply { AcceptInvite = false }); messageBox.Dispose(); };
+            messageBox.YesButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.DivorceReply { AcceptInvite = true });
+            messageBox.NoButton.Click += (o, e) => { Network.SendPacketToServer(new ClientPacket.DivorceReply { AcceptInvite = false }); messageBox.Dispose(); };
 
             messageBox.Show();
         }
 
-        private void MentorRequest(S.MentorRequest p)
+        private void OnRecvMentorRequestHandler(ServerPacket.MentorRequest p)
         {
             ExineMessageBox messageBox = new ExineMessageBox(string.Format("{0}(레벨 {1})에서 {2}의 방법을 가르쳐 달라고 요청했습니다.", p.Name, p.Level, ExineMainScene.User.Class.ToString()), MirMessageBoxButtons.YesNo);
 
-            messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.MentorReply { AcceptInvite = true });
-            messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.MentorReply { AcceptInvite = false }); messageBox.Dispose(); };
+            messageBox.YesButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.MentorReply { AcceptInvite = true });
+            messageBox.NoButton.Click += (o, e) => { Network.SendPacketToServer(new ClientPacket.MentorReply { AcceptInvite = false }); messageBox.Dispose(); };
 
             messageBox.Show();
         }
@@ -5499,7 +5494,7 @@ namespace Exine.ExineScenes
             return false;
         }
 
-        private void GuildBuffList(S.GuildBuffList p)
+        private void OnRecvGuildBuffListHandler(ServerPacket.GuildBuffList p)
         {
             //getting the list of all guildbuffs on server?
             if (p.GuildBuffs.Count > 0)
@@ -5545,43 +5540,43 @@ namespace Exine.ExineScenes
             }
             else
             {
-                RemoveBuff(new S.RemoveBuff { ObjectID = User.ObjectID, Type = BuffType.Guild });
+                OnRecvRemoveBuffHandler(new ServerPacket.RemoveBuff { ObjectID = User.ObjectID, Type = BuffType.Guild });
             }
 
             User.RefreshStats();
         }
 
-        private void TradeRequest(S.TradeRequest p)
+        private void OnRecvTradeRequestHandler(ServerPacket.TradeRequest p)
         {
             ExineMessageBox messageBox = new ExineMessageBox(string.Format("플레이어 {0}이(가) 귀하와 거래를 요청했습니다.", p.Name), MirMessageBoxButtons.YesNo);
 
-            messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.TradeReply { AcceptInvite = true });
-            messageBox.NoButton.Click += (o, e) => { Network.Enqueue(new C.TradeReply { AcceptInvite = false }); messageBox.Dispose(); };
+            messageBox.YesButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.TradeReply { AcceptInvite = true });
+            messageBox.NoButton.Click += (o, e) => { Network.SendPacketToServer(new ClientPacket.TradeReply { AcceptInvite = false }); messageBox.Dispose(); };
 
             messageBox.Show();
         }
-        private void TradeAccept(S.TradeAccept p)
+        private void OnRecvTradeAcceptHandler(ServerPacket.TradeAccept p)
         {
             GuestTradeDialog.GuestName = p.Name;
             TradeDialog.TradeAccept();
         }
-        private void TradeGold(S.TradeGold p)
+        private void OnRecvTradeGoldHandler(ServerPacket.TradeGold p)
         {
             GuestTradeDialog.GuestGold = p.Amount;
             TradeDialog.ChangeLockState(false);
             TradeDialog.RefreshInterface();
         }
-        private void TradeItem(S.TradeItem p)
+        private void OnRecvTradeItemHandler(ServerPacket.TradeItem p)
         {
             GuestTradeDialog.GuestItems = p.TradeItems;
             TradeDialog.ChangeLockState(false);
             TradeDialog.RefreshInterface();
         }
-        private void TradeConfirm()
+        private void OnRecvTradeConfirm()
         {
             TradeDialog.TradeReset();
         }
-        private void TradeCancel(S.TradeCancel p)
+        private void OnRecvTradeCancelHandler(ServerPacket.TradeCancel p)
         {
             if (p.Unlock)
             {
@@ -5599,13 +5594,13 @@ namespace Exine.ExineScenes
         
         
 
-        private void ResizeInventory(S.ResizeInventory p)
+        private void OnRecvResizeInventoryHandler(ServerPacket.ResizeInventory p)
         {
             Array.Resize(ref User.Inventory, p.Size);
             ExInventoryDialog.RefreshInventory2();
         }
 
-        private void ResizeStorage(S.ResizeStorage p)
+        private void OnRecvResizeStorageHandler(ServerPacket.ResizeStorage p)
         {
             Array.Resize(ref Storage, p.Size);
             User.HasExpandedStorage = p.HasExpandedStorage;
@@ -5644,19 +5639,19 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void RequestReincarnation()
+        private void OnRecvRequestReincarnationHandler()
         {
             if (CMain.Time > User.DeadTime && User.CurrentAction == ExAction.Dead)
             {
                 ExineMessageBox messageBox = new ExineMessageBox("부활하시겠습니까?", MirMessageBoxButtons.YesNo);
 
-                messageBox.YesButton.Click += (o, e) => Network.Enqueue(new C.AcceptReincarnation());
+                messageBox.YesButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.AcceptReincarnation());
 
                 messageBox.Show();
             }
         }
 
-        private void FriendUpdate(S.FriendUpdate p)
+        private void OnRecvFriendUpdateHandler(ServerPacket.FriendUpdate p)
         {
             ExineMainScene.Scene.FriendDialog.Friends = p.Friends;
 
@@ -5666,7 +5661,7 @@ namespace Exine.ExineScenes
             }
         }
 
-        private void LoverUpdate(S.LoverUpdate p)
+        private void OnRecvLoverUpdateHandler(ServerPacket.LoverUpdate p)
         {
             ExineMainScene.Scene.RelationshipDialog.LoverName = p.Name;
             ExineMainScene.Scene.RelationshipDialog.Date = p.Date;
@@ -5675,7 +5670,7 @@ namespace Exine.ExineScenes
             ExineMainScene.Scene.RelationshipDialog.UpdateInterface();
         }
 
-        private void MentorUpdate(S.MentorUpdate p)
+        private void OnRecvMentorUpdateHandler(ServerPacket.MentorUpdate p)
         {
             ExineMainScene.Scene.MentorDialog.MentorName = p.Name;
             ExineMainScene.Scene.MentorDialog.MentorLevel = p.Level;
@@ -5685,7 +5680,65 @@ namespace Exine.ExineScenes
             ExineMainScene.Scene.MentorDialog.UpdateInterface();
         }
 
-        
+
+        public void OnRecvRankingsHandler(ServerPacket.Rankings p)
+        {
+            foreach (RankCharacterInfo info in p.ListingDetails)
+            {
+                if (RankingList.ContainsKey(info.PlayerId))
+                    RankingList[info.PlayerId] = info;
+                else
+                    RankingList.Add(info.PlayerId, info);
+            }
+            List<RankCharacterInfo> listings = new List<RankCharacterInfo>();
+            foreach (long id in p.Listings)
+                listings.Add(RankingList[id]);
+
+            RankingDialog.RecieveRanks(listings, p.RankType, p.MyRank, p.Count);
+        }
+
+        public void OnRecvOpendoorHandler(ServerPacket.Opendoor p)
+        {
+            MapControl.OpenDoor(p.DoorIndex, p.Close);
+        }
+
+
+        private void OnRecvOpenBrowserHandler(ServerPacket.OpenBrowser p)
+        {
+            BrowserHelper.OpenDefaultBrowser(p.Url);
+        }
+
+        public void OnRecvPlaySoundHandler(ServerPacket.PlaySound p)
+        {
+            SoundManager.PlaySound(p.Sound, false);
+        }
+        private void OnRecvSetTimerHandler(ServerPacket.SetTimer p)
+        {
+            ExineMainScene.Scene.TimerControl.AddTimer(p);
+        }
+
+        private void OnRecvExpireTimerHandler(ServerPacket.ExpireTimer p)
+        {
+            ExineMainScene.Scene.TimerControl.ExpireTimer(p.Key);
+        }
+
+        private void OnRecvSetCompassHandler(ServerPacket.SetCompass p)
+        {
+            ExineMainScene.Scene.CompassControl.SetPoint(p.Location);
+        }
+
+        private void OnRecvRollHandler(ServerPacket.Roll p)
+        {
+            //ExineMainScene.Scene.RollControl.Setup(p.Type, p.Page, p.Result, p.AutoRoll);
+        }
+
+        public void OnRecvShowNoticeHandler(ServerPacket.UpdateNotice p)
+        {
+            NoticeDialog.Update(p.Notice);
+        }
+
+        #endregion OnRecv From Server Handler 
+
         public void AddItem(UserItem item)
         {
             Redraw();
@@ -5815,6 +5868,7 @@ namespace Exine.ExineScenes
                 GuildBuffLabel.Dispose();
             GuildBuffLabel = null;
         }
+
 
         public ExineControl NameInfoLabel(UserItem item, bool inspect = false, bool hideDura = false)
         {
@@ -8645,7 +8699,7 @@ namespace Exine.ExineScenes
                 if (id == who.Id)
                     return who.UserName;
             }
-            Network.Enqueue(new C.RequestUserName { UserID = id });
+            Network.SendPacketToServer(new ClientPacket.RequestUserName { UserID = id });
             UserIdList.Add(new UserId() { Id = id, UserName = "Unknown" });
             return "";
         }
@@ -8661,62 +8715,6 @@ namespace Exine.ExineScenes
             public string Message;
             public long ExpireTime;
             public OutputMessageType Type;
-        }
-
-        public void Rankings(S.Rankings p)
-        {
-            foreach (RankCharacterInfo info in p.ListingDetails)
-            {
-                if (RankingList.ContainsKey(info.PlayerId))
-                    RankingList[info.PlayerId] = info;
-                else
-                    RankingList.Add(info.PlayerId, info);
-            }
-            List<RankCharacterInfo> listings = new List<RankCharacterInfo>();
-            foreach (long id in p.Listings)
-                listings.Add(RankingList[id]);
-
-            RankingDialog.RecieveRanks(listings, p.RankType, p.MyRank, p.Count);
-        }
-
-        public void Opendoor(S.Opendoor p)
-        {
-            MapControl.OpenDoor(p.DoorIndex, p.Close);
-        }
-
-
-        private void OpenBrowser(S.OpenBrowser p)
-        {
-            BrowserHelper.OpenDefaultBrowser(p.Url);
-        }
-
-        public void PlaySound(S.PlaySound p)
-        {
-            SoundManager.PlaySound(p.Sound, false);
-        }
-        private void SetTimer(S.SetTimer p)
-        {
-            ExineMainScene.Scene.TimerControl.AddTimer(p);
-        }
-
-        private void ExpireTimer(S.ExpireTimer p)
-        {
-            ExineMainScene.Scene.TimerControl.ExpireTimer(p.Key);
-        }
-
-        private void SetCompass(S.SetCompass p)
-        {
-            ExineMainScene.Scene.CompassControl.SetPoint(p.Location);
-        }
-
-        private void Roll(S.Roll p)
-        {
-            //ExineMainScene.Scene.RollControl.Setup(p.Type, p.Page, p.Result, p.AutoRoll);
-        }
-
-        public void ShowNotice(S.UpdateNotice p)
-        {
-            NoticeDialog.Update(p.Notice);
         }
 
         #region Disposable
@@ -9240,9 +9238,9 @@ namespace Exine.ExineScenes
                     if ((index < 0) || (M2CellInfo[x, y].MiddleIndex == -1)) continue;
                     if (M2CellInfo[x, y].MiddleIndex >= 0)    //M2P '> 199' changed to '>= 0' to include mir2 libraries. Fixes middle layer tile strips draw. Also changed in 'Draw mir3 middle layer' bellow.
                     {//mir3 mid layer is same level as front layer not real middle + it cant draw index -1 so 2 birds in one stone :p
-                        Size s = Libraries.MapLibs[M2CellInfo[x, y].MiddleIndex].GetSize(index);
+                        Size imgSize = Libraries.MapLibs[M2CellInfo[x, y].MiddleIndex].GetSize(index);
 
-                        if (s.Width != CellWidth || s.Height != CellHeight) continue;
+                        if (imgSize.Width != CellWidth || imgSize.Height != CellHeight) continue;
                     }
                     Libraries.MapLibs[M2CellInfo[x, y].MiddleIndex].Draw(index, drawX, drawY);
                 }
@@ -9264,7 +9262,7 @@ namespace Exine.ExineScenes
                     if (index == -1) continue;
                     int fileIndex = M2CellInfo[x, y].FrontIndex;
                     if (fileIndex == -1) continue;
-                    Size s = Libraries.MapLibs[fileIndex].GetSize(index);
+                    Size imgSize = Libraries.MapLibs[fileIndex].GetSize(index);
                     if (fileIndex == 200) continue; //fixes random bad spots on old school 4.map
                     if (M2CellInfo[x, y].DoorIndex > 0)
                     {
@@ -9283,7 +9281,7 @@ namespace Exine.ExineScenes
                         }
                     }
 
-                    if (index < 0 || ((s.Width != CellWidth || s.Height != CellHeight) && ((s.Width != CellWidth * 2) || (s.Height != CellHeight * 2)))) continue;
+                    if (index < 0 || ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) && ((imgSize.Width != CellWidth * 2) || (imgSize.Height != CellHeight * 2)))) continue;
                     Libraries.MapLibs[fileIndex].Draw(index, drawX, drawY);
                 }
             }
@@ -9334,7 +9332,7 @@ namespace Exine.ExineScenes
                     int index;
                     byte animation;
                     bool blend;
-                    Size s;
+                    Size imgSize;
                     #region Draw shanda's tile animation layer
                     index = M2CellInfo[x, y].TileAnimationImage;
                     animation = M2CellInfo[x, y].TileAnimationFrames;
@@ -9378,8 +9376,8 @@ namespace Exine.ExineScenes
                                     }
                                 }
                             }
-                            s = Libraries.MapLibs[M2CellInfo[x, y].MiddleIndex].GetSize(index);
-                            if ((s.Width != CellWidth || s.Height != CellHeight) && (s.Width != (CellWidth * 2) || s.Height != (CellHeight * 2)) && !blend)
+                            imgSize = Libraries.MapLibs[M2CellInfo[x, y].MiddleIndex].GetSize(index);
+                            if ((imgSize.Width != CellWidth || imgSize.Height != CellHeight) && (imgSize.Width != (CellWidth * 2) || imgSize.Height != (CellHeight * 2)) && !blend)
                             {
                                 Libraries.MapLibs[M2CellInfo[x, y].MiddleIndex].DrawUp(index, drawX, drawY);
                             }
@@ -9436,9 +9434,9 @@ namespace Exine.ExineScenes
                         }
                     }
 
-                    s = Libraries.MapLibs[fileIndex].GetSize(index);
-                    if (s.Width == CellWidth && s.Height == CellHeight && animation == 0) continue;                   //k333123 front tile to object draw!
-                    if ((s.Width == CellWidth * 2) && (s.Height == CellHeight * 2) && (animation == 0)) continue;     //k333123 front tile to object draw!
+                    imgSize = Libraries.MapLibs[fileIndex].GetSize(index);
+                    if (imgSize.Width == CellWidth && imgSize.Height == CellHeight && animation == 0) continue;                   //k333123 front tile to object draw!
+                    if ((imgSize.Width == CellWidth * 2) && (imgSize.Height == CellHeight * 2) && (animation == 0)) continue;     //k333123 front tile to object draw!
 
                     if (blend)
                     {
@@ -9816,7 +9814,7 @@ namespace Exine.ExineScenes
 
                             ExineMainScene.NPCTime = CMain.Time + 5000;
                             ExineMainScene.NPCID = npc.ObjectID;
-                            Network.Enqueue(new C.CallNPC { ObjectID = npc.ObjectID, Key = "[@Main]" });
+                            Network.SendPacketToServer(new ClientPacket.CallNPC { ObjectID = npc.ObjectID, Key = "[@Main]" });
                         }
                     }
                     break;
@@ -9850,7 +9848,7 @@ namespace Exine.ExineScenes
                             {
                                 ExineMainScene.InspectTime = CMain.Time + 500;
                                 InspectDialog.InspectID = player.ObjectID;
-                                Network.Enqueue(new C.Inspect { ObjectID = player.ObjectID });
+                                Network.SendPacketToServer(new ClientPacket.Inspect { ObjectID = player.ObjectID });
                                 return;
                             }
                         }
@@ -9894,7 +9892,7 @@ namespace Exine.ExineScenes
 
                     messageBox.YesButton.Click += (o, a) =>
                     {
-                        Network.Enqueue(new C.DropItem
+                        Network.SendPacketToServer(new ClientPacket.DropItem
                         {
                             UniqueID = cell.Item.UniqueID,
                             Count = 1,
@@ -9912,7 +9910,7 @@ namespace Exine.ExineScenes
                     amountBox.OKButton.Click += (o, a) =>
                     {
                         if (amountBox.Amount <= 0) return;
-                        Network.Enqueue(new C.DropItem
+                        Network.SendPacketToServer(new ClientPacket.DropItem
                         {
                             UniqueID = cell.Item.UniqueID,
                             Count = (ushort)amountBox.Amount,
@@ -9937,7 +9935,7 @@ namespace Exine.ExineScenes
                 {
                     if (amountBox.Amount > 0)
                     {
-                        Network.Enqueue(new C.DropGold { Amount = amountBox.Amount });
+                        Network.SendPacketToServer(new ClientPacket.DropGold { Amount = amountBox.Amount });
                     }
                 };
 
@@ -10181,7 +10179,7 @@ namespace Exine.ExineScenes
                             if (CMain.Time > ExineMainScene.PickUpTime)
                             {
                                 ExineMainScene.PickUpTime = CMain.Time + 200;
-                                Network.Enqueue(new C.PickUp());
+                                Network.SendPacketToServer(new ClientPacket.PickUp());
                             }
                             return;
                         }
@@ -10230,7 +10228,7 @@ namespace Exine.ExineScenes
                         if (CanFish(direction))
                         {
                             User.FishingTime = CMain.Time;
-                            Network.Enqueue(new C.FishingCast { Sitdown = true });
+                            Network.SendPacketToServer(new ClientPacket.FishingCast { Sitdown = true });
                             return;
                         }
 
@@ -10575,7 +10573,7 @@ namespace Exine.ExineScenes
             }
             else
             {
-                Network.Enqueue(new C.Magic { ObjectID = actor.ObjectID, Spell = magic.Spell, Direction = dir, TargetID = targetID, Location = location, SpellTargetLock = CMain.SpellTargetLock });
+                Network.SendPacketToServer(new ClientPacket.Magic { ObjectID = actor.ObjectID, Spell = magic.Spell, Direction = dir, TargetID = targetID, Location = location, SpellTargetLock = CMain.SpellTargetLock });
             }
         }
 
@@ -10692,7 +10690,7 @@ namespace Exine.ExineScenes
                 if (CMain.Time > _doorTime)
                 {
                     _doorTime = CMain.Time + 4000;
-                    Network.Enqueue(new C.Opendoor() { DoorIndex = DoorInfo.index });
+                    Network.SendPacketToServer(new ClientPacket.Opendoor() { DoorIndex = DoorInfo.index });
                 }
 
                 return false;
@@ -10702,7 +10700,7 @@ namespace Exine.ExineScenes
                 if (CMain.Time > _doorTime)
                 {
                     _doorTime = CMain.Time + 4000;
-                    Network.Enqueue(new C.Opendoor() { DoorIndex = DoorInfo.index });
+                    Network.SendPacketToServer(new ClientPacket.Opendoor() { DoorIndex = DoorInfo.index });
                 }
             }
             return true;
@@ -10840,8 +10838,6 @@ namespace Exine.ExineScenes
         }
 
         #endregion
-
-
 
         public void RemoveObject(MapObject ob)
         {

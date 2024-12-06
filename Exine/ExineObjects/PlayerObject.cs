@@ -3,8 +3,8 @@ using Exine.ExineNetwork;
 using Exine.ExineScenes;
 using Exine.ExineSounds;
 using Exine.ExineControls;
-using S = ServerPackets;
-using C = ClientPackets;
+//
+
 //using Exine.ExineScenes.Dialogs;
 using Exine.ExineScenes.ExDialogs;
 using System.Reflection;
@@ -167,7 +167,7 @@ namespace Exine.ExineObjects
 
         //내가 아닌 다른 플레이어가 로그인 하면 해당 정보를 읽어서 PlayerObject 객체의 내부 변수에 저장해준다.
         //나의 정보는 상속받은 UserObject 객체에서 Load 함수를 오버라이드 해서 처리된다.
-        public void Load(S.ObjectPlayer info)
+        public void Load(ServerPacket.ObjectPlayer info)
         {
             Name = info.Name;
             NameColour = info.NameColour;
@@ -286,7 +286,7 @@ namespace Exine.ExineObjects
 
             SetEffects();
         }
-        public void Update(S.PlayerUpdate info)
+        public void Update(ServerPacket.PlayerUpdate info)
         {
             Weapon = info.Weapon;
 			WeaponEffect = info.WeaponEffect;
@@ -421,8 +421,8 @@ namespace Exine.ExineObjects
                             ActionFeed.Add(new QueuedAction { Action = ExAction.PEACEMODE_SITDOWN, Direction = Direction, Location = CurrentLocation });
                             SetAction();
                             //!!!여기서 c.Turn같이 sitdown을 날리는 식으로 변경해야함.
-                            Network.Enqueue(
-                                new C.Rest
+                            Network.SendPacketToServer(
+                                new ClientPacket.Rest
                                 {
                                     Direction = Direction,
                                     IsRest = true,
@@ -1640,7 +1640,7 @@ namespace Exine.ExineObjects
                                     MapControl.NextAction = CMain.Time + 2500;
                                     ExineMainScene.SpellTime = CMain.Time + 2500; //Spell Delay
 
-                                    Network.Enqueue(new C.Magic { ObjectID = ExineMainScene.User.ObjectID, Spell = Spell, Direction = Direction, });
+                                    Network.SendPacketToServer(new ClientPacket.Magic { ObjectID = ExineMainScene.User.ObjectID, Spell = Spell, Direction = Direction, });
                                 }
                                 break;
                             case Spell.BladeAvalanche:
@@ -1814,7 +1814,7 @@ namespace Exine.ExineObjects
                                     {
                                         MapControl.NextAction = CMain.Time;
                                         ExineMainScene.SpellTime = CMain.Time + 250; //Spell Delay
-                                        if (JumpDistance != 0) Network.Enqueue(new C.Magic { Spell = Spell, Direction = Direction });
+                                        if (JumpDistance != 0) Network.SendPacketToServer(new ClientPacket.Magic { Spell = Spell, Direction = Direction });
                                     }
                                 }
                                 break;
@@ -1851,7 +1851,7 @@ namespace Exine.ExineObjects
                                 {
                                     uint targetID = (uint)action.Params[1];
                                     Point location = (Point)action.Params[2];
-                                    Network.Enqueue(new C.Magic { ObjectID = ExineMainScene.User.ObjectID, Spell = Spell, Direction = Direction, TargetID = targetID, Location = location });
+                                    Network.SendPacketToServer(new ClientPacket.Magic { ObjectID = ExineMainScene.User.ObjectID, Spell = Spell, Direction = Direction, TargetID = targetID, Location = location });
                                     MapControl.NextAction = CMain.Time + 1000;
                                     ExineMainScene.SpellTime = CMain.Time + 1500; //Spell Delay
                                 }
@@ -1878,7 +1878,7 @@ namespace Exine.ExineObjects
                                     {
                                         MapControl.NextAction = CMain.Time + 800;
                                         ExineMainScene.SpellTime = CMain.Time + 2500; //Spell Delay
-                                        Network.Enqueue(new C.Magic { ObjectID = ExineMainScene.User.ObjectID, Spell = Spell, Direction = Direction });
+                                        Network.SendPacketToServer(new ClientPacket.Magic { ObjectID = ExineMainScene.User.ObjectID, Spell = Spell, Direction = Direction });
                                     }
                                     break;
                                 }
@@ -1973,7 +1973,7 @@ namespace Exine.ExineObjects
                         case ExAction.ONEHAND_STAND:
                         case ExAction.TWOHAND_STAND:
                         case ExAction.BOWHAND_STAND:
-                            Network.Enqueue(new C.Turn { Direction = Direction });
+                            Network.SendPacketToServer(new ClientPacket.Turn { Direction = Direction });
                             MapControl.NextAction = CMain.Time + 2500;
                             ExineMainScene.CanRun = false;
                             break;
@@ -1985,7 +1985,7 @@ namespace Exine.ExineObjects
                         case ExAction.BOWHAND_WALK_RIGHT:
                         case ExAction.Sneek:
                             ExineMainScene.LastRunTime = CMain.Time;
-                            Network.Enqueue(new C.Walk { Direction = Direction });
+                            Network.SendPacketToServer(new ClientPacket.Walk { Direction = Direction });
                             ExineMainScene.Scene.MapControl.FloorValid = false;
                             ExineMainScene.CanRun = true;
                             MapControl.NextAction = CMain.Time + 2500;
@@ -1997,7 +1997,7 @@ namespace Exine.ExineObjects
                         case ExAction.BOWHAND_RUN_LEFT:
                         case ExAction.BOWHAND_RUN_RIGHT:
                             ExineMainScene.LastRunTime = CMain.Time;
-                            Network.Enqueue(new C.Run { Direction = Direction });
+                            Network.SendPacketToServer(new ClientPacket.Run { Direction = Direction });
                             ExineMainScene.Scene.MapControl.FloorValid = false;
                             MapControl.NextAction = CMain.Time + (Sprint ? 1000 : 2500);
                             break;
@@ -2018,7 +2018,7 @@ namespace Exine.ExineObjects
                             //CanSetAction = false;
                             break;
                         case ExAction.Mine:
-                            Network.Enqueue(new C.Attack { Direction = Direction, Spell = Spell.None });
+                            Network.SendPacketToServer(new ClientPacket.Attack { Direction = Direction, Spell = Spell.None });
                             ExineMainScene.AttackTime = CMain.Time + (1400 - Math.Min(370, (User.Level * 14)));
                             MapControl.NextAction = CMain.Time + 2500;
                             break;
@@ -2028,7 +2028,7 @@ namespace Exine.ExineObjects
                         case ExAction.TWOHAND_ATTACK1:
                         case ExAction.BOWHAND_ATTACK1:
 
-                            Network.Enqueue(new C.Attack { Direction = Direction, Spell = Spell });
+                            Network.SendPacketToServer(new ClientPacket.Attack { Direction = Direction, Spell = Spell });
 
                             if (Spell == Spell.Slaying)
                                 ExineMainScene.User.Slaying = false;
@@ -2045,10 +2045,10 @@ namespace Exine.ExineObjects
                             MapControl.NextAction = CMain.Time + 2500;
                             break;
                         case ExAction.Attack2:
-                            //Network.Enqueue(new C.Attack2 { Direction = Direction });
+                            //Network.Enqueue(new ClientPacket.Attack2 { Direction = Direction });
                             break;
                         case ExAction.Attack3:
-                            //Network.Enqueue(new C.Attack3 { Direction = Direction });
+                            //Network.Enqueue(new ClientPacket.Attack3 { Direction = Direction });
                             break;
                         //case MirAction.Attack4:
                         //    GameScene.AttackTime = CMain.Time;// + User.AttackSpeed;
@@ -2062,7 +2062,7 @@ namespace Exine.ExineObjects
                                 uint targetID = (uint)action.Params[0];
                                 Point location = (Point)action.Params[1];
 
-                                Network.Enqueue(new C.RangeAttack { Direction = Direction, Location = CurrentLocation, TargetID = targetID, TargetLocation = location });
+                                Network.SendPacketToServer(new ClientPacket.RangeAttack { Direction = Direction, Location = CurrentLocation, TargetID = targetID, TargetLocation = location });
                             }
                             break;
                         case ExAction.AttackRange2:
@@ -2072,7 +2072,7 @@ namespace Exine.ExineObjects
                                 uint targetID = (uint)action.Params[1];
                                 Point location = (Point)action.Params[2];
 
-                                Network.Enqueue(new C.Magic { ObjectID = ExineMainScene.User.ObjectID, Spell = Spell, Direction = Direction, TargetID = targetID, Location = location });
+                                Network.SendPacketToServer(new ClientPacket.Magic { ObjectID = ExineMainScene.User.ObjectID, Spell = Spell, Direction = Direction, TargetID = targetID, Location = location });
 
                                 if (Spell == Spell.FlashDash)
                                 {
@@ -2094,7 +2094,7 @@ namespace Exine.ExineObjects
                             }
                             else
                             {
-                                Network.Enqueue(new C.Harvest { Direction = Direction });
+                                Network.SendPacketToServer(new ClientPacket.Harvest { Direction = Direction });
                                 MapControl.NextAction = CMain.Time + 2500;
                             }
                             break;

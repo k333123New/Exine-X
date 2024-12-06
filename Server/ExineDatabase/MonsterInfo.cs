@@ -376,7 +376,7 @@ namespace Server.ExineDatabase
 
                 if (drop == null)
                 {
-                    MessageQueue.Enqueue(string.Format("Could not load Drop: {0}, Line {1}", name, lines[i]));
+                    MessageQueue.SendMsg(string.Format("Could not load Drop: {0}, Line {1}", name, lines[i]));
                     continue;
                 }
 
@@ -432,7 +432,7 @@ namespace Server.ExineDatabase
 
                 if (drop == null)
                 {
-                    MessageQueue.Enqueue(string.Format("Could not load Drop: {0}, Line {1}", name, line));
+                    MessageQueue.SendMsg(string.Format("Could not load Drop: {0}, Line {1}", name, line));
                     continue;
                 }
 

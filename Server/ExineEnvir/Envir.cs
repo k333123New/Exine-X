@@ -9,7 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using S = ServerPackets;
+
 using Newtonsoft.Json;
 
 
@@ -642,7 +642,7 @@ namespace Server.ExineEnvir
                 var canstartserver = CanStartEnvir();
                 if (canstartserver != "true")
                 {
-                    MessageQueue.Enqueue(canstartserver);
+                    MessageQueue.SendMsg(canstartserver);
                     StopEnvir();
                     _thread = null;
                     Stop();
@@ -774,7 +774,7 @@ namespace Server.ExineEnvir
                         if (Time >= userTime)
                         {
                             userTime = Time + Settings.Minute * 5;
-                            Broadcast(new S.Chat
+                            Broadcast(new ServerPacket.Chat
                             {
                                 Message = string.Format(GameLanguage.OnlinePlayers, Players.Count),
                                 Type = ChatType.Hint
@@ -784,7 +784,7 @@ namespace Server.ExineEnvir
                         if (LineMessages.Count > 0 && Time >= lineMessageTime)
                         {
                             lineMessageTime = Time + Settings.Minute * Settings.LineMessageTimer;
-                            Broadcast(new S.Chat
+                            Broadcast(new ServerPacket.Chat
                             {
                                 Message = LineMessages[Random.Next(LineMessages.Count)],
                                 Type = ChatType.LineMessage
@@ -810,7 +810,7 @@ namespace Server.ExineEnvir
                     // Get the line number from the stack frame
                     var line = frame.GetFileLineNumber();
 
-                    MessageQueue.Enqueue($"[inner workloop error. Line {line}]" + ex);
+                    MessageQueue.SendMsg($"[inner workloop error. Line {line}]" + ex);
                 }
 
                 StopNetwork();
@@ -828,7 +828,7 @@ namespace Server.ExineEnvir
                 // Get the line number from the stack frame
                 var line = frame.GetFileLineNumber();
 
-                MessageQueue.Enqueue($"[outer workloop error. Line {line}]" + ex);
+                MessageQueue.SendMsg($"[outer workloop error. Line {line}]" + ex);
             }
 
             _thread = null;
@@ -901,7 +901,7 @@ namespace Server.ExineEnvir
             {
                 if (ex is ThreadInterruptedException) return;
 
-                MessageQueue.Enqueue($"[threadloop error]" + ex);
+                MessageQueue.SendMsg($"[threadloop error]" + ex);
             }
         }
 
@@ -921,7 +921,7 @@ namespace Server.ExineEnvir
 
             if (oldLights == Lights) return;
 
-            Broadcast(new S.TimeOfDay { Lights = Lights });
+            Broadcast(new ServerPacket.TimeOfDay { Lights = Lights });
         }
 
         public void Process()
@@ -995,7 +995,7 @@ namespace Server.ExineEnvir
 
         public void Broadcast(Packet p)
         {
-            for (var i = 0; i < Players.Count; i++) Players[i].Enqueue(p);
+            for (var i = 0; i < Players.Count; i++) Players[i].SendPacketToClient(p);
         }
 
         public void RequiresBaseStatUpdate()
@@ -1146,7 +1146,7 @@ namespace Server.ExineEnvir
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
         }
 
@@ -1478,12 +1478,12 @@ namespace Server.ExineEnvir
 
                 if (LoadVersion < MinVersion)
                 {
-                    MessageQueue.Enqueue($"Cannot load a database version {LoadVersion}. Mininum supported is {MinVersion}.");
+                    MessageQueue.SendMsg($"Cannot load a database version {LoadVersion}. Mininum supported is {MinVersion}.");
                     return false;
                 }
                 else if (LoadVersion > Version)
                 {
-                    MessageQueue.Enqueue($"Cannot load a database version {LoadVersion}. Maximum supported is {Version}.");
+                    MessageQueue.SendMsg($"Cannot load a database version {LoadVersion}. Maximum supported is {Version}.");
                     return false; 
                 }
                 MapIndex = exineDb.mapIndex;
@@ -1831,7 +1831,7 @@ namespace Server.ExineEnvir
         {
             new Thread(() =>
             {
-                MessageQueue.Enqueue("Server rebooting...");
+                MessageQueue.SendMsg("Server rebooting...");
                 Stop();
                 Start();
             }).Start();
@@ -1861,7 +1861,7 @@ namespace Server.ExineEnvir
                 BuffInfoList.Add(buff);
             }
 
-            MessageQueue.Enqueue($"{BuffInfoList.Count} Buffs Loaded.");
+            MessageQueue.SendMsg($"{BuffInfoList.Count} Buffs Loaded.");
 
             RecipeInfoList.Clear();
             foreach (var recipe in Directory.GetFiles(Settings.RecipePath, "*.txt")
@@ -1871,13 +1871,13 @@ namespace Server.ExineEnvir
                 RecipeInfoList.Add(new RecipeInfo(recipe));
             }
 
-            MessageQueue.Enqueue($"{RecipeInfoList.Count} Recipes Loaded.");
+            MessageQueue.SendMsg($"{RecipeInfoList.Count} Recipes Loaded.");
 
             for (var i = 0; i < MapInfoList.Count; i++)
             {
                 MapInfoList[i].CreateMap();
             }
-            MessageQueue.Enqueue($"{MapInfoList.Count} Maps Loaded.");
+            MessageQueue.SendMsg($"{MapInfoList.Count} Maps Loaded.");
 
             for (var i = 0; i < ItemInfoList.Count; i++)
             {
@@ -1900,14 +1900,14 @@ namespace Server.ExineEnvir
                     if (DragonSystem.Load()) DragonSystem.Info.LoadDrops();
                 }
 
-                MessageQueue.Enqueue("Dragon Loaded.");
+                MessageQueue.SendMsg("Dragon Loaded.");
             }
 
             DefaultNPC = NPCScript.GetOrAdd((uint)Random.Next(1000000, 1999999), Settings.DefaultNPCFilename, NPCScriptType.AutoPlayer);
             MonsterNPC = NPCScript.GetOrAdd((uint)Random.Next(2000000, 2999999), Settings.MonsterNPCFilename, NPCScriptType.AutoMonster);
             RobotNPC = NPCScript.GetOrAdd((uint)Random.Next(3000000, 3999999), Settings.RobotNPCFilename, NPCScriptType.Robot);
 
-            MessageQueue.Enqueue("Envir Started.");
+            MessageQueue.SendMsg("Envir Started.");
         }
         private void StartNetwork()
         {
@@ -1930,7 +1930,7 @@ namespace Server.ExineEnvir
                 _StatusPort.BeginAcceptTcpClient(StatusConnection, null);
             }
 
-            MessageQueue.Enqueue("Network Started.");
+            MessageQueue.SendMsg("Network Started.");
         }
 
         private void StopEnvir()
@@ -1947,7 +1947,7 @@ namespace Server.ExineEnvir
 
             GC.Collect();
 
-            MessageQueue.Enqueue("Envir Stopped.");
+            MessageQueue.SendMsg("Envir Stopped.");
         }
         private void StopNetwork()
         {
@@ -1993,7 +1993,7 @@ namespace Server.ExineEnvir
 
 
             StatusConnections.Clear();
-            MessageQueue.Enqueue("Network Stopped.");
+            MessageQueue.SendMsg("Network Stopped.");
         }
 
         private void CleanUp()
@@ -2050,7 +2050,7 @@ namespace Server.ExineEnvir
             }
             catch (Exception e)
             {
-                MessageQueue.Enqueue(e.ToString());
+                MessageQueue.SendMsg(e.ToString());
             }
 
             try
@@ -2078,7 +2078,7 @@ namespace Server.ExineEnvir
                     {
                         UpdateIPBlock(ipAddress, TimeSpan.FromSeconds(Settings.IPBlockSeconds));
 
-                        MessageQueue.Enqueue(ipAddress + " Disconnected, Too many connections.");
+                        MessageQueue.SendMsg(ipAddress + " Disconnected, Too many connections.");
                     }
                     else
                     {
@@ -2097,7 +2097,7 @@ namespace Server.ExineEnvir
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
             finally
             {
@@ -2121,7 +2121,7 @@ namespace Server.ExineEnvir
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
             finally
             {
@@ -2133,11 +2133,11 @@ namespace Server.ExineEnvir
             }
         }
 
-        public void NewAccount(ClientPackets.NewAccount p, ExineConnection c)
+        public void NewAccount(ClientPacket.NewAccount p, ExineConnection c)
         {
             if (!Settings.AllowNewAccount)
             {
-                c.Enqueue(new ServerPackets.NewAccount { Result = 0 });
+                c.SendPacketToClient(new ServerPacket.NewAccount { Result = 0 });
                 return;
             }
 
@@ -2145,7 +2145,7 @@ namespace Server.ExineEnvir
             if (!string.IsNullOrWhiteSpace(p.AccountID) && p.AccountID.Length > 20)
             {
                 Console.WriteLine(p.AccountID + " is not MatchRegex");
-                c.Enqueue(new ServerPackets.NewAccount { Result = 1 });
+                c.SendPacketToClient(new ServerPacket.NewAccount { Result = 1 });
                 return;
             }
 
@@ -2153,31 +2153,31 @@ namespace Server.ExineEnvir
             if (!string.IsNullOrWhiteSpace(p.Password) && p.Password.Length < 4)
             {
                 Console.WriteLine(p.Password + " is not MatchRegex");
-                c.Enqueue(new ServerPackets.NewAccount { Result = 2 });
+                c.SendPacketToClient(new ServerPacket.NewAccount { Result = 2 });
                 return;
             }
             if (!string.IsNullOrWhiteSpace(p.EMailAddress) && !EMailReg.IsMatch(p.EMailAddress) ||
                 p.EMailAddress.Length > 50)
             {
-                c.Enqueue(new ServerPackets.NewAccount { Result = 3 });
+                c.SendPacketToClient(new ServerPacket.NewAccount { Result = 3 });
                 return;
             }
 
             if (!string.IsNullOrWhiteSpace(p.UserName) && p.UserName.Length > 20)
             {
-                c.Enqueue(new ServerPackets.NewAccount { Result = 4 });
+                c.SendPacketToClient(new ServerPacket.NewAccount { Result = 4 });
                 return;
             }
 
             if (!string.IsNullOrWhiteSpace(p.SecretQuestion) && p.SecretQuestion.Length > 30)
             {
-                c.Enqueue(new ServerPackets.NewAccount { Result = 5 });
+                c.SendPacketToClient(new ServerPacket.NewAccount { Result = 5 });
                 return;
             }
 
             if (!string.IsNullOrWhiteSpace(p.SecretAnswer) && p.SecretAnswer.Length > 30)
             {
-                c.Enqueue(new ServerPackets.NewAccount { Result = 6 });
+                c.SendPacketToClient(new ServerPacket.NewAccount { Result = 6 });
                 return;
             }
 
@@ -2185,18 +2185,18 @@ namespace Server.ExineEnvir
             {
                 if (AccountExists(p.AccountID))
                 {
-                    c.Enqueue(new ServerPackets.NewAccount { Result = 7 });
+                    c.SendPacketToClient(new ServerPacket.NewAccount { Result = 7 });
                     return;
                 }
 
                 AccountList.Add(new AccountInfo(p) { Index = ++NextAccountID, CreationIP = c.IPAddress });
 
 
-                c.Enqueue(new ServerPackets.NewAccount { Result = 8 });
+                c.SendPacketToClient(new ServerPacket.NewAccount { Result = 8 });
             }
         }
 
-        public int HTTPNewAccount(ClientPackets.NewAccount p, string ip)
+        public int HTTPNewAccount(ClientPacket.NewAccount p, string ip)
         {
             if (!Settings.AllowNewAccount)
             {
@@ -2246,30 +2246,30 @@ namespace Server.ExineEnvir
             }
         }
 
-        public void ChangePassword(ClientPackets.ChangePassword p, ExineConnection c)
+        public void ChangePassword(ClientPacket.ChangePassword p, ExineConnection c)
         {
             if (!Settings.AllowChangePassword)
             {
-                c.Enqueue(new ServerPackets.ChangePassword { Result = 0 });
+                c.SendPacketToClient(new ServerPacket.ChangePassword { Result = 0 });
                 return;
             }
 
             //if (!AccountIDReg.IsMatch(p.AccountID))//231107
             if (!string.IsNullOrWhiteSpace(p.AccountID) && p.AccountID.Length > 20)
             {
-                c.Enqueue(new ServerPackets.ChangePassword { Result = 1 });
+                c.SendPacketToClient(new ServerPacket.ChangePassword { Result = 1 });
                 return;
             }
 
             if (!PasswordReg.IsMatch(p.CurrentPassword))
             {
-                c.Enqueue(new ServerPackets.ChangePassword { Result = 2 });
+                c.SendPacketToClient(new ServerPacket.ChangePassword { Result = 2 });
                 return;
             }
 
             if (!PasswordReg.IsMatch(p.NewPassword))
             {
-                c.Enqueue(new ServerPackets.ChangePassword { Result = 3 });
+                c.SendPacketToClient(new ServerPacket.ChangePassword { Result = 3 });
                 return;
             }
 
@@ -2277,7 +2277,7 @@ namespace Server.ExineEnvir
 
             if (account == null)
             {
-                c.Enqueue(new ServerPackets.ChangePassword { Result = 4 });
+                c.SendPacketToClient(new ServerPacket.ChangePassword { Result = 4 });
                 return;
             }
 
@@ -2285,7 +2285,7 @@ namespace Server.ExineEnvir
             {
                 if (account.ExpiryDate > Now)
                 {
-                    c.Enqueue(new ServerPackets.ChangePasswordBanned { Reason = account.BanReason, ExpiryDate = account.ExpiryDate });
+                    c.SendPacketToClient(new ServerPacket.ChangePasswordBanned { Reason = account.BanReason, ExpiryDate = account.ExpiryDate });
                     return;
                 }
                 account.Banned = false;
@@ -2296,39 +2296,39 @@ namespace Server.ExineEnvir
             p.CurrentPassword = Utils.Crypto.HashPassword(p.CurrentPassword, account.Salt);
             if (string.CompareOrdinal(account.Password, p.CurrentPassword) != 0)
             {
-                c.Enqueue(new ServerPackets.ChangePassword { Result = 5 });
+                c.SendPacketToClient(new ServerPacket.ChangePassword { Result = 5 });
                 return;
             }
 
             account.Password = p.NewPassword;
             account.RequirePasswordChange = false;
-            c.Enqueue(new ServerPackets.ChangePassword { Result = 6 });
+            c.SendPacketToClient(new ServerPacket.ChangePassword { Result = 6 });
         }
-        public void Login(ClientPackets.Login p, ExineConnection c)
+        public void Login(ClientPacket.Login p, ExineConnection c)
         {
             if (!Settings.AllowLogin)
             {
-                c.Enqueue(new ServerPackets.Login { Result = 0 });
+                c.SendPacketToClient(new ServerPacket.Login { Result = 0 });
                 return;
             }
 
             //if (!AccountIDReg.IsMatch(p.AccountID))//231107
             if (!string.IsNullOrWhiteSpace(p.AccountID) && p.AccountID.Length > 20)
             {
-                c.Enqueue(new ServerPackets.Login { Result = 1 });
+                c.SendPacketToClient(new ServerPacket.Login { Result = 1 });
                 return;
             }
 
             if (!PasswordReg.IsMatch(p.Password))
             {
-                c.Enqueue(new ServerPackets.Login { Result = 2 });
+                c.SendPacketToClient(new ServerPacket.Login { Result = 2 });
                 return;
             }
             var account = GetAccount(p.AccountID);
 
             if (account == null)
             {
-                c.Enqueue(new ServerPackets.Login { Result = 3 });
+                c.SendPacketToClient(new ServerPacket.Login { Result = 3 });
                 return;
             }
 
@@ -2336,7 +2336,7 @@ namespace Server.ExineEnvir
             {
                 if (account.ExpiryDate > Now)
                 {
-                    c.Enqueue(new ServerPackets.LoginBanned
+                    c.SendPacketToClient(new ServerPacket.LoginBanned
                     {
                         Reason = account.BanReason,
                         ExpiryDate = account.ExpiryDate
@@ -2358,7 +2358,7 @@ namespace Server.ExineEnvir
                     account.BanReason = "Too many Wrong Login Attempts.";
                     account.ExpiryDate = Now.AddMinutes(2);
 
-                    c.Enqueue(new ServerPackets.LoginBanned
+                    c.SendPacketToClient(new ServerPacket.LoginBanned
                     {
                         Reason = account.BanReason,
                         ExpiryDate = account.ExpiryDate
@@ -2366,14 +2366,14 @@ namespace Server.ExineEnvir
                     return;
                 }
 
-                c.Enqueue(new ServerPackets.Login { Result = 4 });
+                c.SendPacketToClient(new ServerPacket.Login { Result = 4 });
                 return;
             }
             account.WrongPasswordCount = 0;
 
             if (account.RequirePasswordChange)
             {
-                c.Enqueue(new ServerPackets.Login { Result = 5 });
+                c.SendPacketToClient(new ServerPacket.Login { Result = 5 });
                 return;
             }
 
@@ -2390,8 +2390,8 @@ namespace Server.ExineEnvir
             account.LastDate = Now;
             account.LastIP = c.IPAddress;
 
-            MessageQueue.Enqueue(account.Connection.SessionID + ", " + account.Connection.IPAddress + ", User logged in.");
-            c.Enqueue(new ServerPackets.LoginSuccess { Characters = account.GetSelectInfo() });
+            MessageQueue.SendMsg(account.Connection.SessionID + ", " + account.Connection.IPAddress + ", User logged in.");
+            c.SendPacketToClient(new ServerPacket.LoginSuccess { Characters = account.GetSelectInfo() });
         }
 
         public int HTTPLogin(string AccountID, string Password)
@@ -2444,59 +2444,59 @@ namespace Server.ExineEnvir
             return 7;
         }
 
-        public void NewCharacter(ClientPackets.NewCharacter p, ExineConnection c, bool IsGm)
+        public void NewCharacter(ClientPacket.NewCharacter p, ExineConnection exineConnection, bool IsGm)
         {
             Console.WriteLine("Envir NewCharacter");
             //here!
             if (!Settings.AllowNewCharacter)
             {
-                c.Enqueue(new ServerPackets.NewCharacter { Result = 0 });
+                exineConnection.SendPacketToClient(new ServerPacket.NewCharacter { Result = 0 });
                 return;
             }
             Console.WriteLine("Envir NewCharacter#2");
             //if (!CharacterReg.IsMatch(p.Name))
             if (!string.IsNullOrWhiteSpace(p.Name) && p.Name.Length > 20)//231107
             {
-                c.Enqueue(new ServerPackets.NewCharacter { Result = 1 });
+                exineConnection.SendPacketToClient(new ServerPacket.NewCharacter { Result = 1 });
                 return;
             }
             Console.WriteLine("Envir NewCharacter#3");
             if (!IsGm && DisabledCharNames.Contains(p.Name.ToUpper()))
             {
-                c.Enqueue(new ServerPackets.NewCharacter { Result = 1 });
+                exineConnection.SendPacketToClient(new ServerPacket.NewCharacter { Result = 1 });
                 return;
             }
 
             if (p.Gender != ExineGender.Male && p.Gender != ExineGender.Female)
             {
-                c.Enqueue(new ServerPackets.NewCharacter { Result = 2 });
+                exineConnection.SendPacketToClient(new ServerPacket.NewCharacter { Result = 2 });
                 return;
             }
 
             if (p.Class != ExineClass.Warrior && p.Class != ExineClass.Wizard && p.Class != ExineClass.Taoist &&
                 p.Class != ExineClass.Assassin && p.Class != ExineClass.Archer)
             {
-                c.Enqueue(new ServerPackets.NewCharacter { Result = 3 });
+                exineConnection.SendPacketToClient(new ServerPacket.NewCharacter { Result = 3 });
                 return;
             }
 
             if (p.Class == ExineClass.Assassin && !Settings.AllowCreateAssassin ||
                 p.Class == ExineClass.Archer && !Settings.AllowCreateArcher)
             {
-                c.Enqueue(new ServerPackets.NewCharacter { Result = 3 });
+                exineConnection.SendPacketToClient(new ServerPacket.NewCharacter { Result = 3 });
                 return;
             }
             Console.WriteLine("Envir NewCharacter#4");
 
             var count = 0;
 
-            for (var i = 0; i < c.Account.Characters.Count; i++)
+            for (var i = 0; i < exineConnection.Account.Characters.Count; i++)
             {
-                if (c.Account.Characters[i].Deleted) continue;
+                if (exineConnection.Account.Characters[i].Deleted) continue;
 
                 if (++count >= Globals.MaxCharacterCount)
                 {
-                    c.Enqueue(new ServerPackets.NewCharacter { Result = 4 });
+                    exineConnection.SendPacketToClient(new ServerPacket.NewCharacter { Result = 4 });
                     return;
                 }
             }
@@ -2505,16 +2505,16 @@ namespace Server.ExineEnvir
             {
                 if (CharacterExists(p.Name))
                 {
-                    c.Enqueue(new ServerPackets.NewCharacter { Result = 5 });
+                    exineConnection.SendPacketToClient(new ServerPacket.NewCharacter { Result = 5 });
                     return;
                 }
 
-                var info = new CharacterInfo(p, c) { Index = ++NextCharacterID, AccountInfo = c.Account };
+                var info = new CharacterInfo(p, exineConnection) { Index = ++NextCharacterID, AccountInfo = exineConnection.Account };
 
-                c.Account.Characters.Add(info);
+                exineConnection.Account.Characters.Add(info);
                 CharacterList.Add(info);
 
-                c.Enqueue(new ServerPackets.NewCharacterSuccess { CharInfo = info.ToSelectInfo() });
+                exineConnection.SendPacketToClient(new ServerPacket.NewCharacterSuccess { CharInfo = info.ToSelectInfo() });
             }
         }
          
@@ -3135,7 +3135,7 @@ namespace Server.ExineEnvir
             }
 
             ResetGS = false;
-            MessageQueue.Enqueue("Gameshop Purchase Logs Cleared.");
+            MessageQueue.SendMsg("Gameshop Purchase Logs Cleared.");
         }
 
         public void Inspect(ExineConnection con, uint id)
@@ -3196,7 +3196,7 @@ namespace Server.ExineEnvir
                 }
             }
 
-            con.Enqueue(new S.PlayerInspect
+            con.SendPacketToClient(new ServerPacket.PlayerInspect
             {
                 Name = player.Name,
                 Equipment = player.Equipment,
@@ -3228,7 +3228,7 @@ namespace Server.ExineEnvir
 
             if (RankIndex >= listings.Count || RankIndex < 0) return;
 
-            S.Rankings p = new S.Rankings
+            ServerPacket.Rankings p = new ServerPacket.Rankings
             {
                 RankType = RankType,
                 Count = OnlineOnly ? OnlineRankingCount[RankType] : listings.Count
@@ -3255,7 +3255,7 @@ namespace Server.ExineEnvir
                 if (c > 19 || c >= p.Count) break;
             }
 
-            con.Enqueue(p);
+            con.SendPacketToClient(p);
         }
 
         private bool CheckListing(ExineConnection con, RankCharacterInfo listing)
@@ -3436,7 +3436,7 @@ namespace Server.ExineEnvir
                 Scripts[key].Load();
             }
 
-            MessageQueue.Enqueue("NPC Scripts reloaded...");
+            MessageQueue.SendMsg("NPC Scripts reloaded...");
         }
 
         public void ReloadDrops()
@@ -3473,7 +3473,7 @@ namespace Server.ExineEnvir
             BlackstoneDrops.Clear();
             DropInfo.Load(BlackstoneDrops, "Blackstone", Path.Combine(Settings.DropPath, Settings.BlackstoneDropFilename + ".txt"));
 
-            MessageQueue.Enqueue("Drops Loaded.");
+            MessageQueue.SendMsg("Drops Loaded.");
         }
 
         private WorldMapIcon ValidateWorldMap()
@@ -3494,7 +3494,7 @@ namespace Server.ExineEnvir
             GuildList.Remove(guild.Info);
 
             GuildRefreshNeeded = true;
-            MessageQueue.Enqueue(guild.Info.Name + " guild will be deleted from the server.");
+            MessageQueue.SendMsg(guild.Info.Name + " guild will be deleted from the server.");
         }
     }
 }

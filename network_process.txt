@@ -30,7 +30,7 @@
     }
 
 2.클라이언트에서(주로 ExineMainScene.cs) 아래와 같이 Network.Enqueue(전송할 패킷);를 실행하여 서버쪽으로 패킷을 전송한다.
-  ex) Network.Enqueue(new C.ChangePMode { Mode = PetMode.Both });
+  ex) Network.Enqueue(new ClientPacket.ChangePMode { Mode = PetMode.Both });
   //내부적으로 Network.Enqueue에서는 _sendList.Enqueue(p);으로 전송용 큐에 넣어둠.
   //->CMain.cs의 Application_Idle에서 주기적으로 UpdateEnviroment를 호출하고 
   //->UpdateEnviroment가 주기적으로  Network.Process();를 호출하고  
@@ -52,11 +52,11 @@
        {
             ...
             case (short)ClientPacketIds.Turn:
-                    Turn((C.Turn) p);
+                    Turn((ClientPacket.Turn) p);
                     break;
        }
 
-   private void Turn(C.Turn p)
+   private void Turn(ClientPacket.Turn p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -72,11 +72,11 @@
     {
         ...
         //해당 처리하는 부분에서 만약 전체 클라이언트가 알아야 하는 내용인 경우  Broadcast함수로 모든 클라이언트들에게 서버에서 패킷을 전달해준다.
-        // Broadcast(new S.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+        // Broadcast(new ServerPacket.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
         
         ...
         // 이후 패킷을 보낸 클라이언트에게 서버에서 패킷을 전송한다.
-        // Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
+        // Enqueue(new ServerPacket.UserLocation { Direction = Direction, Location = CurrentLocation });
     }
   
  4.클라이언트에서는 
@@ -88,17 +88,17 @@
      {
         ... 
         case (short)ServerPacketIds.UserLocation:
-            UserLocation((S.UserLocation)p);
+            UserLocation((ServerPacket.UserLocation)p);
          ...
      }
-  //  private void UserLocation(S.UserLocation p)
+  //  private void UserLocation(ServerPacket.UserLocation p)
         {
             MapControl.NextAction = 0;
             if (User.CurrentLocation == p.Location && User.Direction == p.Direction) return;
 
             if (Settings.DebugMode)
             {
-                ReceiveChat(new S.Chat { Message = "Displacement", Type = ChatType.System });
+                ReceiveChat(new ServerPacket.Chat { Message = "Displacement", Type = ChatType.System });
             }
 
             MapControl.RemoveObject(User);

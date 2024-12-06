@@ -9,7 +9,7 @@ namespace Exine.ExineScenes.ExDialogs
 {
     public sealed class NoticeDialog : ExineImageControl
     {
-        public static Regex C = new Regex(@"{((.*?)\/(.*?))}");
+        public static Regex CPattern = new Regex(@"{((.*?)\/(.*?))}");
         public static Regex L = new Regex(@"\(((.*?)\/(.*?))\)");
 
         public ExineButton CloseButton, UpButton, DownButton, PositionBar, OkButton;
@@ -280,7 +280,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 string currentLine = lines[i];
 
-                List<Match> matchList = C.Matches(currentLine).Cast<Match>().ToList();
+                List<Match> matchList = CPattern.Matches(currentLine).Cast<Match>().ToList();
                 matchList.AddRange(L.Matches(currentLine).Cast<Match>());
 
                 int oldLength = currentLine.Length;
@@ -302,7 +302,7 @@ namespace Exine.ExineScenes.ExDialogs
                         NewLink(txt, action, TextLabel[i].Location.Add(new Point(size.Width - 11, 0)));
                     }
 
-                    if (C.Match(match.Value).Success)
+                    if (CPattern.Match(match.Value).Success)
                     {
                         NewColour(txt, action, TextLabel[i].Location.Add(new Point(size.Width - 11, 0)));
                     }

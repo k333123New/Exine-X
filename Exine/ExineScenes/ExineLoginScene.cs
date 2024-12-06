@@ -4,8 +4,8 @@ using Exine.ExineControls;
 using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineSounds;
-using S = ServerPackets;
-using C = ClientPackets;
+//
+
 using System.Net.Http.Headers;
 //using static Client.MirScenes.LoginScene;
 
@@ -582,7 +582,7 @@ namespace Exine.ExineScenes
         
         private void Login()
         { 
-             Network.Enqueue(new C.Login { AccountID = _loginIdTextBox.Text, Password = _loginPwTextBox.Text });
+             Network.SendPacketToServer(new ClientPacket.Login { AccountID = _loginIdTextBox.Text, Password = _loginPwTextBox.Text });
         }
 
 
@@ -596,7 +596,7 @@ namespace Exine.ExineScenes
         {
             
         }
-        public override void ProcessPacket(Packet p)
+        public override void ProcessRecvPacket(Packet p)
         {
             Console.WriteLine("recvPacket.Type :" + ServerPackIdsToString((ServerPacketIds)p.Index));
             switch (p.Index)
@@ -606,33 +606,33 @@ namespace Exine.ExineScenes
                     SendVersion();
                     break;
                 case (short)ServerPacketIds.ClientVersion:
-                    ClientVersion((S.ClientVersion)p);
+                    OnRecvClientVersionHandler((ServerPacket.ClientVersion)p);
                     break;
                 case (short)ServerPacketIds.NewAccount:
-                    NewAccount((S.NewAccount)p);
+                    OnRecvNewAccountResultHandler((ServerPacket.NewAccount)p);
                     break;
                 case (short)ServerPacketIds.ChangePassword:
-                    ChangePassword((S.ChangePassword)p);
+                    OnRecvChangePasswordResultHandler((ServerPacket.ChangePassword)p);
                     break;
                 case (short)ServerPacketIds.ChangePasswordBanned:
-                    ChangePassword((S.ChangePasswordBanned)p);
+                    OnRecvChangePasswordResultHandler((ServerPacket.ChangePasswordBanned)p);
                     break;
                 case (short)ServerPacketIds.Login:
-                    Login((S.Login)p);
+                    OnRecvLoginFailHandler((ServerPacket.Login)p);
                     break;
                 case (short)ServerPacketIds.LoginBanned:
-                    Login((S.LoginBanned)p);
+                    OnRecvLoginFailHandler((ServerPacket.LoginBanned)p);
                     break;
                 case (short)ServerPacketIds.LoginSuccess:
-                    Login((S.LoginSuccess)p);
+                    OnRecvLoginSuccessHandler((ServerPacket.LoginSuccess)p);
                     break;
                 case (short)ServerPacketIds.StartGame:
-                    StartGame((S.StartGame)p);
+                    OnRecvStartGameHandler((ServerPacket.StartGame)p);
                     break;
 
 
                 default:
-                    base.ProcessPacket(p);
+                    base.ProcessRecvPacket(p);
                     break;
             }
         }
@@ -642,7 +642,7 @@ namespace Exine.ExineScenes
         {
             //_connectBox.Label.Text = "Sending Client Version.";
 
-            C.ClientVersion p = new C.ClientVersion();
+            ClientPacket.ClientVersion p = new ClientPacket.ClientVersion();
             try
             {
                 byte[] sum;
@@ -651,14 +651,14 @@ namespace Exine.ExineScenes
                     sum = md5.ComputeHash(stream);
 
                 p.VersionHash = sum;
-                Network.Enqueue(p);
+                Network.SendPacketToServer(p);
             }
             catch (Exception ex)
             {
                 if (Settings.LogErrors) CMain.SaveError(ex.ToString());
             }
         }
-        private void ClientVersion(S.ClientVersion p)
+        private void OnRecvClientVersionHandler(ServerPacket.ClientVersion p)
         {
             switch (p.Result)
             {
@@ -678,7 +678,7 @@ namespace Exine.ExineScenes
         
         
         
-        private void NewAccount(S.NewAccount p)
+        private void OnRecvNewAccountResultHandler(ServerPacket.NewAccount p)
         { 
             switch (p.Result)
             {
@@ -712,7 +712,7 @@ namespace Exine.ExineScenes
             }
 
         }
-        private void ChangePassword(S.ChangePassword p)
+        private void OnRecvChangePasswordResultHandler(ServerPacket.ChangePassword p)
         {
             /*
             _password.OKButton.Enabled = true;
@@ -751,7 +751,7 @@ namespace Exine.ExineScenes
             
             }*/
         }
-        private void ChangePassword(S.ChangePasswordBanned p)
+        private void OnRecvChangePasswordResultHandler(ServerPacket.ChangePasswordBanned p)
         {/*
             _password.Dispose();
 
@@ -761,7 +761,7 @@ namespace Exine.ExineScenes
         */
         }
         
-        private void Login(S.Login p)
+        private void OnRecvLoginFailHandler(ServerPacket.Login p)
         {
            // _login.OKButton.Enabled = true;
             switch (p.Result)
@@ -788,7 +788,7 @@ namespace Exine.ExineScenes
         }
 
        
-        private void Login(S.LoginBanned p)
+        private void OnRecvLoginFailHandler(ServerPacket.LoginBanned p)
         {
             //_login.OKButton.Enabled = true;
 
@@ -796,11 +796,11 @@ namespace Exine.ExineScenes
             ExineMessageBox.Show(string.Format("This account is banned.\n\nReason: {0}\nExpiryDate: {1}\nDuration: {2:#,##0} Hours, {3} Minutes, {4} Seconds", p.Reason,
                                              p.ExpiryDate, Math.Floor(d.TotalHours), d.Minutes, d.Seconds));
         }
-        private void Login(S.LoginSuccess p)
+        private void OnRecvLoginSuccessHandler(ServerPacket.LoginSuccess p)
         {
             charList.Clear();
-            charList.AddRange(((S.LoginSuccess)p).Characters);
-            Console.WriteLine("Characters.Count:"+((S.LoginSuccess)p).Characters.Count);
+            charList.AddRange(((ServerPacket.LoginSuccess)p).Characters);
+            Console.WriteLine("Characters.Count:"+((ServerPacket.LoginSuccess)p).Characters.Count);
             for (int i = 0; i < charList.Count; i++)
             {
                 Console.WriteLine("name : " + charList[i].Name + "Index : " + charList[i].Index);
@@ -808,17 +808,17 @@ namespace Exine.ExineScenes
             if (charList.Count > 0)
             {
                 Console.WriteLine("charList[charList.Count - 1].Index:" + charList[charList.Count - 1].Index);
-                Network.Enqueue(
-                    new C.StartGame
+                Network.SendPacketToServer(
+                    new ClientPacket.StartGame
                     {
                         CharacterIndex = charList[charList.Count - 1].Index,
                     }
                 );
             } 
         }
-        public void StartGame(S.StartGame p)
+        public void OnRecvStartGameHandler(ServerPacket.StartGame p)
         {
-            Console.WriteLine("StartGame(S.StartGame p");
+            Console.WriteLine("StartGame(ServerPacket.StartGame p");
             switch (p.Result)
             {
                 case 0:

@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineObjects;
-using S = ServerPackets;
+
 
 namespace Server.ExineEnvir
 {
@@ -502,10 +502,10 @@ namespace Server.ExineEnvir
             }
             catch (Exception ex)
             {
-                MessageQueue.Enqueue(ex);
+                MessageQueue.SendMsg(ex);
             }
 
-            MessageQueue.Enqueue("Failed to Load Map: " + Info.FileName);
+            MessageQueue.SendMsg("Failed to Load Map: " + Info.FileName);
             return false;
         }
 
@@ -656,7 +656,7 @@ namespace Server.ExineEnvir
                 {
                     Doors[i].DoorState = 0;
 
-                    Broadcast(new S.Opendoor() { DoorIndex = Doors[i].index, Close = true }, Doors[i].Location);
+                    Broadcast(new ServerPacket.Opendoor() { DoorIndex = Doors[i].index, Close = true }, Doors[i].Location);
                 }
             }
 
@@ -2384,7 +2384,7 @@ namespace Server.ExineEnvir
                 PlayerObjectSrv player = Players[i];
 
                 if (Functions.InRange(location, player.CurrentLocation, Globals.DataRange))
-                    player.Enqueue(p);                   
+                    player.SendPacketToClient(p);                   
             }
         }
 
@@ -2397,7 +2397,7 @@ namespace Server.ExineEnvir
                 PlayerObjectSrv player = Players[i];
 
                 if (Functions.InRange(location, player.CurrentLocation, Globals.DataRange))
-                    player.Enqueue(p);
+                    player.SendPacketToClient(p);
 
             }
         }
@@ -2409,7 +2409,7 @@ namespace Server.ExineEnvir
 
             if (Functions.InRange(location, Player.CurrentLocation, Globals.DataRange))
             {
-                Player.Enqueue(p);
+                Player.SendPacketToClient(p);
             }    
         }
     }

@@ -5,7 +5,7 @@ namespace Exine.ExineControls
     public class MirScrollingLabel : ExineControl
     {
         private static readonly Regex R = new Regex(@"<(.*?/\@.*?)>");
-        private static readonly Regex C = new Regex(@"{(.*?/.*?)}");
+        private static readonly Regex CPattern = new Regex(@"{(.*?/.*?)}");
 
         private readonly ExineLabel[] _textLabel;
         private readonly List<ExineLabel> _textButtons;
@@ -62,7 +62,7 @@ namespace Exine.ExineControls
                 string currentLine = lines[i];
 
                 List<Match> matchList = R.Matches(currentLine).Cast<Match>().ToList();
-                matchList.AddRange(C.Matches(currentLine).Cast<Match>());
+                matchList.AddRange(CPattern.Matches(currentLine).Cast<Match>());
 
                 int oldLength = currentLine.Length;
 
@@ -79,7 +79,7 @@ namespace Exine.ExineControls
                     //if (R.Match(match.Value).Success)
                     //    NewButton(values[0], values[1], TextLabel[i].Location.Add(new Point(size.Width - 10, 0)));
 
-                    if (C.Match(match.Value).Success)
+                    if (CPattern.Match(match.Value).Success)
                         NewColour(values[0], values[1], _textLabel[i - Index].Location.Add(new Point(size.Width - 10, 0)));
                 }
 

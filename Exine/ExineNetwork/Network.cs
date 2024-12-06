@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Net.Sockets;
 using Exine.ExineControls;
-using C = ClientPackets;
+//
 
 
 namespace Exine.ExineNetwork
@@ -15,8 +15,8 @@ namespace Exine.ExineNetwork
         public static bool Connected;
         public static long TimeOutTime, TimeConnected, RetryTime = CMain.Time + 5000;
 
-        private static ConcurrentQueue<Packet> _receiveList;
-        private static ConcurrentQueue<Packet> _sendList;
+        private static ConcurrentQueue<Packet> recvBuffer;
+        private static ConcurrentQueue<Packet> sendBuffer;
 
         static byte[] _rawData = new byte[0];
         static readonly byte[] _rawBytes = new byte[8 * 1024];
@@ -73,8 +73,8 @@ namespace Exine.ExineNetwork
                 }
 
                 //여기서 메인 화면 표시하거나 하는게 맞음
-                _receiveList = new ConcurrentQueue<Packet>();
-                _sendList = new ConcurrentQueue<Packet>();
+                recvBuffer = new ConcurrentQueue<Packet>();
+                sendBuffer = new ConcurrentQueue<Packet>();
                 _rawData = new byte[0];
 
                 TimeOutTime = CMain.Time + Settings.TimeOut;
@@ -141,7 +141,7 @@ namespace Exine.ExineNetwork
             while ((p = Packet.ReceivePacket(_rawData, out _rawData)) != null)
             {
                 data.AddRange(p.GetPacketBytes());
-                _receiveList.Enqueue(p);
+                recvBuffer.Enqueue(p);
             }
 
             CMain.BytesReceived += data.Count;
@@ -180,10 +180,10 @@ namespace Exine.ExineNetwork
 
             TimeConnected = 0;
             Connected = false;
-            _sendList = null;
+            sendBuffer = null;
             _client = null;
 
-            _receiveList = null;
+            recvBuffer = null;
         }
 
         public static void Process()
@@ -192,13 +192,13 @@ namespace Exine.ExineNetwork
             {
                 if (Connected)
                 {
-                    while (_receiveList != null && !_receiveList.IsEmpty)
+                    while (recvBuffer != null && !recvBuffer.IsEmpty)
                     {
-                        if (!_receiveList.TryDequeue(out Packet p) || p == null) continue;
-                        if (!(p is ServerPackets.Disconnect) && !(p is ServerPackets.ClientVersion)) continue;
+                        if (!recvBuffer.TryDequeue(out Packet p) || p == null) continue;
+                        if (!(p is ServerPacket.Disconnect) && !(p is ServerPacket.ClientVersion)) continue;
 
-                        ExineScene.ActiveScene.ProcessPacket(p);
-                        _receiveList = null;
+                        ExineScene.ActiveScene.ProcessRecvPacket(p);
+                        recvBuffer = null;
                         return;
                     }
 
@@ -223,24 +223,24 @@ namespace Exine.ExineNetwork
 
 
 
-            while (_receiveList != null && !_receiveList.IsEmpty)
+            while (recvBuffer != null && !recvBuffer.IsEmpty)
             {
-                if (!_receiveList.TryDequeue(out Packet p) || p == null) continue;
-                ExineScene.ActiveScene.ProcessPacket(p);
+                if (!recvBuffer.TryDequeue(out Packet p) || p == null) continue;
+                ExineScene.ActiveScene.ProcessRecvPacket(p);
             }
 
 
-            if (CMain.Time > TimeOutTime && _sendList != null && _sendList.IsEmpty)
-                _sendList.Enqueue(new C.KeepAlive());
+            if (CMain.Time > TimeOutTime && sendBuffer != null && sendBuffer.IsEmpty)
+                sendBuffer.Enqueue(new ClientPacket.KeepAlive());
 
-            if (_sendList == null || _sendList.IsEmpty) return;
+            if (sendBuffer == null || sendBuffer.IsEmpty) return;
 
             TimeOutTime = CMain.Time + Settings.TimeOut;
 
             List<byte> data = new List<byte>();
-            while (!_sendList.IsEmpty)
+            while (!sendBuffer.IsEmpty)
             {
-                if (!_sendList.TryDequeue(out Packet p)) continue;
+                if (!sendBuffer.TryDequeue(out Packet p)) continue;
                 data.AddRange(p.GetPacketBytes());
             }
 
@@ -249,10 +249,10 @@ namespace Exine.ExineNetwork
             BeginSend(data);
         }
         
-        public static void Enqueue(Packet p)
+        public static void SendPacketToServer(Packet p)
         {
-            if (_sendList != null && p != null)
-                _sendList.Enqueue(p);
+            if (sendBuffer != null && p != null)
+                sendBuffer.Enqueue(p);
         }
     }
 }

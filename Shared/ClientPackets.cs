@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ClientPackets
+namespace ClientPacket
 {
     public sealed class ClientVersion : Packet
     {
@@ -11,11 +11,11 @@ namespace ClientPackets
 
         public byte[] VersionHash;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             VersionHash = reader.ReadBytes(reader.ReadInt32());
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(VersionHash.Length);
             writer.Write(VersionHash);
@@ -27,10 +27,10 @@ namespace ClientPackets
         {
             get { return (short)ClientPacketIds.Disconnect; }
         }
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -41,11 +41,11 @@ namespace ClientPackets
             get { return (short)ClientPacketIds.KeepAlive; }
         }
         public long Time;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Time = reader.ReadInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Time);
         }
@@ -65,7 +65,7 @@ namespace ClientPackets
         public string SecretAnswer = string.Empty;
         public string EMailAddress = string.Empty;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AccountID = reader.ReadString();
             Password = reader.ReadString();
@@ -75,7 +75,7 @@ namespace ClientPackets
             SecretAnswer = reader.ReadString();
             EMailAddress = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AccountID);
             writer.Write(Password);
@@ -97,13 +97,13 @@ namespace ClientPackets
         public string CurrentPassword = string.Empty;
         public string NewPassword = string.Empty;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AccountID = reader.ReadString();
             CurrentPassword = reader.ReadString();
             NewPassword = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AccountID);
             writer.Write(CurrentPassword);
@@ -122,12 +122,12 @@ namespace ClientPackets
         public string Password = string.Empty;
       
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AccountID = reader.ReadString();
             Password = reader.ReadString(); 
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AccountID);
             writer.Write(Password); 
@@ -147,7 +147,7 @@ namespace ClientPackets
         public byte[] ExPortraitBytes = new byte[8000];//add k333123
         //public byte[] Portrait;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Console.WriteLine("NewCharacter ReadPacket");
             Name = reader.ReadString();
@@ -161,7 +161,7 @@ namespace ClientPackets
             Console.WriteLine("ExStyle #5 :" + ExStyle);
             //Portrait = reader.ReadBytes(50);//크기는 차후 확인 필요함.
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             Console.WriteLine("NewCharacter WritePacket");
             writer.Write(Name);
@@ -181,11 +181,11 @@ namespace ClientPackets
 
         public int CharacterIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             CharacterIndex = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(CharacterIndex);
         }
@@ -196,11 +196,11 @@ namespace ClientPackets
 
         public int CharacterIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             CharacterIndex = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(CharacterIndex);
         }
@@ -209,10 +209,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.LogOut; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -222,11 +222,11 @@ namespace ClientPackets
 
         public ExineDirection Direction;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Direction = (ExineDirection)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Direction);
         }
@@ -238,12 +238,12 @@ namespace ClientPackets
         public ExineDirection Direction;
         public bool IsRest;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Direction = (ExineDirection)reader.ReadByte();
             IsRest = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Direction);
             writer.Write(IsRest);
@@ -256,12 +256,12 @@ namespace ClientPackets
         public byte[] photoData;
         public int photoDataLen;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             photoData = reader.ReadBytes(8000);
             photoDataLen = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(photoData);
             writer.Write(photoDataLen);
@@ -273,11 +273,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.Walk; } }
 
         public ExineDirection Direction;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Direction = (ExineDirection)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Direction);
         }
@@ -287,11 +287,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.Run; } }
 
         public ExineDirection Direction;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Direction = (ExineDirection)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Direction);
         }
@@ -303,7 +303,7 @@ namespace ClientPackets
         public string Message = string.Empty;
         public List<ChatItem> LinkedItems = new List<ChatItem>();
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Message = reader.ReadString();
 
@@ -313,7 +313,7 @@ namespace ClientPackets
                 LinkedItems.Add(new ChatItem(reader));
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Message);
 
@@ -329,13 +329,13 @@ namespace ClientPackets
 
         public MirGridType Grid;
         public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             From = reader.ReadInt32();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
             writer.Write(From);
@@ -347,12 +347,12 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.StoreItem; } }
 
         public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             From = reader.ReadInt32();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(From);
             writer.Write(To);
@@ -365,12 +365,12 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.DepositRefineItem; } }
 
         public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             From = reader.ReadInt32();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(From);
             writer.Write(To);
@@ -382,12 +382,12 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.RetrieveRefineItem; } }
 
         public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             From = reader.ReadInt32();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(From);
             writer.Write(To);
@@ -398,10 +398,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.RefineCancel; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -412,11 +412,11 @@ namespace ClientPackets
 
         public ulong UniqueID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
         }
@@ -428,11 +428,11 @@ namespace ClientPackets
 
         public ulong UniqueID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
         }
@@ -444,11 +444,11 @@ namespace ClientPackets
 
         public ulong UniqueID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
         }
@@ -460,12 +460,12 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.DepositTradeItem; } }
 
         public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             From = reader.ReadInt32();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(From);
             writer.Write(To);
@@ -477,12 +477,12 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.RetrieveTradeItem; } }
 
         public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             From = reader.ReadInt32();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(From);
             writer.Write(To);
@@ -493,12 +493,12 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.TakeBackItem; } }
 
         public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             From = reader.ReadInt32();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(From);
             writer.Write(To);
@@ -510,14 +510,14 @@ namespace ClientPackets
 
         public MirGridType GridFrom, GridTo;
         public ulong IDFrom, IDTo;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             GridFrom = (MirGridType)reader.ReadByte();
             GridTo = (MirGridType)reader.ReadByte();
             IDFrom = reader.ReadUInt64();
             IDTo = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)GridFrom);
             writer.Write((byte)GridTo);
@@ -533,13 +533,13 @@ namespace ClientPackets
         public ulong UniqueID;
         public int To;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             UniqueID = reader.ReadUInt64();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
             writer.Write(UniqueID);
@@ -554,13 +554,13 @@ namespace ClientPackets
         public ulong UniqueID;
         public int To;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             UniqueID = reader.ReadUInt64();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
             writer.Write(UniqueID);
@@ -577,7 +577,7 @@ namespace ClientPackets
         public int To;
         public ulong FromUniqueID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             GridTo = (MirGridType)reader.ReadByte();
@@ -585,7 +585,7 @@ namespace ClientPackets
             To = reader.ReadInt32();
             FromUniqueID = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
             writer.Write((byte)GridTo);
@@ -602,13 +602,13 @@ namespace ClientPackets
         public ulong UniqueID;
         public ushort Count;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             UniqueID = reader.ReadUInt64();
             Count = reader.ReadUInt16();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
             writer.Write(UniqueID);
@@ -621,12 +621,12 @@ namespace ClientPackets
 
         public ulong UniqueID;
         public MirGridType Grid;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
             Grid = (MirGridType)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
             writer.Write((byte)Grid);
@@ -640,13 +640,13 @@ namespace ClientPackets
         public ushort Count;
         public bool HeroInventory = false;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
             Count = reader.ReadUInt16();
             HeroInventory = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
             writer.Write(Count);
@@ -660,11 +660,11 @@ namespace ClientPackets
 
         public uint Amount;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Amount = reader.ReadUInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Amount);
         }
@@ -673,10 +673,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.PickUp; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -691,14 +691,14 @@ namespace ClientPackets
         public bool Ranking = false;
         public bool Hero = false;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             ObjectID = reader.ReadUInt32();
             Ranking = reader.ReadBoolean();
             Hero = reader.ReadBoolean();
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(ObjectID);
             writer.Write(Ranking);
@@ -714,12 +714,12 @@ namespace ClientPackets
 
         public string Name;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Name = reader.ReadString();
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Name);
         }
@@ -730,11 +730,11 @@ namespace ClientPackets
 
         public AttackMode Mode;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Mode = (AttackMode)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Mode);
         }
@@ -745,11 +745,11 @@ namespace ClientPackets
 
         public PetMode Mode;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Mode = (PetMode)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Mode);
         }
@@ -760,11 +760,11 @@ namespace ClientPackets
 
         public bool AllowTrade;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AllowTrade = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AllowTrade);
         }
@@ -776,12 +776,12 @@ namespace ClientPackets
         public ExineDirection Direction;
         public Spell Spell;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Direction = (ExineDirection) reader.ReadByte();
             Spell = (Spell) reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Direction);
             writer.Write((byte)Spell);
@@ -796,14 +796,14 @@ namespace ClientPackets
         public uint TargetID;
         public Point TargetLocation;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Direction = (ExineDirection)reader.ReadByte();
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             TargetID = reader.ReadUInt32();
             TargetLocation = new Point(reader.ReadInt32(), reader.ReadInt32());
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Direction);
             writer.Write(Location.X);
@@ -818,11 +818,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.Harvest; } }
 
         public ExineDirection Direction;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Direction = (ExineDirection)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Direction);
         }
@@ -834,12 +834,12 @@ namespace ClientPackets
         public uint ObjectID;
         public string Key = string.Empty;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             ObjectID = reader.ReadUInt32();
             Key = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(ObjectID);
             writer.Write(Key);
@@ -853,13 +853,13 @@ namespace ClientPackets
         public ushort Count;
         public PanelType Type;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             ItemIndex = reader.ReadUInt64();
             Count = reader.ReadUInt16();
             Type = (PanelType)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(ItemIndex);
             writer.Write(Count);
@@ -873,12 +873,12 @@ namespace ClientPackets
         public ulong UniqueID;
         public ushort Count;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
             Count = reader.ReadUInt16();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
             writer.Write(Count);
@@ -892,7 +892,7 @@ namespace ClientPackets
         public ushort Count;
         public int[] Slots;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
             Count = reader.ReadUInt16();
@@ -903,7 +903,7 @@ namespace ClientPackets
                 Slots[i] = reader.ReadInt32();
             }
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
             writer.Write(Count);
@@ -921,11 +921,11 @@ namespace ClientPackets
 
         public ulong UniqueID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
         }
@@ -937,12 +937,12 @@ namespace ClientPackets
         public ulong UniqueID;
         public ushort Count;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
             Count = reader.ReadUInt16();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
             writer.Write(Count);
@@ -954,11 +954,11 @@ namespace ClientPackets
 
         public ulong UniqueID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
         }
@@ -970,11 +970,11 @@ namespace ClientPackets
 
         public int MapIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             MapIndex = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(MapIndex);
         }
@@ -986,11 +986,11 @@ namespace ClientPackets
 
         public uint ObjectID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             ObjectID = reader.ReadUInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(ObjectID);
         }
@@ -1002,11 +1002,11 @@ namespace ClientPackets
 
         public string Text;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Text = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Text);
         }
@@ -1018,13 +1018,13 @@ namespace ClientPackets
         public Spell Spell;
         public byte Key, OldKey;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Spell = (Spell) reader.ReadByte();
             Key = reader.ReadByte();
             OldKey = reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte) Spell);
             writer.Write(Key);
@@ -1042,7 +1042,7 @@ namespace ClientPackets
         public uint ObjectID;
         public bool SpellTargetLock;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             ObjectID = reader.ReadUInt32();
             Spell = (Spell) reader.ReadByte();
@@ -1051,7 +1051,7 @@ namespace ClientPackets
             Location = new Point(reader.ReadInt32(), reader.ReadInt32());
             SpellTargetLock = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(ObjectID);
             writer.Write((byte) Spell);
@@ -1068,11 +1068,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.SwitchGroup; } }
 
         public bool AllowGroup;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AllowGroup = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AllowGroup);
         }
@@ -1082,11 +1082,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.AddMember; } }
 
         public string Name = string.Empty;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Name = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Name);
         }
@@ -1096,11 +1096,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.DellMember; } }
 
         public string Name = string.Empty;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Name = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Name);
         }
@@ -1110,11 +1110,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.GroupInvite; } }
 
         public bool AcceptInvite;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AcceptInvite = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AcceptInvite);
         }
@@ -1125,10 +1125,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.MarriageRequest; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1138,11 +1138,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.MarriageReply; } }
 
         public bool AcceptInvite;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AcceptInvite = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AcceptInvite);
         }
@@ -1152,10 +1152,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.ChangeMarriage; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1164,10 +1164,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.DivorceRequest; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1177,11 +1177,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.DivorceReply; } }
 
         public bool AcceptInvite;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AcceptInvite = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AcceptInvite);
         }
@@ -1193,11 +1193,11 @@ namespace ClientPackets
 
         public string Name;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Name = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Name);
         }
@@ -1208,11 +1208,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.MentorReply; } }
 
         public bool AcceptInvite;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AcceptInvite = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AcceptInvite);
         }
@@ -1222,10 +1222,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.AllowMentor; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1234,10 +1234,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CancelMentor; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1248,11 +1248,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.TradeReply; } }
 
         public bool AcceptInvite;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AcceptInvite = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AcceptInvite);
         }
@@ -1261,10 +1261,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.TradeRequest; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {  }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         { }
     }
 
@@ -1273,11 +1273,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.TradeGold; } }
 
         public uint Amount;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Amount = reader.ReadUInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Amount);
         }
@@ -1287,11 +1287,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.TradeConfirm; } }
 
         public bool Locked;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Locked = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Locked);
         }
@@ -1300,10 +1300,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.TradeCancel; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1311,10 +1311,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.TownRevive; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1332,12 +1332,12 @@ namespace ClientPackets
             }
         }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Spell = (Spell)reader.ReadByte();
             canUse = (SpellToggleState)reader.ReadSByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Spell);
             writer.Write((sbyte)canUse);
@@ -1351,13 +1351,13 @@ namespace ClientPackets
         public uint Price;
         public MarketPanelType Type;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UniqueID = reader.ReadUInt64();
             Price = reader.ReadUInt32();
             Type = (MarketPanelType)reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UniqueID);
             writer.Write(Price);
@@ -1371,12 +1371,12 @@ namespace ClientPackets
 
         public uint UserID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             UserID = reader.ReadUInt32();
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(UserID);
         }
@@ -1387,11 +1387,11 @@ namespace ClientPackets
 
         public ulong ChatItemID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             ChatItemID = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(ChatItemID);
         }
@@ -1405,14 +1405,14 @@ namespace ClientPackets
         public string Name = "";
         public string RankName = "";
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             ChangeType = reader.ReadByte();
             RankIndex = reader.ReadByte();
             Name = reader.ReadString();
             RankName = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(ChangeType);
             writer.Write(RankIndex);
@@ -1426,13 +1426,13 @@ namespace ClientPackets
 
         public List<string> notice = new List<string>();
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             int LineCount = reader.ReadInt32();
             for (int i = 0; i < LineCount; i++)
                 notice.Add(reader.ReadString());
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(notice.Count);
             for (int i = 0; i < notice.Count; i++)
@@ -1444,11 +1444,11 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.GuildInvite; } }
 
         public bool AcceptInvite;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AcceptInvite = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AcceptInvite);
         }
@@ -1459,11 +1459,11 @@ namespace ClientPackets
 
         public byte Type;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Type = reader.ReadByte();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Type);
         }
@@ -1474,11 +1474,11 @@ namespace ClientPackets
 
         public string Name;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Name = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Name);
         }
@@ -1489,11 +1489,11 @@ namespace ClientPackets
 
         public string Name;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Name = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Name);
         }
@@ -1505,12 +1505,12 @@ namespace ClientPackets
         public byte Type = 0;
         public uint Amount = 0;      
         
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Type = reader.ReadByte();
             Amount = reader.ReadUInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Type);
             writer.Write(Amount);
@@ -1522,13 +1522,13 @@ namespace ClientPackets
 
         public byte Type = 0;
         public int From, To;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Type = reader.ReadByte();
             From = reader.ReadInt32();
             To = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Type);
             writer.Write(From);
@@ -1546,7 +1546,7 @@ namespace ClientPackets
         public MirGridType GridTo;
         public ulong ToUniqueID;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             UniqueID = reader.ReadUInt64();
@@ -1554,7 +1554,7 @@ namespace ClientPackets
             GridTo = (MirGridType)reader.ReadByte();
             ToUniqueID = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
             writer.Write(UniqueID);
@@ -1570,11 +1570,11 @@ namespace ClientPackets
 
         public bool Sitdown;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Sitdown = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Sitdown);
         }
@@ -1586,11 +1586,11 @@ namespace ClientPackets
 
         public bool AutoCast;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             AutoCast = reader.ReadBoolean();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(AutoCast);
         }
@@ -1603,12 +1603,12 @@ namespace ClientPackets
         public uint NPCIndex;
         public int QuestIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             NPCIndex = reader.ReadUInt32();
             QuestIndex = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(NPCIndex);
             writer.Write(QuestIndex);
@@ -1622,12 +1622,12 @@ namespace ClientPackets
         public int QuestIndex;
         public int SelectedItemIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             QuestIndex = reader.ReadInt32();
             SelectedItemIndex = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(QuestIndex);
             writer.Write(SelectedItemIndex);
@@ -1640,11 +1640,11 @@ namespace ClientPackets
 
         public int QuestIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             QuestIndex = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(QuestIndex);
         }
@@ -1656,11 +1656,11 @@ namespace ClientPackets
 
         public int QuestIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             QuestIndex = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(QuestIndex);
         }
@@ -1670,10 +1670,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.AcceptReincarnation; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1682,10 +1682,10 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.CancelReincarnation; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1696,13 +1696,13 @@ namespace ClientPackets
 
         public MirGridType Grid;
         public ulong IDFrom, IDTo;
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Grid = (MirGridType)reader.ReadByte();
             IDFrom = reader.ReadUInt64();
             IDTo = reader.ReadUInt64();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write((byte)Grid);
             writer.Write(IDFrom);
@@ -1718,13 +1718,13 @@ namespace ClientPackets
         public string Name;
         public bool Blocked;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Name = reader.ReadString();
             Blocked = reader.ReadBoolean();
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Name);
             writer.Write(Blocked);
@@ -1737,12 +1737,12 @@ namespace ClientPackets
 
         public int CharacterIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             CharacterIndex = reader.ReadInt32();
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(CharacterIndex);
         }
@@ -1752,11 +1752,11 @@ namespace ClientPackets
     {
         public override short Index { get { return (short)ClientPacketIds.RefreshFriends; } }
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
         }
     }
@@ -1770,12 +1770,12 @@ namespace ClientPackets
         public byte Action = 0; //0 = request list, 1 = request a buff to be enabled, 2 = request a buff to be activated
         public int Id;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Action = reader.ReadByte();
             Id = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Action);
             writer.Write(Id);
@@ -1790,13 +1790,13 @@ namespace ClientPackets
         public byte Quantity;
         public int PType;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             GIndex = reader.ReadInt32();
             Quantity = reader.ReadByte();
             PType = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(GIndex);
             writer.Write(Quantity);
@@ -1812,13 +1812,13 @@ namespace ClientPackets
         public string PageName;
         public string Value;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             NPCID = reader.ReadUInt32();
             PageName = reader.ReadString();
             Value = reader.ReadString();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(NPCID);
             writer.Write(PageName);
@@ -1836,13 +1836,13 @@ namespace ClientPackets
 
         public string Message;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             Image = reader.ReadBytes(reader.ReadInt32());
             ImageSize = reader.ReadInt32();
             ImageChunk = reader.ReadInt32();
         }
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(Image.Length);
             writer.Write(Image);
@@ -1857,14 +1857,14 @@ namespace ClientPackets
         public int RankIndex;
         public bool OnlineOnly;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             RankType = reader.ReadByte();
             RankIndex = reader.ReadInt32();
             OnlineOnly = reader.ReadBoolean();
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(RankType);
             writer.Write(RankIndex);
@@ -1877,12 +1877,12 @@ namespace ClientPackets
         public override short Index { get { return (short)ClientPacketIds.Opendoor; } }
         public byte DoorIndex;
 
-        protected override void ReadPacket(BinaryReader reader)
+        protected override void ToParse(BinaryReader reader)
         {
             DoorIndex = reader.ReadByte();
         }
 
-        protected override void WritePacket(BinaryWriter writer)
+        protected override void MakePacket(BinaryWriter writer)
         {
             writer.Write(DoorIndex);
         }

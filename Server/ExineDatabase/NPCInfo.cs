@@ -229,13 +229,13 @@ namespace Server.ExineDatabase
         {
             get
             {
-                string s = Name;
-                if (s.Contains("_"))
+                string name = Name;
+                if (name.Contains("_"))
                 {
-                    string[] splitName = s.Split('_');
-                    s = splitName[splitName.Length - 1];
+                    string[] splitName = name.Split('_');
+                    name = splitName[splitName.Length - 1];
                 }
-                return s;
+                return name;
             }
         }
     }

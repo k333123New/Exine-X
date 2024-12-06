@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 using Shared.Extensions;
 
 namespace Server.ExineObjects.Monsters
@@ -64,7 +64,7 @@ namespace Server.ExineObjects.Monsters
                         {
                             Direction = Functions.DirectionFromPoint(CurrentLocation, target.CurrentLocation);
 
-                            Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = mob.ObjectID });
+                            Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = mob.ObjectID });
 
                              
 

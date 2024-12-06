@@ -34,22 +34,22 @@ namespace Server
 
         public static void Enqueue(Exception ex)
         {
-            MessageQueue.Enqueue(ex);
+            MessageQueue.SendMsg(ex);
         }
 
         public static void EnqueueDebugging(string msg)
         {
-            MessageQueue.EnqueueDebugging(msg);
+            MessageQueue.SendDebugMsg(msg);
         }
 
         public static void EnqueueChat(string msg)
         {
-            MessageQueue.EnqueueChat(msg);
+            MessageQueue.SendChatMsg(msg);
         }
 
         public static void Enqueue(string msg)
         {
-            MessageQueue.Enqueue(msg);
+            MessageQueue.SendMsg(msg);
         }
 
         private void configToolStripMenuItem_Click(object sender, EventArgs e)

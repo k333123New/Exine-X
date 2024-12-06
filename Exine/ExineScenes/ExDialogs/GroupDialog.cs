@@ -3,7 +3,7 @@ using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineObjects;
 using Exine.ExineSounds;
-using C = ClientPackets;
+
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -77,7 +77,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonA,
                 Hint = GameLanguage.GroupSwitch
             };
-            SwitchButton.Click += (o, e) => Network.Enqueue(new C.SwitchGroup { AllowGroup = !AllowGroup });
+            SwitchButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.SwitchGroup { AllowGroup = !AllowGroup });
 
             AddButton = new ExineButton
             {
@@ -178,7 +178,7 @@ namespace Exine.ExineScenes.ExDialogs
                 return;
             }
 
-            Network.Enqueue(new C.AddMember { Name = name });
+            Network.SendPacketToServer(new ClientPacket.AddMember { Name = name });
         }
 
         private void AddMember()
@@ -199,7 +199,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             inputBox.OKButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.AddMember { Name = inputBox.InputTextBox.Text });
+                Network.SendPacketToServer(new ClientPacket.AddMember { Name = inputBox.InputTextBox.Text });
                 inputBox.Dispose();
             };
             inputBox.Show();
@@ -217,7 +217,7 @@ namespace Exine.ExineScenes.ExDialogs
 
             inputBox.OKButton.Click += (o, e) =>
             {
-                Network.Enqueue(new C.DelMember { Name = inputBox.InputTextBox.Text });
+                Network.SendPacketToServer(new ClientPacket.DelMember { Name = inputBox.InputTextBox.Text });
                 inputBox.Dispose();
             };
             inputBox.Show();

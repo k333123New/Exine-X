@@ -1,5 +1,5 @@
 ﻿using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -98,7 +98,7 @@ namespace Server.ExineObjects.Monsters
             Direction = (ExineDirection)6;
             Closed = false;
 
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
             ActiveDoorWall(false);
         }
@@ -110,7 +110,7 @@ namespace Server.ExineObjects.Monsters
             if (newDirection != Direction)
             {
                 Direction = newDirection;
-                Broadcast(new S.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
             }
         }
 
@@ -122,7 +122,7 @@ namespace Server.ExineObjects.Monsters
 
             Closed = true;
 
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
 
             ActiveDoorWall(true);
         }

@@ -1,7 +1,7 @@
 ﻿using Server.ExineNetwork;
 using Server.ExineEnvir;
 using Server.Utils;
-using C = ClientPackets;
+
 
 namespace Server.ExineDatabase
 {
@@ -67,7 +67,7 @@ namespace Server.ExineDatabase
 
         }
 
-        public AccountInfo(C.NewAccount p)
+        public AccountInfo(ClientPacket.NewAccount p)
         {
             AccountID = p.AccountID;
 
@@ -120,21 +120,21 @@ namespace Server.ExineDatabase
 
                 if (info.Deleted && info.DeleteDate.AddMonths(Settings.ArchiveDeletedCharacterAfterMonths) <= Envir.Now)
                 {
-                    MessageQueue.Enqueue($"Player {info.Name} has been archived due to {Settings.ArchiveDeletedCharacterAfterMonths} month deletion.");
+                    MessageQueue.SendMsg($"Player {info.Name} has been archived due to {Settings.ArchiveDeletedCharacterAfterMonths} month deletion.");
                     Envir.SaveArchivedCharacter(info);
                     continue;
                 }
 
                 if (info.LastLoginDate == DateTime.MinValue && info.CreationDate.AddMonths(Settings.ArchiveInactiveCharacterAfterMonths) <= Envir.Now)
                 {
-                    MessageQueue.Enqueue($"Player {info.Name} has been archived due to no login after {Settings.ArchiveInactiveCharacterAfterMonths} months.");
+                    MessageQueue.SendMsg($"Player {info.Name} has been archived due to no login after {Settings.ArchiveInactiveCharacterAfterMonths} months.");
                     Envir.SaveArchivedCharacter(info);
                     continue;
                 }
                 
                 if (info.LastLoginDate > DateTime.MinValue && info.LastLoginDate.AddMonths(Settings.ArchiveInactiveCharacterAfterMonths) <= Envir.Now)
                 {
-                    MessageQueue.Enqueue($"Player {info.Name} has been archived due to {Settings.ArchiveInactiveCharacterAfterMonths} months inactivity.");
+                    MessageQueue.SendMsg($"Player {info.Name} has been archived due to {Settings.ArchiveInactiveCharacterAfterMonths} months inactivity.");
                     Envir.SaveArchivedCharacter(info);
                     continue;
                 }

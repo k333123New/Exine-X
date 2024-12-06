@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -85,7 +85,7 @@ namespace Server.ExineObjects.Monsters
 
             if (targets.Count > 1 && Envir.Random.Next(2) > 0)
             {
-                Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
+                Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
                 for (int i = 0; i < targets.Count; i++)
                 {
                     DelayedAction action = new DelayedAction(DelayedType.Damage, Envir.Time + 600, targets[i], damage, DefenceType.AC);
@@ -122,7 +122,7 @@ namespace Server.ExineObjects.Monsters
 
             LineAttackTime = Envir.Time + 3000 + Envir.Random.Next(5) * 1000;
             Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
 
             for (int i = 1; i <= distance; i++)
             {

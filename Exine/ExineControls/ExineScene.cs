@@ -2,7 +2,7 @@
 using Exine.ExineNetwork;
 using Exine.ExineScenes;
 using SlimDX.Direct3D9;
-using S = ServerPackets;
+//
 
 namespace Exine.ExineControls
 {
@@ -172,37 +172,37 @@ namespace Exine.ExineControls
             TextureValid = false;
         }
         
-        public virtual void ProcessPacket(Packet p)
+        public virtual void ProcessRecvPacket(Packet p)
         {
             switch (p.Index)
             {
                 case (short)ServerPacketIds.Disconnect: // Disconnected
-                    Disconnect((S.Disconnect) p);
+                    Disconnect((ServerPacket.Disconnect) p);
                     Network.Disconnect();
                     break;
                 case (short)ServerPacketIds.NewItemInfo:
-                    NewItemInfo((S.NewItemInfo) p);
+                    NewItemInfo((ServerPacket.NewItemInfo) p);
                     break;
                 case (short)ServerPacketIds.NewChatItem:
-                    NewChatItem((S.NewChatItem)p);
+                    NewChatItem((ServerPacket.NewChatItem)p);
                     break;
                 case (short)ServerPacketIds.NewQuestInfo:
-                    NewQuestInfo((S.NewQuestInfo)p);
+                    NewQuestInfo((ServerPacket.NewQuestInfo)p);
                     break;
                 case (short)ServerPacketIds.NewRecipeInfo:
-                    NewRecipeInfo((S.NewRecipeInfo)p);
+                    NewRecipeInfo((ServerPacket.NewRecipeInfo)p);
                     break;
                 
             }
         }
 
-        private void NewItemInfo(S.NewItemInfo info)
+        private void NewItemInfo(ServerPacket.NewItemInfo info)
         {
             ExineMainScene.ItemInfoList.Add(info.Info);
         }
 
          
-        private void NewChatItem(S.NewChatItem p)
+        private void NewChatItem(ServerPacket.NewChatItem p)
         {
             if (ExineMainScene.ChatItemList.Any(x => x.UniqueID == p.Item.UniqueID)) return;
 
@@ -210,12 +210,12 @@ namespace Exine.ExineControls
             ExineMainScene.ChatItemList.Add(p.Item);
         }
 
-        private void NewQuestInfo(S.NewQuestInfo info)
+        private void NewQuestInfo(ServerPacket.NewQuestInfo info)
         {
             ExineMainScene.QuestInfoList.Add(info.Info);
         }
 
-        private void NewRecipeInfo(S.NewRecipeInfo info)
+        private void NewRecipeInfo(ServerPacket.NewRecipeInfo info)
         {
             ExineMainScene.RecipeInfoList.Add(info.Info);
 
@@ -228,7 +228,7 @@ namespace Exine.ExineControls
                 ExineMainScene.Bind(info.Info.Ingredients[j]);
         }
 
-        private static void Disconnect(S.Disconnect p)
+        private static void Disconnect(ServerPacket.Disconnect p)
         {
             switch (p.Reason)
             {

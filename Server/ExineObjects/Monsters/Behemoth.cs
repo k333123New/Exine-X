@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -40,7 +40,7 @@ namespace Server.ExineObjects.Monsters
                         break;
                     case 3:
                         {
-                            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
+                            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
 
                             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
                             if (damage == 0) return;
@@ -51,7 +51,7 @@ namespace Server.ExineObjects.Monsters
                         break;
                     case 4:
                         {
-                            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
+                            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 2 });
 
                             DelayedAction action = new DelayedAction(DelayedType.Damage, Envir.Time + 300, Target, 0, DefenceType.ACAgility, false);
                             ActionList.Add(action);
@@ -72,13 +72,13 @@ namespace Server.ExineObjects.Monsters
                     switch (Envir.Random.Next(2))
                     {
                         case 0:
-                            Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
+                            Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 0 });
 
                             SpawnSlaves(); //spawn huggers
                             break;
                         case 1:
                             {
-                                Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
+                                Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, Type = 1 });
 
                                 int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]) * 3;
                                 if (damage == 0) return;
@@ -111,7 +111,7 @@ namespace Server.ExineObjects.Monsters
 
             for (int i = 0; i < targets.Count; i++)
             {
-                Broadcast(new S.ObjectEffect { ObjectID = targets[i].ObjectID, Effect = SpellEffect.Behemoth });
+                Broadcast(new ServerPacket.ObjectEffect { ObjectID = targets[i].ObjectID, Effect = SpellEffect.Behemoth });
 
                 if (targets[i].Attacked(this, damage, defence) <= 0) continue;
 

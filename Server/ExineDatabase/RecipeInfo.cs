@@ -33,7 +33,7 @@ namespace Server.ExineDatabase
             ItemInfo itemInfo = Envir.GetItemInfo(name);
             if (itemInfo == null)
             {
-                MessageQueue.Enqueue(string.Format("Could not find Item: {0}", name));
+                MessageQueue.SendMsg(string.Format("Could not find Item: {0}", name));
                 return;
             }
 
@@ -98,7 +98,7 @@ namespace Server.ExineDatabase
 
                             if (info == null)
                             {
-                                MessageQueue.Enqueue(string.Format("Could not find Tool: {0}, Recipe: {1}", lines[i], recipe));
+                                MessageQueue.SendMsg(string.Format("Could not find Tool: {0}, Recipe: {1}", lines[i], recipe));
                                 continue;
                             }
 
@@ -115,7 +115,7 @@ namespace Server.ExineDatabase
 
                             if (info == null)
                             {
-                                MessageQueue.Enqueue(string.Format("Could not find Ingredient: {0}, Recipe: {1}", lines[i], recipe));
+                                MessageQueue.SendMsg(string.Format("Could not find Ingredient: {0}, Recipe: {1}", lines[i], recipe));
                                 continue;
                             }
 
@@ -176,7 +176,7 @@ namespace Server.ExineDatabase
                             }
                             catch
                             {
-                                MessageQueue.Enqueue(string.Format("Could not parse option: {0}, Value: {1}", data[0], data[1]));
+                                MessageQueue.SendMsg(string.Format("Could not parse option: {0}, Value: {1}", data[0], data[1]));
                                 continue;
                             }
                         }

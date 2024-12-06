@@ -1,6 +1,6 @@
 using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.VisualBasic.Devices;
-using ServerPackets;
+using ServerPacket;
 using SlimDX;
 using SlimDX.Direct3D9;
 using SlimDX.Windows; 
@@ -14,8 +14,8 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Text.Unicode;
 //using static System.Net.Mime.MediaTypeNames;
-using C = ClientPackets;
-using S = ServerPackets;
+//using ClientPacket = ClientPackets;
+//using ServerPacket = ServerPacket1;
 
 namespace ClientConsoleTest
 {
@@ -233,18 +233,18 @@ namespace ClientConsoleTest
                     Console.WriteLine("Send [SendVersion()]");
                     
                     //Gen Send Version Packet
-                    C.ClientVersion p1 = new C.ClientVersion();
+                    ClientPacket.ClientVersion p1 = new ClientPacket.ClientVersion();
                     byte[] sum;
                     using (MD5 md5 = MD5.Create())
                     using (FileStream stream = File.OpenRead(Application.ExecutablePath))
                         sum = md5.ComputeHash(stream); 
                     p1.VersionHash = sum;
-                    Network.Enqueue(p1);//Gen Send Version Packet
+                    Network.SendPacket(p1);//Gen Send Version Packet
 
                     break;
                 case (short)ServerPacketIds.ClientVersion:
                     Console.WriteLine("Send [NewAccount]");
-                    Network.Enqueue(new C.NewAccount
+                    Network.SendPacket(new ClientPacket.NewAccount
                     { 
                         AccountID = testAccount.id,//"필11111",
                         Password = testAccount.pw,//"12481248",
@@ -260,17 +260,17 @@ namespace ClientConsoleTest
 
 
                     //Keep Alive를 주기로 동작 실행
-                case (short)ServerPacketIds.KeepAlive: 
-                    
-                    Network.Enqueue(
-                        new C.Turn
+                case (short)ServerPacketIds.KeepAlive:
+
+                    Network.SendPacket(
+                        new ClientPacket.Turn
                         {
                             Direction = (ExineDirection)tempDirection,
                         }
                     );
 
-                    Network.Enqueue(
-                       new C.Chat
+                    Network.SendPacket(
+                       new ClientPacket.Chat
                        {
                            //Direction = (ExineDirection)tempDirection,
                            Message = "Test 테스트 " + tempDirection
@@ -281,8 +281,8 @@ namespace ClientConsoleTest
                     {
                         case 0:
                         case 4:
-                            Network.Enqueue(
-                           new C.Walk
+                            Network.SendPacket(
+                           new ClientPacket.Walk
                            {
                                //Direction = (ExineDirection)tempDirection,
                                Direction = (ExineDirection)tempDirection,
@@ -291,8 +291,8 @@ namespace ClientConsoleTest
                             break;
                         default:
 
-                            Network.Enqueue(
-                              new C.Attack
+                            Network.SendPacket(
+                              new ClientPacket.Attack
                               {
                                   //Direction = (ExineDirection)tempDirection,
                                   Direction = (ExineDirection)tempDirection,
@@ -303,8 +303,8 @@ namespace ClientConsoleTest
                     }
                     if (tempDirection == 0 || tempDirection == 4)
                     {
-                        Network.Enqueue(
-                           new C.Walk
+                        Network.SendPacket(
+                           new ClientPacket.Walk
                            {
                                //Direction = (ExineDirection)tempDirection,
                                Direction = (ExineDirection)tempDirection,
@@ -313,8 +313,8 @@ namespace ClientConsoleTest
                     }
                     //else
                     //{
-                    Network.Enqueue(
-                      new C.Attack
+                    Network.SendPacket(
+                      new ClientPacket.Attack
                       {
                           //Direction = (ExineDirection)tempDirection,
                           Direction = (ExineDirection)tempDirection,
@@ -324,13 +324,13 @@ namespace ClientConsoleTest
                     //}
                     /*
                     Network.Enqueue(
-                      new C.ChangeAMode
+                      new ClientPacket.ChangeAMode
                       {
                           Mode=AttackMode.Peace,
                       }
                    );
                     Network.Enqueue(
-                      new C.ChangeAMode
+                      new ClientPacket.ChangeAMode
                       {
                           Mode = AttackMode.All,
                       }
@@ -342,19 +342,19 @@ namespace ClientConsoleTest
                     break;
 
                 case (short)ServerPacketIds.UserInformation:
-                    var p = ((S.UserInformation)recvPacket);
+                    var p = ((ServerPacket.UserInformation)recvPacket);
                     Console.WriteLine("name:{0} NameColour:{1} Style{2} Color{3} ExPortraitLen{4} Gold{5}", p.Name,p.NameColour,p.ExStyle, p.ExColor, p.ExPortraitLen, p.Gold);
                      
                     
                     break;
 
                 case (short)ServerPacketIds.UserLocation:
-                    Point localtion = ((S.UserLocation)recvPacket).Location;
-                    ExineDirection direction = ((S.UserLocation)recvPacket).Direction; 
-                    Console.WriteLine("localtion:"+((S.UserLocation)recvPacket).Location.ToString()+ " Direction:"+direction);
+                    Point localtion = ((ServerPacket.UserLocation)recvPacket).Location;
+                    ExineDirection direction = ((ServerPacket.UserLocation)recvPacket).Direction;
+                    Console.WriteLine("localtion:"+((ServerPacket.UserLocation)recvPacket).Location.ToString()+ " Direction:"+ direction);
                     break;
                 case (short)ServerPacketIds.NewAccount:
-                    int result = ((S.NewAccount)recvPacket).Result;
+                    int result = ((ServerPacket.NewAccount)recvPacket).Result;
                     Console.Write("result :" + result);
                     //add k333123
                     if (result == 0) MessageBox.Show("Disable New Account");
@@ -372,11 +372,11 @@ namespace ClientConsoleTest
                     * 8: Success
                     */
                     //exist : 7  //ok : 8
-                    if (((S.NewAccount) recvPacket).Result==7 || ((S.NewAccount)recvPacket).Result == 8)
+                    if (((ServerPacket.NewAccount) recvPacket).Result==7 || ((ServerPacket.NewAccount)recvPacket).Result == 8)
                     {
                         Console.WriteLine(" > Send [Login]");
-                        Network.Enqueue(
-                            new C.Login
+                        Network.SendPacket(
+                            new ClientPacket.Login
                             {
                                 AccountID = testAccount.id,
                                 Password = testAccount.pw,
@@ -388,7 +388,7 @@ namespace ClientConsoleTest
                 case (short)ServerPacketIds.LoginSuccess:
                     Console.WriteLine("Send [NewCha]");
                     charList.Clear();
-                    charList.AddRange(((S.LoginSuccess)recvPacket).Characters);
+                    charList.AddRange(((ServerPacket.LoginSuccess)recvPacket).Characters);
                     for(int i=0;i< charList.Count;i++)
                     {
                         Console.WriteLine("name : " + charList[i].Name + "Index : " + charList[i].Index);
@@ -399,8 +399,8 @@ namespace ClientConsoleTest
                     //byte[] exPortraitBytes = GetBytesFromJpg("test.jpg");
 
                     //Select Scene
-                    Network.Enqueue(
-                         new C.NewCharacter
+                    Network.SendPacket(
+                         new ClientPacket.NewCharacter
                          {
                              Name = testAccount.id,//"필11111",
                              Class = 0, //Change to Color
@@ -422,8 +422,8 @@ namespace ClientConsoleTest
                         Console.WriteLine("name : " + charList[i].Name + "Index : " + charList[i].Index);
                     } 
                     Console.WriteLine("charList[charList.Count - 1].Index:" + charList[charList.Count - 1].Index);
-                    Network.Enqueue(
-                        new C.StartGame { 
+                    Network.SendPacket(
+                        new ClientPacket.StartGame { 
                         CharacterIndex = charList[charList.Count-1].Index,
                         }
                     );
@@ -432,15 +432,15 @@ namespace ClientConsoleTest
 
                 case (short)ServerPacketIds.NewCharacterSuccess:
                     Console.WriteLine("> Send [StartXam]");
-                    charList.Insert(0, ((S.NewCharacterSuccess)recvPacket).CharInfo);
+                    charList.Insert(0, ((ServerPacket.NewCharacterSuccess)recvPacket).CharInfo);
                     for (int i = 0; i < charList.Count; i++)
                     {
                         Console.WriteLine("name : " + charList[i].Name + "Index : " + charList[i].Index);
                     }
 
                     Console.WriteLine("charList[charList.Count - 1].Index:" + charList[charList.Count - 1].Index);
-                    Network.Enqueue(
-                        new C.StartGame
+                    Network.SendPacket(
+                        new ClientPacket.StartGame
                         {
                             CharacterIndex = charList[charList.Count - 1].Index,
                         }
@@ -454,7 +454,7 @@ namespace ClientConsoleTest
                 case (short)14:break;
                 
                 case (short)ServerPacketIds.ObjectPlayer:
-                    var temp = (S.ObjectPlayer)recvPacket;
+                    var temp = (ServerPacket.ObjectPlayer)recvPacket;
                     Console.WriteLine("ObjectPlayer.ObjectId{0}, ObjectPlayer.name{1}, ObjectPlayer.ExStyle{2}, ObjectPlayer.ExColor{3} ObjectPlayer.ExPortraitLen{4} ObjectPlayer.ExPortraitBytes[0]{5} ", 
                         temp.ObjectID, temp.Name, temp.ExStyle, temp.ExColor,temp.ExPortraitLen, temp.ExPortraitBytes[0]);
                     //save object portrait
@@ -464,12 +464,12 @@ namespace ClientConsoleTest
                     break;
 
                 case (short)ServerPacketIds.ObjectWalk:
-                    Console.WriteLine("ObjectWalk.ObjectId{0}, ObjectWalk.Location{1}", ((S.ObjectWalk)recvPacket).ObjectID, ((S.ObjectWalk)recvPacket).Location.ToString()); 
+                    Console.WriteLine("ObjectWalk.ObjectId{0}, ObjectWalk.Location{1}", ((ServerPacket.ObjectWalk)recvPacket).ObjectID, ((ServerPacket.ObjectWalk)recvPacket).Location.ToString()); 
                     break;
 
 
                 case (short)ServerPacketIds.ObjectRest:
-                    Console.WriteLine("ObjectRest.ObjectId{0}, ObjectRest.Location{1}", ((S.ObjectRest)recvPacket).ObjectID, ((S.ObjectRest)recvPacket).Location.ToString());
+                    Console.WriteLine("ObjectRest.ObjectId{0}, ObjectRest.Location{1}", ((ServerPacket.ObjectRest)recvPacket).ObjectID, ((ServerPacket.ObjectRest)recvPacket).Location.ToString());
                     break;
 
                 case (short)15:

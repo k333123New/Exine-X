@@ -3,15 +3,15 @@ using System.Net.Sockets;
 using Server.ExineDatabase;
 using Server.ExineEnvir;
 using Server.ExineObjects;
-using C = ClientPackets;
-using S = ServerPackets;
+
+
 using System.Text.RegularExpressions;
 using Server.Utils;
 
 namespace Server.ExineNetwork
 {
     /// <summary>
-    /// 사용자 입력에 관련된 패킷을 주로 처리한다.
+    /// OnRecvPacketHandler
     /// </summary>
     public enum GameStage { None, Login, Select, Game, Observer, Disconnected }
 
@@ -83,7 +83,7 @@ namespace Server.ExineNetwork
 
             Envir.UpdateIPBlock(IPAddress, TimeSpan.FromSeconds(Settings.IPBlockSeconds));
 
-            MessageQueue.Enqueue(IPAddress + ", Connected.");
+            MessageQueue.SendMsg(IPAddress + ", Connected.");
 
             _client = client;
             _client.NoDelay = true;
@@ -95,22 +95,22 @@ namespace Server.ExineNetwork
 
             _receiveList = new ConcurrentQueue<Packet>();
             _sendList = new ConcurrentQueue<Packet>();
-            _sendList.Enqueue(new S.Connected());
+            _sendList.Enqueue(new ServerPacket.Connected());
             _retryList = new Queue<Packet>();
 
             Connected = true;
             BeginReceive();
         }
 
-        public void AddObserver(ExineConnection c)
+        public void AddObserver(ExineConnection exineConnection)
         {
-            Observers.Add(c);
+            Observers.Add(exineConnection);
 
-            if (c.Observing != null)
-                c.Observing.Observers.Remove(c);
-            c.Observing = this;
+            if (exineConnection.Observing != null)
+                exineConnection.Observing.Observers.Remove(exineConnection);
+            exineConnection.Observing = this;
 
-            c.Stage = GameStage.Observer;
+            exineConnection.Stage = GameStage.Observer;
         }
 
         private void BeginReceive()
@@ -126,7 +126,6 @@ namespace Server.ExineNetwork
                 Disconnecting = true;
             }
         }
-
         private void ReceiveData(IAsyncResult result)
         {
             if (!Connected) return;
@@ -175,7 +174,7 @@ namespace Server.ExineNetwork
             {
                 Envir.UpdateIPBlock(IPAddress, TimeSpan.FromHours(24));
 
-                MessageQueue.Enqueue($"{IPAddress} Disconnected, Invalid packet.");
+                MessageQueue.SendMsg($"{IPAddress} Disconnected, Invalid packet.");
 
                 Disconnecting = true;
                 return;
@@ -196,7 +195,7 @@ namespace Server.ExineNetwork
                     packetList.Add(cPacket.ToString());
                 }
 
-                MessageQueue.Enqueue($"{IPAddress} Disconnected, Large amount of Packets. LastPackets: {String.Join(",", packetList.Distinct())}.");
+                MessageQueue.SendMsg($"{IPAddress} Disconnected, Large amount of Packets. LastPackets: {String.Join(",", packetList.Distinct())}.");
 
                 Disconnecting = true;
                 return;
@@ -204,6 +203,7 @@ namespace Server.ExineNetwork
 
             BeginReceive();
         }
+        
         private void BeginSend(List<byte> data)
         {
             if (!Connected || data.Count == 0) return;
@@ -228,8 +228,7 @@ namespace Server.ExineNetwork
             catch
             { }
         }
-        
-        public void Enqueue(Packet p)
+        public void SendPacketToClient(Packet p)
         {
             if (p == null) return;
             if (_sendList != null && p != null)
@@ -237,14 +236,14 @@ namespace Server.ExineNetwork
 
             if (!p.Observable) return;
             foreach (ExineConnection c in Observers)
-                c.Enqueue(p);
+                c.SendPacketToClient(p);
         }
 
         public void Process()
         {
             if (_client == null || !_client.Connected)
             {
-                Disconnect(20);
+                OnRecvDisconnectHandler(20);
                 return;
             }
 
@@ -256,7 +255,7 @@ namespace Server.ExineNetwork
                 _lastPackets.Enqueue(p);
 
                 TimeOutTime = Envir.Time + Settings.TimeOut;
-                ProcessPacket(p);
+                ProcessRecvPacket(p);
 
                 if (_receiveList == null)
                     return;
@@ -267,7 +266,7 @@ namespace Server.ExineNetwork
 
             if (Envir.Time > TimeOutTime)
             {
-                Disconnect(21);
+                OnRecvDisconnectHandler(21);
                 return;
             }
 
@@ -284,306 +283,306 @@ namespace Server.ExineNetwork
 
             BeginSend(data);
         }
-        private void ProcessPacket(Packet p)
+        private void ProcessRecvPacket(Packet p)
         {
             if (p == null || Disconnecting) return;
 
             switch (p.Index)
             {
                 case (short)ClientPacketIds.ClientVersion:
-                    ClientVersion((C.ClientVersion) p);
+                    OnRecvClientVersionHandler((ClientPacket.ClientVersion) p);
                     break;
                 case (short)ClientPacketIds.Disconnect:
-                    Disconnect(22);
+                    OnRecvDisconnectHandler(22);
                     break;
                 case (short)ClientPacketIds.KeepAlive: // Keep Alive
-                    ClientKeepAlive((C.KeepAlive)p);
+                    OnRecvClientKeepAliveHandler((ClientPacket.KeepAlive)p);
                     break;
                 case (short)ClientPacketIds.NewAccount:
-                    NewAccount((C.NewAccount) p);
+                    OnRecvNewAccountHandler((ClientPacket.NewAccount) p);
                     break;
                 case (short)ClientPacketIds.ChangePassword:
-                    ChangePassword((C.ChangePassword) p);
+                    OnRecvChangePasswordHandler((ClientPacket.ChangePassword) p);
                     break;
                 case (short)ClientPacketIds.Login:
-                    Login((C.Login) p);
+                    OnRecvLoginHandler((ClientPacket.Login) p);
                     break;
                 case (short)ClientPacketIds.NewCharacter:
-                    NewCharacter((C.NewCharacter) p);
+                    OnRecvNewCharacterHandler((ClientPacket.NewCharacter) p);
                     break;
                 case (short)ClientPacketIds.DeleteCharacter:
-                    DeleteCharacter((C.DeleteCharacter) p);
+                    OnRecvDeleteCharacterHandler((ClientPacket.DeleteCharacter) p);
                     break;
                 case (short)ClientPacketIds.StartGame:
-                    StartGame((C.StartGame) p);
+                    OnRecvStartGameHandler((ClientPacket.StartGame) p);
                     break;
                 case (short)ClientPacketIds.LogOut:
-                    LogOut();
+                    OnRecvLogOutHandler();
                     break;
                 case (short)ClientPacketIds.Turn:
-                    Turn((C.Turn) p);
+                    OnRecvTurnHandler((ClientPacket.Turn) p);
                     break;
                 case (short)ClientPacketIds.Walk:
-                    Walk((C.Walk) p);
+                    OnRecvWalkHandler((ClientPacket.Walk) p);
                     break;
                 case (short)ClientPacketIds.Run:
-                    Run((C.Run) p);
+                    OnRecvRunHandler((ClientPacket.Run) p);
                     break;
                 case (short)ClientPacketIds.Chat:
-                    Chat((C.Chat) p);
+                    OnRecvChatHandler((ClientPacket.Chat) p);
                     break;
                 case (short)ClientPacketIds.MoveItem:
-                    MoveItem((C.MoveItem) p);
+                    OnRecvMoveItemHandler((ClientPacket.MoveItem) p);
                     break;
                 case (short)ClientPacketIds.StoreItem:
-                    StoreItem((C.StoreItem) p);
+                    OnRecvStoreItemHandler((ClientPacket.StoreItem) p);
                     break;
                 case (short)ClientPacketIds.DepositRefineItem:
-                    DepositRefineItem((C.DepositRefineItem)p);
+                    OnRecvDepositRefineItemHandler((ClientPacket.DepositRefineItem)p);
                     break;
                 case (short)ClientPacketIds.RetrieveRefineItem:
-                    RetrieveRefineItem((C.RetrieveRefineItem)p);
+                    OnRecvRetrieveRefineItemHandler((ClientPacket.RetrieveRefineItem)p);
                     break;
                 case (short)ClientPacketIds.RefineCancel:
-                    RefineCancel((C.RefineCancel)p);
+                    OnRefineCancelHandler((ClientPacket.RefineCancel)p);
                     break;
                 case (short)ClientPacketIds.RefineItem:
-                    RefineItem((C.RefineItem)p);
+                    OnRecvRefineItemHandler((ClientPacket.RefineItem)p);
                     break;
                 case (short)ClientPacketIds.CheckRefine:
-                    CheckRefine((C.CheckRefine)p);
+                    OnRecvCheckRefineHandler((ClientPacket.CheckRefine)p);
                     break;
                 case (short)ClientPacketIds.ReplaceWedRing:
-                    ReplaceWedRing((C.ReplaceWedRing)p);
+                    OnRecvReplaceWedRingHandler((ClientPacket.ReplaceWedRing)p);
                     break;
                 case (short)ClientPacketIds.DepositTradeItem:
-                    DepositTradeItem((C.DepositTradeItem)p);
+                    OnRecvDepositTradeItemHandler((ClientPacket.DepositTradeItem)p);
                     break;
                 case (short)ClientPacketIds.RetrieveTradeItem:
-                    RetrieveTradeItem((C.RetrieveTradeItem)p);
+                    OnRecvRetrieveTradeItemHandler((ClientPacket.RetrieveTradeItem)p);
                     break;
                 case (short)ClientPacketIds.TakeBackItem:
-                    TakeBackItem((C.TakeBackItem) p);
+                    OnRecvTakeBackItemHandler((ClientPacket.TakeBackItem) p);
                     break;
                 case (short)ClientPacketIds.MergeItem:
-                    MergeItem((C.MergeItem) p);
+                    OnRecvMergeItemHandler((ClientPacket.MergeItem) p);
                     break;
                 case (short)ClientPacketIds.EquipItem:
-                    EquipItem((C.EquipItem) p);
+                    OnRecvEquipItemHandler((ClientPacket.EquipItem) p);
                     break;
                 case (short)ClientPacketIds.RemoveItem:
-                    RemoveItem((C.RemoveItem) p);
+                    OnRecvRemoveItemHandler((ClientPacket.RemoveItem) p);
                     break;
                 case (short)ClientPacketIds.RemoveSlotItem:
-                    RemoveSlotItem((C.RemoveSlotItem)p);
+                    OnRecvRemoveSlotItemHandler((ClientPacket.RemoveSlotItem)p);
                     break;
                 case (short)ClientPacketIds.SplitItem:
-                    SplitItem((C.SplitItem) p);
+                    OnRecvSplitItemHandler((ClientPacket.SplitItem) p);
                     break;
                 case (short)ClientPacketIds.UseItem:
-                    UseItem((C.UseItem) p);
+                    OnRecvUseItemHandler((ClientPacket.UseItem) p);
                     break;
                 case (short)ClientPacketIds.DropItem:
-                    DropItem((C.DropItem) p);
+                    OnRecvDropItemHandler((ClientPacket.DropItem) p);
                     break;
                 
                 case (short)ClientPacketIds.DropGold:
-                    DropGold((C.DropGold) p);
+                    OnRecvDropGoldHandler((ClientPacket.DropGold) p);
                     break;
                 case (short)ClientPacketIds.PickUp:
-                    PickUp();
+                    OnRecvPickUpHandler();
                     break;
                 case (short)ClientPacketIds.RequestMapInfo:
-                    RequestMapInfo((C.RequestMapInfo)p);
+                    OnRecvRequestMapInfoHandler((ClientPacket.RequestMapInfo)p);
                     break;
                 case (short)ClientPacketIds.TeleportToNPC:
-                    TeleportToNPC((C.TeleportToNPC)p);
+                    OnRecvTeleportToNPCHandler((ClientPacket.TeleportToNPC)p);
                     break;
                 case (short)ClientPacketIds.SearchMap:
-                    SearchMap((C.SearchMap)p);
+                    OnRecvSearchMapHandler((ClientPacket.SearchMap)p);
                     break;
                 case (short)ClientPacketIds.Inspect:
-                    Inspect((C.Inspect)p);
+                    OnRecvInspectHandler((ClientPacket.Inspect)p);
                     break;
                 case (short)ClientPacketIds.Observe:
-                    Observe((C.Observe)p);
+                    OnRecvObserveHandler((ClientPacket.Observe)p);
                     break;
                 case (short)ClientPacketIds.ChangeAMode:
-                    ChangeAMode((C.ChangeAMode)p);
+                    OnRecvChangeAModeHandler((ClientPacket.ChangeAMode)p);
                     break;
                 case (short)ClientPacketIds.ChangePMode:
-                    ChangePMode((C.ChangePMode)p);
+                    OnRecvChangePModeHandler((ClientPacket.ChangePMode)p);
                     break;
                 case (short)ClientPacketIds.ChangeTrade:
-                    ChangeTrade((C.ChangeTrade)p);
+                    OnRecvChangeTradeHandler((ClientPacket.ChangeTrade)p);
                     break;
                 case (short)ClientPacketIds.Attack:
-                    Attack((C.Attack)p);
+                    OnRecvAttackHandler((ClientPacket.Attack)p);
                     break;
                 case (short)ClientPacketIds.RangeAttack:
-                    RangeAttack((C.RangeAttack)p);
+                    OnRecvRangeAttackHandler((ClientPacket.RangeAttack)p);
                     break;
                 case (short)ClientPacketIds.Harvest:
-                    Harvest((C.Harvest)p);
+                    OnRecvHarvestHandler((ClientPacket.Harvest)p);
                     break;
                 case (short)ClientPacketIds.CallNPC:
-                    CallNPC((C.CallNPC)p);
+                    OnRecvCallNPCHandler((ClientPacket.CallNPC)p);
                     break;
                 case (short)ClientPacketIds.BuyItem:
-                    BuyItem((C.BuyItem)p);
+                    OnRecvBuyItemHandler((ClientPacket.BuyItem)p);
                     break;
                 case (short)ClientPacketIds.CraftItem:
-                    CraftItem((C.CraftItem)p);
+                    OnRecvCraftItemHandler((ClientPacket.CraftItem)p);
                     break;
                 case (short)ClientPacketIds.SellItem:
-                    SellItem((C.SellItem)p);
+                    OnRecvSellItemHandler((ClientPacket.SellItem)p);
                     break;
                 case (short)ClientPacketIds.RepairItem:
-                    RepairItem((C.RepairItem)p);
+                    OnRecvRepairItemHandler((ClientPacket.RepairItem)p);
                     break;
                 case (short)ClientPacketIds.BuyItemBack:
-                    BuyItemBack((C.BuyItemBack)p);
+                    OnRecvBuyItemBackHandler((ClientPacket.BuyItemBack)p);
                     break;
                 case (short)ClientPacketIds.SRepairItem:
-                    SRepairItem((C.SRepairItem)p);
+                    OnRecvSRepairItemHAndler((ClientPacket.SRepairItem)p);
                     break;
                 case (short)ClientPacketIds.MagicKey:
-                    MagicKey((C.MagicKey)p);
+                    OnRecvMagicKeyHandler((ClientPacket.MagicKey)p);
                     break;
                 case (short)ClientPacketIds.Magic:
-                    Magic((C.Magic)p);
+                    OnRecvMagicHAndler((ClientPacket.Magic)p);
                     break;
                 case (short)ClientPacketIds.SwitchGroup:
-                    SwitchGroup((C.SwitchGroup)p);
+                    OnRecvSwitchGroupHandler((ClientPacket.SwitchGroup)p);
                     return;
                 case (short)ClientPacketIds.AddMember:
-                    AddMember((C.AddMember)p);
+                    OnRecvAddMemberHandler((ClientPacket.AddMember)p);
                     return;
                 case (short)ClientPacketIds.DellMember:
-                    DelMember((C.DelMember)p);
+                    OnRecvDelMemberHandler((ClientPacket.DelMember)p);
                     return;
                 case (short)ClientPacketIds.GroupInvite:
-                    GroupInvite((C.GroupInvite)p);
+                    OnRecvGroupInviteHAndler((ClientPacket.GroupInvite)p);
                     return;
                 case (short)ClientPacketIds.TownRevive:
-                    TownRevive();
+                    OnRecvTownReviveHandler();
                     return;
                 case (short)ClientPacketIds.SpellToggle:
-                    SpellToggle((C.SpellToggle)p);
+                    OnRecvSpellToggleHAndler((ClientPacket.SpellToggle)p);
                     return;
                 case (short)ClientPacketIds.ConsignItem:
-                    ConsignItem((C.ConsignItem)p);
+                    OnRecvConsignItemHandler((ClientPacket.ConsignItem)p);
                     return;
                 
                 case (short)ClientPacketIds.RequestUserName:
-                    RequestUserName((C.RequestUserName)p);
+                    OnRecvRequestUserNameHandler((ClientPacket.RequestUserName)p);
                     return;
                 case (short)ClientPacketIds.RequestChatItem:
-                    RequestChatItem((C.RequestChatItem)p);
+                    OnRecvRequestChatItemHandler((ClientPacket.RequestChatItem)p);
                     return;
                 case (short)ClientPacketIds.EditGuildMember:
-                    EditGuildMember((C.EditGuildMember)p);
+                    OnRecvEditGuildMemberHandler((ClientPacket.EditGuildMember)p);
                     return;
                 case (short)ClientPacketIds.EditGuildNotice:
-                    EditGuildNotice((C.EditGuildNotice)p);
+                    OnRecvEditGuildNoticeHandler((ClientPacket.EditGuildNotice)p);
                     return;
                 case (short)ClientPacketIds.GuildInvite:
-                    GuildInvite((C.GuildInvite)p);
+                    OnRecvGuildInviteHandler((ClientPacket.GuildInvite)p);
                     return;
                 case (short)ClientPacketIds.RequestGuildInfo:
-                    RequestGuildInfo((C.RequestGuildInfo)p);
+                    OnRecvRequestGuildInfoHAndler((ClientPacket.RequestGuildInfo)p);
                     return;
                 case (short)ClientPacketIds.GuildNameReturn:
-                    GuildNameReturn((C.GuildNameReturn)p);
+                    OnRecvGuildNameReturnHandler((ClientPacket.GuildNameReturn)p);
                     return;
                 case (short)ClientPacketIds.GuildStorageGoldChange:
-                    GuildStorageGoldChange((C.GuildStorageGoldChange)p);
+                    OnRecvGuildStorageGoldChangeHandler((ClientPacket.GuildStorageGoldChange)p);
                     return;
                 case (short)ClientPacketIds.GuildStorageItemChange:
-                    GuildStorageItemChange((C.GuildStorageItemChange)p);
+                    OnRecvGuildStorageItemChangeHandler((ClientPacket.GuildStorageItemChange)p);
                     return;
                 case (short)ClientPacketIds.GuildWarReturn:
-                    GuildWarReturn((C.GuildWarReturn)p);
+                    OnRecvGuildWarReturnHandler((ClientPacket.GuildWarReturn)p);
                     return;
                 case (short)ClientPacketIds.MarriageRequest:
-                    MarriageRequest((C.MarriageRequest)p);
+                    OnRecvMarriageRequestHandler((ClientPacket.MarriageRequest)p);
                     return;
                 case (short)ClientPacketIds.MarriageReply:
-                    MarriageReply((C.MarriageReply)p);
+                    OnRecvMarriageReplyHandler((ClientPacket.MarriageReply)p);
                     return;
                 case (short)ClientPacketIds.ChangeMarriage:
-                    ChangeMarriage((C.ChangeMarriage)p);
+                    OnRecvChangeMarriageHandler((ClientPacket.ChangeMarriage)p);
                     return;
                 case (short)ClientPacketIds.DivorceRequest:
-                    DivorceRequest((C.DivorceRequest)p);
+                    OnRecvDivorceRequestHandler((ClientPacket.DivorceRequest)p);
                     return;
                 case (short)ClientPacketIds.DivorceReply:
-                    DivorceReply((C.DivorceReply)p);
+                    OnRecvDivorceReplyHandler((ClientPacket.DivorceReply)p);
                     return;
                 case (short)ClientPacketIds.AddMentor:
-                    AddMentor((C.AddMentor)p);
+                    OnRecvAddMentorHandler((ClientPacket.AddMentor)p);
                     return;
                 case (short)ClientPacketIds.MentorReply:
-                    MentorReply((C.MentorReply)p);
+                    OnRecvMentorReplyHandler((ClientPacket.MentorReply)p);
                     return;
                 case (short)ClientPacketIds.AllowMentor:
-                    AllowMentor((C.AllowMentor)p);
+                    OnRecvAllowMentorHandler((ClientPacket.AllowMentor)p);
                     return;
                 case (short)ClientPacketIds.CancelMentor:
-                    CancelMentor((C.CancelMentor)p);
+                    OnRecvCancelMentorHandler((ClientPacket.CancelMentor)p);
                     return;
                 case (short)ClientPacketIds.TradeRequest:
-                    TradeRequest((C.TradeRequest)p);
+                    OnRecvTradeRequestHandler((ClientPacket.TradeRequest)p);
                     return;
                 case (short)ClientPacketIds.TradeGold:
-                    TradeGold((C.TradeGold)p);
+                    OnRecvTradeGoldHandler((ClientPacket.TradeGold)p);
                     return;
                 case (short)ClientPacketIds.TradeReply:
-                    TradeReply((C.TradeReply)p);
+                    OnRecvTradeReplyHandler((ClientPacket.TradeReply)p);
                     return;
                 case (short)ClientPacketIds.TradeConfirm:
-                    TradeConfirm((C.TradeConfirm)p);
+                    OnRecvTradeConfirmHandler((ClientPacket.TradeConfirm)p);
                     return;
                 case (short)ClientPacketIds.TradeCancel:
-                    TradeCancel((C.TradeCancel)p);
+                    OnRecvTradeCancelHandler((ClientPacket.TradeCancel)p);
                     return;
                 case (short)ClientPacketIds.EquipSlotItem:
-                    EquipSlotItem((C.EquipSlotItem)p);
+                    OnRecvEquipSlotItemHandler((ClientPacket.EquipSlotItem)p);
                     break;
                 case (short)ClientPacketIds.FishingCast:
-                    FishingCast((C.FishingCast)p);
+                    OnRecvFishingCastHandler((ClientPacket.FishingCast)p);
                     break;
                 case (short)ClientPacketIds.FishingChangeAutocast:
-                    FishingChangeAutocast((C.FishingChangeAutocast)p);
+                    OnRecvFishingChangeAutocastHandler((ClientPacket.FishingChangeAutocast)p);
                     break;
                 case (short)ClientPacketIds.AcceptQuest:
-                    AcceptQuest((C.AcceptQuest)p);
+                    OnRecvAcceptQuestHandler((ClientPacket.AcceptQuest)p);
                     break;
                 case (short)ClientPacketIds.FinishQuest:
-                    FinishQuest((C.FinishQuest)p);
+                    OnRecvFinishQuestHandler((ClientPacket.FinishQuest)p);
                     break;
                 case (short)ClientPacketIds.AbandonQuest:
-                    AbandonQuest((C.AbandonQuest)p);
+                    OnRecvAbandonQuestHandler((ClientPacket.AbandonQuest)p);
                     break;
                 case (short)ClientPacketIds.ShareQuest:
-                    ShareQuest((C.ShareQuest)p);
+                    OnRecvShareQuestHandler((ClientPacket.ShareQuest)p);
                     break;
                 case (short)ClientPacketIds.AcceptReincarnation:
-                    AcceptReincarnation();
+                    OnRecvAcceptReincarnation();
                     break;
                 case (short)ClientPacketIds.CancelReincarnation:
-                     CancelReincarnation();
+                    OnRecvCancelReincarnation();
                     break;
                 case (short)ClientPacketIds.CombineItem:
-                    CombineItem((C.CombineItem)p);
+                    OnRecvCombineItemHandler((ClientPacket.CombineItem)p);
                     break;
                 
                 
                 case (short)ClientPacketIds.AddFriend:
-                    AddFriend((C.AddFriend)p);
+                    OnRecvAddFriendHandler((ClientPacket.AddFriend)p);
                     break;
                 case (short)ClientPacketIds.RemoveFriend:
-                    RemoveFriend((C.RemoveFriend)p);
+                    OnRecvRemoveFriendHandler((ClientPacket.RemoveFriend)p);
                     break;
                 case (short)ClientPacketIds.RefreshFriends:
                     {
@@ -593,41 +592,40 @@ namespace Server.ExineNetwork
                     }
                  
                 case (short)ClientPacketIds.GuildBuffUpdate:
-                    GuildBuffUpdate((C.GuildBuffUpdate)p);
+                    OnRecvGuildBuffUpdateHandler((ClientPacket.GuildBuffUpdate)p);
                     break;
                 case (short)ClientPacketIds.GameshopBuy:
-                    GameshopBuy((C.GameshopBuy)p);
+                    OnRecvGameshopBuyHandler((ClientPacket.GameshopBuy)p);
                     return;
                 case (short)ClientPacketIds.NPCConfirmInput:
-                    NPCConfirmInput((C.NPCConfirmInput)p);
+                    OnRecvNPCConfirmInputHandler((ClientPacket.NPCConfirmInput)p);
                     break;
                 case (short)ClientPacketIds.ReportIssue:
-                    ReportIssue((C.ReportIssue)p);
+                    OnRecvReportIssueHandler((ClientPacket.ReportIssue)p);
                     break;
                 case (short)ClientPacketIds.GetRanking:
-                    GetRanking((C.GetRanking)p);
+                    OnRecvGetRankingHandler((ClientPacket.GetRanking)p);
                     break;
                 case (short)ClientPacketIds.Opendoor:
-                    Opendoor((C.Opendoor)p);
+                    OnRecvOpendoorHandler((ClientPacket.Opendoor)p);
                     break;
                
                 case (short)ClientPacketIds.Rest:
-                    Rest((C.Rest)p);
+                    OnRecvRestHandler((ClientPacket.Rest)p);
                     break;
 
                 //Server Recv ClientPacketIds.UpdatePhoto packet
                 case (short)ClientPacketIds.UpdatePhoto:
                     Console.WriteLine("@@@333 UpdatePhoto");
                     Console.WriteLine("ExineConnection_ProcessPacket_case (short)ClientPacketIds.UpdatePhoto");
-                    UpdatePhoto((C.UpdatePhoto)p);
+                    OnRecvUpdatePhotoHandler((ClientPacket.UpdatePhoto)p);
                     break;
 
                 default:
-                    MessageQueue.Enqueue(string.Format("Invalid packet received. Index : {0}", p.Index));
+                    MessageQueue.SendMsg(string.Format("Invalid packet received. Index : {0}", p.Index));
                     break;
             }
         }
-
         public void SoftDisconnect(byte reason)
         {
             Stage = GameStage.Disconnected;
@@ -644,7 +642,38 @@ namespace Server.ExineNetwork
 
             Account = null;
         }
-        public void Disconnect(byte reason)
+        public void SendDisconnect(byte reason)
+        {
+            if (!Connected)
+            {
+                Disconnecting = true;
+                SoftDisconnect(reason);
+                return;
+            }
+            
+            Disconnecting = true;
+
+            List<byte> data = new List<byte>();
+
+            data.AddRange(new ServerPacket.Disconnect { Reason = reason }.GetPacketBytes());
+
+            BeginSend(data);
+            SoftDisconnect(reason);
+        }
+        public void CleanObservers()
+        {
+            foreach (ExineConnection c in Observers)
+            {
+                c.Stage = GameStage.Login;
+                c.SendPacketToClient(new ServerPacket.ReturnToLogin());
+            }
+        }
+         
+        public List<byte[]> Image = new List<byte[]>();
+
+
+        #region OnRecvFromClient Handers
+        public void OnRecvDisconnectHandler(byte reason)
         {
             if (!Connected) return;
 
@@ -665,7 +694,7 @@ namespace Server.ExineNetwork
             }
 
             if (Observing != null)
-                Observing.Observers.Remove(this);            
+                Observing.Observers.Remove(this);
 
             Account = null;
 
@@ -677,34 +706,7 @@ namespace Server.ExineNetwork
             if (_client != null) _client.Client.Dispose();
             _client = null;
         }
-        public void SendDisconnect(byte reason)
-        {
-            if (!Connected)
-            {
-                Disconnecting = true;
-                SoftDisconnect(reason);
-                return;
-            }
-            
-            Disconnecting = true;
-
-            List<byte> data = new List<byte>();
-
-            data.AddRange(new S.Disconnect { Reason = reason }.GetPacketBytes());
-
-            BeginSend(data);
-            SoftDisconnect(reason);
-        }
-        public void CleanObservers()
-        {
-            foreach (ExineConnection c in Observers)
-            {
-                c.Stage = GameStage.Login;
-                c.Enqueue(new S.ReturnToLogin());
-            }
-        }
-
-        private void ClientVersion(C.ClientVersion p)
+        private void OnRecvClientVersionHandler(ClientPacket.ClientVersion p)
         {
             if (Stage != GameStage.None) return;
 
@@ -727,50 +729,49 @@ namespace Server.ExineNetwork
 
                     List<byte> data = new List<byte>();
 
-                    data.AddRange(new S.ClientVersion { Result = 0 }.GetPacketBytes());
+                    data.AddRange(new ServerPacket.ClientVersion { Result = 0 }.GetPacketBytes());
 
                     BeginSend(data);
                     SoftDisconnect(10);
-                    MessageQueue.Enqueue(SessionID + ", Disconnnected - Wrong Client Version.");
+                    MessageQueue.SendMsg(SessionID + ", Disconnnected - Wrong Client Version.");
                     return;
                 }
             }
 
-            MessageQueue.Enqueue(SessionID + ", " + IPAddress + ", Client version matched.");
-            Enqueue(new S.ClientVersion { Result = 1 });
+            MessageQueue.SendMsg(SessionID + ", " + IPAddress + ", Client version matched.");
+            SendPacketToClient(new ServerPacket.ClientVersion { Result = 1 });
 
             Stage = GameStage.Login;
         }
-        private void ClientKeepAlive(C.KeepAlive p)
+        private void OnRecvClientKeepAliveHandler(ClientPacket.KeepAlive p)
         {
-            Enqueue(new S.KeepAlive
+            SendPacketToClient(new ServerPacket.KeepAlive
             {
                 Time = p.Time
             });
         }
-        private void NewAccount(C.NewAccount p)
+        private void OnRecvNewAccountHandler(ClientPacket.NewAccount p)
         {
             if (Stage != GameStage.Login) return;
 
-            MessageQueue.Enqueue(SessionID + ", " + IPAddress + ", New account being created.");
+            MessageQueue.SendMsg(SessionID + ", " + IPAddress + ", New account being created.");
             Envir.NewAccount(p, this);
         }
-        private void ChangePassword(C.ChangePassword p)
+        private void OnRecvChangePasswordHandler(ClientPacket.ChangePassword p)
         {
             if (Stage != GameStage.Login) return;
 
-            MessageQueue.Enqueue(SessionID + ", " + IPAddress + ", Password being changed.");
+            MessageQueue.SendMsg(SessionID + ", " + IPAddress + ", Password being changed.");
             Envir.ChangePassword(p, this);
         }
-        
-        private void Login(C.Login p)
+        private void OnRecvLoginHandler(ClientPacket.Login p)
         {
             if (Stage != GameStage.Login) return;
 
-            MessageQueue.Enqueue(SessionID + ", " + IPAddress + ", User logging in.");
+            MessageQueue.SendMsg(SessionID + ", " + IPAddress + ", User logging in.");
             Envir.Login(p, this);
         }
-        private void NewCharacter(C.NewCharacter p)
+        private void OnRecvNewCharacterHandler(ClientPacket.NewCharacter p)
         {
             Console.WriteLine("NewCharacter");
             if (Stage != GameStage.Select) return; //231107
@@ -778,13 +779,13 @@ namespace Server.ExineNetwork
 
             Envir.NewCharacter(p, this, Account.AdminAccount);
         }
-        private void DeleteCharacter(C.DeleteCharacter p)
+        private void OnRecvDeleteCharacterHandler(ClientPacket.DeleteCharacter p)
         {
             if (Stage != GameStage.Select) return;
             
             if (!Settings.AllowDeleteCharacter)
             {
-                Enqueue(new S.DeleteCharacter { Result = 0 });
+                SendPacketToClient(new ServerPacket.DeleteCharacter { Result = 0 });
                 return;
             }
 
@@ -801,28 +802,28 @@ namespace Server.ExineNetwork
 
             if (temp == null)
             {
-                Enqueue(new S.DeleteCharacter { Result = 1 });
+                SendPacketToClient(new ServerPacket.DeleteCharacter { Result = 1 });
                 return;
             }
 
             temp.Deleted = true;
             temp.DeleteDate = Envir.Now;
             Envir.RemoveRank(temp);
-            Enqueue(new S.DeleteCharacterSuccess { CharacterIndex = temp.Index });
+            SendPacketToClient(new ServerPacket.DeleteCharacterSuccess { CharacterIndex = temp.Index });
         }
-        private void StartGame(C.StartGame p)
+        private void OnRecvStartGameHandler(ClientPacket.StartGame p)
         {
             if (Stage != GameStage.Select) return;
 
             if (!Settings.AllowStartGame && (Account == null || (Account != null && !Account.AdminAccount)))
             {
-                Enqueue(new S.StartGame { Result = 0 });
+                SendPacketToClient(new ServerPacket.StartGame { Result = 0 });
                 return;
             }
 
             if (Account == null)
             {
-                Enqueue(new S.StartGame { Result = 1 });
+                SendPacketToClient(new ServerPacket.StartGame { Result = 1 });
                 return;
             }
 
@@ -838,7 +839,7 @@ namespace Server.ExineNetwork
             }
             if (info == null)
             {
-                Enqueue(new S.StartGame { Result = 2 });
+                SendPacketToClient(new ServerPacket.StartGame { Result = 2 });
                 return;
             }
 
@@ -846,7 +847,7 @@ namespace Server.ExineNetwork
             {
                 if (info.ExpiryDate > Envir.Now)
                 {
-                    Enqueue(new S.StartGameBanned { Reason = info.BanReason, ExpiryDate = info.ExpiryDate });
+                    SendPacketToClient(new ServerPacket.StartGameBanned { Reason = info.BanReason, ExpiryDate = info.ExpiryDate });
                     return;
                 }
                 info.Banned = false;
@@ -859,21 +860,20 @@ namespace Server.ExineNetwork
 
             //if (delay < Settings.RelogDelay)
             //{
-            //    Enqueue(new S.StartGameDelay { Milliseconds = Settings.RelogDelay - delay });
+            //    Enqueue(new ServerPacket.StartGameDelay { Milliseconds = Settings.RelogDelay - delay });
             //    return;
             //}
 
             Player = new PlayerObjectSrv(info, this);
             Player.StartGame();
         }
-
-        public void LogOut()
+        public void OnRecvLogOutHandler()
         {
             if (Stage != GameStage.Game) return;
 
             if (Envir.Time < Player.LogTime)
             {
-                Enqueue(new S.LogOutFailed());
+                SendPacketToClient(new ServerPacket.LogOutFailed());
                 return;
             }
 
@@ -882,10 +882,9 @@ namespace Server.ExineNetwork
             Stage = GameStage.Select;
             Player = null;
 
-            Enqueue(new S.LogOutSuccess { Characters = Account.GetSelectInfo() });
+            SendPacketToClient(new ServerPacket.LogOutSuccess { Characters = Account.GetSelectInfo() });
         }
-
-        private void Turn(C.Turn p)
+        private void OnRecvTurnHandler(ClientPacket.Turn p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -894,7 +893,7 @@ namespace Server.ExineNetwork
             else
                 Player.Turn(p.Direction);
         }
-        private void Walk(C.Walk p)
+        private void OnRecvWalkHandler(ClientPacket.Walk p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -903,7 +902,7 @@ namespace Server.ExineNetwork
             else
                 Player.Walk(p.Direction);
         }
-        private void Run(C.Run p)
+        private void OnRecvRunHandler(ClientPacket.Run p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -912,8 +911,7 @@ namespace Server.ExineNetwork
             else
                 Player.Run(p.Direction);
         }
-        
-        private void Chat(C.Chat p)
+        private void OnRecvChatHandler(ClientPacket.Chat p)
         {
             if (p.Message.Length > Globals.MaxChatLength)
             {
@@ -925,112 +923,103 @@ namespace Server.ExineNetwork
 
             Player.Chat(p.Message, p.LinkedItems);
         }
-
-        private void MoveItem(C.MoveItem p)
+        private void OnRecvMoveItemHandler(ClientPacket.MoveItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.MoveItem(p.Grid, p.From, p.To);
         }
-        private void StoreItem(C.StoreItem p)
+        private void OnRecvStoreItemHandler(ClientPacket.StoreItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.StoreItem(p.From, p.To);
         }
-
-        private void DepositRefineItem(C.DepositRefineItem p)
+        private void OnRecvDepositRefineItemHandler(ClientPacket.DepositRefineItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.DepositRefineItem(p.From, p.To);
         }
-
-        private void RetrieveRefineItem(C.RetrieveRefineItem p)
+        private void OnRecvRetrieveRefineItemHandler(ClientPacket.RetrieveRefineItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RetrieveRefineItem(p.From, p.To);
         }
-
-        private void RefineCancel(C.RefineCancel p)
+        private void OnRefineCancelHandler(ClientPacket.RefineCancel p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RefineCancel();
         }
-
-        private void RefineItem(C.RefineItem p)
+        private void OnRecvRefineItemHandler(ClientPacket.RefineItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RefineItem(p.UniqueID);
         }
-
-        private void CheckRefine(C.CheckRefine p)
+        private void OnRecvCheckRefineHandler(ClientPacket.CheckRefine p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.CheckRefine(p.UniqueID);
         }
-
-        private void ReplaceWedRing(C.ReplaceWedRing p)
+        private void OnRecvReplaceWedRingHandler(ClientPacket.ReplaceWedRing p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.ReplaceWeddingRing(p.UniqueID);
         }
-
-        private void DepositTradeItem(C.DepositTradeItem p)
+        private void OnRecvDepositTradeItemHandler(ClientPacket.DepositTradeItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.DepositTradeItem(p.From, p.To);
         }
-        
-        private void RetrieveTradeItem(C.RetrieveTradeItem p)
+        private void OnRecvRetrieveTradeItemHandler(ClientPacket.RetrieveTradeItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RetrieveTradeItem(p.From, p.To);
         }
-        private void TakeBackItem(C.TakeBackItem p)
+        private void OnRecvTakeBackItemHandler(ClientPacket.TakeBackItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.TakeBackItem(p.From, p.To);
         }
-        private void MergeItem(C.MergeItem p)
+        private void OnRecvMergeItemHandler(ClientPacket.MergeItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.MergeItem(p.GridFrom, p.GridTo, p.IDFrom, p.IDTo);
         }
-        private void EquipItem(C.EquipItem p)
+        private void OnRecvEquipItemHandler(ClientPacket.EquipItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.EquipItem(p.Grid, p.UniqueID, p.To);
         }
-        private void RemoveItem(C.RemoveItem p)
+        private void OnRecvRemoveItemHandler(ClientPacket.RemoveItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RemoveItem(p.Grid, p.UniqueID, p.To);
         }
-        private void RemoveSlotItem(C.RemoveSlotItem p)
+        private void OnRecvRemoveSlotItemHandler(ClientPacket.RemoveSlotItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RemoveSlotItem(p.Grid, p.UniqueID, p.To, p.GridTo, p.FromUniqueID);
         }
-        private void SplitItem(C.SplitItem p)
+        private void OnRecvSplitItemHandler(ClientPacket.SplitItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.SplitItem(p.Grid, p.UniqueID, p.Count);
         }
-        private void UseItem(C.UseItem p)
+        private void OnRecvUseItemHandler(ClientPacket.UseItem p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1046,47 +1035,43 @@ namespace Server.ExineNetwork
                     */
             }            
         }
-        private void DropItem(C.DropItem p)
+        private void OnRecvDropItemHandler(ClientPacket.DropItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.DropItem(p.UniqueID, p.Count, p.HeroInventory);
         }
- 
-        private void DropGold(C.DropGold p)
+         private void OnRecvDropGoldHandler(ClientPacket.DropGold p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.DropGold(p.Amount);
         }
-        private void PickUp()
+        private void OnRecvPickUpHandler()
         {
             if (Stage != GameStage.Game) return;
 
             Player.PickUp();
         }
-
-        private void RequestMapInfo(C.RequestMapInfo p)
+        private void OnRecvRequestMapInfoHandler(ClientPacket.RequestMapInfo p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RequestMapInfo(p.MapIndex);
         }
-
-        private void TeleportToNPC(C.TeleportToNPC p)
+        private void OnRecvTeleportToNPCHandler(ClientPacket.TeleportToNPC p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.TeleportToNPC(p.ObjectID);
         }
-
-        private void SearchMap(C.SearchMap p)
+        private void OnRecvSearchMapHandler(ClientPacket.SearchMap p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.SearchMap(p.Text);
         }
-        private void Inspect(C.Inspect p)
+        private void OnRecvInspectHandler(ClientPacket.Inspect p)
         {
             if (Stage != GameStage.Game && Stage != GameStage.Observer) return;
 
@@ -1099,35 +1084,35 @@ namespace Server.ExineNetwork
                 Envir.Inspect(this, p.ObjectID);
             } 
         }
-        private void Observe(C.Observe p)
+        private void OnRecvObserveHandler(ClientPacket.Observe p)
         {
             if (Stage != GameStage.Game && Stage != GameStage.Observer) return;
 
             Envir.Observe(this, p.Name);
         }
-        private void ChangeAMode(C.ChangeAMode p)
+        private void OnRecvChangeAModeHandler(ClientPacket.ChangeAMode p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.AMode = p.Mode;
 
-            Enqueue(new S.ChangeAMode {Mode = Player.AMode});
+            SendPacketToClient(new ServerPacket.ChangeAMode {Mode = Player.AMode});
         }
-        private void ChangePMode(C.ChangePMode p)
+        private void OnRecvChangePModeHandler(ClientPacket.ChangePMode p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.PMode = p.Mode;
 
-            Enqueue(new S.ChangePMode { Mode = Player.PMode });
+            SendPacketToClient(new ServerPacket.ChangePMode { Mode = Player.PMode });
         }
-        private void ChangeTrade(C.ChangeTrade p)
+        private void OnRecvChangeTradeHandler(ClientPacket.ChangeTrade p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.AllowTrade = p.AllowTrade;
         }
-        private void Attack(C.Attack p)
+        private void OnRecvAttackHandler(ClientPacket.Attack p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1136,7 +1121,7 @@ namespace Server.ExineNetwork
             else
                 Player.Attack(p.Direction, p.Spell);
         }
-        private void RangeAttack(C.RangeAttack p)
+        private void OnRecvRangeAttackHandler(ClientPacket.RangeAttack p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1145,7 +1130,7 @@ namespace Server.ExineNetwork
             else
                 Player.RangeAttack(p.Direction, p.TargetLocation, p.TargetID);
         }
-        private void Harvest(C.Harvest p)
+        private void OnRecvHarvestHandler(ClientPacket.Harvest p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1154,8 +1139,7 @@ namespace Server.ExineNetwork
             else
                 Player.Harvest(p.Direction);
         }
-
-        private void CallNPC(C.CallNPC p)
+        private void OnRecvCallNPCHandler(ClientPacket.CallNPC p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1179,44 +1163,43 @@ namespace Server.ExineNetwork
 
             Player.CallNPC(p.ObjectID, p.Key);
         }
-
-        private void BuyItem(C.BuyItem p)
+        private void OnRecvBuyItemHandler(ClientPacket.BuyItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.BuyItem(p.ItemIndex, p.Count, p.Type);
         }
-        private void CraftItem(C.CraftItem p)
+        private void OnRecvCraftItemHandler(ClientPacket.CraftItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.CraftItem(p.UniqueID, p.Count, p.Slots);
         }
-        private void SellItem(C.SellItem p)
+        private void OnRecvSellItemHandler(ClientPacket.SellItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.SellItem(p.UniqueID, p.Count);
         }
-        private void RepairItem(C.RepairItem p)
+        private void OnRecvRepairItemHandler(ClientPacket.RepairItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RepairItem(p.UniqueID);
         }
-        private void BuyItemBack(C.BuyItemBack p)
+        private void OnRecvBuyItemBackHandler(ClientPacket.BuyItemBack p)
         {
             if (Stage != GameStage.Game) return;
 
            // Player.BuyItemBack(p.UniqueID, p.Count);
         }
-        private void SRepairItem(C.SRepairItem p)
+        private void OnRecvSRepairItemHAndler(ClientPacket.SRepairItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RepairItem(p.UniqueID, true);
         }
-        private void MagicKey(C.MagicKey p)
+        private void OnRecvMagicKeyHandler(ClientPacket.MagicKey p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1239,7 +1222,7 @@ namespace Server.ExineNetwork
                 magic.Key = p.Key;
             }
         }
-        private void Magic(C.Magic p)
+        private void OnRecvMagicHAndler(ClientPacket.Magic p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1253,41 +1236,37 @@ namespace Server.ExineNetwork
             else
                 actor.BeginMagic(p.Spell, p.Direction, p.TargetID, p.Location, p.SpellTargetLock);
         }
-
-        private void SwitchGroup(C.SwitchGroup p)
+        private void OnRecvSwitchGroupHandler(ClientPacket.SwitchGroup p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.SwitchGroup(p.AllowGroup);
         }
-        private void AddMember(C.AddMember p)
+        private void OnRecvAddMemberHandler(ClientPacket.AddMember p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.AddMember(p.Name);
         }
-        private void DelMember(C.DelMember p)
+        private void OnRecvDelMemberHandler(ClientPacket.DelMember p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.DelMember(p.Name);
         }
-        private void GroupInvite(C.GroupInvite p)
+        private void OnRecvGroupInviteHAndler(ClientPacket.GroupInvite p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.GroupInvite(p.AcceptInvite);
         }
-
-       
-        private void TownRevive()
+        private void OnRecvTownReviveHandler()
         {
             if (Stage != GameStage.Game) return;
 
             Player.TownRevive();
         }
-
-        private void SpellToggle(C.SpellToggle p)
+        private void OnRecvSpellToggleHAndler(ClientPacket.SpellToggle p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1298,84 +1277,78 @@ namespace Server.ExineNetwork
             }
                  
         }
-        private void ConsignItem(C.ConsignItem p)
+        private void OnRecvConsignItemHandler(ClientPacket.ConsignItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.ConsignItem(p.UniqueID, p.Price, p.Type);
-        }
-       
-        
-        private void RequestUserName(C.RequestUserName p)
+        }        
+        private void OnRecvRequestUserNameHandler(ClientPacket.RequestUserName p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RequestUserName(p.UserID);
         }
-        private void RequestChatItem(C.RequestChatItem p)
+        private void OnRecvRequestChatItemHandler(ClientPacket.RequestChatItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RequestChatItem(p.ChatItemID);
         }
-        private void EditGuildMember(C.EditGuildMember p)
+        private void OnRecvEditGuildMemberHandler(ClientPacket.EditGuildMember p)
         {
             if (Stage != GameStage.Game) return;
             Player.EditGuildMember(p.Name,p.RankName,p.RankIndex,p.ChangeType);
         }
-        private void EditGuildNotice(C.EditGuildNotice p)
+        private void OnRecvEditGuildNoticeHandler(ClientPacket.EditGuildNotice p)
         {
             if (Stage != GameStage.Game) return;
             Player.EditGuildNotice(p.notice);
         }
-        private void GuildInvite(C.GuildInvite p)
+        private void OnRecvGuildInviteHandler(ClientPacket.GuildInvite p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.GuildInvite(p.AcceptInvite);
         }
-        private void RequestGuildInfo(C.RequestGuildInfo p)
+        private void OnRecvRequestGuildInfoHAndler(ClientPacket.RequestGuildInfo p)
         {
             if (Stage != GameStage.Game) return;
             Player.RequestGuildInfo(p.Type);
         }
-        private void GuildNameReturn(C.GuildNameReturn p)
+        private void OnRecvGuildNameReturnHandler(ClientPacket.GuildNameReturn p)
         {
             if (Stage != GameStage.Game) return;
             Player.GuildNameReturn(p.Name);
         }
-        private void GuildStorageGoldChange(C.GuildStorageGoldChange p)
+        private void OnRecvGuildStorageGoldChangeHandler(ClientPacket.GuildStorageGoldChange p)
         {
             if (Stage != GameStage.Game) return;
             Player.GuildStorageGoldChange(p.Type, p.Amount);
         }
-        private void GuildStorageItemChange(C.GuildStorageItemChange p)
+        private void OnRecvGuildStorageItemChangeHandler(ClientPacket.GuildStorageItemChange p)
         {
             if (Stage != GameStage.Game) return;
             Player.GuildStorageItemChange(p.Type, p.From, p.To);
         }
-        private void GuildWarReturn(C.GuildWarReturn p)
+        private void OnRecvGuildWarReturnHandler(ClientPacket.GuildWarReturn p)
         {
             if (Stage != GameStage.Game) return;
             Player.GuildWarReturn(p.Name);
         }
-
-
-        private void MarriageRequest(C.MarriageRequest p)
+        private void OnRecvMarriageRequestHandler(ClientPacket.MarriageRequest p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.MarriageRequest();
         }
-
-        private void MarriageReply(C.MarriageReply p)
+        private void OnRecvMarriageReplyHandler(ClientPacket.MarriageReply p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.MarriageReply(p.AcceptInvite);
         }
-
-        private void ChangeMarriage(C.ChangeMarriage p)
+        private void OnRecvChangeMarriageHandler(ClientPacket.ChangeMarriage p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1396,36 +1369,31 @@ namespace Server.ExineNetwork
                     Player.ReceiveChat("You're now blocking recall from lover.", ChatType.Hint);
             }
         }
-
-        private void DivorceRequest(C.DivorceRequest p)
+        private void OnRecvDivorceRequestHandler(ClientPacket.DivorceRequest p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.DivorceRequest();
         }
-
-        private void DivorceReply(C.DivorceReply p)
+        private void OnRecvDivorceReplyHandler(ClientPacket.DivorceReply p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.DivorceReply(p.AcceptInvite);
         }
-
-        private void AddMentor(C.AddMentor p)
+        private void OnRecvAddMentorHandler(ClientPacket.AddMentor p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.AddMentor(p.Name);
         }
-
-        private void MentorReply(C.MentorReply p)
+        private void OnRecvMentorReplyHandler(ClientPacket.MentorReply p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.MentorReply(p.AcceptInvite);
         }
-
-        private void AllowMentor(C.AllowMentor p)
+        private void OnRecvAllowMentorHandler(ClientPacket.AllowMentor p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1435,95 +1403,85 @@ namespace Server.ExineNetwork
                 else
                     Player.ReceiveChat(GameLanguage.BlockingMentorRequests, ChatType.Hint);
         }
-
-        private void CancelMentor(C.CancelMentor p)
+        private void OnRecvCancelMentorHandler(ClientPacket.CancelMentor p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.MentorBreak(true);
         }
-
-        private void TradeRequest(C.TradeRequest p)
+        private void OnRecvTradeRequestHandler(ClientPacket.TradeRequest p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.TradeRequest();
         }
-        private void TradeGold(C.TradeGold p)
+        private void OnRecvTradeGoldHandler(ClientPacket.TradeGold p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.TradeGold(p.Amount);
         }
-        private void TradeReply(C.TradeReply p)
+        private void OnRecvTradeReplyHandler(ClientPacket.TradeReply p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.TradeReply(p.AcceptInvite);
         }
-        private void TradeConfirm(C.TradeConfirm p)
+        private void OnRecvTradeConfirmHandler(ClientPacket.TradeConfirm p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.TradeConfirm(p.Locked);
         }
-        private void TradeCancel(C.TradeCancel p)
+        private void OnRecvTradeCancelHandler(ClientPacket.TradeCancel p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.TradeCancel();
         }
-        private void EquipSlotItem(C.EquipSlotItem p)
+        private void OnRecvEquipSlotItemHandler(ClientPacket.EquipSlotItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.EquipSlotItem(p.Grid, p.UniqueID, p.To, p.GridTo, p.ToUniqueID);
         }
-
-        private void FishingCast(C.FishingCast p)
+        private void OnRecvFishingCastHandler(ClientPacket.FishingCast p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.FishingCast(p.Sitdown, true);
         }
-
-
-        private void FishingChangeAutocast(C.FishingChangeAutocast p)
+        private void OnRecvFishingChangeAutocastHandler(ClientPacket.FishingChangeAutocast p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.FishingChangeAutocast(p.AutoCast);
         }
-
-        private void AcceptQuest(C.AcceptQuest p)
+        private void OnRecvAcceptQuestHandler(ClientPacket.AcceptQuest p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.AcceptQuest(p.QuestIndex); //p.NPCIndex,
         }
-
-        private void FinishQuest(C.FinishQuest p)
+        private void OnRecvFinishQuestHandler(ClientPacket.FinishQuest p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.FinishQuest(p.QuestIndex, p.SelectedItemIndex);
         }
-
-        private void AbandonQuest(C.AbandonQuest p)
+        private void OnRecvAbandonQuestHandler(ClientPacket.AbandonQuest p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.AbandonQuest(p.QuestIndex);
         }
-
-        private void ShareQuest(C.ShareQuest p)
+        private void OnRecvShareQuestHandler(ClientPacket.ShareQuest p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.ShareQuest(p.QuestIndex);
         }
-
-        private void AcceptReincarnation()
+        private void OnRecvAcceptReincarnation()
         {
             if (Stage != GameStage.Game) return;
 
@@ -1536,58 +1494,47 @@ namespace Server.ExineNetwork
 
             Player.ReceiveChat("Reincarnation failed", ChatType.System);
         }
-
-        private void CancelReincarnation()
+        private void OnRecvCancelReincarnation()
         {
             if (Stage != GameStage.Game) return;
             Player.ReincarnationExpireTime = Envir.Time;
 
         }
-
-        private void CombineItem(C.CombineItem p)
+        private void OnRecvCombineItemHandler(ClientPacket.CombineItem p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.CombineItem(p.Grid, p.IDFrom, p.IDTo);
         }
-
-
-      
-
-        private void AddFriend(C.AddFriend p)
+        private void OnRecvAddFriendHandler(ClientPacket.AddFriend p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.AddFriend(p.Name, p.Blocked);
         }
-
-        private void RemoveFriend(C.RemoveFriend p)
+        private void OnRecvRemoveFriendHandler(ClientPacket.RemoveFriend p)
         {
             if (Stage != GameStage.Game) return;
 
             Player.RemoveFriend(p.CharacterIndex);
         }
-
-       
-
-        private void UpdatePhoto(C.UpdatePhoto p)
+        private void OnRecvUpdatePhotoHandler(ClientPacket.UpdatePhoto p)
         {
             Console.WriteLine("@@@222 UpdatePhoto");
             if (Stage != GameStage.Game) return; 
             Player.UpdatePhoto(p.photoDataLen, p.photoData);
         }
-        private void GuildBuffUpdate(C.GuildBuffUpdate p)
+        private void OnRecvGuildBuffUpdateHandler(ClientPacket.GuildBuffUpdate p)
         {
             if (Stage != GameStage.Game) return;
             Player.GuildBuffUpdate(p.Action,p.Id);
         }
-        private void GameshopBuy(C.GameshopBuy p)
+        private void OnRecvGameshopBuyHandler(ClientPacket.GameshopBuy p)
         {
             if (Stage != GameStage.Game) return;
             Player.GameshopBuy(p.GIndex, p.Quantity);
         }
-
-        private void NPCConfirmInput(C.NPCConfirmInput p)
+        private void OnRecvNPCConfirmInputHandler(ClientPacket.NPCConfirmInput p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1595,10 +1542,7 @@ namespace Server.ExineNetwork
 
             Player.CallNPC(Player.NPCObjectID, p.PageName);
         }
-
-        public List<byte[]> Image = new List<byte[]>();
-        
-        private void ReportIssue(C.ReportIssue p)
+        private void OnRecvReportIssueHandler(ClientPacket.ReportIssue p)
         {
             if (Stage != GameStage.Game) return;
 
@@ -1613,18 +1557,28 @@ namespace Server.ExineNetwork
             //     Image.Clear();
             // }
         }
-        private void GetRanking(C.GetRanking p)
+        private void OnRecvGetRankingHandler(ClientPacket.GetRanking p)
         {
             if (Stage != GameStage.Game && Stage != GameStage.Observer) return;
             Envir.GetRanking(this, p.RankType, p.RankIndex, p.OnlineOnly);
         }
-
-        private void Opendoor(C.Opendoor p)
+        private void OnRecvOpendoorHandler(ClientPacket.Opendoor p)
         {
             if (Stage != GameStage.Game) return;
             Player.Opendoor(p.DoorIndex);
         }
+        private void OnRecvRestHandler(ClientPacket.Rest p) //231107
+        {
+            if (Stage != GameStage.Game) return;
 
+            //Player.Rest(p.Rest, true);
+
+            if (Player.ActionTime > Envir.Time)
+                _retryList.Enqueue(p);
+            else
+                Player.Rest(p.Direction);
+        }
+        #endregion OnRecvFromClient Handers
 
         public void CheckItemInfo(ItemInfo info, bool dontLoop = false)
         {
@@ -1638,7 +1592,7 @@ namespace Server.ExineNetwork
             }
 
             if (SentItemInfo.Contains(info)) return;
-            Enqueue(new S.NewItemInfo { Info = info });
+            SendPacketToClient(new ServerPacket.NewItemInfo { Info = info });
             SentItemInfo.Add(info);
         }
         public void CheckItem(UserItem item)
@@ -1653,18 +1607,5 @@ namespace Server.ExineNetwork
             }
              
         }
-
-        private void Rest(C.Rest p) //231107
-        {
-            if (Stage != GameStage.Game) return;
-
-            //Player.Rest(p.Rest, true);
-
-            if (Player.ActionTime > Envir.Time)
-                _retryList.Enqueue(p);
-            else
-                Player.Rest(p.Direction);
-        }
-
     }
 }

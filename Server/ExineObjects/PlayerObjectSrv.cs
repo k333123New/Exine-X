@@ -1,8 +1,8 @@
-﻿using C = ClientPackets;
+﻿
 using Server.ExineDatabase;
 using Server.ExineEnvir;
 using Server.ExineNetwork;
-using S = ServerPackets;
+
 using System.Text.RegularExpressions;
 using Timer = Server.ExineEnvir.Timer;
 using Server.ExineObjects.Monsters;
@@ -182,7 +182,7 @@ namespace Server.ExineObjects
             if (Account.AdminAccount)
             {
                 IsGM = true;
-                MessageQueue.Enqueue(string.Format("{0} is now a GM", Name));
+                MessageQueue.SendMsg(string.Format("{0} is now a GM", Name));
             }
 
             //Set Starting Character
@@ -280,7 +280,7 @@ namespace Server.ExineObjects
 
             string logReason = LogOutReason(reason);
 
-            MessageQueue.Enqueue(logReason);
+            MessageQueue.SendMsg(logReason);
 
             Fishing = false;
 
@@ -366,7 +366,7 @@ namespace Server.ExineObjects
             {
                 Account.HasExpandedStorage = false;
                 ReceiveChat("Expanded storage has expired.", ChatType.System);
-                Enqueue(new S.ResizeStorage { Size = Account.Storage.Length, HasExpandedStorage = Account.HasExpandedStorage, ExpiryTime = Account.ExpandedStorageExpiryDate });
+                SendPacketToClient(new ServerPacket.ResizeStorage { Size = Account.Storage.Length, HasExpandedStorage = Account.HasExpandedStorage, ExpiryTime = Account.ExpandedStorageExpiryDate });
             }
 
             if (Fishing && Envir.Time > FishingTime)
@@ -433,7 +433,7 @@ namespace Server.ExineObjects
                     if (!(item.Info.Unique.HasFlag(SpecialItemMode.Revival)) || item.CurrentDura < 1000) continue;
                     SetHP(Stats[Stat.HP]);
                     item.CurrentDura = (ushort)(item.CurrentDura - 1000);
-                    Enqueue(new S.DuraChanged { UniqueID = item.UniqueID, CurrentDura = item.CurrentDura });
+                    SendPacketToClient(new ServerPacket.DuraChanged { UniqueID = item.UniqueID, CurrentDura = item.CurrentDura });
                     RefreshStats();
                     ReceiveChat("You have been given a second chance at life", ChatType.System);
                     return;
@@ -460,7 +460,7 @@ namespace Server.ExineObjects
                     {
                         weapon.AddedStats[Stat.Luck]--;
                         hitter.ReceiveChat("Your weapon has been cursed.", ChatType.System);
-                        hitter.Enqueue(new S.RefreshItem { Item = weapon });
+                        hitter.SendPacketToClient(new ServerPacket.RefreshItem { Item = weapon });
                     }
                 }
             }
@@ -479,8 +479,8 @@ namespace Server.ExineObjects
             LogTime = Envir.Time;
             BrownTime = Envir.Time;
 
-            Enqueue(new S.Death { Direction = Direction, Location = CurrentLocation });
-            Broadcast(new S.ObjectDied { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            SendPacketToClient(new ServerPacket.Death { Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectDied { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             for (int i = 0; i < Buffs.Count; i++)
             {
@@ -522,7 +522,7 @@ namespace Server.ExineObjects
                     if (item.Info.Bind.HasFlag(BindMode.BreakOnDeath))
                     {
                         Info.Equipment[i] = null;
-                        Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
+                        SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                         ReceiveChat($"Your {item.FriendlyName} shattered upon death.", ChatType.System2);
                         Report.ItemChanged(item, item.Count, 1, "RedDeathDrop");
                     }
@@ -544,7 +544,7 @@ namespace Server.ExineObjects
                         if (count == item.Count)
                             Info.Equipment[i] = null;
 
-                        Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = count });
+                        SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = count });
                         item.Count -= count;
 
                         Report.ItemChanged(item, count, 1, "RedDeathDrop");
@@ -563,7 +563,7 @@ namespace Server.ExineObjects
                             }
 
                         Info.Equipment[i] = null;
-                        Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
+                        SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
 
                         Report.ItemChanged(item, item.Count, 1, "RedDeathDrop");
                     }
@@ -599,7 +599,7 @@ namespace Server.ExineObjects
                     }
 
                 Info.Inventory[i] = null;
-                Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
+                SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
 
                 Report.ItemChanged(item, item.Count, 1, "RedDeathDrop");
             }
@@ -698,7 +698,7 @@ namespace Server.ExineObjects
 
             Experience += amount;
 
-            Enqueue(new S.GainExperience { Amount = amount });
+            SendPacketToClient(new ServerPacket.GainExperience { Amount = amount });
 
            
 
@@ -738,7 +738,7 @@ namespace Server.ExineObjects
 
             base.LevelUp();
 
-            Enqueue(new S.LevelChanged { Level = Level, Experience = Experience, MaxExperience = MaxExperience });
+            SendPacketToClient(new ServerPacket.LevelChanged { Level = Level, Experience = Experience, MaxExperience = MaxExperience });
 
             if (Info.Mentor != 0 && !Info.IsMentor)
             {
@@ -787,7 +787,7 @@ namespace Server.ExineObjects
         public void CheckQuestInfo(QuestInfo info)
         {
             if (Connection.SentQuestInfo.Contains(info)) return;
-            Enqueue(new S.NewQuestInfo { Info = info.CreateClientQuestInfo() });
+            SendPacketToClient(new ServerPacket.NewQuestInfo { Info = info.CreateClientQuestInfo() });
             Connection.SentQuestInfo.Add(info);
         }
         public void CheckRecipeInfo(RecipeInfo info)
@@ -806,14 +806,14 @@ namespace Server.ExineObjects
                 CheckItemInfo(ingredient.Info);
             }
 
-            Enqueue(new S.NewRecipeInfo { Info = info.CreateClientRecipeInfo() });
+            SendPacketToClient(new ServerPacket.NewRecipeInfo { Info = info.CreateClientRecipeInfo() });
             Connection.SentRecipeInfo.Add(info);
         }
         public void CheckMapInfo(MapInfo mapInfo)
         {
             if (!Connection.WorldMapSetupSent)
             {
-                Enqueue(new S.WorldMapSetupInfo { Setup = Settings.WorldMapSetup, TeleportToNPCCost = Settings.TeleportToNPCCost });
+                SendPacketToClient(new ServerPacket.WorldMapSetupInfo { Setup = Settings.WorldMapSetup, TeleportToNPCCost = Settings.TeleportToNPCCost });
                 Connection.WorldMapSetupSent = true;
             }
 
@@ -859,7 +859,7 @@ namespace Server.ExineObjects
                 });
             }
 
-            Enqueue(new S.NewMapInfo { MapIndex = mapInfo.Index, Info = info });
+            SendPacketToClient(new ServerPacket.NewMapInfo { MapIndex = mapInfo.Index, Info = info });
             Connection.SentMapInfo.Add(mapInfo);
         }
         private void SetBind()
@@ -926,7 +926,7 @@ namespace Server.ExineObjects
         {
             Connection.Stage = GameStage.Game;
 
-            Enqueue(new S.StartGame { Result = 4, Resolution = Settings.AllowedResolution });
+            SendPacketToClient(new ServerPacket.StartGame { Result = 4, Resolution = Settings.AllowedResolution });
             ReceiveChat(string.Format(GameLanguage.Welcome, GameLanguage.GameName), ChatType.Hint);
 
             if (Settings.TestServer)
@@ -967,7 +967,7 @@ namespace Server.ExineObjects
 
             if (!string.IsNullOrWhiteSpace(Settings.Notice.Message) && Settings.Notice.LastUpdate > Info.LastLogoutDate)
             {
-                Enqueue(new S.UpdateNotice { Notice = Settings.Notice });
+                SendPacketToClient(new ServerPacket.UpdateNotice { Notice = Settings.Notice });
             }
 
             Spawned();
@@ -1007,20 +1007,20 @@ namespace Server.ExineObjects
 
             SendBaseStats();
             GetObjectsPassive();
-            Enqueue(new S.TimeOfDay { Lights = Envir.Lights });
-            Enqueue(new S.ChangeAMode { Mode = AMode });
-            Enqueue(new S.ChangePMode { Mode = PMode });
-            Enqueue(new S.SwitchGroup { AllowGroup = AllowGroup });
+            SendPacketToClient(new ServerPacket.TimeOfDay { Lights = Envir.Lights });
+            SendPacketToClient(new ServerPacket.ChangeAMode { Mode = AMode });
+            SendPacketToClient(new ServerPacket.ChangePMode { Mode = PMode });
+            SendPacketToClient(new ServerPacket.SwitchGroup { AllowGroup = AllowGroup });
 
-            Enqueue(new S.DefaultNPC { ObjectID = Envir.DefaultNPC.LoadedObjectID });
+            SendPacketToClient(new ServerPacket.DefaultNPC { ObjectID = Envir.DefaultNPC.LoadedObjectID });
 
-            Enqueue(new S.GuildBuffList() { GuildBuffs = Settings.Guild_BuffList });
+            SendPacketToClient(new ServerPacket.GuildBuffList() { GuildBuffs = Settings.Guild_BuffList });
             RequestedGuildBuffInfo = true;
 
-            if (Info.Thrusting) Enqueue(new S.SpellToggle { ObjectID = ObjectID, Spell = Spell.Thrusting, CanUse = true });
-            if (Info.HalfMoon) Enqueue(new S.SpellToggle { ObjectID = ObjectID, Spell = Spell.HalfMoon, CanUse = true });
-            if (Info.CrossHalfMoon) Enqueue(new S.SpellToggle { ObjectID = ObjectID, Spell = Spell.CrossHalfMoon, CanUse = true });
-            if (Info.DoubleSlash) Enqueue(new S.SpellToggle { ObjectID = ObjectID, Spell = Spell.DoubleSlash, CanUse = true });
+            if (Info.Thrusting) SendPacketToClient(new ServerPacket.SpellToggle { ObjectID = ObjectID, Spell = Spell.Thrusting, CanUse = true });
+            if (Info.HalfMoon) SendPacketToClient(new ServerPacket.SpellToggle { ObjectID = ObjectID, Spell = Spell.HalfMoon, CanUse = true });
+            if (Info.CrossHalfMoon) SendPacketToClient(new ServerPacket.SpellToggle { ObjectID = ObjectID, Spell = Spell.CrossHalfMoon, CanUse = true });
+            if (Info.DoubleSlash) SendPacketToClient(new ServerPacket.SpellToggle { ObjectID = ObjectID, Spell = Spell.DoubleSlash, CanUse = true });
 
           
 
@@ -1044,7 +1044,7 @@ namespace Server.ExineObjects
                 MyGuild.PlayerLogged(this, true);
                 if (MyGuild.BuffList.Count > 0)
                 {
-                    Enqueue(new S.GuildBuffList() { ActiveBuffs = MyGuild.BuffList });
+                    SendPacketToClient(new ServerPacket.GuildBuffList() { ActiveBuffs = MyGuild.BuffList });
                 }
             }
              
@@ -1058,7 +1058,7 @@ namespace Server.ExineObjects
 
             Report.Connected(Connection.IPAddress);
 
-            MessageQueue.Enqueue(string.Format("{0} has connected.", Info.Name));
+            MessageQueue.SendMsg(string.Format("{0} has connected.", Info.Name));
 
             if (IsGM)
             {
@@ -1074,7 +1074,7 @@ namespace Server.ExineObjects
         }
         private void StartGameFailed()
         {
-            Enqueue(new S.StartGame { Result = 3 });
+            SendPacketToClient(new ServerPacket.StartGame { Result = 3 });
             CleanUp();
         }        
         public void GiveRestedBonus(int count)
@@ -1107,7 +1107,7 @@ namespace Server.ExineObjects
             GetObjects();
 
             Fishing = false;
-            Enqueue(GetFishInfo());
+            SendPacketToClient(GetFishInfo());
             GroupMemberMapNameChanged();
             GetPlayerLocation();
         }
@@ -1138,14 +1138,14 @@ namespace Server.ExineObjects
             RefreshStats();
 
             CurrentMap.RemoveObject(this);
-            Broadcast(new S.ObjectRemove { ObjectID = ObjectID });
+            Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID });
 
             CurrentMap = temp;
             CurrentLocation = bindLocation;
 
             CurrentMap.AddObject(this);
 
-            Enqueue(new S.MapChanged
+            SendPacketToClient(new ServerPacket.MapChanged
             {
                 MapIndex = CurrentMap.Info.Index,
                 FileName = CurrentMap.Info.FileName,
@@ -1160,12 +1160,12 @@ namespace Server.ExineObjects
             });
 
             GetObjects();
-            Enqueue(new S.Revived());
-            Broadcast(new S.ObjectRevived { ObjectID = ObjectID, Effect = true });
+            SendPacketToClient(new ServerPacket.Revived());
+            Broadcast(new ServerPacket.ObjectRevived { ObjectID = ObjectID, Effect = true });
 
             InSafeZone = true;
             Fishing = false;
-            Enqueue(GetFishInfo());
+            SendPacketToClient(GetFishInfo());
             GroupMemberMapNameChanged();
             GetPlayerLocation();
         }
@@ -1186,7 +1186,7 @@ namespace Server.ExineObjects
             CheckConquest();
 
             Fishing = false;
-            Enqueue(GetFishInfo());
+            SendPacketToClient(GetFishInfo());
 
             if (mapChanged)
             {
@@ -1228,7 +1228,7 @@ namespace Server.ExineObjects
             if (Array.Exists(BroadcastObservePackets, x => x == (ServerPacketIds)p.Index))
             {
                 foreach (ExineConnection c in Connection.Observers)
-                    c.Enqueue(p);
+                    c.SendPacketToClient(p);
             }
         }
 
@@ -1276,7 +1276,7 @@ namespace Server.ExineObjects
         {
             string guildname = MyGuild != null ? MyGuild.Name : "";
             string guildrank = MyGuild != null ? MyGuildRank.Name : "";
-            S.UserInformation packet = new S.UserInformation
+            ServerPacket.UserInformation packet = new ServerPacket.UserInformation
             {
                 ObjectID = ObjectID,
                 RealId = (uint)Info.Index,
@@ -1327,11 +1327,11 @@ namespace Server.ExineObjects
             Info.QuestInventory.CopyTo(packet.QuestInventory, 0);
 
           
-            Enqueue(packet, c);
+            SendPacketToClient(packet, c);
         }        
         private void GetMapInfo(ExineConnection c)
         {
-            Enqueue(new S.MapInformation
+            SendPacketToClient(new ServerPacket.MapInformation
             {
                 MapIndex = CurrentMap.Info.Index,
                 FileName = CurrentMap.Info.FileName,
@@ -1412,14 +1412,14 @@ namespace Server.ExineObjects
                         if (ob.Race == ObjectType.Player)
                         {
                             PlayerObjectSrv Player = (PlayerObjectSrv)ob;
-                            Enqueue(Player.GetInfoEx(this), c);
+                            SendPacketToClient(Player.GetInfoEx(this), c);
                         }
                         else if (ob.Race == ObjectType.Spell)
                         {
                             SpellObjectSrv obSpell = (SpellObjectSrv)ob;
 
                             if ((obSpell.Spell != Spell.ExplosiveTrap) || (obSpell.Caster != null && IsFriendlyTarget(obSpell.Caster)))
-                                Enqueue(ob.GetInfo(), c);
+                                SendPacketToClient(ob.GetInfo(), c);
                         }
                         else if (ob.Race == ObjectType.Merchant)
                         {
@@ -1427,11 +1427,11 @@ namespace Server.ExineObjects
 
                             NPC.CheckVisible(this);
 
-                            if (NPC.VisibleLog[Info.Index] && NPC.Visible) Enqueue(ob.GetInfo(), c);
+                            if (NPC.VisibleLog[Info.Index] && NPC.Visible) SendPacketToClient(ob.GetInfo(), c);
                         }
                         else
                         {
-                            Enqueue(ob.GetInfo(), c);
+                            SendPacketToClient(ob.GetInfo(), c);
                         }
 
                         if (ob.Race == ObjectType.Player || ob.Race == ObjectType.Monster)
@@ -1463,7 +1463,7 @@ namespace Server.ExineObjects
             
             if (prevColor == NameColour) return;
             
-            Enqueue(new S.ColourChanged { NameColour = NameColour });
+            SendPacketToClient(new ServerPacket.ColourChanged { NameColour = NameColour });
             BroadcastColourChange();
         }
 
@@ -1514,7 +1514,7 @@ namespace Server.ExineObjects
         {
             if (string.IsNullOrEmpty(message)) return;
 
-            MessageQueue.EnqueueChat(string.Format("{0}: {1}", Name, message));
+            MessageQueue.SendChatMsg(string.Format("{0}: {1}", Name, message));
 
             if (GMLogin)
             {
@@ -1522,13 +1522,13 @@ namespace Server.ExineObjects
                 {
                     IsGM = true;
                     UpdateGMBuff();
-                    MessageQueue.Enqueue(string.Format("{0} is now a GM", Name));
+                    MessageQueue.SendMsg(string.Format("{0} is now a GM", Name));
                     ReceiveChat("You have been made a GM", ChatType.System);
                     Envir.RemoveRank(Info);//remove gm chars from ranking to avoid causing bugs in rank list
                 }
                 else
                 {
-                    MessageQueue.Enqueue(string.Format("{0} attempted a GM login", Name));
+                    MessageQueue.SendMsg(string.Format("{0} attempted a GM login", Name));
                     ReceiveChat("Incorrect login password", ChatType.System);
                 }
                 GMLogin = false;
@@ -1613,10 +1613,10 @@ namespace Server.ExineObjects
 
                 message = ProcessChatItems(message, GroupMembers, linkedItems);
 
-                p = new S.ObjectChat { ObjectID = ObjectID, Text = message, Type = ChatType.Group };
+                p = new ServerPacket.ObjectChat { ObjectID = ObjectID, Text = message, Type = ChatType.Group };
 
                 for (int i = 0; i < GroupMembers.Count; i++)
-                    GroupMembers[i].Enqueue(p);
+                    GroupMembers[i].SendPacketToClient(p);
             }
             else if (message.StartsWith("!~"))
             {
@@ -1675,12 +1675,12 @@ namespace Server.ExineObjects
                 {
                     message = ProcessChatItems(message, CurrentMap.Players, linkedItems);
 
-                    p = new S.Chat { Message = message, Type = ChatType.Shout2 };
+                    p = new ServerPacket.Chat { Message = message, Type = ChatType.Shout2 };
                     HasMapShout = false;
 
                     for (int i = 0; i < CurrentMap.Players.Count; i++)
                     {
-                        CurrentMap.Players[i].Enqueue(p);
+                        CurrentMap.Players[i].SendPacketToClient(p);
                     }
                     return;
                 }
@@ -1688,12 +1688,12 @@ namespace Server.ExineObjects
                 {
                     message = ProcessChatItems(message, Envir.Players, linkedItems);
 
-                    p = new S.Chat { Message = message, Type = ChatType.Shout3 };
+                    p = new ServerPacket.Chat { Message = message, Type = ChatType.Shout3 };
                     HasServerShout = false;
 
                     for (int i = 0; i < Envir.Players.Count; i++)
                     {
-                        Envir.Players[i].Enqueue(p);
+                        Envir.Players[i].SendPacketToClient(p);
                     }
                     return;
                 }
@@ -1710,11 +1710,11 @@ namespace Server.ExineObjects
 
                     message = ProcessChatItems(message, playersInRange, linkedItems);
 
-                    p = new S.Chat { Message = message, Type = ChatType.Shout };
+                    p = new ServerPacket.Chat { Message = message, Type = ChatType.Shout };
 
                     for (int i = 0; i < playersInRange.Count; i++)
                     {
-                        playersInRange[i].Enqueue(p);
+                        playersInRange[i].SendPacketToClient(p);
                     }
 
                 }
@@ -1752,7 +1752,7 @@ namespace Server.ExineObjects
 
                 message = ProcessChatItems(message, Envir.Players, linkedItems);
 
-                p = new S.Chat { Message = message, Type = ChatType.Announcement };
+                p = new ServerPacket.Chat { Message = message, Type = ChatType.Announcement };
 
                 Envir.Broadcast(p);
             }
@@ -1846,10 +1846,10 @@ namespace Server.ExineObjects
                         }
 
                         ReceiveChat(string.Format("Player {0} has been changed to {1}", data.Name, data.Gender), ChatType.System);
-                        MessageQueue.Enqueue(string.Format("Player {0} has been changed to {1} by {2}", data.Name, data.Gender, Name));
+                        MessageQueue.SendMsg(string.Format("Player {0} has been changed to {1} by {2}", data.Name, data.Gender, Name));
 
                         if (data.Player != null)
-                            data.Player.Connection.LogOut();
+                            data.Player.Connection.OnRecvLogOutHandler();
 
                         break;
 
@@ -1872,7 +1872,7 @@ namespace Server.ExineObjects
                                 player.LevelUp();
 
                                 ReceiveChat(string.Format("Player {0} has been Leveled {1} -> {2}.", player.Name, old, player.Level), ChatType.System);
-                                MessageQueue.Enqueue(string.Format("Player {0} has been Leveled {1} -> {2} by {3}", player.Name, old, player.Level, Name));
+                                MessageQueue.SendMsg(string.Format("Player {0} has been Leveled {1} -> {2} by {3}", player.Name, old, player.Level, Name));
                                 return;
                             }
                         }
@@ -1891,7 +1891,7 @@ namespace Server.ExineObjects
                                 LevelUp();
 
                                 ReceiveChat(string.Format("{0} {1} -> {2}.", GameLanguage.LevelUp, old, Level), ChatType.System);
-                                MessageQueue.Enqueue(string.Format("Player {0} has been Leveled {1} -> {2} by {3}", Name, old, Level, Name));
+                                MessageQueue.SendMsg(string.Format("Player {0} has been Leveled {1} -> {2} by {3}", Name, old, Level, Name));
                                 return;
                             }
                         }
@@ -1944,7 +1944,7 @@ namespace Server.ExineObjects
                             }
 
                             ReceiveChat(string.Format("{0} x{1} has been created.", iInfo.FriendlyName, tempCount), ChatType.System);
-                            MessageQueue.Enqueue(string.Format("Player {0} has attempted to Create {1} x{2}", Name, iInfo.Name, tempCount));
+                            MessageQueue.SendMsg(string.Format("Player {0} has attempted to Create {1} x{2}", Name, iInfo.Name, tempCount));
                         }
                         break;
                     case "CLEARBUFFS":
@@ -1968,7 +1968,7 @@ namespace Server.ExineObjects
                             item = player.Info.Inventory[i];
                             if (item == null) continue;
 
-                            player.Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
+                            player.SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                             player.Info.Inventory[i] = null;
                         }
                         player.RefreshStats();
@@ -2243,7 +2243,7 @@ namespace Server.ExineObjects
                             Envir.SaveArchivedCharacter(info);
 
                             ReceiveChat(string.Format("Player {0} has been backed up", info.Name), ChatType.System);
-                            MessageQueue.Enqueue(string.Format("Player {0} has been backed up by {1}", info.Name, Name));
+                            MessageQueue.SendMsg(string.Format("Player {0} has been backed up by {1}", info.Name, Name));
                         }
                         break;
 
@@ -2279,7 +2279,7 @@ namespace Server.ExineObjects
                             account.Characters.Remove(data);
 
                             ReceiveChat(string.Format("Player {0} has been archived", data.Name), ChatType.System);
-                            MessageQueue.Enqueue(string.Format("Player {0} has been archived by {1}", data.Name, Name));
+                            MessageQueue.SendMsg(string.Format("Player {0} has been archived by {1}", data.Name, Name));
                         }
                         break;
 
@@ -2314,7 +2314,7 @@ namespace Server.ExineObjects
                             info = bak;
 
                             ReceiveChat(string.Format("Player {0} has been loaded", info.Name), ChatType.System);
-                            MessageQueue.Enqueue(string.Format("Player {0} has been loaded by {1}", info.Name, Name));
+                            MessageQueue.SendMsg(string.Format("Player {0} has been loaded by {1}", info.Name, Name));
                         }
                         break;
 
@@ -2379,7 +2379,7 @@ namespace Server.ExineObjects
                             }
 
                             ReceiveChat(string.Format("Player {0} has been restored by", data.Name), ChatType.System);
-                            MessageQueue.Enqueue(string.Format("Player {0} has been restored by {1}", data.Name, Name));
+                            MessageQueue.SendMsg(string.Format("Player {0} has been restored by {1}", data.Name, Name));
                         }
                         break;
 
@@ -2616,7 +2616,7 @@ namespace Server.ExineObjects
                             count = uint.MaxValue - player.Account.Gold;
 
                         player.GainGold(count);
-                        MessageQueue.Enqueue(string.Format("Player {0} has been given {1} gold", player.Name, count));
+                        MessageQueue.SendMsg(string.Format("Player {0} has been given {1} gold", player.Name, count));
                         break;
 
                     case "GIVEPEARLS":
@@ -2669,7 +2669,7 @@ namespace Server.ExineObjects
                             count = uint.MaxValue - player.Account.Credit;
 
                         player.GainCredit(count);
-                        MessageQueue.Enqueue(string.Format("Player {0} has been given {1} credit", player.Name, count));
+                        MessageQueue.SendMsg(string.Format("Player {0} has been given {1} credit", player.Name, count));
                         break;
                     case "GIVESKILL":
                         if ((!IsGM && !Settings.TestServer) || parts.Length < 3) return;
@@ -2932,10 +2932,10 @@ namespace Server.ExineObjects
                         data.Class = mirClass;
 
                         ReceiveChat(string.Format("Player {0} has been changed to {1}", data.Name, data.Class), ChatType.System);
-                        MessageQueue.Enqueue(string.Format("Player {0} has been changed to {1} by {2}", data.Name, data.Class, Name));
+                        MessageQueue.SendMsg(string.Format("Player {0} has been changed to {1} by {2}", data.Name, data.Class, Name));
 
                         if (data.Player != null)
-                            data.Player.Connection.LogOut();
+                            data.Player.Connection.OnRecvLogOutHandler();
                         break;
 
                     case "DIE":
@@ -2974,7 +2974,7 @@ namespace Server.ExineObjects
                         CurrentMap.AddObject(decoOb);
                         decoOb.Spawned();
 
-                        Enqueue(decoOb.GetInfo());
+                        SendPacketToClient(decoOb.GetInfo());
 
                         break;
 
@@ -3051,8 +3051,8 @@ namespace Server.ExineObjects
                             if (Account.Gold >= openGold)
                             {
                                 Account.Gold -= openGold;
-                                Enqueue(new S.LoseGold { Gold = openGold });
-                                Enqueue(new S.ResizeInventory { Size = Info.ResizeInventory() });
+                                SendPacketToClient(new ServerPacket.LoseGold { Gold = openGold });
+                                SendPacketToClient(new ServerPacket.ResizeInventory { Size = Info.ResizeInventory() });
                                 ReceiveChat(GameLanguage.InventoryIncreased, ChatType.System);
                             }
                             else
@@ -3084,8 +3084,8 @@ namespace Server.ExineObjects
                                     ReceiveChat(GameLanguage.ExpandedStorageExpiresOn + Account.ExpandedStorageExpiryDate.ToString(), ChatType.System);
                                 }
 
-                                Enqueue(new S.LoseGold { Gold = cost });
-                                Enqueue(new S.ResizeStorage { Size = Account.ExpandStorage(), HasExpandedStorage = Account.HasExpandedStorage, ExpiryTime = Account.ExpandedStorageExpiryDate });
+                                SendPacketToClient(new ServerPacket.LoseGold { Gold = cost });
+                                SendPacketToClient(new ServerPacket.ResizeStorage { Size = Account.ExpandStorage(), HasExpandedStorage = Account.HasExpandedStorage, ExpiryTime = Account.ExpandedStorageExpiryDate });
                             }
                             else
                             {
@@ -3099,7 +3099,7 @@ namespace Server.ExineObjects
 
                     case "ALLOWOBSERVE":
                         AllowObserve = !AllowObserve;
-                        Enqueue(new S.AllowObserve { Allow = AllowObserve });
+                        SendPacketToClient(new ServerPacket.AllowObserve { Allow = AllowObserve });
                         break;
 
                     case "INFO":
@@ -3260,7 +3260,7 @@ namespace Server.ExineObjects
                             }
                             else return;
                             ReceiveChat(string.Format("{0} War Started.", tempConq.Info.Name), ChatType.System);
-                            MessageQueue.Enqueue(string.Format("{0} War Started.", tempConq.Info.Name));
+                            MessageQueue.SendMsg(string.Format("{0} War Started.", tempConq.Info.Name));
 
                             foreach (var pl in Envir.Players)
                             {
@@ -3484,7 +3484,7 @@ namespace Server.ExineObjects
                             if (player.Info.Magics[i].Spell != skill1) continue;
 
                             player.Info.Magics.RemoveAt(i);
-                            player.Enqueue(new S.RemoveMagic { PlaceId = i });
+                            player.SendPacketToClient(new ServerPacket.RemoveMagic { PlaceId = i });
                             removed = true;
                         }
 
@@ -3517,7 +3517,7 @@ namespace Server.ExineObjects
 
                         Light = light;
 
-                        Enqueue(GetUpdateInfo());
+                        SendPacketToClient(GetUpdateInfo());
                         Broadcast(GetUpdateInfo());
                         break;
                     default:
@@ -3537,9 +3537,9 @@ namespace Server.ExineObjects
 
                 message = ProcessChatItems(message, null, linkedItems);
 
-                p = new S.ObjectChat { ObjectID = ObjectID, Text = message, Type = ChatType.Normal };
+                p = new ServerPacket.ObjectChat { ObjectID = ObjectID, Text = message, Type = ChatType.Normal };
 
-                Enqueue(p);
+                SendPacketToClient(p);
                 Broadcast(p);
             }
         }
@@ -3597,7 +3597,7 @@ namespace Server.ExineObjects
 
                                 if (!player.Connection.SentChatItem.Contains(item))
                                 {
-                                    player.Enqueue(new S.NewChatItem { Item = item });
+                                    player.SendPacketToClient(new ServerPacket.NewChatItem { Item = item });
                                     player.Connection.SentChatItem.Add(item);
                                 }
                             }
@@ -3616,7 +3616,7 @@ namespace Server.ExineObjects
 
                             if (!player.Connection.SentChatItem.Contains(item))
                             {
-                                player.Enqueue(new S.NewChatItem { Item = item });
+                                player.SendPacketToClient(new ServerPacket.NewChatItem { Item = item });
                                 player.Connection.SentChatItem.Add(item);
                             }
                         }
@@ -3624,7 +3624,7 @@ namespace Server.ExineObjects
 
                     if (!Connection.SentChatItem.Contains(item))
                     {
-                        Enqueue(new S.NewChatItem { Item = item });
+                        SendPacketToClient(new ServerPacket.NewChatItem { Item = item });
                         Connection.SentChatItem.Add(item);
                     }
                 }
@@ -3670,10 +3670,10 @@ namespace Server.ExineObjects
                 if (TradePartner != null)
                     TradeCancel();
                   
-                Broadcast(new S.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+                Broadcast(new ServerPacket.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
             }
 
-            Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
+            SendPacketToClient(new ServerPacket.UserLocation { Direction = Direction, Location = CurrentLocation });
         }
 
 
@@ -3681,15 +3681,15 @@ namespace Server.ExineObjects
         //일단은 전체 네트워크에 뿌리고 수신하는 부분까지만 확인할것.
         public void Rest(ExineDirection dir) //add k333123 240926
         { 
-            Broadcast(new S.ObjectRest { ObjectID = ObjectID, Direction = dir, Location = CurrentLocation });
-            Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectRest { ObjectID = ObjectID, Direction = dir, Location = CurrentLocation });
+            SendPacketToClient(new ServerPacket.UserLocation { Direction = Direction, Location = CurrentLocation });
         }
 
         public void Harvest(ExineDirection dir)
         {
             if (!CanMove)
             {
-                Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
+                SendPacketToClient(new ServerPacket.UserLocation { Direction = Direction, Location = CurrentLocation });
                 return;
             }
 
@@ -3697,8 +3697,8 @@ namespace Server.ExineObjects
 
             Direction = dir;
 
-            Enqueue(new S.UserLocation { Direction = Direction, Location = CurrentLocation });
-            Broadcast(new S.ObjectHarvest { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            SendPacketToClient(new ServerPacket.UserLocation { Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectHarvest { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             Point front = Front;
             bool send = false;
@@ -3813,7 +3813,7 @@ namespace Server.ExineObjects
 
             UserItem slotItem = Info.Equipment[(int)EquipmentSlot.Weapon].Slots[(int)type];
 
-            Enqueue(new S.DeleteItem { UniqueID = slotItem.UniqueID, Count = 1 });
+            SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = slotItem.UniqueID, Count = 1 });
             Info.Equipment[(int)EquipmentSlot.Weapon].Slots[(int)type] = null;
 
             Report.ItemChanged(slotItem, 1, 1);
@@ -3883,7 +3883,7 @@ namespace Server.ExineObjects
                 if (temp == null || !temp.ValidPoint(info.Destination)) continue;
 
                 CurrentMap.RemoveObject(this);
-                Broadcast(new S.ObjectRemove { ObjectID = ObjectID });
+                Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID });
 
                 CompleteMapMovement(temp, info.Destination, CurrentMap, CurrentLocation);
                 return true;
@@ -3910,7 +3910,7 @@ namespace Server.ExineObjects
 
             MovementTime = Envir.Time + MovementDelay;
 
-            Enqueue(new S.MapChanged
+            SendPacketToClient(new ServerPacket.MapChanged
             {
                 MapIndex = CurrentMap.Info.Index,
                 FileName = CurrentMap.Info.FileName,
@@ -4084,7 +4084,7 @@ namespace Server.ExineObjects
 
             if (Globals.FishingRodShapes.Contains(OldLooks_Weapon) != Globals.FishingRodShapes.Contains(Looks_Weapon))
             {
-                Enqueue(GetFishInfo());
+                SendPacketToClient(GetFishInfo());
             }
         }
         public override Packet GetInfo()
@@ -4105,7 +4105,7 @@ namespace Server.ExineObjects
                     
             }
 
-            return new S.ObjectPlayer
+            return new ServerPacket.ObjectPlayer
             {
                 ObjectID = ObjectID,
                 Name = CurrentMap.Info.NoNames ? "?????" : Name,
@@ -4149,7 +4149,7 @@ namespace Server.ExineObjects
         }
         public void EquipSlotItem(MirGridType grid, ulong id, int to, MirGridType gridTo, ulong idTo)
         {
-            S.EquipSlotItem p = new S.EquipSlotItem { Grid = grid, UniqueID = id, To = to, GridTo = gridTo, Success = false };
+            ServerPacket.EquipSlotItem p = new ServerPacket.EquipSlotItem { Grid = grid, UniqueID = id, To = to, GridTo = gridTo, Success = false };
 
             UserItem item = null;
 
@@ -4177,31 +4177,31 @@ namespace Server.ExineObjects
                     }
                     break;
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
             if (item == null || item.Slots == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (gridTo == MirGridType.Fishing && !item.Info.IsFishingRod)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (to < 0 || to >= item.Slots.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (item.Slots[to] != null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4214,7 +4214,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     NPCObjectSrv ob = null;
@@ -4227,20 +4227,20 @@ namespace Server.ExineObjects
 
                     if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
                     if (Info.Equipment[to] != null &&
                         Info.Equipment[to].Info.Bind.HasFlag(BindMode.DontStore))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     array = Account.Storage;
                     break;
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -4258,19 +4258,19 @@ namespace Server.ExineObjects
 
             if (temp == null || index == -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if ((item.Info.IsFishingRod ) && temp.Info.Type == ItemType.Socket)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if ((temp.SoulBoundId != -1) && (temp.SoulBoundId != Info.Index))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4279,7 +4279,7 @@ namespace Server.ExineObjects
                 if (temp.Info.NeedIdentify && !temp.Identified)
                 {
                     temp.Identified = true;
-                    Enqueue(new S.RefreshItem { Item = temp });
+                    SendPacketToClient(new ServerPacket.RefreshItem { Item = temp });
                 }
 
                 switch (temp.Info.Shape)
@@ -4287,21 +4287,21 @@ namespace Server.ExineObjects
                     case 1:
                         if (item.Info.Type != ItemType.Weapon)
                         {
-                            Enqueue(p);
+                            SendPacketToClient(p);
                             return;
                         }
                         break;
                     case 2:
                         if (item.Info.Type != ItemType.Armour)
                         {
-                            Enqueue(p);
+                            SendPacketToClient(p);
                             return;
                         }
                         break;
                     case 3:
                         if (item.Info.Type != ItemType.Ring && item.Info.Type != ItemType.Bracelet && item.Info.Type != ItemType.Necklace)
                         {
-                            Enqueue(p);
+                            SendPacketToClient(p);
                             return;
                         }
                         break;
@@ -4310,7 +4310,7 @@ namespace Server.ExineObjects
                 //if ((temp.Info.BindOnEquip) && (temp.SoulBoundId == -1))
                 //{
                 //    temp.SoulBoundId = Info.Index;
-                //    Enqueue(new S.RefreshItem { Item = temp });
+                //    Enqueue(new ServerPacket.RefreshItem { Item = temp });
                 //}
                 //if (UnlockCurse && Info.Equipment[to].Cursed)
                 //    UnlockCurse = false;
@@ -4319,7 +4319,7 @@ namespace Server.ExineObjects
                 array[index] = null;
 
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                 RefreshStats();
 
                 Report.ItemMoved(temp, grid, gridTo, index, to);
@@ -4327,11 +4327,11 @@ namespace Server.ExineObjects
                 return;
             }
 
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void RemoveItem(MirGridType grid, ulong id, int to)
         {
-            S.RemoveItem p = new S.RemoveItem { Grid = grid, UniqueID = id, To = to, Success = false };
+            ServerPacket.RemoveItem p = new ServerPacket.RemoveItem { Grid = grid, UniqueID = id, To = to, Success = false };
             UserItem[] toArray, fromArray;
             MirGridType fromGrid;
             switch (grid)
@@ -4344,7 +4344,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     NPCObjectSrv ob = null;
@@ -4357,7 +4357,7 @@ namespace Server.ExineObjects
 
                     if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     toArray = Account.Storage;
@@ -4366,7 +4366,7 @@ namespace Server.ExineObjects
                     break;
                 
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -4385,25 +4385,25 @@ namespace Server.ExineObjects
 
             if (temp == null || index == -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.Cursed && !UnlockCurse)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.WeddingRing != -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.Info.Bind.HasFlag(BindMode.DontStore) && grid == MirGridType.Storage)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4418,7 +4418,7 @@ namespace Server.ExineObjects
 
                 toArray[to] = temp;
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                 
                     RefreshStats();
                     Broadcast(GetUpdateInfo()); 
@@ -4428,11 +4428,11 @@ namespace Server.ExineObjects
                 return;
             }
 
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void RemoveSlotItem(MirGridType grid, ulong id, int to, MirGridType gridTo, ulong idFrom)
         {
-            S.RemoveSlotItem p = new S.RemoveSlotItem { Grid = grid, UniqueID = id, To = to, GridTo = gridTo, Success = false };
+            ServerPacket.RemoveSlotItem p = new ServerPacket.RemoveSlotItem { Grid = grid, UniqueID = id, To = to, GridTo = gridTo, Success = false };
             UserItem[] array;
             switch (gridTo)
             {
@@ -4442,7 +4442,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     NPCObjectSrv ob = null;
@@ -4455,13 +4455,13 @@ namespace Server.ExineObjects
 
                     if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     array = Account.Storage;
                     break;
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -4494,19 +4494,19 @@ namespace Server.ExineObjects
                     }
                     break;
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
             if (temp == null || temp.Slots == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (grid == MirGridType.Fishing && !temp.Info.IsFishingRod)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4520,19 +4520,19 @@ namespace Server.ExineObjects
 
             if (slotTemp == null || index == -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (slotTemp.Cursed && !UnlockCurse)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (slotTemp.WeddingRing != -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4547,7 +4547,7 @@ namespace Server.ExineObjects
             {
                 array[to] = slotTemp;
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                 RefreshStats();
                 Broadcast(GetUpdateInfo());
 
@@ -4556,11 +4556,11 @@ namespace Server.ExineObjects
                 return;
             }
 
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void MoveItem(MirGridType grid, int from, int to)
         {
-            S.MoveItem p = new S.MoveItem { Grid = grid, From = from, To = to, Success = false };
+            ServerPacket.MoveItem p = new ServerPacket.MoveItem { Grid = grid, From = from, To = to, Success = false };
             UserItem[] array;
             switch (grid)
             {
@@ -4570,7 +4570,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     NPCObjectSrv ob = null;
@@ -4583,7 +4583,7 @@ namespace Server.ExineObjects
 
                     if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     array = Account.Storage;
@@ -4597,7 +4597,7 @@ namespace Server.ExineObjects
                     break;
                     
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -4607,7 +4607,7 @@ namespace Server.ExineObjects
                 {
                     Report.ItemError(grid, grid, from, to);
                     ReceiveChat("Item Move Error - Please report the item you tried to move and the time", ChatType.System);
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
                 }
 
@@ -4621,19 +4621,19 @@ namespace Server.ExineObjects
                 Report.ItemMoved(array[from], grid, grid, to, from);
                 
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void StoreItem(int from, int to)
         {
-            S.StoreItem p = new S.StoreItem { From = from, To = to, Success = false };
+            ServerPacket.StoreItem p = new ServerPacket.StoreItem { From = from, To = to, Success = false };
 
             if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
             NPCObjectSrv ob = null;
@@ -4646,20 +4646,20 @@ namespace Server.ExineObjects
 
             if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
 
             if (from < 0 || from >= Info.Inventory.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (to < 0 || to >= Account.Storage.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4667,19 +4667,19 @@ namespace Server.ExineObjects
 
             if (temp == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.Info.Bind.HasFlag(BindMode.DontStore))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.RentalInformation != null && temp.RentalInformation.BindingFlags.HasFlag(BindMode.DontStore))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4692,18 +4692,18 @@ namespace Server.ExineObjects
                 Report.ItemMoved(temp, MirGridType.Inventory, MirGridType.Storage, from, to);
 
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void TakeBackItem(int from, int to)
         {
-            S.TakeBackItem p = new S.TakeBackItem { From = from, To = to, Success = false };
+            ServerPacket.TakeBackItem p = new ServerPacket.TakeBackItem { From = from, To = to, Success = false };
 
             if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
             NPCObjectSrv ob = null;
@@ -4716,20 +4716,20 @@ namespace Server.ExineObjects
 
             if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
 
             if (from < 0 || from >= Account.Storage.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (to < 0 || to >= Info.Inventory.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4737,7 +4737,7 @@ namespace Server.ExineObjects
 
             if (temp == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4750,19 +4750,19 @@ namespace Server.ExineObjects
 
                 p.Success = true;
                 RefreshBagWeight();
-                Enqueue(p);
+                SendPacketToClient(p);
 
                 return;
             }
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void EquipItem(MirGridType grid, ulong id, int to)
         {
-            S.EquipItem p = new S.EquipItem { Grid = grid, UniqueID = id, To = to, Success = false };
+            ServerPacket.EquipItem p = new ServerPacket.EquipItem { Grid = grid, UniqueID = id, To = to, Success = false };
 
             if ((grid == MirGridType.Inventory || grid == MirGridType.Storage) && Fishing)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4780,7 +4780,7 @@ namespace Server.ExineObjects
 
             if (toArray == null || to < 0 || to >= toArray.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4793,7 +4793,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     NPCObjectSrv ob = null;
@@ -4806,14 +4806,14 @@ namespace Server.ExineObjects
 
                     if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     array = Account.Storage;
                     break;
                     
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -4830,31 +4830,31 @@ namespace Server.ExineObjects
 
             if (temp == null || index == -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
             if ((toArray[to] != null) && (toArray[to].Cursed) && (!UnlockCurse))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if ((temp.SoulBoundId != -1) && (temp.SoulBoundId != Info.Index))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (toArray[to] != null)
                 if (toArray[to].WeddingRing != -1)
                 {
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
                 }
             if (toArray[to] != null &&
                 toArray[to].Info.Bind.HasFlag(BindMode.DontStore))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4863,12 +4863,12 @@ namespace Server.ExineObjects
                 if (temp.Info.NeedIdentify && !temp.Identified)
                 {
                     temp.Identified = true;
-                    Enqueue(new S.RefreshItem { Item = temp });
+                    SendPacketToClient(new ServerPacket.RefreshItem { Item = temp });
                 }
                 if ((temp.Info.Bind.HasFlag(BindMode.BindOnEquip)) && (temp.SoulBoundId == -1))
                 {
                     temp.SoulBoundId = Info.Index;
-                    Enqueue(new S.RefreshItem { Item = temp });
+                    SendPacketToClient(new ServerPacket.RefreshItem { Item = temp });
                 }
 
                 if ((toArray[to] != null) && (toArray[to].Cursed) && (UnlockCurse))
@@ -4883,18 +4883,18 @@ namespace Server.ExineObjects
                 Report.ItemMoved(temp, grid, toGrid, index, to);
 
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                
                     RefreshStats();
 
                 //Broadcast(GetUpdateInfo());
                 return;
             }
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public override void UseItem(ulong id)
         {
-            S.UseItem p = new S.UseItem { UniqueID = id, Grid = MirGridType.Inventory, Success = false };
+            ServerPacket.UseItem p = new ServerPacket.UseItem { UniqueID = id, Grid = MirGridType.Inventory, Success = false };
 
             UserItem item = null;
             int index = -1;
@@ -4909,13 +4909,13 @@ namespace Server.ExineObjects
 
             if (item == null || index == -1 || !CanUseItem(item))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (Dead && !(item.Info.Type == ItemType.Scroll && item.Info.Shape == 6))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -4936,7 +4936,7 @@ namespace Server.ExineObjects
                             if (UnlockCurse)
                             {
                                 ReceiveChat("You can already unequip a cursed item.", ChatType.Hint);
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             ReceiveChat("You can now unequip a cursed item.", ChatType.Hint);
@@ -4995,7 +4995,7 @@ namespace Server.ExineObjects
                         case 0: //DE
                             if (!TeleportEscape(20))
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             foreach (DelayedAction ac in ActionList.Where(u => u.Type == DelayedType.NPC))
@@ -5006,7 +5006,7 @@ namespace Server.ExineObjects
                         case 1: //TT
                             if (!Teleport(Envir.GetMap(BindMapIndex), BindLocation))
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             foreach (DelayedAction ac in ActionList.Where(u => u.Type == DelayedType.NPC))
@@ -5017,7 +5017,7 @@ namespace Server.ExineObjects
                         case 2: //RT
                             if (!TeleportRandom(200, item.Info.Durability))
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             foreach (DelayedAction ac in ActionList.Where(u => u.Type == DelayedType.NPC))
@@ -5028,7 +5028,7 @@ namespace Server.ExineObjects
                         case 3: //BenedictionOil
                             if (!TryLuckWeapon())
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             break;
@@ -5036,12 +5036,12 @@ namespace Server.ExineObjects
                             temp = Info.Equipment[(int)EquipmentSlot.Weapon];
                             if (temp == null || temp.MaxDura == temp.CurrentDura)
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             if (temp.Info.Bind.HasFlag(BindMode.DontRepair))
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             temp.MaxDura = (ushort)Math.Max(0, temp.MaxDura - Math.Min(5000, temp.MaxDura - temp.CurrentDura) / 30);
@@ -5050,31 +5050,31 @@ namespace Server.ExineObjects
                             temp.DuraChanged = false;
 
                             ReceiveChat("Your weapon has been partially repaired", ChatType.Hint);
-                            Enqueue(new S.ItemRepaired { UniqueID = temp.UniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
+                            SendPacketToClient(new ServerPacket.ItemRepaired { UniqueID = temp.UniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
                             break;
                         case 5: //WarGodOil
                             temp = Info.Equipment[(int)EquipmentSlot.Weapon];
                             if (temp == null || temp.MaxDura == temp.CurrentDura)
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             if (temp.Info.Bind.HasFlag(BindMode.DontRepair) || (temp.Info.Bind.HasFlag(BindMode.NoSRepair)))
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             temp.CurrentDura = temp.MaxDura;
                             temp.DuraChanged = false;
 
                             ReceiveChat("Your weapon has been completely repaired", ChatType.Hint);
-                            Enqueue(new S.ItemRepaired { UniqueID = temp.UniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
+                            SendPacketToClient(new ServerPacket.ItemRepaired { UniqueID = temp.UniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
                             break;
                         case 6: //ResurrectionScroll
                             if (CurrentMap.Info.NoReincarnation)
                             {
                                 ReceiveChat(string.Format("Cannot use on this map"), ChatType.System);
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             if (Dead)
@@ -5104,7 +5104,7 @@ namespace Server.ExineObjects
                         case 11://HomeTeleport
                             if (MyGuild != null && MyGuild.Conquest != null && !MyGuild.Conquest.WarIsOn && MyGuild.Conquest.PalaceMap != null && !TeleportRandom(200, 0, MyGuild.Conquest.PalaceMap))
                             {
-                                Enqueue(p);
+                                SendPacketToClient(p);
                                 return;
                             }
                             break;
@@ -5152,7 +5152,7 @@ namespace Server.ExineObjects
 
                     if (magic.Info == null)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -5182,7 +5182,7 @@ namespace Server.ExineObjects
                     CurrentMap.AddObject(decoOb);
                     decoOb.Spawned();
 
-                    Enqueue(decoOb.GetInfo());
+                    SendPacketToClient(decoOb.GetInfo());
 
                     break;
                 case ItemType.MonsterSpawn:
@@ -5205,7 +5205,7 @@ namespace Server.ExineObjects
                         if (con == null)
                         {
                             ReceiveChat(string.Format("{0} can only be spawned during a conquest.", monsterInfo.GameName), ChatType.Hint);
-                            Enqueue(p);
+                            SendPacketToClient(p);
                             return;
                         }
                     }
@@ -5230,12 +5230,12 @@ namespace Server.ExineObjects
             Report.ItemChanged(item, 1, 1);
 
             p.Success = true;
-            Enqueue(p);
+            SendPacketToClient(p);
         }
          
         public void SplitItem(MirGridType grid, ulong id, ushort count)
         {
-            S.SplitItem1 p = new S.SplitItem1 { Grid = grid, UniqueID = id, Count = count, Success = false };
+            ServerPacket.SplitItem1 p = new ServerPacket.SplitItem1 { Grid = grid, UniqueID = id, Count = count, Success = false };
             UserItem[] array;
             switch (grid)
             {
@@ -5245,7 +5245,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     NPCObjectSrv ob = null;
@@ -5258,13 +5258,13 @@ namespace Server.ExineObjects
 
                     if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     array = Account.Storage;
                     break;
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -5280,7 +5280,7 @@ namespace Server.ExineObjects
 
             if (temp == null || count >= temp.Count || FreeSpace(array) == 0 || count < 1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -5294,8 +5294,8 @@ namespace Server.ExineObjects
             Report.ItemSplit(originalItem, temp, grid);
 
             p.Success = true;
-            Enqueue(p);
-            Enqueue(new S.SplitItem { Item = temp, Grid = grid });
+            SendPacketToClient(p);
+            SendPacketToClient(new ServerPacket.SplitItem { Item = temp, Grid = grid });
 
             if (grid == MirGridType.Inventory && (temp.Info.Type == ItemType.Potion || temp.Info.Type == ItemType.Scroll || temp.Info.Type == ItemType.Amulet || (temp.Info.Type == ItemType.Script && temp.Info.Effect == 1)))
             {
@@ -5339,7 +5339,7 @@ namespace Server.ExineObjects
         }
         public void MergeItem(MirGridType gridFrom, MirGridType gridTo, ulong fromID, ulong toID)
         {
-            S.MergeItem p = new S.MergeItem { GridFrom = gridFrom, GridTo = gridTo, IDFrom = fromID, IDTo = toID, Success = false };
+            ServerPacket.MergeItem p = new ServerPacket.MergeItem { GridFrom = gridFrom, GridTo = gridTo, IDFrom = fromID, IDTo = toID, Success = false };
 
             UserItem[] arrayFrom;
 
@@ -5351,7 +5351,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     NPCObjectSrv ob = null;
@@ -5364,7 +5364,7 @@ namespace Server.ExineObjects
 
                     if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     arrayFrom = Account.Storage;
@@ -5375,14 +5375,14 @@ namespace Server.ExineObjects
                 case MirGridType.Fishing:
                     if (Info.Equipment[(int)EquipmentSlot.Weapon] == null || !Info.Equipment[(int)EquipmentSlot.Weapon].Info.IsFishingRod)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     arrayFrom = Info.Equipment[(int)EquipmentSlot.Weapon].Slots;
                     break;
                     
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -5395,7 +5395,7 @@ namespace Server.ExineObjects
                 case MirGridType.Storage:
                     if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.StorageKey, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     NPCObjectSrv ob = null;
@@ -5408,7 +5408,7 @@ namespace Server.ExineObjects
 
                     if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     arrayTo = Account.Storage;
@@ -5419,14 +5419,14 @@ namespace Server.ExineObjects
                 case MirGridType.Fishing:
                     if (Info.Equipment[(int)EquipmentSlot.Weapon] == null || !Info.Equipment[(int)EquipmentSlot.Weapon].Info.IsFishingRod)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     arrayTo = Info.Equipment[(int)EquipmentSlot.Weapon].Slots;
                     break;
                      
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -5443,7 +5443,7 @@ namespace Server.ExineObjects
 
             if (tempFrom == null || tempFrom.Info.StackSize == 1 || index == -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -5461,19 +5461,19 @@ namespace Server.ExineObjects
 
             if (tempTo == null || tempTo.Info != tempFrom.Info || tempTo.Count == tempTo.Info.StackSize)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (tempTo.Info.Type != ItemType.Amulet && (gridFrom == MirGridType.Equipment || gridTo == MirGridType.Equipment))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if(tempTo.Info.Type != ItemType.Bait && (gridFrom == MirGridType.Fishing || gridTo == MirGridType.Fishing))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -5493,12 +5493,12 @@ namespace Server.ExineObjects
             TradeUnlock();
 
             p.Success = true;
-            Enqueue(p);
+            SendPacketToClient(p);
             RefreshStats();
         }
         public void CombineItem(MirGridType grid, ulong fromID, ulong toID)
         {
-            S.CombineItem p = new S.CombineItem { Grid = grid, IDFrom = fromID, IDTo = toID, Success = false };
+            ServerPacket.CombineItem p = new ServerPacket.CombineItem { Grid = grid, IDFrom = fromID, IDTo = toID, Success = false };
 
             UserItem[] array = null;
             switch (grid)
@@ -5511,7 +5511,7 @@ namespace Server.ExineObjects
 
             if (array == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -5522,7 +5522,7 @@ namespace Server.ExineObjects
 
             if (Dead)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -5536,7 +5536,7 @@ namespace Server.ExineObjects
 
             if (tempFrom == null || indexFrom == -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -5550,13 +5550,13 @@ namespace Server.ExineObjects
 
             if (tempTo == null || indexTo == -1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if ((byte)tempTo.Info.Type < 1 || (byte)tempTo.Info.Type > 11)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -5564,7 +5564,7 @@ namespace Server.ExineObjects
 
             if (tempFrom.Info.Type != ItemType.Gem)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -5577,7 +5577,7 @@ namespace Server.ExineObjects
 
                     if (tempTo.Info.Bind.HasFlag(BindMode.DontRepair))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -5604,44 +5604,44 @@ namespace Server.ExineObjects
 
                     if (canRepair != true)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
                     if (tempTo.CurrentDura == tempTo.MaxDura)
                     {
                         ReceiveChat("Item does not need to be repaired.", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     break;
                 case 7: //slots
                     if (tempTo.Info.Bind.HasFlag(BindMode.DontUpgrade) || tempTo.Info.Unique != SpecialItemMode.None)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (tempTo.RentalInformation != null && tempTo.RentalInformation.BindingFlags.HasFlag(BindMode.DontUpgrade))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (!ValidGemForItem(tempFrom, (byte)tempTo.Info.Type))
                     {
                         ReceiveChat("Invalid combination.", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (tempTo.Info.RandomStats == null)
                     {
                         ReceiveChat("Item already has max sockets.", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (tempTo.Info.RandomStats.SlotMaxStat <= tempTo.Slots.Length)
                     {
                         ReceiveChat("Item already has max sockets.", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -5650,13 +5650,13 @@ namespace Server.ExineObjects
                 case 8: //Seal
                     if (tempTo.Info.Bind.HasFlag(BindMode.DontUpgrade) || tempTo.Info.Unique != SpecialItemMode.None)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (tempTo.SealedInfo != null && tempTo.SealedInfo.ExpiryDate > Envir.Now)
                     {
                         ReceiveChat("Item is already sealed.", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (tempTo.SealedInfo != null && tempTo.SealedInfo.NextSealDate > Envir.Now)
@@ -5664,7 +5664,7 @@ namespace Server.ExineObjects
                         double remainingSeconds = (tempTo.SealedInfo.NextSealDate - Envir.Now).TotalSeconds;
 
                         ReceiveChat($"Item cannot be resealed for another {Functions.PrintTimeSpanFromSeconds(remainingSeconds, false)}.", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -5674,20 +5674,20 @@ namespace Server.ExineObjects
                 case 4: //orbs
                     if (tempTo.Info.Bind.HasFlag(BindMode.DontUpgrade) || tempTo.Info.Unique != SpecialItemMode.None)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
                     if (tempTo.RentalInformation != null && tempTo.RentalInformation.BindingFlags.HasFlag(BindMode.DontUpgrade))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
                     if ((tempTo.GemCount >= tempFrom.Info.Stats[Stat.CriticalDamage]) || (GetCurrentStatCount(tempFrom, tempTo) >= tempFrom.Info.Stats[Stat.HPDrainRatePercent]))
                     {
                         ReceiveChat("Item has already reached maximum added stats.", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -5813,7 +5813,7 @@ namespace Server.ExineObjects
                     if (!ValidGemForItem(tempFrom, itemType))
                     {
                         ReceiveChat("Invalid combination", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -5888,7 +5888,7 @@ namespace Server.ExineObjects
                     else
                     {
                         ReceiveChat("Cannot combine these items.", ChatType.Hint);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -5913,7 +5913,7 @@ namespace Server.ExineObjects
                     }
                     break;
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -5943,21 +5943,21 @@ namespace Server.ExineObjects
                 tempTo.DuraChanged = false;
 
                 ReceiveChat("Item has been repaired.", ChatType.Hint);
-                Enqueue(new S.ItemRepaired { UniqueID = tempTo.UniqueID, MaxDura = tempTo.MaxDura, CurrentDura = tempTo.CurrentDura });
+                SendPacketToClient(new ServerPacket.ItemRepaired { UniqueID = tempTo.UniqueID, MaxDura = tempTo.MaxDura, CurrentDura = tempTo.CurrentDura });
             }
 
             if (canUpgrade && array[indexTo] != null)
             {
                 tempTo.GemCount++;
                 ReceiveChat("Item has been upgraded.", ChatType.Hint);
-                Enqueue(new S.ItemUpgraded { Item = tempTo });
+                SendPacketToClient(new ServerPacket.ItemUpgraded { Item = tempTo });
             }
 
             if (canSlotUpgrade && array[indexTo] != null)
             {
                 tempTo.SetSlotSize(tempTo.Slots.Length + 1);
                 ReceiveChat("Item has increased its sockets.", ChatType.Hint);
-                Enqueue(new S.ItemSlotSizeChanged { UniqueID = tempTo.UniqueID, SlotSize = tempTo.Slots.Length });
+                SendPacketToClient(new ServerPacket.ItemSlotSizeChanged { UniqueID = tempTo.UniqueID, SlotSize = tempTo.Slots.Length });
             }
 
             if (canSeal && array[indexTo] != null)
@@ -5971,7 +5971,7 @@ namespace Server.ExineObjects
 
                 ReceiveChat($"Item sealed for {Functions.PrintTimeSpanFromSeconds(minutes * 60)}.", ChatType.Hint);
 
-                Enqueue(new S.ItemSealChanged { UniqueID = tempTo.UniqueID, ExpiryDate = tempTo.SealedInfo.ExpiryDate });
+                SendPacketToClient(new ServerPacket.ItemSealChanged { UniqueID = tempTo.UniqueID, ExpiryDate = tempTo.SealedInfo.ExpiryDate });
             }
 
             if (tempFrom.Count > 1) tempFrom.Count--;
@@ -5983,7 +5983,7 @@ namespace Server.ExineObjects
             TradeUnlock();
 
             p.Success = true;
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         private bool ValidGemForItem(UserItem Gem, byte itemtype)
         {
@@ -6115,17 +6115,17 @@ namespace Server.ExineObjects
         //Gems granting multiple stat types are not compatible with this method.        
         public void DropItem(ulong id, ushort count, bool isHeroItem)
         {
-            S.DropItem p = new S.DropItem { UniqueID = id, Count = count, HeroItem = isHeroItem, Success = false };
+            ServerPacket.DropItem p = new ServerPacket.DropItem { UniqueID = id, Count = count, HeroItem = isHeroItem, Success = false };
             if (Dead)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (CurrentMap.Info.NoThrowItem)
             {
                 ReceiveChat(GameLanguage.CanNotDrop, ChatType.System);
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -6147,19 +6147,19 @@ namespace Server.ExineObjects
 
             if (temp == null || index == -1 || count > temp.Count || count < 1)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.Info.Bind.HasFlag(BindMode.DontDrop))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.RentalInformation != null && temp.RentalInformation.BindingFlags.HasFlag(BindMode.DontDrop))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -6168,7 +6168,7 @@ namespace Server.ExineObjects
                 if (!temp.Info.Bind.HasFlag(BindMode.DestroyOnDrop))
                     if (!DropItem(temp))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -6183,13 +6183,13 @@ namespace Server.ExineObjects
                 if (!temp.Info.Bind.HasFlag(BindMode.DestroyOnDrop))
                     if (!DropItem(temp2))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                 temp.Count -= count;
             }
             p.Success = true;
-            Enqueue(p);
+            SendPacketToClient(p);
              
             RefreshBagWeight();
             Report.ItemChanged(temp, count, 1);
@@ -6202,7 +6202,7 @@ namespace Server.ExineObjects
 
             if (!ob.Drop(5)) return;
             Account.Gold -= gold;
-            Enqueue(new S.LoseGold { Gold = gold });
+            SendPacketToClient(new ServerPacket.LoseGold { Gold = gold });
         }
         public void PickUp()
         {
@@ -6290,7 +6290,7 @@ namespace Server.ExineObjects
                 if (CurrentMap.ValidPoint(p))
                 {
                     Account.Gold -= cost;
-                    Enqueue(new S.LoseGold { Gold = cost });
+                    SendPacketToClient(new ServerPacket.LoseGold { Gold = cost });
                     Teleport(CurrentMap, p);
                 }
 
@@ -6301,14 +6301,14 @@ namespace Server.ExineObjects
         {
             if (string.IsNullOrWhiteSpace(text) || text.Length < 3) return;
 
-            S.SearchMapResult p = new S.SearchMapResult();
+            ServerPacket.SearchMapResult p = new ServerPacket.SearchMapResult();
 
             Map map = Envir.GetWorldMap(text);
             if (map != null)
             {
                 CheckMapInfo(map.Info);
                 p.MapIndex = map.Info.Index;
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -6318,11 +6318,11 @@ namespace Server.ExineObjects
                 CheckMapInfo(npc.CurrentMap.Info);
                 p.MapIndex = npc.CurrentMap.Info.Index;
                 p.NPCIndex = npc.ObjectID;
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
-            Enqueue(p);
+            SendPacketToClient(p);
             return;
         }
         private bool IsGroupMember(MapObjectSrv player)
@@ -6374,7 +6374,7 @@ namespace Server.ExineObjects
 
             Account.Gold += gold;
 
-            Enqueue(new S.GainedGold { Gold = gold });
+            SendPacketToClient(new ServerPacket.GainedGold { Gold = gold });
         }
 
         public void UpdatePhoto(int len, byte[] datas)
@@ -6394,7 +6394,7 @@ namespace Server.ExineObjects
 
             Account.Credit += credit;
 
-            Enqueue(new S.GainedCredit { Credit = credit });
+            SendPacketToClient(new ServerPacket.GainedCredit { Credit = credit });
         }
                         
         public bool CanRemoveItem(MirGridType grid, UserItem item)
@@ -6465,7 +6465,7 @@ namespace Server.ExineObjects
 
             UserItem clonedItem = item.Clone();
 
-            Enqueue(new S.GainedQuestItem { Item = clonedItem });
+            SendPacketToClient(new ServerPacket.GainedQuestItem { Item = clonedItem });
 
             AddQuestItem(item);
         }
@@ -6479,14 +6479,14 @@ namespace Server.ExineObjects
 
                 if (count > item.Count)
                 {
-                    Enqueue(new S.DeleteQuestItem { UniqueID = item.UniqueID, Count = item.Count });
+                    SendPacketToClient(new ServerPacket.DeleteQuestItem { UniqueID = item.UniqueID, Count = item.Count });
                     Info.QuestInventory[o] = null;
 
                     count -= item.Count;
                     continue;
                 }
 
-                Enqueue(new S.DeleteQuestItem { UniqueID = item.UniqueID, Count = count });
+                SendPacketToClient(new ServerPacket.DeleteQuestItem { UniqueID = item.UniqueID, Count = count });
 
                 if (count == item.Count)
                     Info.QuestInventory[o] = null;
@@ -6498,24 +6498,24 @@ namespace Server.ExineObjects
         
         public void RequestChatItem(ulong id)
         {
-            //Enqueue(new S.ChatItemStats { ChatItemId = id, Stats = whatever });
+            //Enqueue(new ServerPacket.ChatItemStats { ChatItemId = id, Stats = whatever });
         }
         
         public override void ReceiveChat(string text, ChatType type)
         {
-            Enqueue(new S.Chat { Message = text, Type = type });
+            SendPacketToClient(new ServerPacket.Chat { Message = text, Type = type });
         }
         public void ReceiveOutputMessage(string text, OutputMessageType type)
         {
-            Enqueue(new S.SendOutputMessage { Message = text, Type = type });
+            SendPacketToClient(new ServerPacket.SendOutputMessage { Message = text, Type = type });
         }                
         public void Opendoor(byte Doorindex)
         {
             //todo: add check for sw doors
             if (CurrentMap.OpenDoor(Doorindex))
             {
-                Enqueue(new S.Opendoor() { DoorIndex = Doorindex });
-                Broadcast(new S.Opendoor() { DoorIndex = Doorindex });
+                SendPacketToClient(new ServerPacket.Opendoor() { DoorIndex = Doorindex });
+                Broadcast(new ServerPacket.Opendoor() { DoorIndex = Doorindex });
             }
         }
 
@@ -6578,7 +6578,7 @@ namespace Server.ExineObjects
             DelayedAction action = new DelayedAction(DelayedType.NPC, Envir.Time, Envir.DefaultNPC.LoadedObjectID, Envir.DefaultNPC.ScriptID, key);
             ActionList.Add(action);
 
-            Enqueue(new S.NPCUpdate { NPCID = Envir.DefaultNPC.LoadedObjectID });
+            SendPacketToClient(new ServerPacket.NPCUpdate { NPCID = Envir.DefaultNPC.LoadedObjectID });
         }
 
         public void CallDefaultNPC(string key)
@@ -6681,17 +6681,17 @@ namespace Server.ExineObjects
 
         public void SellItem(ulong uniqueID, ushort count)
         {
-            S.SellItem p = new S.SellItem { UniqueID = uniqueID, Count = count };
+            ServerPacket.SellItem p = new ServerPacket.SellItem { UniqueID = uniqueID, Count = count };
 
             if (Dead || count == 0)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (NPCPage == null || !(String.Equals(NPCPage.Key, NPCScript.BuySellKey, StringComparison.CurrentCultureIgnoreCase) || String.Equals(NPCPage.Key, NPCScript.SellKey, StringComparison.CurrentCultureIgnoreCase)))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -6714,19 +6714,19 @@ namespace Server.ExineObjects
 
                 if (temp == null || index == -1 || count > temp.Count)
                 {
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
                 }
 
                 if (temp.Info.Bind.HasFlag(BindMode.DontSell))
                 {
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
                 }
 
                 if (temp.RentalInformation != null && temp.RentalInformation.BindingFlags.HasFlag(BindMode.DontSell))
                 {
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
                 }
 
@@ -6735,7 +6735,7 @@ namespace Server.ExineObjects
                 if (script.Types.Count != 0 && !script.Types.Contains(temp.Info.Type))
                 {
                     ReceiveChat("You cannot sell this item here.", ChatType.System);
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
                 }
 
@@ -6746,7 +6746,7 @@ namespace Server.ExineObjects
 
                     if (item.Price() / 2 + Account.Gold > uint.MaxValue)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
 
@@ -6774,18 +6774,18 @@ namespace Server.ExineObjects
                 }
 
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                 GainGold(temp.Price() / 2);
                 RefreshBagWeight();
 
                 return;
             }
 
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void RepairItem(ulong uniqueID, bool special = false)
         {
-            Enqueue(new S.RepairItem { UniqueID = uniqueID });
+            SendPacketToClient(new ServerPacket.RepairItem { UniqueID = uniqueID });
 
             if (Dead) return;
 
@@ -6840,7 +6840,7 @@ namespace Server.ExineObjects
                 if (cost > Account.Gold) return;
 
                 Account.Gold -= cost;
-                Enqueue(new S.LoseGold { Gold = cost });
+                SendPacketToClient(new ServerPacket.LoseGold { Gold = cost });
                 if (ob.Conq != null) ob.Conq.GuildInfo.GoldStorage += (cost - baseCost);
 
                 if (!special) temp.MaxDura = (ushort)Math.Max(0, temp.MaxDura - (temp.MaxDura - temp.CurrentDura) / 30);
@@ -6848,7 +6848,7 @@ namespace Server.ExineObjects
                 temp.CurrentDura = temp.MaxDura;
                 temp.DuraChanged = false;
 
-                Enqueue(new S.ItemRepaired { UniqueID = uniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
+                SendPacketToClient(new ServerPacket.ItemRepaired { UniqueID = uniqueID, MaxDura = temp.MaxDura, CurrentDura = temp.CurrentDura });
                 return;
             }
         }
@@ -6865,7 +6865,7 @@ namespace Server.ExineObjects
                 CheckItem(item);
             }
 
-            Enqueue(new S.UserStorage { Storage = Account.Storage }); // Should be no alter before being sent.
+            SendPacketToClient(new ServerPacket.UserStorage { Storage = Account.Storage }); // Should be no alter before being sent.
         }
 
         #endregion
@@ -6873,11 +6873,11 @@ namespace Server.ExineObjects
         #region Consignment
         public void ConsignItem(ulong uniqueID, uint price, MarketPanelType panelType)
         {
-            S.ConsignItem p = new S.ConsignItem { UniqueID = uniqueID };
+            ServerPacket.ConsignItem p = new ServerPacket.ConsignItem { UniqueID = uniqueID };
 
             if (Dead || NPCPage == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -6887,20 +6887,20 @@ namespace Server.ExineObjects
                     {
                         if (price < Globals.MinConsignment || price > Globals.MaxConsignment)
                         {
-                            Enqueue(p);
+                            SendPacketToClient(p);
                             return;
                         }
 
                         if (Account.Gold < Globals.ConsignmentCost)
                         {
-                            Enqueue(p);
+                            SendPacketToClient(p);
                             return;
                         }
                     }
                     break;
                 
                 default:
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
             }
 
@@ -6923,13 +6923,13 @@ namespace Server.ExineObjects
 
                 if (temp == null || index == -1)
                 {
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
                 }
 
                 if (temp.Info.Bind.HasFlag(BindMode.DontSell))
                 {
-                    Enqueue(p);
+                    SendPacketToClient(p);
                     return;
                 }
 
@@ -6939,17 +6939,17 @@ namespace Server.ExineObjects
                 //TODO Check Max Consignment.
 
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
 
                 Info.Inventory[index] = null;
 
                 Account.Gold -= cost;
 
-                Enqueue(new S.LoseGold { Gold = cost });
+                SendPacketToClient(new ServerPacket.LoseGold { Gold = cost });
                 RefreshBagWeight();
             }
 
-            Enqueue(p);
+            SendPacketToClient(p);
         }
          
 
@@ -6958,7 +6958,7 @@ namespace Server.ExineObjects
         {
             CharacterInfo Character = Envir.GetCharacterInfo((int)id);
             if (Character != null)
-                Enqueue(new S.UserName { Id = (uint)Character.Index, Name = Character.Name });
+                SendPacketToClient(new ServerPacket.UserName { Id = (uint)Character.Index, Name = Character.Name });
         }
 
         #endregion
@@ -6967,7 +6967,7 @@ namespace Server.ExineObjects
 
         public void SwitchGroup(bool allow)
         {
-            Enqueue(new S.SwitchGroup { AllowGroup = allow });
+            SendPacketToClient(new ServerPacket.SwitchGroup { AllowGroup = allow });
 
             if (AllowGroup == allow) return;
             AllowGroup = allow;
@@ -6985,16 +6985,16 @@ namespace Server.ExineObjects
 
                 if (GroupMembers.Count > 1)
                 {
-                    Packet p = new S.DeleteMember { Name = Name };
+                    Packet p = new ServerPacket.DeleteMember { Name = Name };
 
                     for (int i = 0; i < GroupMembers.Count; i++)
                     {
-                        GroupMembers[i].Enqueue(p);
+                        GroupMembers[i].SendPacketToClient(p);
                     }
                 }
                 else
                 {
-                    GroupMembers[0].Enqueue(new S.DeleteGroup());
+                    GroupMembers[0].SendPacketToClient(new ServerPacket.DeleteGroup());
                     GroupMembers[0].GroupMembers = null;
                 }
 
@@ -7050,7 +7050,7 @@ namespace Server.ExineObjects
             }
 
             SwitchGroup(true);
-            player.Enqueue(new S.GroupInvite { Name = Name });
+            player.SendPacketToClient(new ServerPacket.GroupInvite { Name = Name });
             player.GroupInvitation = this;
 
         }
@@ -7082,7 +7082,7 @@ namespace Server.ExineObjects
                 return;
             }
 
-            player.Enqueue(new S.DeleteGroup());
+            player.SendPacketToClient(new ServerPacket.DeleteGroup());
             player.LeaveGroup();
         }
 
@@ -7137,12 +7137,12 @@ namespace Server.ExineObjects
             if (GroupInvitation.GroupMembers == null)
             {
                 GroupInvitation.GroupMembers = new List<PlayerObjectSrv> { GroupInvitation };
-                GroupInvitation.Enqueue(new S.AddMember { Name = GroupInvitation.Name });
-                GroupInvitation.Enqueue(new S.GroupMembersMap { PlayerName = GroupInvitation.Name, PlayerMap = GroupInvitation.CurrentMap.Info.Title });
-                GroupInvitation.Enqueue(new S.SendMemberLocation { MemberName = GroupInvitation.Name, MemberLocation = GroupInvitation.CurrentLocation });
+                GroupInvitation.SendPacketToClient(new ServerPacket.AddMember { Name = GroupInvitation.Name });
+                GroupInvitation.SendPacketToClient(new ServerPacket.GroupMembersMap { PlayerName = GroupInvitation.Name, PlayerMap = GroupInvitation.CurrentMap.Info.Title });
+                GroupInvitation.SendPacketToClient(new ServerPacket.SendMemberLocation { MemberName = GroupInvitation.Name, MemberLocation = GroupInvitation.CurrentLocation });
             }
 
-            Packet p = new S.AddMember { Name = Name };
+            Packet p = new ServerPacket.AddMember { Name = Name };
             GroupMembers = GroupInvitation.GroupMembers;
             GroupInvitation = null;
 
@@ -7150,15 +7150,15 @@ namespace Server.ExineObjects
             {
                 PlayerObjectSrv member = GroupMembers[i];
 
-                member.Enqueue(p);
-                Enqueue(new S.AddMember { Name = member.Name });
+                member.SendPacketToClient(p);
+                SendPacketToClient(new ServerPacket.AddMember { Name = member.Name });
 
                 if (CurrentMap != member.CurrentMap || !Functions.InRange(CurrentLocation, member.CurrentLocation, Globals.DataRange)) continue;
 
                 byte time = Math.Min(byte.MaxValue, (byte)Math.Max(5, (RevTime - Envir.Time) / 1000));
 
-                member.Enqueue(new S.ObjectHealth { ObjectID = ObjectID, Percent = PercentHealth, Expire = time });
-                Enqueue(new S.ObjectHealth { ObjectID = member.ObjectID, Percent = member.PercentHealth, Expire = time });
+                member.SendPacketToClient(new ServerPacket.ObjectHealth { ObjectID = ObjectID, Percent = PercentHealth, Expire = time });
+                SendPacketToClient(new ServerPacket.ObjectHealth { ObjectID = member.ObjectID, Percent = member.PercentHealth, Expire = time });
 
                
             }
@@ -7166,7 +7166,7 @@ namespace Server.ExineObjects
             GroupMembers.Add(this);
 
             
-            Enqueue(p);
+            SendPacketToClient(p);
             GroupMemberMapNameChanged();
             GetPlayerLocation();
         }
@@ -7177,10 +7177,10 @@ namespace Server.ExineObjects
             for (int i = 0; i < GroupMembers.Count; i++)
             {
                 PlayerObjectSrv member = GroupMembers[i];
-                member.Enqueue(new S.GroupMembersMap { PlayerName = Name, PlayerMap = CurrentMap.Info.Title });
-                Enqueue(new S.GroupMembersMap { PlayerName = member.Name, PlayerMap = member.CurrentMap.Info.Title });
+                member.SendPacketToClient(new ServerPacket.GroupMembersMap { PlayerName = Name, PlayerMap = CurrentMap.Info.Title });
+                SendPacketToClient(new ServerPacket.GroupMembersMap { PlayerName = member.Name, PlayerMap = member.CurrentMap.Info.Title });
             }
-            Enqueue(new S.GroupMembersMap { PlayerName = Name, PlayerMap = CurrentMap.Info.Title });
+            SendPacketToClient(new ServerPacket.GroupMembersMap { PlayerName = Name, PlayerMap = CurrentMap.Info.Title });
         }
 
         #endregion
@@ -7262,7 +7262,7 @@ namespace Server.ExineObjects
                         if (Info.AccountInfo.Gold >= Required.Amount)
                         {
                             Info.AccountInfo.Gold -= Required.Amount;
-                            Enqueue(new S.LoseGold { Gold = Required.Amount });
+                            SendPacketToClient(new ServerPacket.LoseGold { Gold = Required.Amount });
                         }
                     }
                     else
@@ -7277,19 +7277,19 @@ namespace Server.ExineObjects
 
                             if ((Required.Item.Type == ItemType.Ore) && (item.CurrentDura / 1000 > Required.Amount))
                             {
-                                Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
+                                SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                                 Info.Inventory[o] = null;
                                 break;
                             }
                             if (count > item.Count)
                             {
-                                Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
+                                SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = item.Count });
                                 Info.Inventory[o] = null;
                                 count -= item.Count;
                                 continue;
                             }
 
-                            Enqueue(new S.DeleteItem { UniqueID = item.UniqueID, Count = (ushort)count });
+                            SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = item.UniqueID, Count = (ushort)count });
                             if (count == item.Count)
                                 Info.Inventory[o] = null;
                             else
@@ -7367,7 +7367,7 @@ namespace Server.ExineObjects
                         return;
                     }
 
-                    player.Enqueue(new S.GuildInvite { Name = MyGuild.Name });
+                    player.SendPacketToClient(new ServerPacket.GuildInvite { Name = MyGuild.Name });
                     player.PendingGuildInvite = MyGuild;
                     break;
                 case 1: //delete member
@@ -7487,7 +7487,7 @@ namespace Server.ExineObjects
             //refresh guildbuffs
             RefreshStats();
             if (MyGuild.BuffList.Count > 0)
-                Enqueue(new S.GuildBuffList() { ActiveBuffs = MyGuild.BuffList});
+                SendPacketToClient(new ServerPacket.GuildBuffList() { ActiveBuffs = MyGuild.BuffList});
         }
         public void RequestGuildInfo(byte Type)
         {
@@ -7497,12 +7497,12 @@ namespace Server.ExineObjects
             {
                 case 0://notice
                     if (GuildNoticeChanged)
-                        Enqueue(new S.GuildNoticeChange() { notice = MyGuild.Info.Notice });
+                        SendPacketToClient(new ServerPacket.GuildNoticeChange() { notice = MyGuild.Info.Notice });
                     GuildNoticeChanged = false;
                     break;
                 case 1://memberlist
                     if (GuildMembersChanged)
-                        Enqueue(new S.GuildMemberChange() { Status = 255, Ranks = MyGuild.Ranks });
+                        SendPacketToClient(new ServerPacket.GuildMemberChange() { Status = 255, Ranks = MyGuild.Ranks });
                     break;
             }
         }
@@ -7568,8 +7568,8 @@ namespace Server.ExineObjects
 
                 Account.Gold -= amount;
                 MyGuild.Gold += amount;
-                Enqueue(new S.LoseGold { Gold = amount });
-                MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 0, Name = Info.Name, Amount = amount });
+                SendPacketToClient(new ServerPacket.LoseGold { Gold = amount });
+                MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 0, Name = Info.Name, Amount = amount });
                 MyGuild.NeedSave = true;
             }
             else
@@ -7594,23 +7594,23 @@ namespace Server.ExineObjects
 
                 MyGuild.Gold -= amount;
                 GainGold(amount);
-                MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 1, Name = Info.Name, Amount = amount });
+                MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 1, Name = Info.Name, Amount = amount });
                 MyGuild.NeedSave = true;
             }
         }
         public void GuildStorageItemChange(byte type, int from, int to)
         {
-            S.GuildStorageItemChange p = new S.GuildStorageItemChange { Type = (byte)(3 + type), From = from, To = to };
+            ServerPacket.GuildStorageItemChange p = new ServerPacket.GuildStorageItemChange { Type = (byte)(3 + type), From = from, To = to };
             if ((MyGuild == null) || (MyGuildRank == null))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 ReceiveChat("You are not part of a guild.", ChatType.System);
                 return;
             }
 
             if (!InSafeZone && type != 3)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 ReceiveChat("You cannot use guild storage outside safezones.", ChatType.System);
                 return;
             }
@@ -7620,46 +7620,46 @@ namespace Server.ExineObjects
                 case 0://store
                     if (!MyGuildRank.Options.HasFlag(GuildRankOptions.CanStoreItem))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         ReceiveChat("You do not have permission to store items in guild storage.", ChatType.System);
                         return;
                     }
                     if (from < 0 || from >= Info.Inventory.Length)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (to < 0 || to >= MyGuild.StoredItems.Length)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (Info.Inventory[from] == null)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (Info.Inventory[from].Info.Bind.HasFlag(BindMode.DontStore))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (Info.Inventory[from].RentalInformation != null && Info.Inventory[from].RentalInformation.BindingFlags.HasFlag(BindMode.DontStore))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (MyGuild.StoredItems[to] != null)
                     {
                         ReceiveChat("Target slot not empty.", ChatType.System);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     MyGuild.StoredItems[to] = new GuildStorageItem() { Item = Info.Inventory[from], UserId = Info.Index };
                     Info.Inventory[from] = null;
                     RefreshBagWeight();
                     MyGuild.SendItemInfo(MyGuild.StoredItems[to].Item);
-                    MyGuild.SendServerPacket(new S.GuildStorageItemChange() { Type = 0, User = Info.Index, Item = MyGuild.StoredItems[to], To = to, From = from });
+                    MyGuild.SendServerPacket(new ServerPacket.GuildStorageItemChange() { Type = 0, User = Info.Index, Item = MyGuild.StoredItems[to], To = to, From = from });
                     MyGuild.NeedSave = true;
                     break;
                 case 1://retrieve
@@ -7671,33 +7671,33 @@ namespace Server.ExineObjects
                     }
                     if (from < 0 || from >= MyGuild.StoredItems.Length)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (to < 0 || to >= Info.Inventory.Length)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (Info.Inventory[to] != null)
                     {
                         ReceiveChat("Target slot not empty.", ChatType.System);
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (MyGuild.StoredItems[from] == null)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (MyGuild.StoredItems[from].Item.Info.Bind.HasFlag(BindMode.DontStore))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     Info.Inventory[to] = MyGuild.StoredItems[from].Item;
                     MyGuild.StoredItems[from] = null;
-                    MyGuild.SendServerPacket(new S.GuildStorageItemChange() { Type = 1, User = Info.Index, To = to, From = from });
+                    MyGuild.SendServerPacket(new ServerPacket.GuildStorageItemChange() { Type = 1, User = Info.Index, To = to, From = from });
                     RefreshBagWeight();
                     MyGuild.NeedSave = true;
                     break;
@@ -7705,28 +7705,28 @@ namespace Server.ExineObjects
                     GuildStorageItem q = null;
                     if (!MyGuildRank.Options.HasFlag(GuildRankOptions.CanStoreItem))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         ReceiveChat("You do not have permission to move items in guild storage.", ChatType.System);
                         return;
                     }
                     if (from < 0 || from >= MyGuild.StoredItems.Length)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (to < 0 || to >= MyGuild.StoredItems.Length)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (MyGuild.StoredItems[from] == null)
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (MyGuild.StoredItems[from].Item.Info.Bind.HasFlag(BindMode.DontStore))
                     {
-                        Enqueue(p);
+                        SendPacketToClient(p);
                         return;
                     }
                     if (MyGuild.StoredItems[to] != null)
@@ -7741,7 +7741,7 @@ namespace Server.ExineObjects
 
                     if (MyGuild.StoredItems[from] != null) MyGuild.SendItemInfo(MyGuild.StoredItems[from].Item);
 
-                    MyGuild.SendServerPacket(new S.GuildStorageItemChange() { Type = 2, User = Info.Index, Item = MyGuild.StoredItems[to], To = to, From = from });
+                    MyGuild.SendServerPacket(new ServerPacket.GuildStorageItemChange() { Type = 2, User = Info.Index, Item = MyGuild.StoredItems[to], To = to, From = from });
                     MyGuild.NeedSave = true;
                     break;
                 case 3://request list
@@ -7755,7 +7755,7 @@ namespace Server.ExineObjects
                         //CheckItemInfo(item.Info);
                         CheckItem(item);
                     }
-                    Enqueue(new S.GuildStorageList() { Items = MyGuild.StoredItems });
+                    SendPacketToClient(new ServerPacket.GuildStorageList() { Items = MyGuild.StoredItems });
                     break;
             }
 
@@ -7796,7 +7796,7 @@ namespace Server.ExineObjects
                 enemyGuild.SendMessage(string.Format("{0} has started a war", MyGuild.Name), ChatType.System);
 
                 MyGuild.Gold -= Settings.Guild_WarCost;
-                MyGuild.SendServerPacket(new S.GuildStorageGoldChange() { Type = 2, Name = Info.Name, Amount = Settings.Guild_WarCost });
+                MyGuild.SendServerPacket(new ServerPacket.GuildStorageGoldChange() { Type = 2, Name = Info.Name, Amount = Settings.Guild_WarCost });
             }
         }
 
@@ -7830,7 +7830,7 @@ namespace Server.ExineObjects
             {
                 case 0://request info list
                     if (RequestedGuildBuffInfo) return;
-                    Enqueue(new S.GuildBuffList() { GuildBuffs = Settings.Guild_BuffList });
+                    SendPacketToClient(new ServerPacket.GuildBuffList() { GuildBuffs = Settings.Guild_BuffList });
                     break;
                 case 1://buy the buff
                     if (!MyGuildRank.Options.HasFlag(GuildRankOptions.CanActivateBuff))
@@ -7876,17 +7876,17 @@ namespace Server.ExineObjects
 
         public void DepositTradeItem(int from, int to)
         {
-            S.DepositTradeItem p = new S.DepositTradeItem { From = from, To = to, Success = false };
+            ServerPacket.DepositTradeItem p = new ServerPacket.DepositTradeItem { From = from, To = to, Success = false };
 
             if (from < 0 || from >= Info.Inventory.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (to < 0 || to >= Info.Trade.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -7894,19 +7894,19 @@ namespace Server.ExineObjects
 
             if (temp == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.Info.Bind.HasFlag(BindMode.DontTrade))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (temp.RentalInformation != null && temp.RentalInformation.BindingFlags.HasFlag(BindMode.DontTrade))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -7920,25 +7920,25 @@ namespace Server.ExineObjects
                 Report.ItemMoved(temp, MirGridType.Inventory, MirGridType.Trade, from, to);
                 
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
-            Enqueue(p);
+            SendPacketToClient(p);
 
         }
         public void RetrieveTradeItem(int from, int to)
         {
-            S.RetrieveTradeItem p = new S.RetrieveTradeItem { From = from, To = to, Success = false };
+            ServerPacket.RetrieveTradeItem p = new ServerPacket.RetrieveTradeItem { From = from, To = to, Success = false };
 
             if (from < 0 || from >= Info.Trade.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (to < 0 || to >= Info.Inventory.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -7946,7 +7946,7 @@ namespace Server.ExineObjects
 
             if (temp == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -7962,7 +7962,7 @@ namespace Server.ExineObjects
                 Report.ItemMoved(temp, MirGridType.Trade, MirGridType.Inventory, from, to);
             }
 
-            Enqueue(p);
+            SendPacketToClient(p);
         }
 
         
@@ -8047,7 +8047,7 @@ namespace Server.ExineObjects
                 }
 
                 player.TradeInvitation = this;
-                player.Enqueue(new S.TradeRequest { Name = Info.Name });
+                player.SendPacketToClient(new ServerPacket.TradeRequest { Name = Info.Name });
             }
         }
         public void TradeReply(bool accept)
@@ -8083,8 +8083,8 @@ namespace Server.ExineObjects
             TradeInvitation.TradePartner = this;
             TradeInvitation = null;
 
-            Enqueue(new S.TradeAccept { Name = TradePartner.Info.Name });
-            TradePartner.Enqueue(new S.TradeAccept { Name = Info.Name });
+            SendPacketToClient(new ServerPacket.TradeAccept { Name = TradePartner.Info.Name });
+            TradePartner.SendPacketToClient(new ServerPacket.TradeAccept { Name = Info.Name });
         }
         public void TradeGold(uint amount)
         {
@@ -8100,8 +8100,8 @@ namespace Server.ExineObjects
             TradeGoldAmount += amount;
             Account.Gold -= amount;
 
-            Enqueue(new S.LoseGold { Gold = amount });
-            TradePartner.Enqueue(new S.TradeGold { Amount = TradeGoldAmount });
+            SendPacketToClient(new ServerPacket.LoseGold { Gold = amount });
+            TradePartner.SendPacketToClient(new ServerPacket.TradeGold { Amount = TradeGoldAmount });
         }
         public void TradeItem()
         {
@@ -8118,7 +8118,7 @@ namespace Server.ExineObjects
                 TradePartner.CheckItem(u);
             }
 
-            TradePartner.Enqueue(new S.TradeItem { TradeItems = Info.Trade });
+            TradePartner.SendPacketToClient(new ServerPacket.TradeItem { TradeItems = Info.Trade });
         }
 
         public void TradeUnlock()
@@ -8175,10 +8175,10 @@ namespace Server.ExineObjects
                 {
                     CanTrade = false;
                     TradePair[p].ReceiveChat("Trading partner cannot accept all items.", ChatType.System);
-                    TradePair[p].Enqueue(new S.TradeCancel { Unlock = true });
+                    TradePair[p].SendPacketToClient(new ServerPacket.TradeCancel { Unlock = true });
 
                     TradePair[o].ReceiveChat("Unable to accept all items.", ChatType.System);
-                    TradePair[o].Enqueue(new S.TradeCancel { Unlock = true });
+                    TradePair[o].SendPacketToClient(new ServerPacket.TradeCancel { Unlock = true });
 
                     return;
                 }
@@ -8187,10 +8187,10 @@ namespace Server.ExineObjects
                 {
                     CanTrade = false;
                     TradePair[p].ReceiveChat("Trading partner cannot accept any more gold.", ChatType.System);
-                    TradePair[p].Enqueue(new S.TradeCancel { Unlock = true });
+                    TradePair[p].SendPacketToClient(new ServerPacket.TradeCancel { Unlock = true });
 
                     TradePair[o].ReceiveChat("Unable to accept any more gold.", ChatType.System);
-                    TradePair[o].Enqueue(new S.TradeCancel { Unlock = true });
+                    TradePair[o].SendPacketToClient(new ServerPacket.TradeCancel { Unlock = true });
 
                     return;
                 }
@@ -8224,7 +8224,7 @@ namespace Server.ExineObjects
                     }
 
                     TradePair[p].ReceiveChat("Trade successful.", ChatType.System);
-                    TradePair[p].Enqueue(new S.TradeConfirm());
+                    TradePair[p].SendPacketToClient(new ServerPacket.TradeConfirm());
 
                     TradePair[p].TradeLocked = false;
                     TradePair[p].TradePartner = null;
@@ -8255,7 +8255,7 @@ namespace Server.ExineObjects
                         if(FreeSpace(TradePair[p].Info.Inventory) < 1)
                         {
                             
-                            TradePair[p].Enqueue(new S.DeleteItem { UniqueID = temp.UniqueID, Count = temp.Count });
+                            TradePair[p].SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = temp.UniqueID, Count = temp.Count });
                             TradePair[p].Info.Trade[t] = null;
                             continue;
                         }
@@ -8288,7 +8288,7 @@ namespace Server.ExineObjects
                     TradePair[p].TradeLocked = false;
                     TradePair[p].TradePartner = null;
 
-                    TradePair[p].Enqueue(new S.TradeCancel { Unlock = false });
+                    TradePair[p].SendPacketToClient(new ServerPacket.TradeCancel { Unlock = false });
                 }
             }
         }
@@ -8424,7 +8424,7 @@ namespace Server.ExineObjects
             {
                 if (!Fishing)
                 {
-                    Enqueue(GetFishInfo());
+                    SendPacketToClient(GetFishInfo());
                     return;
                 }
 
@@ -8497,7 +8497,7 @@ namespace Server.ExineObjects
                 FishFirstFound = false;
             }
 
-            Enqueue(GetFishInfo());
+            SendPacketToClient(GetFishInfo());
             Broadcast(GetFishInfo());
 
             if (FishingAutocast && !cast && !cancel)
@@ -8553,7 +8553,7 @@ namespace Server.ExineObjects
 
             FishingTime = Envir.Time + FishingDelay;
 
-            Enqueue(GetFishInfo());
+            SendPacketToClient(GetFishInfo());
 
             if (FishingProgress > 100)
             {
@@ -8564,7 +8564,7 @@ namespace Server.ExineObjects
         {
             FishingProgress = _fishCounter > 0 ? (int)(((decimal)_fishCounter / FishingProgressMax) * 100) : 0;
 
-            return new S.FishingUpdate
+            return new ServerPacket.FishingUpdate
             {
                 ObjectID = ObjectID,
                 Fishing = Fishing,
@@ -8811,7 +8811,7 @@ namespace Server.ExineObjects
                         Functions.InRange(player.CurrentLocation, CurrentLocation, Globals.DataRange) &&
                         !player.Dead && player != this))
                 {
-                    player.Enqueue(new S.ShareQuest { QuestIndex = questIndex, SharerName = Name });
+                    player.SendPacketToClient(new ServerPacket.ShareQuest { QuestIndex = questIndex, SharerName = Name });
                     shared = true;
                 }
             }
@@ -8879,7 +8879,7 @@ namespace Server.ExineObjects
                     GainQuestItem(item);
                     quest.ProcessItem(Info.QuestInventory);
 
-                    Enqueue(new S.SendOutputMessage { Message = string.Format("You found {0}.", item.FriendlyName), Type = OutputMessageType.Quest });
+                    SendPacketToClient(new ServerPacket.SendOutputMessage { Message = string.Format("You found {0}.", item.FriendlyName), Type = OutputMessageType.Quest });
 
                     SendUpdateQuest(quest, QuestState.Update);
 
@@ -8898,7 +8898,7 @@ namespace Server.ExineObjects
             {
                 quest.ProcessFlag(Info.Flags);
 
-                //Enqueue(new S.SendOutputMessage { Message = string.Format("Location visited."), Type = OutputMessageType.Quest });
+                //Enqueue(new ServerPacket.SendOutputMessage { Message = string.Format("Location visited."), Type = OutputMessageType.Quest });
 
                 SendUpdateQuest(quest, QuestState.Update);
                 return true;
@@ -8914,7 +8914,7 @@ namespace Server.ExineObjects
             {
                 quest.ProcessKill(mInfo);
 
-                Enqueue(new S.SendOutputMessage { Message = string.Format("You killed {0}.", mInfo.GameName), Type = OutputMessageType.Quest });
+                SendPacketToClient(new ServerPacket.SendOutputMessage { Message = string.Format("You killed {0}.", mInfo.GameName), Type = OutputMessageType.Quest });
 
                 SendUpdateQuest(quest, QuestState.Update);
             }
@@ -8955,7 +8955,7 @@ namespace Server.ExineObjects
                 if (!itemRequired && !isCarryItem)
                 {
                     Info.QuestInventory[i] = null;
-                    Enqueue(new S.DeleteQuestItem { UniqueID = itm.UniqueID, Count = itm.Count });
+                    SendPacketToClient(new ServerPacket.DeleteQuestItem { UniqueID = itm.UniqueID, Count = itm.Count });
                 }
             }
         }
@@ -8982,7 +8982,7 @@ namespace Server.ExineObjects
                     break;
             }
 
-            Enqueue(new S.ChangeQuest
+            SendPacketToClient(new ServerPacket.ChangeQuest
             {
                 Quest = quest.CreateClientQuestProgress(),
                 QuestState = state,
@@ -8992,7 +8992,7 @@ namespace Server.ExineObjects
 
         public void GetCompletedQuests()
         {
-            Enqueue(new S.CompleteQuest
+            SendPacketToClient(new ServerPacket.CompleteQuest
             {
                 CompletedQuests = CompletedQuests
             });
@@ -9058,7 +9058,7 @@ namespace Server.ExineObjects
                 }
             }
 
-            Enqueue(new S.FriendUpdate { Friends = friends });
+            SendPacketToClient(new ServerPacket.FriendUpdate { Friends = friends });
         }
 
         #endregion
@@ -9070,11 +9070,11 @@ namespace Server.ExineObjects
         public void DepositRefineItem(int from, int to)
         {
 
-            S.DepositRefineItem p = new S.DepositRefineItem { From = from, To = to, Success = false };
+            ServerPacket.DepositRefineItem p = new ServerPacket.DepositRefineItem { From = from, To = to, Success = false };
 
             if (NPCPage == null || !String.Equals(NPCPage.Key, NPCScript.RefineKey, StringComparison.CurrentCultureIgnoreCase))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
             NPCObjectSrv ob = null;
@@ -9087,20 +9087,20 @@ namespace Server.ExineObjects
 
             if (ob == null || !Functions.InRange(ob.CurrentLocation, CurrentLocation, Globals.DataRange))
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
 
             if (from < 0 || from >= Info.Inventory.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (to < 0 || to >= Info.Refine.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -9108,7 +9108,7 @@ namespace Server.ExineObjects
 
             if (temp == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -9121,25 +9121,25 @@ namespace Server.ExineObjects
                 Report.ItemMoved(temp, MirGridType.Inventory, MirGridType.Refine, from, to);
 
                 p.Success = true;
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
-            Enqueue(p);
+            SendPacketToClient(p);
 
         }
         public void RetrieveRefineItem(int from, int to)
         {
-            S.RetrieveRefineItem p = new S.RetrieveRefineItem { From = from, To = to, Success = false };
+            ServerPacket.RetrieveRefineItem p = new ServerPacket.RetrieveRefineItem { From = from, To = to, Success = false };
 
             if (from < 0 || from >= Info.Refine.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (to < 0 || to >= Info.Inventory.Length)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -9147,7 +9147,7 @@ namespace Server.ExineObjects
 
             if (temp == null)
             {
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -9160,11 +9160,11 @@ namespace Server.ExineObjects
 
                 p.Success = true;
                 RefreshBagWeight();
-                Enqueue(p);
+                SendPacketToClient(p);
 
                 return;
             }
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void RefineCancel()
         {
@@ -9185,7 +9185,7 @@ namespace Server.ExineObjects
                     }
                     else //Send item via mail if it can no longer be stored
                     {
-                        Enqueue(new S.DeleteItem { UniqueID = temp.UniqueID, Count = temp.Count });
+                        SendPacketToClient(new ServerPacket.DeleteItem { UniqueID = temp.UniqueID, Count = temp.Count });
                          
                     }
 
@@ -9197,7 +9197,7 @@ namespace Server.ExineObjects
         }
         public void RefineItem(ulong uniqueID)
         {
-            Enqueue(new S.RepairItem { UniqueID = uniqueID }); //CHECK THIS.
+            SendPacketToClient(new ServerPacket.RepairItem { UniqueID = uniqueID }); //CHECK THIS.
 
             if (Dead) return;
 
@@ -9254,14 +9254,14 @@ namespace Server.ExineObjects
             }
 
             Account.Gold -= cost;
-            Enqueue(new S.LoseGold { Gold = cost });
+            SendPacketToClient(new ServerPacket.LoseGold { Gold = cost });
 
             //START OF FORMULA
 
             Info.CurrentRefine = Info.Inventory[index];
             Info.Inventory[index] = null;
             Info.CollectTime = (Envir.Time + (Settings.RefineTime * Settings.Minute));
-            Enqueue(new S.RefineItem { UniqueID = uniqueID });
+            SendPacketToClient(new ServerPacket.RefineItem { UniqueID = uniqueID });
 
 
             short orePurity = 0;
@@ -9414,19 +9414,19 @@ namespace Server.ExineObjects
         }
         public void CollectRefine()
         {
-            S.NPCCollectRefine p = new S.NPCCollectRefine { Success = false };
+            ServerPacket.NPCCollectRefine p = new ServerPacket.NPCCollectRefine { Success = false };
 
             if (Info.CurrentRefine == null)
             {
                 ReceiveChat("You aren't currently refining any items.", ChatType.System);
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
             if (Info.CollectTime > Envir.Time)
             {
                 ReceiveChat(string.Format("Your {0} will be ready to collect in {1} minute(s).", Info.CurrentRefine.FriendlyName, ((Info.CollectTime - Envir.Time) / Settings.Minute)), ChatType.System);
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -9442,7 +9442,7 @@ namespace Server.ExineObjects
             if (index == -1)
             {
                 ReceiveChat(String.Format("There isn't room in your bag for your {0}, make some space and try again.", Info.CurrentRefine.FriendlyName), ChatType.System);
-                Enqueue(p);
+                SendPacketToClient(p);
                 return;
             }
 
@@ -9453,7 +9453,7 @@ namespace Server.ExineObjects
 
             Info.CurrentRefine = null;
             Info.CollectTime = 0;
-            Enqueue(p);
+            SendPacketToClient(p);
         }
         public void CheckRefine(ulong uniqueID)
         {
@@ -9518,13 +9518,13 @@ namespace Server.ExineObjects
             else if ((Info.Inventory[index].RefinedValue == RefinedValue.None) && (Info.Inventory[index].RefineAdded > 0))
             {
                 ReceiveChat(String.Format("Your {0} smashed into a thousand pieces upon testing.", Info.Inventory[index].FriendlyName), ChatType.System);
-                Enqueue(new S.RefineItem { UniqueID = Info.Inventory[index].UniqueID });
+                SendPacketToClient(new ServerPacket.RefineItem { UniqueID = Info.Inventory[index].UniqueID });
                 Info.Inventory[index].RefineSuccessChance = 0;
                 Info.Inventory[index] = null;
                 return;
             }
 
-            Enqueue(new S.ItemUpgraded { Item = Info.Inventory[index] });
+            SendPacketToClient(new ServerPacket.ItemUpgraded { Item = Info.Inventory[index] });
             return;
         }
 
@@ -9549,7 +9549,7 @@ namespace Server.ExineObjects
             if (Info.Equipment[(int)EquipmentSlot.RingL] != null)
             {
                 Info.Equipment[(int)EquipmentSlot.RingL].WeddingRing = -1;
-                Enqueue(new S.RefreshItem { Item = Info.Equipment[(int)EquipmentSlot.RingL] });
+                SendPacketToClient(new ServerPacket.RefreshItem { Item = Info.Equipment[(int)EquipmentSlot.RingL] });
             }
 
             GetRelationship(false);
@@ -9564,7 +9564,7 @@ namespace Server.ExineObjects
                 player.GetRelationship(false);
                 player.ReceiveChat(string.Format("You've just been forcefully divorced"), ChatType.System);
                 if (player.Info.Equipment[(int)EquipmentSlot.RingL] != null)
-                    player.Enqueue(new S.RefreshItem { Item = player.Info.Equipment[(int)EquipmentSlot.RingL] });
+                    player.SendPacketToClient(new ServerPacket.RefreshItem { Item = player.Info.Equipment[(int)EquipmentSlot.RingL] });
             }
         }
 
@@ -9602,7 +9602,7 @@ namespace Server.ExineObjects
             if (CheckMakeWeddingRing())
             {
                 Info.Equipment[(int)EquipmentSlot.RingL].WeddingRing = Info.Married;
-                Enqueue(new S.RefreshItem { Item = Info.Equipment[(int)EquipmentSlot.RingL] });
+                SendPacketToClient(new ServerPacket.RefreshItem { Item = Info.Equipment[(int)EquipmentSlot.RingL] });
             }
         }
 
@@ -9669,7 +9669,7 @@ namespace Server.ExineObjects
             }
 
             Account.Gold -= cost;
-            Enqueue(new S.LoseGold { Gold = cost });
+            SendPacketToClient(new ServerPacket.LoseGold { Gold = cost });
 
 
             temp.WeddingRing = Info.Married;
@@ -9678,10 +9678,10 @@ namespace Server.ExineObjects
             Info.Equipment[(int)EquipmentSlot.RingL] = temp;
             Info.Inventory[index] = CurrentRing;
 
-            Enqueue(new S.EquipItem { Grid = MirGridType.Inventory, UniqueID = temp.UniqueID, To = (int)EquipmentSlot.RingL, Success = true });
+            SendPacketToClient(new ServerPacket.EquipItem { Grid = MirGridType.Inventory, UniqueID = temp.UniqueID, To = (int)EquipmentSlot.RingL, Success = true });
 
-            Enqueue(new S.RefreshItem { Item = Info.Inventory[index] });
-            Enqueue(new S.RefreshItem { Item = Info.Equipment[(int)EquipmentSlot.RingL] });
+            SendPacketToClient(new ServerPacket.RefreshItem { Item = Info.Inventory[index] });
+            SendPacketToClient(new ServerPacket.RefreshItem { Item = Info.Equipment[(int)EquipmentSlot.RingL] });
 
         }
 
@@ -9794,7 +9794,7 @@ namespace Server.ExineObjects
                 }
 
                 player.MarriageProposal = this;
-                player.Enqueue(new S.MarriageRequest { Name = Info.Name });
+                player.SendPacketToClient(new ServerPacket.MarriageRequest { Name = Info.Name });
             }
             else
             {
@@ -9913,7 +9913,7 @@ namespace Server.ExineObjects
                 }
 
                 player.DivorceProposal = this;
-                player.Enqueue(new S.DivorceRequest { Name = Info.Name });
+                player.SendPacketToClient(new ServerPacket.DivorceRequest { Name = Info.Name });
             }
             else
             {
@@ -9949,7 +9949,7 @@ namespace Server.ExineObjects
             if (DivorceProposal.Info.Equipment[(int)EquipmentSlot.RingL] != null)
             {
                 DivorceProposal.Info.Equipment[(int)EquipmentSlot.RingL].WeddingRing = -1;
-                DivorceProposal.Enqueue(new S.RefreshItem { Item = DivorceProposal.Info.Equipment[(int)EquipmentSlot.RingL] });
+                DivorceProposal.SendPacketToClient(new ServerPacket.RefreshItem { Item = DivorceProposal.Info.Equipment[(int)EquipmentSlot.RingL] });
             }
 
             Info.Married = 0;
@@ -9957,7 +9957,7 @@ namespace Server.ExineObjects
             if (Info.Equipment[(int)EquipmentSlot.RingL] != null)
             {
                 Info.Equipment[(int)EquipmentSlot.RingL].WeddingRing = -1;
-                Enqueue(new S.RefreshItem { Item = Info.Equipment[(int)EquipmentSlot.RingL] });
+                SendPacketToClient(new ServerPacket.RefreshItem { Item = Info.Equipment[(int)EquipmentSlot.RingL] });
             }
 
             DivorceProposal.ReceiveChat(string.Format("You're now divorced", Info.Name), ChatType.System);
@@ -9972,7 +9972,7 @@ namespace Server.ExineObjects
         {
             if (Info.Married == 0)
             {
-                Enqueue(new S.LoverUpdate { Name = "", Date = Info.MarriedDate, MapName = "", MarriedDays = 0 });
+                SendPacketToClient(new ServerPacket.LoverUpdate { Name = "", Date = Info.MarriedDate, MapName = "", MarriedDays = 0 });
             }
             else
             {
@@ -9981,10 +9981,10 @@ namespace Server.ExineObjects
                 PlayerObjectSrv player = Envir.GetPlayer(Lover.Name);
 
                 if (player == null)
-                    Enqueue(new S.LoverUpdate { Name = Lover.Name, Date = Info.MarriedDate, MapName = "", MarriedDays = (short)(Envir.Now - Info.MarriedDate).TotalDays });
+                    SendPacketToClient(new ServerPacket.LoverUpdate { Name = Lover.Name, Date = Info.MarriedDate, MapName = "", MarriedDays = (short)(Envir.Now - Info.MarriedDate).TotalDays });
                 else
                 {
-                    Enqueue(new S.LoverUpdate { Name = Lover.Name, Date = Info.MarriedDate, MapName = player.CurrentMap.Info.Title, MarriedDays = (short)(Envir.Now - Info.MarriedDate).TotalDays });
+                    SendPacketToClient(new ServerPacket.LoverUpdate { Name = Lover.Name, Date = Info.MarriedDate, MapName = player.CurrentMap.Info.Title, MarriedDays = (short)(Envir.Now - Info.MarriedDate).TotalDays });
                     if (CheckOnline)
                     {
                         player.GetRelationship(false);
@@ -10000,14 +10000,14 @@ namespace Server.ExineObjects
 
             if (lover == null)
             {
-                MessageQueue.EnqueueDebugging(Name + " is married but couldn't find marriage ID " + Info.Married);
+                MessageQueue.SendDebugMsg(Name + " is married but couldn't find marriage ID " + Info.Married);
                 return;
             }
 
             PlayerObjectSrv player = Envir.GetPlayer(lover.Name);
             if (player != null)
             {
-                player.Enqueue(new S.LoverUpdate { Name = Info.Name, Date = player.Info.MarriedDate, MapName = "", MarriedDays = (short)(Envir.Now - Info.MarriedDate).TotalDays });
+                player.SendPacketToClient(new ServerPacket.LoverUpdate { Name = Info.Name, Date = player.Info.MarriedDate, MapName = "", MarriedDays = (short)(Envir.Now - Info.MarriedDate).TotalDays });
                 player.ReceiveChat(String.Format("{0} has gone offline.", Info.Name), ChatType.System);
             }
         }
@@ -10150,7 +10150,7 @@ namespace Server.ExineObjects
                 }
 
                 mentor.MentorRequest = this;
-                mentor.Enqueue(new S.MentorRequest { Name = Info.Name, Level = Info.Level });
+                mentor.SendPacketToClient(new ServerPacket.MentorRequest { Name = Info.Name, Level = Info.Level });
                 ReceiveChat(String.Format("Request Sent."), ChatType.System);
             }
 
@@ -10221,7 +10221,7 @@ namespace Server.ExineObjects
         {
             if (Info.Mentor == 0)
             {
-                Enqueue(new S.MentorUpdate { Name = "", Level = 0, Online = false, MenteeEXP = 0 });
+                SendPacketToClient(new ServerPacket.MentorUpdate { Name = "", Level = 0, Online = false, MenteeEXP = 0 });
             }
             else
             {
@@ -10229,7 +10229,7 @@ namespace Server.ExineObjects
 
                 PlayerObjectSrv player = Envir.GetPlayer(mentor.Name);
 
-                Enqueue(new S.MentorUpdate { Name = mentor.Name, Level = mentor.Level, Online = player != null, MenteeEXP = Info.MentorExp });
+                SendPacketToClient(new ServerPacket.MentorUpdate { Name = mentor.Name, Level = mentor.Level, Online = player != null, MenteeEXP = Info.MentorExp });
 
                 if (player != null && CheckOnline)
                 {
@@ -10247,7 +10247,7 @@ namespace Server.ExineObjects
 
             if (mentor == null)
             {
-                MessageQueue.EnqueueDebugging(Name + " is mentored but couldn't find mentor ID " + Info.Mentor);
+                MessageQueue.SendDebugMsg(Name + " is mentored but couldn't find mentor ID " + Info.Mentor);
                 return;
             }
 
@@ -10260,7 +10260,7 @@ namespace Server.ExineObjects
 
             if (player != null)
             {
-                player.Enqueue(new S.MentorUpdate { Name = Info.Name, Level = Info.Level, Online = false, MenteeEXP = mentor.MentorExp });
+                player.SendPacketToClient(new ServerPacket.MentorUpdate { Name = Info.Name, Level = Info.Level, Online = false, MenteeEXP = mentor.MentorExp });
                 player.ReceiveChat(String.Format("{0} has gone offline.", Info.Name), ChatType.System);
             }
         }
@@ -10286,7 +10286,7 @@ namespace Server.ExineObjects
             if (item.Stock - purchased >= 0)
             {
                 StockLevel = item.Stock - purchased;
-                Enqueue(new S.GameShopStock { GIndex = item.Info.Index, StockLevel = StockLevel });
+                SendPacketToClient(new ServerPacket.GameShopStock { GIndex = item.Info.Index, StockLevel = StockLevel });
             }
               
         }
@@ -10318,7 +10318,7 @@ namespace Server.ExineObjects
             if (Product == null)
             {
                 ReceiveChat("You're trying to buy an item that isn't in the shop.", ChatType.System);
-                MessageQueue.EnqueueDebugging(Info.Name + " is trying to buy Something that doesn't exist.");
+                MessageQueue.SendDebugMsg(Info.Name + " is trying to buy Something that doesn't exist.");
                 return;
             }
 
@@ -10344,7 +10344,7 @@ namespace Server.ExineObjects
                 {
                     ReceiveChat("You're trying to buy more of this item than is available.", ChatType.System);
                     GameShopStock(Product);
-                    MessageQueue.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Stock isn't available.");
+                    MessageQueue.SendDebugMsg(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Stock isn't available.");
                     return;
                 }
             }
@@ -10355,7 +10355,7 @@ namespace Server.ExineObjects
 
             if (stockAvailable)
             {
-                MessageQueue.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Stock is available");
+                MessageQueue.SendDebugMsg(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Stock is available");
                 
                 var cost = Product.CreditPrice * Quantity;
                 if (cost < Account.Credit || cost == 0)
@@ -10376,7 +10376,7 @@ namespace Server.ExineObjects
                     else
                     {
                         ReceiveChat("You don't have enough currency for your purchase.", ChatType.System);
-                        MessageQueue.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - not enough currency.");
+                        MessageQueue.SendDebugMsg(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - not enough currency.");
                         return;
                     }
                 }
@@ -10388,15 +10388,15 @@ namespace Server.ExineObjects
 
             if (canAfford)
             {
-                MessageQueue.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Has enough currency.");
+                MessageQueue.SendDebugMsg(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Has enough currency.");
                 Account.Gold -= GoldCost;
                 Account.Credit -= CreditCost;
 
                 Report.GoldChanged(GoldCost, true, Product.Info.FriendlyName);
                 Report.CreditChanged(CreditCost, true, Product.Info.FriendlyName);
 
-                if (GoldCost != 0) Enqueue(new S.LoseGold { Gold = GoldCost });
-                if (CreditCost != 0) Enqueue(new S.LoseCredit { Credit = CreditCost });
+                if (GoldCost != 0) SendPacketToClient(new ServerPacket.LoseGold { Gold = GoldCost });
+                if (CreditCost != 0) SendPacketToClient(new ServerPacket.LoseCredit { Credit = CreditCost });
 
                 if (Product.iStock && Product.Stock != 0)
                 {
@@ -10462,7 +10462,7 @@ namespace Server.ExineObjects
 
             
 
-            MessageQueue.EnqueueDebugging(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Purchases Sent!");
+            MessageQueue.SendDebugMsg(Info.Name + " is trying to buy " + Product.Info.FriendlyName + " x " + Quantity + " - Purchases Sent!");
             ReceiveChat("Your purchases have been sent to your Mailbox.", ChatType.Hint);
         }
 
@@ -10489,12 +10489,12 @@ namespace Server.ExineObjects
                     if (item.Stock - purchased >= 0)
                     {
                         stockLevel = item.Stock - purchased;
-                        Enqueue(new S.GameShopInfo { Item = item, StockLevel = stockLevel });
+                        SendPacketToClient(new ServerPacket.GameShopInfo { Item = item, StockLevel = stockLevel });
                     }
                 }
                 else
                 {
-                    Enqueue(new S.GameShopInfo { Item = item, StockLevel = item.Stock });
+                    SendPacketToClient(new ServerPacket.GameShopInfo { Item = item, StockLevel = item.Stock });
                 }  
             }
         }
@@ -10557,7 +10557,7 @@ namespace Server.ExineObjects
 
             Envir.Timers[timerKey] = t;
 
-            Enqueue(new S.SetTimer { Key = t.Key, Seconds = t.Seconds, Type = t.Type });
+            SendPacketToClient(new ServerPacket.SetTimer { Key = t.Key, Seconds = t.Seconds, Type = t.Type });
         }
         public void ExpireTimer(string key)
         {
@@ -10568,11 +10568,11 @@ namespace Server.ExineObjects
                 Envir.Timers.Remove(timerKey);
             }
 
-            Enqueue(new S.ExpireTimer { Key = timerKey });
+            SendPacketToClient(new ServerPacket.ExpireTimer { Key = timerKey });
         }
         public void SetCompass(Point location)
         {
-            Enqueue(new S.SetCompass { Location = location });
+            SendPacketToClient(new ServerPacket.SetCompass { Location = location });
         } 
          
     }

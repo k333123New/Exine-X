@@ -1,6 +1,6 @@
 using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects
 {
@@ -192,7 +192,7 @@ namespace Server.ExineObjects
         {
             Direction = dir;
 
-            Broadcast(new S.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
         }
 
         public override void Process()
@@ -251,7 +251,7 @@ namespace Server.ExineObjects
 
                     var speech = Speech.OrderBy(x => x.GetWeight(Envir.Random, maxWeight)).Last();
 
-                    Broadcast(new S.ObjectChat { ObjectID = this.ObjectID, Text = $"{Info.Name.Split('_')[0]}:{speech.Message}", Type = ChatType.Normal });
+                    Broadcast(new ServerPacket.ObjectChat { ObjectID = this.ObjectID, Text = $"{Info.Name.Split('_')[0]}:{speech.Message}", Type = ChatType.Normal });
                 }
             }
         }
@@ -305,7 +305,7 @@ namespace Server.ExineObjects
 
         public void Hide()
         {
-            CurrentMap.Broadcast(new S.ObjectRemove { ObjectID = ObjectID }, CurrentLocation);
+            CurrentMap.Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID }, CurrentLocation);
             Visible = false;
         }
 
@@ -367,7 +367,7 @@ namespace Server.ExineObjects
         //k333123 add 240314
         public override Packet GetInfo()
         {
-            return new S.ObjectNPC
+            return new ServerPacket.ObjectNPC
             {
                 ObjectID = ObjectID,
                 Name = Name,
@@ -383,7 +383,7 @@ namespace Server.ExineObjects
 
         public Packet GetUpdateInfo()
         {
-            return new S.NPCImageUpdate
+            return new ServerPacket.NPCImageUpdate
             {
                 ObjectID = ObjectID,
                 Image = Info.Image,
@@ -417,28 +417,28 @@ namespace Server.ExineObjects
                 Conq.WarIsOn &&
                 !Info.ConquestVisible)
             {
-                if (canSee) CurrentMap.Broadcast(new S.ObjectRemove { ObjectID = ObjectID }, CurrentLocation, Player);
+                if (canSee) CurrentMap.Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID }, CurrentLocation, Player);
                 VisibleLog[Player.Info.Index] = false;
                 return;
             }
 
             if (Info.FlagNeeded != 0 && !Player.Info.Flags[Info.FlagNeeded])
             {
-                if (canSee) CurrentMap.Broadcast(new S.ObjectRemove { ObjectID = ObjectID }, CurrentLocation, Player);
+                if (canSee) CurrentMap.Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID }, CurrentLocation, Player);
                 VisibleLog[Player.Info.Index] = false;
                 return;
             }
 
             if (Info.MinLev != 0 && Player.Level < Info.MinLev || Info.MaxLev != 0 && Player.Level > Info.MaxLev)
             {
-                if (canSee) CurrentMap.Broadcast(new S.ObjectRemove { ObjectID = ObjectID }, CurrentLocation, Player);
+                if (canSee) CurrentMap.Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID }, CurrentLocation, Player);
                 VisibleLog[Player.Info.Index] = false;
                 return;
             }
 
             if (Info.ClassRequired != "" && Player.Class.ToString() != Info.ClassRequired)
             {
-                if (canSee) CurrentMap.Broadcast(new S.ObjectRemove { ObjectID = ObjectID }, CurrentLocation, Player);
+                if (canSee) CurrentMap.Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID }, CurrentLocation, Player);
                 VisibleLog[Player.Info.Index] = false;
                 return;
             }

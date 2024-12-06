@@ -1,5 +1,5 @@
 ﻿using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -69,8 +69,8 @@ namespace Server.ExineObjects.Monsters
             Point target = Target.Back;
             ExineDirection dir = Functions.DirectionFromPoint(target, Target.CurrentLocation);
 
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = dir, Location = target });
-            Broadcast(new S.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = dir, Location = target });
+            Broadcast(new ServerPacket.ObjectTurn { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             ActionTime = Envir.Time + 500;
             AttackTime = Envir.Time + AttackSpeed;

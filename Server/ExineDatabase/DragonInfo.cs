@@ -119,7 +119,7 @@ namespace Server.ExineDatabase
                 DropInfo drop = DropInfo.FromLine(lines[i]);
                 if (drop == null)
                 {
-                    MessageQueue.Enqueue(string.Format("Could not load Drop: DragonItem, Line {0}", lines[i]));
+                    MessageQueue.SendMsg(string.Format("Could not load Drop: DragonItem, Line {0}", lines[i]));
                     continue;
                 }
 

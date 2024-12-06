@@ -2,7 +2,7 @@
 using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineSounds;
-using C = ClientPackets;
+
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -74,7 +74,7 @@ namespace Exine.ExineScenes.ExDialogs
                     AllowButton.PressedIndex = 116;
                 }
 
-                Network.Enqueue(new C.AllowMentor());
+                Network.SendPacketToServer(new ClientPacket.AllowMentor());
             };
 
 
@@ -103,7 +103,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 inputBox.OKButton.Click += (o1, e1) =>
                 {
-                    Network.Enqueue(new C.AddMentor { Name = inputBox.InputTextBox.Text });
+                    Network.SendPacketToServer(new ClientPacket.AddMentor { Name = inputBox.InputTextBox.Text });
                     inputBox.Dispose();
                 };
 
@@ -132,7 +132,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 ExineMessageBox messageBox = new ExineMessageBox(string.Format("멘토십을 일찍 취소하면 쿨다운이 발생합니다. 정말 진행할까요?"), MirMessageBoxButtons.YesNo);
 
-                messageBox.YesButton.Click += (oo, ee) => Network.Enqueue(new C.CancelMentor { });
+                messageBox.YesButton.Click += (oo, ee) => Network.SendPacketToServer(new ClientPacket.CancelMentor { });
                 messageBox.NoButton.Click += (oo, ee) => { messageBox.Dispose(); };
 
                 messageBox.Show();

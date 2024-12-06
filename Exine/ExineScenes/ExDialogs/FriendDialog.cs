@@ -2,7 +2,7 @@
 using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineSounds;
-using C = ClientPackets;
+
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -152,7 +152,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 inputBox.OKButton.Click += (o1, e1) =>
                 {
-                    Network.Enqueue(new C.AddFriend { Name = inputBox.InputTextBox.Text, Blocked = _blockedTab });
+                    Network.SendPacketToServer(new ClientPacket.AddFriend { Name = inputBox.InputTextBox.Text, Blocked = _blockedTab });
                     inputBox.Dispose();
                 };
 
@@ -178,7 +178,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 messageBox.YesButton.Click += (o1, e1) =>
                 {
-                    Network.Enqueue(new C.RemoveFriend { CharacterIndex = SelectedFriend.Index });
+                    Network.SendPacketToServer(new ClientPacket.RemoveFriend { CharacterIndex = SelectedFriend.Index });
                     messageBox.Dispose();
                 };
 
@@ -353,7 +353,7 @@ namespace Exine.ExineScenes.ExDialogs
             if (Visible) return;
             Visible = true;
             UpdateDisplay();
-            Network.Enqueue(new C.RefreshFriends());
+            Network.SendPacketToServer(new ClientPacket.RefreshFriends());
         }
     }
     public sealed class FriendRow : ExineControl

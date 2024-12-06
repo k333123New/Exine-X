@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -44,7 +44,7 @@ namespace Server.ExineObjects.Monsters
                     Visible = true;
                     CellTime = Envir.Time + 500;
                     Broadcast(GetInfo());
-                    Broadcast(new S.ObjectShow { ObjectID = ObjectID });
+                    Broadcast(new ServerPacket.ObjectShow { ObjectID = ObjectID });
                     ActionTime = Envir.Time + 1000;
                 }
 
@@ -53,7 +53,7 @@ namespace Server.ExineObjects.Monsters
                     Visible = false;
                     VisibleTime = Envir.Time + 3000;
 
-                    Broadcast(new S.ObjectHide { ObjectID = ObjectID });
+                    Broadcast(new ServerPacket.ObjectHide { ObjectID = ObjectID });
 
                     SetHP(Stats[Stat.HP]);
                 }

@@ -2,7 +2,7 @@
 using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineSounds;
-using C = ClientPackets;
+
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -65,7 +65,7 @@ namespace Exine.ExineScenes.ExDialogs
                 Sound = SoundList.ButtonA,
                 Hint = GameLanguage.SwitchMarriage
             };
-            AllowButton.Click += (o, e) => Network.Enqueue(new C.ChangeMarriage());
+            AllowButton.Click += (o, e) => Network.SendPacketToServer(new ClientPacket.ChangeMarriage());
 
             RequestButton = new ExineButton
             {
@@ -86,7 +86,7 @@ namespace Exine.ExineScenes.ExDialogs
                     return;
                 }
 
-                Network.Enqueue(new C.MarriageRequest());
+                Network.SendPacketToServer(new ClientPacket.MarriageRequest());
             };
 
             DivorceButton = new ExineButton
@@ -108,7 +108,7 @@ namespace Exine.ExineScenes.ExDialogs
                     return;
                 }
 
-                Network.Enqueue(new C.DivorceRequest());
+                Network.SendPacketToServer(new ClientPacket.DivorceRequest());
             };
 
             

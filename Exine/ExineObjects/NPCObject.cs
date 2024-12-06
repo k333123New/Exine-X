@@ -1,7 +1,7 @@
 ﻿using Exine.ExineControls;
 using Exine.ExineGraphics;
 using Exine.ExineScenes;
-using S = ServerPackets;
+//
 
 namespace Exine.ExineObjects
 {
@@ -47,7 +47,7 @@ namespace Exine.ExineObjects
         {
         }
 
-        public void Load(S.ObjectNPC info)
+        public void Load(ServerPacket.ObjectNPC info)
         {
             Name = info.Name;
             NameColour = info.NameColour;

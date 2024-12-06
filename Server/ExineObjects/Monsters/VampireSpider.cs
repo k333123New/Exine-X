@@ -1,6 +1,6 @@
 ﻿using Server.ExineDatabase;
 using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -127,7 +127,7 @@ namespace Server.ExineObjects.Monsters
             }
 
             Direction = Functions.DirectionFromPoint(CurrentLocation, Target.CurrentLocation);
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             AttackLogic();
 
@@ -180,7 +180,7 @@ namespace Server.ExineObjects.Monsters
             if (Master == null) return;
             if (Master.VampAmount == 0) ((PlayerObjectSrv)Master).VampTime = Envir.Time + 1000;
             Master.VampAmount += (ushort)(value * (PetLevel + 1) * 0.25F);
-            ob.Broadcast(new S.ObjectEffect { ObjectID = ob.ObjectID, Effect = SpellEffect.Bleeding, EffectType = 0 });
+            ob.Broadcast(new ServerPacket.ObjectEffect { ObjectID = ob.ObjectID, Effect = SpellEffect.Bleeding, EffectType = 0 });
         }
 
         public override void Spawned()
@@ -191,7 +191,7 @@ namespace Server.ExineObjects.Monsters
 
         public override Packet GetInfo()
         {
-            return new S.ObjectMonster
+            return new ServerPacket.ObjectMonster
                 {
                     ObjectID = ObjectID,
                     Name = Name,

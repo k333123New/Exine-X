@@ -1,5 +1,5 @@
 ﻿using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -60,7 +60,7 @@ namespace Server.ExineObjects.Monsters
 
             if (CurrentMap == null) return;
 
-            CurrentMap.Broadcast(new S.ObjectRemove { ObjectID = ObjectID }, CurrentLocation);
+            CurrentMap.Broadcast(new ServerPacket.ObjectRemove { ObjectID = ObjectID }, CurrentLocation);
         }
 
         public void Show()

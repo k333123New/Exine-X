@@ -3,7 +3,7 @@ using Exine.ExineGraphics;
 using Exine.ExineNetwork;
 using Exine.ExineObjects;
 using Exine.ExineSounds;
-using C = ClientPackets;
+
 
 namespace Exine.ExineScenes.ExDialogs
 {
@@ -94,7 +94,7 @@ namespace Exine.ExineScenes.ExDialogs
 
              messageBox.OKButton.Click += (o, a) =>
              {
-                 Network.Enqueue(new C.Chat { Message = "@ADDINVENTORY" });
+                 Network.SendPacketToServer(new ClientPacket.Chat { Message = "@ADDINVENTORY" });
              };
              messageBox.Show();
          };
@@ -200,7 +200,7 @@ namespace Exine.ExineScenes.ExDialogs
 
                 messageBox.OKButton.Click += (o, a) =>
                 {
-                    Network.Enqueue(new C.Chat { Message = "@ADDINVENTORY" });
+                    Network.SendPacketToServer(new ClientPacket.Chat { Message = "@ADDINVENTORY" });
                 };
                 messageBox.Show();
             }

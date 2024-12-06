@@ -1,5 +1,5 @@
 ﻿using Server.ExineEnvir;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects
 {
@@ -129,7 +129,7 @@ namespace Server.ExineObjects
 
         public override Packet GetInfo()
         {
-            return new S.ObjectDeco
+            return new ServerPacket.ObjectDeco
             {
                 ObjectID = ObjectID,
                 Location = CurrentLocation,

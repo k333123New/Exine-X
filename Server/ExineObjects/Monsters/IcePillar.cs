@@ -1,5 +1,5 @@
 ﻿using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -76,7 +76,7 @@ namespace Server.ExineObjects.Monsters
                 CloseAttack(damage);
             }
 
-            Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
 
             ChangeHP(-1);
             return 1;
@@ -130,7 +130,7 @@ namespace Server.ExineObjects.Monsters
                 CloseAttack(damage);
             }
 
-            Broadcast(new S.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectStruck { ObjectID = ObjectID, AttackerID = attacker.ObjectID, Direction = Direction, Location = CurrentLocation });
             attacker.GatherElement();
             ChangeHP(-1);
 
@@ -146,7 +146,7 @@ namespace Server.ExineObjects.Monsters
 
         private void CloseAttack(int damage)
         {
-            Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             List<MapObjectSrv> targets = FindAllTargets(1, CurrentLocation);
 
@@ -154,7 +154,7 @@ namespace Server.ExineObjects.Monsters
             
             for (int i = 0; i < targets.Count; i++)
             {
-                Broadcast(new S.ObjectEffect { ObjectID = targets[i].ObjectID, Effect = SpellEffect.IcePillar });
+                Broadcast(new ServerPacket.ObjectEffect { ObjectID = targets[i].ObjectID, Effect = SpellEffect.IcePillar });
 
                 if (targets[i].Attacked(this, damage, DefenceType.MACAgility) <= 0) continue;
 
@@ -164,7 +164,7 @@ namespace Server.ExineObjects.Monsters
 
         public override void Die()
         {
-            Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             int damage = GetAttackPower(Stats[Stat.MinDC], Stats[Stat.MaxDC]);
 

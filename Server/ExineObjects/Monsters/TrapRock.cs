@@ -1,5 +1,5 @@
 ﻿using Server.ExineDatabase;
-using S = ServerPackets;
+
 
 namespace Server.ExineObjects.Monsters
 {
@@ -90,9 +90,9 @@ namespace Server.ExineObjects.Monsters
 
             if (!ChildRock)
             {
-                Broadcast(new S.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID });
+                Broadcast(new ServerPacket.ObjectRangeAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation, TargetID = Target.ObjectID });
             }
-            else Broadcast(new S.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
+            else Broadcast(new ServerPacket.ObjectAttack { ObjectID = ObjectID, Direction = Direction, Location = CurrentLocation });
 
             ActionTime = Envir.Time + 300;
             AttackTime = Envir.Time + AttackSpeed;
@@ -184,7 +184,7 @@ namespace Server.ExineObjects.Monsters
             CellTime = ChildRock ? ParentRock.CellTime : Envir.Time + 500;
 
             Broadcast(GetInfo());
-            Broadcast(new S.ObjectShow { ObjectID = ObjectID });
+            Broadcast(new ServerPacket.ObjectShow { ObjectID = ObjectID });
 
             if (!ChildRock)
             {

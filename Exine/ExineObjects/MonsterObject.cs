@@ -1,7 +1,7 @@
 ﻿using Exine.ExineGraphics;
 using Exine.ExineScenes;
 using Exine.ExineSounds;
-using S = ServerPackets;
+//
 using Exine.ExineControls;
 
 namespace Exine.ExineObjects
@@ -67,7 +67,7 @@ namespace Exine.ExineObjects
 
         public MonsterObject(uint objectID) : base(objectID) { }
 
-        public void Load(S.ObjectMonster info, bool update = false)
+        public void Load(ServerPacket.ObjectMonster info, bool update = false)
         {
             Name = info.Name;
             NameColour = info.NameColour;
